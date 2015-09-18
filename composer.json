@@ -1,0 +1,27 @@
+{
+    "name": "iddigital/cms.core",
+    "description": "The core library for the Iddigital CMS",
+    "authors": [
+        {
+            "name": "Elliot Levin",
+            "email": "elliot@aanet.com.au"
+        }
+    ],
+    "minimum-stability": "stable",
+    "repositories": [
+        { "type": "composer", "url": "http://satis.dev:4321" }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Iddigital\\Cms\\Core\\": "Source/",
+            "Iddigital\\Cms\\Core\\Tests\\": "Tests/Tests"
+        }
+    },
+    "require": {
+        "timetoogo/pinq": "~3.2",
+        "doctrine/dbal": "~2.5"
+    },
+    "require-dev": {
+        "iddigital/cms.common.testing": "dev-master"
+    }
+}

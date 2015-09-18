@@ -1,0 +1,307 @@
+<?php
+
+namespace Iddigital\Cms\Core\Persistence\Db\Mapping\ReadModel\Definition;
+
+use Iddigital\Cms\Core\Exception\InvalidArgumentException;
+use Iddigital\Cms\Core\Exception\InvalidOperationException;
+use Iddigital\Cms\Core\Model\IReadModel;
+use Iddigital\Cms\Core\Model\Object\FinalizedClassDefinition;
+use Iddigital\Cms\Core\Model\Object\TypedObject;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\FinalizedMapperDefinition;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\MapperDefinition;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\IObjectMapper;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\ReadModel\EmbeddedMapperProxy;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\ReadModel\GenericReadModelMapper;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Embedded\EmbeddedObjectRelation;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\EntityRelation;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\IRelation;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\IToManyRelation;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\IToOneRelation;
+
+/**
+ * The read model mapper definition class
+ *
+ * @author Elliot Levin <elliotlevin@hotmail.com>
+ */
+class ReadMapperDefinition
+{
+    /**
+     * @var FinalizedClassDefinition
+     */
+    protected $class;
+
+    /**
+     * @var IObjectMapper
+     */
+    protected $mapper;
+
+    /**
+     * @var FinalizedMapperDefinition
+     */
+    protected $definition;
+
+    /**
+     * @var array
+     */
+    protected $validProperties;
+
+    /**
+     * @var IRelation[]
+     */
+    protected $relations;
+
+    /**
+     * @var MapperDefinition
+     */
+    protected $readDefinition;
+
+    public function __construct()
+    {
+        $this->readDefinition = new MapperDefinition();
+    }
+
+    /**
+     * @return MapperDefinition
+     */
+    public function getReadModelDefinition()
+    {
+        return $this->readDefinition;
+    }
+
+    /**
+     * @return IObjectMapper
+     */
+    public function getParentMapper()
+    {
+        return $this->mapper;
+    }
+
+    /**
+     * @return FinalizedMapperDefinition
+     */
+    public function getDefinition()
+    {
+        return $this->definition;
+    }
+
+    /**
+     * Defines the read model type
+     *
+     * @param string $readModelType
+     *
+     * @return void
+     * @throws InvalidArgumentException
+     */
+    public function type($readModelType)
+    {
+        if (!is_subclass_of($readModelType, IReadModel::class, true)) {
+            throw InvalidArgumentException::format(
+                    'Invalid class supplied to read model mapper definition: expecting instance of %s, %s given',
+                    IReadModel::class, $readModelType
+            );
+        }
+
+        $this->readDefinition->type($readModelType);
+        /** @var string|IReadModel|TypedObject $readModelType */
+        $this->class = $readModelType::definition();
+    }
+
+    /**
+     * Defines the root entity mapper
+     *
+     * @param IObjectMapper $mapper
+     *
+     * @return void
+     */
+    public function from(IObjectMapper $mapper)
+    {
+        $this->mapper     = $mapper;
+        $this->definition = $mapper->getDefinition();
+        $this->relations  = $this->definition->getRelations();
+        $this->readDefinition->addColumn($this->definition->getTable()->getPrimaryKeyColumn());
+
+        $this->validProperties = $this->definition->getPropertyColumnMap() + $this->definition->getRelations();
+    }
+
+    /**
+     * Maps the entity instance to the property
+     * of the read model.
+     *
+     * @param string $propertyName
+     *
+     * @return void
+     */
+    public function entityTo($propertyName)
+    {
+        $this->readDefinition->relation($propertyName)
+            ->asCustom(new EmbeddedObjectRelation(new EmbeddedMapperProxy($this->mapper)));
+    }
+
+    /**
+     * Defines the properties of the entity to load.
+     *
+     * Example:
+     * <code>
+     * $map->properties(['foo' => 'bar']);
+     * </code>
+     *
+     * Or if the property names are the same:
+     * <code>
+     * $map->properties(['foo']);
+     * </code>
+     *
+     * @param string[] $propertyAliasMap
+     *
+     * @return void
+     */
+    public function properties(array $propertyAliasMap)
+    {
+        $this->verifyClassDefined(__METHOD__);
+        $this->verifyMapperDefined(__METHOD__);
+
+        $propertyColumnMap = $this->definition->getPropertyColumnMap();
+        $relations         = $this->definition->getRelations();
+        $toPhpConverters   = $this->definition->getDbToPhpPropertyConverterMap();
+        $table             = $this->definition->getTable();
+        $phpToDbConverter  = function () {
+        };
+        foreach ($propertyAliasMap as $property => $alias) {
+            if (is_int($property)) {
+                $property = $alias;
+            }
+
+            $this->validatePropertyMapped($property);
+
+            if (isset($propertyColumnMap[$property])) {
+                $this->readDefinition
+                        ->property($alias)
+                        ->mappedVia($phpToDbConverter, isset($toPhpConverters[$property]) ? $toPhpConverters[$property] : function ($i) {
+                            return $i;
+                        })
+                        ->to($propertyColumnMap[$property])
+                        ->asType($table->getColumn($propertyColumnMap[$property])->getType());
+            } else {
+                $relation = $relations[$property];
+                $this->readDefinition
+                        ->relation($alias)
+                        ->asCustom($relation);
+
+                foreach ($relation->getParentColumnsToLoad() as $column) {
+                    $this->readDefinition->addColumn($table->getColumn($column));
+                }
+            }
+        }
+    }
+
+    /**
+     * Defines columns to map to to the supplied properties
+     *
+     * @param string[] $columnsPropertyMap
+     *
+     * @throws InvalidArgumentException
+     */
+    public function columns(array $columnsPropertyMap)
+    {
+        $table = $this->definition->getTable();
+
+        foreach ($columnsPropertyMap as $column => $property) {
+            if (!$table->hasColumn($column)) {
+                throw InvalidArgumentException::format(
+                        'Invalid column supplied to %s: \'%s\' does not exist on table \'%s\'',
+                        __METHOD__, $column, $table->getName()
+                );
+            }
+
+            $this->readDefinition
+                    ->property($property)
+                    ->to($column)
+                    ->asType($table->getColumn($column)->getType());
+        }
+    }
+
+    /**
+     * Defines a relation to load.
+     *
+     * @param string $propertyName
+     *
+     * @return RelationAliasDefiner
+     * @throws InvalidArgumentException
+     */
+    public function relation($propertyName)
+    {
+        $this->verifyClassDefined(__METHOD__);
+        $this->verifyMapperDefined(__METHOD__);
+
+        if (!isset($this->relations[$propertyName]) || !($this->relations[$propertyName] instanceof EntityRelation)) {
+            throw InvalidArgumentException::format(
+                    'Invalid property to load from parent: property must be mapped to a relation, \'%s\' given',
+                    $propertyName
+            );
+        }
+
+        /** @var IToOneRelation $relation */
+        $relation   = $this->relations[$propertyName];
+        $definition = new self();
+        $definition->from($relation->getMapper());
+
+        return new RelationAliasDefiner($definition, function ($alias, callable $relationReferenceLoader) use ($relation) {
+            if ($relation instanceof IToOneRelation) {
+                $relation = $relation->withReference($relationReferenceLoader($relation));
+            } elseif ($relation instanceof IToManyRelation) {
+                $relation = $relation->withReference($relationReferenceLoader($relation));
+            }
+
+            $this->readDefinition->relation($alias)->asCustom($relation);
+        });
+    }
+
+
+    /**
+     * Defines an embedded read model.
+     *
+     * @param GenericReadModelMapper $readModelMapper
+     *
+     * @return EmbeddedReadModelAliasDefiner
+     */
+    public function embedded(GenericReadModelMapper $readModelMapper)
+    {
+        $this->verifyClassDefined(__METHOD__);
+        $this->verifyMapperDefined(__METHOD__);
+
+        return new EmbeddedReadModelAliasDefiner(function ($alias) use ($readModelMapper) {
+            $mapper = $readModelMapper->loadMapperFor($this->mapper);
+
+            $this->readDefinition->embedded($alias)->using($mapper);
+        });
+    }
+
+    private function validatePropertyMapped($property)
+    {
+        if (!isset($this->validProperties[$property])) {
+            throw InvalidArgumentException::format(
+                    'Invalid property supplied to read model definition: must be mapped to column or relation, \'%s\' given',
+                    $property
+            );
+        }
+    }
+
+    private function verifyMapperDefined($method)
+    {
+        if (!$this->class) {
+            throw InvalidOperationException::format(
+                    'Invalid call to %s: mapper has not been defined, use $map->from(...)',
+                    $method
+            );
+        }
+    }
+
+    private function verifyClassDefined($method)
+    {
+        if (!$this->class) {
+            throw InvalidOperationException::format(
+                    'Invalid call to %s: read model class has not been defined, use $map->type(...)',
+                    $method
+            );
+        }
+    }
+}

@@ -1,0 +1,218 @@
+<?php
+
+namespace Iddigital\Cms\Core\Model\Criteria\Condition;
+
+use Iddigital\Cms\Core\Exception\InvalidArgumentException;
+use Iddigital\Cms\Core\Exception\NotImplementedException;
+use Iddigital\Cms\Core\Util\Debug;
+
+/**
+ * The property condition operator enum class.
+ *
+ * NOTE: these operators are assumed null-safe, that is
+ * return false if one of the operands is null (unless it is null == null).
+ *
+ * @author Elliot Levin <elliotlevin@hotmail.com>
+ */
+final class ConditionOperator
+{
+    const EQUALS = '=';
+    const NOT_EQUALS = '!=';
+    const IN = 'in';
+    const NOT_IN = 'not-in';
+    const STRING_CONTAINS = 'string-contains';
+    const STRING_CONTAINS_CASE_INSENSITIVE = 'string-contains-case-insensitive';
+    const GREATER_THAN = '>';
+    const GREATER_THAN_OR_EQUAL = '>=';
+    const LESS_THAN = '<';
+    const LESS_THAN_OR_EQUAL = '<=';
+
+    private static $operators = [
+            self::EQUALS                           => true,
+            self::NOT_EQUALS                       => true,
+            self::IN                               => true,
+            self::NOT_IN                           => true,
+            self::STRING_CONTAINS                  => true,
+            self::STRING_CONTAINS_CASE_INSENSITIVE => true,
+            self::GREATER_THAN                     => true,
+            self::GREATER_THAN_OR_EQUAL            => true,
+            self::LESS_THAN                        => true,
+            self::LESS_THAN_OR_EQUAL               => true,
+    ];
+
+    private function __construct()
+    {
+    }
+
+    /**
+     * @return string[]
+     */
+    public static function getAll()
+    {
+        return array_keys(self::$operators);
+    }
+
+    /**
+     * @param string $operator
+     *
+     * @return bool
+     */
+    public static function isValid($operator)
+    {
+        return isset(self::$operators[$operator]);
+    }
+
+    /**
+     * @param string $operator
+     *
+     * @return void
+     * @throws InvalidArgumentException
+     */
+    public static function validate($operator)
+    {
+        if (!isset(self::$operators[$operator])) {
+            throw InvalidArgumentException::format(
+                    'Invalid condition operator: expecting one of (%s), \'%s\' given',
+                    Debug::formatValues(array_keys(self::$operators)), $operator
+            );
+        }
+    }
+
+    /**
+     * @param callable $left
+     * @param string   $operator
+     * @param callable $right
+     *
+     * @return \Closure
+     * @throws NotImplementedException
+     */
+    public static function makeOperatorCallable(callable $left, $operator, callable $right)
+    {
+        switch ($operator) {
+            case ConditionOperator::EQUALS:
+                return function ($arg) use ($left, $right) {
+                    return $left($arg) == $right($arg);
+                };
+
+            case ConditionOperator::NOT_EQUALS:
+                return function ($arg) use ($left, $right) {
+                    return $left($arg) != $right($arg);
+                };
+
+            case ConditionOperator::GREATER_THAN:
+                return function ($arg) use ($left, $right) {
+                    $l = $left($arg);
+                    $r = $right($arg);
+
+                    if ($l === null || $r === null) {
+                        return false;
+                    }
+
+                    return $l > $r;
+                };
+
+            case ConditionOperator::GREATER_THAN_OR_EQUAL:
+                return function ($arg) use ($left, $right) {
+                    $l = $left($arg);
+                    $r = $right($arg);
+
+                    if ($l === null || $r === null) {
+                        return false;
+                    }
+
+                    return $l >= $r;
+                };
+
+            case ConditionOperator::LESS_THAN:
+                return function ($arg) use ($left, $right) {
+                    $l = $left($arg);
+                    $r = $right($arg);
+
+                    if ($l === null || $r === null) {
+                        return false;
+                    }
+
+                    return $l < $r;
+                };
+
+            case ConditionOperator::LESS_THAN_OR_EQUAL:
+                return function ($arg) use ($left, $right) {
+                    $l = $left($arg);
+                    $r = $right($arg);
+
+                    if ($l === null || $r === null) {
+                        return false;
+                    }
+
+                    return $l <= $r;
+                };
+
+            case ConditionOperator::STRING_CONTAINS:
+                return function ($arg) use ($left, $right) {
+                    $l = $left($arg);
+                    $r = $right($arg);
+
+                    if ($l === null || $r === null) {
+                        return false;
+                    }
+
+                    return strpos($l, $r) !== false;
+                };
+
+            case ConditionOperator::STRING_CONTAINS_CASE_INSENSITIVE:
+                return function ($arg) use ($left, $right) {
+                    $l = $left($arg);
+                    $r = $right($arg);
+
+                    if ($l === null || $r === null) {
+                        return false;
+                    }
+
+                    return stripos($l, $r) !== false;
+                };
+
+            case ConditionOperator::IN:
+                return function ($arg) use ($left, $right) {
+                    $l = $left($arg);
+                    $r = $right($arg);
+
+                    if ($l === null || $r === null) {
+                        return false;
+                    }
+
+                    $isScalar = !(is_object($l) || is_array($l));
+                    foreach ($r as $element) {
+                        if ($isScalar ? $l === $element : $l == $element) {
+                            return true;
+                        }
+                    }
+
+                    return false;
+                };
+
+            case ConditionOperator::NOT_IN:
+                return function ($arg) use ($left, $right) {
+                    $l = $left($arg);
+                    $r = $right($arg);
+
+                    if ($l === null || $r === null) {
+                        return false;
+                    }
+
+                    $isScalar = !(is_object($l) || is_array($l));
+                    foreach ($r as $element) {
+                        if ($isScalar ? $l === $element : $l == $element) {
+                            return false;
+                        }
+                    }
+
+                    return true;
+                };
+
+            default:
+                throw NotImplementedException::format(
+                        'Unknown condition operator \'%s\'', $operator
+                );
+        }
+    }
+}

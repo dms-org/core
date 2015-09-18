@@ -1,0 +1,33 @@
+<?php
+
+namespace Iddigital\Cms\Core\Form\Field\Builder;
+
+use Iddigital\Cms\Core\Form\Field\Options\EntityIdOptions;
+use Iddigital\Cms\Core\Form\Field\Type\FieldType;
+
+/**
+ * The entity field builder base class.
+ *
+ * @author Elliot Levin <elliotlevin@hotmail.com>
+ */
+class EntityFieldBuilderBase extends FieldBuilderBase
+{
+    /**
+     * Labels the entity options with the returned values
+     * of the supplied callback.
+     *
+     * @param callable $labelCallback
+     *
+     * @return static
+     */
+    public function labelledBy(callable $labelCallback)
+    {
+        /** @var EntityIdOptions $options */
+        $options = $this->type->get(FieldType::ATTR_OPTIONS);
+
+        return $this->attr(FieldType::ATTR_OPTIONS, new EntityIdOptions(
+            $options->getEntities(),
+            $labelCallback
+        ));
+    }
+}
