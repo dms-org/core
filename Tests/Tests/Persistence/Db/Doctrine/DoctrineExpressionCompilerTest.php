@@ -4,7 +4,6 @@ namespace Iddigital\Cms\Core\Tests\Persistence\Db\Doctrine;
 
 use Doctrine\DBAL\Platforms\MySqlPlatform;
 use Doctrine\DBAL\Query\QueryBuilder;
-use Doctrine\Tests\Mocks\DriverMock;
 use Iddigital\Cms\Core\Persistence\Db\Doctrine\DoctrineExpressionCompiler;
 use Iddigital\Cms\Core\Persistence\Db\Doctrine\DoctrinePlatform;
 use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Expr;
@@ -14,7 +13,8 @@ use Iddigital\Cms\Core\Persistence\Db\Schema\Type\DateTime;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Type\Integer;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Type\Text;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Type\Time;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Doctrine\Fixtures\ConnectionMock;
+use Iddigital\Cms\Core\Tests\Persistence\Db\Doctrine\Mocks\ConnectionMock;
+use Iddigital\Cms\Core\Tests\Persistence\Db\Doctrine\Mocks\DriverMock;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

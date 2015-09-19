@@ -45,6 +45,7 @@ abstract class StagedFormObject extends TypedObject implements IDataTransferObje
         $this->stagedForm         = $this->formDefinition->getStagedForm();
         $this->stagedFormForClone = $this->formDefinition->forInstance(clone $this)->getStagedForm();
 
+        // TODO: Clean up handling of submission / stages
         //  parent::__construct();
     }
 

@@ -3,7 +3,6 @@
 namespace Iddigital\Cms\Core\Tests\Persistence\Db\Doctrine;
 
 use Doctrine\DBAL\Platforms\MySqlPlatform;
-use Doctrine\Tests\Mocks\DriverMock;
 use Iddigital\Cms\Core\Persistence\Db\Doctrine\DoctrinePlatform;
 use Iddigital\Cms\Core\Persistence\Db\Query\Clause\Join;
 use Iddigital\Cms\Core\Persistence\Db\Query\Delete;
@@ -15,7 +14,8 @@ use Iddigital\Cms\Core\Persistence\Db\Schema\Table;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Type\Integer;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Type\Text;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Type\Varchar;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Doctrine\Fixtures\ConnectionMock;
+use Iddigital\Cms\Core\Tests\Persistence\Db\Doctrine\Mocks\ConnectionMock;
+use Iddigital\Cms\Core\Tests\Persistence\Db\Doctrine\Mocks\DriverMock;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

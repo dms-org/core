@@ -1,6 +1,6 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Persistence\Db\Doctrine\Fixtures;
+namespace Iddigital\Cms\Core\Tests\Persistence\Db\Doctrine\Mocks;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
