@@ -5,11 +5,22 @@ namespace Iddigital\Cms\Core\Persistence\Db\Mapping\Definition;
 use Iddigital\Cms\Core\Exception\InvalidArgumentException;
 use Iddigital\Cms\Core\Model\Object\TypedObject;
 use Iddigital\Cms\Core\Model\Type\ObjectType;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Column\ColumnTypeDefiner;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Column\PropertyColumnDefiner;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Embedded\EmbeddedCollectionDefiner;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Embedded\EmbeddedValueObjectDefiner;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Embedded\EnumPropertyColumnDefiner;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\ForeignKey\ForeignKeyLocalColumnsDefiner;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Index\IndexColumnsDefiner;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Relation\RelationUsingDefiner;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Subclass\SubClassMappingDefiner;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\EnumMapper;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\IEmbeddedObjectMapper;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Embedded\EmbeddedCollectionRelation;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Embedded\EmbeddedObjectRelation;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Column;
+use Iddigital\Cms\Core\Persistence\Db\Schema\ForeignKey;
+use Iddigital\Cms\Core\Persistence\Db\Schema\Index;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Table;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Type\Boolean;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Type\Integer;
@@ -70,6 +81,16 @@ class MapperDefinition extends MapperDefinitionBase
      * @var callable[]
      */
     protected $relationFactories = [];
+
+    /**
+     * @var Index[]
+     */
+    protected $indexes = [];
+
+    /**
+     * @var ForeignKey[]
+     */
+    protected $foreignKeys = [];
 
     /**
      * @var array
@@ -146,7 +167,7 @@ class MapperDefinition extends MapperDefinitionBase
      */
     public function column($columnName)
     {
-        return new ColumnTypeDefiner(function (Column $column) {
+        return new ColumnTypeDefiner($this, function (Column $column) {
             $this->addColumn($column);
         }, null, null, $columnName);
     }
@@ -187,7 +208,7 @@ class MapperDefinition extends MapperDefinitionBase
     {
         $this->verifyProperty(__METHOD__, $propertyName);
 
-        return new PropertyColumnDefiner(function (
+        return new PropertyColumnDefiner($this, function (
                 Column $column,
                 callable $phpToDbPropertyConverter = null,
                 callable $dbToPhpPropertyConverter = null
@@ -212,7 +233,7 @@ class MapperDefinition extends MapperDefinitionBase
      */
     public function method($methodName)
     {
-        return new PropertyColumnDefiner(function (Column $column) use ($methodName) {
+        return new PropertyColumnDefiner($this, function (Column $column) use ($methodName) {
             $this->methodColumnMap[$methodName] = $column->getName();
             $this->addColumn($column);
         });
@@ -228,7 +249,7 @@ class MapperDefinition extends MapperDefinitionBase
      */
     public function computed(callable $computedProperty)
     {
-        return new PropertyColumnDefiner(function (Column $column) use ($computedProperty) {
+        return new PropertyColumnDefiner($this, function (Column $column) use ($computedProperty) {
             $this->computedColumnMap[$column->getName()] = $computedProperty;
             $this->addColumn($column);
         });
@@ -379,6 +400,61 @@ class MapperDefinition extends MapperDefinitionBase
         );
     }
 
+    /**
+     * Defines an index on the supplied column names
+     *
+     * @param string $indexName
+     *
+     * @return IndexColumnsDefiner
+     */
+    public function index($indexName)
+    {
+        return new IndexColumnsDefiner(function (array $columnNames) use ($indexName) {
+            $this->indexes[] = new Index($indexName, false, $columnNames);
+        });
+    }
+
+    /**
+     * Defines a unique index on the supplied columns
+     *
+     * @param string $indexName
+     *
+     * @return IndexColumnsDefiner
+     */
+    public function unique($indexName)
+    {
+        return new IndexColumnsDefiner(function (array $columnNames) use ($indexName) {
+            $this->indexes[] = new Index($indexName, true, $columnNames);
+        });
+    }
+
+    /**
+     * Defines a foreign key.
+     *
+     * @param string $foreignKeyName
+     *
+     * @return ForeignKeyLocalColumnsDefiner
+     */
+    public function foreignKey($foreignKeyName)
+    {
+        return new ForeignKeyLocalColumnsDefiner(function (
+                array $localColumnNames,
+                $referencedTable,
+                array $referencedColumns,
+                $onUpdateMode,
+                $onDeleteMode
+        ) use ($foreignKeyName) {
+            $this->foreignKeys[] = new ForeignKey(
+                    $foreignKeyName,
+                    $localColumnNames,
+                    $referencedTable,
+                    $referencedColumns,
+                    $onUpdateMode,
+                    $onDeleteMode
+            );
+        });
+    }
+
     protected function getAllMappedProperties()
     {
         return ($this->parent ? $this->parent->getAllMappedProperties() : []) + $this->mappedProperties;
@@ -402,7 +478,7 @@ class MapperDefinition extends MapperDefinitionBase
             }
         }
 
-        $table = new Table($tableName, $this->columns);
+        $table = new Table($tableName, $this->columns, $this->indexes, $this->foreignKeys);
 
         $relationsFactory = function (Table $table) {
             $relations = [];

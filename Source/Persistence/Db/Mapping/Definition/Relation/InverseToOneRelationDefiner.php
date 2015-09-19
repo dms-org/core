@@ -1,6 +1,6 @@
 <?php
 
-namespace Iddigital\Cms\Core\Persistence\Db\Mapping\Definition;
+namespace Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Relation;
 
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\IdentifyingToOneRelation;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\ManyToOneRelation;

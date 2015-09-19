@@ -2,6 +2,7 @@
 
 namespace Iddigital\Cms\Core\Persistence\Db\Schema;
 
+use Iddigital\Cms\Core\Exception\InvalidArgumentException;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Type\IType;
 
 /**
@@ -35,6 +36,8 @@ class Index
      */
     public function __construct($name, $isUnique, array $columnNames)
     {
+        InvalidArgumentException::verify(!empty($columnNames), 'Column names cannot be empty');
+
         $this->name        = $name;
         $this->isUnique    = $isUnique;
         $this->columnNames = $columnNames;

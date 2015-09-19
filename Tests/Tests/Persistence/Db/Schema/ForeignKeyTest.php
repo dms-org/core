@@ -92,4 +92,18 @@ class ForeignKeyTest extends CmsTestCase
         $this->assertSame(ForeignKeyMode::SET_NULL, $foreignKey->getOnUpdateMode());
     }
 
+
+    public function testNoColumns()
+    {
+        $this->setExpectedException(InvalidArgumentException::class);
+
+        new ForeignKey(
+                'fk',
+                [],
+                'other_table',
+                [],
+                ForeignKeyMode::CASCADE,
+                ForeignKeyMode::CASCADE
+        );
+    }
 }

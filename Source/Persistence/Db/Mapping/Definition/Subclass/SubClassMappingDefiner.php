@@ -1,12 +1,11 @@
 <?php
 
-namespace Iddigital\Cms\Core\Persistence\Db\Mapping\Definition;
+namespace Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Subclass;
 
+use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\MapperDefinition;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Hierarchy\EmbeddedObjectMapping;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Hierarchy\JoinedTableObjectMapping;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Column;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Table;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Type\Integer;
 
 /**
  * The subclass definition definer.

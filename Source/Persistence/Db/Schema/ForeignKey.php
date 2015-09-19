@@ -68,6 +68,8 @@ class ForeignKey
                 count($localColumnNames), count($referencedColumnNames)
         );
 
+        InvalidArgumentException::verify(!empty($localColumnNames), 'Column names cannot be empty');
+
         ForeignKeyMode::validate($onDeleteMode);
         ForeignKeyMode::validate($onUpdateMode);
 

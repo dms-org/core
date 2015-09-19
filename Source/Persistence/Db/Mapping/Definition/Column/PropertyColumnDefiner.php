@@ -1,6 +1,8 @@
 <?php
 
-namespace Iddigital\Cms\Core\Persistence\Db\Mapping\Definition;
+namespace Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Column;
+
+use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\MapperDefinition;
 
 /**
  * The property column mapping definer class.
@@ -9,6 +11,11 @@ namespace Iddigital\Cms\Core\Persistence\Db\Mapping\Definition;
  */
 class PropertyColumnDefiner
 {
+    /**
+     * @var MapperDefinition
+     */
+    private $definition;
+
     /**
      * @var callable
      */
@@ -27,11 +34,13 @@ class PropertyColumnDefiner
     /**
      * PropertyColumnDefiner constructor.
      *
-     * @param callable $callback
+     * @param MapperDefinition $definition
+     * @param callable         $callback
      */
-    public function __construct(callable $callback)
+    public function __construct(MapperDefinition $definition, callable $callback)
     {
-        $this->callback = $callback;
+        $this->definition = $definition;
+        $this->callback   = $callback;
     }
 
     /**
@@ -60,6 +69,12 @@ class PropertyColumnDefiner
      */
     public function to($columnName)
     {
-        return new ColumnTypeDefiner($this->callback, $this->phpToDbConverter, $this->dbToPhpConverter, $columnName);
+        return new ColumnTypeDefiner(
+                $this->definition,
+                $this->callback,
+                $this->phpToDbConverter,
+                $this->dbToPhpConverter,
+                $columnName
+        );
     }
 }

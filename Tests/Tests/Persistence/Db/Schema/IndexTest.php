@@ -3,6 +3,7 @@
 namespace Iddigital\Cms\Core\Tests\Persistence\Db\Schema;
 
 use Iddigital\Cms\Common\Testing\CmsTestCase;
+use Iddigital\Cms\Core\Exception\InvalidArgumentException;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Index;
 
 /**
@@ -21,11 +22,18 @@ class IndexTest extends CmsTestCase
 
     public function testWithPrefix()
     {
-        $index = (new Index('index', true, ['column', 'other']))->withPrefix('foo_');
+        $index = (new Index('index', false, ['column', 'other']))->withPrefix('foo_');
 
 
         $this->assertSame('foo_index', $index->getName());
-        $this->assertSame(true, $index->isUnique());
+        $this->assertSame(false, $index->isUnique());
         $this->assertSame(['foo_column', 'foo_other'], $index->getColumnNames());
+    }
+
+    public function testNoColumns()
+    {
+        $this->setExpectedException(InvalidArgumentException::class);
+
+        new Index('foo', false, []);
     }
 }

@@ -1,8 +1,6 @@
 <?php
 
-namespace Iddigital\Cms\Core\Persistence\Db\Mapping\Definition;
-
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\IRelation;
+namespace Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Relation;
 
 /**
  * The relation type definer class.

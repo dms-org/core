@@ -11,7 +11,6 @@ use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\FinalizedMapperDefiniti
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Hierarchy\ParentObjectMapping;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\IEmbeddedObjectMapper;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\IEntityMapper;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\IObjectMapper;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\ObjectMapper;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\ReadModel\Definition\ReadMapperDefinition;
 use Iddigital\Cms\Core\Persistence\Db\PersistenceContext;

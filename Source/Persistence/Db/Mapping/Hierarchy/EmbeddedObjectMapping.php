@@ -3,7 +3,6 @@
 namespace Iddigital\Cms\Core\Persistence\Db\Mapping\Hierarchy;
 
 use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Model\ITypedObject;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\FinalizedMapperDefinition;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\IRelation;
 use Iddigital\Cms\Core\Persistence\Db\PersistenceContext;

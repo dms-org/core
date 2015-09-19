@@ -41,7 +41,7 @@ abstract class ObjectMapper implements IObjectMapper
      * @param MapperDefinition $definition
      * @param string           $tableName
      *
-     * @throws Definition\IncompleteMapperDefinitionException
+     * @throws \Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\IncompleteMapperDefinitionException
      */
     public function __construct(MapperDefinition $definition, $tableName)
     {

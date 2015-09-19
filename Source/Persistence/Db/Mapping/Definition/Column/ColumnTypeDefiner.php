@@ -1,10 +1,11 @@
 <?php
 
-namespace Iddigital\Cms\Core\Persistence\Db\Mapping\Definition;
+namespace Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Column;
 
+use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\MapperDefinition;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Column;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Type\Boolean;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Type\Blob;
+use Iddigital\Cms\Core\Persistence\Db\Schema\Type\Boolean;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Type\Date;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Type\DateTime;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Type\Decimal;
@@ -22,6 +23,11 @@ use Iddigital\Cms\Core\Persistence\Db\Schema\Type\Varchar;
  */
 class ColumnTypeDefiner
 {
+    /**
+     * @var MapperDefinition
+     */
+    private $definition;
+
     /**
      * @var string
      */
@@ -48,16 +54,34 @@ class ColumnTypeDefiner
     private $nullable;
 
     /**
+     * @var string|null
+     */
+    private $indexName;
+
+    /**
+     * @var bool
+     */
+    private $isUnique = false;
+
+    /**
      * PropertyColumnDefiner constructor.
      *
-     * @param callable $callback
-     * @param callable $phpToDbConverter
-     * @param callable $dbToPhpConverter
-     * @param string   $name
-     * @param bool     $nullable
+     * @param MapperDefinition $definition
+     * @param callable         $callback
+     * @param callable         $phpToDbConverter
+     * @param callable         $dbToPhpConverter
+     * @param string           $name
+     * @param bool             $nullable
      */
-    public function __construct(callable $callback, callable $phpToDbConverter = null, callable $dbToPhpConverter = null, $name, $nullable = false)
-    {
+    public function __construct(
+            MapperDefinition $definition,
+            callable $callback,
+            callable $phpToDbConverter = null,
+            callable $dbToPhpConverter = null,
+            $name,
+            $nullable = false
+    ) {
+        $this->definition       = $definition;
         $this->callback         = $callback;
         $this->phpToDbConverter = $phpToDbConverter;
         $this->dbToPhpConverter = $dbToPhpConverter;
@@ -72,7 +96,38 @@ class ColumnTypeDefiner
      */
     public function nullable()
     {
-        return new self($this->callback, $this->phpToDbConverter, $this->dbToPhpConverter, $this->name, true);
+        $this->nullable = true;
+
+        return $this;
+    }
+
+    /**
+     * Defines an index for the column.
+     *
+     * @param string|null $indexName Defaults to {column-name}_index
+     *
+     * @return ColumnTypeDefiner
+     */
+    public function index($indexName = null)
+    {
+        $this->indexName = $indexName ?: $this->name . '_index';
+
+        return $this;
+    }
+
+    /**
+     * Defines an unique index constraint for the column.
+     *
+     * @param string|null $indexName Defaults to {column-name}_index
+     *
+     * @return ColumnTypeDefiner
+     */
+    public function unique($indexName = null)
+    {
+        $this->index($indexName);
+        $this->isUnique = true;
+
+        return $this;
     }
 
     /**
@@ -306,5 +361,13 @@ class ColumnTypeDefiner
         }
 
         call_user_func($this->callback, new Column($this->name, $type), $this->phpToDbConverter, $this->dbToPhpConverter);
+
+        if ($this->indexName) {
+            if ($this->isUnique) {
+                $this->definition->unique($this->indexName)->on($this->name);
+            } else {
+                $this->definition->index($this->indexName)->on($this->name);
+            }
+        }
     }
 }

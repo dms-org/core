@@ -163,11 +163,7 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
             return $this;
         }
 
-        $columns = [];
-        foreach ($this->table->getColumns() as $column) {
-            $columns[] = $column->withPrefix($prefix);
-        }
-        $table = $this->table->withColumns($columns);
+        $table = $this->table->withPrefix($prefix);
 
         $propertyColumnNameMap = [];
         foreach ($this->propertyColumnNameMap as $property => $column) {

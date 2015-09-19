@@ -1,6 +1,6 @@
 <?php
 
-namespace Iddigital\Cms\Core\Persistence\Db\Mapping\Definition;
+namespace Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Embedded;
 
 use Iddigital\Cms\Core\Exception\InvalidOperationException;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\CustomValueObjectMapper;
