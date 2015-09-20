@@ -11,9 +11,9 @@ use Iddigital\Cms\Core\Persistence\Db\Mapping\IEntityMapper;
  */
 class ToManyRelationDefiner extends OneToManyRelationDefiner
 {
-    public function __construct(callable $callback, IEntityMapper $mapper, $loadIds)
+    public function __construct(callable $callback, callable $mapperLoader, $loadIds)
     {
-        parent::__construct($callback, $mapper, $loadIds, $identifying = false);
+        parent::__construct($callback, $mapperLoader, $loadIds, $identifying = false);
     }
 
     /**
@@ -25,7 +25,7 @@ class ToManyRelationDefiner extends OneToManyRelationDefiner
      */
     public function identifying()
     {
-        return new OneToManyRelationDefiner($this->callback, $this->mapper, $this->loadIds, $identifying = true);
+        return new OneToManyRelationDefiner($this->callback, $this->mapperLoader, $this->loadIds, $identifying = true);
     }
 
     /**
@@ -38,6 +38,6 @@ class ToManyRelationDefiner extends OneToManyRelationDefiner
      */
     public function throughJoinTable($tableName)
     {
-        return new ManyToManyParentIdDefiner($this->callback, $this->mapper, $tableName, $this->bidirectionalRelationProperty,  $this->loadIds);
+        return new ManyToManyParentIdDefiner($this->callback, $this->mapperLoader, $tableName, $this->bidirectionalRelationProperty,  $this->loadIds);
     }
 }

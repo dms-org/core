@@ -11,14 +11,6 @@ use Iddigital\Cms\Core\Persistence\Db\Mapping\EntityMapper;
 class EntityWithTitleMapper extends EntityMapper
 {
     /**
-     * @inheritDoc
-     */
-    public function __construct()
-    {
-        parent::__construct('entities');
-    }
-
-    /**
      * Defines the entity mapper
      *
      * @param MapperDefinition $map
@@ -28,6 +20,8 @@ class EntityWithTitleMapper extends EntityMapper
     protected function define(MapperDefinition $map)
     {
         $map->type(EntityWithTitle::class);
+        $map->toTable('entities');
+
         $map->idToPrimaryKey('id');
 
         $map->property('title')->to('title')->asVarchar(255);

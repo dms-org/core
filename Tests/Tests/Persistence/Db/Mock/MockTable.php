@@ -18,6 +18,11 @@ class MockTable
     private $structure;
 
     /**
+     * @var bool
+     */
+    private $hasLoadedForeignKeys = false;
+
+    /**
      * @var string|null
      */
     private $primaryKey;
@@ -48,6 +53,59 @@ class MockTable
         $this->primaryKey = $structure->getPrimaryKeyColumnName();
     }
 
+    /**
+     * @param MockDatabase $database
+     *
+     * @return void
+     * @throws InvalidOperationException
+     * @throws InvalidArgumentException
+     */
+    public function loadForeignKeys(MockDatabase $database)
+    {
+        if ($this->hasLoadedForeignKeys === true) {
+            return;
+        }
+
+        foreach ($this->structure->getForeignKeys() as $fk) {
+            if (count($fk->getLocalColumnNames()) !== 1) {
+                throw InvalidOperationException::format('Mock database does not support foreign keys with multiple columns');
+            }
+
+            $referencedTable     = $database->getTable($fk->getReferencedTableName());
+
+            if (!$referencedTable) {
+                throw InvalidArgumentException::format(
+                        'Unknown referenced table %s', $fk->getReferencedTableName()
+                );
+            }
+
+            $referencedColumn   = $referencedTable->getStructure()->getColumn($fk->getReferencedColumnNames()[0]);
+
+            if (!$referencedColumn) {
+                throw InvalidArgumentException::format(
+                        'Unknown referenced column %s.%s', $referencedTable->getName(), $fk->getReferencedColumnNames()[0]
+                );
+            }
+
+            $this->foreignKeys[] = new MockForeignKey(
+                    $this,
+                    $this->structure->getColumn($fk->getLocalColumnNames()[0]),
+                    $referencedTable,
+                    $referencedColumn
+            );
+        }
+
+        $this->hasLoadedForeignKeys = true;
+    }
+
+    /**
+     * @param Column    $column
+     * @param MockTable $referencedTable
+     * @param Column    $referencedColumn
+     *
+     * @return void
+     * @throws ForeignKeyConstraintException
+     */
     public function addForeignKey(Column $column, MockTable $referencedTable, Column $referencedColumn)
     {
         $foreignKey = new MockForeignKey($this, $column, $referencedTable, $referencedColumn);
@@ -188,6 +246,7 @@ class MockTable
 
         if ($this->hasRowWithPrimaryKey($primaryKey)) {
             $this->rows[$primaryKey] = $row;
+
             return true;
         } else {
             return false;
@@ -216,6 +275,7 @@ class MockTable
             foreach ($columnData as $column => $value) {
                 $this->rows[$primaryKey][$column] = $value;
             }
+
             return true;
         } else {
             return false;

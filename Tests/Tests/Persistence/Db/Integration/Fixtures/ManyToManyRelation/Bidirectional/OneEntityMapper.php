@@ -2,6 +2,7 @@
 
 namespace Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Fixtures\ManyToManyRelation\Bidirectional;
 
+use Iddigital\Cms\Core\Persistence\Db\Mapping\CustomOrm;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\MapperDefinition;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\EntityMapper;
 
@@ -10,13 +11,12 @@ use Iddigital\Cms\Core\Persistence\Db\Mapping\EntityMapper;
  */
 class OneEntityMapper extends EntityMapper
 {
-
-    /**
-     * @inheritDoc
-     */
-    public function __construct()
+    public static function orm()
     {
-        parent::__construct('ones');
+        return CustomOrm::from([
+                OneEntity::class     => __CLASS__,
+                AnotherEntity::class => AnotherEntityMapper::class,
+        ]);
     }
 
     /**
@@ -29,11 +29,12 @@ class OneEntityMapper extends EntityMapper
     protected function define(MapperDefinition $map)
     {
         $map->type(OneEntity::class);
+        $map->toTable('ones');
 
         $map->idToPrimaryKey('id');
 
         $map->relation('others')
-            ->using(new AnotherEntityMapper($this))
+            ->to(AnotherEntity::class)
             ->toMany()
             ->withBidirectionalRelation('ones')
             ->throughJoinTable('one_anothers')

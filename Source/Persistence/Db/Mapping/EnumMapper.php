@@ -53,15 +53,16 @@ class EnumMapper extends ValueObjectMapper
     private $flippedValueMap;
 
     /**
-     * @param bool       $nullable
-     * @param string     $columnName
-     * @param string     $enumClass
-     * @param array|null $valueMap
+     * @param IOrm          $orm
+     * @param bool          $nullable
+     * @param string        $columnName
+     * @param string        $enumClass
+     * @param array|null    $valueMap
      *
      * @throws InvalidArgumentException
      * @throws InvalidHandlerClassException
      */
-    public function __construct($nullable, $columnName, $enumClass, array $valueMap = null)
+    public function __construct(IOrm $orm, $nullable, $columnName, $enumClass, array $valueMap = null)
     {
         $this->nullable      = $nullable;
         $this->columnName    = $columnName;
@@ -96,7 +97,8 @@ class EnumMapper extends ValueObjectMapper
             $this->options = $enumClass::getOptions();
         }
 
-        parent::__construct();
+        // TODO: verify using null object mapper here is safe
+        parent::__construct($orm, null);
     }
 
     /**

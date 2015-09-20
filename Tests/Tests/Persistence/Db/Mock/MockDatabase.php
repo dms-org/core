@@ -96,7 +96,23 @@ class MockDatabase
      */
     public function createTable(Table $structure)
     {
-        return $this->tables[$structure->getName()] = new MockTable($structure);
+        $mockTable = new MockTable($structure);
+        $this->tables[$structure->getName()] = $mockTable;
+
+        return $mockTable;
+    }
+
+    /**
+     * @return void
+     * @throws \Iddigital\Cms\Core\Exception\InvalidOperationException
+     */
+    public function loadForeignKeys()
+    {
+        foreach ($this->tables as $table) {
+            $table->loadForeignKeys($this);
+        }
+
+        $this->validateConstraints();
     }
 
     /**

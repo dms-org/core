@@ -6,6 +6,7 @@ use Iddigital\Cms\Core\Exception\TypeMismatchException;
 use Iddigital\Cms\Core\Persistence\Db\LoadingContext;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\ParentChildrenMap;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Reference\IToManyRelationReference;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Reference\RelationObjectReference;
 use Iddigital\Cms\Core\Persistence\Db\PersistenceContext;
 use Iddigital\Cms\Core\Persistence\Db\Query\Clause\Join;
 use Iddigital\Cms\Core\Persistence\Db\Query\Delete;
@@ -13,6 +14,8 @@ use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Expr;
 use Iddigital\Cms\Core\Persistence\Db\Row;
 use Iddigital\Cms\Core\Persistence\Db\RowSet;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Column;
+use Iddigital\Cms\Core\Persistence\Db\Schema\ForeignKey;
+use Iddigital\Cms\Core\Persistence\Db\Schema\ForeignKeyMode;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Table;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Type\Integer;
 use Pinq\Iterators\Common\Identity;
@@ -30,9 +33,29 @@ class ManyToManyRelation extends ToManyRelationBase
     private $joinTable;
 
     /**
+     * @var string
+     */
+    private $parentTableName;
+
+    /**
+     * @var string
+     */
+    private $parentTableIdName;
+
+    /**
      * @var Column
      */
     private $parentIdColumn;
+
+    /**
+     * @var array
+     */
+    private $relatedTableName;
+
+    /**
+     * @var string
+     */
+    private $relatedTableIdName;
 
     /**
      * @var Column
@@ -44,18 +67,31 @@ class ManyToManyRelation extends ToManyRelationBase
      *
      * @param IToManyRelationReference $reference
      * @param string                   $joinTableName
+     * @param string                   $parentTableName
+     * @param string                   $parentTableIdName
      * @param string                   $parentIdColumn
      * @param string                   $relatedIdColumn
      */
     public function __construct(
             IToManyRelationReference $reference,
             $joinTableName,
+            $parentTableName,
+            $parentTableIdName,
             $parentIdColumn,
             $relatedIdColumn
     ) {
-        $this->parentIdColumn  = new Column($parentIdColumn, Integer::normal());
-        $this->relatedIdColumn = new Column($relatedIdColumn, Integer::normal());
-        $joinTable             = $this->buildJoinTable($joinTableName);
+        $this->parentColumnsToLoad = [];
+
+        $mapper = $reference->getMapper();
+        $this->parentTableName   = $parentTableName;
+        $this->parentTableIdName = $parentTableIdName;
+        $this->parentIdColumn = new Column($parentIdColumn, Integer::normal());
+
+        $this->relatedTableName   = $mapper->getPrimaryTableName();
+        $this->relatedTableIdName = $mapper->getPrimaryTable()->getPrimaryKeyColumnName();
+        $this->relatedIdColumn    = new Column($relatedIdColumn, Integer::normal());
+
+        $joinTable = $this->buildJoinTable($joinTableName);
 
         parent::__construct($reference, null, self::DEPENDENT_CHILDREN, [
                 $joinTable
@@ -69,12 +105,36 @@ class ManyToManyRelation extends ToManyRelationBase
      */
     public function withReference(IToManyRelationReference $reference)
     {
-        return new self($reference, $this->joinTable->getName(), $this->parentIdColumn->getName(), $this->relatedIdColumn->getName());
+        return new self(
+                $reference,
+                $this->joinTable->getName(),
+                $this->parentTableName,
+                $this->parentTableIdName,
+                $this->parentIdColumn->getName(),
+                $this->relatedTableName,
+                $this->relatedTableIdName,
+                $this->relatedIdColumn->getName()
+        );
     }
 
     private function buildJoinTable($name)
     {
-        return new Table($name, [$this->parentIdColumn, $this->relatedIdColumn]);
+        return new Table($name, [$this->parentIdColumn, $this->relatedIdColumn], [], [
+                ForeignKey::createWithNamingConvention(
+                        $name,
+                        [$this->parentIdColumn->getName()],
+                        $this->parentTableName,
+                        [$this->parentTableIdName],
+                        ForeignKeyMode::CASCADE, ForeignKeyMode::CASCADE
+                ),
+                ForeignKey::createWithNamingConvention(
+                        $name,
+                        [$this->relatedIdColumn->getName()],
+                        $this->relatedTableName,
+                        [$this->relatedTableIdName],
+                        ForeignKeyMode::CASCADE, ForeignKeyMode::CASCADE
+                ),
+        ]);
     }
 
     /**
@@ -230,8 +290,8 @@ class ManyToManyRelation extends ToManyRelationBase
         // WHERE <delete parent conditions>
 
 
-        $delete        = $parentDelete->copy()->setTable($this->joinTable);
-        $alias         = $delete->getAliasFor($parentDelete->getTable()->getName());
+        $delete           = $parentDelete->copy()->setTable($this->joinTable);
+        $alias            = $delete->getAliasFor($parentDelete->getTable()->getName());
         $parentPrimaryKey = Expr::column($alias, $parentDelete->getTable()->getPrimaryKeyColumn());
 
         $joinOnCondition = Expr::equal(
@@ -239,7 +299,7 @@ class ManyToManyRelation extends ToManyRelationBase
                 Expr::tableColumn($this->joinTable, $this->parentIdColumn->getName())
         );
 
-        $isSelfReferencing = $parentDelete->getTable()->getName() === $this->mapper->getPrimaryTable()->getName();
+        $isSelfReferencing = $parentDelete->getTable()->getName() === $this->mapper->getPrimaryTableName();
         if ($isSelfReferencing) {
             // If the relation is self-referencing the join condition becomes
             // INNER JOIN <parent table> ON  <parent table>.<primary key> = <join table>.<parent key> OR <parent table>.<primary key> = <join table>.<related key>

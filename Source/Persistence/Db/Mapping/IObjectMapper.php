@@ -19,6 +19,13 @@ use Iddigital\Cms\Core\Persistence\Db\Row;
 interface IObjectMapper
 {
     /**
+     * Initializes the mapper relations
+     *
+     * @return void
+     */
+    public function initializeRelations();
+
+    /**
      * @return string
      */
     public function getMapperHash();
@@ -42,15 +49,6 @@ interface IObjectMapper
      * @return IObjectMapper[]
      */
     public function getNestedMappers();
-
-    /**
-     * Calls the supplied callback when the mapper is initialized.
-     *
-     * @param callable $callback
-     *
-     * @return void
-     */
-    public function onInitialized(callable $callback);
 
     /**
      * Loads an object from the supplied row.

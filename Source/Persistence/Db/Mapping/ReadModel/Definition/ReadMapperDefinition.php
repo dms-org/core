@@ -10,6 +10,7 @@ use Iddigital\Cms\Core\Model\Object\TypedObject;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\FinalizedMapperDefinition;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\MapperDefinition;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\IObjectMapper;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\IOrm;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\ReadModel\EmbeddedMapperProxy;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\ReadModel\GenericReadModelMapper;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Embedded\EmbeddedObjectRelation;
@@ -25,6 +26,11 @@ use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\IToOneRelation;
  */
 class ReadMapperDefinition
 {
+    /**
+     * @var IOrm
+     */
+    protected $orm;
+
     /**
      * @var FinalizedClassDefinition
      */
@@ -55,17 +61,10 @@ class ReadMapperDefinition
      */
     protected $readDefinition;
 
-    public function __construct()
+    public function __construct(IOrm $orm)
     {
-        $this->readDefinition = new MapperDefinition();
-    }
-
-    /**
-     * @return MapperDefinition
-     */
-    public function getReadModelDefinition()
-    {
-        return $this->readDefinition;
+        $this->orm = $orm;
+        $this->readDefinition = new MapperDefinition($orm);
     }
 
     /**
@@ -124,6 +123,19 @@ class ReadMapperDefinition
     }
 
     /**
+     * Defines the root entity to load the read model data from.
+     *
+     * @param string      $entityClass
+     * @param string|null $tableName
+     *
+     * @return void
+     */
+    public function fromType($entityClass, $tableName = null)
+    {
+        $this->from($this->orm->getEntityMapper($entityClass, $tableName));
+    }
+
+    /**
      * Maps the entity instance to the property
      * of the read model.
      *
@@ -134,7 +146,7 @@ class ReadMapperDefinition
     public function entityTo($propertyName)
     {
         $this->readDefinition->relation($propertyName)
-            ->asCustom(new EmbeddedObjectRelation(new EmbeddedMapperProxy($this->mapper)));
+                ->asCustom(new EmbeddedObjectRelation(new EmbeddedMapperProxy($this->mapper)));
     }
 
     /**
@@ -241,7 +253,7 @@ class ReadMapperDefinition
 
         /** @var IToOneRelation $relation */
         $relation   = $this->relations[$propertyName];
-        $definition = new self();
+        $definition = new self($this->orm);
         $definition->from($relation->getMapper());
 
         return new RelationAliasDefiner($definition, function ($alias, callable $relationReferenceLoader) use ($relation) {
@@ -273,6 +285,18 @@ class ReadMapperDefinition
 
             $this->readDefinition->embedded($alias)->using($mapper);
         });
+    }
+
+    /**
+     * @return FinalizedMapperDefinition
+     * @throws \Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\IncompleteMapperDefinitionException
+     */
+    public function finalize()
+    {
+        $this->verifyClassDefined(__METHOD__);
+        $this->verifyMapperDefined(__METHOD__);
+
+        return $this->readDefinition->finalize($this->definition->getTable()->getName());
     }
 
     private function validatePropertyMapped($property)

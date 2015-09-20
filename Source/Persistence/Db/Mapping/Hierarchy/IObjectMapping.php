@@ -5,6 +5,7 @@ namespace Iddigital\Cms\Core\Persistence\Db\Mapping\Hierarchy;
 use Iddigital\Cms\Core\Model\ITypedObject;
 use Iddigital\Cms\Core\Persistence\Db\LoadingContext;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\FinalizedMapperDefinition;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\IObjectMapper;
 use Iddigital\Cms\Core\Persistence\Db\PersistenceContext;
 use Iddigital\Cms\Core\Persistence\Db\Query\Delete;
 use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Expr;
@@ -29,6 +30,11 @@ interface IObjectMapping
      * @return FinalizedMapperDefinition
      */
     public function getDefinition();
+
+    /**
+     * @param IObjectMapper $parentMapper
+     */
+    public function initializeRelations(IObjectMapper $parentMapper);
 
     /**
      * Adds the required clauses to load the data for the

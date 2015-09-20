@@ -4,6 +4,7 @@ namespace Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Criteria;
 
 use Iddigital\Cms\Core\Model\Criteria\SpecificationDefinition;
 use Iddigital\Cms\Core\Persistence\Db\Criteria\CriteriaMapper;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\CustomOrm;
 use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Expr;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Fixtures\TableInheritance\SingleTable\TestSingleTableInheritanceMapper;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Fixtures\TableInheritance\TestSubclassEntity1;
@@ -18,7 +19,7 @@ class CriteriaMapperWithSingleTableInheritanceTest extends CriteriaMapperTestBas
 
     protected function buildMapper()
     {
-        return new CriteriaMapper(new TestSingleTableInheritanceMapper('entities'));
+        return new CriteriaMapper(new TestSingleTableInheritanceMapper(CustomOrm::from([])));
     }
 
     public function testInstanceOfWithSingleTableInheritance()

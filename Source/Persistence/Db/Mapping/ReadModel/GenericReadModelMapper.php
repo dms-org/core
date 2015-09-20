@@ -34,7 +34,7 @@ abstract class GenericReadModelMapper
      */
     final public function loadMapperFor(IObjectMapper $sourceObjectMapper)
     {
-        $map = new ReadMapperDefinition();
+        $map = new ReadMapperDefinition($sourceObjectMapper->getDefinition()->getOrm());
         $map->from($sourceObjectMapper);
 
         $this->define($map);

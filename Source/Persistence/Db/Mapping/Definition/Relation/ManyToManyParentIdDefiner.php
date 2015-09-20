@@ -20,8 +20,8 @@ class ManyToManyParentIdDefiner extends ManyToManyRelationDefinerBase
     {
         return new ManyToManyRelatedIdDefiner(
                 $this->callback,
-                $this->mapper,
-                $this->joinTable,
+                $this->mapperLoader,
+                $this->joinTableName,
                 $column,
                 $this->bidirectionalRelationProperty,
                 $this->loadIds

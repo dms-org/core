@@ -11,14 +11,6 @@ use Iddigital\Cms\Core\Persistence\Db\Mapping\EntityMapper;
 class EntityWithEnumMapper extends EntityMapper
 {
     /**
-     * @inheritDoc
-     */
-    public function __construct()
-    {
-        parent::__construct('data');
-    }
-
-    /**
      * Defines the entity mapper
      *
      * @param MapperDefinition $map
@@ -28,6 +20,7 @@ class EntityWithEnumMapper extends EntityMapper
     protected function define(MapperDefinition $map)
     {
         $map->type(EntityWithEnum::class);
+        $map->toTable('data');
 
         $map->idToPrimaryKey('id');
 

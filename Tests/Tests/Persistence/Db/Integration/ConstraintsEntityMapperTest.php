@@ -2,10 +2,13 @@
 
 namespace Iddigital\Cms\Core\Tests\Persistence\Db\Integration;
 
+use Iddigital\Cms\Core\Persistence\Db\Mapping\CustomOrm;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\IEntityMapper;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\IOrm;
 use Iddigital\Cms\Core\Persistence\Db\Schema\ForeignKey;
 use Iddigital\Cms\Core\Persistence\Db\Schema\ForeignKeyMode;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Index;
+use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Fixtures\Constraints\ConstrainedEntity;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Fixtures\Constraints\ConstraintsEntityMapper;
 
 /**
@@ -13,12 +16,17 @@ use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Fixtures\Constraints\Con
  */
 class ConstraintsEntityMapperTest extends DbIntegrationTest
 {
-    /**
-     * @return IEntityMapper
-     */
-    protected function loadMapper()
+    public function setUp()
     {
-        return new ConstraintsEntityMapper();
+        $this->mapper = $this->loadOrm()->getEntityMapper(ConstrainedEntity::class);
+    }
+
+    /**
+     * @return IOrm
+     */
+    protected function loadOrm()
+    {
+        return CustomOrm::from([ConstrainedEntity::class => ConstraintsEntityMapper::class]);
     }
 
     public function testLoadsCorrectIndexes()

@@ -7,7 +7,6 @@ use Iddigital\Cms\Core\Exception\InvalidOperationException;
 use Iddigital\Cms\Core\Model\ITypedObject;
 use Iddigital\Cms\Core\Persistence\Db\LoadingContext;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\FinalizedMapperDefinition;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\MapperDefinition;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Hierarchy\ParentObjectMapping;
 use Iddigital\Cms\Core\Persistence\Db\PersistenceContext;
 use Iddigital\Cms\Core\Persistence\Db\Query\Delete;
@@ -21,6 +20,11 @@ use Iddigital\Cms\Core\Persistence\Db\Row;
 abstract class ObjectMapper implements IObjectMapper
 {
     /**
+     * @var bool
+     */
+    protected $hasInitializedRelations = false;
+
+    /**
      * @var ParentObjectMapping
      */
     protected $mapping;
@@ -31,30 +35,32 @@ abstract class ObjectMapper implements IObjectMapper
     private $objectType;
 
     /**
-     * @var callable[]
-     */
-    private $initializeCallbacks = [];
-
-    /**
      * ObjectMapping constructor.
      *
-     * @param MapperDefinition $definition
-     * @param string           $tableName
+     * @param FinalizedMapperDefinition $definition
      *
      * @throws \Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\IncompleteMapperDefinitionException
      */
-    public function __construct(MapperDefinition $definition, $tableName)
+    public function __construct(FinalizedMapperDefinition $definition)
     {
-        $definition->finalize($tableName, function (FinalizedMapperDefinition $definition) {
-            $this->objectType = $definition->getClassName();
-            $this->mapping    = $this->loadMapping($definition);
+        $this->objectType = $definition->getClassName();
+        $this->mapping    = $this->loadMapping($definition);
 
-            $this->loadFromDefinition($definition);
-        }, function () {
-            foreach ($this->initializeCallbacks as $callback) {
-                $callback();
-            }
-        });
+        $this->loadFromDefinition($definition);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function initializeRelations()
+    {
+        if ($this->hasInitializedRelations) {
+            return;
+        }
+
+        $this->mapping->initializeRelations($this);
+        $this->loadFromDefinition($this->getDefinition());
+        $this->hasInitializedRelations = true;
     }
 
     /**
@@ -100,18 +106,6 @@ abstract class ObjectMapper implements IObjectMapper
     final public function getMapping()
     {
         return $this->mapping;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    final public function onInitialized(callable $callback)
-    {
-        if ($this->mapping && $this->getDefinition()) {
-            $callback();
-        } else {
-            $this->initializeCallbacks[] = $callback;
-        }
     }
 
     /**

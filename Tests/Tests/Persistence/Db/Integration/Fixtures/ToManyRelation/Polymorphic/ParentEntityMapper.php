@@ -2,21 +2,23 @@
 
 namespace Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Fixtures\ToManyRelation\Polymorphic;
 
+use Iddigital\Cms\Core\Persistence\Db\Mapping\CustomOrm;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\MapperDefinition;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\EntityMapper;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Fixtures\ToManyRelation\ParentEntity;
+use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Fixtures\ToManyRelation\ChildEntity;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>
  */
 class ParentEntityMapper extends EntityMapper
 {
-    /**
-     * @inheritDoc
-     */
-    public function __construct()
+    public static function orm()
     {
-        parent::__construct('parent_entities');
+        return CustomOrm::from([
+                ParentEntity::class => __CLASS__,
+                ChildEntity::class  => ChildEntityMapper::class
+        ]);
     }
 
     /**
@@ -29,11 +31,12 @@ class ParentEntityMapper extends EntityMapper
     protected function define(MapperDefinition $map)
     {
         $map->type(ParentEntity::class);
+        $map->toTable('parent_entities');
 
         $map->idToPrimaryKey('id');
 
         $map->relation('children')
-                ->using(new ChildEntityMapper())
+                ->to(ChildEntity::class)
                 ->toMany()
                 ->identifying()
                 ->withParentIdAs('parent_id');

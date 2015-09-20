@@ -9,6 +9,7 @@ use Iddigital\Cms\Core\Persistence\Db\PersistenceContext;
 use Iddigital\Cms\Core\Persistence\Db\Query\Select;
 use Iddigital\Cms\Core\Persistence\Db\Row;
 use Iddigital\Cms\Core\Persistence\Db\RowSet;
+use Iddigital\Cms\Core\Persistence\Db\Schema\ForeignKey;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Table;
 
 
@@ -20,11 +21,25 @@ use Iddigital\Cms\Core\Persistence\Db\Schema\Table;
 interface IEntityMapper extends IObjectMapper
 {
     /**
+     * Initializes the entity mapper relations
+     *
+     * @return void
+     */
+    public function initializeRelations();
+
+    /**
      * Gets the table where the primary key of the parent entity is stored.
      *
      * @return Table
      */
     public function getPrimaryTable();
+
+    /**
+     * Gets the table name where the primary key of the parent entity is stored.
+     *
+     * @return string
+     */
+    public function getPrimaryTableName();
 
     /**
      * Gets all the tables that store this entity hierarchy.
@@ -42,6 +57,15 @@ interface IEntityMapper extends IObjectMapper
      * @return Select
      */
     public function getSelect();
+
+    /**
+     * Adds a foreign key to the primary table of the entity mapper.
+     *
+     * @param ForeignKey $foreignKey
+     *
+     * @return void
+     */
+    public function addForeignKey(ForeignKey $foreignKey);
 
     /**
      * @param Row[] $rows

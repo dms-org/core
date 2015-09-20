@@ -35,17 +35,18 @@ abstract class RelationObjectReference extends RelationReference
         parent::__construct($mapper);
 
         if ($bidirectionalRelationProperty) {
-            $this->mapper->onInitialized(function () use ($bidirectionalRelationProperty) {
-                $this->bidirectionalRelation = $this->mapper->getDefinition()->getRelation($bidirectionalRelationProperty);
-
-                if ($bidirectionalRelationProperty && !$this->bidirectionalRelation) {
-                    throw InvalidArgumentException::format(
-                            'Invalid bidirectional relation property %s::$%s, property is not mapped to a relation',
-                            $this->mapper->getObjectType(),
-                            $bidirectionalRelationProperty
-                    );
-                }
-            });
+            // TODO:
+//            $this->mapper->onInitialized(function () use ($bidirectionalRelationProperty) {
+//                $this->bidirectionalRelation = $this->mapper->getDefinition()->getRelation($bidirectionalRelationProperty);
+//
+//                if ($bidirectionalRelationProperty && !$this->bidirectionalRelation) {
+//                    throw InvalidArgumentException::format(
+//                            'Invalid bidirectional relation property %s::$%s, property is not mapped to a relation',
+//                            $this->mapper->getObjectType(),
+//                            $bidirectionalRelationProperty
+//                    );
+//                }
+//            });
         }
     }
 

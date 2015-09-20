@@ -3,6 +3,7 @@
 namespace Iddigital\Cms\Core\Tests\Persistence\Db\Schema;
 
 use Iddigital\Cms\Common\Testing\CmsTestCase;
+use Iddigital\Cms\Core\Exception\InvalidArgumentException;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Column;
 use Iddigital\Cms\Core\Persistence\Db\Schema\ForeignKey;
 use Iddigital\Cms\Core\Persistence\Db\Schema\ForeignKeyMode;
@@ -63,5 +64,44 @@ class TableTest extends CmsTestCase
 
         $this->assertEquals(['foo_data_index' => $index->withPrefix('foo_')], $prefixed->getIndexes());
         $this->assertEquals(['foo_id_fk' => $fk->withPrefix('foo_')], $prefixed->getForeignKeys());
+    }
+
+    public function testInvalidIndexColumn()
+    {
+        $this->setExpectedException(InvalidArgumentException::class);
+
+        new Table(
+                'table',
+                [$this->idColumn(), new Column('data', new Varchar(255))],
+                [new Index('bad_index', false, ['some_random_column'])],
+                []
+        );
+    }
+
+    public function testInvalidForeignKeyColumn()
+    {
+        $this->setExpectedException(InvalidArgumentException::class);
+
+        new Table(
+                'table',
+                [$this->idColumn(), new Column('data', new Varchar(255))],
+                [],
+                [new ForeignKey('bad_fk', ['some_random_column'], 'other_table', ['fk'], ForeignKeyMode::CASCADE, ForeignKeyMode::CASCADE)]
+        );
+    }
+
+    public function testWithColumnsIgnoringConstraints()
+    {
+        $table = (new Table(
+                'table',
+                [$id = $this->idColumn(), $data = new Column('data', new Varchar(255))],
+                [new Index('index', false, ['data'])],
+                [new ForeignKey('fk', ['id'], 'other_table', ['fk'], ForeignKeyMode::CASCADE, ForeignKeyMode::CASCADE)]
+        ))->withColumnsIgnoringConstraints([$id]);
+
+        $this->assertEquals(
+                new Table('table', [$id]),
+                $table
+        );
     }
 }

@@ -12,14 +12,6 @@ use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Fixtures\ToManyRelation\
 class ChildEntityMapper extends EntityMapper
 {
     /**
-     * @inheritDoc
-     */
-    public function __construct()
-    {
-        parent::__construct('child_entities');
-    }
-
-    /**
      * Defines the entity mapper
      *
      * @param MapperDefinition $map
@@ -29,6 +21,7 @@ class ChildEntityMapper extends EntityMapper
     protected function define(MapperDefinition $map)
     {
         $map->type(ChildEntity::class);
+        $map->toTable('child_entities');
 
         $map->idToPrimaryKey('id');
         $map->column('parent_id')->nullable()->asInt();

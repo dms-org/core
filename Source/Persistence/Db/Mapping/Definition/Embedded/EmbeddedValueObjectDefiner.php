@@ -4,13 +4,14 @@ namespace Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Embedded;
 
 use Iddigital\Cms\Core\Persistence\Db\Mapping\CustomValueObjectMapper;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\IEmbeddedObjectMapper;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\IObjectMapper;
 
 /**
  * The embedded value object definer
  *
  * @author Elliot Levin <elliotlevin@hotmail.com>
  */
-class EmbeddedValueObjectDefiner
+class EmbeddedValueObjectDefiner extends EmbeddedRelationDefiner
 {
     /**
      * @var string
@@ -18,19 +19,9 @@ class EmbeddedValueObjectDefiner
     private $prefix = '';
 
     /**
-     * @var callable
-     */
-    private $callback;
-
-    /**
      * @var string
      */
     private $issetColumnName;
-
-    public function __construct(callable $callback)
-    {
-        $this->callback = $callback;
-    }
 
     /**
      * Sets the embedded object columns to be prefixed
@@ -72,7 +63,9 @@ class EmbeddedValueObjectDefiner
      */
     public function using(IEmbeddedObjectMapper $mapper)
     {
-        call_user_func($this->callback, $this->prefix ? $mapper->withColumnsPrefixedBy($this->prefix) : $mapper, $this->issetColumnName);
+        $this->defineRelation(function () use ($mapper) {
+            return $mapper;
+        });
     }
 
     /**
@@ -84,6 +77,37 @@ class EmbeddedValueObjectDefiner
      */
     public function usingCustom(callable $mapperDefinitionCallback)
     {
-        $this->using(new CustomValueObjectMapper($mapperDefinitionCallback));
+        $this->defineRelation(function (IObjectMapper $parentMapper) use ($mapperDefinitionCallback) {
+            return new CustomValueObjectMapper($this->orm, $parentMapper, $mapperDefinitionCallback);
+        });
+    }
+
+    /**
+     * Sets the type of value object to use to embed
+     * in the parent class mapping.
+     *
+     * @param string $valueObjectClass
+     *
+     * @return void
+     */
+    public function to($valueObjectClass)
+    {
+        $this->defineRelation(function (IObjectMapper $parentObjectMapper) use ($valueObjectClass) {
+            return $this->orm->loadEmbeddedObjectMapper($parentObjectMapper, $valueObjectClass);
+        });
+    }
+
+    /**
+     * @param callable $mapperLoader
+     *
+     * @return void
+     */
+    protected function defineRelation(callable $mapperLoader)
+    {
+        call_user_func($this->callback, function (IObjectMapper $parentMapper) use ($mapperLoader) {
+            /** @var IEmbeddedObjectMapper $mapper */
+            $mapper = $mapperLoader($parentMapper);
+            return $this->prefix ? $mapper->withColumnsPrefixedBy($this->prefix) : $mapper;
+        }, $this->issetColumnName);
     }
 }

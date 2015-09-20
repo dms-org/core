@@ -11,14 +11,6 @@ use Iddigital\Cms\Core\Persistence\Db\Mapping\EntityMapper;
 class ConstraintsEntityMapper extends EntityMapper
 {
     /**
-     * @inheritDoc
-     */
-    public function __construct()
-    {
-        parent::__construct('constrained');
-    }
-
-    /**
      * Defines the entity mapper
      *
      * @param MapperDefinition $map
@@ -28,6 +20,7 @@ class ConstraintsEntityMapper extends EntityMapper
     protected function define(MapperDefinition $map)
     {
         $map->type(ConstrainedEntity::class);
+        $map->toTable('constrained');
 
         $map->idToPrimaryKey('id');
 

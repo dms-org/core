@@ -20,6 +20,7 @@ class ConvertedPropertyEntityMapper extends EntityMapper
     protected function define(MapperDefinition $map)
     {
         $map->type(ConvertedPropertyEntity::class);
+        $map->toTable('converted_properties');
 
         $map->idToPrimaryKey('id');
 

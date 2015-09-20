@@ -4,9 +4,13 @@ namespace Iddigital\Cms\Core\Persistence\Db\Mapping\Definition;
 
 use Iddigital\Cms\Core\Model\Object\FinalizedClassDefinition;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Hierarchy\IObjectMapping;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\IObjectMapper;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\IOrm;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\NullObjectMapper;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\IRelation;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\IToManyRelation;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\IToOneRelation;
+use Iddigital\Cms\Core\Persistence\Db\Schema\ForeignKey;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Table;
 
 /**
@@ -19,7 +23,12 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
     /**
      * @var bool
      */
-    private $initialized = false;
+    private $hasInitializedRelations = false;
+
+    /**
+     * @var IOrm
+     */
+    private $orm;
 
     /**
      * @var Table
@@ -67,13 +76,19 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
     private $dbToPhpPropertyConverterMap;
 
     /**
-     * @var callable[]
+     * @var callable
      */
-    private $initializedCallbacks = [];
+    private $relationsFactory;
+
+    /**
+     * @var callable
+     */
+    private $foreignKeysFactory;
 
     /**
      * FinalizedMapperDefinition constructor.
      *
+     * @param IOrm                     $orm
      * @param FinalizedClassDefinition $class
      * @param Table                    $table
      * @param string[]                 $propertyColumnNameMap
@@ -83,10 +98,10 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
      * @param callable[]               $columnNameCallableMap
      * @param IObjectMapping[]         $subClassMappings
      * @param callable                 $relationsFactory
-     * @param callable                 $relationLoadingCallback
-     * @param callable                 $afterLoadRelationCallback
+     * @param callable                 $foreignKeysFactory
      */
     public function __construct(
+            IOrm $orm,
             FinalizedClassDefinition $class,
             Table $table,
             array $propertyColumnNameMap,
@@ -96,9 +111,9 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
             array $columnNameCallableMap,
             array $subClassMappings,
             callable $relationsFactory,
-            callable $relationLoadingCallback,
-            callable $afterLoadRelationCallback
+            callable $foreignKeysFactory
     ) {
+        $this->orm                         = $orm;
         $this->class                       = $class;
         $this->table                       = $table;
         $this->propertyColumnNameMap       = $propertyColumnNameMap;
@@ -111,9 +126,22 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
             $this->subClassMappings[$mapping->getObjectType()] = $mapping;
         }
 
-        $relationLoadingCallback($this);
+        $this->relationsFactory   = $relationsFactory;
+        $this->foreignKeysFactory = $foreignKeysFactory;
+    }
 
-        $relations = $relationsFactory($this->table);
+    /**
+     * @param IObjectMapper $parentMapper
+     *
+     * @return void
+     */
+    public function initializeRelations(IObjectMapper $parentMapper)
+    {
+        if ($this->hasInitializedRelations) {
+            return;
+        }
+
+        $relations = call_user_func($this->relationsFactory, $this->table, $parentMapper);
 
         foreach ($relations as $property => $relation) {
             if ($relation instanceof IToOneRelation) {
@@ -123,22 +151,20 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
             }
         }
 
-        $afterLoadRelationCallback($this);
+        $this->table = $this->table->withForeignKeys(array_merge(
+                $this->table->getForeignKeys(),
+                call_user_func($this->foreignKeysFactory, $this->table)
+        ));
 
-        foreach ($this->initializedCallbacks as $callback) {
-            call_user_func($callback);
-        }
-        $this->initializedCallbacks = [];
-        $this->initialized          = true;
+        $this->hasInitializedRelations = true;
     }
 
-    public function onInitialized(callable $callback)
+    /**
+     * @return IOrm
+     */
+    public function getOrm()
     {
-        if ($this->initialized) {
-            $callback();
-        } else {
-            $this->initializedCallbacks[] = $callback;
-        }
+        return $this->orm;
     }
 
     /**
@@ -180,10 +206,38 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
             $columnNameCallableMap[$prefix . $column] = $callable;
         }
 
-        $relations = [];
-        foreach ($this->getRelations() as $property => $relation) {
-            $relations[$property] = $relation->withEmbeddedColumnsPrefixedBy($prefix);
+        if ($this->hasInitializedRelations) {
+            $relationsFactory = function () {
+                return $this->getRelations();
+            };
+
+            $foreignKeyFactory = function () {
+                return [];
+            };
+        } else {
+            $relationsFactory  = $this->relationsFactory;
+            $foreignKeyFactory = $this->foreignKeysFactory;
         }
+
+        $relationsFactory = function (Table $parentTable, IObjectMapper $parentMapper) use ($relationsFactory, $prefix) {
+            $relations = [];
+            /** @var IRelation $relation */
+            foreach ($relationsFactory($parentTable, $parentMapper) as $property => $relation) {
+                $relations[$property] = $relation->withEmbeddedColumnsPrefixedBy($prefix);
+            }
+
+            return $relations;
+        };
+
+        $foreignKeyFactory = function (Table $parentTable) use ($foreignKeyFactory, $prefix) {
+            $foreignKeys = [];
+            /** @var ForeignKey $foreignKey */
+            foreach ($foreignKeyFactory($parentTable) as $foreignKey) {
+                $foreignKeys[] = $foreignKey->withPrefix($prefix);
+            }
+
+            return $foreignKeys;
+        };
 
         $subClassMappings = [];
         foreach ($this->subClassMappings as $mapping) {
@@ -191,6 +245,7 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
         }
 
         $self = new self(
+                $this->orm,
                 $this->class,
                 $table,
                 $propertyColumnNameMap,
@@ -199,12 +254,13 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
                 $methodColumnNameMap,
                 $columnNameCallableMap,
                 $subClassMappings,
-                // @formatter:off
-                function () use ($relations) { return $relations; },
-                function () { },
-                function () { }
-                // @formatter:on
+                $relationsFactory,
+                $foreignKeyFactory
         );
+
+        if ($this->hasInitializedRelations) {
+            $self->initializeRelations(new NullObjectMapper());
+        }
 
         return $self;
     }

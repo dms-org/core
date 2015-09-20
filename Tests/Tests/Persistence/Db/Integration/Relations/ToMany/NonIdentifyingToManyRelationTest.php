@@ -8,6 +8,7 @@ use Iddigital\Cms\Core\Persistence\Db\Query\Delete;
 use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Expr;
 use Iddigital\Cms\Core\Persistence\Db\Query\Update;
 use Iddigital\Cms\Core\Persistence\Db\Query\Upsert;
+use Iddigital\Cms\Core\Persistence\Db\Schema\ForeignKeyMode;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Fixtures\ToManyRelation\NonIdentifyingParentEntityMapper;
 
 /**
@@ -16,11 +17,19 @@ use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Fixtures\ToManyRelation\
 class NonIdentifyingToManyRelationTest extends ToManyRelationTestBase
 {
     /**
-     * @return IEntityMapper
+     * @inheritDoc
      */
-    protected function loadMapper()
+    protected function loadOrm()
     {
-        return new NonIdentifyingParentEntityMapper();
+        return NonIdentifyingParentEntityMapper::orm();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function deleteForeignKeyMode()
+    {
+        return ForeignKeyMode::SET_NULL;
     }
 
     public function testPersistParentWithId()

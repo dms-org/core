@@ -106,4 +106,32 @@ class ForeignKeyTest extends CmsTestCase
                 ForeignKeyMode::CASCADE
         );
     }
+
+    public function testWithNamingConvention()
+    {
+        $fk = ForeignKey::createWithNamingConvention(
+                'parent_table',
+                ['some_id', 'other_id'],
+                'other_table',
+                ['referenced_id', 'other_referenced_id'],
+                ForeignKeyMode::CASCADE,
+                ForeignKeyMode::SET_NULL
+        );
+
+        $this->assertSame('fk_parent_table_some_id_other_id_other_table', $fk->getName());
+    }
+
+    public function testWithPrefixKeepsFkConventionPrefix()
+    {
+        $fk = ForeignKey::createWithNamingConvention(
+                'parent_table',
+                ['some_id'],
+                'other_table',
+                ['referenced_id'],
+                ForeignKeyMode::CASCADE,
+                ForeignKeyMode::SET_NULL
+        )->withPrefix('foo_');
+
+        $this->assertSame('fk_foo_parent_table_some_id_other_table', $fk->getName());
+    }
 }

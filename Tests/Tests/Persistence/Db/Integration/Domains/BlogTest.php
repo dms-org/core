@@ -3,15 +3,20 @@
 namespace Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Domains;
 
 use Iddigital\Cms\Core\Persistence\Db\Mapping\IEntityMapper;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\IOrm;
+use Iddigital\Cms\Core\Persistence\Db\Schema\ForeignKey;
+use Iddigital\Cms\Core\Persistence\Db\Schema\ForeignKeyMode;
 use Iddigital\Cms\Core\Persistence\DbRepository;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\DbIntegrationTest;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\HashedPassword;
+use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\Mapper\BlogOrm;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\Mapper\PostMapper;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\Mapper\UserMapper;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\Post;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\User;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\UserGender;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Mock\MockDatabase;
+use Iddigital\Cms\Core\Tests\Persistence\Db\Mock\MockTable;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>
@@ -39,11 +44,44 @@ class BlogTest extends DbIntegrationTest
     protected $postRepo;
 
     /**
-     * @return IEntityMapper
+     * @var MockTable
      */
-    protected function loadMapper()
+    protected $userTable;
+
+    /**
+     * @var MockTable
+     */
+    protected $aliasTable;
+
+    /**
+     * @var MockTable
+     */
+    protected $postTable;
+
+    /**
+     * @var MockTable
+     */
+    protected $commentTable;
+
+    /**
+     * @var MockTable
+     */
+    protected $userFriendsJoinTable;
+
+    /**
+     * @return IOrm
+     */
+    protected function loadOrm()
     {
-        return new UserMapper();
+        return new BlogOrm();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function mapperAndRepoType()
+    {
+        return User::class;
     }
 
     public function setUp()
@@ -52,28 +90,86 @@ class BlogTest extends DbIntegrationTest
         $this->userMapper = $this->mapper;
         $this->userRepo   = $this->repo;
 
-        $this->postMapper = $this->userMapper->getPostMapper();
+        $this->postMapper = $this->orm->getEntityMapper(Post::class);
         $this->postRepo   = new DbRepository($this->connection, $this->postMapper);
     }
 
     /**
      * @inheritDoc
      */
-    protected function buildDatabase(MockDatabase $db, IEntityMapper $mapper)
+    protected function buildDatabase(MockDatabase $db, IOrm $orm)
     {
-        parent::buildDatabase($db, $mapper);
+        parent::buildDatabase($db, $orm);
 
-        $db->createForeignKey('aliases.user_id', 'users.id');
-        //
-        $db->createForeignKey('posts.author_id', 'users.id');
-        //
-        $db->createForeignKey('comments.post_id', 'posts.id');
-        $db->createForeignKey('comments.author_id', 'users.id');
-        //
-        $db->createForeignKey('user_friends.user_id', 'users.id');
-        $db->createForeignKey('user_friends.friend_id', 'users.id');
+        $this->userMapper           = $db->getTable('users');
+        $this->aliasTable           = $db->getTable('aliases');
+        $this->postTable            = $db->getTable('posts');
+        $this->commentTable         = $db->getTable('comments');
+        $this->userFriendsJoinTable = $db->getTable('user_friends');
     }
 
+    public function testCreatesCorrectForeignKeys()
+    {
+        $this->assertEquals([
+                new ForeignKey(
+                        'fk_aliases_user_id_users',
+                        ['user_id'],
+                        'users',
+                        ['id'],
+                        ForeignKeyMode::CASCADE,
+                        ForeignKeyMode::CASCADE
+                )
+        ], array_values($this->aliasTable->getStructure()->getForeignKeys()));
+
+        $this->assertEquals([
+                new ForeignKey(
+                        'fk_posts_author_id_users',
+                        ['author_id'],
+                        'users',
+                        ['id'],
+                        ForeignKeyMode::CASCADE,
+                        ForeignKeyMode::SET_NULL
+                )
+        ], array_values($this->postTable->getStructure()->getForeignKeys()));
+
+        $this->assertEquals([
+                new ForeignKey(
+                        'fk_comments_post_id_posts',
+                        ['post_id'],
+                        'posts',
+                        ['id'],
+                        ForeignKeyMode::CASCADE,
+                        ForeignKeyMode::CASCADE
+                ),
+                new ForeignKey(
+                        'fk_comments_author_id_users',
+                        ['author_id'],
+                        'users',
+                        ['id'],
+                        ForeignKeyMode::CASCADE,
+                        ForeignKeyMode::CASCADE
+                )
+        ], array_values($this->commentTable->getStructure()->getForeignKeys()));
+
+        $this->assertEquals([
+                new ForeignKey(
+                        'fk_user_friends_user_id_',
+                        ['post_id'],
+                        'posts',
+                        ['id'],
+                        ForeignKeyMode::CASCADE,
+                        ForeignKeyMode::CASCADE
+                ),
+                new ForeignKey(
+                        'fk_comments_author_id_users',
+                        ['author_id'],
+                        'users',
+                        ['id'],
+                        ForeignKeyMode::CASCADE,
+                        ForeignKeyMode::CASCADE
+                )
+        ], array_values($this->userFriendsJoinTable->getStructure()->getForeignKeys()));
+    }
 
     /**
      * @return User

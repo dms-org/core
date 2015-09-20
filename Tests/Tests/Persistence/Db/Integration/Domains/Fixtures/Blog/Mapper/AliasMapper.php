@@ -12,14 +12,6 @@ use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\Al
 class AliasMapper extends EntityMapper
 {
     /**
-     * AliasMapper constructor.
-     */
-    public function __construct()
-    {
-        parent::__construct('aliases');
-    }
-
-    /**
      * Defines the entity mapper
      *
      * @param MapperDefinition $map
@@ -29,6 +21,7 @@ class AliasMapper extends EntityMapper
     protected function define(MapperDefinition $map)
     {
         $map->type(Alias::class);
+        $map->toTable('aliases');
 
         $map->idToPrimaryKey('id');
         $map->column('user_id')->asInt();

@@ -2,6 +2,7 @@
 
 namespace Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Fixtures\SelfReferencing\ManyToManyRelation;
 
+use Iddigital\Cms\Core\Persistence\Db\Mapping\CustomOrm;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\MapperDefinition;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\EntityMapper;
 
@@ -10,12 +11,9 @@ use Iddigital\Cms\Core\Persistence\Db\Mapping\EntityMapper;
  */
 class RecursiveEntityMapper extends EntityMapper
 {
-    /**
-     * @inheritDoc
-     */
-    public function __construct()
+    public static function orm()
     {
-        parent::__construct('recursive_entities');
+        return CustomOrm::from([RecursiveEntity::class => __CLASS__]);
     }
 
     /**
@@ -28,11 +26,12 @@ class RecursiveEntityMapper extends EntityMapper
     protected function define(MapperDefinition $map)
     {
         $map->type(RecursiveEntity::class);
+        $map->toTable('recursive_entities');
 
         $map->idToPrimaryKey('id');
 
         $map->relation('parents')
-                ->using($this)
+                ->to(RecursiveEntity::class)
                 ->toMany()
                 ->throughJoinTable('parents')
                 ->withParentIdAs('parent_id')

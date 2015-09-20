@@ -11,14 +11,6 @@ use Iddigital\Cms\Core\Persistence\Db\Mapping\EntityMapper;
 class EmptyMapper extends EntityMapper
 {
     /**
-     * @inheritDoc
-     */
-    public function __construct()
-    {
-        parent::__construct('data');
-    }
-
-    /**
      * Defines the entity mapper
      *
      * @param MapperDefinition $map
@@ -28,6 +20,7 @@ class EmptyMapper extends EntityMapper
     protected function define(MapperDefinition $map)
     {
         $map->type(EmptyEntity::class);
+        $map->toTable('data');
 
         $map->idToPrimaryKey('id');
     }

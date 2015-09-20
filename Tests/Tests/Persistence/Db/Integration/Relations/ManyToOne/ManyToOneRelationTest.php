@@ -3,8 +3,11 @@
 namespace Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Relations\ManyToOne;
 
 use Iddigital\Cms\Core\Persistence\Db\Mapping\IEntityMapper;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\IOrm;
 use Iddigital\Cms\Core\Persistence\Db\Query\Select;
 use Iddigital\Cms\Core\Persistence\Db\Query\Upsert;
+use Iddigital\Cms\Core\Persistence\Db\Schema\ForeignKey;
+use Iddigital\Cms\Core\Persistence\Db\Schema\ForeignKeyMode;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Table;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\DbIntegrationTest;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Fixtures\ManyToOneRelation\ParentEntity;
@@ -30,20 +33,33 @@ class ManyToOneRelationTest extends DbIntegrationTest
     /**
      * {@inheritDoc}
      */
-    protected function buildDatabase(MockDatabase $db, IEntityMapper $mapper)
+    protected function buildDatabase(MockDatabase $db, IOrm $orm)
     {
-        parent::buildDatabase($db, $mapper);
-        $db->createForeignKey('parent_entities.child_id', 'sub_entities.id');
+        parent::buildDatabase($db, $orm);
         $this->parentEntities = $db->getTable('parent_entities')->getStructure();
         $this->subEntities    = $db->getTable('sub_entities')->getStructure();
     }
 
     /**
-     * @return IEntityMapper
+     * @inheritDoc
      */
-    protected function loadMapper()
+    protected function loadOrm()
     {
-        return new ParentEntityMapper();
+        return ParentEntityMapper::orm();
+    }
+
+    public function testCreatesForeignKeys()
+    {
+        $this->assertEquals([
+                new ForeignKey(
+                        'fk_parent_entities_child_id_sub_entities',
+                        ['child_id'],
+                        'sub_entities',
+                        ['id'],
+                        ForeignKeyMode::CASCADE,
+                        ForeignKeyMode::DO_NOTHING
+                )
+        ], array_values($this->parentEntities->getForeignKeys()));
     }
 
     public function testPersistWithNoChild()

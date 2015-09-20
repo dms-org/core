@@ -5,12 +5,15 @@ namespace Iddigital\Cms\Core\Tests\Persistence\Db;
 use Iddigital\Cms\Common\Testing\CmsTestCase;
 use Iddigital\Cms\Core\Exception\InvalidArgumentException;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Column;
+use Iddigital\Cms\Core\Persistence\Db\Schema\ForeignKey;
+use Iddigital\Cms\Core\Persistence\Db\Schema\ForeignKeyMode;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Table;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Type\Integer;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Type\Varchar;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Mock\DuplicateKeyException;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Mock\ForeignKeyConstraintException;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Mock\MockDatabase;
+use Iddigital\Cms\Core\Tests\Persistence\Db\Mock\MockForeignKey;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>
@@ -52,7 +55,7 @@ class MockDatabaseTest extends CmsTestCase
         $this->db->createTable($structure);
 
         $this->assertTrue($this->db->hasColumn('foo.id'));
-        $this->assertSame($column,  $this->db->getColumn('foo.id'));
+        $this->assertSame($column, $this->db->getColumn('foo.id'));
         $this->assertNull($this->db->getColumn('foo.other'));
     }
 
@@ -130,7 +133,8 @@ class MockDatabaseTest extends CmsTestCase
     public function testAddForeignKey()
     {
         $foo = $this->db->createTable(new Table('foo', [new Column('id', Integer::normal(), true)]));
-        $bar = $this->db->createTable(new Table('bar', [new Column('id', Integer::normal(), true), new Column('foreign', Integer::normal()->nullable())]));
+        $bar = $this->db->createTable(new Table('bar',
+                [new Column('id', Integer::normal(), true), new Column('foreign', Integer::normal()->nullable())]));
 
         $this->db->createForeignKey('bar.foreign', 'foo.id');
         $foo->insert(['id' => 1]);
@@ -142,5 +146,41 @@ class MockDatabaseTest extends CmsTestCase
         $this->setExpectedException(ForeignKeyConstraintException::class);
         $bar->insert(['id' => null, 'foreign' => 2]);
         $bar->validateConstraints();
+    }
+
+    public function testLoadForeignKeys()
+    {
+        $foo = $this->db->createTable(new Table('foo', [new Column('id', Integer::normal(), true)]));
+        $bar = $this->db->createTable(new Table(
+                'bar',
+                [
+                        new Column('id', Integer::normal(), true),
+                        new Column('foreign', Integer::normal()->nullable())
+                ],
+                [],
+                [
+                        new ForeignKey(
+                                'fk_name',
+                                ['foreign'],
+                                'foo',
+                                ['id'],
+                                ForeignKeyMode::CASCADE,
+                                ForeignKeyMode::CASCADE
+                        )
+                ]
+        ));
+
+        $this->assertSame([], $this->db->getTable('bar')->getForeignKeys());
+
+        $this->db->loadForeignKeys();
+
+        $this->assertEquals([
+                new MockForeignKey(
+                        $bar,
+                        $bar->getStructure()->getColumn('foreign'),
+                        $foo,
+                        $foo->getStructure()->getColumn('id')
+                )
+        ], $this->db->getTable('bar')->getForeignKeys());
     }
 }

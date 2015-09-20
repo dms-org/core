@@ -2,9 +2,8 @@
 
 namespace Iddigital\Cms\Core\Tests\Persistence\Db\Integration;
 
-use Iddigital\Cms\Core\Persistence\Db\Mapping\IEntityMapper;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\CustomOrm;
 use Iddigital\Cms\Core\Persistence\Db\Query\Delete;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Type\Boolean;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Fixtures\ValueObject\CurrencyEnum;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Fixtures\ValueObject\EmbeddedMoneyObject;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Fixtures\ValueObject\EntityWithValueObject;
@@ -17,11 +16,11 @@ use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Fixtures\ValueObject\Pol
 class PolymorphicValueObjectTest extends DbIntegrationTest
 {
     /**
-     * @return IEntityMapper
+     * @inheritDoc
      */
-    protected function loadMapper()
+    protected function loadOrm()
     {
-        return new EntityWithValueObjectMapper();
+        return EntityWithValueObjectMapper::orm();
     }
 
     protected function getTestEntity($id = null)

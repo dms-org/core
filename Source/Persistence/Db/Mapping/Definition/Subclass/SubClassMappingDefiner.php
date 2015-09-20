@@ -77,8 +77,7 @@ class SubClassMappingDefiner extends SubClassDefinerBase
                             function (Table $parentTable) use ($finalizedSubClassDefinition) {
                                 return new JoinedTableObjectMapping(
                                         $parentTable,
-                                        $finalizedSubClassDefinition,
-                                        $parentTable->getPrimaryKeyColumnName()
+                                        $finalizedSubClassDefinition
                                 );
                             }
                     );

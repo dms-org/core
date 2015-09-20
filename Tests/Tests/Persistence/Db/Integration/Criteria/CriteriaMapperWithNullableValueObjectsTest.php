@@ -15,7 +15,7 @@ class CriteriaMapperWithNullableValueObjectsTest extends CriteriaMapperTestBase
 {
     protected function buildMapper()
     {
-        return new CriteriaMapper(new EntityWithValueObjectMapper());
+        return new CriteriaMapper(new EntityWithValueObjectMapper(EntityWithValueObjectMapper::orm()));
     }
 
     public function testWhereEquals()

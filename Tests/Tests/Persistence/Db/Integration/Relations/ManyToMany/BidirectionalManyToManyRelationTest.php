@@ -3,6 +3,7 @@
 namespace Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Relations\ManyToMany;
 
 use Iddigital\Cms\Core\Persistence\Db\Mapping\IEntityMapper;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\IOrm;
 use Iddigital\Cms\Core\Persistence\Db\Query\Clause\Join;
 use Iddigital\Cms\Core\Persistence\Db\Query\Delete;
 use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Expr;
@@ -38,17 +39,17 @@ class BidirectionalManyToManyRelationTest extends DbIntegrationTest
     /**
      * @inheritDoc
      */
-    protected function loadMapper()
+    protected function loadOrm()
     {
-        return new OneEntityMapper();
+        return OneEntityMapper::orm();
     }
 
     /**
      * {@inheritDoc}
      */
-    protected function buildDatabase(MockDatabase $db, IEntityMapper $mapper)
+    protected function buildDatabase(MockDatabase $db, IOrm $orm)
     {
-        parent::buildDatabase($db, $mapper);
+        parent::buildDatabase($db, $orm);
         $db->createForeignKey('one_anothers.one_id', 'ones.id');
         $db->createForeignKey('one_anothers.another_id', 'anothers.id');
         $this->oneTable     = $db->getTable('ones')->getStructure();

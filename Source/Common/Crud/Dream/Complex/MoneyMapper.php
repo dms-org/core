@@ -3,6 +3,7 @@
 namespace Iddigital\Cms\Core\Common\Crud\Dream\Complex;
 
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\MapperDefinition;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\IOrm;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\ValueObjectMapper;
 
 /**
@@ -18,11 +19,12 @@ class MoneyMapper extends ValueObjectMapper
     /**
      * MoneyMapper constructor.
      *
+     * @param IOrm   $orm
      * @param string $columnName
      */
-    public function __construct($columnName)
+    public function __construct(IOrm $orm, $columnName)
     {
-        parent::__construct();
+        parent::__construct($orm);
         $this->columnName = $columnName;
     }
 

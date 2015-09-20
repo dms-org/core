@@ -3,7 +3,7 @@
 namespace Iddigital\Cms\Core\Tests\Persistence\Db\Integration\ReadModel;
 
 use Iddigital\Cms\Core\Persistence\Db\Connection\IConnection;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\IEntityMapper;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\IOrm;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\ReadModel\ReadModelMapper;
 use Iddigital\Cms\Core\Persistence\ReadModelRepository;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\DbIntegrationTest;
@@ -30,15 +30,16 @@ abstract class ReadModelRepositoryTest extends DbIntegrationTest
         $this->db         = new MockDatabase();
         $this->connection = new MockConnection($this->db);
         $this->repo       = $this->loadRepository($this->connection);
+        $this->orm        = $this->repo->getMapper()->getDefinition()->getOrm();
         $this->mapper     = $this->repo->getParentMapper();
-        $this->buildDatabase($this->db, $this->mapper);
-        $this->table = $this->db->getTable($this->mapper->getPrimaryTable()->getName());
+        $this->buildDatabase($this->db, $this->orm);
+        $this->table = $this->db->getTable($this->mapper->getPrimaryTableName());
     }
 
     /**
-     * @return IEntityMapper
+     * @inheritDoc
      */
-    final protected function loadMapper()
+    final protected function loadOrm()
     {
 
     }

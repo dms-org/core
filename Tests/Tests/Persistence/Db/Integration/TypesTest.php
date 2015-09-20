@@ -2,6 +2,7 @@
 
 namespace Iddigital\Cms\Core\Tests\Persistence\Db\Integration;
 
+use Iddigital\Cms\Core\Persistence\Db\Mapping\CustomOrm;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\IEntityMapper;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Fixtures\Types\TypesEntity;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Fixtures\Types\TypesMapper;
@@ -12,11 +13,11 @@ use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Fixtures\Types\TypesMapp
 class TypesTest extends DbIntegrationTest
 {
     /**
-     * @return IEntityMapper
+     * @inheritDoc
      */
-    protected function loadMapper()
+    protected function loadOrm()
     {
-        return new TypesMapper();
+        return CustomOrm::from([TypesEntity::class => TypesMapper::class]);
     }
 
     public function testLoadEmpty()

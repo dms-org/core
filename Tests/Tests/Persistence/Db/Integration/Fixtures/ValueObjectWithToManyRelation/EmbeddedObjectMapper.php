@@ -10,7 +10,6 @@ use Iddigital\Cms\Core\Persistence\Db\Mapping\ValueObjectMapper;
  */
 class EmbeddedObjectMapper extends ValueObjectMapper
 {
-
     /**
      * Defines the value object mapper
      *
@@ -23,7 +22,7 @@ class EmbeddedObjectMapper extends ValueObjectMapper
         $map->type(EmbeddedObject::class);
 
         $map->relation('children')
-            ->using(new ChildEntityMapper())
+            ->to(ChildEntity::class)
             ->toMany()
             ->identifying()
             ->withParentIdAs('parent_id');

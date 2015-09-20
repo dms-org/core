@@ -2,7 +2,8 @@
 
 namespace Iddigital\Cms\Core\Tests\Persistence\Db\Integration;
 
-use Iddigital\Cms\Core\Persistence\Db\Mapping\IEntityMapper;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\CustomOrm;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\IOrm;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Fixtures\PropertyConverters\ConvertedPropertyEntity;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Fixtures\PropertyConverters\ConvertedPropertyEntityMapper;
 
@@ -12,11 +13,11 @@ use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Fixtures\PropertyConvert
 class ConvertedPropertyTest extends DbIntegrationTest
 {
     /**
-     * @return IEntityMapper
+     * @return IOrm
      */
-    protected function loadMapper()
+    protected function loadOrm()
     {
-        return new ConvertedPropertyEntityMapper('converted_properties');
+        return CustomOrm::from([ConvertedPropertyEntity::class => ConvertedPropertyEntityMapper::class]);
     }
 
     public function testPersist()

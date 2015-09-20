@@ -2,8 +2,6 @@
 
 namespace Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Relation;
 
-use Iddigital\Cms\Core\Persistence\Db\Mapping\IEntityMapper;
-
 /**
  * The relation type definer class base.
  *
@@ -17,19 +15,19 @@ abstract class RelationTypeDefinerBase
     protected $callback;
 
     /**
-     * @var IEntityMapper
+     * @var callable
      */
-    protected $mapper;
+    protected $mapperLoader;
 
     /**
      * @var bool
      */
     protected $loadIds;
 
-    public function __construct(callable $callback, IEntityMapper $mapper, $loadId = false)
+    public function __construct(callable $callback, callable $mapperLoader, $loadId = false)
     {
-        $this->callback = $callback;
-        $this->mapper   = $mapper;
-        $this->loadIds  = $loadId;
+        $this->callback     = $callback;
+        $this->mapperLoader = $mapperLoader;
+        $this->loadIds      = $loadId;
     }
 }

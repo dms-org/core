@@ -25,7 +25,7 @@ interface IEmbeddedObjectMapper extends IObjectMapper
      * Gets the mapper for the object which this object is
      * embedded within.
      *
-     * @return IObjectMapper|null
+     * @return IObjectMapper
      */
     public function getParentMapper();
 
@@ -33,7 +33,7 @@ interface IEmbeddedObjectMapper extends IObjectMapper
      * Gets the root entity mapper for the object which this object is
      * embedded within.
      *
-     * @return IEntityMapper|null
+     * @return IEntityMapper
      */
     public function getRootEntityMapper();
 

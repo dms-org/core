@@ -2,6 +2,7 @@
 
 namespace Iddigital\Cms\Core\Tests\Persistence\Db\Integration;
 
+use Iddigital\Cms\Core\Persistence\Db\Mapping\CustomOrm;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\IEntityMapper;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Column;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Table;
@@ -26,11 +27,11 @@ class SingleTableInheritanceTest extends DbIntegrationTest
     private $entities;
 
     /**
-     * @return IEntityMapper
+     * @inheritDoc
      */
-    protected function loadMapper()
+    protected function loadOrm()
     {
-        return new TestSingleTableInheritanceMapper('entities');
+        return CustomOrm::from([TestSuperclassEntity::class => TestSingleTableInheritanceMapper::class]);
     }
 
     public function setUp()

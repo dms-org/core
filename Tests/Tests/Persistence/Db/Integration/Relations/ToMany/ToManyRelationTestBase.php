@@ -4,8 +4,11 @@ namespace Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Relations\ToMany;
 
 use Iddigital\Cms\Core\Model\EntityCollection;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\IEntityMapper;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\IOrm;
 use Iddigital\Cms\Core\Persistence\Db\Query\Select;
 use Iddigital\Cms\Core\Persistence\Db\Query\Upsert;
+use Iddigital\Cms\Core\Persistence\Db\Schema\ForeignKey;
+use Iddigital\Cms\Core\Persistence\Db\Schema\ForeignKeyMode;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Table;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\DbIntegrationTest;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Fixtures\ToManyRelation\ParentEntity;
@@ -30,10 +33,9 @@ abstract class ToManyRelationTestBase extends DbIntegrationTest
     /**
      * {@inheritDoc}
      */
-    protected function buildDatabase(MockDatabase $db, IEntityMapper $mapper)
+    protected function buildDatabase(MockDatabase $db, IOrm $orm)
     {
-        parent::buildDatabase($db, $mapper);
-        $db->createForeignKey('child_entities.parent_id', 'parent_entities.id');
+        parent::buildDatabase($db, $orm);
         $this->parentEntities = $db->getTable('parent_entities')->getStructure();
         $this->childEntities  = $db->getTable('child_entities')->getStructure();
     }
@@ -47,6 +49,28 @@ abstract class ToManyRelationTestBase extends DbIntegrationTest
         }
 
         return $entity;
+    }
+
+    /**
+     * @return string
+     */
+    abstract protected function deleteForeignKeyMode();
+
+    public function testCreatesForeignKeys()
+    {
+        $this->assertEquals(
+                [
+                        new ForeignKey(
+                                'fk_child_entities_parent_id_parent_entities',
+                                ['parent_id'],
+                                'parent_entities',
+                                ['id'],
+                                ForeignKeyMode::CASCADE,
+                                $this->deleteForeignKeyMode()
+                        ),
+                ],
+                array_values($this->childEntities->getForeignKeys())
+        );
     }
 
     public function testPersistNoChildren()

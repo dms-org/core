@@ -2,8 +2,10 @@
 
 namespace Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Fixtures\ValueObjectWithToManyRelation;
 
+use Iddigital\Cms\Core\Persistence\Db\Mapping\CustomOrm;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\MapperDefinition;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\EntityMapper;
+use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Fixtures\ToManyIdRelation\ChildEntity;
 
 
 /**
@@ -11,12 +13,14 @@ use Iddigital\Cms\Core\Persistence\Db\Mapping\EntityMapper;
  */
 class EntityWithValueObjectMapper extends EntityMapper
 {
-    /**
-     * @inheritDoc
-     */
-    public function __construct()
+    public static function orm()
     {
-        parent::__construct('entities');
+        return CustomOrm::from([
+                EntityWithValueObject::class => __CLASS__
+        ], [
+                EmbeddedObject::class => EmbeddedObjectMapper::class,
+                ChildEntity::class    => ChildEntityMapper::class,
+        ]);
     }
 
     /**
@@ -29,9 +33,10 @@ class EntityWithValueObjectMapper extends EntityMapper
     protected function define(MapperDefinition $map)
     {
         $map->type(EntityWithValueObject::class);
+        $map->toTable('entities');
 
         $map->idToPrimaryKey('id');
 
-        $map->embedded('embedded')->using(new EmbeddedObjectMapper($this));
+        $map->embedded('embedded')->to(EmbeddedObject::class);
     }
 }

@@ -3,6 +3,7 @@
 namespace Iddigital\Cms\Core\Tests\Persistence\Db\Integration;
 
 use Iddigital\Cms\Core\Persistence\Db\Mapping\IEntityMapper;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\IOrm;
 use Iddigital\Cms\Core\Persistence\Db\Query\Query;
 use Iddigital\Cms\Core\Persistence\DbRepository;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Mock\MockConnection;
@@ -19,6 +20,11 @@ abstract class DbIntegrationTest extends MockDatabaseTestBase
      * @var MockDatabase
      */
     protected $db;
+
+    /**
+     * @var IOrm
+     */
+    protected $orm;
 
     /**
      * @var MockTable
@@ -43,44 +49,45 @@ abstract class DbIntegrationTest extends MockDatabaseTestBase
     public function setUp()
     {
         $this->db     = new MockDatabase();
-        $this->mapper = $this->loadMapper();
-        $this->buildDatabase($this->db, $this->mapper);
+        $this->orm    = $this->loadOrm();
+        $this->mapper = $this->orm->getEntityMapper($this->mapperAndRepoType());
+        $this->buildDatabase($this->db, $this->orm);
         $this->connection = new MockConnection($this->db);
         $this->repo       = new DbRepository($this->connection, $this->mapper);
-        $this->table      = $this->db->getTable($this->mapper->getPrimaryTable()->getName());
+        $this->table      = $this->db->getTable($this->mapper->getPrimaryTableName());
+    }
+
+    /**
+     * @return IOrm
+     */
+    abstract protected function loadOrm();
+
+    /**
+     * @return string
+     */
+    protected function mapperAndRepoType()
+    {
+        $entityMappers = $this->orm->getEntityMappers();
+        /** @var IEntityMapper $mapper */
+        $mapper = reset($entityMappers);
+
+        return $mapper->getObjectType();
     }
 
     /**
      * @param MockDatabase  $db
-     * @param IEntityMapper $mapper
+     * @param IOrm $orm
      *
      * @return void
      */
-    protected function buildDatabase(MockDatabase $db, IEntityMapper $mapper)
+    protected function buildDatabase(MockDatabase $db, IOrm $orm)
     {
-        foreach ($mapper->getTables() as $table) {
+        foreach ($orm->getDatabase()->getTables() as $table) {
             $db->createTable($table);
         }
 
-        foreach ($mapper->getNestedMappers() as $innerMapper) {
-            if ($innerMapper instanceof IEntityMapper) {
-                foreach ($innerMapper->getTables() as $table) {
-                    $db->createTable($table);
-                }
-            }
-        }
-
-        foreach ($mapper->getDefinition()->getRelations() as $relation) {
-            foreach ($relation->getRelationshipTables() as $table) {
-                $db->createTable($table);
-            }
-        }
+        $db->loadForeignKeys();
     }
-
-    /**
-     * @return IEntityMapper
-     */
-    abstract protected function loadMapper();
 
     /**
      * @param string $table

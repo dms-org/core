@@ -2,8 +2,12 @@
 
 namespace Iddigital\Cms\Core\Tests\Persistence\Db\Integration\ReadModel\Fixtures\Properties;
 
+use Iddigital\Cms\Core\Persistence\Db\Connection\IConnection;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\CustomOrm;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\IOrm;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\ReadModel\Definition\ReadMapperDefinition;
 use Iddigital\Cms\Core\Persistence\ReadModelRepository;
+use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Fixtures\Types\TypesEntity;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Fixtures\Types\TypesMapper;
 
 /**
@@ -11,6 +15,16 @@ use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Fixtures\Types\TypesMapp
  */
 class TypesReadModelRepository extends ReadModelRepository
 {
+    /**
+     * @inheritDoc
+     */
+    public function __construct(IConnection $connection)
+    {
+        parent::__construct($connection, CustomOrm::from([
+            TypesEntity::class => TypesMapper::class
+        ]));
+    }
+
     /**
      * Defines the structure of the read model.
      *
@@ -21,7 +35,7 @@ class TypesReadModelRepository extends ReadModelRepository
     protected function define(ReadMapperDefinition $map)
     {
         $map->type(TypesReadModel::class);
-        $map->from(new TypesMapper());
+        $map->fromType(TypesEntity::class);
 
         $map->properties([
                 'int',

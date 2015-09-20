@@ -6,7 +6,6 @@ use Iddigital\Cms\Core\Exception\InvalidArgumentException;
 use Iddigital\Cms\Core\Model\IEntity;
 use Iddigital\Cms\Core\Persistence\Db\LoadingContext;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\FinalizedMapperDefinition;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\MapperDefinition;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Hierarchy\ParentObjectMapping;
 use Iddigital\Cms\Core\Persistence\Db\PersistenceContext;
 use Iddigital\Cms\Core\Persistence\Db\Query\Delete;
@@ -14,6 +13,7 @@ use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Expr;
 use Iddigital\Cms\Core\Persistence\Db\Query\Select;
 use Iddigital\Cms\Core\Persistence\Db\Row;
 use Iddigital\Cms\Core\Persistence\Db\RowSet;
+use Iddigital\Cms\Core\Persistence\Db\Schema\ForeignKey;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Table;
 
 /**
@@ -46,12 +46,11 @@ abstract class EntityMapperBase extends ObjectMapper implements IEntityMapper
     /**
      * EntityMapperBase constructor.
      *
-     * @param MapperDefinition $definition
-     * @param string           $tableName
+     * @param FinalizedMapperDefinition $definition
      */
-    public function __construct(MapperDefinition $definition, $tableName)
+    public function __construct(FinalizedMapperDefinition $definition)
     {
-        parent::__construct($definition, $tableName);
+        parent::__construct($definition);
     }
 
     /**
@@ -64,14 +63,14 @@ abstract class EntityMapperBase extends ObjectMapper implements IEntityMapper
 
     final protected function loadFromDefinition(FinalizedMapperDefinition $definition)
     {
-        $this->entityType   = $definition->getClassName();
-        $this->primaryTable = $definition->getTable();
-        $this->primaryKey   = $this->primaryTable->getPrimaryKeyColumnName();
+        $this->entityType       = $definition->getClassName();
+        $this->primaryTable     = $definition->getTable();
+        $this->primaryKey       = $this->primaryTable->getPrimaryKeyColumnName();
 
-        $this->tables[] = $this->primaryTable;
+        $this->tables[$this->primaryTable->getName()] = $this->primaryTable;
 
         foreach ($this->mapping->getMappingTables() as $table) {
-            $this->tables[] = $table;
+            $this->tables[$table->getName()] = $table;
         }
     }
 
@@ -81,6 +80,14 @@ abstract class EntityMapperBase extends ObjectMapper implements IEntityMapper
     final public function getPrimaryTable()
     {
         return $this->primaryTable;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    final public function getPrimaryTableName()
+    {
+        return $this->primaryTable->getName();
     }
 
     /**
@@ -111,6 +118,18 @@ abstract class EntityMapperBase extends ObjectMapper implements IEntityMapper
     final public function rowSet(array $rows)
     {
         return new RowSet($this->primaryTable, $rows);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    final public function addForeignKey(ForeignKey $foreignKey)
+    {
+        $this->primaryTable                           = $this->primaryTable->withForeignKeys(
+                array_merge($this->primaryTable->getForeignKeys(), [$foreignKey])
+        );
+        $this->mapping                                = $this->mapping->withPrimaryTable($this->primaryTable);
+        $this->tables[$this->primaryTable->getName()] = $this->primaryTable;
     }
 
     /**
@@ -209,7 +228,7 @@ abstract class EntityMapperBase extends ObjectMapper implements IEntityMapper
             $idParams[] = Expr::idParam($id);
         }
 
-        $primaryKey  = Expr::column($this->getPrimaryTable()->getName(), $this->getPrimaryTable()->getPrimaryKeyColumn());
+        $primaryKey  = Expr::column($this->getPrimaryTableName(), $this->getPrimaryTable()->getPrimaryKeyColumn());
         $deleteQuery = Delete::from($this->getPrimaryTable())->where(Expr::in($primaryKey, Expr::tuple($idParams)));
 
         $this->deleteFromQuery($context, $deleteQuery);

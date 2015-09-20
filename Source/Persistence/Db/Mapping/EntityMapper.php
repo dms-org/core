@@ -16,13 +16,14 @@ abstract class EntityMapper extends EntityMapperBase
     /**
      * EntityMapper constructor.
      *
-     * @param string $tableName
+     * @param IOrm   $orm
+     * @param string|null $tableName
      */
-    public function __construct($tableName)
+    public function __construct(IOrm $orm, $tableName = null)
     {
-        $definition = new MapperDefinition();
+        $definition = new MapperDefinition($orm);
         $this->define($definition);
-        parent::__construct($definition, $tableName);
+        parent::__construct($definition->finalize($tableName));
     }
 
     /**

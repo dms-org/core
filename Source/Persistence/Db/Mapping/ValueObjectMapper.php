@@ -31,16 +31,22 @@ abstract class ValueObjectMapper extends ObjectMapper implements IEmbeddedObject
      */
     private $parentMapper;
 
-    public function __construct(IObjectMapper $parentMapper = null)
+    /**
+     * @param IOrm               $orm
+     * @param IObjectMapper|null $parentMapper
+     */
+    public function __construct(IOrm $orm, IObjectMapper $parentMapper = null)
     {
+        $rootEntityMapper   = $this->getRootEntityMapper();
         $this->parentMapper = $parentMapper;
-        $definition         = new MapperDefinition();
+        $definition         = new MapperDefinition($orm);
         $this->define($definition);
-        parent::__construct($definition, '__EMBEDDED__');
+
+        parent::__construct($definition->finalize($rootEntityMapper ? $rootEntityMapper->getPrimaryTableName() : '__EMBEDDED__'));
     }
 
     /**
-     * @return IObjectMapper|null
+     * @return IObjectMapper
      */
     final public function getParentMapper()
     {
@@ -53,14 +59,13 @@ abstract class ValueObjectMapper extends ObjectMapper implements IEmbeddedObject
     final public function getRootEntityMapper()
     {
         $parentMapper = $this->parentMapper;
-        if ($parentMapper === null) {
-            return null;
-        } elseif ($parentMapper instanceof IEntityMapper) {
+        if ($parentMapper instanceof IEntityMapper) {
             return $parentMapper;
-        } else {
-            /** @var IEmbeddedObjectMapper $parentMapper */
+        } elseif ($parentMapper instanceof IEmbeddedObjectMapper) {
             return $parentMapper->getRootEntityMapper();
         }
+
+        return null;
     }
 
     /**

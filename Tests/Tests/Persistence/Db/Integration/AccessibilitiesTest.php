@@ -2,10 +2,10 @@
 
 namespace Iddigital\Cms\Core\Tests\Persistence\Db\Integration;
 
-use Iddigital\Cms\Core\Persistence\Db\Mapping\IEntityMapper;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\CustomOrm;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\IOrm;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Fixtures\Accessbilities\AccessibilitiesEntity;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Fixtures\Accessbilities\AccessibilitiesEntityMapper;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Fixtures\Types\TypesEntity;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>
@@ -13,11 +13,11 @@ use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Fixtures\Types\TypesEnti
 class AccessibilitiesTest extends DbIntegrationTest
 {
     /**
-     * @return IEntityMapper
+     * @return IOrm
      */
-    protected function loadMapper()
+    protected function loadOrm()
     {
-        return new AccessibilitiesEntityMapper('accessibilities');
+        return CustomOrm::from([AccessibilitiesEntity::class => AccessibilitiesEntityMapper::class]);
     }
 
     protected function getTestEntity()

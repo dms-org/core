@@ -2,13 +2,14 @@
 
 namespace Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Fixtures\NestedValueObject;
 
+use Iddigital\Cms\Core\Persistence\Db\Mapper\SimpleValueObjectMapper;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\MapperDefinition;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\ValueObjectMapper;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>
  */
-class LevelTwoMapper extends ValueObjectMapper
+class LevelTwoMapper extends SimpleValueObjectMapper
 {
 
     /**

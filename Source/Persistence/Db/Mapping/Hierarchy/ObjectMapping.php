@@ -6,6 +6,7 @@ use Iddigital\Cms\Core\Model\ITypedObject;
 use Iddigital\Cms\Core\Persistence\Db\Exception\InvalidRowException;
 use Iddigital\Cms\Core\Persistence\Db\LoadingContext;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\FinalizedMapperDefinition;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\IObjectMapper;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\ParentChildMap;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\ParentChildrenMap;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\EntityRelation;
@@ -71,40 +72,64 @@ abstract class ObjectMapping implements IObjectMapping
     /**
      * @var string[]
      */
-    protected $allColumnsToLoad;
+    protected $allColumnsToLoad = [];
 
     /**
      * ObjectMapping constructor.
      *
      * @param FinalizedMapperDefinition $definition
      * @param string                    $dependencyMode
-     * @param Table[]                   $mappingTables
-     * @param string[]                  $columnsToLoad
      */
-    public function __construct(FinalizedMapperDefinition $definition, $dependencyMode, array $mappingTables, array $columnsToLoad = [])
+    public function __construct(FinalizedMapperDefinition $definition, $dependencyMode)
     {
-        $this->definition           = $definition;
-        $this->objectType           = $definition->getClassName();
-        $this->subClassMappings     = $definition->getSubClassMappings();
-        $this->primaryKeyColumnName = $definition->getTable()->getPrimaryKeyColumnName();
-        $this->dependencyMode       = $dependencyMode;
-        $this->mappingTables        = $mappingTables;
-
-        $this->specificColumnsToLoad = $columnsToLoad;
-        $definition->onInitialized(function () {
-            $this->specificColumnsToLoad = array_merge($this->specificColumnsToLoad, $this->loadColumnsToLoad());
-            $this->allColumnsToLoad      = array_merge($this->specificColumnsToLoad, $this->loadSubclassColumnsToLoad());
-        });
+        $this->dependencyMode = $dependencyMode;
+        $this->loadFromDefinition($definition);
 
         if (!$definition->isForAbstractClass()) {
             $this->cleanInstance = $definition->getClass()->newCleanInstance();
         }
     }
 
+    protected function loadFromDefinition(FinalizedMapperDefinition $definition)
+    {
+        $this->definition            = $definition;
+        $this->objectType            = $definition->getClassName();
+        $this->subClassMappings      = $definition->getSubClassMappings();
+        $this->primaryKeyColumnName  = $definition->getTable()->getPrimaryKeyColumnName();
+        $this->mappingTables         = $this->loadMappingTables($definition);
+        $this->specificColumnsToLoad = $this->loadRequiredColumns($definition);
+    }
+
+    protected function loadMappingTables(FinalizedMapperDefinition $definition)
+    {
+        return [];
+    }
+
+    protected function loadRequiredColumns(FinalizedMapperDefinition $definition)
+    {
+        return [];
+    }
+
+    /**
+     * @param IObjectMapper $parentMapper
+     */
+    public function initializeRelations(IObjectMapper $parentMapper)
+    {
+        $this->definition->initializeRelations($parentMapper);
+
+        foreach ($this->subClassMappings as $mapping) {
+            $mapping->initializeRelations($parentMapper);
+        }
+
+        $this->specificColumnsToLoad = array_merge($this->specificColumnsToLoad, $this->findAllColumnsToLoad());
+        $this->allColumnsToLoad      = array_merge($this->specificColumnsToLoad, $this->findAllSubclassColumnsToLoad());
+        $this->loadFromDefinition($this->definition);
+    }
+
     /**
      * @return string[]
      */
-    protected function loadColumnsToLoad()
+    protected function findAllColumnsToLoad()
     {
         $columns = [];
 
@@ -133,7 +158,7 @@ abstract class ObjectMapping implements IObjectMapping
         return array_unique($columns, SORT_STRING);
     }
 
-    protected function loadSubclassColumnsToLoad()
+    protected function findAllSubclassColumnsToLoad()
     {
         $columns = [];
 
@@ -219,6 +244,8 @@ abstract class ObjectMapping implements IObjectMapping
         foreach ($clone->allColumnsToLoad as $key => $column) {
             $clone->allColumnsToLoad[$key] = $prefix . $column;
         }
+
+        $clone->loadFromDefinition($clone->definition);
 
         return $clone;
     }

@@ -8,6 +8,9 @@ use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Mode\NonIdentifyingRelati
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Reference\ToManyRelationIdentityReference;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Reference\ToManyRelationObjectReference;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\ToManyRelation;
+use Iddigital\Cms\Core\Persistence\Db\Schema\ForeignKey;
+use Iddigital\Cms\Core\Persistence\Db\Schema\ForeignKeyMode;
+use Iddigital\Cms\Core\Persistence\Db\Schema\Table;
 
 /**
  * The one-to-many relation definer class.
@@ -26,9 +29,9 @@ class OneToManyRelationDefiner extends RelationTypeDefinerBase
      */
     private $identifying;
 
-    public function __construct(callable $callback, IEntityMapper $mapper, $loadIds, $identifying)
+    public function __construct(callable $callback, callable $mapperLoader, $loadIds, $identifying)
     {
-        parent::__construct($callback, $mapper, $loadIds);
+        parent::__construct($callback, $mapperLoader, $loadIds);
         $this->identifying = $identifying;
     }
 
@@ -59,18 +62,31 @@ class OneToManyRelationDefiner extends RelationTypeDefinerBase
      * Defines the relationship as one-to-many mapping the parent
      * id to the supplied column.
      *
-     * @param string $column
+     * @param string $columnName
      *
      * @return void
      */
-    public function withParentIdAs($column)
+    public function withParentIdAs($columnName)
     {
-        call_user_func($this->callback, function () use ($column) {
+        call_user_func($this->callback, function (Table $parentTable) use ($columnName) {
+            /** @var IEntityMapper $mapper */
+            $mapper = call_user_func($this->mapperLoader);
+            $mapper->addForeignKey(ForeignKey::createWithNamingConvention(
+                    $mapper->getPrimaryTableName(),
+                    [$columnName],
+                    $parentTable->getName(),
+                    [$parentTable->getPrimaryKeyColumnName()],
+                    ForeignKeyMode::CASCADE,
+                    $this->identifying
+                            ? ForeignKeyMode::CASCADE
+                            : ForeignKeyMode::SET_NULL
+            ));
+
             return new ToManyRelation(
                     $this->loadIds
-                            ? new ToManyRelationIdentityReference($this->mapper)
-                            : new ToManyRelationObjectReference($this->mapper, $this->bidirectionalRelationProperty),
-                    $column,
+                            ? new ToManyRelationIdentityReference($mapper)
+                            : new ToManyRelationObjectReference($mapper, $this->bidirectionalRelationProperty),
+                    $columnName,
                     $this->identifying
                             ? new IdentifyingRelationMode()
                             : new NonIdentifyingRelationMode()

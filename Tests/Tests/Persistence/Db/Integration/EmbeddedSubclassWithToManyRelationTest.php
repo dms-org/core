@@ -2,11 +2,14 @@
 
 namespace Iddigital\Cms\Core\Tests\Persistence\Db\Integration;
 
+use Iddigital\Cms\Core\Persistence\Db\Mapping\CustomOrm;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\IEntityMapper;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\IOrm;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Column;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Type\Enum;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Type\Integer;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Fixtures\EmbeddedSubclassWithToManyRelation\ChildEntity;
+use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Fixtures\EmbeddedSubclassWithToManyRelation\RootEntity;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Fixtures\EmbeddedSubclassWithToManyRelation\RootEntityMapper;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Fixtures\EmbeddedSubclassWithToManyRelation\EntitySubclass;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Mock\MockDatabase;
@@ -17,19 +20,19 @@ use Iddigital\Cms\Core\Tests\Persistence\Db\Mock\MockDatabase;
 class EmbeddedSubclassWithToManyRelationTest extends DbIntegrationTest
 {
     /**
-     * @return IEntityMapper
+     * @inheritDoc
      */
-    protected function loadMapper()
+    protected function loadOrm()
     {
-        return new RootEntityMapper();
+        return RootEntityMapper::orm();
     }
 
     /**
      * @inheritDoc
      */
-    protected function buildDatabase(MockDatabase $db, IEntityMapper $mapper)
+    protected function buildDatabase(MockDatabase $db, IOrm $orm)
     {
-        parent::buildDatabase($db, $mapper);
+        parent::buildDatabase($db, $orm);
 
         $db->createForeignKey('children.parent_id', 'entities.id');
     }

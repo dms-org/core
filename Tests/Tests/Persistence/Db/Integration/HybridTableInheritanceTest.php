@@ -2,6 +2,7 @@
 
 namespace Iddigital\Cms\Core\Tests\Persistence\Db\Integration;
 
+use Iddigital\Cms\Core\Persistence\Db\Mapping\CustomOrm;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\IEntityMapper;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Column;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Table;
@@ -26,11 +27,11 @@ class HybridTableInheritanceTest extends DbIntegrationTest
     private $parentEntities;
 
     /**
-     * @return IEntityMapper
+     * @inheritDoc
      */
-    protected function loadMapper()
+    protected function loadOrm()
     {
-        return new TestHybridTableInheritanceMapper('parent_entities');
+        return CustomOrm::from([TestSuperclassEntity::class => TestHybridTableInheritanceMapper::class]);
     }
 
     public function setUp()

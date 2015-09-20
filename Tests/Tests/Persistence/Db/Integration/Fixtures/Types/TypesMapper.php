@@ -11,14 +11,6 @@ use Iddigital\Cms\Core\Persistence\Db\Mapping\EntityMapper;
 class TypesMapper extends EntityMapper
 {
     /**
-     * @inheritDoc
-     */
-    public function __construct()
-    {
-        parent::__construct('types');
-    }
-
-    /**
      * Defines the entity mapper
      *
      * @param MapperDefinition $map
@@ -28,6 +20,7 @@ class TypesMapper extends EntityMapper
     protected function define(MapperDefinition $map)
     {
         $map->type(TypesEntity::class);
+        $map->toTable('types');
 
         $map->idToPrimaryKey('id');
 

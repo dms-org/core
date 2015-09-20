@@ -6,6 +6,7 @@ use Iddigital\Cms\Core\Persistence\Db\Mapping\IEntityMapper;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\ManyToManyRelation;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Reference\ToManyRelationIdentityReference;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Reference\ToManyRelationObjectReference;
+use Iddigital\Cms\Core\Persistence\Db\Schema\Table;
 
 /**
  * The many-to-many relation definer class.
@@ -19,9 +20,9 @@ class ManyToManyRelatedIdDefiner extends ManyToManyRelationDefinerBase
      */
     private $parentIdColumn;
 
-    public function __construct(callable $callback, IEntityMapper $mapper, $joinTable, $parentIdColumn, $bidirectionalRelationProperty, $loadIds)
+    public function __construct(callable $callback, callable $mapperLoader, $joinTable, $parentIdColumn, $bidirectionalRelationProperty, $loadIds)
     {
-        parent::__construct($callback, $mapper, $joinTable, $bidirectionalRelationProperty, $loadIds);
+        parent::__construct($callback, $mapperLoader, $joinTable, $bidirectionalRelationProperty, $loadIds);
         $this->parentIdColumn = $parentIdColumn;
     }
 
@@ -34,12 +35,16 @@ class ManyToManyRelatedIdDefiner extends ManyToManyRelationDefinerBase
      */
     public function withRelatedIdAs($column)
     {
-        call_user_func($this->callback, function () use ($column) {
+        call_user_func($this->callback, function (Table $parentTable) use ($column) {
+            $mapper = call_user_func($this->mapperLoader);
+
             return new ManyToManyRelation(
                     $this->loadIds
-                            ? new ToManyRelationIdentityReference($this->mapper)
-                            : new ToManyRelationObjectReference($this->mapper, $this->bidirectionalRelationProperty),
-                    $this->joinTable,
+                            ? new ToManyRelationIdentityReference($mapper)
+                            : new ToManyRelationObjectReference($mapper, $this->bidirectionalRelationProperty),
+                    $this->joinTableName,
+                    $parentTable->getName(),
+                    $parentTable->getPrimaryKeyColumnName(),
                     $this->parentIdColumn,
                     $column
             );

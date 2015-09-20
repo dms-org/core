@@ -19,12 +19,14 @@ class CustomValueObjectMapper extends ValueObjectMapper
     /**
      * CustomValueObjectMapper constructor.
      *
-     * @param callable $defineCallback
+     * @param IOrm          $orm
+     * @param IObjectMapper $parentMapper
+     * @param callable      $defineCallback
      */
-    public function __construct(callable $defineCallback)
+    public function __construct(IOrm $orm, IObjectMapper $parentMapper, callable $defineCallback)
     {
-        parent::__construct();
         $this->defineCallback = $defineCallback;
+        parent::__construct($orm, $parentMapper);
     }
 
     /**

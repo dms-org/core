@@ -2,6 +2,7 @@
 
 namespace Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Fixtures\ValueObjectCollection;
 
+use Iddigital\Cms\Core\Persistence\Db\Mapping\CustomOrm;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\MapperDefinition;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\EntityMapper;
 
@@ -11,12 +12,13 @@ use Iddigital\Cms\Core\Persistence\Db\Mapping\EntityMapper;
  */
 class EntityWithEmailsMapper extends EntityMapper
 {
-    /**
-     * @inheritDoc
-     */
-    public function __construct()
+    public static function orm()
     {
-        parent::__construct('entities');
+        return CustomOrm::from([
+                EntityWithEmails::class => __CLASS__
+        ], [
+                EmbeddedEmailAddress::class => EmbeddedEmailAddressMapper::class
+        ]);
     }
 
     /**
@@ -29,6 +31,7 @@ class EntityWithEmailsMapper extends EntityMapper
     protected function define(MapperDefinition $map)
     {
         $map->type(EntityWithEmails::class);
+        $map->toTable('entities');
 
         $map->idToPrimaryKey('id');
 
@@ -36,6 +39,6 @@ class EntityWithEmailsMapper extends EntityMapper
                 ->toTable('emails')
                 ->withPrimaryKey('id')
                 ->withForeignKeyToParentAs('entity_id')
-                ->using(new EmbeddedEmailAddressMapper());
+                ->to(EmbeddedEmailAddress::class);
     }
 }

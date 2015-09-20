@@ -2,6 +2,7 @@
 
 namespace Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Fixtures\ManyToOneRelation;
 
+use Iddigital\Cms\Core\Persistence\Db\Mapping\CustomOrm;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\MapperDefinition;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\EntityMapper;
 
@@ -10,12 +11,12 @@ use Iddigital\Cms\Core\Persistence\Db\Mapping\EntityMapper;
  */
 class ParentEntityMapper extends EntityMapper
 {
-    /**
-     * @inheritDoc
-     */
-    public function __construct()
+    public static function orm()
     {
-        parent::__construct('parent_entities');
+        return CustomOrm::from([
+                ParentEntity::class => __CLASS__,
+                SubEntity::class    => SubEntityMapper::class,
+        ]);
     }
 
     /**
@@ -28,12 +29,13 @@ class ParentEntityMapper extends EntityMapper
     protected function define(MapperDefinition $map)
     {
         $map->type(ParentEntity::class);
+        $map->toTable('parent_entities');
 
         $map->idToPrimaryKey('id');
         $map->column('child_id')->nullable()->asInt();
 
         $map->relation('child')
-                ->using(new SubEntityMapper())
+                ->to(SubEntity::class)
                 ->manyToOne()
                 ->withRelatedIdAs('child_id');
     }

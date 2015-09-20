@@ -22,17 +22,17 @@ abstract class Relation implements IRelation
     /**
      * @var string
      */
-    private $dependencyMode;
+    protected $dependencyMode;
 
     /**
      * @var Table[]
      */
-    private $relationshipTables;
+    protected $relationshipTables;
 
     /**
      * @var string[]
      */
-    private $parentColumnsToLoad;
+    protected $parentColumnsToLoad;
 
     /**
      * Relation constructor.

@@ -2,7 +2,9 @@
 
 namespace Iddigital\Cms\Core\Tests\Persistence\Db\Integration;
 
+use Iddigital\Cms\Core\Persistence\Db\Mapping\CustomOrm;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\IEntityMapper;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\IOrm;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Column;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Table;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Type\Boolean;
@@ -26,11 +28,11 @@ class ClassTableInheritanceTest extends DbIntegrationTest
     private $parentEntities;
 
     /**
-     * @return IEntityMapper
+     * @return IOrm
      */
-    protected function loadMapper()
+    protected function loadOrm()
     {
-        return new TestClassTableInheritanceMapper('parent_entities');
+        return CustomOrm::from([TestSuperclassEntity::class => TestClassTableInheritanceMapper::class]);
     }
 
     public function setUp()
@@ -42,9 +44,9 @@ class ClassTableInheritanceTest extends DbIntegrationTest
     /**
      * @inheritDoc
      */
-    protected function buildDatabase(MockDatabase $db, IEntityMapper $mapper)
+    protected function buildDatabase(MockDatabase $db, IOrm $orm)
     {
-        parent::buildDatabase($db, $mapper);
+        parent::buildDatabase($db, $orm);
 
         $db->createForeignKey('subclass1_table.id', 'parent_entities.id');
 

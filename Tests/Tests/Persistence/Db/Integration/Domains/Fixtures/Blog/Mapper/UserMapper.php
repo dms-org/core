@@ -4,6 +4,9 @@ namespace Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\B
 
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\MapperDefinition;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\EntityMapper;
+use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\Alias;
+use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\HashedPassword;
+use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\Post;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\User;
 
 /**
@@ -13,39 +16,6 @@ use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\Us
  */
 class UserMapper extends EntityMapper
 {
-    private $aliasMapper;
-    /**
-     * @var PostMapper
-     */
-    private $postMapper;
-
-    /**
-     * @inheritDoc
-     */
-    public function __construct()
-    {
-        $this->postMapper  = new PostMapper($this);
-        $this->aliasMapper = new AliasMapper();
-        parent::__construct('users');
-    }
-
-    /**
-     * @return PostMapper
-     */
-    public function getPostMapper()
-    {
-        return $this->postMapper;
-    }
-
-    /**
-     * @return AliasMapper
-     */
-    public function getAliasMapper()
-    {
-        return $this->aliasMapper;
-    }
-
-
     /**
      * Defines the entity mapper
      *
@@ -56,6 +26,7 @@ class UserMapper extends EntityMapper
     protected function define(MapperDefinition $map)
     {
         $map->type(User::class);
+        $map->toTable('users');
 
         $map->idToPrimaryKey('id');
 
@@ -69,10 +40,10 @@ class UserMapper extends EntityMapper
 
         $map->embedded('password')
                 ->withColumnsPrefixedBy('password_')
-                ->using(new PasswordMapper());
+                ->to(HashedPassword::class);
 
         $map->relation('postIds')
-                ->using($this->postMapper)
+                ->to(Post::class)
                 ->toManyIds()
                 ->withParentIdAs('author_id');
 
@@ -84,7 +55,7 @@ class UserMapper extends EntityMapper
                 ->withRelatedIdAs('friend_id');
 
         $map->relation('alias')
-                ->using($this->aliasMapper)
+                ->to(Alias::class)
                 ->toOne()
                 ->identifying()
                 ->withParentIdAs('user_id');

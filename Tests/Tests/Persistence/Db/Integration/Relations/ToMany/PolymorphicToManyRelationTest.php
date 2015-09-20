@@ -15,11 +15,11 @@ use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Fixtures\ToManyRelation\
 class PolymorphicToManyRelationTest extends DbIntegrationTest
 {
     /**
-     * @return IEntityMapper
+     * @inheritDoc
      */
-    protected function loadMapper()
+    protected function loadOrm()
     {
-        return new ParentEntityMapper();
+        return ParentEntityMapper::orm();
     }
 
     public function testPersist()

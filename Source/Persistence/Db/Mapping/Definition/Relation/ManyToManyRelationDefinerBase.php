@@ -2,8 +2,6 @@
 
 namespace Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Relation;
 
-use Iddigital\Cms\Core\Persistence\Db\Mapping\IEntityMapper;
-
 /**
  * The many-to-many relation definer class.
  *
@@ -14,17 +12,17 @@ class ManyToManyRelationDefinerBase extends RelationTypeDefinerBase
     /**
      * @var string
      */
-    protected $joinTable;
+    protected $joinTableName;
 
     /**
      * @var string
      */
     protected $bidirectionalRelationProperty;
 
-    public function __construct(callable $callback, IEntityMapper $mapper, $joinTable, $bidirectionalRelationProperty, $loadIds)
+    public function __construct(callable $callback, callable $mapperLoader, $joinTable, $bidirectionalRelationProperty, $loadIds)
     {
-        parent::__construct($callback, $mapper, $loadIds);
-        $this->joinTable                     = $joinTable;
+        parent::__construct($callback, $mapperLoader, $loadIds);
+        $this->joinTableName                 = $joinTable;
         $this->bidirectionalRelationProperty = $bidirectionalRelationProperty;
     }
 }

@@ -77,6 +77,8 @@ class CriteriaMapper
      */
     public function __construct(IObjectMapper $mapper)
     {
+        $mapper->initializeRelations();
+
         $this->mapper                      = $mapper;
         $this->definition                  = $this->mapper->getDefinition();
         $this->primaryTable                = $this->mapper->getDefinition()->getTable();

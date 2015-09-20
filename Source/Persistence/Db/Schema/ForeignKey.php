@@ -12,6 +12,8 @@ use Iddigital\Cms\Core\Persistence\Db\Schema\Type\IType;
  */
 class ForeignKey
 {
+    const CONVENTION_PREFIX = 'fk_';
+
     /**
      * @var string
      */
@@ -82,6 +84,43 @@ class ForeignKey
     }
 
     /**
+     * Creates a new foreign key with the name using the convention:
+     * fk_{table}_{local_columns}_{referenced_table}
+     *
+     * @param string   $tableName
+     * @param string[] $localColumnNames
+     * @param string   $referencedTableName
+     * @param string[] $referencedColumnNames
+     * @param string   $onDeleteMode
+     * @param string   $onUpdateMode
+     *
+     * @return ForeignKey
+     */
+    public static function createWithNamingConvention(
+            $tableName,
+            array $localColumnNames,
+            $referencedTableName,
+            array $referencedColumnNames,
+            $onDeleteMode,
+            $onUpdateMode
+    ) {
+        $fkName = self::CONVENTION_PREFIX . implode('_', [
+                $tableName,
+                implode('_', $localColumnNames),
+                $referencedTableName
+        ]);
+
+        return new self(
+                $fkName,
+                $localColumnNames,
+                $referencedTableName,
+                $referencedColumnNames,
+                $onDeleteMode,
+                $onUpdateMode
+        );
+    }
+
+    /**
      * @return string
      */
     public function getName()
@@ -141,12 +180,18 @@ class ForeignKey
     {
         $prefixedLocalColumns = [];
 
-        foreach ($this->localColumnNames as $name) {
-            $prefixedLocalColumns[] = $prefix . $name;
+        foreach ($this->localColumnNames as $column) {
+            $prefixedLocalColumns[] = $prefix . $column;
+        }
+
+        if (strpos($this->name, self::CONVENTION_PREFIX) === 0) {
+            $name = self::CONVENTION_PREFIX . $prefix . substr($this->name, strlen(self::CONVENTION_PREFIX));
+        } else {
+            $name = $prefix . $this->name;
         }
 
         return new ForeignKey(
-                $prefix . $this->name,
+                $name,
                 $prefixedLocalColumns,
                 $this->referencedTableName,
                 $this->referencedColumnNames,

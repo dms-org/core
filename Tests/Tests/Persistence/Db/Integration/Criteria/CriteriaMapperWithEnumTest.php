@@ -3,6 +3,7 @@
 namespace Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Criteria;
 
 use Iddigital\Cms\Core\Persistence\Db\Criteria\CriteriaMapper;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\CustomOrm;
 use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Expr;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Fixtures\Enum\EntityWithEnumMapper;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Fixtures\Enum\StatusEnum;
@@ -15,7 +16,7 @@ class CriteriaMapperWithEnumTest extends CriteriaMapperTestBase
 
     protected function buildMapper()
     {
-        return new CriteriaMapper(new EntityWithEnumMapper());
+        return new CriteriaMapper(new EntityWithEnumMapper(CustomOrm::from([])));
     }
 
     public function testWhereEquals()

@@ -158,7 +158,7 @@ class RowSet
      */
     public function add(Row $row)
     {
-        if ($row->getTable() !== $this->table) {
+        if ($row->getTable()->getName() !== $this->table->getName()) {
             throw InvalidArgumentException::format(
                     'The supplied row does not match the table: expecting %s, %s given',
                     $this->table->getName(),

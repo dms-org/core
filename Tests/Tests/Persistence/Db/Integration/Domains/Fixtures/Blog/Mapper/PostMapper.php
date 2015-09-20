@@ -4,7 +4,9 @@ namespace Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\B
 
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\MapperDefinition;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\EntityMapper;
+use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\Comment;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\Post;
+use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\User;
 
 /**
  *
@@ -12,23 +14,6 @@ use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\Po
  */
 class PostMapper extends EntityMapper
 {
-    /**
-     * @var UserMapper
-     */
-    private $userMapper;
-
-    /**
-     * PostMapper constructor.
-     *
-     * @param UserMapper $userMapper
-     */
-    public function __construct(UserMapper $userMapper)
-    {
-        $this->userMapper = $userMapper;
-        parent::__construct('posts');
-    }
-
-
     /**
      * Defines the entity mapper
      *
@@ -39,6 +24,7 @@ class PostMapper extends EntityMapper
     protected function define(MapperDefinition $map)
     {
         $map->type(Post::class);
+        $map->toTable('posts');
 
         $map->idToPrimaryKey('id');
         $map->column('author_id')->asInt();
@@ -46,14 +32,14 @@ class PostMapper extends EntityMapper
         $map->property('content')->to('content')->asText();
 
         $map->relation('authorId')
-            ->using($this->userMapper)
-            ->manyToOneId()
-            ->withRelatedIdAs('author_id');
+                ->to(User::class)
+                ->manyToOneId()
+                ->withRelatedIdAs('author_id');
 
         $map->relation('comments')
-            ->using(new CommentMapper($this->userMapper))
-            ->toMany()
-            ->identifying()
-            ->withParentIdAs('post_id');
+                ->to(Comment::class)
+                ->toMany()
+                ->identifying()
+                ->withParentIdAs('post_id');
     }
 }

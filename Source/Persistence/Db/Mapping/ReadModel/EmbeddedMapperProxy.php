@@ -39,6 +39,14 @@ class EmbeddedMapperProxy implements IEmbeddedObjectMapper
     /**
      * @inheritDoc
      */
+    public function initializeRelations()
+    {
+        $this->mapper->initializeRelations();
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function getMapperHash()
     {
         return $this->mapper->getMapperHash();
@@ -66,14 +74,6 @@ class EmbeddedMapperProxy implements IEmbeddedObjectMapper
     public function getNestedMappers()
     {
         return $this->mapper->getNestedMappers();
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function onInitialized(callable $callback)
-    {
-        $this->mapper->onInitialized($callback);
     }
 
     /**

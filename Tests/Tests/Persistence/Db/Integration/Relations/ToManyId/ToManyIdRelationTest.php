@@ -3,11 +3,14 @@
 namespace Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Relations\ToManyId;
 
 use Iddigital\Cms\Core\Persistence\Db\Mapping\IEntityMapper;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\IOrm;
 use Iddigital\Cms\Core\Persistence\Db\Query\BulkUpdate;
 use Iddigital\Cms\Core\Persistence\Db\Query\Delete;
 use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Expr;
 use Iddigital\Cms\Core\Persistence\Db\Query\Select;
 use Iddigital\Cms\Core\Persistence\Db\Query\Upsert;
+use Iddigital\Cms\Core\Persistence\Db\Schema\ForeignKey;
+use Iddigital\Cms\Core\Persistence\Db\Schema\ForeignKeyMode;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Table;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\DbIntegrationTest;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Fixtures\ToManyIdRelation\ParentEntity;
@@ -32,20 +35,36 @@ class ToManyIdRelationTest extends DbIntegrationTest
     /**
      * {@inheritDoc}
      */
-    protected function buildDatabase(MockDatabase $db, IEntityMapper $mapper)
+    protected function buildDatabase(MockDatabase $db, IOrm $orm)
     {
-        parent::buildDatabase($db, $mapper);
-        $db->createForeignKey('child_entities.parent_id', 'parent_entities.id');
+        parent::buildDatabase($db, $orm);
         $this->parentEntities = $db->getTable('parent_entities')->getStructure();
         $this->childEntities  = $db->getTable('child_entities')->getStructure();
     }
 
     /**
-     * @return IEntityMapper
+     * @inheritDoc
      */
-    protected function loadMapper()
+    protected function loadOrm()
     {
-        return new ParentEntityMapper();
+        return ParentEntityMapper::orm();
+    }
+
+    public function testCreatesForeignKeys()
+    {
+        $this->assertEquals(
+                [
+                        new ForeignKey(
+                                'fk_child_entities_parent_id_parent_entities',
+                                ['parent_id'],
+                                'parent_entities',
+                                ['id'],
+                                ForeignKeyMode::CASCADE,
+                                ForeignKeyMode::CASCADE
+                        ),
+                ],
+                array_values($this->childEntities->getForeignKeys())
+        );
     }
 
     public function testPersistNoChildren()

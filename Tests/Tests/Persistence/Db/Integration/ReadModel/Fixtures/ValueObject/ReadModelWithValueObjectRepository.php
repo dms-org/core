@@ -2,8 +2,10 @@
 
 namespace Iddigital\Cms\Core\Tests\Persistence\Db\Integration\ReadModel\Fixtures\ValueObject;
 
+use Iddigital\Cms\Core\Persistence\Db\Connection\IConnection;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\ReadModel\Definition\ReadMapperDefinition;
 use Iddigital\Cms\Core\Persistence\ReadModelRepository;
+use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Fixtures\ValueObject\EntityWithValueObject;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Fixtures\ValueObject\EntityWithValueObjectMapper;
 
 /**
@@ -11,6 +13,13 @@ use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Fixtures\ValueObject\Ent
  */
 class ReadModelWithValueObjectRepository extends ReadModelRepository
 {
+    /**
+     * @inheritDoc
+     */
+    public function __construct(IConnection $connection)
+    {
+        parent::__construct($connection, EntityWithValueObjectMapper::orm());
+    }
 
     /**
      * Defines the structure of the read model.
@@ -22,7 +31,7 @@ class ReadModelWithValueObjectRepository extends ReadModelRepository
     protected function define(ReadMapperDefinition $map)
     {
         $map->type(ReadModelWithValueObject::class);
-        $map->from(new EntityWithValueObjectMapper());
+        $map->fromType(EntityWithValueObject::class);
 
         $map->properties(['money' => 'money']);
     }

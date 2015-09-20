@@ -2,7 +2,7 @@
 
 namespace Iddigital\Cms\Core\Tests\Persistence\Db\Integration;
 
-use Iddigital\Cms\Core\Persistence\Db\Mapping\IEntityMapper;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\IOrm;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Column;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Type\Integer;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Fixtures\ValueObjectWithToManyRelation\ChildEntity;
@@ -17,19 +17,19 @@ use Iddigital\Cms\Core\Tests\Persistence\Db\Mock\MockDatabase;
 class ValueObjectWithToManyRelationTest extends DbIntegrationTest
 {
     /**
-     * @return IEntityMapper
+     * @inheritDoc
      */
-    protected function loadMapper()
+    protected function loadOrm()
     {
-        return new EntityWithValueObjectMapper();
+        return EntityWithValueObjectMapper::orm();
     }
 
     /**
      * @inheritDoc
      */
-    protected function buildDatabase(MockDatabase $db, IEntityMapper $mapper)
+    protected function buildDatabase(MockDatabase $db, IOrm $orm)
     {
-        parent::buildDatabase($db, $mapper);
+        parent::buildDatabase($db, $orm);
 
         $db->createForeignKey('children.parent_id', 'entities.id');
     }

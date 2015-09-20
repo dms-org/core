@@ -18,6 +18,8 @@ use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Expr;
 use Iddigital\Cms\Core\Persistence\Db\Query\Select;
 use Iddigital\Cms\Core\Persistence\Db\Row;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Column;
+use Iddigital\Cms\Core\Persistence\Db\Schema\ForeignKey;
+use Iddigital\Cms\Core\Persistence\Db\Schema\ForeignKeyMode;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Table;
 
 /**
@@ -34,6 +36,16 @@ class EmbeddedCollectionRelation extends EmbeddedRelation implements IToManyRela
      * @var IdentifyingRelationMode
      */
     private $mode;
+
+    /**
+     * @var string
+     */
+    private $parentTableName;
+
+    /**
+     * @var Column
+     */
+    private $parentPrimaryKey;
 
     /**
      * @var Column
@@ -53,17 +65,21 @@ class EmbeddedCollectionRelation extends EmbeddedRelation implements IToManyRela
     /**
      * @param IEmbeddedObjectMapper $mapper
      * @param string                $tableName
+     * @param string                $parentTableName
      * @param Column                $childPrimaryKey
      * @param Column                $foreignKeyToParentColumn
      * @param Column                $parentPrimaryKey
      */
     public function __construct(
             IEmbeddedObjectMapper $mapper,
+            $parentTableName,
             $tableName,
             Column $childPrimaryKey,
             Column $foreignKeyToParentColumn,
             Column $parentPrimaryKey
     ) {
+        $this->parentTableName    = $parentTableName;
+        $this->parentPrimaryKey   = $parentPrimaryKey;
         $this->primaryKey         = $childPrimaryKey;
         $this->foreignKeyToParent = $foreignKeyToParentColumn;
         $this->childrenTable      = $this->buildChildrenTable($mapper, $tableName);
@@ -94,6 +110,19 @@ class EmbeddedCollectionRelation extends EmbeddedRelation implements IToManyRela
                 ->withColumns(array_merge(
                         [$this->primaryKey, $this->foreignKeyToParent],
                         $table->getColumns()
+                ))
+                ->withForeignKeys(array_merge(
+                        [
+                                ForeignKey::createWithNamingConvention(
+                                        $tableName,
+                                        [$this->foreignKeyToParent->getName()],
+                                        $this->parentTableName,
+                                        [$this->parentPrimaryKey->getName()],
+                                        ForeignKeyMode::CASCADE,
+                                        ForeignKeyMode::CASCADE
+                                )
+                        ],
+                        $table->getForeignKeys()
                 ));
     }
 

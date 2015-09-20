@@ -3,6 +3,7 @@
 namespace Iddigital\Cms\Core\Tests\Persistence\Db\Integration\ReadModel;
 
 use Iddigital\Cms\Core\Persistence\Db\Connection\IConnection;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\IOrm;
 use Iddigital\Cms\Core\Persistence\Db\Query\Select;
 use Iddigital\Cms\Core\Persistence\ReadModelRepository;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\ReadModel\Fixtures\Properties\TypesReadModel;

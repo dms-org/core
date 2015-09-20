@@ -20,6 +20,7 @@ class AccessibilitiesEntityMapper extends EntityMapper
     protected function define(MapperDefinition $map)
     {
         $map->type(AccessibilitiesEntity::class);
+        $map->toTable('accessibilities');
 
         $map->idToPrimaryKey('id');
 

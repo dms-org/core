@@ -55,15 +55,25 @@ class JoinedTableObjectMapping extends SubClassObjectMapping
      */
     public function __construct(Table $parentTable, FinalizedMapperDefinition $definition)
     {
-        parent::__construct($parentTable, $definition, IRelation::DEPENDENT_CHILDREN, [$definition->getTable()]);
+        parent::__construct($parentTable, $definition, IRelation::DEPENDENT_CHILDREN);
+    }
+
+    protected function loadFromDefinition(FinalizedMapperDefinition $definition)
+    {
+        parent::loadFromDefinition($definition);
         $this->classTable               = $definition->getTable();
         $this->classTablePrimaryKeyName = $this->classTable->getPrimaryKeyColumnName();
-        $this->classTablePrefix           = '__' . $this->classTable->getName() . '__';
+        $this->classTablePrefix         = '__' . $this->classTable->getName() . '__';
 
         foreach ($this->getAllColumnsToLoad() as $columnName) {
             $this->classTableColumnMap[$columnName] = $this->classTablePrefix . $columnName;
         }
         $this->classTableColumnMap[$this->classTablePrimaryKeyName] = $this->classTablePrefix . $this->classTablePrimaryKeyName;
+    }
+
+    protected function loadMappingTables(FinalizedMapperDefinition $definition)
+    {
+        return [$definition->getTable()];
     }
 
     /**
@@ -133,6 +143,7 @@ class JoinedTableObjectMapping extends SubClassObjectMapping
 
         parent::addSpecificLoadToQuery($query, $objectType);
     }
+
     /**
      * {@inheritdoc}
      */

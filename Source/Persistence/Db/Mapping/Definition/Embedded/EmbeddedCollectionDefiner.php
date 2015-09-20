@@ -5,19 +5,15 @@ namespace Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Embedded;
 use Iddigital\Cms\Core\Exception\InvalidOperationException;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\CustomValueObjectMapper;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\IEmbeddedObjectMapper;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\IObjectMapper;
 
 /**
  * The embedded collection definer
  *
  * @author Elliot Levin <elliotlevin@hotmail.com>
  */
-class EmbeddedCollectionDefiner
+class EmbeddedCollectionDefiner extends EmbeddedRelationDefiner
 {
-    /**
-     * @var callable
-     */
-    private $callback;
-
     /**
      * @var string
      */
@@ -32,11 +28,6 @@ class EmbeddedCollectionDefiner
      * @var string
      */
     private $foreignKeyToParentName;
-
-    public function __construct(callable $callback)
-    {
-        $this->callback = $callback;
-    }
 
     /**
      * Sets the name of the child table
@@ -91,13 +82,24 @@ class EmbeddedCollectionDefiner
      */
     public function using(IEmbeddedObjectMapper $mapper)
     {
-        if (!$this->tableName || !$this->primaryKeyName || !$this->foreignKeyToParentName) {
-            throw new InvalidOperationException(
-                'Must supply table name, primary key name and foreign key name for embedded collection relation'
-            );
-        }
+        $this->defineRelation(function () use ($mapper) {
+            return $mapper;
+        });
+    }
 
-        call_user_func($this->callback, $mapper, $this->tableName, $this->primaryKeyName, $this->foreignKeyToParentName);
+    /**
+     * Sets the value object class to use for the collection.
+     *
+     * @param string $valueObjectClass
+     *
+     * @return void
+     * @throws InvalidOperationException
+     */
+    public function to($valueObjectClass)
+    {
+        $this->defineRelation(function (IObjectMapper $parentMapper) use ($valueObjectClass) {
+            return $this->orm->loadEmbeddedObjectMapper($parentMapper, $valueObjectClass);
+        });
     }
 
     /**
@@ -109,6 +111,25 @@ class EmbeddedCollectionDefiner
      */
     public function usingCustom(callable $mapperDefinitionCallback)
     {
-        $this->using(new CustomValueObjectMapper($mapperDefinitionCallback));
+        $this->defineRelation(function (IObjectMapper $parentMapper) use ($mapperDefinitionCallback) {
+            return new CustomValueObjectMapper($this->orm, $parentMapper, $mapperDefinitionCallback);
+        });
+    }
+
+    /**
+     * @param callable $mapperLoader
+     *
+     * @return void
+     * @throws InvalidOperationException
+     */
+    private function defineRelation(callable $mapperLoader)
+    {
+        if (!$this->tableName || !$this->primaryKeyName || !$this->foreignKeyToParentName) {
+            throw new InvalidOperationException(
+                    'Must supply table name, primary key name and foreign key name for embedded collection relation'
+            );
+        }
+
+        call_user_func($this->callback, $mapperLoader, $this->tableName, $this->primaryKeyName, $this->foreignKeyToParentName);
     }
 }

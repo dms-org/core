@@ -2,6 +2,8 @@
 
 namespace Iddigital\Cms\Core\Tests\Persistence\Db\Integration\ReadModel\Fixtures\Embedded;
 
+use Iddigital\Cms\Core\Persistence\Db\Connection\IConnection;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\CustomOrm;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\ReadModel\Definition\ReadMapperDefinition;
 use Iddigital\Cms\Core\Persistence\ReadModelRepository;
 
@@ -10,6 +12,15 @@ use Iddigital\Cms\Core\Persistence\ReadModelRepository;
  */
 class ReadModelWithLabelRepository extends ReadModelRepository
 {
+    /**
+     * @inheritDoc
+     */
+    public function __construct(IConnection $connection)
+    {
+        parent::__construct($connection, CustomOrm::from([
+                EntityWithTitle::class => EntityWithTitleMapper::class
+        ]));
+    }
 
     /**
      * Defines the structure of the read model.
@@ -21,7 +32,7 @@ class ReadModelWithLabelRepository extends ReadModelRepository
     protected function define(ReadMapperDefinition $map)
     {
         $map->type(ReadModelWithLabel::class);
-        $map->from(new EntityWithTitleMapper());
+        $map->fromType(EntityWithTitle::class);
 
         $map->embedded(new GenericLabelReadModelMapper('title'))->to('label');
     }

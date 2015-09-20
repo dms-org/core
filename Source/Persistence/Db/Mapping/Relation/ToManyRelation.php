@@ -41,16 +41,14 @@ class ToManyRelation extends ToManyRelationBase
     {
         parent::__construct($reference, $mode, self::DEPENDENT_CHILDREN);
         $this->foreignKeyToParent = $parentForeignKey;
-        $this->mapper->onInitialized(function () {
-            $this->foreignKeyColumn   = $this->mapper->getPrimaryTable()->getColumn($this->foreignKeyToParent);
+        $this->foreignKeyColumn   = $this->mapper->getPrimaryTable()->getColumn($this->foreignKeyToParent);
 
-            if (!$this->foreignKeyColumn) {
-                throw InvalidRelationException::format(
-                        'Invalid parent foreign key column %s does not exist on related table %s',
-                        $this->foreignKeyToParent, $this->mapper->getPrimaryTable()->getName()
-                );
-            }
-        });
+        if (!$this->foreignKeyColumn) {
+            throw InvalidRelationException::format(
+                    'Invalid parent foreign key column %s does not exist on related table %s',
+                    $this->foreignKeyToParent, $this->mapper->getPrimaryTableName()
+            );
+        }
     }
 
     /**

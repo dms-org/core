@@ -12,14 +12,6 @@ use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Fixtures\ToOneRelation\S
 class SubEntityMapper extends EntityMapper
 {
     /**
-     * @inheritDoc
-     */
-    public function __construct()
-    {
-        parent::__construct('sub_entities');
-    }
-
-    /**
      * Defines the entity mapper
      *
      * @param MapperDefinition $map
@@ -29,6 +21,7 @@ class SubEntityMapper extends EntityMapper
     protected function define(MapperDefinition $map)
     {
         $map->type(SubEntity::class);
+        $map->toTable('sub_entities');
 
         $map->idToPrimaryKey('id');
         $map->column('parent_id')->nullable()->asInt();

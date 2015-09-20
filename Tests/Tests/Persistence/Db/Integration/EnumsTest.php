@@ -2,6 +2,7 @@
 
 namespace Iddigital\Cms\Core\Tests\Persistence\Db\Integration;
 
+use Iddigital\Cms\Core\Persistence\Db\Mapping\CustomOrm;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\IEntityMapper;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Fixtures\Enum\EntityWithEnum;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Fixtures\Enum\EntityWithEnumMapper;
@@ -15,11 +16,11 @@ use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Fixtures\Types\TypesEnti
 class EnumsTest extends DbIntegrationTest
 {
     /**
-     * @return IEntityMapper
+     * @inheritDoc
      */
-    protected function loadMapper()
+    protected function loadOrm()
     {
-        return new EntityWithEnumMapper();
+        return CustomOrm::from([EntityWithEnum::class => EntityWithEnumMapper::class]);
     }
 
     /**

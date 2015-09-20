@@ -43,7 +43,8 @@ class EmbeddedObjectMapping extends SubClassObjectMapping implements IEmbeddedOb
      */
     public function __construct(Table $parentTable, FinalizedMapperDefinition $definition, $classTypeColumnName, $classTypeValue)
     {
-        parent::__construct($parentTable, $definition, IRelation::DEPENDENT_PARENTS, [], [$classTypeColumnName]);
+        InvalidArgumentException::verify(is_string($classTypeColumnName), 'class type column name must be a string');
+
         $this->classTypeColumnName = $classTypeColumnName;
         $this->classTypeValue      = $classTypeValue;
 
@@ -53,7 +54,15 @@ class EmbeddedObjectMapping extends SubClassObjectMapping implements IEmbeddedOb
                     $classTypeColumnName
             );
         }
+
+        parent::__construct($parentTable, $definition, IRelation::DEPENDENT_PARENTS);
     }
+
+    protected function loadRequiredColumns(FinalizedMapperDefinition $definition)
+    {
+        return [$this->classTypeColumnName];
+    }
+
 
     public function persistAllBeforeParent(PersistenceContext $context, array $objects, array $rows)
     {

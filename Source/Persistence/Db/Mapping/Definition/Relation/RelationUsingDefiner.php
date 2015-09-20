@@ -3,6 +3,7 @@
 namespace Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Relation;
 
 use Iddigital\Cms\Core\Persistence\Db\Mapping\IEntityMapper;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\IOrm;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\IRelation;
 
 /**
@@ -13,6 +14,11 @@ use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\IRelation;
 class RelationUsingDefiner
 {
     /**
+     * @var IOrm
+     */
+    private $orm;
+
+    /**
      * @var callable
      */
     private $callback;
@@ -20,10 +26,12 @@ class RelationUsingDefiner
     /**
      * TypeTableDefiner constructor.
      *
+     * @param IOrm     $orm
      * @param callable $callback
      */
-    public function __construct(callable $callback)
+    public function __construct(IOrm $orm, callable $callback)
     {
+        $this->orm      = $orm;
         $this->callback = $callback;
     }
 
@@ -36,7 +44,28 @@ class RelationUsingDefiner
      */
     public function using(IEntityMapper $mapper)
     {
-        return new RelationDefiner($this->callback, $mapper);
+        return new RelationDefiner($this->callback, function () use ($mapper) {
+            return $mapper;
+        });
+    }
+
+    /**
+     * Sets the relation to use the mapper of the
+     * supplied entity type.
+     *
+     * If the related entity is mapped to multiple tables
+     * the table name must be specified.
+     *
+     * @param string      $entityType
+     * @param string|null $tableName
+     *
+     * @return RelationDefiner
+     */
+    public function to($entityType, $tableName = null)
+    {
+        return new RelationDefiner($this->callback, function () use ($entityType, $tableName) {
+            return $this->orm->getEntityMapper($entityType, $tableName);
+        });
     }
 
     /**

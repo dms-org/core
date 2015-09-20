@@ -20,9 +20,9 @@ abstract class SubClassObjectMapping extends ObjectMapping
     /**
      * @inheritDoc
      */
-    public function __construct(Table $parentTable, FinalizedMapperDefinition $definition, $dependencyMode, array $mappingTables, array $columnsToLoad = [])
+    public function __construct(Table $parentTable, FinalizedMapperDefinition $definition, $dependencyMode)
     {
-        parent::__construct($definition, $dependencyMode, $mappingTables, $columnsToLoad);
+        parent::__construct($definition, $dependencyMode);
 
         $this->parentTable = $parentTable;
     }

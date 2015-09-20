@@ -7,6 +7,7 @@ use Iddigital\Cms\Core\Persistence\Db\Query\Clause\Join;
 use Iddigital\Cms\Core\Persistence\Db\Query\Delete;
 use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Expr;
 use Iddigital\Cms\Core\Persistence\Db\Query\Upsert;
+use Iddigital\Cms\Core\Persistence\Db\Schema\ForeignKeyMode;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Fixtures\ToOneRelation\IdentifyingParentEntityMapper;
 
 /**
@@ -15,11 +16,19 @@ use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Fixtures\ToOneRelation\I
 class IdentifyingToOneRelationTest extends ToOneRelationTestBase
 {
     /**
-     * @return IEntityMapper
+     * @inheritDoc
      */
-    protected function loadMapper()
+    protected function loadOrm()
     {
-        return new IdentifyingParentEntityMapper();
+        return IdentifyingParentEntityMapper::orm();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function deleteForeignKeyMode()
+    {
+        return ForeignKeyMode::CASCADE;
     }
 
     public function testPersistParentWithId()

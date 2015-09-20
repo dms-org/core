@@ -2,11 +2,14 @@
 
 namespace Iddigital\Cms\Core\Tests\Persistence\Db\Integration;
 
+use Iddigital\Cms\Core\Persistence\Db\Mapping\CustomOrm;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\IEntityMapper;
 use Iddigital\Cms\Core\Persistence\Db\Query\Delete;
 use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Expr;
 use Iddigital\Cms\Core\Persistence\Db\Query\Upsert;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Column;
+use Iddigital\Cms\Core\Persistence\Db\Schema\ForeignKey;
+use Iddigital\Cms\Core\Persistence\Db\Schema\ForeignKeyMode;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Table;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Type\Integer;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Type\Varchar;
@@ -36,22 +39,30 @@ class ValueObjectCollectionTest extends DbIntegrationTest
         $this->emails   = $this->db->getTable('emails')->getStructure();
     }
 
-
     /**
-     * @return IEntityMapper
+     * @inheritDoc
      */
-    protected function loadMapper()
+    protected function loadOrm()
     {
-        return new EntityWithEmailsMapper();
+        return EntityWithEmailsMapper::orm();
     }
 
-    public function testBuildsTableForEmbeddedObjects()
+    public function testBuildsTableForEmbeddedObjectsWithForeignKey()
     {
         $this->assertEquals(
                 new Table('emails', [
                         new Column('id', Integer::normal()->autoIncrement(), true),
                         new Column('entity_id', Integer::normal()),
                         new Column('email', new Varchar(255))
+                ], [], [
+                        new ForeignKey(
+                                'fk_emails_entity_id_entities',
+                                ['entity_id'],
+                                'entities',
+                                ['id'],
+                                ForeignKeyMode::CASCADE,
+                                ForeignKeyMode::CASCADE
+                        )
                 ]),
                 $this->emails
         );

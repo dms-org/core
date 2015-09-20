@@ -3,11 +3,14 @@
 namespace Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Relations\ManyToMany;
 
 use Iddigital\Cms\Core\Persistence\Db\Mapping\IEntityMapper;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\IOrm;
 use Iddigital\Cms\Core\Persistence\Db\Query\Clause\Join;
 use Iddigital\Cms\Core\Persistence\Db\Query\Delete;
 use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Expr;
 use Iddigital\Cms\Core\Persistence\Db\Query\Select;
 use Iddigital\Cms\Core\Persistence\Db\Query\Upsert;
+use Iddigital\Cms\Core\Persistence\Db\Schema\ForeignKey;
+use Iddigital\Cms\Core\Persistence\Db\Schema\ForeignKeyMode;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Table;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\DbIntegrationTest;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Fixtures\SelfReferencing\ManyToManyRelation\RecursiveEntity;
@@ -32,21 +35,44 @@ class RecursiveManyToManyRelationTest extends DbIntegrationTest
     /**
      * @inheritDoc
      */
-    protected function loadMapper()
+    protected function loadOrm()
     {
-        return new RecursiveEntityMapper();
+        return RecursiveEntityMapper::orm();
     }
 
     /**
      * {@inheritDoc}
      */
-    protected function buildDatabase(MockDatabase $db, IEntityMapper $mapper)
+    protected function buildDatabase(MockDatabase $db, IOrm $orm)
     {
-        parent::buildDatabase($db, $mapper);
-        $db->createForeignKey('parents.parent_id', 'recursive_entities.id');
-        $db->createForeignKey('parents.child_id', 'recursive_entities.id');
+        parent::buildDatabase($db, $orm);
         $this->entities  = $db->getTable('recursive_entities')->getStructure();
         $this->joinTable = $db->getTable('parents')->getStructure();
+    }
+
+    public function testCreatesForeignKeys()
+    {
+        $this->assertEquals(
+                [
+                        new ForeignKey(
+                                'fk_parents_parent_id_recursive_entities',
+                                ['parent_id'],
+                                'recursive_entities',
+                                ['id'],
+                                ForeignKeyMode::CASCADE,
+                                ForeignKeyMode::CASCADE
+                        ),
+                        new ForeignKey(
+                                'fk_parents_child_id_recursive_entities',
+                                ['child_id'],
+                                'recursive_entities',
+                                ['id'],
+                                ForeignKeyMode::CASCADE,
+                                ForeignKeyMode::CASCADE
+                        ),
+                ],
+                array_values($this->joinTable->getForeignKeys())
+        );
     }
 
     public function testPersistNoChildren()

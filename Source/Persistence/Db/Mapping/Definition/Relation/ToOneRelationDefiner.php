@@ -2,11 +2,15 @@
 
 namespace Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Relation;
 
+use Iddigital\Cms\Core\Persistence\Db\Mapping\IEntityMapper;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Mode\IdentifyingRelationMode;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Mode\NonIdentifyingRelationMode;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Reference\ToOneRelationIdentityReference;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Reference\ToOneRelationObjectReference;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\ToOneRelation;
+use Iddigital\Cms\Core\Persistence\Db\Schema\ForeignKey;
+use Iddigital\Cms\Core\Persistence\Db\Schema\ForeignKeyMode;
+use Iddigital\Cms\Core\Persistence\Db\Schema\Table;
 
 /**
  * The to-one relation definer class.
@@ -54,6 +58,7 @@ class ToOneRelationDefiner extends RelationTypeDefinerBase
     public function withBidirectionalRelation($propertyOnRelatedEntity)
     {
         $this->bidirectionalRelationProperty = $propertyOnRelatedEntity;
+
         return $this;
     }
 
@@ -67,11 +72,25 @@ class ToOneRelationDefiner extends RelationTypeDefinerBase
      */
     public function withParentIdAs($columnName)
     {
-        call_user_func($this->callback, function () use ($columnName) {
+        call_user_func($this->callback, function (Table $parentTable) use ($columnName) {
+            /** @var IEntityMapper $mapper */
+            $mapper = call_user_func($this->mapperLoader);
+
+            $mapper->addForeignKey(ForeignKey::createWithNamingConvention(
+                    $mapper->getPrimaryTableName(),
+                    [$columnName],
+                    $parentTable->getName(),
+                    [$parentTable->getPrimaryKeyColumnName()],
+                    ForeignKeyMode::CASCADE,
+                    $this->identifying
+                            ? ForeignKeyMode::CASCADE
+                            : ForeignKeyMode::SET_NULL
+            ));
+
             return new ToOneRelation(
                     $this->loadIds
-                            ? new ToOneRelationIdentityReference($this->mapper)
-                            : new ToOneRelationObjectReference($this->mapper, $this->bidirectionalRelationProperty),
+                            ? new ToOneRelationIdentityReference($mapper)
+                            : new ToOneRelationObjectReference($mapper, $this->bidirectionalRelationProperty),
                     $columnName,
                     $this->identifying
                             ? new IdentifyingRelationMode()

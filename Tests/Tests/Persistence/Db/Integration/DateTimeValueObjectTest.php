@@ -3,15 +3,10 @@
 namespace Iddigital\Cms\Core\Tests\Persistence\Db\Integration;
 
 use Iddigital\Cms\Core\Model\Object\Type\DateTime;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\IEntityMapper;
-use Iddigital\Cms\Core\Persistence\Db\Query\Delete;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Type\Boolean;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\CustomOrm;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\IOrm;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Fixtures\DateTimeValueObject\EntityWithDateTime;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Fixtures\DateTimeValueObject\EntityWithDateTimeMapper;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Fixtures\ValueObject\CurrencyEnum;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Fixtures\ValueObject\EmbeddedMoneyObject;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Fixtures\ValueObject\EntityWithValueObject;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Fixtures\ValueObject\EntityWithValueObjectMapper;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>
@@ -19,11 +14,11 @@ use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Fixtures\ValueObject\Ent
 class DateTimeValueObjectTest extends DbIntegrationTest
 {
     /**
-     * @return IEntityMapper
+     * @return IOrm
      */
-    protected function loadMapper()
+    protected function loadOrm()
     {
-        return new EntityWithDateTimeMapper();
+        return CustomOrm::from([EntityWithDateTime::class => EntityWithDateTimeMapper::class]);
     }
 
     public function testPersist()
@@ -34,7 +29,7 @@ class DateTimeValueObjectTest extends DbIntegrationTest
 
         $this->assertDatabaseDataSameAs([
                 'entities' => [
-                    ['id' => 1, 'datetime' => '2000-01-01 10:11:12']
+                        ['id' => 1, 'datetime' => '2000-01-01 10:11:12']
                 ]
         ]);
     }

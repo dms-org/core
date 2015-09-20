@@ -6,6 +6,7 @@ use Iddigital\Cms\Core\Exception\TypeMismatchException;
 use Iddigital\Cms\Core\Model\Criteria\Criteria;
 use Iddigital\Cms\Core\Model\Criteria\SpecificationDefinition;
 use Iddigital\Cms\Core\Persistence\Db\Criteria\CriteriaMapper;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\CustomOrm;
 use Iddigital\Cms\Core\Persistence\Db\Query\Clause\Ordering;
 use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Expr;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Fixtures\MockEntity;
@@ -20,7 +21,7 @@ class CriteriaMapperTest extends CriteriaMapperTestBase
 
     protected function buildMapper()
     {
-        return new CriteriaMapper(new TypesMapper());
+        return new CriteriaMapper(new TypesMapper(CustomOrm::from([])));
     }
 
     public function testInvalidCriteria()

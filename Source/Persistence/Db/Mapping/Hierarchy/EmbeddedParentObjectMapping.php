@@ -5,6 +5,7 @@ namespace Iddigital\Cms\Core\Persistence\Db\Mapping\Hierarchy;
 use Iddigital\Cms\Core\Exception\InvalidArgumentException;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\FinalizedMapperDefinition;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\IEntityMapper;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\NullObjectMapper;
 use Iddigital\Cms\Core\Persistence\Db\PersistenceContext;
 use Iddigital\Cms\Core\Persistence\Db\Query\Delete;
 
@@ -16,7 +17,7 @@ use Iddigital\Cms\Core\Persistence\Db\Query\Delete;
 class EmbeddedParentObjectMapping extends ParentObjectMapping implements IEmbeddedObjectMapping
 {
     /**
-     * @var IEntityMapper|null
+     * @var IEntityMapper
      */
     private $rootEntityMapper;
 
@@ -34,12 +35,8 @@ class EmbeddedParentObjectMapping extends ParentObjectMapping implements IEmbedd
             );
         }
 
-        if ($rootEntityMapper) {
-            $this->rootEntityMapper = $rootEntityMapper;
-            $rootEntityMapper->onInitialized(function () use ($rootEntityMapper) {
-                $this->primaryKeyColumnName = $rootEntityMapper->getPrimaryTable()->getPrimaryKeyColumnName();
-            });
-        }
+        $this->rootEntityMapper     = $rootEntityMapper;
+        $this->loadPrimaryKeyColumnName();
     }
 
     /**
@@ -48,14 +45,19 @@ class EmbeddedParentObjectMapping extends ParentObjectMapping implements IEmbedd
     public function withEmbeddedColumnsPrefixedBy($prefix)
     {
         $clone = parent::withEmbeddedColumnsPrefixedBy($prefix);
-
-        if ($this->rootEntityMapper) {
-            $this->rootEntityMapper->onInitialized(function () use ($clone) {
-                $clone->primaryKeyColumnName = $this->rootEntityMapper->getPrimaryTable()->getPrimaryKeyColumnName();
-            });
-        }
+        $this->loadPrimaryKeyColumnName();
 
         return $clone;
+    }
+
+    /**
+     * @return void
+     */
+    private function loadPrimaryKeyColumnName()
+    {
+        if ($this->rootEntityMapper && !($this->rootEntityMapper instanceof NullObjectMapper)) {
+            $this->primaryKeyColumnName = $this->rootEntityMapper->getPrimaryTable()->getPrimaryKeyColumnName();
+        }
     }
 
     public function persistAllBeforeParent(PersistenceContext $context, array $objects, array $rows)

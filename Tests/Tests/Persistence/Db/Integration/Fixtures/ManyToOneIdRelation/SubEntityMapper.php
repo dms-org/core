@@ -11,14 +11,6 @@ use Iddigital\Cms\Core\Persistence\Db\Mapping\EntityMapper;
 class SubEntityMapper extends EntityMapper
 {
     /**
-     * @inheritDoc
-     */
-    public function __construct()
-    {
-        parent::__construct('sub_entities');
-    }
-
-    /**
      * Defines the entity mapper
      *
      * @param MapperDefinition $map
@@ -28,6 +20,7 @@ class SubEntityMapper extends EntityMapper
     protected function define(MapperDefinition $map)
     {
         $map->type(SubEntity::class);
+        $map->toTable('sub_entities');
 
         $map->idToPrimaryKey('id');
 

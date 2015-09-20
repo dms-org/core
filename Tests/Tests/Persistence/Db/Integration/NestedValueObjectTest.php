@@ -2,6 +2,7 @@
 
 namespace Iddigital\Cms\Core\Tests\Persistence\Db\Integration;
 
+use Iddigital\Cms\Core\Persistence\Db\Mapping\CustomOrm;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\IEntityMapper;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Fixtures\NestedValueObject\LevelOne;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Fixtures\NestedValueObject\LevelThree;
@@ -15,11 +16,11 @@ use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Fixtures\NestedValueObje
 class NestedValueObjectTest extends DbIntegrationTest
 {
     /**
-     * @return IEntityMapper
+     * @inheritDoc
      */
-    protected function loadMapper()
+    protected function loadOrm()
     {
-        return new ParentEntityMapper();
+        return CustomOrm::from([ParentEntity::class => ParentEntityMapper::class]);
     }
 
     protected function getTestEntity()

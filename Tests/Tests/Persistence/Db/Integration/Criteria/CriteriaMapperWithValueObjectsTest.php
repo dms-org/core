@@ -4,6 +4,7 @@ namespace Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Criteria;
 
 use Iddigital\Cms\Core\Exception\TypeMismatchException;
 use Iddigital\Cms\Core\Persistence\Db\Criteria\CriteriaMapper;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\CustomOrm;
 use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Expr;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Fixtures\NestedValueObject\LevelOne;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Fixtures\NestedValueObject\LevelThree;
@@ -18,7 +19,7 @@ class CriteriaMapperWithValueObjectsTest extends CriteriaMapperTestBase
 
     protected function buildMapper()
     {
-        return new CriteriaMapper(new ParentEntityMapper());
+        return new CriteriaMapper(new ParentEntityMapper(CustomOrm::from([])));
     }
 
     public function testWhereEquals()

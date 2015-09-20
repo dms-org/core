@@ -64,13 +64,11 @@ abstract class EntityRelation extends Relation implements IRelation
     ) {
         parent::__construct($reference->getMapper(), $dependencyMode, $relationshipTables, $parentColumnsToLoad);
 
-        $this->reference = $reference;
-        $this->mapper    = $reference->getMapper();
-        $this->mode      = $mode;
-        $this->mapper->onInitialized(function () {
-            $this->table      = $this->mapper->getPrimaryTable();
-            $this->primaryKey = $this->table->getPrimaryKeyColumn();
-        });
+        $this->reference  = $reference;
+        $this->mapper     = $reference->getMapper();
+        $this->mode       = $mode;
+        $this->table      = $this->mapper->getPrimaryTable();
+        $this->primaryKey = $this->table->getPrimaryKeyColumn();
     }
 
     /**

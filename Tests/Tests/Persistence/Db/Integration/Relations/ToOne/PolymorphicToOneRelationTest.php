@@ -15,11 +15,11 @@ use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Fixtures\ToOneRelation\S
 class PolymorphicToOneRelationTest extends DbIntegrationTest
 {
     /**
-     * @return IEntityMapper
+     * @inheritDoc
      */
-    protected function loadMapper()
+    protected function loadOrm()
     {
-        return new ParentEntityMapper();
+        return ParentEntityMapper::orm();
     }
 
     public function testPersist()

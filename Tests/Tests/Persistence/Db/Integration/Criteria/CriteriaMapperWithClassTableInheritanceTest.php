@@ -4,6 +4,7 @@ namespace Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Criteria;
 
 use Iddigital\Cms\Core\Model\Criteria\SpecificationDefinition;
 use Iddigital\Cms\Core\Persistence\Db\Criteria\CriteriaMapper;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\CustomOrm;
 use Iddigital\Cms\Core\Persistence\Db\Query\Clause\Join;
 use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Expr;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Table;
@@ -11,6 +12,7 @@ use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Fixtures\TableInheritanc
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Fixtures\TableInheritance\TestSubclassEntity1;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Fixtures\TableInheritance\TestSubclassEntity2;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Fixtures\TableInheritance\TestSubclassEntity3;
+use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Fixtures\TableInheritance\TestSuperclassEntity;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>
@@ -24,7 +26,10 @@ class CriteriaMapperWithClassTableInheritanceTest extends CriteriaMapperTestBase
 
     protected function buildMapper()
     {
-        $mapper = new TestClassTableInheritanceMapper('entities');
+        $mapper = new TestClassTableInheritanceMapper(CustomOrm::from([
+            TestSuperclassEntity::class => TestClassTableInheritanceMapper::class
+        ]));
+        $mapper->initializeRelations();
 
         foreach ($mapper->getTables() as $table) {
             $this->tables[$table->getName()] = $table;
@@ -40,8 +45,8 @@ class CriteriaMapperWithClassTableInheritanceTest extends CriteriaMapperTestBase
 
         $this->assertMappedSelect($criteria,
                 $this->select()
-                        ->addColumn('id', Expr::tableColumn($this->tables['entities'], 'id'))
-                        ->addColumn('base_prop', Expr::tableColumn($this->tables['entities'], 'base_prop'))
+                        ->addColumn('id', Expr::tableColumn($this->tables['parent_entities'], 'id'))
+                        ->addColumn('base_prop', Expr::tableColumn($this->tables['parent_entities'], 'base_prop'))
                         ->addColumn('__subclass1_table__id', Expr::tableColumn($this->tables['subclass1_table'], 'id'))
                         ->addColumn('__subclass1_table__subclass1_prop', Expr::tableColumn($this->tables['subclass1_table'], 'subclass1_prop'))
                         ->join(Join::inner($this->tables['subclass1_table'], 'subclass1_table', [
@@ -60,8 +65,8 @@ class CriteriaMapperWithClassTableInheritanceTest extends CriteriaMapperTestBase
 
         $this->assertMappedSelect($criteria,
                 $this->select()
-                        ->addColumn('id', Expr::tableColumn($this->tables['entities'], 'id'))
-                        ->addColumn('base_prop', Expr::tableColumn($this->tables['entities'], 'base_prop'))
+                        ->addColumn('id', Expr::tableColumn($this->tables['parent_entities'], 'id'))
+                        ->addColumn('base_prop', Expr::tableColumn($this->tables['parent_entities'], 'base_prop'))
                         ->addColumn('__subclass1_table__id', Expr::tableColumn($this->tables['subclass1_table'], 'id'))
                         ->addColumn('__subclass1_table__subclass1_prop', Expr::tableColumn($this->tables['subclass1_table'], 'subclass1_prop'))
                         ->addColumn('__subclass3_table__id', Expr::tableColumn($this->tables['subclass3_table'], 'id'))
@@ -91,8 +96,8 @@ class CriteriaMapperWithClassTableInheritanceTest extends CriteriaMapperTestBase
 
         $this->assertMappedSelect($criteria,
                 $this->select()
-                        ->addColumn('id', Expr::tableColumn($this->tables['entities'], 'id'))
-                        ->addColumn('base_prop', Expr::tableColumn($this->tables['entities'], 'base_prop'))
+                        ->addColumn('id', Expr::tableColumn($this->tables['parent_entities'], 'id'))
+                        ->addColumn('base_prop', Expr::tableColumn($this->tables['parent_entities'], 'base_prop'))
                         ->addColumn('__subclass1_table__id', Expr::tableColumn($this->tables['subclass1_table'], 'id'))
                         ->addColumn('__subclass1_table__subclass1_prop', Expr::tableColumn($this->tables['subclass1_table'], 'subclass1_prop'))
                         ->addColumn('__subclass3_table__id', Expr::tableColumn($this->tables['subclass3_table'], 'id'))
@@ -114,7 +119,7 @@ class CriteriaMapperWithClassTableInheritanceTest extends CriteriaMapperTestBase
                         ]))
                         ->join(Join::left($this->tables['subclass2_table'], 'subclass2_table', [
                                 Expr::equal(
-                                        Expr::tableColumn($this->tables['entities'], 'id'),
+                                        Expr::tableColumn($this->tables['parent_entities'], 'id'),
                                         Expr::tableColumn($this->tables['subclass2_table'], 'id')
                                 )
                         ]))

@@ -2,8 +2,10 @@
 
 namespace Iddigital\Cms\Core\Tests\Persistence\Db\Integration\ReadModel\Fixtures\ToOneRelation;
 
+use Iddigital\Cms\Core\Persistence\Db\Connection\IConnection;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\ReadModel\Definition\ReadMapperDefinition;
 use Iddigital\Cms\Core\Persistence\ReadModelRepository;
+use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Fixtures\ToOneRelation\ParentEntity;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Fixtures\ToOneRelation\IdentifyingParentEntityMapper;
 
 /**
@@ -11,6 +13,14 @@ use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Fixtures\ToOneRelation\I
  */
 class ReadModelWithToOneRelationRepository extends ReadModelRepository
 {
+    /**
+     * @inheritDoc
+     */
+    public function __construct(IConnection $connection)
+    {
+        parent::__construct($connection, IdentifyingParentEntityMapper::orm());
+    }
+
     /**
      * Defines the structure of the read model.
      *
@@ -21,7 +31,7 @@ class ReadModelWithToOneRelationRepository extends ReadModelRepository
     protected function define(ReadMapperDefinition $map)
     {
         $map->type(ReadModelWithToOneRelation::class);
-        $map->from(new IdentifyingParentEntityMapper());
+        $map->fromType(ParentEntity::class);
 
         $map->properties(['child' => 'subEntity']);
     }

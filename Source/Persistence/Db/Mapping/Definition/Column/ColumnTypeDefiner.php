@@ -118,13 +118,13 @@ class ColumnTypeDefiner
     /**
      * Defines an unique index constraint for the column.
      *
-     * @param string|null $indexName Defaults to {column-name}_index
+     * @param string|null $indexName Defaults to {column-name}_unique_index
      *
      * @return ColumnTypeDefiner
      */
     public function unique($indexName = null)
     {
-        $this->index($indexName);
+        $this->indexName = $indexName ?: $this->name . '_unique_index';
         $this->isUnique = true;
 
         return $this;

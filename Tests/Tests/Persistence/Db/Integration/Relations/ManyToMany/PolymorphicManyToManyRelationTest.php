@@ -3,6 +3,7 @@
 namespace Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Relations\ManyToMany;
 
 use Iddigital\Cms\Core\Persistence\Db\Mapping\IEntityMapper;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\IOrm;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Table;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\DbIntegrationTest;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Fixtures\ManyToManyRelation\AnotherEntity;
@@ -39,17 +40,17 @@ class PolymorphicManyToManyRelationTest extends DbIntegrationTest
     /**
      * @inheritDoc
      */
-    protected function loadMapper()
+    protected function loadOrm()
     {
-        return new OneEntityMapper();
+        return OneEntityMapper::orm();
     }
 
     /**
      * {@inheritDoc}
      */
-    protected function buildDatabase(MockDatabase $db, IEntityMapper $mapper)
+    protected function buildDatabase(MockDatabase $db, IOrm $orm)
     {
-        parent::buildDatabase($db, $mapper);
+        parent::buildDatabase($db, $orm);
         $db->createForeignKey('one_anothers.one_id', 'ones.id');
         $db->createForeignKey('one_anothers.another_id', 'anothers.id');
         $db->createForeignKey('another_subclasses.id', 'anothers.id');

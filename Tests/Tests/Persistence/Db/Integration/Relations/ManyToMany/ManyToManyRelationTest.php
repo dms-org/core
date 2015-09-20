@@ -3,11 +3,14 @@
 namespace Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Relations\ManyToMany;
 
 use Iddigital\Cms\Core\Persistence\Db\Mapping\IEntityMapper;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\IOrm;
 use Iddigital\Cms\Core\Persistence\Db\Query\Clause\Join;
 use Iddigital\Cms\Core\Persistence\Db\Query\Delete;
 use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Expr;
 use Iddigital\Cms\Core\Persistence\Db\Query\Select;
 use Iddigital\Cms\Core\Persistence\Db\Query\Upsert;
+use Iddigital\Cms\Core\Persistence\Db\Schema\ForeignKey;
+use Iddigital\Cms\Core\Persistence\Db\Schema\ForeignKeyMode;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Table;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\DbIntegrationTest;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Fixtures\ManyToManyRelation\AnotherEntity;
@@ -38,22 +41,45 @@ class ManyToManyRelationTest extends DbIntegrationTest
     /**
      * @inheritDoc
      */
-    protected function loadMapper()
+    protected function loadOrm()
     {
-        return new OneEntityMapper();
+        return OneEntityMapper::orm();
     }
 
     /**
      * {@inheritDoc}
      */
-    protected function buildDatabase(MockDatabase $db, IEntityMapper $mapper)
+    protected function buildDatabase(MockDatabase $db, IOrm $orm)
     {
-        parent::buildDatabase($db, $mapper);
-        $db->createForeignKey('one_anothers.one_id', 'ones.id');
-        $db->createForeignKey('one_anothers.another_id', 'anothers.id');
+        parent::buildDatabase($db, $orm);
         $this->oneTable     = $db->getTable('ones')->getStructure();
         $this->joinTable    = $db->getTable('one_anothers')->getStructure();
         $this->anotherTable = $db->getTable('anothers')->getStructure();
+    }
+
+    public function testCreatesForeignKeys()
+    {
+        $this->assertEquals(
+                [
+                        new ForeignKey(
+                                'fk_one_anothers_one_id_ones',
+                                ['one_id'],
+                                'ones',
+                                ['id'],
+                                ForeignKeyMode::CASCADE,
+                                ForeignKeyMode::CASCADE
+                        ),
+                        new ForeignKey(
+                                'fk_one_anothers_another_id_anothers',
+                                ['another_id'],
+                                'anothers',
+                                ['id'],
+                                ForeignKeyMode::CASCADE,
+                                ForeignKeyMode::CASCADE
+                        ),
+                ],
+                array_values($this->joinTable->getForeignKeys())
+        );
     }
 
     public function testPersistNoChildren()

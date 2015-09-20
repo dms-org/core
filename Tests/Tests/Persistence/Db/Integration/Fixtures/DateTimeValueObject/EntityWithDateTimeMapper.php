@@ -12,14 +12,6 @@ use Iddigital\Cms\Core\Persistence\Db\Mapping\EntityMapper;
 class EntityWithDateTimeMapper extends EntityMapper
 {
     /**
-     * @inheritDoc
-     */
-    public function __construct()
-    {
-        parent::__construct('entities');
-    }
-
-    /**
      * Defines the entity mapper
      *
      * @param MapperDefinition $map
@@ -29,6 +21,7 @@ class EntityWithDateTimeMapper extends EntityMapper
     protected function define(MapperDefinition $map)
     {
         $map->type(EntityWithDateTime::class);
+        $map->toTable('entities');
 
         $map->idToPrimaryKey('id');
 

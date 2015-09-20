@@ -2,8 +2,10 @@
 
 namespace Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Fixtures\ValueObject\Polymorphic;
 
+use Iddigital\Cms\Core\Persistence\Db\Mapping\CustomOrm;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\MapperDefinition;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\EntityMapper;
+use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Fixtures\ValueObject\EmbeddedMoneyObject;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Fixtures\ValueObject\EntityWithValueObject;
 
 
@@ -12,12 +14,13 @@ use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Fixtures\ValueObject\Ent
  */
 class EntityWithValueObjectMapper extends EntityMapper
 {
-    /**
-     * @inheritDoc
-     */
-    public function __construct()
+    public static function orm()
     {
-        parent::__construct('entities');
+        return CustomOrm::from([
+                EntityWithValueObject::class => __CLASS__,
+        ], [
+                EmbeddedMoneyObject::class => EmbeddedMoneyObjectMapper::class,
+        ]);
     }
 
     /**
@@ -30,16 +33,17 @@ class EntityWithValueObjectMapper extends EntityMapper
     protected function define(MapperDefinition $map)
     {
         $map->type(EntityWithValueObject::class);
+        $map->toTable('entities');
 
         $map->idToPrimaryKey('id');
 
         $map->property('name')->to('name')->asVarchar(255);
-        $map->embedded('money')->using(new EmbeddedMoneyObjectMapper());
-        $map->embedded('prefixedMoney')->withColumnsPrefixedBy('prefix_')->using(new EmbeddedMoneyObjectMapper());
+        $map->embedded('money')->to(EmbeddedMoneyObject::class);
+        $map->embedded('prefixedMoney')->withColumnsPrefixedBy('prefix_')->to(EmbeddedMoneyObject::class);
 
         $map->embedded('nullableMoney')
                 ->withColumnsPrefixedBy('nullable_')
                 ->withIssetColumn('has_nullable_money')
-                ->using(new EmbeddedMoneyObjectMapper());
+                ->to(EmbeddedMoneyObject::class);
     }
 }

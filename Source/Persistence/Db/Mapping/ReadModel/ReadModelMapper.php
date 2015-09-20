@@ -18,6 +18,7 @@ use Iddigital\Cms\Core\Persistence\Db\Query\Delete;
 use Iddigital\Cms\Core\Persistence\Db\Query\Select;
 use Iddigital\Cms\Core\Persistence\Db\Row;
 use Iddigital\Cms\Core\Persistence\Db\RowSet;
+use Iddigital\Cms\Core\Persistence\Db\Schema\ForeignKey;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Table;
 
 /**
@@ -43,7 +44,7 @@ class ReadModelMapper extends ObjectMapper implements IEntityMapper, IEmbeddedOb
      */
     public function __construct(ReadMapperDefinition $definition)
     {
-        parent::__construct($definition->getReadModelDefinition(), $definition->getDefinition()->getTable()->getName());
+        parent::__construct($definition->finalize());
 
         $parentMapper = $definition->getParentMapper();
 
@@ -96,6 +97,14 @@ class ReadModelMapper extends ObjectMapper implements IEntityMapper, IEmbeddedOb
     public function getPrimaryTable()
     {
         return $this->parentMapper->getPrimaryTable();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getPrimaryTableName()
+    {
+        return $this->parentMapper->getPrimaryTableName();
     }
 
     /**
@@ -200,4 +209,10 @@ class ReadModelMapper extends ObjectMapper implements IEntityMapper, IEmbeddedOb
     {
         throw NotImplementedException::method(__METHOD__);
     }
+
+    public function addForeignKey(ForeignKey $foreignKey)
+    {
+        throw NotImplementedException::method(__METHOD__);
+    }
+
 }

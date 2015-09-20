@@ -17,7 +17,7 @@ class ProductCategoryMapper extends EntityMapper
 
     public function __construct()
     {
-        parent::__construct('product_categories');
+        parent::__construct('');
         $this->productMapper = new ProductMapper($this);
     }
 
@@ -39,6 +39,7 @@ class ProductCategoryMapper extends EntityMapper
     protected function define(MapperDefinition $map)
     {
         $map->type(ProductCategory::class);
+        $map->toTable('product_categories');
 
         $map->property('name')->to('name')->asVarchar(255);
         $map->property('navigationSortIndex')->to('navigation_sort_index')->asInt();

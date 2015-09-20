@@ -28,9 +28,7 @@ abstract class RelationIdentityReference extends RelationReference
     public function __construct(IEntityMapper $mapper)
     {
         parent::__construct($mapper);
-        $this->mapper->onInitialized(function () {
-            $this->primaryKeyColumn = $this->mapper->getPrimaryTable()->getPrimaryKeyColumn();
-        });
+        $this->primaryKeyColumn = $this->mapper->getPrimaryTable()->getPrimaryKeyColumn();
     }
 
     /**
@@ -70,7 +68,7 @@ abstract class RelationIdentityReference extends RelationReference
             $columns = [$primaryKey];
         }
 
-        $rowSet = new RowSet($this->mapper->getPrimaryTable()->withColumns($columns));
+        $rowSet = new RowSet($this->mapper->getPrimaryTable()->withColumnsIgnoringConstraints($columns));
         $rows   = [];
 
         foreach ($children as $key => $childId) {

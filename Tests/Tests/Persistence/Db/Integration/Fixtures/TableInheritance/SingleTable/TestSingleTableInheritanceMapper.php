@@ -25,6 +25,7 @@ class TestSingleTableInheritanceMapper extends EntityMapper
     protected function define(MapperDefinition $map)
     {
         $map->type(TestSuperclassEntity::class);
+        $map->toTable('entities');
 
         $map->idToPrimaryKey('id');
 

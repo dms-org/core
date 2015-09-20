@@ -280,4 +280,14 @@ class Table
                 $foreignKeys
         );
     }
+
+    /**
+     * @param ForeignKey[] $foreignKeys
+     *
+     * @return Table
+     */
+    public function withForeignKeys(array $foreignKeys)
+    {
+        return new self($this->name, $this->columns, $this->indexes, $foreignKeys);
+    }
 }

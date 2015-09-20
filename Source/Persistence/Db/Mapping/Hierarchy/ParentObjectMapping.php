@@ -13,6 +13,7 @@ use Iddigital\Cms\Core\Persistence\Db\Query\Query;
 use Iddigital\Cms\Core\Persistence\Db\Query\Select;
 use Iddigital\Cms\Core\Persistence\Db\Row;
 use Iddigital\Cms\Core\Persistence\Db\RowSet;
+use Iddigital\Cms\Core\Persistence\Db\Schema\Table;
 
 /**
  * The root object mapping class.
@@ -22,7 +23,7 @@ use Iddigital\Cms\Core\Persistence\Db\RowSet;
 class ParentObjectMapping extends ObjectMapping
 {
     /**
-     * @var string
+     * @var Table
      */
     protected $table;
 
@@ -31,9 +32,30 @@ class ParentObjectMapping extends ObjectMapping
      */
     public function __construct(FinalizedMapperDefinition $definition)
     {
-        parent::__construct($definition, null, []);
+        parent::__construct($definition, null);
 
         $this->table = $definition->getTable();
+    }
+
+    protected function loadFromDefinition(FinalizedMapperDefinition $definition)
+    {
+        parent::loadFromDefinition($definition);
+
+        $this->table = $definition->getTable();
+    }
+
+    /**
+     * @param Table $table
+     *
+     * @return ParentObjectMapping
+     */
+    public function withPrimaryTable(Table $table)
+    {
+        // TODO: verify safe
+        $clone = clone $this;
+        $clone->table = $table;
+
+        return $clone;
     }
 
     /**
@@ -49,7 +71,7 @@ class ParentObjectMapping extends ObjectMapping
      */
     protected function performDelete(PersistenceContext $context, Delete $deleteQuery)
     {
-        if ($deleteQuery->getTable() !== $this->table) {
+        if ($deleteQuery->getTable()->getName() !== $this->table->getName()) {
             throw InvalidArgumentException::format(
                     'Invalid delete query: expecting for table %s, %s given',
                     $this->table->getName(), $deleteQuery->getTable()->getName()

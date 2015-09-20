@@ -25,6 +25,7 @@ class TestHybridTableInheritanceMapper extends EntityMapper
     protected function define(MapperDefinition $map)
     {
         $map->type(TestSuperclassEntity::class);
+        $map->toTable('parent_entities');
 
         $map->idToPrimaryKey('id');
 

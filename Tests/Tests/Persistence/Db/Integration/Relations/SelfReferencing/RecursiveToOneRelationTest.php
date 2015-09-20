@@ -3,10 +3,13 @@
 namespace Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Relations\SelfReferencing;
 
 use Iddigital\Cms\Core\Persistence\Db\Mapping\IEntityMapper;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\IOrm;
 use Iddigital\Cms\Core\Persistence\Db\Query\Delete;
 use Iddigital\Cms\Core\Persistence\Db\Query\Select;
 use Iddigital\Cms\Core\Persistence\Db\Query\Update;
 use Iddigital\Cms\Core\Persistence\Db\Query\Upsert;
+use Iddigital\Cms\Core\Persistence\Db\Schema\ForeignKey;
+use Iddigital\Cms\Core\Persistence\Db\Schema\ForeignKeyMode;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Table;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\DbIntegrationTest;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Fixtures\SelfReferencing\ToOneRelation\RecursiveEntity;
@@ -24,19 +27,19 @@ class RecursiveToOneRelationTest extends DbIntegrationTest
     protected $entities;
 
     /**
-     * @return IEntityMapper
+     * @inheritDoc
      */
-    protected function loadMapper()
+    protected function loadOrm()
     {
-        return new RecursiveEntityMapper();
+        return RecursiveEntityMapper::orm();
     }
 
     /**
      * {@inheritDoc}
      */
-    protected function buildDatabase(MockDatabase $db, IEntityMapper $mapper)
+    protected function buildDatabase(MockDatabase $db, IOrm $orm)
     {
-        parent::buildDatabase($db, $mapper);
+        parent::buildDatabase($db, $orm);
         $db->createForeignKey('recursive_entities.parent_id', 'recursive_entities.id');
         $this->entities = $db->getTable('recursive_entities')->getStructure();
     }
@@ -51,6 +54,23 @@ class RecursiveToOneRelationTest extends DbIntegrationTest
         }
 
         return $main;
+    }
+
+    public function testCreatesForeignKeys()
+    {
+        $this->assertEquals(
+                [
+                        new ForeignKey(
+                                'fk_recursive_entities_parent_id_recursive_entities',
+                                ['parent_id'],
+                                'recursive_entities',
+                                ['id'],
+                                ForeignKeyMode::CASCADE,
+                                ForeignKeyMode::SET_NULL
+                        ),
+                ],
+                array_values($this->entities->getForeignKeys())
+        );
     }
 
     public function testPersistSingleLevel()
