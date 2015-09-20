@@ -13,6 +13,8 @@ use Iddigital\Cms\Core\Persistence\Db\Query\Query;
 use Iddigital\Cms\Core\Persistence\Db\Query\Select;
 use Iddigital\Cms\Core\Persistence\Db\Row;
 use Iddigital\Cms\Core\Persistence\Db\RowSet;
+use Iddigital\Cms\Core\Persistence\Db\Schema\ForeignKey;
+use Iddigital\Cms\Core\Persistence\Db\Schema\ForeignKeyMode;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Table;
 
 /**
@@ -56,6 +58,16 @@ class JoinedTableObjectMapping extends SubClassObjectMapping
     public function __construct(Table $parentTable, FinalizedMapperDefinition $definition)
     {
         parent::__construct($parentTable, $definition, IRelation::DEPENDENT_CHILDREN);
+
+        $subClassTable = $definition->getTable();
+        $definition->addForeignKey(ForeignKey::createWithNamingConvention(
+                $subClassTable->getName(),
+                [$subClassTable->getPrimaryKeyColumnName()],
+                $parentTable->getName(),
+                [$parentTable->getPrimaryKeyColumnName()],
+                ForeignKeyMode::CASCADE,
+                ForeignKeyMode::CASCADE
+        ));
     }
 
     protected function loadFromDefinition(FinalizedMapperDefinition $definition)

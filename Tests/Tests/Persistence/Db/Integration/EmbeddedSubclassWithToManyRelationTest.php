@@ -6,6 +6,8 @@ use Iddigital\Cms\Core\Persistence\Db\Mapping\CustomOrm;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\IEntityMapper;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\IOrm;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Column;
+use Iddigital\Cms\Core\Persistence\Db\Schema\ForeignKey;
+use Iddigital\Cms\Core\Persistence\Db\Schema\ForeignKeyMode;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Type\Enum;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Type\Integer;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Fixtures\EmbeddedSubclassWithToManyRelation\ChildEntity;
@@ -33,10 +35,21 @@ class EmbeddedSubclassWithToManyRelationTest extends DbIntegrationTest
     protected function buildDatabase(MockDatabase $db, IOrm $orm)
     {
         parent::buildDatabase($db, $orm);
-
-        $db->createForeignKey('children.parent_id', 'entities.id');
     }
 
+    public function testCreatesForeignKey()
+    {
+        $this->assertEquals([
+                new ForeignKey(
+                        'fk_children_parent_id_entities',
+                        ['parent_id'],
+                        'entities',
+                        ['id'],
+                        ForeignKeyMode::CASCADE,
+                        ForeignKeyMode::CASCADE
+                )
+        ], array_values($this->db->getTable('children')->getStructure()->getForeignKeys()));
+    }
 
     public function testCorrectTableLayout()
     {

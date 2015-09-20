@@ -4,6 +4,8 @@ namespace Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Relations\ManyToMa
 
 use Iddigital\Cms\Core\Persistence\Db\Mapping\IEntityMapper;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\IOrm;
+use Iddigital\Cms\Core\Persistence\Db\Schema\ForeignKey;
+use Iddigital\Cms\Core\Persistence\Db\Schema\ForeignKeyMode;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Table;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\DbIntegrationTest;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Fixtures\ManyToManyRelation\AnotherEntity;
@@ -51,13 +53,50 @@ class PolymorphicManyToManyRelationTest extends DbIntegrationTest
     protected function buildDatabase(MockDatabase $db, IOrm $orm)
     {
         parent::buildDatabase($db, $orm);
-        $db->createForeignKey('one_anothers.one_id', 'ones.id');
-        $db->createForeignKey('one_anothers.another_id', 'anothers.id');
-        $db->createForeignKey('another_subclasses.id', 'anothers.id');
         $this->oneTable               = $db->getTable('ones')->getStructure();
         $this->joinTable              = $db->getTable('one_anothers')->getStructure();
         $this->anotherTable           = $db->getTable('anothers')->getStructure();
         $this->anotherSubclassesTable = $db->getTable('another_subclasses')->getStructure();
+    }
+
+    public function testCreatesForeignKeys()
+    {
+        $this->assertEquals(
+                [
+                        new ForeignKey(
+                                'fk_one_anothers_one_id_ones',
+                                ['one_id'],
+                                'ones',
+                                ['id'],
+                                ForeignKeyMode::CASCADE,
+                                ForeignKeyMode::CASCADE
+                        ),
+                        new ForeignKey(
+                                'fk_one_anothers_another_id_anothers',
+                                ['another_id'],
+                                'anothers',
+                                array('id'),
+                                ForeignKeyMode::CASCADE,
+                                ForeignKeyMode::CASCADE
+                        ),
+                ],
+                array_values($this->joinTable->getForeignKeys())
+        );
+
+
+        $this->assertEquals(
+                [
+                        new ForeignKey(
+                                'fk_another_subclasses_id_anothers',
+                                ['id'],
+                                'anothers',
+                                ['id'],
+                                ForeignKeyMode::CASCADE,
+                                ForeignKeyMode::CASCADE
+                        ),
+                ],
+                array_values($this->anotherSubclassesTable->getForeignKeys())
+        );
     }
 
     public function testPersistNoChildren()

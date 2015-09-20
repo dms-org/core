@@ -40,8 +40,21 @@ class RecursiveToOneRelationTest extends DbIntegrationTest
     protected function buildDatabase(MockDatabase $db, IOrm $orm)
     {
         parent::buildDatabase($db, $orm);
-        $db->createForeignKey('recursive_entities.parent_id', 'recursive_entities.id');
         $this->entities = $db->getTable('recursive_entities')->getStructure();
+    }
+
+    public function testCreatesForeignKey()
+    {
+        $this->assertEquals([
+            new ForeignKey(
+                'fk_recursive_entities_parent_id_recursive_entities',
+                    ['parent_id'],
+                    'recursive_entities',
+                    ['id'],
+                    ForeignKeyMode::CASCADE,
+                    ForeignKeyMode::SET_NULL
+            )
+        ], array_values($this->entities->getForeignKeys()));
     }
 
     protected function buildTestEntity($levels)

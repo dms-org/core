@@ -3,9 +3,10 @@
 namespace Iddigital\Cms\Core\Tests\Persistence\Db\Integration;
 
 use Iddigital\Cms\Core\Persistence\Db\Mapping\CustomOrm;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\IEntityMapper;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\IOrm;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Column;
+use Iddigital\Cms\Core\Persistence\Db\Schema\ForeignKey;
+use Iddigital\Cms\Core\Persistence\Db\Schema\ForeignKeyMode;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Table;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Type\Boolean;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Type\Integer;
@@ -15,7 +16,6 @@ use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Fixtures\TableInheritanc
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Fixtures\TableInheritance\TestSubclassEntity2;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Fixtures\TableInheritance\TestSubclassEntity3;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Fixtures\TableInheritance\TestSuperclassEntity;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Mock\MockDatabase;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>
@@ -41,18 +41,40 @@ class ClassTableInheritanceTest extends DbIntegrationTest
         $this->parentEntities = $this->getSchemaTable('parent_entities');
     }
 
-    /**
-     * @inheritDoc
-     */
-    protected function buildDatabase(MockDatabase $db, IOrm $orm)
+    public function testCreatesCorrectForeignKeys()
     {
-        parent::buildDatabase($db, $orm);
+        $this->assertEquals([
+                new ForeignKey(
+                        'fk_subclass1_table_id_parent_entities',
+                        ['id'],
+                        'parent_entities',
+                        ['id'],
+                        ForeignKeyMode::CASCADE,
+                        ForeignKeyMode::CASCADE
+                )
+        ], array_values($this->getSchemaTable('subclass1_table')->getForeignKeys()));
 
-        $db->createForeignKey('subclass1_table.id', 'parent_entities.id');
+        $this->assertEquals([
+                new ForeignKey(
+                        'fk_subclass3_table_id_subclass1_table',
+                        ['id'],
+                        'subclass1_table',
+                        ['id'],
+                        ForeignKeyMode::CASCADE,
+                        ForeignKeyMode::CASCADE
+                )
+        ], array_values($this->getSchemaTable('subclass3_table')->getForeignKeys()));
 
-        $db->createForeignKey('subclass3_table.id', 'subclass1_table.id');
-
-        $db->createForeignKey('subclass2_table.id', 'parent_entities.id');
+        $this->assertEquals([
+                new ForeignKey(
+                        'fk_subclass2_table_id_parent_entities',
+                        ['id'],
+                        'parent_entities',
+                        ['id'],
+                        ForeignKeyMode::CASCADE,
+                        ForeignKeyMode::CASCADE
+                )
+        ], array_values($this->getSchemaTable('subclass2_table')->getForeignKeys()));
     }
 
     public function testBuildsCorrectTables()
