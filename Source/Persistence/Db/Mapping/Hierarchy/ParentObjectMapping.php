@@ -13,6 +13,7 @@ use Iddigital\Cms\Core\Persistence\Db\Query\Query;
 use Iddigital\Cms\Core\Persistence\Db\Query\Select;
 use Iddigital\Cms\Core\Persistence\Db\Row;
 use Iddigital\Cms\Core\Persistence\Db\RowSet;
+use Iddigital\Cms\Core\Persistence\Db\Schema\ForeignKey;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Table;
 
 /**
@@ -45,17 +46,13 @@ class ParentObjectMapping extends ObjectMapping
     }
 
     /**
-     * @param Table $table
+     * @param ForeignKey $foreignKey
      *
-     * @return ParentObjectMapping
+     * @return void
      */
-    public function withPrimaryTable(Table $table)
+    public function addForeignKey(ForeignKey $foreignKey)
     {
-        // TODO: verify safe
-        $clone = clone $this;
-        $clone->table = $table;
-
-        return $clone;
+        $this->definition->addForeignKey($foreignKey);
     }
 
     /**

@@ -82,8 +82,9 @@ class EmbeddedCollectionRelation extends EmbeddedRelation implements IToManyRela
         $this->parentPrimaryKey   = $parentPrimaryKey;
         $this->primaryKey         = $childPrimaryKey;
         $this->foreignKeyToParent = $foreignKeyToParentColumn;
-        $this->childrenTable      = $this->buildChildrenTable($mapper, $tableName);
-        $mapper                   = $mapper->asSeparateTable($this->childrenTable);
+        $mapper                   = $this->loadMapperAsSeparateTable($mapper, $tableName);
+        $this->childrenTable      = $mapper->getDefinition()->getTable();
+
 
         parent::__construct($mapper, self::DEPENDENT_CHILDREN, [$this->childrenTable], [$parentPrimaryKey->getName()]);
 
@@ -101,29 +102,23 @@ class EmbeddedCollectionRelation extends EmbeddedRelation implements IToManyRela
         throw NotImplementedException::method(__METHOD__);
     }
 
-    private function buildChildrenTable(IEmbeddedObjectMapper $mapper, $tableName)
+    private function loadMapperAsSeparateTable(IEmbeddedObjectMapper $mapper, $tableName)
     {
-        $table = $mapper->getDefinition()->getTable();
-
-        return $table
-                ->withName($tableName)
-                ->withColumns(array_merge(
-                        [$this->primaryKey, $this->foreignKeyToParent],
-                        $table->getColumns()
-                ))
-                ->withForeignKeys(array_merge(
-                        [
-                                ForeignKey::createWithNamingConvention(
-                                        $tableName,
-                                        [$this->foreignKeyToParent->getName()],
-                                        $this->parentTableName,
-                                        [$this->parentPrimaryKey->getName()],
-                                        ForeignKeyMode::CASCADE,
-                                        ForeignKeyMode::CASCADE
-                                )
-                        ],
-                        $table->getForeignKeys()
-                ));
+        return $mapper->asSeparateTable(
+                $tableName,
+                [$this->primaryKey, $this->foreignKeyToParent],
+                [],
+                [
+                        ForeignKey::createWithNamingConvention(
+                                $tableName,
+                                [$this->foreignKeyToParent->getName()],
+                                $this->parentTableName,
+                                [$this->parentPrimaryKey->getName()],
+                                ForeignKeyMode::CASCADE,
+                                ForeignKeyMode::CASCADE
+                        )
+                ]
+        );
     }
 
     /**

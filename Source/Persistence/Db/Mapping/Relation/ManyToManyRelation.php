@@ -2,11 +2,11 @@
 
 namespace Iddigital\Cms\Core\Persistence\Db\Mapping\Relation;
 
+use Iddigital\Cms\Core\Exception\InvalidArgumentException;
 use Iddigital\Cms\Core\Exception\TypeMismatchException;
 use Iddigital\Cms\Core\Persistence\Db\LoadingContext;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\ParentChildrenMap;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Reference\IToManyRelationReference;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Reference\RelationObjectReference;
 use Iddigital\Cms\Core\Persistence\Db\PersistenceContext;
 use Iddigital\Cms\Core\Persistence\Db\Query\Clause\Join;
 use Iddigital\Cms\Core\Persistence\Db\Query\Delete;
@@ -80,18 +80,28 @@ class ManyToManyRelation extends ToManyRelationBase
             $parentIdColumn,
             $relatedIdColumn
     ) {
-        $this->parentColumnsToLoad = [];
-
-        $mapper = $reference->getMapper();
+        $mapper                  = $reference->getMapper();
         $this->parentTableName   = $parentTableName;
         $this->parentTableIdName = $parentTableIdName;
-        $this->parentIdColumn = new Column($parentIdColumn, Integer::normal());
+        $this->parentIdColumn    = new Column($parentIdColumn, Integer::normal());
 
         $this->relatedTableName   = $mapper->getPrimaryTableName();
         $this->relatedTableIdName = $mapper->getPrimaryTable()->getPrimaryKeyColumnName();
         $this->relatedIdColumn    = new Column($relatedIdColumn, Integer::normal());
 
-        $joinTable = $this->buildJoinTable($joinTableName);
+        $inverseRelation = $reference->getBidirectionalRelation();
+        if ($inverseRelation) {
+            if (!($inverseRelation instanceof self)) {
+                throw InvalidArgumentException::format(
+                        'Invalid bidirectional relation for many-to-many relation: expecting instance of %s, %s given',
+                        __CLASS__, get_class($inverseRelation)
+                );
+            }
+
+            $joinTable = $inverseRelation->joinTable;
+        } else {
+            $joinTable = $this->buildJoinTable($joinTableName);
+        }
 
         parent::__construct($reference, null, self::DEPENDENT_CHILDREN, [
                 $joinTable

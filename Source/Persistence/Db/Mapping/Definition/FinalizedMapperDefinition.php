@@ -156,7 +156,23 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
                 call_user_func($this->foreignKeysFactory, $this->table)
         ));
 
+        foreach ($this->subClassMappings as $mapping) {
+            $mapping->initializeRelations($parentMapper);
+        }
+
         $this->hasInitializedRelations = true;
+    }
+
+    /**
+     * @param ForeignKey $foreignKey
+     *
+     * @return void
+     */
+    public function addForeignKey(ForeignKey $foreignKey)
+    {
+        $this->table = $this->table->withForeignKeys(
+                array_merge($this->table->getForeignKeys(), [$foreignKey])
+        );
     }
 
     /**

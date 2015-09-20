@@ -87,10 +87,9 @@ abstract class Orm implements IOrm
             }
         }
 
-        // TODO: add checks for duplicate tables
         $uniqueTables = [];
         foreach ($tables as $table) {
-            $uniqueTables[$table->getName()] = $table;
+            $uniqueTables[spl_object_hash($table)] = $table;
         }
 
         $this->database = new Database($uniqueTables);

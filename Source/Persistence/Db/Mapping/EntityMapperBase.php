@@ -125,11 +125,8 @@ abstract class EntityMapperBase extends ObjectMapper implements IEntityMapper
      */
     final public function addForeignKey(ForeignKey $foreignKey)
     {
-        $this->primaryTable                           = $this->primaryTable->withForeignKeys(
-                array_merge($this->primaryTable->getForeignKeys(), [$foreignKey])
-        );
-        $this->mapping                                = $this->mapping->withPrimaryTable($this->primaryTable);
-        $this->tables[$this->primaryTable->getName()] = $this->primaryTable;
+        $this->mapping->addForeignKey($foreignKey);
+        $this->loadFromDefinition($this->getDefinition());
     }
 
     /**

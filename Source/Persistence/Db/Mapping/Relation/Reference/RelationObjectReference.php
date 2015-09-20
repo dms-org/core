@@ -18,11 +18,6 @@ use Iddigital\Cms\Core\Persistence\Db\Row;
 abstract class RelationObjectReference extends RelationReference
 {
     /**
-     * @var IRelation|null
-     */
-    protected $bidirectionalRelation;
-
-    /**
      * ToOneRelationObjectReference constructor.
      *
      * @param IEntityMapper $mapper
@@ -32,22 +27,7 @@ abstract class RelationObjectReference extends RelationReference
      */
     public function __construct(IEntityMapper $mapper, $bidirectionalRelationProperty = null)
     {
-        parent::__construct($mapper);
-
-        if ($bidirectionalRelationProperty) {
-            // TODO:
-//            $this->mapper->onInitialized(function () use ($bidirectionalRelationProperty) {
-//                $this->bidirectionalRelation = $this->mapper->getDefinition()->getRelation($bidirectionalRelationProperty);
-//
-//                if ($bidirectionalRelationProperty && !$this->bidirectionalRelation) {
-//                    throw InvalidArgumentException::format(
-//                            'Invalid bidirectional relation property %s::$%s, property is not mapped to a relation',
-//                            $this->mapper->getObjectType(),
-//                            $bidirectionalRelationProperty
-//                    );
-//                }
-//            });
-        }
+        parent::__construct($mapper, $bidirectionalRelationProperty);
     }
 
     /**
@@ -87,11 +67,13 @@ abstract class RelationObjectReference extends RelationReference
             PersistenceContext $context,
             array $children
     ) {
+        $bidirectionalRelation = $this->getBidirectionalRelation();
+
         return $context->ignoreRelationsFor(
                 function () use ($context, $children) {
                     return $this->mapper->persistAll($context, array_filter($children));
                 },
-                $this->bidirectionalRelation ? [$this->bidirectionalRelation] : []
+                $bidirectionalRelation ? [$bidirectionalRelation] : []
         );
     }
 }

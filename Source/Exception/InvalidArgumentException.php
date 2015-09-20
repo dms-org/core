@@ -27,7 +27,7 @@ class InvalidArgumentException extends BaseException
     public static function verifyNotNull($method, $name, $argument)
     {
         static::verify($argument !== null,
-            self::messageFormat($method, $name, 'cannot be null'));
+                self::messageFormat($method, $name, 'cannot be null'));
     }
 
     /**
@@ -36,16 +36,51 @@ class InvalidArgumentException extends BaseException
      * @param string $method The method
      * @param string $name
      * @param mixed  $argument
-     * @param string  $class
+     * @param string $class
      *
      * @throws static
      */
     public static function verifyInstanceOf($method, $name, $argument, $class)
     {
         static::verify($argument instanceof $class,
-            self::messageFormat($method, $name, 'expecting instance of %s, %s given'),
-            $class,
-            self::getType($argument));
+                self::messageFormat($method, $name, 'expecting instance of %s, %s given'),
+                $class,
+                self::getType($argument));
+    }
+
+    /**
+     * Verifies the supplied argument value is an array containing only
+     * instances of the supplied class.
+     *
+     * @param string             $method The method
+     * @param string             $name
+     * @param array|\Traversable $argument
+     * @param callable           $satisfiesCallback
+     *
+     * @throws mixed
+     */
+    public static function verifyAll($method, $name, $argument, callable $satisfiesCallback)
+    {
+        $failed   = false;
+        $failType = null;
+
+        foreach ($argument as $value) {
+            if (!$satisfiesCallback($value)) {
+                $failed   = true;
+                $failType = self::getType($value);
+                break;
+            }
+        }
+
+        is_callable($satisfiesCallback, false, $callableName);
+
+        if ($failed) {
+            static::verify(!$failed,
+                    self::messageFormat($method, $name, 'expecting array|\Traversable all matching %s, %s found'),
+                    $callableName,
+                    $failType
+            );
+        }
     }
 
     /**
@@ -68,12 +103,16 @@ class InvalidArgumentException extends BaseException
             if (!($value instanceof $class)) {
                 $failed   = true;
                 $failType = self::getType($value);
+                break;
             }
         }
 
-        static::verify(!$failed,
-            self::messageFormat($method, $name, 'expecting array of %s, %s found'),
-            $class,
-            $failType);
+        if ($failed) {
+            static::verify(!$failed,
+                    self::messageFormat($method, $name, 'expecting array|\Traversable of %s, %s found'),
+                    $class,
+                    $failType
+            );
+        }
     }
 }

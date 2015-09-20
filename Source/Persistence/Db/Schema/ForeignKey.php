@@ -64,11 +64,15 @@ class ForeignKey
             $onDeleteMode,
             $onUpdateMode
     ) {
+        InvalidArgumentException::verifyAll(__METHOD__, 'localColumnNames', $localColumnNames, 'is_string');
+        InvalidArgumentException::verifyAll(__METHOD__, 'referencedColumnNames', $referencedColumnNames, 'is_string');
+
         InvalidArgumentException::verify(
                 count($localColumnNames) === count($referencedColumnNames),
                 'Local columns must match the amount of referenced columns: %s != %s',
                 count($localColumnNames), count($referencedColumnNames)
         );
+
 
         InvalidArgumentException::verify(!empty($localColumnNames), 'Column names cannot be empty');
 

@@ -3,6 +3,7 @@
 namespace Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Reference;
 
 use Iddigital\Cms\Core\Persistence\Db\Mapping\IEntityMapper;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\IRelation;
 use Pinq\Queries\Segments\Select;
 
 /**
@@ -28,4 +29,9 @@ interface IRelationReference
      * @return int|null
      */
     public function getIdFromValue($childValue);
+
+    /**
+     * @return IRelation|null
+     */
+    public function getBidirectionalRelation();
 }

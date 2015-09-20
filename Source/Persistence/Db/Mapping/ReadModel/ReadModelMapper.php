@@ -205,7 +205,7 @@ class ReadModelMapper extends ObjectMapper implements IEntityMapper, IEmbeddedOb
         throw NotImplementedException::method(__METHOD__);
     }
 
-    public function asSeparateTable(Table $table)
+    public function asSeparateTable($name, array $extraColumns = [], array $extraIndexes = [], array $extraForeignKeys = [])
     {
         throw NotImplementedException::method(__METHOD__);
     }

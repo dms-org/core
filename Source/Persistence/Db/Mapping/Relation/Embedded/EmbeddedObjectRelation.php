@@ -39,6 +39,8 @@ class EmbeddedObjectRelation extends EmbeddedRelation implements IEmbeddedToOneR
      */
     public function __construct(IEmbeddedObjectMapper $mapper, $objectIssetColumnName = null)
     {
+        $mapper->initializeRelations();
+
         $parentColumnsToLoad = $mapper->getMapping()->getAllColumnsToLoad();
         if ($objectIssetColumnName) {
             $parentColumnsToLoad[] = $objectIssetColumnName;

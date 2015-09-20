@@ -16,10 +16,10 @@ class EntityWithValueObjectMapper extends EntityMapper
     public static function orm()
     {
         return CustomOrm::from([
-                EntityWithValueObject::class => __CLASS__
+                EntityWithValueObject::class => __CLASS__,
+                ChildEntity::class           => ChildEntityMapper::class,
         ], [
-                EmbeddedObject::class => EmbeddedObjectMapper::class,
-                ChildEntity::class    => ChildEntityMapper::class,
+                EmbeddedObject::class => EmbeddedObjectMapper::class
         ]);
     }
 

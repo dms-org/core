@@ -88,7 +88,6 @@ abstract class Relation implements IRelation
         return $clone;
     }
 
-
     /**
      * @inheritDoc
      */

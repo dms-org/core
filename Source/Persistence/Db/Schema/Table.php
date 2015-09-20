@@ -282,6 +282,16 @@ class Table
     }
 
     /**
+     * @param Index[] $indexes
+     *
+     * @return Table
+     */
+    public function withIndexes(array $indexes)
+    {
+        return new self($this->name, $this->columns, $indexes, $this->foreignKeys);
+    }
+
+    /**
      * @param ForeignKey[] $foreignKeys
      *
      * @return Table

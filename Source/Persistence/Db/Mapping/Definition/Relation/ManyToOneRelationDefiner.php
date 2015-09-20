@@ -2,6 +2,7 @@
 
 namespace Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Relation;
 
+use Iddigital\Cms\Core\Exception\InvalidOperationException;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\IEntityMapper;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\IdentifyingToOneRelation;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\ManyToOneRelation;
@@ -25,6 +26,11 @@ class ManyToOneRelationDefiner extends RelationTypeDefinerBase
     private $bidirectionalRelationProperty;
 
     /**
+     * @var string
+     */
+    private $onDeleteMode = ForeignKeyMode::SET_NULL;
+
+    /**
      * Defines the bidirectional relation property that is defined
      * on the related entity.
      *
@@ -43,6 +49,53 @@ class ManyToOneRelationDefiner extends RelationTypeDefinerBase
     }
 
     /**
+     * Defines the foreign key to delete the objects when the related objects
+     * are deleted.
+     *
+     * @return static
+     */
+    public function onDeleteCascade()
+    {
+        return $this->onDelete(ForeignKeyMode::CASCADE);
+    }
+
+    /**
+     * Defines the foreign key to set the columns to null
+     * when the related objects are deleted.
+     *
+     * @return static
+     */
+    public function onDeleteSetNull()
+    {
+        return $this->onDelete(ForeignKeyMode::SET_NULL);
+    }
+
+    /**
+     * Defines the foreign key to throw an error when the related objects
+     * are deleted.
+     *
+     * @return static
+     */
+    public function onDeleteDoNothing()
+    {
+        return $this->onDelete(ForeignKeyMode::DO_NOTHING);
+    }
+
+    private function onDelete($mode)
+    {
+        if ($this->bidirectionalRelationProperty) {
+            throw InvalidOperationException::format(
+                    'Cannot set foreign key delete mode on many-to-one relation: bidirectional relation property is set ' .
+                    'so the foreign key will be defined on the inverse one-to-many relation'
+            );
+        }
+
+        $this->onDeleteMode = $mode;
+
+        return $this;
+    }
+
+    /**
      * Sets the column name of the foreign key on the parent table.
      *
      * @param string $columnName
@@ -54,6 +107,7 @@ class ManyToOneRelationDefiner extends RelationTypeDefinerBase
         call_user_func($this->callback,
                 function (Table $parentTable) use ($columnName) {
                     $mapper = call_user_func($this->mapperLoader);
+
                     return new ManyToOneRelation(
                             $this->loadIds
                                     ? new ToOneRelationIdentityReference($mapper)
@@ -76,7 +130,7 @@ class ManyToOneRelationDefiner extends RelationTypeDefinerBase
                             $mapper->getPrimaryTableName(),
                             [$mapper->getPrimaryTable()->getPrimaryKeyColumnName()],
                             ForeignKeyMode::CASCADE,
-                            ForeignKeyMode::DO_NOTHING
+                            $this->onDeleteMode
                     );
                 });
     }

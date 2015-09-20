@@ -189,7 +189,7 @@ class EmbeddedMapperProxy implements IEmbeddedObjectMapper
         throw NotImplementedException::method(__METHOD__);
     }
 
-    public function asSeparateTable(Table $table)
+    public function asSeparateTable($name, array $extraColumns = [], array $extraIndexes = [], array $extraForeignKeys = [])
     {
         throw NotImplementedException::method(__METHOD__);
     }

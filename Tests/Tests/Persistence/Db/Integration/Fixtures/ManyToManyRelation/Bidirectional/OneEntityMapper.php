@@ -34,11 +34,11 @@ class OneEntityMapper extends EntityMapper
         $map->idToPrimaryKey('id');
 
         $map->relation('others')
-            ->to(AnotherEntity::class)
-            ->toMany()
-            ->withBidirectionalRelation('ones')
-            ->throughJoinTable('one_anothers')
-            ->withParentIdAs('one_id')
-            ->withRelatedIdAs('another_id');
+                ->to(AnotherEntity::class)
+                ->toMany()
+                ->withBidirectionalRelation('ones')
+                ->throughJoinTable('one_anothers')
+                ->withParentIdAs('one_id')
+                ->withRelatedIdAs('another_id');
     }
 }

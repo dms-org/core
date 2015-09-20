@@ -184,7 +184,7 @@ class MapperDefinition extends MapperDefinitionBase
     public function primaryKey($columnName)
     {
         $this->primaryKey = $this->buildPrimaryKeyColumn($columnName);
-        array_unshift($this->columns, $this->primaryKey);
+        $this->columns    = [$columnName => $this->primaryKey] + $this->columns;
     }
 
     /**

@@ -125,8 +125,12 @@ class CriteriaMapper
         $loaded = false;
 
         if ($criteria->hasCondition()) {
-            $condition = $this->applySpecificInstanceOfCondition($criteria->getCondition(), $select, /* out */
-                    $loaded);
+            $condition = $this->applySpecificInstanceOfCondition(
+                    $criteria->getCondition(),
+                    $select,
+                    /* out */
+                    $loaded
+            );
 
             if ($condition) {
                 $select->where($this->mapCondition($condition, $select));

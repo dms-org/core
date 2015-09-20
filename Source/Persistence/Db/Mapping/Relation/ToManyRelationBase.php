@@ -2,7 +2,6 @@
 
 namespace Iddigital\Cms\Core\Persistence\Db\Mapping\Relation;
 
-use Iddigital\Cms\Core\Model\ITypedCollection;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Mode\IRelationMode;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Reference\IToManyRelationReference;
 

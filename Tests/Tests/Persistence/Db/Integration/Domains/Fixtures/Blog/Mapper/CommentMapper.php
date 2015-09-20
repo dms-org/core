@@ -27,12 +27,13 @@ class CommentMapper extends EntityMapper
 
         $map->idToPrimaryKey('id');
         $map->column('post_id')->asInt();
-        $map->column('author_id')->asInt();
+        $map->column('author_id')->nullable()->asInt();
 
         $map->property('content')->to('content')->asText();
         $map->relation('authorId')
-            ->to(User::class)
-            ->manyToOneId()
-            ->withRelatedIdAs('author_id');
+                ->to(User::class)
+                ->manyToOneId()
+                ->onDeleteSetNull()
+                ->withRelatedIdAs('author_id');
     }
 }

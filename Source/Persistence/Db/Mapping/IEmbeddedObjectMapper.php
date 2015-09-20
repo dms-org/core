@@ -6,6 +6,9 @@ use Iddigital\Cms\Core\Model\ITypedObject;
 use Iddigital\Cms\Core\Persistence\Db\PersistenceContext;
 use Iddigital\Cms\Core\Persistence\Db\Query\Delete;
 use Iddigital\Cms\Core\Persistence\Db\Row;
+use Iddigital\Cms\Core\Persistence\Db\Schema\Column;
+use Iddigital\Cms\Core\Persistence\Db\Schema\ForeignKey;
+use Iddigital\Cms\Core\Persistence\Db\Schema\Index;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Table;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Hierarchy\EmbeddedParentObjectMapping;
 
@@ -108,9 +111,12 @@ interface IEmbeddedObjectMapper extends IObjectMapper
      * Returns an equivalent mapper that will map objects and execute queries as if it
      * were on a separate table.
      *
-     * @param Table $table
+     * @param string      $name
+     * @param Column[] $extraColumns
+     * @param Index[] $extraIndexes
+     * @param ForeignKey[] $extraForeignKeys
      *
      * @return IEmbeddedObjectMapper
      */
-    public function asSeparateTable(Table $table);
+    public function asSeparateTable($name, array $extraColumns = [], array $extraIndexes = [], array $extraForeignKeys = []);
 }

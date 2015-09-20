@@ -32,17 +32,34 @@ abstract class ValueObjectMapper extends ObjectMapper implements IEmbeddedObject
     private $parentMapper;
 
     /**
+     * @var string[]
+     */
+    private $parentColumns = [];
+
+    /**
      * @param IOrm               $orm
      * @param IObjectMapper|null $parentMapper
      */
     public function __construct(IOrm $orm, IObjectMapper $parentMapper = null)
     {
-        $rootEntityMapper   = $this->getRootEntityMapper();
+        if ($parentMapper instanceof NullObjectMapper) {
+            $parentMapper = null;
+        }
+
         $this->parentMapper = $parentMapper;
         $definition         = new MapperDefinition($orm);
         $this->define($definition);
+        $rootEntityMapper = $this->getRootEntityMapper();
+        $tableName        = $rootEntityMapper ? $rootEntityMapper->getPrimaryTableName() : '__EMBEDDED__';
 
-        parent::__construct($definition->finalize($rootEntityMapper ? $rootEntityMapper->getPrimaryTableName() : '__EMBEDDED__'));
+        if ($parentMapper) {
+            foreach ($parentMapper->getDefinition()->getTable()->getColumns() as $column) {
+                $definition->addColumn($column);
+                $this->parentColumns[] = $column->getName();
+            }
+        }
+
+        parent::__construct($definition->finalize($tableName));
     }
 
     /**
@@ -79,12 +96,30 @@ abstract class ValueObjectMapper extends ObjectMapper implements IEmbeddedObject
     /**
      * {@inheritDoc}
      */
-    final public function asSeparateTable(Table $table)
+    final public function asSeparateTable($name, array $extraColumns = [], array $extraIndexes = [], array $extraForeignKeys = [])
     {
+        $table = $this->loadTableWithoutParentColumns($name, $extraColumns, $extraIndexes, $extraForeignKeys);
+
         $clone          = clone $this;
         $clone->mapping = new ParentObjectMapping($this->getDefinition()->withTable($table));
 
         return $clone;
+    }
+
+    private function loadTableWithoutParentColumns($name, array $extraColumns, array $extraIndexes, array $extraForeignKeys)
+    {
+        $table   = $this->getDefinition()->getTable();
+        $columns = $table->getColumns();
+
+        foreach ($this->parentColumns as $parentColumn) {
+            unset($columns[$parentColumn]);
+        }
+
+        return $table
+                ->withName($name)
+                ->withColumns(array_merge($extraColumns, $columns))
+                ->withIndexes(array_merge($extraIndexes, $table->getIndexes()))
+                ->withForeignKeys(array_merge($extraForeignKeys, $table->getForeignKeys()));
     }
 
     final protected function loadFromDefinition(FinalizedMapperDefinition $definition)

@@ -52,7 +52,7 @@ abstract class ObjectMapper implements IObjectMapper
     /**
      * @inheritDoc
      */
-    public function initializeRelations()
+    final public function initializeRelations()
     {
         if ($this->hasInitializedRelations) {
             return;

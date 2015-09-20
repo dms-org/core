@@ -9,6 +9,7 @@ use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\FinalizedMapperDefiniti
 use Iddigital\Cms\Core\Persistence\Db\Mapping\IObjectMapper;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\ParentChildMap;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\ParentChildrenMap;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Embedded\EmbeddedObjectRelation;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\EntityRelation;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\IEmbeddedToOneRelation;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\IRelation;
@@ -98,6 +99,8 @@ abstract class ObjectMapping implements IObjectMapping
         $this->primaryKeyColumnName  = $definition->getTable()->getPrimaryKeyColumnName();
         $this->mappingTables         = $this->loadMappingTables($definition);
         $this->specificColumnsToLoad = $this->loadRequiredColumns($definition);
+        $this->specificColumnsToLoad = array_merge($this->specificColumnsToLoad, $this->findAllColumnsToLoad());
+        $this->allColumnsToLoad      = array_merge($this->specificColumnsToLoad, $this->findAllSubclassColumnsToLoad());
     }
 
     protected function loadMappingTables(FinalizedMapperDefinition $definition)
@@ -117,12 +120,6 @@ abstract class ObjectMapping implements IObjectMapping
     {
         $this->definition->initializeRelations($parentMapper);
 
-        foreach ($this->subClassMappings as $mapping) {
-            $mapping->initializeRelations($parentMapper);
-        }
-
-        $this->specificColumnsToLoad = array_merge($this->specificColumnsToLoad, $this->findAllColumnsToLoad());
-        $this->allColumnsToLoad      = array_merge($this->specificColumnsToLoad, $this->findAllSubclassColumnsToLoad());
         $this->loadFromDefinition($this->definition);
     }
 

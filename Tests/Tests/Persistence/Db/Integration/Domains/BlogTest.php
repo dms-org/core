@@ -128,7 +128,7 @@ class BlogTest extends DbIntegrationTest
                         'users',
                         ['id'],
                         ForeignKeyMode::CASCADE,
-                        ForeignKeyMode::SET_NULL
+                        ForeignKeyMode::CASCADE
                 )
         ], array_values($this->postTable->getStructure()->getForeignKeys()));
 
@@ -147,22 +147,22 @@ class BlogTest extends DbIntegrationTest
                         'users',
                         ['id'],
                         ForeignKeyMode::CASCADE,
-                        ForeignKeyMode::CASCADE
+                        ForeignKeyMode::SET_NULL
                 )
         ], array_values($this->commentTable->getStructure()->getForeignKeys()));
 
         $this->assertEquals([
                 new ForeignKey(
-                        'fk_user_friends_user_id_',
-                        ['post_id'],
-                        'posts',
+                        'fk_user_friends_user_id_users',
+                        ['user_id'],
+                        'users',
                         ['id'],
                         ForeignKeyMode::CASCADE,
                         ForeignKeyMode::CASCADE
                 ),
                 new ForeignKey(
-                        'fk_comments_author_id_users',
-                        ['author_id'],
+                        'fk_user_friends_friend_id_users',
+                        ['friend_id'],
                         'users',
                         ['id'],
                         ForeignKeyMode::CASCADE,
