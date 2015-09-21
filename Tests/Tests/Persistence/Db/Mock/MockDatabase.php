@@ -237,7 +237,7 @@ class MockDatabase
         $table = $this->tables[$tableName];
 
         return $table->getStructure()->hasColumn($columnName)
-                ? [$table, $table->getStructure()->getColumn($columnName)]
+                ? [$table, $table->getStructure()->findColumn($columnName)]
                 : null;
     }
 

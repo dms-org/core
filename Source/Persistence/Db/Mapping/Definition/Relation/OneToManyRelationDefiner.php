@@ -8,6 +8,7 @@ use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Mode\NonIdentifyingRelati
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Reference\ToManyRelationIdentityReference;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Reference\ToManyRelationObjectReference;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\ToManyRelation;
+use Iddigital\Cms\Core\Persistence\Db\Query\Clause\Ordering;
 use Iddigital\Cms\Core\Persistence\Db\Schema\ForeignKey;
 use Iddigital\Cms\Core\Persistence\Db\Schema\ForeignKeyMode;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Table;
@@ -28,6 +29,16 @@ class OneToManyRelationDefiner extends RelationTypeDefinerBase
      * @var bool
      */
     private $identifying;
+
+    /**
+     * @var string[]
+     */
+    protected $orderByColumnNameDirectionMap = [];
+
+    /**
+     * @var string|null
+     */
+    protected $orderPersistColumn;
 
     public function __construct(callable $callback, callable $mapperLoader, $loadIds, $identifying)
     {
@@ -54,6 +65,53 @@ class OneToManyRelationDefiner extends RelationTypeDefinerBase
     public function withBidirectionalRelation($propertyOnRelatedEntity)
     {
         $this->bidirectionalRelationProperty = $propertyOnRelatedEntity;
+
+        return $this;
+    }
+
+    /**
+     * Defines the one-to-many relation to load the collection
+     * ordered by the supplied column ascendingly.
+     *
+     * @param string $columnName
+     *
+     * @return OneToManyRelationDefiner
+     */
+    public function orderByAsc($columnName)
+    {
+        $this->orderByColumnNameDirectionMap[$columnName] = Ordering::ASC;
+
+        return $this;
+    }
+
+    /**
+     * Defines the one-to-many relation to load the collection
+     * ordered by the supplied column descendingly.
+     *
+     * @param string $columnName
+     *
+     * @return OneToManyRelationDefiner
+     */
+    public function orderByDesc($columnName)
+    {
+        $this->orderByColumnNameDirectionMap[$columnName] = Ordering::DESC;
+
+        return $this;
+    }
+
+    /**
+     * Defines the one-to-many relation to persist the 1-based
+     * order index of the related objects to the supplied column.
+     * This will automatically load the columns in the persisted order.
+     *
+     * @param string $columnName
+     *
+     * @return OneToManyRelationDefiner
+     */
+    public function withOrderPersistedTo($columnName)
+    {
+        $this->orderPersistColumn = $columnName;
+        $this->orderByAsc($columnName);
 
         return $this;
     }
@@ -89,7 +147,9 @@ class OneToManyRelationDefiner extends RelationTypeDefinerBase
                     $columnName,
                     $this->identifying
                             ? new IdentifyingRelationMode()
-                            : new NonIdentifyingRelationMode()
+                            : new NonIdentifyingRelationMode(),
+                    $this->orderByColumnNameDirectionMap,
+                    $this->orderPersistColumn
             );
         });
     }

@@ -139,7 +139,7 @@ class EmbeddedObjectMapping extends SubClassObjectMapping implements IEmbeddedOb
     public function makeClassConditionExpr(Query $query)
     {
         $parentAlias = $this->parentTable->getName();
-        $column      = $this->parentTable->getColumn($this->classTypeColumnName);
+        $column      = $this->parentTable->findColumn($this->classTypeColumnName);
 
         return Expr::equal(
                 Expr::column($parentAlias, $column),
@@ -160,7 +160,7 @@ class EmbeddedObjectMapping extends SubClassObjectMapping implements IEmbeddedOb
         }
 
         $parentAlias = $this->parentTable->getName();
-        $column      = $this->parentTable->getColumn($this->classTypeColumnName);
+        $column      = $this->parentTable->findColumn($this->classTypeColumnName);
 
         $query->where(Expr::equal(
                 Expr::column($parentAlias, $column),

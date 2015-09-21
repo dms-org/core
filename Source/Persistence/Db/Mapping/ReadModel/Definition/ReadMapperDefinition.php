@@ -191,7 +191,7 @@ class ReadMapperDefinition
                             return $i;
                         })
                         ->to($propertyColumnMap[$property])
-                        ->asType($table->getColumn($propertyColumnMap[$property])->getType());
+                        ->asType($table->findColumn($propertyColumnMap[$property])->getType());
             } else {
                 $relation = $relations[$property];
                 $this->readDefinition
@@ -199,7 +199,7 @@ class ReadMapperDefinition
                         ->asCustom($relation);
 
                 foreach ($relation->getParentColumnsToLoad() as $column) {
-                    $this->readDefinition->addColumn($table->getColumn($column));
+                    $this->readDefinition->addColumn($table->findColumn($column));
                 }
             }
         }
@@ -227,7 +227,7 @@ class ReadMapperDefinition
             $this->readDefinition
                     ->property($property)
                     ->to($column)
-                    ->asType($table->getColumn($column)->getType());
+                    ->asType($table->findColumn($column)->getType());
         }
     }
 

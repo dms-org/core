@@ -182,7 +182,7 @@ class JoinedTableObjectMapping extends SubClassObjectMapping
     protected function addPrefixedColumnsToSelect(Select $select, $joinAlias)
     {
         foreach ($this->classTableColumnMap as $columnName => $prefixedColumnName) {
-            $select->addColumn($prefixedColumnName, Expr::column($joinAlias, $this->classTable->getColumn($columnName)));
+            $select->addColumn($prefixedColumnName, Expr::column($joinAlias, $this->classTable->findColumn($columnName)));
         }
     }
 

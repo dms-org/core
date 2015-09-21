@@ -177,9 +177,9 @@ class MockDatabaseTest extends CmsTestCase
         $this->assertEquals([
                 new MockForeignKey(
                         $bar,
-                        $bar->getStructure()->getColumn('foreign'),
+                        $bar->getStructure()->findColumn('foreign'),
                         $foo,
-                        $foo->getStructure()->getColumn('id')
+                        $foo->getStructure()->findColumn('id')
                 )
         ], $this->db->getTable('bar')->getForeignKeys());
     }

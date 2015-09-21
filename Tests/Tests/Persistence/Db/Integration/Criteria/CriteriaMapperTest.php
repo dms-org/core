@@ -10,8 +10,8 @@ use Iddigital\Cms\Core\Persistence\Db\Mapping\CustomOrm;
 use Iddigital\Cms\Core\Persistence\Db\Query\Clause\Ordering;
 use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Expr;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Fixtures\MockEntity;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Fixtures\Types\TypesEntity;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Fixtures\Types\TypesMapper;
+use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\Fixtures\Types\TypesEntity;
+use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\Fixtures\Types\TypesMapper;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

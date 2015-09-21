@@ -79,7 +79,7 @@ class MockTable
                 );
             }
 
-            $referencedColumn   = $referencedTable->getStructure()->getColumn($fk->getReferencedColumnNames()[0]);
+            $referencedColumn   = $referencedTable->getStructure()->findColumn($fk->getReferencedColumnNames()[0]);
 
             if (!$referencedColumn) {
                 throw InvalidArgumentException::format(
@@ -89,7 +89,7 @@ class MockTable
 
             $this->foreignKeys[] = new MockForeignKey(
                     $this,
-                    $this->structure->getColumn($fk->getLocalColumnNames()[0]),
+                    $this->structure->findColumn($fk->getLocalColumnNames()[0]),
                     $referencedTable,
                     $referencedColumn
             );

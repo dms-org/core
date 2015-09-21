@@ -2,12 +2,14 @@
 
 namespace Iddigital\Cms\Core\Persistence\Db\Mapping\Relation;
 
+use Iddigital\Cms\Core\Exception\InvalidArgumentException;
 use Iddigital\Cms\Core\Model\IEntity;
 use Iddigital\Cms\Core\Persistence\Db\LoadingContext;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\ParentChildrenMap;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Mode\IRelationMode;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Reference\IToManyRelationReference;
 use Iddigital\Cms\Core\Persistence\Db\PersistenceContext;
+use Iddigital\Cms\Core\Persistence\Db\Query\Clause\Ordering;
 use Iddigital\Cms\Core\Persistence\Db\Query\Delete;
 use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Expr;
 use Iddigital\Cms\Core\Persistence\Db\Row;
@@ -31,23 +33,57 @@ class ToManyRelation extends ToManyRelationBase
     protected $foreignKeyColumn;
 
     /**
+     * The order to load the related objects.
+     * The column names as keys and the direction as values.
+     *
+     * @var string[]
+     */
+    private $orderByColumnNameDirectionMap;
+
+    /**
+     * The column to save the order index (1 based)
+     * of the entity in it's parents collection.
+     *
+     * @var Column|null
+     */
+    protected $orderPersistColumn;
+
+    /**
      * @param IToManyRelationReference $reference
      * @param string                   $parentForeignKey
      * @param IRelationMode            $mode
+     * @param string[]                 $orderByColumnNameDirectionMap
+     * @param string|null              $orderPersistColumn
      *
+     * @throws InvalidArgumentException
      * @throws InvalidRelationException
      */
-    public function __construct(IToManyRelationReference $reference, $parentForeignKey, IRelationMode $mode)
-    {
+    public function __construct(
+            IToManyRelationReference $reference,
+            $parentForeignKey,
+            IRelationMode $mode,
+            $orderByColumnNameDirectionMap = [],
+            $orderPersistColumn = null
+    ) {
         parent::__construct($reference, $mode, self::DEPENDENT_CHILDREN);
         $this->foreignKeyToParent = $parentForeignKey;
-        $this->foreignKeyColumn   = $this->mapper->getPrimaryTable()->getColumn($this->foreignKeyToParent);
+        $this->foreignKeyColumn   = $this->table->getColumn($this->foreignKeyToParent);
 
-        if (!$this->foreignKeyColumn) {
-            throw InvalidRelationException::format(
-                    'Invalid parent foreign key column %s does not exist on related table %s',
-                    $this->foreignKeyToParent, $this->mapper->getPrimaryTableName()
-            );
+        $this->orderByColumnNameDirectionMap = $orderByColumnNameDirectionMap;
+
+        foreach ($orderByColumnNameDirectionMap as $columnName => $direction) {
+            $this->table->getColumn($columnName);
+        }
+
+        if ($orderPersistColumn) {
+            $this->orderPersistColumn = $this->table->findColumn($orderPersistColumn);
+
+            if (!$this->orderPersistColumn) {
+                throw InvalidRelationException::format(
+                        'Invalid order persist column %s does not exist on related table %s',
+                        $orderPersistColumn, $this->table->getName()
+                );
+            }
         }
     }
 
@@ -56,7 +92,13 @@ class ToManyRelation extends ToManyRelationBase
      */
     public function withReference(IToManyRelationReference $reference)
     {
-        return new self($reference, $this->foreignKeyToParent, $this->mode);
+        return new self(
+                $reference,
+                $this->foreignKeyToParent,
+                $this->mode,
+                $this->orderByColumnNameDirectionMap,
+                $this->orderPersistColumn ? $this->orderPersistColumn->getName() : null
+        );
     }
 
     public function persist(PersistenceContext $context, ParentChildrenMap $map)
@@ -93,7 +135,8 @@ class ToManyRelation extends ToManyRelationBase
      */
     protected function insertRelated(PersistenceContext $context, ParentChildrenMap $map)
     {
-        $primaryKey = $map->getPrimaryKeyColumn();
+        $primaryKey         = $map->getPrimaryKeyColumn();
+        $orderPersistColumn = $this->orderPersistColumn ? $this->orderPersistColumn->getName() : null;
         /** @var Row[] $parents */
         $parents = [];
         /** @var IEntity[] $children */
@@ -110,8 +153,9 @@ class ToManyRelation extends ToManyRelationBase
             }
         }
 
-        $rows = $this->reference->syncRelated($context, $this->foreignKeyColumn, $children);
+        /** @var Row[][] $rowGroups */
         $rowGroups = [];
+        $rows      = $this->reference->syncRelated($context, $this->foreignKeyColumn, $children);
 
         foreach ($childKeyParentMap as $rowKey => $parentKey) {
             $rowGroups[$parentKey][] = $rows[$rowKey];
@@ -120,6 +164,14 @@ class ToManyRelation extends ToManyRelationBase
         foreach ($map->getItems() as $key => $item) {
             $parentRow = $item->getParent();
             $childRows = isset($rowGroups[$key]) ? $rowGroups[$key] : [];
+
+            if ($orderPersistColumn) {
+                $order = 1;
+                foreach ($childRows as $row) {
+                    $row->setColumn($orderPersistColumn, $order);
+                    $order++;
+                }
+            }
 
             if ($parentRow->hasColumn($primaryKey)) {
                 $this->setForeignKey($childRows, $this->foreignKeyToParent, $parentRow->getColumn($primaryKey));
@@ -187,6 +239,10 @@ class ToManyRelation extends ToManyRelationBase
         $select = $this->select();
         $select->addRawColumn($this->foreignKeyToParent);
         $select->where(Expr::in($this->column($this->foreignKeyColumn), Expr::tuple($parentIds)));
+
+        foreach ($this->orderByColumnNameDirectionMap as $column => $direction) {
+            $select->orderBy(new Ordering($this->column($this->table->getColumn($column)), $direction));
+        }
 
         $indexedGroups = [];
 

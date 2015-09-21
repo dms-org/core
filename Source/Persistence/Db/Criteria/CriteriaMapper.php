@@ -245,7 +245,7 @@ class CriteriaMapper
                     $property,
                     $condition->getOperator(),
                     $condition->getValue(),
-                    $this->primaryTable->getColumn($this->propertyColumnMap[$propertyName])
+                    $this->primaryTable->findColumn($this->propertyColumnMap[$propertyName])
             );
         } elseif (isset($this->embeddedObjects[$propertyName])) {
             return $this->mapConditionToEmbeddedObject(

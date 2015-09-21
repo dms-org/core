@@ -71,6 +71,8 @@ class ManyToManyRelation extends ToManyRelationBase
      * @param string                   $parentTableIdName
      * @param string                   $parentIdColumn
      * @param string                   $relatedIdColumn
+     *
+     * @throws InvalidArgumentException
      */
     public function __construct(
             IToManyRelationReference $reference,

@@ -46,7 +46,7 @@ class ManyToOneRelation extends ToOneRelationBase
         parent::__construct($reference, null, self::DEPENDENT_PARENTS, [], [$foreignKeyToRelated]);
         $this->parentTable         = $parentTable;
         $this->foreignKeyToRelated = $foreignKeyToRelated;
-        $this->foreignKeyColumn    = $parentTable->getColumn($foreignKeyToRelated);
+        $this->foreignKeyColumn    = $parentTable->findColumn($foreignKeyToRelated);
 
         if (!$this->foreignKeyColumn) {
             throw InvalidRelationException::format(

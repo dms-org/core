@@ -6,10 +6,10 @@ use Iddigital\Cms\Core\Exception\TypeMismatchException;
 use Iddigital\Cms\Core\Persistence\Db\Criteria\CriteriaMapper;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\CustomOrm;
 use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Expr;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Fixtures\NestedValueObject\LevelOne;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Fixtures\NestedValueObject\LevelThree;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Fixtures\NestedValueObject\LevelTwo;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Fixtures\NestedValueObject\ParentEntityMapper;
+use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\Fixtures\NestedValueObject\LevelOne;
+use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\Fixtures\NestedValueObject\LevelThree;
+use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\Fixtures\NestedValueObject\LevelTwo;
+use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\Fixtures\NestedValueObject\ParentEntityMapper;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

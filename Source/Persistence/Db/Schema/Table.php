@@ -169,9 +169,29 @@ class Table
     /**
      * @param string $name
      *
-     * @return Column|null
+     * @return Column
+     * @throws InvalidArgumentException
      */
     public function getColumn($name)
+    {
+        $column = $this->findColumn($name);
+
+        if (!$column) {
+            throw InvalidArgumentException::format(
+                    'Could not get column from table %s: expecting one of (%s), %s given',
+                    $this->name, Debug::formatValues($this->getColumnNames()), $name
+            );
+        }
+
+        return $column;
+    }
+
+    /**
+     * @param string $name
+     *
+     * @return Column|null
+     */
+    public function findColumn($name)
     {
         InvalidArgumentException::verify(is_string($name), 'Column name must be string, %s given', gettype($name));
 

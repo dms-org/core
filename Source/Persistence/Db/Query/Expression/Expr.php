@@ -50,7 +50,7 @@ abstract class Expr
             );
         }
 
-        return new ColumnExpr($table->getName(), $table->getColumn($columnName));
+        return new ColumnExpr($table->getName(), $table->findColumn($columnName));
     }
 
     /**

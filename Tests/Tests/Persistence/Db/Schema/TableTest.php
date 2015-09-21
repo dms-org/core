@@ -33,11 +33,11 @@ class TableTest extends CmsTestCase
         $this->assertSame('table', $table->getName());
         $this->assertSame('id', $table->getPrimaryKeyColumnName());
         $this->assertSame($id, $table->getPrimaryKeyColumn());
-        $this->assertSame($id, $table->getColumn('id'));
+        $this->assertSame($id, $table->findColumn('id'));
         $this->assertTrue($table->hasColumn('data'));
-        $this->assertSame($data, $table->getColumn('data'));
+        $this->assertSame($data, $table->findColumn('data'));
         $this->assertFalse($table->hasColumn('foo'));
-        $this->assertSame(null, $table->getColumn('foo'));
+        $this->assertSame(null, $table->findColumn('foo'));
 
         $this->assertSame([], $table->getIndexes());
         $this->assertSame([], $table->getForeignKeys());

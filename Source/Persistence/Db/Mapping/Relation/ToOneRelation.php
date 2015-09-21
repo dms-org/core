@@ -40,7 +40,7 @@ class ToOneRelation extends ToOneRelationBase
     {
         parent::__construct($reference, $mode, self::DEPENDENT_CHILDREN);
         $this->foreignKeyToParent = $foreignKeyToParent;
-        $this->foreignKeyColumn   = $this->mapper->getPrimaryTable()->getColumn($this->foreignKeyToParent);
+        $this->foreignKeyColumn   = $this->mapper->getPrimaryTable()->findColumn($this->foreignKeyToParent);
 
         if (!$this->foreignKeyColumn) {
             throw InvalidRelationException::format(

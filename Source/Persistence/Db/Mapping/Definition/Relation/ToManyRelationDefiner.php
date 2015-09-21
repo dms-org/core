@@ -2,8 +2,6 @@
 
 namespace Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Relation;
 
-use Iddigital\Cms\Core\Persistence\Db\Mapping\IEntityMapper;
-
 /**
  * The to-many relation definer class.
  *

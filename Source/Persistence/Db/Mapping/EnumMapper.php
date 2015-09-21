@@ -105,7 +105,7 @@ class EnumMapper extends ValueObjectMapper
      */
     public function getEnumValueColumn()
     {
-        return $this->getDefinition()->getTable()->getColumn($this->columnName);
+        return $this->getDefinition()->getTable()->findColumn($this->columnName);
     }
 
     /**

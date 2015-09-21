@@ -113,7 +113,7 @@ class Select extends Query
             );
         }
 
-        $this->aliasColumnMap[$column] = Expr::column($this->getTableAlias(), $table->getColumn($column));
+        $this->aliasColumnMap[$column] = Expr::column($this->getTableAlias(), $table->findColumn($column));
 
         return $this;
     }

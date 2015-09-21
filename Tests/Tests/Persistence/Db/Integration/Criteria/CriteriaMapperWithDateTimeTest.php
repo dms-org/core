@@ -6,7 +6,7 @@ use Iddigital\Cms\Core\Model\Object\Type\DateTime;
 use Iddigital\Cms\Core\Persistence\Db\Criteria\CriteriaMapper;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\CustomOrm;
 use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Expr;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Fixtures\DateTimeValueObject\EntityWithDateTimeMapper;
+use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\Fixtures\DateTimeValueObject\EntityWithDateTimeMapper;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>
