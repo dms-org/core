@@ -120,8 +120,8 @@ abstract class Connection implements IConnection
             $rowArray        = $rowsWithoutKeys->getRows();
             $rowsData        = $this->platform->mapResultSetToDbFormat($rowsWithoutKeys);
             $insert          = $this->prepare($this->platform->compilePreparedInsert($table));
-            if ($rowsData) {
 
+            if ($rowsData) {
                 foreach ($rowsData as $key => $row) {
                     $insert->setParameters($row);
                     $insert->execute();

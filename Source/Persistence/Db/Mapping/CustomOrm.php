@@ -2,14 +2,10 @@
 
 namespace Iddigital\Cms\Core\Persistence\Db\Mapping;
 
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Orm\OrmDefinition;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Database;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Table;
-use Iddigital\Cms\Core\Util\Debug;
 
 /**
- * The custom orm base class.
+ * The custom orm class.
  *
  * @author Elliot Levin <elliotlevin@hotmail.com>
  */
@@ -32,7 +28,7 @@ class CustomOrm extends Orm
     }
 
     /**
-     * Constructs an orm instances from the supplied data.
+     * Constructs an orm instance from the supplied entity / mapper classes.
      *
      * Example:
      * <code>
@@ -43,8 +39,8 @@ class CustomOrm extends Orm
      * )
      * </code>
      *
-     * @param array $entityMappersMap
-     * @param array $valueObjectMapperMap
+     * @param array  $entityMappersMap
+     * @param array  $valueObjectMapperMap
      * @param IOrm[] $includedOrms
      *
      * @return CustomOrm
