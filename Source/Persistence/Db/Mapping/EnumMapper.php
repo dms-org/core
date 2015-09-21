@@ -97,8 +97,7 @@ class EnumMapper extends ValueObjectMapper
             $this->options = $enumClass::getOptions();
         }
 
-        // TODO: verify using null object mapper here is safe
-        parent::__construct($orm, null);
+        parent::__construct($orm);
     }
 
     /**
