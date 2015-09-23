@@ -82,13 +82,12 @@ class IntFieldBuilderTest extends FieldBuilderTestBase
         $this->assertEquals(Type::int(), $field->getProcessedType());
     }
 
-    public function testUniqueIn()
+    public function testFieldUniqueValidation()
     {
         $entities = new EntityCollection(TestEntity::class, [
                 new TestEntity(1),
                 new TestEntity(2),
         ]);
-
 
         $field = $this->field()
                 ->uniqueIn($entities, 'id')
