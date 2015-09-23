@@ -72,6 +72,14 @@ abstract class EntityRelation extends Relation implements IRelation
     }
 
     /**
+     * @return IEntityMapper
+     */
+    final public function getEntityMapper()
+    {
+        return $this->mapper;
+    }
+
+    /**
      * @return IRelationMode|null
      */
     final public function getMode()

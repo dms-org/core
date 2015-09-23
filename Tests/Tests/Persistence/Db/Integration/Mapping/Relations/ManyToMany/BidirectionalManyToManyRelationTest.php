@@ -153,6 +153,29 @@ class BidirectionalManyToManyRelationTest extends DbIntegrationTest
         ]);
     }
 
+    public function testPersistWithCyclicAssociation()
+    {
+        $entity = new OneEntity();
+        $another = new AnotherEntity();
+
+        $entity->others[] = $another;
+        $another->ones[]  = $entity;
+
+        $this->repo->save($entity);
+
+        $this->assertDatabaseDataSameAs([
+                'ones'         => [
+                        ['id' => 1]
+                ],
+                'anothers'     => [
+                        ['id' => 1]
+                ],
+                'one_anothers' => [
+                        ['one_id' => 1, 'another_id' => 1],
+                ],
+        ]);
+    }
+
     public function testPersistExisting()
     {
         $this->db->setData([

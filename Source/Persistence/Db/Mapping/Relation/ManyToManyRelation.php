@@ -7,6 +7,7 @@ use Iddigital\Cms\Core\Exception\TypeMismatchException;
 use Iddigital\Cms\Core\Persistence\Db\LoadingContext;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\ParentChildrenMap;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Reference\IToManyRelationReference;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Reference\RelationObjectReference;
 use Iddigital\Cms\Core\Persistence\Db\PersistenceContext;
 use Iddigital\Cms\Core\Persistence\Db\Query\Clause\Join;
 use Iddigital\Cms\Core\Persistence\Db\Query\Delete;
@@ -22,6 +23,14 @@ use Pinq\Iterators\Common\Identity;
 
 /**
  * The many to many relation class.
+ *
+ * NOTE: Because bidirectional inverse relations are ignored
+ * when persisting (to avoid infinite recursion) the inverse
+ * many-to-many relation will not be synced. Hence the entities
+ * are assumed to maintain a consistent bidirectional state
+ * where all the related entities are in sync on both sides.
+ * This is then consistent with how the relational data will
+ * be stored.
  *
  * @author Elliot Levin <elliotlevin@hotmail.com>
  */
@@ -163,6 +172,7 @@ class ManyToManyRelation extends ToManyRelationBase
         $children          = $map->getAllChildren();
         $rows              = $this->reference->syncRelated($context, null, $children);
 
+        /** @var Row[] $childRowMap */
         $childRowMap = [];
         foreach ($children as $key => $child) {
             $childRowMap[Identity::hash($child)] = $rows[$key];
@@ -193,12 +203,11 @@ class ManyToManyRelation extends ToManyRelationBase
                     });
                 }
 
-                /** @var Row $row */
-                $row = $childRowMap[Identity::hash($child)];
-                if ($row->hasColumn($relatedPrimaryKey)) {
-                    $joinRow->setColumn($relatedIdColumn, $row->getColumn($relatedPrimaryKey));
+                $childRow = $childRowMap[Identity::hash($child)];
+                if ($childRow->hasColumn($relatedPrimaryKey)) {
+                    $joinRow->setColumn($relatedIdColumn, $childRow->getColumn($relatedPrimaryKey));
                 } else {
-                    $row->onInsertPrimaryKey(function ($id) use ($joinRow, $relatedIdColumn) {
+                    $childRow->onInsertPrimaryKey(function ($id) use ($joinRow, $relatedIdColumn) {
                         $joinRow->setColumn($relatedIdColumn, $id);
                     });
                 }
