@@ -3,11 +3,13 @@
 namespace Iddigital\Cms\Core\Form\Field\Builder;
 
 use Iddigital\Cms\Core\Form\Field\Processor\FieldValidator;
+use Iddigital\Cms\Core\Form\Field\Processor\Validator\AllUniquePropertyValidator;
 use Iddigital\Cms\Core\Form\Field\Processor\Validator\ExactArrayLengthValidator;
 use Iddigital\Cms\Core\Form\Field\Processor\Validator\MaxArrayLengthValidator;
 use Iddigital\Cms\Core\Form\Field\Processor\Validator\MinArrayLengthValidator;
 use Iddigital\Cms\Core\Form\Field\Type\ArrayOfType;
-use Iddigital\Cms\Core\Model\Type\IType;
+use Iddigital\Cms\Core\Model\IObjectSet;
+use Iddigital\Cms\Core\Model\Type\ArrayType;
 
 /**
  * The array field builder class.
@@ -60,7 +62,22 @@ trait ArrayFieldBuilderTrait
     }
 
     /**
-     * @return IType
+     * Validates that all the array elements are unique within the supplied
+     * set of object properties.
+     *
+     * @param IObjectSet $objects
+     * @param string     $propertyName
+     *
+     * @return static
+     */
+    public function allUniqueIn(IObjectSet $objects, $propertyName)
+    {
+        return $this
+                ->validate(new AllUniquePropertyValidator($this->getCurrentProcessedType(), $objects, $propertyName));
+    }
+
+    /**
+     * @return ArrayType
      */
     abstract protected function getCurrentProcessedType();
 

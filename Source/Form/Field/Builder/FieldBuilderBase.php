@@ -5,18 +5,17 @@ namespace Iddigital\Cms\Core\Form\Field\Builder;
 use Iddigital\Cms\Core\Exception\InvalidOperationException;
 use Iddigital\Cms\Core\Form\Field\Field as ActualField;
 use Iddigital\Cms\Core\Form\Field\Options\ArrayFieldOptions;
-use Iddigital\Cms\Core\Form\Field\Options\EntityIdOptions;
 use Iddigital\Cms\Core\Form\Field\Processor\CustomProcessor;
 use Iddigital\Cms\Core\Form\Field\Processor\DefaultValueProcessor;
 use Iddigital\Cms\Core\Form\Field\Processor\FieldValidator;
 use Iddigital\Cms\Core\Form\Field\Processor\Validator\CustomValidator;
 use Iddigital\Cms\Core\Form\Field\Processor\Validator\OneOfValidator;
 use Iddigital\Cms\Core\Form\Field\Processor\Validator\RequiredValidator;
-use Iddigital\Cms\Core\Form\Field\Type\IntType;
+use Iddigital\Cms\Core\Form\Field\Processor\Validator\UniquePropertyValidator;
 use Iddigital\Cms\Core\Form\Field\Type\FieldType;
 use Iddigital\Cms\Core\Form\IFieldProcessor;
 use Iddigital\Cms\Core\Form\IFieldType;
-use Iddigital\Cms\Core\Model\IEntitySet;
+use Iddigital\Cms\Core\Model\IObjectSet;
 use Iddigital\Cms\Core\Model\Type\IType;
 
 /**
@@ -156,18 +155,32 @@ abstract class FieldBuilderBase
     }
 
     /**
-     * Validates the input is one of the supplied values with the option
-     * values as the array keys and the labels as the array values.
+     * Validates the input to be a unique within the object properties.
      *
-     * @param array $keyValueOptions
+     * @param IObjectSet $objects
+     * @param string     $propertyName
      *
      * @return static
      */
-    public function oneOf(array $keyValueOptions)
+    public function uniqueIn(IObjectSet $objects, $propertyName)
     {
         return $this
-                ->process(new OneOfValidator($this->getCurrentProcessedType(), array_keys($keyValueOptions)))
-                ->attr(FieldType::ATTR_OPTIONS, ArrayFieldOptions::fromAssocArray($keyValueOptions));
+                ->validate(new UniquePropertyValidator($this->getCurrentProcessedType(), $objects, $propertyName));
+    }
+
+    /**
+     * Validates the input is one of the supplied values with the option
+     * values as the array keys and the labels as the array values.
+     *
+     * @param array $valueLabelMap
+     *
+     * @return static
+     */
+    public function oneOf(array $valueLabelMap)
+    {
+        return $this
+                ->process(new OneOfValidator($this->getCurrentProcessedType(), array_keys($valueLabelMap)))
+                ->attr(FieldType::ATTR_OPTIONS, ArrayFieldOptions::fromAssocArray($valueLabelMap));
     }
 
     /**

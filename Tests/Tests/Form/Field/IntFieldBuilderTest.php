@@ -11,10 +11,13 @@ use Iddigital\Cms\Core\Form\Field\Processor\Validator\IntValidator;
 use Iddigital\Cms\Core\Form\Field\Processor\Validator\LessThanOrEqualValidator;
 use Iddigital\Cms\Core\Form\Field\Processor\Validator\LessThanValidator;
 use Iddigital\Cms\Core\Form\Field\Processor\Validator\RequiredValidator;
+use Iddigital\Cms\Core\Form\Field\Processor\Validator\UniquePropertyValidator;
 use Iddigital\Cms\Core\Form\Field\Type\IntType;
 use Iddigital\Cms\Core\Language\Message;
+use Iddigital\Cms\Core\Model\EntityCollection;
 use Iddigital\Cms\Core\Model\Type\Builder\Type;
 use Iddigital\Cms\Core\Model\Type\ScalarType;
+use Iddigital\Cms\Core\Tests\Form\Field\Processor\Validator\Fixtures\TestEntity;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>
@@ -77,5 +80,34 @@ class IntFieldBuilderTest extends FieldBuilderTestBase
         ]);
 
         $this->assertEquals(Type::int(), $field->getProcessedType());
+    }
+
+    public function testUniqueIn()
+    {
+        $entities = new EntityCollection(TestEntity::class, [
+                new TestEntity(1),
+                new TestEntity(2),
+        ]);
+
+
+        $field = $this->field()
+                ->uniqueIn($entities, 'id')
+                ->build();
+
+        $this->assertEquals([
+                new IntValidator(Type::mixed()),
+                new TypeProcessor('int'),
+                new UniquePropertyValidator(Type::int()->nullable(), $entities, 'id'),
+        ], $field->getProcessors());
+
+        $this->assertSame(5, $field->process('5'));
+
+        $this->assertFieldThrows($field, '2', [
+                new Message(UniquePropertyValidator::MESSAGE, [
+                        'field'         => 'Name',
+                        'input'         => '2',
+                        'property_name' => 'id',
+                ])
+        ]);
     }
 }

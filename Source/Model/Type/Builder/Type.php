@@ -204,7 +204,14 @@ class Type
             case 'boolean':
                 return self::bool();
             case 'array':
-                return self::arrayOf(self::mixed());
+                if (count($default) < 20) {
+                    $types = [];
+                    foreach ($default as $value) {
+                        $types[] = self::from($value);
+                    }
+                }
+
+                return self::arrayOf($types ? UnionType::create($types) : self::$mixed);
             case 'object':
                 if ($default instanceof ITypedCollection) {
                     return self::collectionOf($default->getElementType());

@@ -2,6 +2,8 @@
 
 namespace Iddigital\Cms\Core\Exception;
 
+use Iddigital\Cms\Core\Model\Type\Builder\Type;
+
 /**
  * Exception for a type mismatch.
  *
@@ -19,7 +21,7 @@ class TypeMismatchException extends BaseException
      */
     public static function argument($method, $argumentName, $expectedType, $argument)
     {
-        $actualType = self::getType($argument);
+        $actualType = Type::from($argument)->asTypeString();
 
         return new self(
                 "Invalid call to {$method}: expecting {$argumentName} to be of type {$expectedType}, {$actualType} given"

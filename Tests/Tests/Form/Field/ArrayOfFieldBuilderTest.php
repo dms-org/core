@@ -2,18 +2,21 @@
 
 namespace Iddigital\Cms\Core\Tests\Form\Field;
 
-use Iddigital\Cms\Common\Testing\CmsTestCase;
 use Iddigital\Cms\Core\Form\Field\Builder\ArrayOfFieldBuilder;
 use Iddigital\Cms\Core\Form\Field\Builder\Field as Field;
 use Iddigital\Cms\Core\Form\Field\Processor\ArrayAllProcessor;
 use Iddigital\Cms\Core\Form\Field\Processor\TypeProcessor;
+use Iddigital\Cms\Core\Form\Field\Processor\Validator\AllUniquePropertyValidator;
 use Iddigital\Cms\Core\Form\Field\Processor\Validator\ExactArrayLengthValidator;
+use Iddigital\Cms\Core\Form\Field\Processor\Validator\IntValidator;
 use Iddigital\Cms\Core\Form\Field\Processor\Validator\MaxArrayLengthValidator;
 use Iddigital\Cms\Core\Form\Field\Processor\Validator\MinArrayLengthValidator;
 use Iddigital\Cms\Core\Form\Field\Processor\Validator\TypeValidator;
 use Iddigital\Cms\Core\Form\Field\Type\ArrayOfType;
 use Iddigital\Cms\Core\Language\Message;
+use Iddigital\Cms\Core\Model\EntityCollection;
 use Iddigital\Cms\Core\Model\Type\Builder\Type;
+use Iddigital\Cms\Core\Tests\Model\Fixtures\TestEntity;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>
@@ -91,6 +94,37 @@ class ArrayOfFieldBuilderTest extends FieldBuilderTestBase
                         'field'  => 'Name',
                         'input'  => [1, 2, 4, 5, 6, 5, 4],
                         'length' => 5,
+                ])
+        ]);
+    }
+
+    public function testAllUniqueIn()
+    {
+        $entities = new EntityCollection(TestEntity::class, [
+                new TestEntity(1),
+                new TestEntity(2),
+        ]);
+
+
+        $field = Field::name('number')
+                ->label('Number')
+                ->arrayOf(Field::element()->int())
+                ->allUniqueIn($entities, 'id')
+                ->build();
+
+        $this->assertEquals([
+                new TypeValidator(Type::arrayOf(Type::mixed())->nullable()),
+                new ArrayAllProcessor([new IntValidator(Type::mixed()), new TypeProcessor('int')]),
+                new AllUniquePropertyValidator(Type::arrayOf(Type::int()->nullable())->nullable(), $entities, 'id'),
+        ], $field->getProcessors());
+
+        $this->assertSame([5, 9], $field->process(['5', '9']));
+
+        $this->assertFieldThrows($field, [2, 4, 5, 6, 5, 4], [
+                new Message(AllUniquePropertyValidator::MESSAGE, [
+                        'field'         => 'Number',
+                        'input'         => [2, 4, 5, 6, 5, 4],
+                        'property_name' => 'id',
                 ])
         ]);
     }
