@@ -101,7 +101,7 @@ abstract class TableDataSource implements ITableDataSource
     {
         $collection = new Collection($rows);
 
-        if ($criteria) {
+        if ($criteria && $criteria->getGroupings()) {
             $groupings  = $criteria->getGroupings();
             $collection = $collection->groupBy(function (ITableRow $row) use ($groupings) {
                 $groupData = [];
@@ -112,7 +112,7 @@ abstract class TableDataSource implements ITableDataSource
                     $groupData[$columnName][$componentName] = $row->getData()[$columnName][$componentName];
                 }
 
-                return $groupData ?: null;
+                return $groupData;
             });
         } else {
             $collection = $collection->groupBy(function () {
