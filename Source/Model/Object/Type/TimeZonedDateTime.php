@@ -9,6 +9,8 @@ namespace Iddigital\Cms\Core\Model\Object\Type;
  */
 class TimeZonedDateTime extends DateTimeBase
 {
+    private static $debugFormat = 'Y-m-d H:i:s (e)';
+
     /**
      * @param \DateTimeInterface $dateTime
      */
@@ -56,6 +58,83 @@ class TimeZonedDateTime extends DateTimeBase
     public function getTimezone()
     {
         return $this->dateTime->getTimezone();
+    }
+
+    /**
+     * Returns whether the datetime is greater than the supplied datetime.
+     *
+     * @param TimeZonedDateTime $other
+     *
+     * @return bool
+     */
+    public function comesAfter(TimeZonedDateTime $other)
+    {
+        return $this->dateTime > $other->dateTime;
+    }
+
+    /**
+     * Returns whether the datetime is greater or equal to the supplied datetime.
+     *
+     * @param TimeZonedDateTime $other
+     *
+     * @return bool
+     */
+    public function comesAfterOrEqual(TimeZonedDateTime $other)
+    {
+        return $this->dateTime >= $other->dateTime;
+    }
+
+    /**
+     * Returns whether the datetime is less than the supplied datetime.
+     *
+     * @param TimeZonedDateTime $other
+     *
+     * @return bool
+     */
+    public function comesBefore(TimeZonedDateTime $other)
+    {
+        return $this->dateTime < $other->dateTime;
+    }
+
+    /**
+     * Returns whether the datetime is less or equal to the supplied datetime.
+     *
+     * @param TimeZonedDateTime $other
+     *
+     * @return bool
+     */
+    public function comesBeforeOrEqual(TimeZonedDateTime $other)
+    {
+        return $this->dateTime <= $other->dateTime;
+    }
+
+    /**
+     * Returns whether the datetime is between the start and end datetime.
+     *
+     * @param TimeZonedDateTime $start
+     * @param TimeZonedDateTime $end
+     *
+     * @return bool
+     */
+    public function isBetween(TimeZonedDateTime $start, TimeZonedDateTime $end)
+    {
+        $this->verifyStartLessThenEnd(__METHOD__, $start, $end, self::$debugFormat);
+        return $this->comesAfter($start) && $this->comesBefore($end);
+    }
+
+    /**
+     * Returns whether the datetime is between the start and end datetime
+     * or if it is equal to the start or end datetime.
+     *
+     * @param TimeZonedDateTime $start
+     * @param TimeZonedDateTime $end
+     *
+     * @return bool
+     */
+    public function isBetweenInclusive(TimeZonedDateTime $start, TimeZonedDateTime $end)
+    {
+        $this->verifyStartLessThenEnd(__METHOD__, $start, $end, self::$debugFormat);
+        return $this->comesAfterOrEqual($start) && $this->comesBeforeOrEqual($end);
     }
 
     /**

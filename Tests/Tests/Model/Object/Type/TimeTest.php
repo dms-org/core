@@ -2,6 +2,7 @@
 
 namespace Iddigital\Cms\Core\Tests\Model\Object\Type;
 
+use Iddigital\Cms\Core\Exception\InvalidArgumentException;
 use Iddigital\Cms\Core\Model\Object\Type\Time;
 
 /**
@@ -68,9 +69,41 @@ class TimeTest extends DateOrTimeObjectTest
         $this->assertFalse($time->isEarlierThan($time->subSeconds(1)));
         $this->assertTrue($time->isEarlierThan($time->addSeconds(1)));
 
+        $this->assertTrue($time->isEarlierThanOrEqual($time));
+        $this->assertFalse($time->isEarlierThanOrEqual($time->subSeconds(1)));
+        $this->assertTrue($time->isEarlierThanOrEqual($time->addSeconds(1)));
+
         $this->assertFalse($time->isLaterThan($time));
         $this->assertFalse($time->isLaterThan($time->addSeconds(1)));
         $this->assertTrue($time->isLaterThan($time->subSeconds(1)));
+
+        $this->assertTrue($time->isLaterThanOrEqual($time));
+        $this->assertFalse($time->isLaterThanOrEqual($time->addSeconds(1)));
+        $this->assertTrue($time->isLaterThanOrEqual($time->subSeconds(1)));
+    }
+
+    public function testBetween()
+    {
+        $time = new Time(12, 0, 0);
+
+        $this->assertTrue($time->isBetween($time->subSeconds(1), $time->addSeconds(1)));
+        $this->assertFalse($time->isBetween($time, $time->addSeconds(1)));
+        $this->assertFalse($time->isBetween($time->subSeconds(1), $time));
+        $this->assertFalse($time->isBetween($time, $time));
+        $this->assertFalse($time->isBetween($time->addSeconds(1), $time->addSeconds(2)));
+
+        $this->assertTrue($time->isBetweenInclusive($time->subSeconds(1), $time->addSeconds(1)));
+        $this->assertTrue($time->isBetweenInclusive($time, $time->addSeconds(1)));
+        $this->assertTrue($time->isBetweenInclusive($time->subSeconds(1), $time));
+        $this->assertTrue($time->isBetweenInclusive($time, $time));
+
+        $this->assertThrows(function () use ($time) {
+            $time->isBetween($time->addSeconds(1), $time);
+        }, InvalidArgumentException::class);
+
+        $this->assertThrows(function () use ($time) {
+            $time->isBetweenInclusive($time->addSeconds(1), $time);
+        }, InvalidArgumentException::class);
     }
 
     public function testNoonComparisons()

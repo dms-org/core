@@ -2,6 +2,7 @@
 
 namespace Iddigital\Cms\Core\Tests\Model\Object\Type;
 
+use Iddigital\Cms\Core\Exception\InvalidArgumentException;
 use Iddigital\Cms\Core\Model\Object\Type\Date;
 use Iddigital\Cms\Core\Model\Object\Type\Time;
 
@@ -61,8 +62,40 @@ class DateTest extends DateOrTimeObjectTest
         $this->assertFalse($date->comesBefore($date->subDays(1)));
         $this->assertTrue($date->comesBefore($date->addDays(1)));
 
+        $this->assertTrue($date->comesBeforeOrEqual($date));
+        $this->assertFalse($date->comesBeforeOrEqual($date->subDays(1)));
+        $this->assertTrue($date->comesBeforeOrEqual($date->addDays(1)));
+
         $this->assertFalse($date->comesAfter($date));
         $this->assertFalse($date->comesAfter($date->addDays(1)));
         $this->assertTrue($date->comesAfter($date->subDays(1)));
+
+        $this->assertTrue($date->comesAfterOrEqual($date));
+        $this->assertFalse($date->comesAfterOrEqual($date->addDays(1)));
+        $this->assertTrue($date->comesAfterOrEqual($date->subDays(1)));
+    }
+
+    public function testBetween()
+    {
+        $date = new Date(2000, 1, 1);
+
+        $this->assertTrue($date->isBetween($date->subDays(1), $date->addDays(1)));
+        $this->assertFalse($date->isBetween($date, $date->addDays(1)));
+        $this->assertFalse($date->isBetween($date->subDays(1), $date));
+        $this->assertFalse($date->isBetween($date, $date));
+        $this->assertFalse($date->isBetween($date->addDays(1), $date->addDays(2)));
+
+        $this->assertTrue($date->isBetweenInclusive($date->subDays(1), $date->addDays(1)));
+        $this->assertTrue($date->isBetweenInclusive($date, $date->addDays(1)));
+        $this->assertTrue($date->isBetweenInclusive($date->subDays(1), $date));
+        $this->assertTrue($date->isBetweenInclusive($date, $date));
+
+        $this->assertThrows(function () use ($date) {
+            $date->isBetween($date->addDays(1), $date);
+        }, InvalidArgumentException::class);
+
+        $this->assertThrows(function () use ($date) {
+            $date->isBetweenInclusive($date->addDays(1), $date);
+        }, InvalidArgumentException::class);
     }
 }

@@ -21,30 +21,6 @@ abstract class DateTimeBase extends DateOrTimeObject
     }
 
     /**
-     * Returns whether the DateTimeBase is greater than the supplied date.
-     *
-     * @param DateTimeBase $other
-     *
-     * @return bool
-     */
-    public function comesAfter(DateTimeBase $other)
-    {
-        return $this->dateTime > $other->dateTime;
-    }
-
-    /**
-     * Returns whether the DateTimeBase is less than the supplied date.
-     *
-     * @param DateTimeBase $other
-     *
-     * @return bool
-     */
-    public function comesBefore(DateTimeBase $other)
-    {
-        return $this->dateTime < $other->dateTime;
-    }
-
-    /**
      * Returns a diff of the supplied date time.
      *
      * @param DateTimeBase $other

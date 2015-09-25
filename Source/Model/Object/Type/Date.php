@@ -11,6 +11,8 @@ class Date extends DateOrTimeObject
 {
     use DateOperations;
 
+    private static $debugFormat = 'Y-m-d';
+
     /**
      * @param int $year
      * @param int $month
@@ -63,6 +65,18 @@ class Date extends DateOrTimeObject
     }
 
     /**
+     * Returns whether the date is greater or equal to the supplied date.
+     *
+     * @param Date $other
+     *
+     * @return bool
+     */
+    public function comesAfterOrEqual(Date $other)
+    {
+        return $this->dateTime >= $other->dateTime;
+    }
+
+    /**
      * Returns whether the date is less than the supplied date.
      *
      * @param Date $other
@@ -72,6 +86,48 @@ class Date extends DateOrTimeObject
     public function comesBefore(Date $other)
     {
         return $this->dateTime < $other->dateTime;
+    }
+
+    /**
+     * Returns whether the date is less than or equal to the supplied date.
+     *
+     * @param Date $other
+     *
+     * @return bool
+     */
+    public function comesBeforeOrEqual(Date $other)
+    {
+        return $this->dateTime <= $other->dateTime;
+    }
+
+
+    /**
+     * Returns whether the date is between the start and end date.
+     *
+     * @param Date $start
+     * @param Date $end
+     *
+     * @return bool
+     */
+    public function isBetween(Date $start, Date $end)
+    {
+        $this->verifyStartLessThenEnd(__METHOD__, $start, $end, self::$debugFormat);
+        return $this->comesAfter($start) && $this->comesBefore($end);
+    }
+
+    /**
+     * Returns whether the date is between the start and end date
+     * or if it is equal to the start or end date.
+     *
+     * @param Date $start
+     * @param Date $end
+     *
+     * @return bool
+     */
+    public function isBetweenInclusive(Date $start, Date $end)
+    {
+        $this->verifyStartLessThenEnd(__METHOD__, $start, $end, self::$debugFormat);
+        return $this->comesAfterOrEqual($start) && $this->comesBeforeOrEqual($end);
     }
 
     /**
