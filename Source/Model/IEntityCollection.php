@@ -9,7 +9,7 @@ use Iddigital\Cms\Core\Exception;
  *
  * @author Elliot Levin <elliot@aanet.com.au>
  */
-interface IEntityCollection extends ICollection, IEntitySet
+interface IEntityCollection extends ITypedObjectCollection, IEntitySet
 {
 
 }

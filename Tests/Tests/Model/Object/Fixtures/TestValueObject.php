@@ -3,12 +3,13 @@
 namespace Iddigital\Cms\Core\Tests\Model\Object\Fixtures;
 
 use Iddigital\Cms\Core\Model\Object\ClassDefinition;
+use Iddigital\Cms\Core\Model\Object\ValueObject;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>
  * @immutable
  */
-class TestValueObject extends \Iddigital\Cms\Core\Model\Object\ValueObject
+class TestValueObject extends ValueObject
 {
     /**
      * @var mixed

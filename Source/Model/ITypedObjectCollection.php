@@ -5,11 +5,11 @@ namespace Iddigital\Cms\Core\Model;
 use Iddigital\Cms\Core\Exception;
 
 /**
- * The value object collection interface.
+ * The typed object collection interface.
  *
  * @author Elliot Levin <elliot@aanet.com.au>
  */
-interface IValueObjectCollection extends ITypedObjectCollection
+interface ITypedObjectCollection extends ITypedCollection, IObjectSet
 {
 
 }

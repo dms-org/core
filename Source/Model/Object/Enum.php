@@ -86,6 +86,9 @@ abstract class Enum extends TypedObject
     }
 
     /**
+     * Gets the value represented by the current
+     * enum instance.
+     *
      * @return mixed
      */
     final public function getValue()

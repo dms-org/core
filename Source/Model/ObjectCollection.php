@@ -15,7 +15,7 @@ use Pinq\Iterators\IIteratorScheme;
  *
  * @author Elliot Levin <elliot@aanet.com.au>
  */
-class ObjectCollection extends TypedCollection implements ITypedCollection, IObjectSet
+class ObjectCollection extends TypedCollection implements ITypedObjectCollection
 {
     /**
      * @var ObjectType

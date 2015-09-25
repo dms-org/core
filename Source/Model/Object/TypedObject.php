@@ -5,6 +5,10 @@ namespace Iddigital\Cms\Core\Model\Object;
 use Iddigital\Cms\Core\Exception\InvalidOperationException;
 use Iddigital\Cms\Core\Model\Criteria\Criteria;
 use Iddigital\Cms\Core\Model\ITypedObject;
+use Iddigital\Cms\Core\Model\ITypedObjectCollection;
+use Iddigital\Cms\Core\Model\ObjectCollection;
+use Iddigital\Cms\Core\Model\Type\Builder\Type;
+use Iddigital\Cms\Core\Model\Type\ObjectType;
 
 /**
  * The typed object base class.
@@ -81,9 +85,30 @@ abstract class TypedObject implements ITypedObject, \Serializable
      *
      * @return Criteria
      */
-    final public static function criteria()
+    public static function criteria()
     {
         return new Criteria(static::definition());
+    }
+
+    /**
+     * Returns the type of the called class.
+     *
+     * @return ObjectType
+     */
+    final public static function type()
+    {
+        return Type::object(get_called_class());
+    }
+
+    /**
+     * Returns a typed collection with the element type as
+     * the called class.
+     *
+     * @return ITypedObjectCollection|static[]
+     */
+    public static function collection()
+    {
+        return new ObjectCollection(get_called_class());
     }
 
     /**

@@ -3,7 +3,9 @@
 namespace Iddigital\Cms\Core\Model\Object;
 
 use Iddigital\Cms\Core\Exception;
+use Iddigital\Cms\Core\Model\EntityCollection;
 use Iddigital\Cms\Core\Model\IEntity;
+use Iddigital\Cms\Core\Model\IEntityCollection;
 use Iddigital\Cms\Core\Model\Type\Builder\Type as Type;
 
 /**
@@ -27,6 +29,17 @@ abstract class Entity extends TypedObject implements IEntity
     {
         parent::__construct();
         $this->id = $id;
+    }
+
+    /**
+     * Returns an entity collection with the element type
+     * as the called class.
+     *
+     * @return IEntityCollection|static[]
+     */
+    final public static function collection()
+    {
+        return new EntityCollection(get_called_class());
     }
 
     /**

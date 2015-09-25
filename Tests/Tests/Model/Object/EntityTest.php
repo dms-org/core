@@ -4,6 +4,8 @@ namespace Iddigital\Cms\Core\Tests\Model\Object;
 
 use Iddigital\Cms\Core\Exception\InvalidArgumentException;
 use Iddigital\Cms\Core\Exception\InvalidOperationException;
+use Iddigital\Cms\Core\Model\IEntityCollection;
+use Iddigital\Cms\Core\Model\Type\Builder\Type;
 use Iddigital\Cms\Core\Tests\Model\Object\Fixtures\BlankEntity;
 
 /**
@@ -73,5 +75,15 @@ class EntityTest extends TypedObjectTest
     {
         $entity = BlankEntity::hydrateNew(['id' => 412]);
         $this->assertSame(412, $entity->getId());
+    }
+
+    public function testEntityCollection()
+    {
+        $collection = BlankEntity::collection();
+
+        $this->assertInstanceOf(IEntityCollection::class, $collection);
+        $this->assertSame(BlankEntity::class, $collection->getEntityType());
+        $this->assertSame(BlankEntity::class, $collection->getObjectType());
+        $this->assertEquals(Type::object(BlankEntity::class), $collection->getElementType());
     }
 }
