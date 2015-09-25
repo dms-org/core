@@ -135,4 +135,91 @@ class StagedFormBuilderTest extends FormBuilderTestBase
 
         $this->assertInstanceOf(IndependentFormStage::class, $form->getStage(1));
     }
+
+    public function testConsecutiveDependentFormStages()
+    {
+
+        $form = StagedForm::begin(
+                Form::create()
+                        ->section('First Stage', [
+                                Field::name('length')->label('Length')->int()->required()->min(1)
+                        ])
+        )->then(function (array $data) {
+            return Form::create()
+                    ->section('Second Stage', [
+                            Field::name('name')->label('Name')->string()->required()->maxLength($data['length'])
+                    ]);
+        })->then(function (array $data) {
+            return Form::create()
+                    ->section('Third Stage', [
+                            Field::name('field')->label($data['name'] . ':' . $data['length'])->string()->required()
+                    ]);
+        })->build();
+
+        $this->assertSame(3, $form->getAmountOfStages());
+        $this->assertInstanceOf(IndependentFormStage::class, $form->getStage(1));
+        $this->assertInstanceOf(DependentFormStage::class, $form->getStage(2));
+        $this->assertInstanceOf(DependentFormStage::class, $form->getStage(3));
+
+        $this->assertSame(
+                5,
+                $form->getFormForStage(2, ['length' => '5'])
+                        ->getField('name')
+                        ->getType()
+                        ->get(StringType::ATTR_MAX_LENGTH)
+        );
+
+        $this->assertSame(
+                'Field Name:10',
+                $form->getFormForStage(3, ['length' => '10', 'name' => 'Field Name'])
+                        ->getField('field')
+                        ->getLabel()
+        );
+    }
+
+    public function testCreateStagedFormFromGenerator()
+    {
+        $form = StagedForm::generator(3, function () {
+            $data = (yield
+            Form::create()
+                    ->section('First Stage', [
+                            Field::name('length')->label('Length')->int()->required()->min(1)
+                    ])
+            );
+
+            $data = (yield
+            Form::create()
+                    ->section('Second Stage', [
+                            Field::name('name')->label('Name')->string()->required()->maxLength($data['length'])
+                    ])
+            );
+
+            $data = (yield
+            Form::create()
+                    ->section('Third Stage', [
+                            Field::name('field')->label($data['name'] . ':' . $data['length'])->string()->required()
+                    ])
+            );
+        });
+
+        $this->assertSame(3, $form->getAmountOfStages());
+        $this->assertInstanceOf(IndependentFormStage::class, $form->getStage(1));
+        $this->assertInstanceOf(DependentFormStage::class, $form->getStage(2));
+        $this->assertInstanceOf(DependentFormStage::class, $form->getStage(3));
+
+        $this->assertSame(
+                5,
+                $form->getFormForStage(2, ['length' => '5'])
+                        ->getField('name')
+                        ->getType()
+                        ->get(StringType::ATTR_MAX_LENGTH)
+        );
+
+        $this->assertSame(
+                'Field Name:10',
+                $form->getFormForStage(3, ['length' => '10', 'name' => 'Field Name'])
+                        ->getField('field')
+                        ->getLabel()
+        );
+    }
 }

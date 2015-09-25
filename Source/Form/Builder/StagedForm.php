@@ -7,9 +7,9 @@ use Iddigital\Cms\Core\Form\IForm;
 use Iddigital\Cms\Core\Form\IFormStage;
 use Iddigital\Cms\Core\Form\Stage\DependentFormStage;
 use Iddigital\Cms\Core\Form\Stage\IndependentFormStage;
+use Iddigital\Cms\Core\Form\StagedForm as ActualStagedForm;
 use Iddigital\Cms\Core\Util\Debug;
 use Iddigital\Cms\Core\Util\Reflection;
-use Iddigital\Cms\Core\Form\StagedForm as ActualStagedForm;
 
 /**
  * The staged form builder class.
@@ -36,7 +36,7 @@ class StagedForm
      */
     final protected function __construct(IndependentFormStage $firstStage, StagedForm $previous = null)
     {
-        $this->firstStage      = $firstStage;
+        $this->firstStage = $firstStage;
         if ($previous) {
             $this->followingStages = $previous->followingStages;
         }
@@ -48,6 +48,58 @@ class StagedForm
     public function build()
     {
         return new ActualStagedForm($this->firstStage, $this->followingStages);
+    }
+
+    /**
+     * Constructs a staged from from a generator function.
+     * This function must yield the form for each stage and
+     * the previously submitted data will be sent.
+     *
+     * Example:
+     * <code>
+     * $stagedFrom = StagedFrom::create(2, function () {
+     *      $data = (yield Form::create()
+     *              ->section('First Stage', [...]));
+     *
+     *      $data = (yield Form::create()
+     *              ->section('Second Stage', [...]));
+     * });
+     * </code>
+     *
+     * @param int      $numberOfStages
+     * @param callable $formStagesGeneratorFunction
+     *
+     * @return ActualStagedForm
+     * @throws InvalidArgumentException
+     */
+    public static function generator($numberOfStages, callable $formStagesGeneratorFunction)
+    {
+        $generator = $formStagesGeneratorFunction();
+
+        if (!($generator instanceof \Generator)) {
+            throw InvalidArgumentException::format(
+                    'Invalid call to %s: first argument must be a generator function, function returned %s instead',
+                    Debug::getType($generator)
+            );
+        }
+
+        $builder                 = self::begin($generator->current());
+        $numberOfDependentStages = $numberOfStages - 1;
+
+        for ($i = 1; $i <= $numberOfDependentStages; $i++) {
+            // TODO: Don't recreate generator for every form stage. (low-pri)
+            $builder->then(function (array $data) use ($formStagesGeneratorFunction, $i) {
+                /** @var \Generator $generator */
+                $generator = $formStagesGeneratorFunction();
+                for ($current = 1; $current <= $i; $current++) {
+                    $generator->send($data);
+                }
+
+                return $generator->current();
+            });
+        }
+
+        return $builder->build();
     }
 
     /**
