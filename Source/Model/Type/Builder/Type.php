@@ -69,6 +69,8 @@ class Type
     }
 
     /**
+     * The 'string' primitive type.
+     *
      * @return ScalarType
      */
     public static function string()
@@ -77,6 +79,8 @@ class Type
     }
 
     /**
+     * The 'integer' primitive type.
+     *
      * @return ScalarType
      */
     public static function int()
@@ -85,6 +89,8 @@ class Type
     }
 
     /**
+     * The 'boolean' primitive type.
+     *
      * @return ScalarType
      */
     public static function bool()
@@ -93,6 +99,8 @@ class Type
     }
 
     /**
+     * The 'float' primitive type.
+     *
      * @return ScalarType
      */
     public static function float()
@@ -101,6 +109,8 @@ class Type
     }
 
     /**
+     * The a union of the 'integer' and 'float' primitive types.
+     *
      * @return UnionType
      */
     public static function number()
@@ -113,6 +123,8 @@ class Type
     }
 
     /**
+     * The 'null' type.
+     *
      * @return ScalarType
      */
     public static function null()
@@ -139,6 +151,9 @@ class Type
     }
 
     /**
+     * An instance of any object if $class = null.
+     * Or an instance of the supplied class.
+     *
      * @param string|null $class
      *
      * @return ObjectType
@@ -153,6 +168,8 @@ class Type
     }
 
     /**
+     * The 'array' native type. Contains only elements of the supplied type.
+     *
      * @param IType $elementType
      *
      * @return ArrayType
@@ -169,6 +186,11 @@ class Type
     }
 
     /**
+     * The typed collection type. Contains only elements of the
+     * supplied class.
+     *
+     * @see ITypedCollection
+     *
      * @param IType $elementType
      *
      * @return CollectionType
@@ -185,6 +207,8 @@ class Type
     }
 
     /**
+     * Loads the appropriate type from a value.
+     *
      * @param mixed $default
      *
      * @return IType
@@ -209,6 +233,8 @@ class Type
                     foreach ($default as $value) {
                         $types[] = self::from($value);
                     }
+                } else {
+                    $types = null;
                 }
 
                 return self::arrayOf($types ? UnionType::create($types) : self::$mixed);
