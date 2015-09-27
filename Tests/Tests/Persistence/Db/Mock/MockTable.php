@@ -10,8 +10,13 @@ use Iddigital\Cms\Core\Persistence\Db\Schema\Table;
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>
  */
-class MockTable
+class MockTable implements \Serializable
 {
+    /**
+     * @var MockDatabase|null
+     */
+    private $db;
+
     /**
      * @var Table
      */
@@ -54,6 +59,32 @@ class MockTable
     }
 
     /**
+     * @inheritDoc
+     */
+    public function serialize()
+    {
+        $originalDb = $this->db;
+        $this->db   = null;
+        $serialized = serialize($this);
+        $this->db   = $originalDb;
+
+        return $serialized;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function unserialize($serialized)
+    {
+
+    }
+
+    public function setDb(MockDatabase $db)
+    {
+        $this->db = $db;
+    }
+
+    /**
      * @param MockDatabase $database
      *
      * @return void
@@ -71,7 +102,7 @@ class MockTable
                 throw InvalidOperationException::format('Mock database does not support foreign keys with multiple columns');
             }
 
-            $referencedTable     = $database->getTable($fk->getReferencedTableName());
+            $referencedTable = $database->getTable($fk->getReferencedTableName());
 
             if (!$referencedTable) {
                 throw InvalidArgumentException::format(
@@ -79,7 +110,7 @@ class MockTable
                 );
             }
 
-            $referencedColumn   = $referencedTable->getStructure()->findColumn($fk->getReferencedColumnNames()[0]);
+            $referencedColumn = $referencedTable->getStructure()->findColumn($fk->getReferencedColumnNames()[0]);
 
             if (!$referencedColumn) {
                 throw InvalidArgumentException::format(
@@ -217,6 +248,10 @@ class MockTable
             }
 
             $this->rows[$key] = $row;
+
+            if ($this->db) {
+                $this->db->setLastInsertId($key);
+            }
         } else {
             $key          = null;
             $this->rows[] = $row;

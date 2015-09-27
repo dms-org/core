@@ -72,4 +72,15 @@ class RowTest extends CmsTestCase
 
         $this->assertSame(20, $i, 'Callbacks must be fired with primary key');
     }
+
+    public function testLockingData()
+    {
+        $row = new Row($this->table(), ['id' => null], ['id' => 1]);
+
+        $this->assertSame(['id' => 1], $row->getLockingColumnData());
+
+        $row->setLockingColumn('id', 5);
+
+        $this->assertSame(['id' => 5], $row->getLockingColumnData());
+    }
 }

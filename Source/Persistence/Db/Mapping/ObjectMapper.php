@@ -119,6 +119,24 @@ abstract class ObjectMapper implements IObjectMapper
         return $mappers;
     }
 
+    /**
+     * @inheritDoc
+     */
+    public function findMapperFor($class)
+    {
+        /** @var IObjectMapper[] $mappers */
+        $mappers = array_merge([$this], $this->getNestedMappers());
+
+        foreach ($mappers as $mapper) {
+            if (is_a($class, $mapper->getObjectType(), true)) {
+                return $mapper;
+            }
+        }
+
+        return null;
+    }
+
+
     final protected function findMappers(array &$mappers)
     {
         if (!$this->getDefinition()) {

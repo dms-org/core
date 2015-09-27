@@ -14,6 +14,14 @@ class DateTimeClock implements IClock
      */
     public function now()
     {
-        return new \DateTime();
+        return new \DateTimeImmutable();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function utcNow()
+    {
+        return new \DateTimeImmutable('now', new \DateTimeZone('UTC'));
     }
 }

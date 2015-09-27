@@ -5,7 +5,9 @@ namespace Iddigital\Cms\Core\Persistence;
 use Iddigital\Cms\Core\Exception;
 use Iddigital\Cms\Core\Model\EntityNotFoundException;
 use Iddigital\Cms\Core\Model\IEntity;
+use Iddigital\Cms\Core\Persistence\Db\Connection\DbOutOfSyncException;
 use Iddigital\Cms\Core\Persistence\Db\Connection\IConnection;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\EntityOutOfSyncException;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\IEntityMapper;
 use Iddigital\Cms\Core\Persistence\Db\PersistenceContext;
 use Iddigital\Cms\Core\Persistence\Db\Query\Delete;
@@ -180,11 +182,45 @@ class DbRepository extends DbRepositoryBase implements IRepository
             }
 
             $this->connection->commitTransaction();
-            $context->fireCompletionCallbacks();
+            $context->fireAfterCommitCallbacks();
         } catch (\Exception $e) {
             $this->connection->rollbackTransaction();
+
+            if ($e instanceof DbOutOfSyncException) {
+                /** @var PersistenceContext $context */
+                $this->rethrowAsEntityOutOfSyncException($context, $e);
+            } else {
+                throw $e;
+            }
+        }
+    }
+
+    private function rethrowAsEntityOutOfSyncException(PersistenceContext $context, DbOutOfSyncException $e)
+    {
+        $entityBeingPersisted = $context->getPersistedEntityFor($e->getRowBeingPersisted());
+        $currentEntityInDb    = null;
+
+        if (!($entityBeingPersisted instanceof IEntity)) {
             throw $e;
         }
+
+        $mapper = $this->mapper->findMapperFor($entityBeingPersisted);
+
+        if (!$mapper) {
+            throw $e;
+        }
+
+        /** @var IEntity $currentEntityInDb */
+        $currentRowInDb    = $e->getCurrentRowInDb();
+        $currentEntityInDb = $currentRowInDb
+                ? $mapper->load($this->loadingContext, $currentRowInDb)
+                : null;
+
+        throw new EntityOutOfSyncException(
+                $entityBeingPersisted,
+                $currentEntityInDb,
+                $e
+        );
     }
 
     /**

@@ -63,9 +63,9 @@ abstract class EntityMapperBase extends ObjectMapper implements IEntityMapper
 
     final protected function loadFromDefinition(FinalizedMapperDefinition $definition)
     {
-        $this->entityType       = $definition->getClassName();
-        $this->primaryTable     = $definition->getTable();
-        $this->primaryKey       = $this->primaryTable->getPrimaryKeyColumnName();
+        $this->entityType   = $definition->getClassName();
+        $this->primaryTable = $definition->getTable();
+        $this->primaryKey   = $this->primaryTable->getPrimaryKeyColumnName();
 
         $this->tables[$this->primaryTable->getName()] = $this->primaryTable;
 
@@ -196,7 +196,7 @@ abstract class EntityMapperBase extends ObjectMapper implements IEntityMapper
         if (!empty($entities)) {
             $this->persistObjects($context, $entities, $rows);
 
-            $context->onCompletion(function () use (&$idEntityMap) {
+            $context->afterCommit(function () use (&$idEntityMap) {
                 foreach ($idEntityMap as $id => $entity) {
                     $entity->setId($id);
                 }

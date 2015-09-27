@@ -35,6 +35,10 @@ class PersistenceContextTest extends CmsTestCase
 
         $this->assertTrue($context->isPersisted($entity));
         $this->assertSame($row, $context->getPersistedRowFor($entity));
+        $this->assertSame($entity, $context->getPersistedEntityFor($row));
+
+        $this->assertSame(null, $context->getPersistedRowFor(new MockEntity()));
+        $this->assertSame(null, $context->getPersistedEntityFor(clone $row));
     }
 
     public function testQueueOperation()
@@ -53,14 +57,14 @@ class PersistenceContextTest extends CmsTestCase
         $context = new PersistenceContext();
 
         $i = '';
-        $context->onCompletion(function () use (&$i) {
+        $context->afterCommit(function () use (&$i) {
             $i .= '1';
         });
-        $context->onCompletion(function () use (&$i) {
+        $context->afterCommit(function () use (&$i) {
             $i .= '2';
         });
 
-        $context->fireCompletionCallbacks();
+        $context->fireAfterCommitCallbacks();
 
         $this->assertSame('12', $i, 'Must fire the completion callbacks');
     }

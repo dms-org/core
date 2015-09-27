@@ -30,11 +30,14 @@ interface IPlatform
      * Maps the supplied row set to an array of arrays
      * with the values in a suitable database format.
      *
+     * Note: row keys are maintained.
+     *
      * @param RowSet $rows
+     * @param string|null $lockingColumnDataPrefix
      *
      * @return array
      */
-    public function mapResultSetToDbFormat(RowSet $rows);
+    public function mapResultSetToDbFormat(RowSet $rows, $lockingColumnDataPrefix = null);
 
     /**
      * Maps the supplied result set array to a row set object
@@ -85,12 +88,12 @@ interface IPlatform
 
     /**
      * Compiles a prepared update query with the values as named parameters with their respective column.
-     * The columns in $whereColumns are *not* in the SET clause and instead a condition in the WHERE clause.
      *
      * @param Table    $table
-     * @param string[] $whereColumns
+     * @param string[] $updateColumns
+     * @param string[] $whereColumnNameParameterMap
      *
      * @return string
      */
-    public function compilePreparedUpdate(Table $table, array $whereColumns);
+    public function compilePreparedUpdate(Table $table, array $updateColumns, array $whereColumnNameParameterMap);
 }

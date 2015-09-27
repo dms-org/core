@@ -23,6 +23,11 @@ class Row
     private $columnData = [];
 
     /**
+     * @var array
+     */
+    private $lockingColumnData = [];
+
+    /**
      * @var callable
      */
     private $onInsertCallbacks = [];
@@ -32,15 +37,18 @@ class Row
      */
     private $primaryKey;
 
+
     /**
      * @param Table $table
      * @param array $columnData
+     * @param array $lockingColumnData
      */
-    public function __construct(Table $table, array $columnData = [])
+    public function __construct(Table $table, array $columnData = [], array $lockingColumnData = [])
     {
-        $this->table      = $table;
-        $this->primaryKey = $table->getPrimaryKeyColumnName();
-        $this->columnData = $columnData + $table->getNullColumnData();
+        $this->table             = $table;
+        $this->primaryKey        = $table->getPrimaryKeyColumnName();
+        $this->columnData        = $columnData + $table->getNullColumnData();
+        $this->lockingColumnData = $lockingColumnData;
     }
 
     /**
@@ -129,6 +137,26 @@ class Row
     {
         $this->columnData[$column] = $value;
     }
+
+    /**
+     * @return array
+     */
+    public function getLockingColumnData()
+    {
+        return $this->lockingColumnData;
+    }
+
+    /**
+     * @param string $column
+     * @param mixed  $value
+     *
+     * @return void
+     */
+    public function setLockingColumn($column, $value)
+    {
+        $this->lockingColumnData[$column] = $value;
+    }
+
 
     /**
      * @param callable $callback

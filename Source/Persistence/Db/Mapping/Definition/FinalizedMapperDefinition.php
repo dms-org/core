@@ -6,6 +6,7 @@ use Iddigital\Cms\Core\Model\Object\FinalizedClassDefinition;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Hierarchy\IObjectMapping;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\IObjectMapper;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\IOrm;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\Locking\IOptimisticLockingStrategy;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\NullObjectMapper;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\IRelation;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\IToManyRelation;
@@ -76,6 +77,11 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
     private $dbToPhpPropertyConverterMap;
 
     /**
+     * @var IOptimisticLockingStrategy[]
+     */
+    private $lockingStrategies = [];
+
+    /**
      * @var callable
      */
     private $relationsFactory;
@@ -88,17 +94,18 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
     /**
      * FinalizedMapperDefinition constructor.
      *
-     * @param IOrm                     $orm
-     * @param FinalizedClassDefinition $class
-     * @param Table                    $table
-     * @param string[]                 $propertyColumnNameMap
-     * @param callable[]               $phpToDbPropertyConverterMap
-     * @param callable[]               $dbToPhpPropertyConverterMap
-     * @param string[]                 $methodColumnNameMap
-     * @param callable[]               $columnNameCallableMap
-     * @param IObjectMapping[]         $subClassMappings
-     * @param callable                 $relationsFactory
-     * @param callable                 $foreignKeysFactory
+     * @param IOrm                         $orm
+     * @param FinalizedClassDefinition     $class
+     * @param Table                        $table
+     * @param string[]                     $propertyColumnNameMap
+     * @param callable[]                   $phpToDbPropertyConverterMap
+     * @param callable[]                   $dbToPhpPropertyConverterMap
+     * @param string[]                     $methodColumnNameMap
+     * @param callable[]                   $columnNameCallableMap
+     * @param IOptimisticLockingStrategy[] $lockingStrategies
+     * @param IObjectMapping[]             $subClassMappings
+     * @param callable                     $relationsFactory
+     * @param callable                     $foreignKeysFactory
      */
     public function __construct(
             IOrm $orm,
@@ -109,6 +116,7 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
             array $dbToPhpPropertyConverterMap,
             array $methodColumnNameMap,
             array $columnNameCallableMap,
+            array $lockingStrategies,
             array $subClassMappings,
             callable $relationsFactory,
             callable $foreignKeysFactory
@@ -121,6 +129,7 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
         $this->dbToPhpPropertyConverterMap = $dbToPhpPropertyConverterMap;
         $this->methodColumnNameMap         = $methodColumnNameMap;
         $this->columnNameCallableMap       = $columnNameCallableMap;
+        $this->lockingStrategies           = $lockingStrategies;
 
         foreach ($subClassMappings as $mapping) {
             $this->subClassMappings[$mapping->getObjectType()] = $mapping;
@@ -128,6 +137,7 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
 
         $this->relationsFactory   = $relationsFactory;
         $this->foreignKeysFactory = $foreignKeysFactory;
+
     }
 
     /**
@@ -222,6 +232,11 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
             $columnNameCallableMap[$prefix . $column] = $callable;
         }
 
+        $lockingStrategies = [];
+        foreach ($this->lockingStrategies as $key => $lockingStrategy) {
+            $lockingStrategies[$key] = $lockingStrategy->withColumnNamesPrefixedBy($prefix);
+        }
+
         if ($this->hasInitializedRelations) {
             $relationsFactory = function () {
                 return $this->getRelations();
@@ -269,6 +284,7 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
                 $this->dbToPhpPropertyConverterMap,
                 $methodColumnNameMap,
                 $columnNameCallableMap,
+                $lockingStrategies,
                 $subClassMappings,
                 $relationsFactory,
                 $foreignKeyFactory
@@ -389,6 +405,14 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
         }
 
         return $relations;
+    }
+
+    /**
+     * @return IOptimisticLockingStrategy[]
+     */
+    public function getLockingStrategies()
+    {
+        return $this->lockingStrategies;
     }
 
     /**

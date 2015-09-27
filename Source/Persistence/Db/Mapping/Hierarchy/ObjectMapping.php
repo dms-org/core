@@ -152,6 +152,12 @@ abstract class ObjectMapping implements IObjectMapping
             $columns[] = $this->primaryKeyColumnName;
         }
 
+        foreach ($this->definition->getLockingStrategies() as $lockingStrategy) {
+            foreach ($lockingStrategy->getLockingColumnNames() as $column) {
+                $columns[] = $column;
+            }
+        }
+
         return array_unique($columns, SORT_STRING);
     }
 
@@ -490,11 +496,24 @@ abstract class ObjectMapping implements IObjectMapping
     ) {
         $objectProperties = $this->persistObjectDataToRows($objects, $rows);
 
+        $this->performLockingOperators($context, $objects, $rows);
+
         $this->performPrePersist($context, $objects, $rows, $objectProperties);
 
         $this->performPersist($context, $rows, $extraData);
 
         $this->performPostPersist($context, $objects, $rows, $objectProperties);
+    }
+
+    protected function performLockingOperators(PersistenceContext $context, array $objects, array $rows)
+    {
+        foreach ($this->definition->getLockingStrategies() as $lockingStrategy) {
+            $lockingStrategy->applyLockingDataBeforeCommit($context, $objects, $rows);
+
+            $context->afterCommit(function () use ($lockingStrategy, $context, $objects, $rows) {
+                $lockingStrategy->applyLockingDataAfterCommit($context, $objects, $rows);
+            });
+        }
     }
 
     protected function performPrePersist(PersistenceContext $context, array $objects, array $rows, $objectProperties)

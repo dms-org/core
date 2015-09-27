@@ -57,9 +57,9 @@ class DoctrinePlatformTest extends DoctrineTestBase
 
     public function testPreparedUpdate()
     {
-        $sql = $this->platform->compilePreparedUpdate($this->mockTable(), ['id']);
+        $sql = $this->platform->compilePreparedUpdate($this->mockTable(), ['data'], ['id' => 'some_param_id']);
 
-        $this->assertSqlSame('UPDATE `foo` SET `data` = :data WHERE `id` = :id', $sql);
+        $this->assertSqlSame('UPDATE `foo` SET `data` = :data WHERE `id` = :some_param_id', $sql);
     }
 
     public function testSimpleDelete()

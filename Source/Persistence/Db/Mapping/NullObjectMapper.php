@@ -46,6 +46,9 @@ class NullObjectMapper implements IEntityMapper
     {
     }
 
+    public function findMapperFor($class)
+    {
+    }
 
     public function load(LoadingContext $context, Row $row)
     {

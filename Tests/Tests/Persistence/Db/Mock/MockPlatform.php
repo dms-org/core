@@ -57,12 +57,46 @@ class MockPlatform extends Platform
 
     public function compilePreparedInsert(Table $table)
     {
-        throw NotImplementedException::method(__METHOD__);
+        return new PhpPreparedCompiledQuery(function (MockDatabase $database, array $parameters) use ($table) {
+            $table = $database->getTable($table->getName());
+
+            $table->insert($parameters);
+
+            return 1;
+        });
     }
 
-    public function compilePreparedUpdate(Table $table, array $whereColumns)
+    public function compilePreparedUpdate(Table $table, array $updateColumns, array $whereColumnNameParameterMap)
     {
-        throw NotImplementedException::method(__METHOD__);
+        return new PhpPreparedCompiledQuery(function (MockDatabase $database, array $parameters) use ($table, $updateColumns, $whereColumnNameParameterMap) {
+            $affectedRows = 0;
+
+            $primaryKey = $table->getPrimaryKeyColumnName();
+            $table = $database->getTable($table->getName());
+
+            $whereConditions = [];
+            foreach ($whereColumnNameParameterMap as $column => $parameterName) {
+                $whereConditions[$column] = $parameters[$parameterName];
+            }
+
+            $updatedData = [];
+            foreach ($updateColumns as $columnName) {
+                $updatedData[$columnName] = $parameters[$columnName];
+            }
+
+            foreach ($table->getRows() as $row) {
+                foreach ($whereConditions as $column => $value) {
+                    if ($row[$column] !== $value && $value !== null) {
+                        continue 2;
+                    }
+                }
+
+                $table->update($row[$primaryKey], $updatedData + $row);
+                $affectedRows++;
+            }
+
+            return $affectedRows;
+        });
     }
 
     protected function compileExpressions(array $exprs)
@@ -442,56 +476,6 @@ class MockPlatform extends Platform
             $database->getTable($query->getTableName())->setRows($newRows->asArray());
 
             return $deletedRows;
-        };
-
-        return new PhpCompiledQuery($compiledQuery);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function compileUpsert(Upsert $query)
-    {
-        $rowObjects    = $query->getRows()->getRows();
-        $rows          = $this->mapResultSetToDbFormat($query->getRows());
-        $compiledQuery = function (MockDatabase $database) use ($query, $rowObjects, $rows) {
-            $table = $database->getTable($query->getTable()->getName());
-
-            foreach ($rows as $key => $row) {
-                if ($rowObjects[$key]->hasPrimaryKey()) {
-                    $primaryKey = $rowObjects[$key]->getPrimaryKey();
-
-                    if ($table->hasRowWithPrimaryKey($primaryKey)) {
-                        $table->update($primaryKey, $row);
-                    } else {
-                        $table->insert($row);
-                    }
-                } else {
-                    $insertedKey = $table->insert($row);
-                    $rowObjects[$key]->firePrimaryKeyCallbacks($insertedKey);
-                }
-            }
-        };
-
-        return new PhpCompiledQuery($compiledQuery);
-    }
-
-    public function compileBulkUpdate(BulkUpdate $query)
-    {
-        $rowObjects    = $query->getRows()->getRows();
-        $rows          = $this->mapResultSetToDbFormat($query->getRows());
-        $compiledQuery = function (MockDatabase $database) use ($query, $rowObjects, $rows) {
-            $table = $database->getTable($query->getTable()->getName());
-
-            foreach ($rows as $key => $row) {
-                $primaryKey = $rowObjects[$key]->getPrimaryKey();
-
-                if ($table->hasRowWithPrimaryKey($primaryKey)) {
-                    $table->updateColumns($primaryKey, $row);
-                } else {
-                    throw new \Exception(sprintf('Row with primary key %s: cannot be found', $primaryKey));
-                }
-            }
         };
 
         return new PhpCompiledQuery($compiledQuery);

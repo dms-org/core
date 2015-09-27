@@ -24,7 +24,17 @@ class DateTimeClockTest extends CmsTestCase
     {
         $now = $this->clock->now();
 
-        $this->assertInstanceOf(\DateTime::class, $now);
+        $this->assertInstanceOf(\DateTimeImmutable::class, $now);
         $this->assertNotSame($now, $this->clock->now());
+        $this->assertSame(date_default_timezone_get(), $this->clock->now()->getTimezone()->getName());
+    }
+
+    public function testGetUtcNow()
+    {
+        $now = $this->clock->utcNow();
+
+        $this->assertInstanceOf(\DateTimeImmutable::class, $now);
+        $this->assertNotSame($now, $this->clock->utcNow());
+        $this->assertSame('UTC', $this->clock->now()->getTimezone()->getName());
     }
 }

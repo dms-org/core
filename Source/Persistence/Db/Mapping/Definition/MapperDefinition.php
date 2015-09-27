@@ -18,6 +18,7 @@ use Iddigital\Cms\Core\Persistence\Db\Mapping\EnumMapper;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\IEmbeddedObjectMapper;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\IObjectMapper;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\IOrm;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\Locking\IOptimisticLockingStrategy;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\NullObjectMapper;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Embedded\EmbeddedCollectionRelation;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Embedded\EmbeddedObjectRelation;
@@ -27,6 +28,7 @@ use Iddigital\Cms\Core\Persistence\Db\Schema\Index;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Table;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Type\Boolean;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Type\Integer;
+use Iddigital\Cms\Core\Util\Debug;
 
 /**
  * The mapper definition class.
@@ -116,6 +118,11 @@ class MapperDefinition extends MapperDefinitionBase
     private $mappedProperties = [];
 
     /**
+     * @var IOptimisticLockingStrategy[]
+     */
+    private $lockingStrategies = [];
+
+    /**
      * MapperDefinition constructor.
      *
      * @param IOrm                  $orm
@@ -201,7 +208,7 @@ class MapperDefinition extends MapperDefinitionBase
     {
         return new ColumnTypeDefiner($this, function (Column $column) {
             $this->addColumn($column);
-        }, null, null, $columnName);
+        }, null, null, null, $columnName);
     }
 
     /**
@@ -240,7 +247,7 @@ class MapperDefinition extends MapperDefinitionBase
     {
         $this->verifyProperty(__METHOD__, $propertyName);
 
-        return new PropertyColumnDefiner($this, function (
+        return new PropertyColumnDefiner($this, $propertyName, function (
                 Column $column,
                 callable $phpToDbPropertyConverter = null,
                 callable $dbToPhpPropertyConverter = null
@@ -265,7 +272,7 @@ class MapperDefinition extends MapperDefinitionBase
      */
     public function method($methodName)
     {
-        return new PropertyColumnDefiner($this, function (Column $column) use ($methodName) {
+        return new PropertyColumnDefiner($this, null, function (Column $column) use ($methodName) {
             $this->methodColumnMap[$methodName] = $column->getName();
             $this->addColumn($column);
         });
@@ -281,7 +288,7 @@ class MapperDefinition extends MapperDefinitionBase
      */
     public function computed(callable $computedProperty)
     {
-        return new PropertyColumnDefiner($this, function (Column $column) use ($computedProperty) {
+        return new PropertyColumnDefiner($this, null, function (Column $column) use ($computedProperty) {
             $this->computedColumnMap[$column->getName()] = $computedProperty;
             $this->addColumn($column);
         });
@@ -507,6 +514,28 @@ class MapperDefinition extends MapperDefinitionBase
         });
     }
 
+    /**
+     * Adds an optimistic locking strategy to use during persistence.
+     *
+     * @param IOptimisticLockingStrategy $strategy
+     *
+     * @return void
+     * @throws InvalidArgumentException
+     */
+    public function optimisticLocking(IOptimisticLockingStrategy $strategy)
+    {
+        foreach ($strategy->getLockingColumnNames() as $columnName) {
+            if (!isset($this->columns[$columnName])) {
+                throw InvalidArgumentException::format(
+                        'Cannot add optimistic locking strategy: expecting one of columns (%s), \'%s\' given',
+                        Debug::formatValues(array_keys($this->columns)), $columnName
+                );
+            }
+        }
+
+        $this->lockingStrategies[] = $strategy;
+    }
+
     protected function getAllMappedProperties()
     {
         return ($this->parent ? $this->parent->getAllMappedProperties() : []) + $this->mappedProperties;
@@ -573,6 +602,7 @@ class MapperDefinition extends MapperDefinitionBase
                 $this->dbToPhpPropertyConverterMap,
                 $this->methodColumnMap,
                 $this->computedColumnMap,
+                $this->lockingStrategies,
                 $subClassMappings,
                 $relationsFactory,
                 $foreignKeysFactory

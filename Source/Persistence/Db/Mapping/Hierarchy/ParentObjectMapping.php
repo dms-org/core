@@ -60,7 +60,17 @@ class ParentObjectMapping extends ObjectMapping
      */
     protected function performPersist(PersistenceContext $context, array $rows, array $extraData = null)
     {
-        $context->upsert(new RowSet($this->table, $rows));
+        $context->upsert(new RowSet($this->table, $rows), $this->getLockingColumnNames());
+    }
+
+    private function getLockingColumnNames()
+    {
+        $lockingColumnNames = [];
+        foreach ($this->definition->getLockingStrategies() as $lockingStrategy) {
+            $lockingColumnNames = array_merge($lockingColumnNames, $lockingStrategy->getLockingColumnNames());
+        }
+
+        return array_unique($lockingColumnNames, SORT_STRING);
     }
 
     /**

@@ -51,6 +51,13 @@ interface IObjectMapper
     public function getNestedMappers();
 
     /**
+     * @param string $class
+     *
+     * @return IObjectMapper
+     */
+    public function findMapperFor($class);
+
+    /**
      * Loads an object from the supplied row.
      *
      * @param LoadingContext $context

@@ -127,6 +127,22 @@ class RowSet
     }
 
     /**
+     * @return Row|null
+     */
+    public function getFirstRowOrNull()
+    {
+        if ($this->rows) {
+            $row = reset($this->rows);
+        } elseif ($this->rowsWithoutPrimaryKeys) {
+            $row = reset($this->rowsWithoutPrimaryKeys);
+        } else {
+            $row = null;
+        }
+
+        return $row ?: null;
+    }
+
+    /**
      * @return array[]
      */
     public function asArray()

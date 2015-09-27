@@ -6,9 +6,11 @@ use Iddigital\Cms\Core\Persistence\Db\Platform\CompiledQuery;
 use Iddigital\Cms\Core\Persistence\Db\Platform\IPlatform;
 use Iddigital\Cms\Core\Persistence\Db\Query\BulkUpdate;
 use Iddigital\Cms\Core\Persistence\Db\Query\Delete;
+use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Expr;
 use Iddigital\Cms\Core\Persistence\Db\Query\Select;
 use Iddigital\Cms\Core\Persistence\Db\Query\Update;
 use Iddigital\Cms\Core\Persistence\Db\Query\Upsert;
+use Iddigital\Cms\Core\Persistence\Db\Schema\Table;
 
 /**
  * The connection base class.
@@ -48,7 +50,7 @@ abstract class Connection implements IConnection
      */
     public function withinTransaction(callable $operation)
     {
-        if($this->isInTransaction()) {
+        if ($this->isInTransaction()) {
             return $operation();
         }
 
@@ -113,38 +115,64 @@ abstract class Connection implements IConnection
     public function upsert(Upsert $query)
     {
         $this->withinTransaction(function () use ($query) {
-            $rows  = $query->getRows();
-            $table = $rows->getTable();
+            $rows                     = $query->getRows();
+            $table                    = $rows->getTable();
+            $isUsingOptimisticLocking = count($query->getLockingColumnNames()) > 0;
+
+            $insert = $this->prepare($this->platform->compilePreparedInsert($table));
+
+            $rowsWithKeys     = $rows->getRowsWithPrimaryKeys();
+            $rowsWithKeyArray = $rowsWithKeys->getRows();
+            $rowsData         = $this->platform->mapResultSetToDbFormat($rowsWithKeys, 'lock__');
+            if ($rowsData) {
+                $lockingColumnNameParameterMap = [];
+
+                foreach ($query->getLockingColumnNames() as $columnName) {
+                    $lockingColumnNameParameterMap[$columnName] = 'lock__' . $columnName;
+                }
+
+                $update = $this->createPreparedUpdatedWithWhereId($table, $lockingColumnNameParameterMap);
+
+                foreach ($rowsData as $key => $row) {
+                    $update->setParameters($row);
+                    $update->execute();
+
+                    // If the update does not succeed that means the row has been updated
+                    // and optimistic locking has failed OR the row with the primary key
+                    // no longer exists.
+                    if ($update->getAffectedRows() !== 1) {
+                        if ($isUsingOptimisticLocking) {
+                            // If optimistic locking is used, we get the current row
+                            // and throw an exception.
+                            $currentRow = $this->load(
+                                    Select::allFrom($table)
+                                            ->where(Expr::equal(
+                                                    Expr::tableColumn($table, $table->getPrimaryKeyColumnName()),
+                                                    Expr::idParam($rowsWithKeyArray[$key]->getColumn($table->getPrimaryKeyColumnName()))
+                                            ))
+                            )->getFirstRowOrNull();
+
+                            throw new DbOutOfSyncException(
+                                    $rowsWithKeyArray[$key],
+                                    $currentRow
+                            );
+                        } else {
+                            $insert->setParameters($row);
+                            $insert->execute();
+                        }
+                    }
+                }
+            }
 
             $rowsWithoutKeys = $rows->getRowsWithoutPrimaryKeys();
             $rowArray        = $rowsWithoutKeys->getRows();
             $rowsData        = $this->platform->mapResultSetToDbFormat($rowsWithoutKeys);
-            $insert          = $this->prepare($this->platform->compilePreparedInsert($table));
 
             if ($rowsData) {
                 foreach ($rowsData as $key => $row) {
                     $insert->setParameters($row);
                     $insert->execute();
                     $rowArray[$key]->firePrimaryKeyCallbacks($this->getLastInsertId());
-                }
-            }
-
-            $rowsWithKeys = $rows->getRowsWithPrimaryKeys();
-            $rowsData     = $this->platform->mapResultSetToDbFormat($rowsWithKeys);
-            if ($rowsData) {
-                $update = $this->prepare($this->platform->compilePreparedUpdate(
-                        $table,
-                        [$table->getPrimaryKeyColumnName()]
-                ));
-
-                foreach ($rowsData as $key => $row) {
-                    $update->setParameters($row);
-                    $update->execute();
-
-                    if ($update->getAffectedRows() !== 1) {
-                        $insert->setParameters($row);
-                        $insert->execute();
-                    }
                 }
             }
         });
@@ -156,25 +184,36 @@ abstract class Connection implements IConnection
     public function bulkUpdate(BulkUpdate $query)
     {
         $this->withinTransaction(function () use ($query) {
-            $rows  = $query->getRows();
-            $table = $rows->getTable();
+            $rows     = $query->getRows();
+            $rowArray = $rows->getRows();
+            $table    = $rows->getTable();
 
             $rowsData = $this->platform->mapResultSetToDbFormat($rows);
 
-            $update = $this->prepare($this->platform->compilePreparedUpdate(
-                    $table,
-                    [$table->getPrimaryKeyColumnName()]
-            ));
+            $update = $this->createPreparedUpdatedWithWhereId($table);
 
             foreach ($rowsData as $key => $row) {
                 $update->setParameters($row);
                 $update->execute();
 
                 if ($update->getAffectedRows() !== 1) {
-                    // TODO: throw lock exception
+                    throw new DbOutOfSyncException(
+                            $rowArray[$key],
+                            null // There is no row with the supplied id.
+                    );
                 }
             }
         });
     }
 
+    protected function createPreparedUpdatedWithWhereId(Table $table, array $lockingColumnNameParameterMap = [])
+    {
+        $primaryKey = $table->getPrimaryKeyColumnName();
+
+        return $this->prepare($this->platform->compilePreparedUpdate(
+                $table,
+                array_diff($table->getColumnNames(), [$primaryKey]),
+                $lockingColumnNameParameterMap + [$primaryKey => $primaryKey]
+        ));
+    }
 }

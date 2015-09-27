@@ -77,6 +77,14 @@ class EmbeddedMapperProxy implements IEmbeddedObjectMapper
     }
 
     /**
+     * @inheritDoc
+     */
+    public function findMapperFor($class)
+    {
+        return $this->mapper->findMapperFor($class);
+    }
+
+    /**
      * {@inheritDoc}
      */
     public function getMapping()

@@ -98,4 +98,19 @@ class RowSetTest extends CmsTestCase
         $rows = new RowSet($this->table());
         $rows->add(new Row(new Table('other_table', []), ['id' => null]));
     }
+
+    public function testGetFirstRowOrNull()
+    {
+        $rows = new RowSet($this->table());
+
+        $this->assertSame(null, $rows->getFirstRowOrNull());
+
+        $rows = RowSet::fromRowArray($this->table(), [['id' => null]]);
+
+        $this->assertSame(['id' => null], $rows->getFirstRowOrNull()->getColumnData());
+
+        $rows = RowSet::fromRowArray($this->table(), [['id' => 1]]);
+
+        $this->assertSame(['id' => 1], $rows->getFirstRowOrNull()->getColumnData());
+    }
 }

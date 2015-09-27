@@ -106,7 +106,7 @@ class MockConnection extends Connection
     public function upsert(Upsert $query)
     {
         $this->queryLog[] = $query;
-        $this->db->query($this->platform->compileUpsert($query));
+        parent::upsert($query);
     }
 
     /**
@@ -115,12 +115,12 @@ class MockConnection extends Connection
     public function bulkUpdate(BulkUpdate $query)
     {
         $this->queryLog[] = $query;
-        $this->db->query($this->platform->compileBulkUpdate($query));
+        parent::bulkUpdate($query);
     }
 
     public function getLastInsertId()
     {
-        throw NotImplementedException::method(__METHOD__);
+        return $this->db->getLastInsertId();
     }
 
     /**
@@ -165,6 +165,13 @@ class MockConnection extends Connection
 
     public function prepare($sql, array $parameters = [])
     {
+        if ($sql instanceof PhpPreparedCompiledQuery) {
+            $sql->setConnection($this);
+            $sql->setParameters($parameters);
+
+            return $sql;
+        }
+
         throw NotImplementedException::method(__METHOD__);
     }
 }

@@ -26,6 +26,11 @@ class MockDatabase
      */
     private $checkForeignKeys = true;
 
+    /**
+     * @var int|null
+     */
+    private $lastInsertId;
+
     public function beginTransaction()
     {
         $this->transactionStack[] = serialize($this->tables);
@@ -40,6 +45,9 @@ class MockDatabase
     {
         if ($this->isInTransaction()) {
             $this->tables = unserialize(array_pop($this->transactionStack));
+            foreach ($this->tables as $table) {
+                $table->setDb($this);
+            }
 
             return true;
         }
@@ -97,6 +105,7 @@ class MockDatabase
     public function createTable(Table $structure)
     {
         $mockTable = new MockTable($structure);
+        $mockTable->setDb($this);
         $this->tables[$structure->getName()] = $mockTable;
 
         return $mockTable;
@@ -263,5 +272,15 @@ class MockDatabase
     public function disableForeignKeyChecks()
     {
         $this->checkForeignKeys = false;
+    }
+
+    public function getLastInsertId()
+    {
+        return $this->lastInsertId;
+    }
+
+    public function setLastInsertId($id)
+    {
+        $this->lastInsertId = $id;
     }
 }

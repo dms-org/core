@@ -2,15 +2,15 @@
 
 namespace Iddigital\Cms\Core\Persistence\Db\Platform;
 
+use Iddigital\Cms\Core\Exception\InvalidArgumentException;
 use Iddigital\Cms\Core\Persistence\Db\Query\Delete;
 use Iddigital\Cms\Core\Persistence\Db\Query\Select;
 use Iddigital\Cms\Core\Persistence\Db\Query\Update;
-use Iddigital\Cms\Core\Persistence\Db\Query\Upsert;
 use Iddigital\Cms\Core\Persistence\Db\Row;
 use Iddigital\Cms\Core\Persistence\Db\RowSet;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Table;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Type\Boolean;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Type\Blob;
+use Iddigital\Cms\Core\Persistence\Db\Schema\Type\Boolean;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Type\Date;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Type\DateTime;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Type\Decimal;
@@ -55,7 +55,7 @@ abstract class Platform implements IPlatform
         ];
 
         $this->typePhpTypeMap = $this->typeMap();
-        $this->timezone = new \DateTimeZone('UTC');
+        $this->timezone       = new \DateTimeZone('UTC');
     }
 
     /**
@@ -110,7 +110,7 @@ abstract class Platform implements IPlatform
     /**
      * {@inheritDoc}
      */
-    final public function mapResultSetToDbFormat(RowSet $rows)
+    final public function mapResultSetToDbFormat(RowSet $rows, $lockingColumnDataPrefix = null)
     {
         $results             = [];
         $columnDateFormatMap = $this->getColumnDateFormatMap($rows->getTable());
@@ -122,6 +122,25 @@ abstract class Platform implements IPlatform
                 $rowData[$column] = $rowData[$column] instanceof \DateTimeInterface
                         ? $rowData[$column]->format($dateFormat)
                         : null;
+
+            }
+
+            foreach ($row->getLockingColumnData() as $column => $value) {
+                if (!$lockingColumnDataPrefix) {
+                    throw InvalidArgumentException::format(
+                            'Invalid call to %s: missing $lockingColumnDataPrefix argument and locking data found in column %s',
+                            __METHOD__, $column
+                    );
+                }
+
+                $prefixedName = $lockingColumnDataPrefix . $column;
+                if (isset($columnDateFormatMap[$column])) {
+                    $rowData[$prefixedName] = $value instanceof \DateTimeInterface
+                            ? $value->format($columnDateFormatMap[$column])
+                            : null;
+                } else {
+                    $rowData[$prefixedName] = $value;
+                }
             }
 
             $results[$key] = $rowData;
@@ -168,7 +187,7 @@ abstract class Platform implements IPlatform
         $columnMap = [];
 
         foreach ($table->getColumns() as $column) {
-            $type = $column->getType();
+            $type  = $column->getType();
             $class = get_class($type);
 
             if (isset($typeMap[$class])) {

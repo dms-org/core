@@ -17,6 +17,11 @@ class PropertyColumnDefiner
     private $definition;
 
     /**
+     * @var string|null
+     */
+    private $propertyName;
+
+    /**
      * @var callable
      */
     private $callback;
@@ -35,12 +40,14 @@ class PropertyColumnDefiner
      * PropertyColumnDefiner constructor.
      *
      * @param MapperDefinition $definition
+     * @param string|null      $propertyName
      * @param callable         $callback
      */
-    public function __construct(MapperDefinition $definition, callable $callback)
+    public function __construct(MapperDefinition $definition, $propertyName, callable $callback)
     {
-        $this->definition = $definition;
-        $this->callback   = $callback;
+        $this->definition   = $definition;
+        $this->propertyName = $propertyName;
+        $this->callback     = $callback;
     }
 
     /**
@@ -74,6 +81,7 @@ class PropertyColumnDefiner
                 $this->callback,
                 $this->phpToDbConverter,
                 $this->dbToPhpConverter,
+                $this->propertyName,
                 $columnName
         );
     }

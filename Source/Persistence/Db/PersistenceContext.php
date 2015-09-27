@@ -77,6 +77,22 @@ class PersistenceContext
     }
 
     /**
+     * @param Row $row
+     *
+     * @return IEntity|null
+     */
+    public function getPersistedEntityFor(Row $row)
+    {
+        $entityInstanceHash = array_search($row, $this->persistedEntityRows, true);
+
+        if (!$entityInstanceHash) {
+            return null;
+        }
+
+        return $this->persistedEntities[$entityInstanceHash];
+    }
+
+    /**
      * @param callable    $operation
      * @param IRelation[] $relations
      *
@@ -86,7 +102,7 @@ class PersistenceContext
     {
         InvalidArgumentException::verifyAllInstanceOf(__METHOD__, 'relations', $relations, IRelation::class);
         $this->ignoreRelationStack[] = $relations;
-        $result = $operation();
+        $result                      = $operation();
         array_pop($this->ignoreRelationStack);
 
         return $result;
@@ -115,13 +131,14 @@ class PersistenceContext
     }
 
     /**
-     * @param RowSet $rows
+     * @param RowSet   $rows
+     * @param string[] $lockingColumnNames
      *
      * @return void
      */
-    public function upsert(RowSet $rows)
+    public function upsert(RowSet $rows, array $lockingColumnNames = [])
     {
-        $this->queue(new Upsert($rows));
+        $this->queue(new Upsert($rows, $lockingColumnNames));
     }
 
     /**
@@ -147,7 +164,7 @@ class PersistenceContext
     /**
      * @param callable $callback
      */
-    public function onCompletion(callable $callback)
+    public function afterCommit(callable $callback)
     {
         $this->completionCallbacks[] = $callback;
     }
@@ -157,7 +174,7 @@ class PersistenceContext
      *
      * @return void
      */
-    public function fireCompletionCallbacks()
+    public function fireAfterCommitCallbacks()
     {
         foreach ($this->completionCallbacks as $callback) {
             $callback();

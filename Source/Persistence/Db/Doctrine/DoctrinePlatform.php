@@ -83,22 +83,18 @@ class DoctrinePlatform extends Platform
     /**
      * @inheritDoc
      */
-    public function compilePreparedUpdate(Table $table, array $whereColumns)
+    public function compilePreparedUpdate(Table $table, array $updateColumns, array $whereColumnNameParameterMap)
     {
-        $whereColumns = array_flip($whereColumns);
-
         $queryBuilder = $this->doctrineConnection->createQueryBuilder();
 
         $queryBuilder->update($this->identifier($table->getName()));
 
-        foreach ($this->createColumnParameterArray($queryBuilder, $table) as $column => $parameter) {
-            if (!isset($whereColumns[$column])) {
-                $queryBuilder->set($this->identifier($column), $parameter);
-            }
+        foreach ($updateColumns as $columnName) {
+            $queryBuilder->set($this->identifier($columnName), ':' . $columnName);
         }
 
-        foreach ($whereColumns as $whereColumn => $i) {
-            $queryBuilder->where($this->identifier($whereColumn) . ' = :' . $whereColumn);
+        foreach ($whereColumnNameParameterMap as $columnName => $parameterName) {
+            $queryBuilder->where($this->identifier($columnName) . ' = :' . $parameterName);
         }
 
         return $queryBuilder->getSQL();
