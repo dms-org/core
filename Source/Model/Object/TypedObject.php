@@ -104,11 +104,13 @@ abstract class TypedObject implements ITypedObject, \Serializable
      * Returns a typed collection with the element type as
      * the called class.
      *
+     * @param static[] $objects
+     *
      * @return ITypedObjectCollection|static[]
      */
-    public static function collection()
+    public static function collection(array $objects = [])
     {
-        return new ObjectCollection(get_called_class());
+        return new ObjectCollection(get_called_class(), $objects);
     }
 
     /**

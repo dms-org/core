@@ -24,10 +24,11 @@ class TypedObjectStaticMethodTest extends CmsTestCase
 
     public function testCollection()
     {
-        $collection = BlankTypedObject::collection();
+        $collection = BlankTypedObject::collection([new BlankTypedObject()]);
 
         $this->assertInstanceOf(ITypedObjectCollection::class, $collection);
         $this->assertSame(BlankTypedObject::class, $collection->getObjectType());
         $this->assertSame(Type::object(BlankTypedObject::class), $collection->getElementType());
+        $this->assertCount(1, $collection);
     }
 }

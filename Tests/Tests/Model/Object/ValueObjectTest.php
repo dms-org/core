@@ -15,11 +15,12 @@ class ValueObjectTest extends CmsTestCase
 {
     public function testValueObjectCollection()
     {
-        $collection = TestValueObject::collection();
+        $collection = TestValueObject::collection([new TestValueObject()]);
 
         $this->assertInstanceOf(IValueObjectCollection::class, $collection);
         $this->assertSame(TestValueObject::class, $collection->getObjectType());
         $this->assertEquals(Type::object(TestValueObject::class), $collection->getElementType());
+        $this->assertCount(1, $collection);
     }
 
     public function testValueObjectsAreImmutableByDefault()

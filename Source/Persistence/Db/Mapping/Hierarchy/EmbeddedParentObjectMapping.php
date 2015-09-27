@@ -68,6 +68,7 @@ class EmbeddedParentObjectMapping extends ParentObjectMapping implements IEmbedd
     public function persistAll(PersistenceContext $context, array $objects, array $rows)
     {
         $this->persistObjectDataToRows($objects, $rows);
+        $this->performLockingOperators($context, $objects, $rows);
     }
 
     protected function performPersist(PersistenceContext $context, array $rows, array $extraData = null)

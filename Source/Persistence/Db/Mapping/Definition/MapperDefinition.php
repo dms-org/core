@@ -176,6 +176,7 @@ class MapperDefinition extends MapperDefinitionBase
      */
     public function idToPrimaryKey($columnName)
     {
+        $this->verifyProperty(__METHOD__, 'id');
         $this->propertyColumnMap['id'] = $columnName;
         $this->mappedProperties['id']  = true;
         $this->primaryKey($columnName);

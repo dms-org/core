@@ -79,11 +79,12 @@ class EntityTest extends TypedObjectTest
 
     public function testEntityCollection()
     {
-        $collection = BlankEntity::collection();
+        $collection = BlankEntity::collection([new BlankEntity(42)]);
 
         $this->assertInstanceOf(IEntityCollection::class, $collection);
         $this->assertSame(BlankEntity::class, $collection->getEntityType());
         $this->assertSame(BlankEntity::class, $collection->getObjectType());
         $this->assertEquals(Type::object(BlankEntity::class), $collection->getElementType());
+        $this->assertCount(1, $collection);
     }
 }

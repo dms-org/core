@@ -40,9 +40,11 @@ class DateTimeVersionTest extends DbIntegrationTest
                     return $this->mockedCurrentTime;
                 });
 
-        /** @var DateTimeVersionLockingStrategy $lockingStrategy */
-        $lockingStrategy = $this->mapper->getDefinition()->getLockingStrategies()[0];
-        $lockingStrategy->setClock($clock);
+        foreach ($this->mapper->getDefinition()->getLockingStrategies() as $lockingStrategy) {
+            if ($lockingStrategy instanceof DateTimeVersionLockingStrategy) {
+                $lockingStrategy->setClock($clock);
+            }
+        }
     }
 
 

@@ -18,10 +18,12 @@ abstract class ValueObject extends TypedObject implements IValueObject
      * Returns a value object collection with the element type
      * as the called class.
      *
+     * @param static[] $objects
+     *
      * @return IValueObjectCollection|static[]
      */
-    final public static function collection()
+    final public static function collection(array $objects = [])
     {
-        return new ValueObjectCollection(get_called_class());
+        return new ValueObjectCollection(get_called_class(), $objects);
     }
 }

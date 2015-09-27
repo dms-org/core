@@ -35,11 +35,13 @@ abstract class Entity extends TypedObject implements IEntity
      * Returns an entity collection with the element type
      * as the called class.
      *
+     * @param static[] $entities
+     *
      * @return IEntityCollection|static[]
      */
-    final public static function collection()
+    final public static function collection(array $entities = [])
     {
-        return new EntityCollection(get_called_class());
+        return new EntityCollection(get_called_class(), $entities);
     }
 
     /**

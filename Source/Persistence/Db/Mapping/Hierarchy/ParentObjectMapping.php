@@ -6,6 +6,7 @@ use Iddigital\Cms\Core\Exception\InvalidArgumentException;
 use Iddigital\Cms\Core\Model\ITypedObject;
 use Iddigital\Cms\Core\Persistence\Db\LoadingContext;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\FinalizedMapperDefinition;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\IEmbeddedToOneRelation;
 use Iddigital\Cms\Core\Persistence\Db\PersistenceContext;
 use Iddigital\Cms\Core\Persistence\Db\Query\Delete;
 use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Expr;
@@ -68,6 +69,12 @@ class ParentObjectMapping extends ObjectMapping
         $lockingColumnNames = [];
         foreach ($this->definition->getLockingStrategies() as $lockingStrategy) {
             $lockingColumnNames = array_merge($lockingColumnNames, $lockingStrategy->getLockingColumnNames());
+        }
+
+        foreach ($this->definition->getRelations() as $relation) {
+            if ($relation instanceof IEmbeddedToOneRelation) {
+                $lockingColumnNames = array_merge($lockingColumnNames, $relation->getMapper()->getMapping()->getLockingColumnNames());
+            }
         }
 
         return array_unique($lockingColumnNames, SORT_STRING);
