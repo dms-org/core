@@ -89,6 +89,7 @@ class DateTest extends DateOrTimeObjectTest
         $this->assertTrue($date->isBetweenInclusive($date, $date->addDays(1)));
         $this->assertTrue($date->isBetweenInclusive($date->subDays(1), $date));
         $this->assertTrue($date->isBetweenInclusive($date, $date));
+        $this->assertFalse($date->isBetweenInclusive($date->addDays(1), $date->addDays(2)));
 
         $this->assertThrows(function () use ($date) {
             $date->isBetween($date->addDays(1), $date);

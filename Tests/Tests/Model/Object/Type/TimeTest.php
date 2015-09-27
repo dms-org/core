@@ -96,6 +96,7 @@ class TimeTest extends DateOrTimeObjectTest
         $this->assertTrue($time->isBetweenInclusive($time, $time->addSeconds(1)));
         $this->assertTrue($time->isBetweenInclusive($time->subSeconds(1), $time));
         $this->assertTrue($time->isBetweenInclusive($time, $time));
+        $this->assertFalse($time->isBetweenInclusive($time->addSeconds(1), $time->addSeconds(2)));
 
         $this->assertThrows(function () use ($time) {
             $time->isBetween($time->addSeconds(1), $time);

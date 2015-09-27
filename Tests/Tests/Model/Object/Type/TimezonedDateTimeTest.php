@@ -99,6 +99,7 @@ class TimezonedDateTimeTest extends DateOrTimeObjectTest
         $this->assertTrue($dateTime->isBetweenInclusive($dateTime, $dateTime->addSeconds(1)));
         $this->assertTrue($dateTime->isBetweenInclusive($dateTime->subSeconds(1), $dateTime));
         $this->assertTrue($dateTime->isBetweenInclusive($dateTime, $dateTime));
+        $this->assertFalse($dateTime->isBetweenInclusive($dateTime->addSeconds(1), $dateTime->addSeconds(2)));
 
         $this->assertThrows(function () use ($dateTime) {
             $dateTime->isBetween($dateTime->addSeconds(1), $dateTime);
