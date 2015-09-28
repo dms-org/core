@@ -3,6 +3,7 @@
 namespace Iddigital\Cms\Core\Persistence\Db\Connection;
 
 use Iddigital\Cms\Core\Exception\BaseException;
+use Iddigital\Cms\Core\Exception\InvalidArgumentException;
 use Iddigital\Cms\Core\Persistence\Db\Row;
 
 /**
@@ -28,10 +29,17 @@ class DbOutOfSyncException extends BaseException
      *
      * @param Row      $rowBeingPersisted
      * @param Row|null $currentRowInDb
+     *
+     * @throws InvalidArgumentException
      */
     public function __construct(Row $rowBeingPersisted, Row $currentRowInDb = null)
     {
-        parent::__construct('The database was out of sync when persisting the rows.');
+        parent::__construct(sprintf(
+                'Could not persist row on table %s with primary key %d: the row has been %s in another instance',
+                $rowBeingPersisted->getTable()->getName(), $rowBeingPersisted->getPrimaryKey(),
+                $currentRowInDb ? 'updated' : 'deleted'
+        ));
+
         $this->rowBeingPersisted = $rowBeingPersisted;
         $this->currentRowInDb    = $currentRowInDb;
     }
