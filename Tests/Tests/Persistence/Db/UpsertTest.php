@@ -23,9 +23,12 @@ class UpsertTest extends CmsTestCase
     public function testNew()
     {
         $rowSet = new RowSet($this->table());
+        $rowSet->add($rowSet->createRow(['id' => null]));
+        $rowSet->add($rowSet->createRow(['id' => 1]));
         $upsert = new Upsert($rowSet, ['id']);
 
-        $this->assertSame($rowSet, $upsert->getRows());
+        $this->assertEquals(new RowSet($this->table(), [$rowSet->createRow(['id' => null])]), $upsert->getRowsWithoutPrimaryKeys());
+        $this->assertEquals(new RowSet($this->table(), [$rowSet->createRow(['id' => 1])]), $upsert->getRowsWithPrimaryKeys());
         $this->assertSame($rowSet->getTable(), $upsert->getTable());
         $this->assertSame(['id'], $upsert->getLockingColumnNames());
     }

@@ -226,17 +226,17 @@ class ManyToOneRelationTest extends DbIntegrationTest
                 ]
         ]);
 
-        $entity = new ParentEntity(4, new SubEntity(7, 500));
+        $entity = new ParentEntity(4, new SubEntity(null, 500));
 
         $this->repo->save($entity);
 
         $this->assertDatabaseDataSameAs([
                 'parent_entities' => [
-                        ['id' => 4, 'child_id' => 7]
+                        ['id' => 4, 'child_id' => 2]
                 ],
                 'sub_entities'    => [
                         ['id' => 1, 'val' => 123],
-                        ['id' => 7, 'val' => 500],
+                        ['id' => 2, 'val' => 500],
                 ]
         ]);
 

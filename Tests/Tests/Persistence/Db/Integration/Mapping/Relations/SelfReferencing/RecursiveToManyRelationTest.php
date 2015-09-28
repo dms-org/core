@@ -2,8 +2,8 @@
 
 namespace Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\Relations\SelfReferencing;
 
-use Iddigital\Cms\Core\Persistence\Db\Mapping\IEntityMapper;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\IOrm;
+use Iddigital\Cms\Core\Persistence\Db\Query\BulkUpdate;
 use Iddigital\Cms\Core\Persistence\Db\Query\Delete;
 use Iddigital\Cms\Core\Persistence\Db\Query\Select;
 use Iddigital\Cms\Core\Persistence\Db\Query\Update;
@@ -11,12 +11,10 @@ use Iddigital\Cms\Core\Persistence\Db\Query\Upsert;
 use Iddigital\Cms\Core\Persistence\Db\Schema\ForeignKey;
 use Iddigital\Cms\Core\Persistence\Db\Schema\ForeignKeyMode;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Table;
-use Iddigital\Cms\Core\Tests\Helpers\Comparators\EntityCollectionComparator;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\DbIntegrationTest;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\Relations\Fixtures\SelfReferencing\ToManyRelation\RecursiveEntity;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\Relations\Fixtures\SelfReferencing\ToManyRelation\RecursiveEntityMapper;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Mock\MockDatabase;
-use SebastianBergmann\Comparator\Factory;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>
@@ -89,6 +87,8 @@ class RecursiveToManyRelationTest extends DbIntegrationTest
                 ],
         ]);
 
+        $this->assertSame(1, $entity->getId());
+
         $this->assertExecutedQueryTypes([
                 'Insert entity' => Upsert::class,
         ]);
@@ -122,8 +122,7 @@ class RecursiveToManyRelationTest extends DbIntegrationTest
 
     public function testPersistRecursive()
     {
-        $entity = new RecursiveEntity();
-        $entity->setId(1);
+        $entity            = new RecursiveEntity();
         $entity->parents[] = $entity;
 
         $this->repo->save($entity);
@@ -135,13 +134,19 @@ class RecursiveToManyRelationTest extends DbIntegrationTest
         ]);
 
         $this->assertExecutedQueryTypes([
-                'Insert recursive entity' => Upsert::class,
-                'Update recursive entity' => Update::class,
+                'Insert recursive entity'     => Upsert::class,
+                'Update recursive entity fks' => BulkUpdate::class,
         ]);
     }
 
     public function testPersistDeepExisting()
     {
+        $this->db->setData([
+                'recursive_entities' => [
+                        ['id' => 1, 'parent_id' => null],
+                ],
+        ]);
+
         $entity = $this->buildTestEntity(3, 2);
         $entity->setId(1);
 
@@ -220,7 +225,7 @@ class RecursiveToManyRelationTest extends DbIntegrationTest
         // Have to do manual assertions on structure because
         // recursive dependency causes infinite recursion in comparators :(
         // Here is the expected structure.
-        $entity = new RecursiveEntity(1, [
+        $entity                                    = new RecursiveEntity(1, [
                 new RecursiveEntity(3, [
                         new RecursiveEntity(2)
                 ]),

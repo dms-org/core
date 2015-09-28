@@ -13,6 +13,7 @@ use Iddigital\Cms\Core\Persistence\Db\Query\Clause\Ordering;
 use Iddigital\Cms\Core\Persistence\Db\Query\Delete;
 use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Expr;
 use Iddigital\Cms\Core\Persistence\Db\Row;
+use Iddigital\Cms\Core\Persistence\Db\RowSet;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Column;
 
 /**
@@ -161,6 +162,8 @@ class ToManyRelation extends ToManyRelationBase
             $rowGroups[$parentKey][] = $rows[$rowKey];
         }
 
+        $selfReferencingChildRows = [];
+
         foreach ($map->getItems() as $key => $item) {
             $parentRow = $item->getParent();
             $childRows = isset($rowGroups[$key]) ? $rowGroups[$key] : [];
@@ -179,7 +182,24 @@ class ToManyRelation extends ToManyRelationBase
                 $parentRow->onInsertPrimaryKey(function ($id) use ($childRows) {
                     $this->setForeignKey($childRows, $this->foreignKeyToParent, $id);
                 });
+
+                foreach ($childRows as $row) {
+                    if ($parentRow === $row) {
+                        $selfReferencingChildRows[] = $row;
+                    }
+                }
             }
+        }
+
+        if ($selfReferencingChildRows) {
+            // If the rows are self-referencing and need to be inserted
+            // an extra step must be taken because the primary key will
+            // only be known after inserting so the foreign key to itself
+            // will have to be updated separately afterwards
+            $context->bulkUpdate(new RowSet($this->table->withColumnsIgnoringConstraints([
+                    $this->primaryKey,
+                    $this->foreignKeyColumn
+            ]), $selfReferencingChildRows));
         }
     }
 

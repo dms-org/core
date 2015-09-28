@@ -10,6 +10,7 @@ use Iddigital\Cms\Core\Persistence\Db\PersistenceContext;
 use Iddigital\Cms\Core\Persistence\Db\Query\Delete;
 use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Expr;
 use Iddigital\Cms\Core\Persistence\Db\Row;
+use Iddigital\Cms\Core\Persistence\Db\RowSet;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Column;
 
 /**
@@ -105,6 +106,8 @@ class ToOneRelation extends ToOneRelationBase
 
         $rows = $this->reference->syncRelated($context, $this->foreignKeyColumn, $children);
 
+        $selfReferencingChildRows = [];
+
         foreach ($rows as $key => $row) {
             $parent = $parents[$key];
 
@@ -114,7 +117,22 @@ class ToOneRelation extends ToOneRelationBase
                 $parent->onInsertPrimaryKey(function ($id) use ($row) {
                     $this->setForeignKey([$row], $this->foreignKeyToParent, $id);
                 });
+
+                if ($parent === $row) {
+                    $selfReferencingChildRows[] = $row;
+                }
             }
+        }
+
+        if ($selfReferencingChildRows) {
+            // If the rows are self-referencing and need to be inserted
+            // an extra step must be taken because the primary key will
+            // only be known after inserting so the foreign key to itself
+            // will have to be updated separately afterwards
+            $context->bulkUpdate(new RowSet($this->table->withColumnsIgnoringConstraints([
+                    $this->primaryKey,
+                    $this->foreignKeyColumn
+            ]), $selfReferencingChildRows));
         }
     }
 

@@ -115,13 +115,9 @@ abstract class Connection implements IConnection
     public function upsert(Upsert $query)
     {
         $this->withinTransaction(function () use ($query) {
-            $rows                     = $query->getRows();
-            $table                    = $rows->getTable();
-            $isUsingOptimisticLocking = count($query->getLockingColumnNames()) > 0;
+            $table  = $query->getTable();
 
-            $insert = $this->prepare($this->platform->compilePreparedInsert($table));
-
-            $rowsWithKeys     = $rows->getRowsWithPrimaryKeys();
+            $rowsWithKeys     = $query->getRowsWithPrimaryKeys();
             $rowsWithKeyArray = $rowsWithKeys->getRows();
             $rowsData         = $this->platform->mapResultSetToDbFormat($rowsWithKeys, 'lock__');
             if ($rowsData) {
@@ -138,37 +134,32 @@ abstract class Connection implements IConnection
                     $update->execute();
 
                     // If the update does not succeed that means the row has been updated
-                    // and optimistic locking has failed OR the row with the primary key
+                    // and optimistic locking has failed OR the row with that primary key
                     // no longer exists.
                     if ($update->getAffectedRows() !== 1) {
-                        if ($isUsingOptimisticLocking) {
-                            // If optimistic locking is used, we get the current row
-                            // and throw an exception.
-                            $currentRow = $this->load(
-                                    Select::allFrom($table)
-                                            ->where(Expr::equal(
-                                                    Expr::tableColumn($table, $table->getPrimaryKeyColumnName()),
-                                                    Expr::idParam($rowsWithKeyArray[$key]->getColumn($table->getPrimaryKeyColumnName()))
-                                            ))
-                            )->getFirstRowOrNull();
+                        $currentRow = $this->load(
+                                Select::allFrom($table)
+                                        ->where(Expr::equal(
+                                                Expr::tableColumn($table, $table->getPrimaryKeyColumnName()),
+                                                Expr::idParam($rowsWithKeyArray[$key]->getColumn($table->getPrimaryKeyColumnName()))
+                                        ))
+                        )->getFirstRowOrNull();
 
-                            throw new DbOutOfSyncException(
-                                    $rowsWithKeyArray[$key],
-                                    $currentRow
-                            );
-                        } else {
-                            $insert->setParameters($row);
-                            $insert->execute();
-                        }
+                        throw new DbOutOfSyncException(
+                                $rowsWithKeyArray[$key],
+                                $currentRow
+                        );
                     }
                 }
             }
 
-            $rowsWithoutKeys = $rows->getRowsWithoutPrimaryKeys();
+            $rowsWithoutKeys = $query->getRowsWithoutPrimaryKeys();
             $rowArray        = $rowsWithoutKeys->getRows();
             $rowsData        = $this->platform->mapResultSetToDbFormat($rowsWithoutKeys);
 
             if ($rowsData) {
+                $insert = $this->prepare($this->platform->compilePreparedInsert($table));
+
                 foreach ($rowsData as $key => $row) {
                     $insert->setParameters($row);
                     $insert->execute();

@@ -175,6 +175,8 @@ class Row
      */
     public function firePrimaryKeyCallbacks($primaryKey)
     {
+        $this->columnData[$this->primaryKey] = $primaryKey;
+
         foreach ($this->onInsertCallbacks as $callback) {
             $callback($primaryKey);
         }

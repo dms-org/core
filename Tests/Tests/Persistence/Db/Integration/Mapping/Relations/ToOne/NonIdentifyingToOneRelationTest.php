@@ -34,6 +34,12 @@ class NonIdentifyingToOneRelationTest extends ToOneRelationTestBase
 
     public function testPersistParentWithId()
     {
+        $this->db->setData([
+                'parent_entities' => [
+                        ['id' => 4]
+                ],
+        ]);
+
         // If the entity had an id it may
         // have contained previous child entities
         // must perform a update to disassociate previous

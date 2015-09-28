@@ -23,15 +23,10 @@ class RowSet
     private $rows = [];
 
     /**
-     * @var Row[]
-     */
-    private $rowsWithoutPrimaryKeys = [];
-
-    /**
      * RowSet constructor.
      *
-     * @param Table      $table
-     * @param Row[]       $rows
+     * @param Table $table
+     * @param Row[] $rows
      *
      * @throws InvalidArgumentException
      */
@@ -51,16 +46,12 @@ class RowSet
      *
      * @return RowSet
      */
-    public static function fromRowArray(Table $table, $rows)
+    public static function fromRowArray(Table $table, array $rows)
     {
         $self = new self($table);
 
         foreach ($rows as $row) {
-            if (isset($row[$self->primaryKey])) {
-                $self->rows[$row[$self->primaryKey]] = $self->createRow($row);
-            } else {
-                $self->rowsWithoutPrimaryKeys[] = $self->createRow($row);
-            }
+            $self->rows[] = $self->createRow($row);
         }
 
         return $self;
@@ -99,7 +90,16 @@ class RowSet
      */
     public function getPrimaryKeys()
     {
-        return array_keys($this->rows);
+        $primaryKeys = [];
+
+        foreach ($this->rows as $row) {
+            $primaryKey = $row->getColumn($this->primaryKey);
+            if ($primaryKey) {
+                $primaryKeys[] = $primaryKey;
+            }
+        }
+
+        return $primaryKeys;
     }
 
     /**
@@ -107,7 +107,15 @@ class RowSet
      */
     public function getRowsWithoutPrimaryKeys()
     {
-        return $this->withRows($this->rowsWithoutPrimaryKeys);
+        $rowWithoutPrimaryKeys = [];
+
+        foreach ($this->rows as $row) {
+            if (!$row->hasColumn($this->primaryKey)) {
+                $rowWithoutPrimaryKeys[] = $row;
+            }
+        }
+
+        return $this->withRows($rowWithoutPrimaryKeys);
     }
 
     /**
@@ -115,7 +123,15 @@ class RowSet
      */
     public function getRowsWithPrimaryKeys()
     {
-        return $this->withRows($this->rows);
+        $rowWithPrimaryKeys = [];
+
+        foreach ($this->rows as $row) {
+            if ($row->hasColumn($this->primaryKey)) {
+                $rowWithPrimaryKeys[] = $row;
+            }
+        }
+
+        return $this->withRows($rowWithPrimaryKeys);
     }
 
     /**
@@ -123,7 +139,7 @@ class RowSet
      */
     public function getRows()
     {
-        return array_merge($this->rows, $this->rowsWithoutPrimaryKeys);
+        return $this->rows;
     }
 
     /**
@@ -131,15 +147,7 @@ class RowSet
      */
     public function getFirstRowOrNull()
     {
-        if ($this->rows) {
-            $row = reset($this->rows);
-        } elseif ($this->rowsWithoutPrimaryKeys) {
-            $row = reset($this->rowsWithoutPrimaryKeys);
-        } else {
-            $row = null;
-        }
-
-        return $row ?: null;
+        return reset($this->rows) ?: null;
     }
 
     /**
@@ -149,7 +157,7 @@ class RowSet
     {
         $columnData = [];
 
-        foreach ($this->getRows() as $row) {
+        foreach ($this->rows as $row) {
             $columnData[] = $row->getColumnData();
         }
 
@@ -157,13 +165,19 @@ class RowSet
     }
 
     /**
-     * @param $primaryKey
+     * @param int $primaryKey
      *
      * @return bool
      */
     public function has($primaryKey)
     {
-        return isset($this->rows[$primaryKey]);
+        foreach ($this->rows as $row) {
+            if ($row->getColumn($this->primaryKey) === $primaryKey) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -182,19 +196,11 @@ class RowSet
             );
         }
 
-        if (!$row->hasPrimaryKey()) {
-            $this->rowsWithoutPrimaryKeys[] = $row;
-
-            return true;
-        }
-
-        $primaryKey = $row->getPrimaryKey();
-
-        if ($this->has($primaryKey)) {
+        if ($row->hasColumn($this->primaryKey) && $this->has($row->getColumn($this->primaryKey))) {
             return false;
         }
 
-        $this->rows[$primaryKey] = $row;
+        $this->rows[] = $row;
 
         return true;
     }
@@ -206,10 +212,11 @@ class RowSet
      */
     public function remove($primaryKey)
     {
-        if ($this->has($primaryKey)) {
-            unset($this->rows[$primaryKey]);
-
-            return true;
+        foreach ($this->rows as $key => $row) {
+            if ($row->getColumn($this->primaryKey) === $primaryKey) {
+                unset($this->rows[$key]);
+                return true;
+            }
         }
 
         return false;
@@ -217,6 +224,6 @@ class RowSet
 
     public function count()
     {
-        return count($this->rows) + count($this->rowsWithoutPrimaryKeys);
+        return count($this->rows);
     }
 }

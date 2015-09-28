@@ -70,6 +70,8 @@ class RowTest extends CmsTestCase
 
         $rows->firePrimaryKeyCallbacks(10);
 
+        $this->assertSame(true, $rows->hasPrimaryKey());
+        $this->assertSame(10, $rows->getPrimaryKey());
         $this->assertSame(20, $i, 'Callbacks must be fired with primary key');
     }
 

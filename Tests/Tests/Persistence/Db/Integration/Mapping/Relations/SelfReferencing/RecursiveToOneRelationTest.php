@@ -2,8 +2,8 @@
 
 namespace Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\Relations\SelfReferencing;
 
-use Iddigital\Cms\Core\Persistence\Db\Mapping\IEntityMapper;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\IOrm;
+use Iddigital\Cms\Core\Persistence\Db\Query\BulkUpdate;
 use Iddigital\Cms\Core\Persistence\Db\Query\Delete;
 use Iddigital\Cms\Core\Persistence\Db\Query\Select;
 use Iddigital\Cms\Core\Persistence\Db\Query\Update;
@@ -46,14 +46,14 @@ class RecursiveToOneRelationTest extends DbIntegrationTest
     public function testCreatesForeignKey()
     {
         $this->assertEquals([
-            new ForeignKey(
-                'fk_recursive_entities_parent_id_recursive_entities',
-                    ['parent_id'],
-                    'recursive_entities',
-                    ['id'],
-                    ForeignKeyMode::CASCADE,
-                    ForeignKeyMode::SET_NULL
-            )
+                new ForeignKey(
+                        'fk_recursive_entities_parent_id_recursive_entities',
+                        ['parent_id'],
+                        'recursive_entities',
+                        ['id'],
+                        ForeignKeyMode::CASCADE,
+                        ForeignKeyMode::SET_NULL
+                )
         ], array_values($this->entities->getForeignKeys()));
     }
 
@@ -129,8 +129,7 @@ class RecursiveToOneRelationTest extends DbIntegrationTest
 
     public function testPersistRecursive()
     {
-        $entity = new RecursiveEntity();
-        $entity->setId(1);
+        $entity         = new RecursiveEntity();
         $entity->parent = $entity;
 
         $this->repo->save($entity);
@@ -141,14 +140,23 @@ class RecursiveToOneRelationTest extends DbIntegrationTest
                 ],
         ]);
 
+        $this->assertSame(1, $entity->getId());
+
         $this->assertExecutedQueryTypes([
-                'Insert recursive entity' => Upsert::class,
-                'Update recursive entity' => Update::class,
+                'Insert recursive entity'    => Upsert::class,
+                'Update recursive entity fk' => BulkUpdate::class,
         ]);
     }
 
     public function testPersistDeepExisting()
     {
+        $this->db->setData([
+                'recursive_entities' => [
+                        ['id' => 3, 'parent_id' => null],
+                        ['id' => 4, 'parent_id' => 3],
+                ],
+        ]);
+
         $entity = $this->buildTestEntity(4);
         $entity->setId(4);
 
@@ -156,6 +164,7 @@ class RecursiveToOneRelationTest extends DbIntegrationTest
 
         $this->assertDatabaseDataSameAs([
                 'recursive_entities' => [
+                        ['id' => 3, 'parent_id' => null],
                         ['id' => 4, 'parent_id' => null],
                         ['id' => 5, 'parent_id' => 4],
                         ['id' => 6, 'parent_id' => 5],

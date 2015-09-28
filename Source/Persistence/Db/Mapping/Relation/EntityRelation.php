@@ -37,11 +37,15 @@ abstract class EntityRelation extends Relation implements IRelation
     protected $mode;
 
     /**
+     * The related table.
+     *
      * @var Table
      */
     protected $table;
 
     /**
+     * The primary key of the related table.
+     *
      * @var Column
      */
     protected $primaryKey;

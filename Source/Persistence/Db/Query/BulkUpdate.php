@@ -19,10 +19,6 @@ class BulkUpdate extends RowSetQuery
     public function __construct(RowSet $rows)
     {
         parent::__construct($rows);
-
-        if ($rows->getRowsWithoutPrimaryKeys()->count() > 0) {
-            throw new InvalidArgumentException('Cannot create bulk-update: row set contains rows without primary keys');
-        }
     }
 
     /**
@@ -30,6 +26,10 @@ class BulkUpdate extends RowSetQuery
      */
     public function executeOn(IConnection $connection)
     {
+        if ($this->rows->getRowsWithoutPrimaryKeys()->count() > 0) {
+            throw new InvalidArgumentException('Cannot create bulk-update: row set contains rows without primary keys');
+        }
+
         $connection->bulkUpdate($this);
     }
 }

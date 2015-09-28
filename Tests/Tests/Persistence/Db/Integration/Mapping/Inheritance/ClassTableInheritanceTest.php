@@ -104,7 +104,7 @@ class ClassTableInheritanceTest extends DbIntegrationTest
     public function testPersistEntities()
     {
         $this->repo->saveAll([
-                new TestSuperclassEntity(1, 'base1-parent'),
+                new TestSuperclassEntity(null, 'base1-parent'),
                 new TestSubclassEntity1(null, 'base1', 100),
                 new TestSubclassEntity2(null, 'base2', 123, false),
                 new TestSubclassEntity3(null, 'base3', 99, 'sub3'),

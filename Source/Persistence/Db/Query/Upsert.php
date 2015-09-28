@@ -5,15 +5,36 @@ namespace Iddigital\Cms\Core\Persistence\Db\Query;
 use Iddigital\Cms\Core\Exception\InvalidArgumentException;
 use Iddigital\Cms\Core\Persistence\Db\Connection\IConnection;
 use Iddigital\Cms\Core\Persistence\Db\RowSet;
+use Iddigital\Cms\Core\Persistence\Db\Schema\Table;
 use Iddigital\Cms\Core\Util\Debug;
 
 /**
  * The upsert query.
  *
+ * This should insert the rows without primary keys and
+ * update the rows with set primary keys or if no rows with
+ * the corresponding primary key is found, an exception should be thrown.
+ *
+ * If optimistic locking is used, the updated rows should
+ * also add a check to ensure the rows match the current version
+ * data, if not throw an exception.
+ *
+ * @see    DbOutOfSyncException
+ *
  * @author Elliot Levin <elliotlevin@hotmail.com>
  */
-class Upsert extends RowSetQuery
+class Upsert implements IQuery
 {
+    /**
+     * @var RowSet
+     */
+    protected $rowsWithoutPrimaryKeys;
+
+    /**
+     * @var RowSet
+     */
+    protected $rowsWithPrimaryKeys;
+
     /**
      * @var string[]
      */
@@ -24,7 +45,8 @@ class Upsert extends RowSetQuery
      */
     public function __construct(RowSet $rows, array $lockingColumnNames = [])
     {
-        parent::__construct($rows);
+        $this->rowsWithoutPrimaryKeys = $rows->getRowsWithoutPrimaryKeys();
+        $this->rowsWithPrimaryKeys    = $rows->getRowsWithPrimaryKeys();
 
         $table = $rows->getTable();
 
@@ -47,6 +69,30 @@ class Upsert extends RowSetQuery
     public function executeOn(IConnection $connection)
     {
         $connection->upsert($this);
+    }
+
+    /**
+     * @return Table
+     */
+    public function getTable()
+    {
+        return $this->rowsWithPrimaryKeys->getTable();
+    }
+
+    /**
+     * @return RowSet
+     */
+    public function getRowsWithPrimaryKeys()
+    {
+        return $this->rowsWithPrimaryKeys;
+    }
+
+    /**
+     * @return RowSet
+     */
+    public function getRowsWithoutPrimaryKeys()
+    {
+        return $this->rowsWithoutPrimaryKeys;
     }
 
     /**

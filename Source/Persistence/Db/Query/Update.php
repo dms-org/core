@@ -8,6 +8,8 @@ use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Expr;
 /**
  * The db update query class.
  *
+ * This should update the row values matched by the query criteria.
+ *
  * @author Elliot Levin <elliotlevin@hotmail.com>
  */
 class Update extends Query

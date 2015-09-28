@@ -37,8 +37,11 @@ class EntityOutOfSyncException extends BaseException
     {
         parent::__construct(
                 sprintf(
-                        'Could not persist entity %s with id %d: the database is out of sync',
-                        get_class($entityBeingPersisted), $entityBeingPersisted->getId()
+                        'Could not persist entity %s with id %d: the database %s',
+                        get_class($entityBeingPersisted), $entityBeingPersisted->getId(),
+                        $currentEntityInDb
+                                ? 'contains an entity which has since been modified by another instance'
+                                : 'no longer contains an entry with that id'
                 ),
                 null,
                 $innerException

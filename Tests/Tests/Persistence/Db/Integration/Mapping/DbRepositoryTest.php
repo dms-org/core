@@ -78,7 +78,7 @@ class DbRepositoryTest extends DbIntegrationTest
 
     public function testSave()
     {
-        $entity = new EmptyEntity(1);
+        $entity = new EmptyEntity();
 
         $this->repo->save($entity);
 
@@ -103,25 +103,30 @@ class DbRepositoryTest extends DbIntegrationTest
 
     public function testGetInvalidId()
     {
-        $this->setExpectedException(EntityNotFoundException::class);
-        $this->repo->save(new EmptyEntity(1));
+        $entity = new EmptyEntity();
+        $this->repo->save($entity);
 
+        $this->assertSame(1, $entity->getId());
+
+        $this->setExpectedException(EntityNotFoundException::class);
         $this->repo->get(2);
     }
 
     public function testGet()
     {
-        $entity = new EmptyEntity(1);
+        $entity = new EmptyEntity();
 
         $this->repo->save($entity);
 
+        $this->assertSame(1, $entity->getId());
         $this->assertTrue($this->repo->has(1));
         $this->assertEquals($entity, $this->repo->get(1));
+        $this->assertNotSame($entity, $this->repo->get(1));
     }
 
     public function testTryGetInvalidId()
     {
-        $this->repo->save(new EmptyEntity(1));
+        $this->repo->save(new EmptyEntity());
 
         $this->assertNull($this->repo->tryGet(2));
     }
@@ -146,7 +151,7 @@ class DbRepositoryTest extends DbIntegrationTest
 
     public function testRemove()
     {
-        $entity = new EmptyEntity(1);
+        $entity = new EmptyEntity();
 
         $this->repo->save($entity);
         $this->repo->remove($entity);
@@ -158,7 +163,7 @@ class DbRepositoryTest extends DbIntegrationTest
 
     public function testRemoveById()
     {
-        $entity = new EmptyEntity(1);
+        $entity = new EmptyEntity();
 
         $this->repo->save($entity);
         $this->repo->removeById(1);

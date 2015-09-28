@@ -7,6 +7,8 @@ use Iddigital\Cms\Core\Persistence\Db\Connection\IConnection;
 /**
  * The db delete query class.
  *
+ * This should delete the rows matched by the query criteria.
+ *
  * @author Elliot Levin <elliotlevin@hotmail.com>
  */
 class Delete extends Query

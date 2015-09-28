@@ -13,6 +13,8 @@ use Iddigital\Cms\Core\Util\Debug;
 /**
  * The db select query class.
  *
+ * This should return the result set matched by the query criteria.
+ *
  * @author Elliot Levin <elliotlevin@hotmail.com>
  */
 class Select extends Query
