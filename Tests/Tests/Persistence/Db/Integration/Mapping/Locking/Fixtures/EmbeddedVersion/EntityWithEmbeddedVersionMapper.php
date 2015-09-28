@@ -16,7 +16,7 @@ class EntityWithEmbeddedVersionMapper extends EntityMapper
         return CustomOrm::from([
                 EntityWithEmbeddedVersion::class => __CLASS__,
         ], [
-                VersionValueObject::class        => VersionValueObjectMapper::class,
+                VersionValueObject::class => VersionValueObjectMapper::class,
         ]);
     }
 
