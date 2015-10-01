@@ -4,6 +4,7 @@ namespace Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\Locking;
 
 use Iddigital\Cms\Core\Persistence\Db\Mapping\EntityOutOfSyncException;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\IOrm;
+use Iddigital\Cms\Core\Persistence\Db\Query\Delete;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\DbIntegrationTest;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\Locking\Fixtures\VersionedToManyRelation\ChildEntity;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\Locking\Fixtures\VersionedToManyRelation\ParentEntity;
@@ -213,6 +214,11 @@ class VersionedToManyRelationTest extends DbIntegrationTest
                 'children' => [
 
                 ]
+        ]);
+
+        $this->assertExecutedQueryTypes([
+                'Delete parent entity'  => Delete::class,
+                'Delete child entities' => Delete::class,
         ]);
     }
 }
