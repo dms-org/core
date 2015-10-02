@@ -6,7 +6,6 @@ use Iddigital\Cms\Core\Exception;
 use Iddigital\Cms\Core\Model\EntityCollection;
 use Iddigital\Cms\Core\Model\IEntity;
 use Iddigital\Cms\Core\Model\IEntityCollection;
-use Iddigital\Cms\Core\Model\Type\Builder\Type as Type;
 
 /**
  * The entity object base class.
@@ -51,7 +50,7 @@ abstract class Entity extends TypedObject implements IEntity
      */
     final protected function define(ClassDefinition $class)
     {
-        $class->property($this->id)->asType(Type::int()->nullable());
+        $class->property($this->id)->nullable()->asInt();
 
         $this->defineEntity($class);
     }

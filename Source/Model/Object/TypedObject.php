@@ -217,7 +217,7 @@ abstract class TypedObject implements ITypedObject, \Serializable
     {
         $property = $this->validateProperty($name);
 
-        if (!$property->getAccessibility()->isPublic()) {
+        if (TypedObjectAccessibilityAssertion::isEnabled() && !$property->getAccessibility()->isPublic()) {
             $this->validateAccessibility($name, debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2));
         }
 
@@ -230,7 +230,7 @@ abstract class TypedObject implements ITypedObject, \Serializable
 
         $property = $this->definition->getProperty($name);
 
-        if (!$property->getAccessibility()->isPublic()) {
+        if (TypedObjectAccessibilityAssertion::isEnabled() && !$property->getAccessibility()->isPublic()) {
             $this->validateAccessibility($name, debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2));
         }
 

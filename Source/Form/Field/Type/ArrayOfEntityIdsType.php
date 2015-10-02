@@ -3,7 +3,6 @@
 namespace Iddigital\Cms\Core\Form\Field\Type;
 
 use Iddigital\Cms\Core\Form\Field\Processor\ArrayAllProcessor;
-use Iddigital\Cms\Core\Form\Field\Processor\EntityArrayLoaderProcessor;
 use Iddigital\Cms\Core\Form\Field\Processor\TypeProcessor;
 use Iddigital\Cms\Core\Form\Field\Processor\Validator\EntityIdArrayValidator;
 use Iddigital\Cms\Core\Form\Field\Processor\Validator\IntValidator;

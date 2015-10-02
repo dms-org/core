@@ -3,6 +3,7 @@
 namespace Iddigital\Cms\Core\Tests\Model\Object;
 
 use Iddigital\Cms\Core\Model\Object\InaccessiblePropertyException;
+use Iddigital\Cms\Core\Model\Object\TypedObjectAccessibilityAssertion;
 use Iddigital\Cms\Core\Tests\Model\Object\Fixtures\ExtendedPropertyAccessibilities;
 use Iddigital\Cms\Core\Tests\Model\Object\Fixtures\PropertyAccessibilities;
 
@@ -114,5 +115,36 @@ class TypedObjectAccessibilityTest extends TypedObjectTest
             $this->assertTrue(isset($object->private));
         }, $this, PropertyAccessibilities::class);
         $issetter();
+    }
+
+    public function testDisablingPropertyAccessibilityAssertion()
+    {
+        $this->assertTrue(TypedObjectAccessibilityAssertion::isEnabled());
+
+        TypedObjectAccessibilityAssertion::enable(false);
+
+        $this->assertFalse(TypedObjectAccessibilityAssertion::isEnabled());
+
+        $this->assertNull($this->object->public);
+        $this->object->public = true;
+        $this->assertTrue($this->object->public);
+
+        $this->assertNull($this->object->protected);
+        $this->object->protected = true;
+        $this->assertTrue($this->object->protected);
+
+        $this->assertNull($this->object->private);
+        $this->object->private = true;
+        $this->assertTrue($this->object->private);
+
+        TypedObjectAccessibilityAssertion::enable(true);
+
+        $this->assertTrue(TypedObjectAccessibilityAssertion::isEnabled());
+
+        $this->assertThrows(function () {
+                    $this->object->private = true;
+                },
+                InaccessiblePropertyException::class
+        );
     }
 }

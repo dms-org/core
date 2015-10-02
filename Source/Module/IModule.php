@@ -5,6 +5,7 @@ namespace Iddigital\Cms\Core\Module;
 use Iddigital\Cms\Core\Form;
 use Iddigital\Cms\Core\Auth\IPermission;
 use Iddigital\Cms\Core\Persistence\IRepository;
+use Iddigital\Cms\Core\Table\ITableDataSource;
 
 /**
  * The API for a module.
@@ -31,10 +32,17 @@ interface IModule
 
     /**
      * Gets the actions.
-     * 
+     *
      * @return IAction[]
      */
     public function getActions();
+
+    /**
+     * Gets the table data sources.
+     *
+     * @return ITableDataSource[]
+     */
+    public function getTables();
     
     /**
      * Gets the repository.
