@@ -3,7 +3,7 @@
 namespace Iddigital\Cms\Core\Module\Definition;
 
 use Iddigital\Cms\Core\Auth\IAuthSystem;
-use Iddigital\Cms\Core\Auth\IPermission;
+use Iddigital\Cms\Core\Exception\InvalidOperationException;
 use Iddigital\Cms\Core\Module\Definition\Table\TableDefiner;
 use Iddigital\Cms\Core\Module\IAction;
 use Iddigital\Cms\Core\Table\ITableDataSource;
@@ -21,14 +21,14 @@ class ModuleDefinition
     private $authSystem;
 
     /**
+     * @var string
+     */
+    private $name;
+
+    /**
      * @var IAction[]
      */
     private $actions = [];
-
-    /**
-     * @var IPermission[]
-     */
-    private $permissions = [];
 
     /**
      * @var ITableDataSource[]
@@ -46,6 +46,18 @@ class ModuleDefinition
     }
 
     /**
+     * Defines the name of the module.
+     *
+     * @param string $name
+     *
+     * @return void
+     */
+    public function name($name)
+    {
+        $this->name = $name;
+    }
+
+    /**
      * Defines an action with the supplied name.
      *
      * @param string $name
@@ -56,10 +68,6 @@ class ModuleDefinition
     {
         return new ActionDefiner($this->authSystem, $name, function (IAction $action) {
             $this->actions[$action->getName()] = $action;
-
-            foreach ($action->getRequiredPermissions() as $permission) {
-                $this->permissions[] = $permission;
-            }
         });
     }
 
@@ -79,9 +87,18 @@ class ModuleDefinition
 
     /**
      * @return FinalizedModuleDefinition
+     * @throws InvalidOperationException
      */
     public function finalize()
     {
+        if (!$this->name) {
+            throw InvalidOperationException::format('Cannot finalize module definition: name has not been defined');
+        }
 
+        return new FinalizedModuleDefinition(
+                $this->name,
+                $this->actions,
+                $this->tables
+        );
     }
 }

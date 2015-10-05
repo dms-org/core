@@ -12,7 +12,7 @@ use Iddigital\Cms\Core\Persistence;
  *
  * @author Elliot Levin <elliot@aanet.com.au>
  */
-interface IUnparameterizedAction
+interface IUnparameterizedAction extends IAction
 {
     /**
      * Gets the action handler

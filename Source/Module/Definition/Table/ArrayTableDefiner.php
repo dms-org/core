@@ -51,7 +51,7 @@ class ArrayTableDefiner extends TableDefinerBase
      *
      * @return void
      */
-    public function with(array $columns)
+    public function withColumns(array $columns)
     {
         $this->withStructure(Table::create($columns));
     }

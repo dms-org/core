@@ -37,6 +37,15 @@ class StagedFormObjectDefinition
     /**
      * Defines a stage in the form object.
      *
+     * Example:
+     * <code>
+     * ->stage(function (FormObjectDefinition $form) {
+     *      $form->section('Section Title', [
+     *              $form->field($this->field)->name('field')->label('Field')->string(),
+     *      ]);
+     * });
+     * </code>
+     *
      * @param callable $defineStageCallback
      *
      * @return void

@@ -1,16 +1,21 @@
 <?php
 
-namespace Iddigital\Cms\Core\Auth;
+namespace Iddigital\Cms\Core\Tests\Module\Mock;
 
-use Iddigital\Cms\Core\Exception;
+use Iddigital\Cms\Core\Auth\IAuthSystem;
+use Iddigital\Cms\Core\Auth\InvalidCredentialsException;
+use Iddigital\Cms\Core\Auth\IPermission;
+use Iddigital\Cms\Core\Auth\IUser;
+use Iddigital\Cms\Core\Auth\UserBannedException;
+use Iddigital\Cms\Core\Auth\UserForbiddenException;
+use Iddigital\Cms\Core\Auth\UserNotAuthenticatedException;
 
 /**
- * The authentication system interface.
- *
  * @author Elliot Levin <elliotlevin@hotmail.com>
  */
-interface IAuthSystem
+class MockAuthSystem implements IAuthSystem
 {
+
     /**
      * Attempts to login with the supplied credentials.
      *
@@ -21,7 +26,10 @@ interface IAuthSystem
      * @throws InvalidCredentialsException
      * @throws UserBannedException
      */
-    public function login($username, $password);
+    public function login($username, $password)
+    {
+
+    }
 
     /**
      * Attempts to logout the currently authenticated user.
@@ -29,7 +37,10 @@ interface IAuthSystem
      * @return void
      * @throws UserNotAuthenticatedException
      */
-    public function logout();
+    public function logout()
+    {
+
+    }
 
     /**
      * Resets the users credentials.
@@ -42,14 +53,20 @@ interface IAuthSystem
      * @throws InvalidCredentialsException
      * @throws UserBannedException
      */
-    public function resetPassword($username, $oldPassword, $newPassword);
+    public function resetPassword($username, $oldPassword, $newPassword)
+    {
+
+    }
 
     /**
      * Returns whether there is an authenticated user.
      *
      * @return boolean
      */
-    public function isAuthenticated();
+    public function isAuthenticated()
+    {
+        return true;
+    }
 
     /**
      * Returns the currently authenticated user.
@@ -57,7 +74,10 @@ interface IAuthSystem
      * @return IUser
      * @throws UserNotAuthenticatedException
      */
-    public function getAuthenticatedUser();
+    public function getAuthenticatedUser()
+    {
+
+    }
 
     /**
      * Returns whether the currently authenticated user has the
@@ -67,7 +87,10 @@ interface IAuthSystem
      *
      * @return boolean
      */
-    public function isAuthorized(array $permissions);
+    public function isAuthorized(array $permissions)
+    {
+        return true;
+    }
 
     /**
      * Verifies whether the currently authenticated user has the supplied
@@ -80,5 +103,8 @@ interface IAuthSystem
      * @throws UserNotAuthenticatedException
      * @throws UserBannedException
      */
-    public function verifyAuthorized(array $permissions);
+    public function verifyAuthorized(array $permissions)
+    {
+
+    }
 }

@@ -4,6 +4,9 @@ namespace Iddigital\Cms\Core\Tests\Model;
 
 use Iddigital\Cms\Core\Exception\InvalidArgumentException;
 use Iddigital\Cms\Core\Model\EntityCollection;
+use Iddigital\Cms\Core\Model\EntityIdCollection;
+use Iddigital\Cms\Core\Model\IEntity;
+use Iddigital\Cms\Core\Model\TypedCollection;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>
@@ -45,5 +48,17 @@ class EntityCollectionTest extends IEntitySetTest
         $entities           = $this->collection->getAll();
 
         $this->assertEquals([1, 5, 10, 11, 12, 20], $this->getEntityIds($entities));
+    }
+
+    public function testProjectionReturnsTypedCollection()
+    {
+        $ids = $this->collection->select(function (IEntity $entity) {
+            return $entity->getId();
+        });
+
+        $this->assertInstanceOf(TypedCollection::class, $ids);
+        $this->assertNotInstanceOf(EntityCollection::class, $ids);
+
+        $this->assertEquals([1, 5, 10, 11, 12], $ids->asArray());
     }
 }

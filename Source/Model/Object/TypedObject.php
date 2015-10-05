@@ -106,7 +106,7 @@ abstract class TypedObject implements ITypedObject, \Serializable
      *
      * @param static[] $objects
      *
-     * @return ITypedObjectCollection|static[]
+     * @return ObjectCollection|static[]
      */
     public static function collection(array $objects = [])
     {

@@ -2,21 +2,27 @@
 
 namespace Iddigital\Cms\Core\Module;
 
+use Iddigital\Cms\Core\Auth\IAuthSystem;
 use Iddigital\Cms\Core\Auth\IPermission;
+use Iddigital\Cms\Core\Exception\InvalidArgumentException;
+use Iddigital\Cms\Core\Exception\InvalidOperationException;
 use Iddigital\Cms\Core\Form;
-use Iddigital\Cms\Core\Persistence\IRepository;
+use Iddigital\Cms\Core\Module\Definition\FinalizedModuleDefinition;
+use Iddigital\Cms\Core\Module\Definition\ModuleDefinition;
+use Iddigital\Cms\Core\Table\ITableDataSource;
+use Iddigital\Cms\Core\Util\Debug;
 
 /**
  * The module base class.
  *
  * @author Elliot Levin <elliot@aanet.com.au>
  */
-class Module implements IModule
+abstract class Module implements IModule
 {
     /**
-     * @var string
+     * @var FinalizedModuleDefinition
      */
-    private $name;
+    private $definition;
 
     /**
      * @var IPermission[]
@@ -24,41 +30,68 @@ class Module implements IModule
     private $permissions = [];
 
     /**
-     * @var IAction[]
+     * @var IParameterizedAction[]
      */
-    private $actions;
+    private $parameterizedActions = [];
 
     /**
-     * @var IRepository
+     * @var IUnparameterizedAction[]
      */
-    protected $repository;
+    private $unparameterizedActions = [];
 
     /**
-     * Context constructor.
+     * @var ITableDataSource[]
+     */
+    private $tableDataSources = [];
+
+    /**
+     * Module constructor.
      *
-     * @param string      $name
-     * @param IAction[]   $actions
-     * @param IRepository $repository
+     * @param IAuthSystem $authSystem
+     *
+     * @throws InvalidArgumentException
+     * @throws InvalidOperationException
      */
-    public function __construct($name, array $actions, IRepository $repository)
+    public function __construct(IAuthSystem $authSystem)
     {
-        $this->name       = $name;
-        $this->actions    = $actions;
-        $this->repository = $repository;
+        $definition = new ModuleDefinition($authSystem);
+        $this->define($definition);
+        $this->definition = $definition->finalize();
 
-        foreach ($this->actions as $action) {
-            foreach ($action->getRequiredPermissions() as $permission) {
-                $this->permissions[] = $permission;
+        foreach ($this->definition->getPermissions() as $permission) {
+            $this->permissions[$permission->getName()] = $permission;
+        }
+
+        foreach ($this->definition->getActions() as $action) {
+            if ($action instanceof IParameterizedAction) {
+                $this->parameterizedActions[$action->getName()] = $action;
+            } elseif ($action instanceof IUnparameterizedAction) {
+                $this->unparameterizedActions[$action->getName()] = $action;
+            } else {
+                throw InvalidArgumentException::format('Unknown action type: %s', Debug::getType($action));
             }
         }
+
+        foreach ($this->definition->getTables() as $table) {
+            $this->tableDataSources[$table->getName()] = $table;
+        }
     }
+
+    /**
+     * Defines the module.
+     *
+     * @param ModuleDefinition $module
+     *
+     * @return void
+     */
+    abstract protected function define(ModuleDefinition $module);
 
     /**
      * {@inheritDoc}
      */
     public function getName()
     {
-        return $this->name;
+        return $this->definition->getName();
     }
 
     /**
@@ -66,7 +99,7 @@ class Module implements IModule
      */
     final public function getPermissions()
     {
-        return $this->permissions;
+        return $this->definition->getPermissions();
     }
 
     /**
@@ -74,14 +107,124 @@ class Module implements IModule
      */
     final public function getActions()
     {
-        return $this->actions;
+        return $this->definition->getActions();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getAction($name)
+    {
+        if (isset($this->unparameterizedActions[$name])) {
+            return $this->unparameterizedActions[$name];
+        } elseif (isset($this->parameterizedActions[$name])) {
+            return $this->parameterizedActions[$name];
+        }
+
+        throw InvalidArgumentException::format(
+                'Invalid call to %s: unknown action name, expecting one of (%s), %s given',
+                __METHOD__, Debug::formatValues(array_keys($this->parameterizedActions + $this->unparameterizedActions)), $name
+        );
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function hasAction($name)
+    {
+        return isset($this->parameterizedActions[$name]) || isset($this->unparameterizedActions[$name]);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getParameterizedActions()
+    {
+        return $this->parameterizedActions;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getParameterizedAction($name)
+    {
+        if (isset($this->parameterizedActions[$name])) {
+            return $this->parameterizedActions[$name];
+        }
+
+        throw InvalidArgumentException::format(
+                'Invalid call to %s: unknown action name, expecting one of (%s), %s given',
+                __METHOD__, Debug::formatValues(array_keys($this->parameterizedActions)), $name
+        );
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function hasParameterizedAction($name)
+    {
+        return isset($this->parameterizedActions[$name]);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getUnparameterizedActions()
+    {
+        return $this->unparameterizedActions;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getUnparameterizedAction($name)
+    {
+        if (isset($this->unparameterizedActions[$name])) {
+            return $this->unparameterizedActions[$name];
+        }
+
+        throw InvalidArgumentException::format(
+                'Invalid call to %s: unknown action name, expecting one of (%s), %s given',
+                __METHOD__, Debug::formatValues(array_keys($this->unparameterizedActions)), $name
+        );
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function hasUnparameterizedAction($name)
+    {
+        return isset($this->unparameterizedActions[$name]);
     }
 
     /**
      * {@inheritDoc}
      */
-    final public function getRepository()
+    public function getTables()
     {
-        return $this->repository;
+        return $this->tableDataSources;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getTable($name)
+    {
+        if (isset($this->tableDataSources[$name])) {
+            return $this->tableDataSources[$name];
+        }
+
+        throw InvalidArgumentException::format(
+                'Invalid call to %s: unknown action name, expecting one of (%s), %s given',
+                __METHOD__, Debug::formatValues(array_keys($this->tableDataSources)), $name
+        );
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function hasTable($name)
+    {
+        return isset($this->tableDataSources[$name]);
     }
 }

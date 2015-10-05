@@ -2,6 +2,7 @@
 
 namespace Iddigital\Cms\Core\Module;
 
+use Iddigital\Cms\Core\Exception\InvalidArgumentException;
 use Iddigital\Cms\Core\Form;
 use Iddigital\Cms\Core\Auth\IPermission;
 use Iddigital\Cms\Core\Persistence\IRepository;
@@ -38,16 +39,99 @@ interface IModule
     public function getActions();
 
     /**
+     * Gets the action with the supplied name.
+     *
+     * @param string $name
+     *
+     * @return IAction
+     * @throws InvalidArgumentException
+     */
+    public function getAction($name);
+
+    /**
+     * Returns whether the module contains the supplied action.
+     *
+     * @param string $name
+     *
+     * @return bool
+     */
+    public function hasAction($name);
+
+    /**
+     * Gets the parameterized actions.
+     *
+     * @return IParameterizedAction[]
+     */
+    public function getParameterizedActions();
+
+    /**
+     * Gets the parameterized action with the supplied name.
+     *
+     * @param string $name
+     *
+     * @return IParameterizedAction
+     * @throws InvalidArgumentException
+     */
+    public function getParameterizedAction($name);
+
+    /**
+     * Returns whether the module contains the supplied parameterized action.
+     *
+     * @param string $name
+     *
+     * @return bool
+     */
+    public function hasParameterizedAction($name);
+
+    /**
+     * Gets the unparameterized actions.
+     *
+     * @return IUnparameterizedAction[]
+     */
+    public function getUnparameterizedActions();
+
+    /**
+     * Gets the unparameterized action with the supplied name.
+     *
+     * @param string $name
+     *
+     * @return IUnparameterizedAction
+     * @throws InvalidArgumentException
+     */
+    public function getUnparameterizedAction($name);
+
+    /**
+     * Returns whether the module contains the supplied unparameterized action.
+     *
+     * @param string $name
+     *
+     * @return bool
+     */
+    public function hasUnparameterizedAction($name);
+
+    /**
      * Gets the table data sources.
      *
      * @return ITableDataSource[]
      */
     public function getTables();
-    
+
     /**
-     * Gets the repository.
-     * 
-     * @return IRepository
+     * Gets the table data source with the supplied name.
+     *
+     * @param string $name
+     *
+     * @return ITableDataSource
+     * @throws InvalidArgumentException
      */
-    public function getRepository();
+    public function getTable($name);
+
+    /**
+     * Returns whether the module contains the supplied table.
+     *
+     * @param string $name
+     *
+     * @return bool
+     */
+    public function hasTable($name);
 }

@@ -4,7 +4,6 @@ namespace Iddigital\Cms\Core\Model\Object;
 
 use Iddigital\Cms\Core\Exception;
 use Iddigital\Cms\Core\Model\IValueObject;
-use Iddigital\Cms\Core\Model\IValueObjectCollection;
 use Iddigital\Cms\Core\Model\ValueObjectCollection;
 
 /**
@@ -20,7 +19,7 @@ abstract class ValueObject extends TypedObject implements IValueObject
      *
      * @param static[] $objects
      *
-     * @return IValueObjectCollection|static[]
+     * @return ValueObjectCollection|static[]
      */
     final public static function collection(array $objects = [])
     {

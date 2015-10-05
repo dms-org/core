@@ -48,7 +48,7 @@ class ObjectCollection extends TypedCollection implements ITypedObjectCollection
 
     protected function constructScopedSelf($elements)
     {
-        return new static($this->elementType->getClass(), $elements, $this->scheme, $this->source ?: $this);
+        return new TypedCollection(Type::mixed(), $elements, $this->scheme, $this->source ?: $this);
     }
 
     public function getAll()

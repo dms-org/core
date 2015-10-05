@@ -36,7 +36,7 @@ abstract class Entity extends TypedObject implements IEntity
      *
      * @param static[] $entities
      *
-     * @return IEntityCollection|static[]
+     * @return EntityCollection|static[]
      */
     final public static function collection(array $entities = [])
     {

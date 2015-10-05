@@ -3,6 +3,7 @@
 namespace Iddigital\Cms\Core\Model;
 
 use Iddigital\Cms\Core\Exception;
+use Iddigital\Cms\Core\Model\Type\Builder\Type;
 use Iddigital\Cms\Core\Model\Type\IType;
 use Iddigital\Cms\Core\Util\Debug;
 use Pinq\Collection;
@@ -35,6 +36,7 @@ class TypedCollection extends Collection implements ITypedCollection
             Collection $source = null
     ) {
         $this->elementType = $elementType;
+
         foreach ($values as $value) {
             $this->verifyElement($value);
         }
@@ -44,7 +46,7 @@ class TypedCollection extends Collection implements ITypedCollection
 
     protected function constructScopedSelf($elements)
     {
-        return new static($this->elementType, $elements, $this->scheme, $this->source ?: $this);
+        return new static(Type::mixed(), $elements, $this->scheme, $this->source ?: $this);
     }
 
     public function getAll()
