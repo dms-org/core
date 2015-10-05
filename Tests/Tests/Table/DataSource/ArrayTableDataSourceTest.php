@@ -29,13 +29,14 @@ class ArrayTableDataSourceTest extends PeopleTableDataSourceTest
     }
 
     /**
+     * @param string          $name
      * @param ITableStructure $structure
      *
      * @return ITableDataSource
      */
-    protected function buildDataSource(ITableStructure $structure)
+    protected function buildDataSource($name, ITableStructure $structure)
     {
-        return new ArrayTableDataSource($structure, [
+        return new ArrayTableDataSource($name, $structure, [
                 ['name' => ['first_name' => 'Joe', 'last_name' => 'Go'], 'age' => 29],
                 ['name' => ['first_name' => 'Harold', 'last_name' => 'Php'], 'age' => 38],
                 ['name' => ['first_name' => 'Samantha', 'last_name' => 'Sharp'], 'age' => 20],

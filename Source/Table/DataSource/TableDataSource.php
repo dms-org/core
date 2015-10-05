@@ -4,7 +4,6 @@ namespace Iddigital\Cms\Core\Table\DataSource;
 
 use Iddigital\Cms\Core\Exception\InvalidArgumentException;
 use Iddigital\Cms\Core\Model\Collection;
-use Iddigital\Cms\Core\Module\IParameterizedAction;
 use Iddigital\Cms\Core\Table\Criteria\RowCriteria;
 use Iddigital\Cms\Core\Table\Data\DataTable;
 use Iddigital\Cms\Core\Table\Data\TableRow;
@@ -24,6 +23,11 @@ use Pinq\ITraversable;
 abstract class TableDataSource implements ITableDataSource
 {
     /**
+     * @var string
+     */
+    protected $name;
+
+    /**
      * @var ITableStructure
      */
     protected $structure;
@@ -31,11 +35,21 @@ abstract class TableDataSource implements ITableDataSource
     /**
      * TableDataSource constructor.
      *
+     * @param string          $name
      * @param ITableStructure $structure
      */
-    public function __construct(ITableStructure $structure)
+    public function __construct($name, ITableStructure $structure)
     {
+        $this->name      = $name;
         $this->structure = $structure;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    final public function getName()
+    {
+        return $this->name;
     }
 
     /**
@@ -92,8 +106,8 @@ abstract class TableDataSource implements ITableDataSource
     abstract protected function loadCount(IRowCriteria $criteria = null);
 
     /**
-     * @param ITableRow[]               $rows
-     * @param IRowCriteria|null         $criteria
+     * @param ITableRow[]       $rows
+     * @param IRowCriteria|null $criteria
      *
      * @return ITableSection[]
      */

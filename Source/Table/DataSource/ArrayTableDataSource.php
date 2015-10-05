@@ -28,14 +28,15 @@ class ArrayTableDataSource extends TableDataSource
     /**
      * ArrayTableDataSource constructor.
      *
+     * @param string $name
      * @param ITableStructure $structure
      * @param array[]         $rows
      *
      * @throws InvalidArgumentException
      */
-    public function __construct(ITableStructure $structure, array $rows)
+    public function __construct($name, ITableStructure $structure, array $rows)
     {
-        parent::__construct($structure);
+        parent::__construct($name, $structure);
         $this->rows = $this->buildNormalizedRows($structure, $rows);
     }
 

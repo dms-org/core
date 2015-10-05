@@ -12,6 +12,13 @@ use Iddigital\Cms\Core\Table\Criteria\RowCriteria;
 interface ITableDataSource
 {
     /**
+     * Gets the name of the data source.
+     *
+     * @return string
+     */
+    public function getName();
+
+    /**
      * Gets the table structure for data source.
      *
      * @return ITableStructure

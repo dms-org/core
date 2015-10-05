@@ -5,7 +5,6 @@ namespace Iddigital\Cms\Core\Tests\Module\Mapping;
 use Iddigital\Cms\Core\Form\IForm;
 use Iddigital\Cms\Core\Module\IStagedFormDtoMapping;
 use Iddigital\Cms\Core\Module\Mapping\StagedFormObjectMapping;
-use Iddigital\Cms\Core\Tests\Form\Object\Fixtures\ArrayOfInts;
 use Iddigital\Cms\Core\Tests\Form\Object\Stage\Fixtures\ArrayOfIntsStagedForm;
 
 /**

@@ -1,6 +1,6 @@
 <?php
 
-namespace Iddigital\Cms\Core\Module\Definition\Action;
+namespace Iddigital\Cms\Core\Module\Definition;
 
 use Iddigital\Cms\Core\Auth\IAuthSystem;
 use Iddigital\Cms\Core\Auth\IPermission;

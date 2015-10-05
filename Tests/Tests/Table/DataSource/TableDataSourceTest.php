@@ -16,6 +16,11 @@ use Iddigital\Cms\Core\Table\ITableStructure;
 abstract class TableDataSourceTest extends CmsTestCase
 {
     /**
+     * @var string
+     */
+    protected $name;
+
+    /**
      * @var ITableStructure
      */
     protected $structure;
@@ -31,16 +36,31 @@ abstract class TableDataSourceTest extends CmsTestCase
     abstract protected function buildStructure();
 
     /**
+     * @return string
+     */
+    protected function buildName()
+    {
+        return 'table-data-source';
+    }
+
+    /**
+     * @param string          $name
      * @param ITableStructure $structure
      *
      * @return ITableDataSource
      */
-    abstract protected function buildDataSource(ITableStructure $structure);
+    abstract protected function buildDataSource($name, ITableStructure $structure);
 
     public function setUp()
     {
+        $this->name       = $this->buildName();
         $this->structure  = $this->buildStructure();
-        $this->dataSource = $this->buildDataSource($this->structure);
+        $this->dataSource = $this->buildDataSource($this->name, $this->structure);
+    }
+
+    public function testName()
+    {
+        $this->assertSame($this->name, $this->dataSource->getName());
     }
 
     public function testStructure()
