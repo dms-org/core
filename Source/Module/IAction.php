@@ -14,6 +14,13 @@ use Iddigital\Cms\Core\Persistence;
 interface IAction
 {
     /**
+     * Gets the name of the action.
+     *
+     * @return bool
+     */
+    public function getName();
+
+    /**
      * Returns whether the action has a return type.
      *
      * @return bool

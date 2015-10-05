@@ -3,9 +3,9 @@
 namespace Iddigital\Cms\Core\Module\Action;
 
 use Iddigital\Cms\Core\Auth\IAuthSystem;
-use Iddigital\Cms\Core\Module\IUnparameterizedActionHandler;
-use Iddigital\Cms\Core\Module\IUnparameterizedAction;
 use Iddigital\Cms\Core\Form;
+use Iddigital\Cms\Core\Module\IUnparameterizedAction;
+use Iddigital\Cms\Core\Module\IUnparameterizedActionHandler;
 
 /**
  * The unparameterized action class.
@@ -17,9 +17,13 @@ class UnparameterizedAction extends Action implements IUnparameterizedAction
     /**
      * {@inheritDoc}
      */
-    public function __construct(IAuthSystem $auth, array $requiredPermissions, IUnparameterizedActionHandler $handler)
-    {
-        parent::__construct($auth, $requiredPermissions, $handler);
+    public function __construct(
+            $name,
+            IAuthSystem $auth,
+            array $requiredPermissions,
+            IUnparameterizedActionHandler $handler
+    ) {
+        parent::__construct($name, $auth, $requiredPermissions, $handler);
     }
 
     /**

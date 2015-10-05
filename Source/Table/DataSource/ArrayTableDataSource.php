@@ -3,11 +3,9 @@
 namespace Iddigital\Cms\Core\Table\DataSource;
 
 use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Model\ITraversable;
 use Iddigital\Cms\Core\Model\Traversable;
 use Iddigital\Cms\Core\Table\Criteria\ColumnOrdering;
 use Iddigital\Cms\Core\Table\Data\TableRow;
-use Iddigital\Cms\Core\Table\Data\TableSection;
 use Iddigital\Cms\Core\Table\IRowCriteria;
 use Iddigital\Cms\Core\Table\ITableRow;
 use Iddigital\Cms\Core\Table\ITableSection;

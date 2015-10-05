@@ -91,7 +91,7 @@ abstract class FormObject extends TypedObject implements IDataTransferObject, IF
      *
      * @return FinalizedFormObjectDefinition
      */
-    final  public function getFormDefinition()
+    final public function getFormDefinition()
     {
         return $this->formDefinition;
     }

@@ -160,4 +160,21 @@ abstract class StagedFormObject extends TypedObject implements IDataTransferObje
 
         return $this;
     }
+
+    /**
+     * Returns a new form object filled with the data from the supplied submission.
+     *
+     * @param array $submission
+     *
+     * @return static
+     * @throws InvalidFormSubmissionException
+     */
+    final public function submitNew(array $submission)
+    {
+        $clone = clone $this;
+
+        $clone->formDefinition = $clone->formDefinition->forInstance($clone);
+
+        return $clone->submit($submission);
+    }
 }

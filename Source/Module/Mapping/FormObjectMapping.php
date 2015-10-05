@@ -16,15 +16,15 @@ class FormObjectMapping extends StagedFormDtoMapping
     /**
      * @var FormObject
      */
-    private $stagedForm;
+    private $formObject;
 
     public function __construct(FormObject $formObject)
     {
         parent::__construct(
                 $formObject->getForm()->asStagedForm(),
-                $formObject->getFormDefinition()->getClass()->getClassName()
+                get_class($formObject)
         );
-        $this->stagedForm = $formObject;
+        $this->formObject = $formObject;
     }
 
     /**
@@ -32,6 +32,6 @@ class FormObjectMapping extends StagedFormDtoMapping
      */
     public function mapFormSubmissionToDto(array $submission)
     {
-        return $this->stagedForm->submitNew($submission);
+        return $this->formObject->submitNew($submission);
     }
 }

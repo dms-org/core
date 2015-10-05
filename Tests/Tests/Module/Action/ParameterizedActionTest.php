@@ -16,11 +16,29 @@ use Iddigital\Cms\Core\Tests\Module\Handler\Fixtures\ParamDto;
  */
 class ParameterizedActionTest extends ActionTest
 {
+    public function testNewAction()
+    {
+        $action = new ParameterizedAction(
+                'name',
+                $this->mockAuth(),
+                [],
+                $mapping = new FormObjectMapping(ArrayOfInts::withLength(2)),
+                $handler = new CustomParameterizedActionHandler(function (ArrayOfInts $form) { })
+        );
+
+        $this->assertSame('name', $action->getName());
+        $this->assertSame([], $action->getRequiredPermissions());
+        $this->assertSame(null, $action->getReturnDtoType());
+        $this->assertSame($mapping, $action->getFormDtoMapping());
+        $this->assertSame($handler, $action->getHandler());
+    }
+
     public function testDtoTypeMismatch()
     {
         $this->setExpectedException(TypeMismatchException::class);
 
         new ParameterizedAction(
+            'name',
                 $this->mockAuth(),
                 [],
                 new FormObjectMapping(new CreatePageForm()),
@@ -31,6 +49,7 @@ class ParameterizedActionTest extends ActionTest
     public function testCorrectDtoTypes()
     {
         $action = new ParameterizedAction(
+                'name',
                 $this->mockAuth(),
                 [],
                 new FormObjectMapping(ArrayOfInts::withLength(2)),
@@ -46,6 +65,7 @@ class ParameterizedActionTest extends ActionTest
     public function testCorrectReturnDtoTypes()
     {
         $action = new ParameterizedAction(
+                'name',
                 $this->mockAuth(),
                 [],
                 new FormObjectMapping(ArrayOfInts::withLength(2)),
@@ -64,6 +84,7 @@ class ParameterizedActionTest extends ActionTest
 
         $called = false;
         $action = new ParameterizedAction(
+                'name',
                 $this->mockAuthWithExpectedVerifyCall($permissions),
                 $permissions,
                 new FormObjectMapping(ArrayOfInts::withLength(2)),

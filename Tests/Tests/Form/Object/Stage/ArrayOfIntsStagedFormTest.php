@@ -83,11 +83,37 @@ class ArrayOfIntsStagedFormTest extends CmsTestCase
         $this->assertSame([1, 2, 4], $this->form->ints);
     }
 
+    public function testSubmitNew()
+    {
+        $submitted = $this->form->submitNew([
+                'length' => ' 3',
+                'ints'   => ['1', '2', '4'],
+        ]);
+
+        $this->assertNotSame($this->form, $submitted);
+
+        $this->assertNull($this->form->length);
+        $this->assertNull($this->form->ints);
+
+        $this->assertSame(3, $submitted->length);
+        $this->assertSame([1, 2, 4], $submitted->ints);
+    }
+
     public function testInvalidSubmission()
     {
         $this->setExpectedException(InvalidFormSubmissionException::class);
 
         $this->form->submit([
+                'length' => '1',
+                'ints'   => ['1', '2', '4'],
+        ]);
+    }
+
+    public function testInvalidSubmissionWithSubmitNew()
+    {
+        $this->setExpectedException(InvalidFormSubmissionException::class);
+
+        $this->form->submitNew([
                 'length' => '1',
                 'ints'   => ['1', '2', '4'],
         ]);

@@ -6,9 +6,9 @@ use Iddigital\Cms\Core\Auth\IAuthSystem;
 use Iddigital\Cms\Core\Exception\TypeMismatchException;
 use Iddigital\Cms\Core\Form;
 use Iddigital\Cms\Core\Form\IStagedForm;
-use Iddigital\Cms\Core\Module\IStagedFormDtoMapping;
 use Iddigital\Cms\Core\Module\IParameterizedAction;
 use Iddigital\Cms\Core\Module\IParameterizedActionHandler;
+use Iddigital\Cms\Core\Module\IStagedFormDtoMapping;
 
 /**
  * The parameterized action class.
@@ -31,12 +31,13 @@ class ParameterizedAction extends Action implements IParameterizedAction
      * {@inheritDoc}
      */
     public function __construct(
+            $name,
             IAuthSystem $auth,
             array $requiredPermissions,
             IStagedFormDtoMapping $formDtoMapping,
             IParameterizedActionHandler $handler
     ) {
-        parent::__construct($auth, $requiredPermissions, $handler);
+        parent::__construct($name, $auth, $requiredPermissions, $handler);
 
         if ($formDtoMapping->getDtoType() !== $handler->getDtoType()) {
             throw TypeMismatchException::format(

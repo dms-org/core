@@ -12,6 +12,22 @@ use Iddigital\Cms\Core\Tests\Module\Handler\Fixtures\ParamDto;
  */
 class UnparameterizedActionTest extends ActionTest
 {
+    public function testNewAction()
+    {
+        $action = new UnparameterizedAction(
+                'name',
+                $this->mockAuth(),
+                [],
+                $handler = new CustomUnparameterizedActionHandler(function () {
+
+                })
+        );
+
+        $this->assertSame('name', $action->getName());
+        $this->assertSame([], $action->getRequiredPermissions());
+        $this->assertSame(null, $action->getReturnDtoType());
+        $this->assertSame($handler, $action->getHandler());
+    }
 
     public function testRunningActionsChecksForPermissions()
     {
@@ -19,6 +35,7 @@ class UnparameterizedActionTest extends ActionTest
 
         $called = false;
         $action = new UnparameterizedAction(
+                'name',
                 $this->mockAuthWithExpectedVerifyCall($permissions),
                 $permissions,
                 new CustomUnparameterizedActionHandler(function () use (&$called) {
@@ -33,6 +50,7 @@ class UnparameterizedActionTest extends ActionTest
     public function testCorrectReturnDtoTypes()
     {
         $action = new UnparameterizedAction(
+                'name',
                 $this->mockAuth(),
                 [],
                 new CustomUnparameterizedActionHandler(function () {
@@ -47,6 +65,7 @@ class UnparameterizedActionTest extends ActionTest
     public function testWithoutReturnDtoTypes()
     {
         $action = new UnparameterizedAction(
+                'name',
                 $this->mockAuth(),
                 [],
                 new CustomUnparameterizedActionHandler(function () {
@@ -62,6 +81,7 @@ class UnparameterizedActionTest extends ActionTest
     {
         $return = null;
         $action = new UnparameterizedAction(
+                'name',
                 $this->mockAuth(),
                 [],
                 new CustomUnparameterizedActionHandler(function () use (&$return) {
@@ -81,6 +101,7 @@ class UnparameterizedActionTest extends ActionTest
     {
         $return = ParamDto::from('foo');
         $action = new UnparameterizedAction(
+                'name',
                 $this->mockAuth(),
                 [],
                 new CustomUnparameterizedActionHandler(function () use (&$return) {
