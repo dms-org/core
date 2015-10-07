@@ -89,7 +89,7 @@ interface IObjectMapper
      * @param LoadingContext $context
      * @param Row[]          $rows
      *
-     * @return ITypedObject[]
+     * @return array[]
      * @throws InvalidArgumentException
      */
     public function loadAllAsArray(LoadingContext $context, array $rows);
