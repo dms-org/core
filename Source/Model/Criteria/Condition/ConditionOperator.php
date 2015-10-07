@@ -91,12 +91,26 @@ final class ConditionOperator
         switch ($operator) {
             case ConditionOperator::EQUALS:
                 return function ($arg) use ($left, $right) {
-                    return $left($arg) == $right($arg);
+                    $l = $left($arg);
+                    $r = $right($arg);
+
+                    $isScalar = !(is_object($l) || is_array($l));
+
+                    return $isScalar
+                            ? $l === $r
+                            : $l == $r;
                 };
 
             case ConditionOperator::NOT_EQUALS:
                 return function ($arg) use ($left, $right) {
-                    return $left($arg) != $right($arg);
+                    $l = $left($arg);
+                    $r = $right($arg);
+
+                    $isScalar = !(is_object($l) || is_array($l));
+
+                    return $isScalar
+                            ? $l !== $r
+                            : $l != $r;
                 };
 
             case ConditionOperator::GREATER_THAN:
@@ -176,14 +190,24 @@ final class ConditionOperator
                     $l = $left($arg);
                     $r = $right($arg);
 
-                    if ($l === null || $r === null) {
+                    if ($r === null) {
                         return false;
                     }
 
-                    $isScalar = !(is_object($l) || is_array($l));
-                    foreach ($r as $element) {
-                        if ($isScalar ? $l === $element : $l == $element) {
-                            return true;
+                    $type     = gettype($l);
+                    $isScalar = !($type === 'object' || $type === 'array');
+
+                    if ($isScalar) {
+                        foreach ($r as $element) {
+                            if ($l === $element) {
+                                return true;
+                            }
+                        }
+                    } else {
+                        foreach ($r as $element) {
+                            if (gettype($element) === $type && $l == $element) {
+                                return true;
+                            }
                         }
                     }
 
@@ -195,14 +219,24 @@ final class ConditionOperator
                     $l = $left($arg);
                     $r = $right($arg);
 
-                    if ($l === null || $r === null) {
+                    if ($r === null) {
                         return false;
                     }
 
-                    $isScalar = !(is_object($l) || is_array($l));
-                    foreach ($r as $element) {
-                        if ($isScalar ? $l === $element : $l == $element) {
-                            return false;
+                    $type     = gettype($l);
+                    $isScalar = !($type === 'object' || $type === 'array');
+
+                    if ($isScalar) {
+                        foreach ($r as $element) {
+                            if ($l === $element) {
+                                return false;
+                            }
+                        }
+                    } else {
+                        foreach ($r as $element) {
+                            if (gettype($element) === $type && $l == $element) {
+                                return false;
+                            }
                         }
                     }
 
