@@ -6,6 +6,7 @@ use Iddigital\Cms\Common\Testing\CmsTestCase;
 use Iddigital\Cms\Core\Exception\TypeMismatchException;
 use Iddigital\Cms\Core\Model\Criteria\Condition\ConditionOperator;
 use Iddigital\Cms\Core\Model\Criteria\Condition\PropertyCondition;
+use Iddigital\Cms\Core\Model\Criteria\NestedProperty;
 use Iddigital\Cms\Core\Tests\Model\Fixtures\TestEntity;
 
 /**
@@ -15,21 +16,21 @@ class PropertyConditionTest extends CmsTestCase
 {
     protected function property()
     {
-        return TestEntity::definition()->getProperty('prop');
+        return new NestedProperty([TestEntity::definition()->getProperty('prop')]);
     }
 
     public function testNewPropertyCondition()
     {
-        $condition = new PropertyCondition([$this->property()], '=', 'foo');
+        $condition = new PropertyCondition($this->property(), '=', 'foo');
 
-        $this->assertSame([$this->property()], $condition->getNestedProperties());
+        $this->assertSame($this->property()->getNestedProperties(), $condition->getNestedProperties());
         $this->assertSame('=', $condition->getOperator());
         $this->assertSame('foo', $condition->getValue());
     }
 
     public function testEqualsFilterCallable()
     {
-        $condition = new PropertyCondition([$this->property()], '=', 'foo');
+        $condition = new PropertyCondition($this->property(), '=', 'foo');
 
         $callable = $condition->getFilterCallable();
         $this->assertInternalType('callable', $callable);
@@ -40,7 +41,7 @@ class PropertyConditionTest extends CmsTestCase
 
     public function testNotEqualsFilterCallable()
     {
-        $condition = new PropertyCondition([$this->property()], '!=', 'foo');
+        $condition = new PropertyCondition($this->property(), '!=', 'foo');
 
         $callable = $condition->getFilterCallable();
         $this->assertTrue($callable(new TestEntity(null, 'abc')));
@@ -50,7 +51,7 @@ class PropertyConditionTest extends CmsTestCase
 
     public function testInFilterCallable()
     {
-        $condition = new PropertyCondition([$this->property()], ConditionOperator::IN, ['foo', 'bar']);
+        $condition = new PropertyCondition($this->property(), ConditionOperator::IN, ['foo', 'bar']);
 
         $callable = $condition->getFilterCallable();
         $this->assertTrue($callable(new TestEntity(null, 'foo')));
@@ -59,13 +60,13 @@ class PropertyConditionTest extends CmsTestCase
         $this->assertFalse($callable(new TestEntity(null, '')));
 
         $this->assertThrows(function () {
-            new PropertyCondition([$this->property()], ConditionOperator::IN, [123]);
+            new PropertyCondition($this->property(), ConditionOperator::IN, [123]);
         }, TypeMismatchException::class);
     }
 
     public function testNotInFilterCallable()
     {
-        $condition = new PropertyCondition([$this->property()], ConditionOperator::NOT_IN, ['foo', 'bar']);
+        $condition = new PropertyCondition($this->property(), ConditionOperator::NOT_IN, ['foo', 'bar']);
 
         $callable = $condition->getFilterCallable();
         $this->assertTrue($callable(new TestEntity(null, 'baz')));
@@ -74,13 +75,13 @@ class PropertyConditionTest extends CmsTestCase
         $this->assertFalse($callable(new TestEntity(null, 'bar')));
 
         $this->assertThrows(function () {
-            new PropertyCondition([$this->property()], ConditionOperator::NOT_IN, ['foo', null]);
+            new PropertyCondition($this->property(), ConditionOperator::NOT_IN, ['foo', null]);
         }, TypeMismatchException::class);
     }
 
     public function testStringContainsFilterCallable()
     {
-        $condition = new PropertyCondition([$this->property()], ConditionOperator::STRING_CONTAINS, 'foo');
+        $condition = new PropertyCondition($this->property(), ConditionOperator::STRING_CONTAINS, 'foo');
 
         $callable = $condition->getFilterCallable();
         $this->assertTrue($callable(new TestEntity(null, 'fooo')));
@@ -90,7 +91,7 @@ class PropertyConditionTest extends CmsTestCase
 
     public function testStringContainsCaseInsensitiveFilterCallable()
     {
-        $condition = new PropertyCondition([$this->property()], ConditionOperator::STRING_CONTAINS_CASE_INSENSITIVE, 'foo');
+        $condition = new PropertyCondition($this->property(), ConditionOperator::STRING_CONTAINS_CASE_INSENSITIVE, 'foo');
 
         $callable = $condition->getFilterCallable();
         $this->assertTrue($callable(new TestEntity(null, 'fooo')));

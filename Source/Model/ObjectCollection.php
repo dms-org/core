@@ -3,7 +3,9 @@
 namespace Iddigital\Cms\Core\Model;
 
 use Iddigital\Cms\Core\Exception;
-use Iddigital\Cms\Core\Model\Object\Entity;
+use Iddigital\Cms\Core\Model\Criteria\PartialLoadCriteria;
+use Iddigital\Cms\Core\Model\Object\FinalizedClassDefinition;
+use Iddigital\Cms\Core\Model\Object\TypedObject;
 use Iddigital\Cms\Core\Model\Type\Builder\Type;
 use Iddigital\Cms\Core\Model\Type\ObjectType;
 use Pinq\Collection;
@@ -21,6 +23,11 @@ class ObjectCollection extends TypedCollection implements ITypedObjectCollection
      * @var ObjectType
      */
     protected $elementType;
+
+    /**
+     * @var FinalizedClassDefinition
+     */
+    protected $classDefinition;
 
     /**
      * @param string               $objectType
@@ -44,6 +51,12 @@ class ObjectCollection extends TypedCollection implements ITypedObjectCollection
         }
 
         parent::__construct(Type::object($objectType), $objects, $scheme, $source);
+
+        if (is_a($objectType, TypedObject::class, true)) {
+            /** @var string|TypedObject $objectType */
+            $objectType            = $this->getObjectType();
+            $this->classDefinition = $objectType::definition();
+        }
     }
 
     protected function constructScopedSelf($elements)
@@ -69,11 +82,20 @@ class ObjectCollection extends TypedCollection implements ITypedObjectCollection
      */
     public function criteria()
     {
-        /** @var string|Entity $entityType */
-        $entityType = $this->getObjectType();
+        /** @var string|TypedObject $objectType */
+        $objectType = $this->getObjectType();
 
-        return $entityType::criteria();
+        return $objectType::criteria();
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function partialCriteria()
+    {
+        return new PartialLoadCriteria($this->classDefinition);
+    }
+
 
     public function countMatching(ICriteria $criteria)
     {
@@ -119,4 +141,26 @@ class ObjectCollection extends TypedCollection implements ITypedObjectCollection
 
         return $this->where($specification->getCondition()->getFilterCallable())->asArray();
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function loadPartial(IPartialLoadCriteria $criteria)
+    {
+        $criteria->verifyOfClass($this->getObjectType());
+
+        $objects    = array_values($this->matching($criteria));
+        $loadedData = [];
+
+        foreach ($criteria->getAliasNestedPropertyMap() as $index => $property) {
+            $getter = $property->makePropertyGetterCallable();
+
+            foreach ($objects as $key => $object) {
+                $loadedData[$key][$index] = $getter($object);
+            }
+        }
+
+        return $loadedData;
+    }
+
 }

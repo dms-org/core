@@ -148,7 +148,7 @@ class FinalizedClassDefinition
     {
         if (!isset($this->properties[$name])) {
             throw Exception\InvalidArgumentException::format(
-                    'Invalid property name for class %s: expecting on of (%s), %s given',
+                    'Invalid property name for class %s: expecting one of (%s), %s given',
                     $this->className, Debug::formatValues(array_keys($this->properties)), var_export($name, true)
             );
         }

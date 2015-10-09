@@ -5,8 +5,10 @@ namespace Iddigital\Cms\Core\Persistence;
 use Iddigital\Cms\Core\Exception;
 use Iddigital\Cms\Core\Model\ICriteria;
 use Iddigital\Cms\Core\Model\IEntity;
-use Iddigital\Cms\Core\Model\IObjectSet;
+use Iddigital\Cms\Core\Model\IObjectSetWithPartialLoadSupport;
+use Iddigital\Cms\Core\Model\IPartialLoadCriteria;
 use Iddigital\Cms\Core\Model\ISpecification;
+use Iddigital\Cms\Core\Model\ITypedObject;
 use Iddigital\Cms\Core\Persistence\Db\Connection\IConnection;
 use Iddigital\Cms\Core\Persistence\Db\Criteria\CriteriaMapper;
 use Iddigital\Cms\Core\Persistence\Db\LoadingContext;
@@ -19,7 +21,7 @@ use Iddigital\Cms\Core\Persistence\Db\Query\Select;
  *
  * @author Elliot Levin <elliot@aanet.com.au>
  */
-abstract class DbRepositoryBase implements IObjectSet
+abstract class DbRepositoryBase implements IObjectSetWithPartialLoadSupport
 {
     /**
      * @var LoadingContext
@@ -119,6 +121,14 @@ abstract class DbRepositoryBase implements IObjectSet
     /**
      * {@inheritDoc}
      */
+    public function partialCriteria()
+    {
+        return $this->criteriaMapper->newPartialCriteria();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function countMatching(ICriteria $criteria)
     {
         return $this->loadCount($this->criteriaMapper->mapCriteriaToSelect($criteria));
@@ -138,6 +148,14 @@ abstract class DbRepositoryBase implements IObjectSet
     public function satisfying(ISpecification $specification)
     {
         return $this->matching($specification->asCriteria());
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function loadPartial(IPartialLoadCriteria $criteria)
+    {
+        // TODO: Implement loadPartial() method.
     }
 
     public function getIterator()

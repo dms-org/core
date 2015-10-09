@@ -46,7 +46,7 @@ class Criteria extends SpecificationDefinition implements ICriteria
     final public function orderBy($propertyName, $direction)
     {
         $this->orderings[] = new PropertyOrdering(
-                $this->parseNestedProperties($propertyName),
+                NestedProperty::parsePropertyName($this->class, $propertyName),
                 $direction
         );
 

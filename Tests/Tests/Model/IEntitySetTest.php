@@ -9,14 +9,11 @@ use Iddigital\Cms\Core\Model\Criteria\Criteria;
 use Iddigital\Cms\Core\Model\Criteria\SpecificationDefinition;
 use Iddigital\Cms\Core\Model\EntityCollection;
 use Iddigital\Cms\Core\Model\EntityNotFoundException;
-use Iddigital\Cms\Core\Model\IEntity;
-use Iddigital\Cms\Core\Model\IEntityCollection;
 use Iddigital\Cms\Core\Model\IEntitySet;
 use Iddigital\Cms\Core\Model\Type\ObjectType;
 use Iddigital\Cms\Core\Tests\Model\Criteria\Fixtures\MockSpecification;
 use Iddigital\Cms\Core\Tests\Model\Fixtures\SubObject;
 use Iddigital\Cms\Core\Tests\Model\Fixtures\TestEntity;
-use Pinq\Tests\Integration\Parsing\Test;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>
@@ -36,20 +33,20 @@ abstract class IEntitySetTest extends CmsTestCase
     public function setUp()
     {
         $this->collection = new EntityCollection(TestEntity::class, [
-            $this->entityMock(1),
-            $this->entityMock(5),
-            $this->entityMock(10),
-            $this->entityMock(11),
-            $this->entityMock(12),
+                $this->entityMock(1),
+                $this->entityMock(5),
+                $this->entityMock(10),
+                $this->entityMock(11),
+                $this->entityMock(12),
         ]);
     }
 
     public function testCanAddEntitiesThroughConstructor()
     {
         new EntityCollection(TestEntity::class, [
-            $this->entityMock(1),
-            $this->entityMock(2),
-            $this->entityMock(3),
+                $this->entityMock(1),
+                $this->entityMock(2),
+                $this->entityMock(3),
         ]);
     }
 
@@ -58,9 +55,9 @@ abstract class IEntitySetTest extends CmsTestCase
         $this->setExpectedException(InvalidArgumentException::class);
 
         new EntityCollection(\DateTime::class, [
-            $this->entityMock(1),
-            new \stdClass(),
-            $this->entityMock(2),
+                $this->entityMock(1),
+                new \stdClass(),
+                $this->entityMock(2),
         ]);
     }
 

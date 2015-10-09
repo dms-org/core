@@ -2,7 +2,6 @@
 
 namespace Iddigital\Cms\Core\Persistence\Db\Mapping\ReadModel;
 
-use Iddigital\Cms\Core\Persistence\Db\Mapping\IEntityMapper;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\IObjectMapper;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\ReadModel\Definition\ReadMapperDefinition;
 

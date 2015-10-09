@@ -386,12 +386,12 @@ abstract class ObjectMapping implements IObjectMapping
      */
     public function loadAllRaw(LoadingContext $context, array $rows)
     {
+        /** @var Row[] $rows */
         foreach ($rows as $key => $row) {
             $rows[$key] = $this->processRowBeforeLoadSubclass($row);
         }
 
         $definition = $this->definition;
-        /** @var Row[] $rows */
 
         $propertyMap         = $definition->getPropertyColumnMap();
         $dbToPhpConverterMap = $definition->getDbToPhpPropertyConverterMap();

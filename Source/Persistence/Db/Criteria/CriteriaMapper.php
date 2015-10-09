@@ -12,6 +12,7 @@ use Iddigital\Cms\Core\Model\Criteria\Condition\NotCondition;
 use Iddigital\Cms\Core\Model\Criteria\Condition\OrCondition;
 use Iddigital\Cms\Core\Model\Criteria\Condition\PropertyCondition;
 use Iddigital\Cms\Core\Model\Criteria\Criteria;
+use Iddigital\Cms\Core\Model\Criteria\NestedProperty;
 use Iddigital\Cms\Core\Model\Criteria\PropertyOrdering;
 use Iddigital\Cms\Core\Model\ICriteria;
 use Iddigital\Cms\Core\Model\IValueObject;
@@ -232,7 +233,7 @@ class CriteriaMapper
 
             return $this->createEmbeddedMapper($this->embeddedObjects[$propertyName])->mapPropertyCondition(
                     new PropertyCondition(
-                            $properties,
+                            new NestedProperty($properties),
                             $condition->getOperator(),
                             $condition->getValue()
                     ),
@@ -428,7 +429,7 @@ class CriteriaMapper
         foreach ($embeddedDefinition->getProperties() as $property) {
             $columnExpressions[] = $embeddedMapper->mapPropertyCondition(
                     new PropertyCondition(
-                            [$property],
+                            new NestedProperty([$property]),
                             $operator,
                             $embeddedProperties[$property->getName()]
                     ),

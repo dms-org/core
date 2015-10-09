@@ -4,9 +4,10 @@ namespace Iddigital\Cms\Core\Tests\Model;
 
 use Iddigital\Cms\Core\Exception\InvalidArgumentException;
 use Iddigital\Cms\Core\Model\EntityCollection;
-use Iddigital\Cms\Core\Model\EntityIdCollection;
 use Iddigital\Cms\Core\Model\IEntity;
+use Iddigital\Cms\Core\Model\IPartialLoadCriteria;
 use Iddigital\Cms\Core\Model\TypedCollection;
+use Iddigital\Cms\Core\Tests\Model\Fixtures\TestEntity;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>
@@ -60,5 +61,28 @@ class EntityCollectionTest extends IEntitySetTest
         $this->assertNotInstanceOf(EntityCollection::class, $ids);
 
         $this->assertEquals([1, 5, 10, 11, 12], $ids->asArray());
+    }
+
+    public function testPartialLoadCriteria()
+    {
+        $criteria = $this->collection->partialCriteria();
+
+        $this->assertInstanceOf(IPartialLoadCriteria::class, $criteria);
+        $this->assertSame(TestEntity::class, $criteria->getClass()->getClassName());
+    }
+
+    public function testPartialLoadEntities()
+    {
+        $data = $this->collection->loadPartial(
+                $this->collection->partialCriteria()
+                        ->loadAll(['id', 'object.prop' => 'sub-prop'])
+                        ->where('id', '>', 5)
+        );
+
+        $this->assertSame([
+                ['id' => 10, 'sub-prop' => 'foo'],
+                ['id' => 11, 'sub-prop' => null],
+                ['id' => 12, 'sub-prop' => 'foo'],
+        ], $data);
     }
 }

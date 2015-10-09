@@ -43,6 +43,13 @@ class SpecificationDefinition extends ObjectCriteriaBase
     }
 
     /**
+     * Defines a where condition on the criteria.
+     *
+     * Example:
+     * <code>
+     * ->where('some.nested.property', '=', 100)
+     * </code>
+     *
      * @param string $propertyName
      * @param string $operator
      * @param mixed  $value
@@ -53,7 +60,7 @@ class SpecificationDefinition extends ObjectCriteriaBase
     final public function where($propertyName, $operator, $value)
     {
         $this->append(new PropertyCondition(
-                $this->parseNestedProperties($propertyName),
+                NestedProperty::parsePropertyName($this->class, $propertyName),
                 $operator,
                 $value
         ));
@@ -62,6 +69,17 @@ class SpecificationDefinition extends ObjectCriteriaBase
     }
 
     /**
+     * Defines a condition that is satisfied when ANY of the
+     * conditions within the callback are satisfied.
+     *
+     * Example:
+     * <code>
+     * ->whereAny(function (SpecificationDefinition $match) {
+     *      $match->where('prop', '>', 50);
+     *      $match->where('prop', '<', 10);
+     * })
+     * </code>
+     *
      * @param callable $conditionCallback
      *
      * @return static
@@ -77,6 +95,17 @@ class SpecificationDefinition extends ObjectCriteriaBase
     }
 
     /**
+     * Defines a condition that is satisfied when ALL of the
+     * conditions within the callback are satisfied.
+     *
+     * Example:
+     * <code>
+     * ->whereAll(function (SpecificationDefinition $match) {
+     *      $match->where('prop', '>', 50);
+     *      $match->where('flag', '=', true);
+     * })
+     * </code>
+     *
      * @param callable $conditionCallback
      *
      * @return static
@@ -91,11 +120,21 @@ class SpecificationDefinition extends ObjectCriteriaBase
     }
 
     /**
+     * Defines a condition that is satisfied when the condition
+     * within the callback are NOT satisfied.
+     *
+     * Example:
+     * <code>
+     * ->whereNot(function (SpecificationDefinition $match) {
+     *      $match->where('prop', '>', 50);
+     * })
+     * </code>
+     *
      * @param callable $conditionCallback
      *
      * @return static
      */
-    public function whereNot(callable $conditionCallback)
+    final public function whereNot(callable $conditionCallback)
     {
         $definition = new SpecificationDefinition($this->class);
         $conditionCallback($definition);
@@ -105,6 +144,9 @@ class SpecificationDefinition extends ObjectCriteriaBase
     }
 
     /**
+     * Defines a condition that is satisfied when the condition
+     * property contains the supplied string.
+     *
      * @param string $propertyName
      * @param mixed  $value
      *
@@ -116,6 +158,9 @@ class SpecificationDefinition extends ObjectCriteriaBase
     }
 
     /**
+     * Defines a condition that is satisfied when the condition
+     * property contains the supplied string insensitive to case.
+     *
      * @param string $propertyName
      * @param mixed  $value
      *
@@ -127,6 +172,9 @@ class SpecificationDefinition extends ObjectCriteriaBase
     }
 
     /**
+     * Defines a condition that is satisfied when the value
+     * is found within the array/collection of the property.
+     *
      * @param string $propertyName
      * @param array  $values
      *
@@ -138,6 +186,9 @@ class SpecificationDefinition extends ObjectCriteriaBase
     }
 
     /**
+     * Defines a condition that is satisfied when the value
+     * is NOT found within the array/collection of the property.
+     *
      * @param string $propertyName
      * @param array  $values
      *
@@ -149,6 +200,9 @@ class SpecificationDefinition extends ObjectCriteriaBase
     }
 
     /**
+     * Defines a condition that is satisfied when the class
+     * is an instance of the supplied class.
+     *
      * @param string $class
      *
      * @return static
@@ -169,6 +223,9 @@ class SpecificationDefinition extends ObjectCriteriaBase
     }
 
     /**
+     * Defines a condition that is satisfied when the value
+     * supplied specification is satisfied.
+     *
      * @param ISpecification $specification
      *
      * @return static
@@ -181,52 +238,5 @@ class SpecificationDefinition extends ObjectCriteriaBase
         $this->append($specification->getCondition());
 
         return $this;
-    }
-
-    /**
-     * @param string $propertyName
-     *
-     * @return FinalizedPropertyDefinition[]
-     * @throws Exception\InvalidOperationException
-     * @throws InvalidArgumentException
-     */
-    final protected function parseNestedProperties($propertyName)
-    {
-        $parts      = explode('.', $propertyName);
-        $partsCount = count($parts);
-
-        $properties = [];
-        $class      = $this->class;
-        $nullable   = false;
-
-        foreach ($parts as $key => $propertyPart) {
-            $property = $class->getProperty($propertyPart);
-            if ($nullable) {
-                $property = $property->asNullable();
-            }
-
-            $properties[] = $property;
-
-            if ($key < $partsCount - 1) {
-                if ($property->getType()->isNullable()) {
-                    $nullable = true;
-                }
-
-                $type = $property->getType()->nonNullable();
-
-                if (!($type instanceof ObjectType) || !is_subclass_of($type->getClass(), TypedObject::class, true)) {
-                    throw Exception\InvalidOperationException::format(
-                            'Invalid property string \'%s\': property %s::$%s must be a subclass of %s to use nested property, %s given',
-                            $propertyName, $class->getClassName(), $propertyPart, TypedObject::class, $type->asTypeString()
-                    );
-                }
-
-                /** @var TypedObject|string $className */
-                $className = $type->getClass();
-                $class     = $className::definition();
-            }
-        }
-
-        return $properties;
     }
 }

@@ -4,7 +4,6 @@ namespace Iddigital\Cms\Core\Table\Column\Component;
 
 use Iddigital\Cms\Core\Form\IField;
 use Iddigital\Cms\Core\Table\Column\Component\Type\ColumnComponentType;
-use Iddigital\Cms\Core\Table\Column\Component\Type\SimpleComponentType;
 use Iddigital\Cms\Core\Table\IColumnComponent;
 use Iddigital\Cms\Core\Table\IColumnComponentType;
 

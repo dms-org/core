@@ -10,6 +10,7 @@ use Iddigital\Cms\Core\Model\Criteria\Condition\InstanceOfCondition;
 use Iddigital\Cms\Core\Model\Criteria\Condition\NotCondition;
 use Iddigital\Cms\Core\Model\Criteria\Condition\OrCondition;
 use Iddigital\Cms\Core\Model\Criteria\Condition\PropertyCondition;
+use Iddigital\Cms\Core\Model\Criteria\NestedProperty;
 use Iddigital\Cms\Core\Model\Criteria\OrderingDirection;
 use Iddigital\Cms\Core\Model\Criteria\PropertyOrdering;
 use Iddigital\Cms\Core\Model\Criteria\SpecificationDefinition;
@@ -57,7 +58,7 @@ class CriteriaTest extends CmsTestCase
         $criteria->where('prop', '=', 'foo');
 
         $this->assertSame(TestEntity::definition(), $criteria->getClass());
-        $this->assertEquals(new PropertyCondition([TestEntity::definition()->getProperty('prop')], '=', 'foo'), $criteria->getCondition());
+        $this->assertEquals(new PropertyCondition(new NestedProperty([TestEntity::definition()->getProperty('prop')]), '=', 'foo'), $criteria->getCondition());
     }
 
     public function testValidNestedPropertyCondition()
@@ -68,10 +69,10 @@ class CriteriaTest extends CmsTestCase
 
         $this->assertSame(TestEntity::definition(), $criteria->getClass());
         $this->assertEquals(
-                new PropertyCondition([
+                new PropertyCondition(new NestedProperty([
                         TestEntity::definition()->getProperty('object'),
                         SubObject::definition()->getProperty('prop')->asNullable(),
-                ],
+                ]),
                         '=',
                         'foo'),
                 $criteria->getCondition());
@@ -105,7 +106,7 @@ class CriteriaTest extends CmsTestCase
 
         $this->assertSame(TestEntity::definition(), $criteria->getClass());
         $this->assertEquals([
-                new PropertyOrdering([TestEntity::definition()->getProperty('prop')], OrderingDirection::ASC)
+                new PropertyOrdering(new NestedProperty([TestEntity::definition()->getProperty('prop')]), OrderingDirection::ASC)
         ], $criteria->getOrderings());
     }
 
@@ -117,10 +118,10 @@ class CriteriaTest extends CmsTestCase
 
         $this->assertSame(TestEntity::definition(), $criteria->getClass());
         $this->assertEquals([
-                new PropertyOrdering([
+                new PropertyOrdering(new NestedProperty([
                         TestEntity::definition()->getProperty('object'),
                         SubObject::definition()->getProperty('prop')->asNullable(),
-                ], OrderingDirection::ASC)
+                ]), OrderingDirection::ASC)
         ], $criteria->getOrderings());
     }
 
@@ -156,10 +157,10 @@ class CriteriaTest extends CmsTestCase
 
         $this->assertSame(TestEntity::definition(), $criteria->getClass());
         $this->assertEquals(
-                new PropertyCondition([
+                new PropertyCondition(new NestedProperty([
                         TestEntity::definition()->getProperty('object'),
                         SubObject::definition()->getProperty('prop')->asNullable(),
-                ],
+                ]),
                         '=',
                         'foo')
                 , $criteria->getCondition());
@@ -205,8 +206,8 @@ class CriteriaTest extends CmsTestCase
 
         $this->assertEquals(
                 new AndCondition([
-                        new PropertyCondition([TestEntity::definition()->getProperty('prop')], '!=', 'foo'),
-                        new PropertyCondition([TestEntity::definition()->getProperty('prop')], '!=', 'bar'),
+                        new PropertyCondition(new NestedProperty([TestEntity::definition()->getProperty('prop')]), '!=', 'foo'),
+                        new PropertyCondition(new NestedProperty([TestEntity::definition()->getProperty('prop')]), '!=', 'bar'),
                 ]),
                 $criteria->getCondition());
     }
@@ -222,8 +223,8 @@ class CriteriaTest extends CmsTestCase
 
         $this->assertEquals(
                 new OrCondition([
-                        new PropertyCondition([TestEntity::definition()->getProperty('prop')], '!=', 'foo'),
-                        new PropertyCondition([TestEntity::definition()->getProperty('prop')], '!=', 'bar'),
+                        new PropertyCondition(new NestedProperty([TestEntity::definition()->getProperty('prop')]), '!=', 'foo'),
+                        new PropertyCondition(new NestedProperty([TestEntity::definition()->getProperty('prop')]), '!=', 'bar'),
                 ]),
                 $criteria->getCondition());
     }
@@ -242,10 +243,10 @@ class CriteriaTest extends CmsTestCase
 
         $this->assertEquals(
                 new OrCondition([
-                        new PropertyCondition([TestEntity::definition()->getProperty('prop')], '!=', 'foo'),
+                        new PropertyCondition(new NestedProperty([TestEntity::definition()->getProperty('prop')]), '!=', 'foo'),
                         new AndCondition([
-                                new PropertyCondition([TestEntity::definition()->getProperty('prop')], '!=', 'foo'),
-                                new PropertyCondition([TestEntity::definition()->getProperty('prop')], '!=', 'bar'),
+                                new PropertyCondition(new NestedProperty([TestEntity::definition()->getProperty('prop')]), '!=', 'foo'),
+                                new PropertyCondition(new NestedProperty([TestEntity::definition()->getProperty('prop')]), '!=', 'bar'),
                         ])
                 ]),
                 $criteria->getCondition());
@@ -262,8 +263,8 @@ class CriteriaTest extends CmsTestCase
 
         $this->assertEquals(
                 new NotCondition(new AndCondition([
-                        new PropertyCondition([TestEntity::definition()->getProperty('prop')], '!=', 'foo'),
-                        new PropertyCondition([TestEntity::definition()->getProperty('prop')], '!=', 'bar'),
+                        new PropertyCondition(new NestedProperty([TestEntity::definition()->getProperty('prop')]), '!=', 'foo'),
+                        new PropertyCondition(new NestedProperty([TestEntity::definition()->getProperty('prop')]), '!=', 'bar'),
                 ])),
                 $criteria->getCondition());
     }

@@ -7,12 +7,10 @@ use Iddigital\Cms\Core\Model\IEntity;
 use Iddigital\Cms\Core\Model\ITypedObject;
 use Iddigital\Cms\Core\Persistence\Db\LoadingContext;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\IEmbeddedObjectMapper;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\IEntityMapper;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\IObjectMapper;
 use Iddigital\Cms\Core\Persistence\Db\PersistenceContext;
 use Iddigital\Cms\Core\Persistence\Db\Query\Delete;
 use Iddigital\Cms\Core\Persistence\Db\Row;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Table;
 
 /**
  * This class wraps an entity mapper as an embedded mapper.
@@ -134,9 +132,6 @@ class EmbeddedMapperProxy implements IEmbeddedObjectMapper
 
     // NOT REQUIRED
 
-    /**
-     * @inheritDoc
-     */
     public function deleteFromQuery(PersistenceContext $context, Delete $deleteQuery)
     {
         throw NotImplementedException::method(__METHOD__);

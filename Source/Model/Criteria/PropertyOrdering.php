@@ -10,8 +10,13 @@ use Iddigital\Cms\Core\Model\Object\FinalizedPropertyDefinition;
  *
  * @author Elliot Levin <elliotlevin@hotmail.com>
  */
-class PropertyOrdering extends PropertyCriterion
+class PropertyOrdering
 {
+    /**
+     * @var NestedProperty
+     */
+    private $nestedProperty;
+
     /**
      * @var string
      */
@@ -20,17 +25,25 @@ class PropertyOrdering extends PropertyCriterion
     /**
      * PropertyOrdering constructor.
      *
-     * @param FinalizedPropertyDefinition[] $properties
-     * @param string                      $direction
+     * @param NestedProperty $nestedProperty
+     * @param string         $direction
      *
      * @throws InvalidArgumentException
      */
-    public function __construct(array $properties, $direction)
+    public function __construct(NestedProperty $nestedProperty, $direction)
     {
         OrderingDirection::validate($direction);
 
-        parent::__construct($properties);
-        $this->direction = $direction;
+        $this->nestedProperty = $nestedProperty;
+        $this->direction      = $direction;
+    }
+
+    /**
+     * @return FinalizedPropertyDefinition[]
+     */
+    final  public function getNestedProperties()
+    {
+        return $this->nestedProperty->getNestedProperties();
     }
 
     /**
@@ -57,6 +70,6 @@ class PropertyOrdering extends PropertyCriterion
      */
     public function getOrderCallable()
     {
-        return $this->getter;
+        return $this->nestedProperty->makePropertyGetterCallable();
     }
 }

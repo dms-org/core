@@ -4,7 +4,7 @@ namespace Iddigital\Cms\Core\Model\Criteria\Condition;
 
 use Iddigital\Cms\Core\Exception\InvalidArgumentException;
 use Iddigital\Cms\Core\Exception\TypeMismatchException;
-use Iddigital\Cms\Core\Model\Criteria\PropertyCriterion;
+use Iddigital\Cms\Core\Model\Criteria\NestedProperty;
 use Iddigital\Cms\Core\Model\Object\FinalizedPropertyDefinition;
 use Iddigital\Cms\Core\Util\Debug;
 
@@ -16,9 +16,9 @@ use Iddigital\Cms\Core\Util\Debug;
 class PropertyCondition extends Condition
 {
     /**
-     * @var PropertyCriterion
+     * @var NestedProperty
      */
-    private $criterion;
+    private $nestedProperty;
 
     /**
      * @var string
@@ -33,15 +33,17 @@ class PropertyCondition extends Condition
     /**
      * PropertyCondition constructor.
      *
-     * @param FinalizedPropertyDefinition[] $properties
-     * @param string                        $conditionOperator
-     * @param mixed                         $value
+     * @param NestedProperty $property
+     * @param string         $conditionOperator
+     * @param mixed          $value
      *
      * @throws InvalidArgumentException
      * @throws TypeMismatchException
      */
-    final public function __construct(array $properties, $conditionOperator, $value)
+    final public function __construct(NestedProperty $property, $conditionOperator, $value)
     {
+        $properties = $property->getNestedProperties();
+
         /** @var FinalizedPropertyDefinition $lastProperty */
         $lastProperty = end($properties);
 
@@ -61,7 +63,7 @@ class PropertyCondition extends Condition
 
         ConditionOperator::validate($conditionOperator);
 
-        $this->criterion         = new PropertyCriterion($properties);
+        $this->nestedProperty    = $property;
         $this->conditionOperator = $conditionOperator;
         $this->value             = $value;
 
@@ -85,25 +87,17 @@ class PropertyCondition extends Condition
     }
 
     /**
-     * @return PropertyCriterion
-     */
-    public function getCriterion()
-    {
-        return $this->criterion;
-    }
-
-    /**
      * @return FinalizedPropertyDefinition[]
      */
-    public function getNestedProperties()
+    final public function getNestedProperties()
     {
-        return $this->criterion->getNestedProperties();
+        return $this->nestedProperty->getNestedProperties();
     }
 
     protected function makeFilterCallable()
     {
-        $getter = $this->criterion->makePropertyGetterCallable();
-        $value  = $this->getValue();
+        $getter = $this->nestedProperty->makePropertyGetterCallable();
+        $value  = $this->value;
 
         return ConditionOperator::makeOperatorCallable(
                 $getter,

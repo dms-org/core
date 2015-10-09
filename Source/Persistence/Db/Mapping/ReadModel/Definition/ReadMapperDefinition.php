@@ -8,6 +8,7 @@ use Iddigital\Cms\Core\Model\IReadModel;
 use Iddigital\Cms\Core\Model\Object\FinalizedClassDefinition;
 use Iddigital\Cms\Core\Model\Object\TypedObject;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\FinalizedMapperDefinition;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\IncompleteMapperDefinitionException;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\MapperDefinition;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\IObjectMapper;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\IOrm;
@@ -63,7 +64,7 @@ class ReadMapperDefinition
 
     public function __construct(IOrm $orm)
     {
-        $this->orm = $orm;
+        $this->orm            = $orm;
         $this->readDefinition = new MapperDefinition($orm);
     }
 
@@ -177,6 +178,7 @@ class ReadMapperDefinition
         $table             = $this->definition->getTable();
         $phpToDbConverter  = function () {
         };
+
         foreach ($propertyAliasMap as $property => $alias) {
             if (is_int($property)) {
                 $property = $alias;
@@ -185,11 +187,15 @@ class ReadMapperDefinition
             $this->validatePropertyMapped($property);
 
             if (isset($propertyColumnMap[$property])) {
+                $dbToPhpConverter = isset($toPhpConverters[$property])
+                        ? $toPhpConverters[$property]
+                        : function ($i) {
+                            return $i;
+                        };
+
                 $this->readDefinition
                         ->property($alias)
-                        ->mappedVia($phpToDbConverter, isset($toPhpConverters[$property]) ? $toPhpConverters[$property] : function ($i) {
-                            return $i;
-                        })
+                        ->mappedVia($phpToDbConverter, $dbToPhpConverter)
                         ->to($propertyColumnMap[$property])
                         ->asType($table->findColumn($propertyColumnMap[$property])->getType());
             } else {
@@ -214,6 +220,9 @@ class ReadMapperDefinition
      */
     public function columns(array $columnsPropertyMap)
     {
+        $this->verifyClassDefined(__METHOD__);
+        $this->verifyMapperDefined(__METHOD__);
+
         $table = $this->definition->getTable();
 
         foreach ($columnsPropertyMap as $column => $property) {
@@ -289,7 +298,7 @@ class ReadMapperDefinition
 
     /**
      * @return FinalizedMapperDefinition
-     * @throws \Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\IncompleteMapperDefinitionException
+     * @throws IncompleteMapperDefinitionException
      */
     public function finalize()
     {

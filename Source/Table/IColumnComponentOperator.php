@@ -14,6 +14,8 @@ interface IColumnComponentOperator
     /**
      * Gets the condition operator.
      *
+     * @see ConditionOperator
+     *
      * @return string
      */
     public function getOperator();

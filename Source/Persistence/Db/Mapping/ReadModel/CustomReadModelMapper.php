@@ -2,6 +2,8 @@
 
 namespace Iddigital\Cms\Core\Persistence\Db\Mapping\ReadModel;
 
+use Iddigital\Cms\Core\Exception\InvalidArgumentException;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\IOrm;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\ReadModel\Definition\ReadMapperDefinition;
 
 /**
@@ -17,11 +19,14 @@ class CustomReadModelMapper extends ReadModelMapper
     /**
      * CustomReadModelMapper constructor.
      *
+     * @param IOrm     $orm
      * @param callable $defineCallback
+     *
+     * @throws InvalidArgumentException
      */
-    public function __construct(callable $defineCallback)
+    public function __construct(IOrm $orm, callable $defineCallback)
     {
-        $definition = new ReadMapperDefinition();
+        $definition = new ReadMapperDefinition($orm);
         $defineCallback($definition);
 
         parent::__construct($definition);

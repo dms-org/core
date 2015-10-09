@@ -2,8 +2,6 @@
 
 namespace Iddigital\Cms\Core\Table;
 
-use Iddigital\Cms\Core\Form\IField;
-
 /**
  * The table column component interface.
  *
@@ -19,7 +17,7 @@ interface IColumnComponent
     public function getName();
 
     /**
-     * Gets the label of the column
+     * Gets the label of the column component
      *
      * @return string
      */
