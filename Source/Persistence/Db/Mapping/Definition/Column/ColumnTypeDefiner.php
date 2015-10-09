@@ -2,10 +2,7 @@
 
 namespace Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Column;
 
-use Iddigital\Cms\Core\Exception\InvalidOperationException;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\MapperDefinition;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Locking\DateTimeVersionLockingStrategy;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Locking\IntegerVersionLockingStrategy;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Column;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Type\Blob;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Type\Boolean;
@@ -29,81 +26,57 @@ class ColumnTypeDefiner
     /**
      * @var MapperDefinition
      */
-    private $definition;
+    protected $definition;
 
     /**
      * @var string
      */
-    private $name;
-
-    /**
-     * @var string|null
-     */
-    private $propertyName;
+    protected $name;
 
     /**
      * @var callable
      */
-    private $callback;
-
-    /**
-     * @var callable|null
-     */
-    private $phpToDbConverter;
-
-    /**
-     * @var callable|null
-     */
-    private $dbToPhpConverter;
+    protected $callback;
 
     /**
      * @var bool
      */
-    private $nullable;
+    protected $nullable;
 
     /**
      * @var string|null
      */
-    private $indexName;
+    protected $indexName;
 
     /**
      * @var bool
      */
-    private $isUnique = false;
+    protected $isUnique = false;
 
     /**
      * PropertyColumnDefiner constructor.
      *
      * @param MapperDefinition $definition
      * @param callable         $callback
-     * @param callable         $phpToDbConverter
-     * @param callable         $dbToPhpConverter
-     * @param string|null      $propertyName
      * @param string           $name
      * @param bool             $nullable
      */
     public function __construct(
             MapperDefinition $definition,
             callable $callback,
-            callable $phpToDbConverter = null,
-            callable $dbToPhpConverter = null,
-            $propertyName,
             $name,
             $nullable = false
     ) {
-        $this->definition       = $definition;
-        $this->callback         = $callback;
-        $this->phpToDbConverter = $phpToDbConverter;
-        $this->dbToPhpConverter = $dbToPhpConverter;
-        $this->propertyName     = $propertyName;
-        $this->name             = $name;
-        $this->nullable         = $nullable;
+        $this->definition = $definition;
+        $this->callback   = $callback;
+        $this->name       = $name;
+        $this->nullable   = $nullable;
     }
 
     /**
      * Defines the column type as nullable.
      *
-     * @return ColumnTypeDefiner
+     * @return static
      */
     public function nullable()
     {
@@ -117,7 +90,7 @@ class ColumnTypeDefiner
      *
      * @param string|null $indexName Defaults to {column-name}_index
      *
-     * @return ColumnTypeDefiner
+     * @return static
      */
     public function index($indexName = null)
     {
@@ -131,7 +104,7 @@ class ColumnTypeDefiner
      *
      * @param string|null $indexName Defaults to {column-name}_unique_index
      *
-     * @return ColumnTypeDefiner
+     * @return static
      */
     public function unique($indexName = null)
     {
@@ -141,49 +114,6 @@ class ColumnTypeDefiner
         return $this;
     }
 
-    /**
-     * Defines the column as an INTEGER type that will act as a versioning
-     * column for optimistic locking. This column will be incremented every
-     * time the entity is saved. If the value in the database is out of sync
-     * with the value being persisted an exception will be thrown.
-     *
-     * @see EntityOutOfSyncException
-     *
-     * @return void
-     */
-    public function asVersionInteger()
-    {
-        $this->verifyHasPropertyNameForVersioning(__METHOD__);
-        $this->asInt();
-        $this->definition->optimisticLocking(new IntegerVersionLockingStrategy($this->propertyName, $this->name));
-    }
-
-    /**
-     * Defines the column as an DATETIME type that will act as a versioning
-     * column for optimistic locking. This column will be set the current UTC
-     * datetime when the entity is saved. If the value in the database is out
-     * of sync with the value being persisted an exception will be thrown.
-     *
-     * @see EntityOutOfSyncException
-     *
-     * @return void
-     */
-    public function asVersionDateTime()
-    {
-        $this->verifyHasPropertyNameForVersioning(__METHOD__);
-        $this->asDateTime();
-        $this->definition->optimisticLocking(new DateTimeVersionLockingStrategy($this->propertyName, $this->name));
-    }
-
-    private function verifyHasPropertyNameForVersioning($method)
-    {
-        if (!$this->propertyName) {
-            throw InvalidOperationException::format(
-                    'Invalid call to %s: column can only be used as a versioning column if it is mapped to property',
-                    $method
-            );
-        }
-    }
 
     /**
      * Defines the column as the supplied type
@@ -415,7 +345,7 @@ class ColumnTypeDefiner
             $type = $type->nullable();
         }
 
-        call_user_func($this->callback, new Column($this->name, $type), $this->phpToDbConverter, $this->dbToPhpConverter);
+        $this->invokeCallback($type);
 
         if ($this->indexName) {
             if ($this->isUnique) {
@@ -424,5 +354,15 @@ class ColumnTypeDefiner
                 $this->definition->index($this->indexName)->on($this->name);
             }
         }
+    }
+
+    /**
+     * @param Type $type
+     *
+     * @return void
+     */
+    protected function invokeCallback(Type $type)
+    {
+        call_user_func($this->callback, new Column($this->name, $type));
     }
 }

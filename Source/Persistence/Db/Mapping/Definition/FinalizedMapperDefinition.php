@@ -47,14 +47,19 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
     private $propertyColumnNameMap;
 
     /**
-     * @var string[]
+     * @var callable[]
      */
-    protected $methodColumnNameMap = [];
+    protected $columnSetterMap = [];
 
     /**
      * @var callable[]
      */
-    protected $columnNameCallableMap = [];
+    protected $columnGetterMap = [];
+
+    /**
+     * @var string[]
+     */
+    protected $methodColumnNameMap = [];
 
     /**
      * @var IToOneRelation[]
@@ -98,10 +103,11 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
      * @param FinalizedClassDefinition     $class
      * @param Table                        $table
      * @param string[]                     $propertyColumnNameMap
+     * @param callable[]                   $columnGetterMap
+     * @param callable[]                   $columnSetterMap
      * @param callable[]                   $phpToDbPropertyConverterMap
      * @param callable[]                   $dbToPhpPropertyConverterMap
      * @param string[]                     $methodColumnNameMap
-     * @param callable[]                   $columnNameCallableMap
      * @param IOptimisticLockingStrategy[] $lockingStrategies
      * @param IObjectMapping[]             $subClassMappings
      * @param callable                     $relationsFactory
@@ -112,10 +118,11 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
             FinalizedClassDefinition $class,
             Table $table,
             array $propertyColumnNameMap,
+            array $columnGetterMap,
+            array $columnSetterMap,
             array $phpToDbPropertyConverterMap,
             array $dbToPhpPropertyConverterMap,
             array $methodColumnNameMap,
-            array $columnNameCallableMap,
             array $lockingStrategies,
             array $subClassMappings,
             callable $relationsFactory,
@@ -125,10 +132,11 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
         $this->class                       = $class;
         $this->table                       = $table;
         $this->propertyColumnNameMap       = $propertyColumnNameMap;
+        $this->columnGetterMap             = $columnGetterMap;
+        $this->columnSetterMap             = $columnSetterMap;
         $this->phpToDbPropertyConverterMap = $phpToDbPropertyConverterMap;
         $this->dbToPhpPropertyConverterMap = $dbToPhpPropertyConverterMap;
         $this->methodColumnNameMap         = $methodColumnNameMap;
-        $this->columnNameCallableMap       = $columnNameCallableMap;
         $this->lockingStrategies           = $lockingStrategies;
 
         foreach ($subClassMappings as $mapping) {
@@ -137,7 +145,6 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
 
         $this->relationsFactory   = $relationsFactory;
         $this->foreignKeysFactory = $foreignKeysFactory;
-
     }
 
     /**
@@ -222,14 +229,19 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
             $propertyColumnNameMap[$property] = $prefix . $column;
         }
 
+        $columnGetterMap = [];
+        foreach ($this->columnGetterMap as $column => $getter) {
+            $columnGetterMap[$prefix . $column] = $getter;
+        }
+
+        $columnSetterMap = [];
+        foreach ($this->columnSetterMap as $column => $setter) {
+            $columnSetterMap[$prefix . $column] = $setter;
+        }
+
         $methodColumnNameMap = [];
         foreach ($this->methodColumnNameMap as $property => $column) {
             $methodColumnNameMap[$property] = $prefix . $column;
-        }
-
-        $columnNameCallableMap = [];
-        foreach ($this->columnNameCallableMap as $column => $callable) {
-            $columnNameCallableMap[$prefix . $column] = $callable;
         }
 
         $lockingStrategies = [];
@@ -280,10 +292,11 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
                 $this->class,
                 $table,
                 $propertyColumnNameMap,
+                $columnGetterMap,
+                $columnSetterMap,
                 $this->phpToDbPropertyConverterMap,
                 $this->dbToPhpPropertyConverterMap,
                 $methodColumnNameMap,
-                $columnNameCallableMap,
                 $lockingStrategies,
                 $subClassMappings,
                 $relationsFactory,
@@ -338,19 +351,27 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
     }
 
     /**
-     * @return string[]
+     * @return callable[]
      */
-    public function getMethodColumnMap()
+    public function getColumnGetterMap()
     {
-        return $this->methodColumnNameMap;
+        return $this->columnGetterMap;
     }
 
     /**
      * @return callable[]
      */
-    public function getColumnCallableMap()
+    public function getColumnSetterMap()
     {
-        return $this->columnNameCallableMap;
+        return $this->columnSetterMap;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getMethodColumnMap()
+    {
+        return $this->methodColumnNameMap;
     }
 
     /**

@@ -6,6 +6,7 @@ use Iddigital\Cms\Core\Exception\InvalidArgumentException;
 use Iddigital\Cms\Core\Model\Object\TypedObject;
 use Iddigital\Cms\Core\Model\Type\ObjectType;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Column\ColumnTypeDefiner;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Column\GetterSetterColumnDefiner;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Column\PropertyColumnDefiner;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Embedded\EmbeddedCollectionDefiner;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Embedded\EmbeddedValueObjectDefiner;
@@ -83,14 +84,19 @@ class MapperDefinition extends MapperDefinitionBase
     protected $dbToPhpPropertyConverterMap = [];
 
     /**
-     * @var string[]
+     * @var callable[]
      */
-    protected $methodColumnMap = [];
+    protected $columnSetterMap = [];
 
     /**
      * @var callable[]
      */
-    protected $computedColumnMap = [];
+    protected $columnGetterMap = [];
+
+    /**
+     * @var string[]
+     */
+    protected $methodColumnMap = [];
 
     /**
      * @var callable[]
@@ -116,6 +122,11 @@ class MapperDefinition extends MapperDefinitionBase
      * @var array
      */
     private $mappedProperties = [];
+
+    /**
+     * @var bool
+     */
+    private $verifyAllPropertiesMapped = true;
 
     /**
      * @var IOptimisticLockingStrategy[]
@@ -199,7 +210,7 @@ class MapperDefinition extends MapperDefinitionBase
      * Defines a column on the mapped table.
      *
      * This column is not mapped to properties in this mapper
-     * but can be used to implement relations as foreign keys.
+     * but can be used to implement relations via foreign keys.
      *
      * @param string $columnName
      *
@@ -207,9 +218,13 @@ class MapperDefinition extends MapperDefinitionBase
      */
     public function column($columnName)
     {
-        return new ColumnTypeDefiner($this, function (Column $column) {
-            $this->addColumn($column);
-        }, null, null, null, $columnName);
+        return new ColumnTypeDefiner(
+                $this,
+                function (Column $column) {
+                    $this->addColumn($column);
+                },
+                $columnName
+        );
     }
 
     /**
@@ -265,6 +280,49 @@ class MapperDefinition extends MapperDefinitionBase
     }
 
     /**
+     * Defines the mapper definition to ignore all the
+     * unmapped properties instead of throwing an exception.
+     *
+     * @return void
+     */
+    public function ignoreUnmappedProperties()
+    {
+        $this->verifyAllPropertiesMapped = false;
+    }
+
+    /**
+     * Defines a mapping between a getter and setter callback and a column.
+     *
+     * Example:
+     * <code>
+     * ->accessor(
+     *      function (SomeEntity $entity) {
+     *          return $entity->getData();
+     *      },
+     *      function (SomeEntity $entity, $data) {
+     *          $entity->setData($data);
+     *      }
+     * )
+     * ->to('column_name')->asText();
+     * </code>
+     *
+     * @param callable $getter
+     * @param callable $setter
+     *
+     * @return GetterSetterColumnDefiner
+     */
+    public function accessor(callable $getter, callable $setter)
+    {
+        return new GetterSetterColumnDefiner($this, function (Column $column) use ($getter, $setter) {
+            $this->columnGetterMap[$column->getName()] = $getter;
+            $this->columnSetterMap[$column->getName()] = $setter;
+            $this->addColumn($column);
+
+            $this->verifyAllPropertiesMapped = false;
+        });
+    }
+
+    /**
      * Defines a mapping between a method call to a column
      *
      * @param string $methodName
@@ -281,16 +339,24 @@ class MapperDefinition extends MapperDefinitionBase
 
     /**
      * Defines a mapping between the results of a computed property
-     * to a column
+     * to a column.
      *
-     * @param callable $computedProperty
+     * Example:
+     * <code>
+     * ->computed(function ($entity) {
+     *      return $entity->getData();
+     * })
+     * ->to('column_name')->asInt();
+     * </code>
      *
-     * @return PropertyColumnDefiner
+     * @param callable $computedPropertyCallback
+     *
+     * @return GetterSetterColumnDefiner
      */
-    public function computed(callable $computedProperty)
+    public function computed(callable $computedPropertyCallback)
     {
-        return new PropertyColumnDefiner($this, null, function (Column $column) use ($computedProperty) {
-            $this->computedColumnMap[$column->getName()] = $computedProperty;
+        return new GetterSetterColumnDefiner($this, function (Column $column) use ($computedPropertyCallback) {
+            $this->columnGetterMap[$column->getName()] = $computedPropertyCallback;
             $this->addColumn($column);
         });
     }
@@ -555,12 +621,13 @@ class MapperDefinition extends MapperDefinitionBase
         $tableName = $tableName ?: $this->tableName;
 
         $allMappedProperties = $this->getAllMappedProperties();
+
         foreach ($this->class->getProperties() as $property) {
             $propertyName = $property->getName();
-            if (!isset($allMappedProperties[$propertyName])) {
 
+            if ($this->verifyAllPropertiesMapped && !isset($allMappedProperties[$propertyName])) {
                 throw IncompleteMapperDefinitionException::format(
-                        'Invalid mapper definition for %s: unmapped property \'%s\' of type %s',
+                        'Invalid mapper definition for %s: unmapped property \'%s\' of type %s, call $map->ignoreUnmappedProperties() to ignore this warning',
                         $this->class->getClassName(),
                         $propertyName,
                         $property->getType()->asTypeString()
@@ -599,10 +666,11 @@ class MapperDefinition extends MapperDefinitionBase
                 $this->class,
                 $table,
                 $this->propertyColumnMap,
+                $this->columnGetterMap,
+                $this->columnSetterMap,
                 $this->phpToDbPropertyConverterMap,
                 $this->dbToPhpPropertyConverterMap,
                 $this->methodColumnMap,
-                $this->computedColumnMap,
                 $this->lockingStrategies,
                 $subClassMappings,
                 $relationsFactory,

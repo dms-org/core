@@ -72,11 +72,11 @@ class PropertyColumnDefiner
      *
      * @param string $columnName
      *
-     * @return ColumnTypeDefiner
+     * @return ColumnTypeDefinerWithVersioning
      */
     public function to($columnName)
     {
-        return new ColumnTypeDefiner(
+        return new ColumnTypeDefinerWithVersioning(
                 $this->definition,
                 $this->callback,
                 $this->phpToDbConverter,

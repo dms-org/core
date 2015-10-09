@@ -138,7 +138,7 @@ abstract class ObjectMapping implements IObjectMapping
             $columns[] = $column;
         }
 
-        foreach ($this->definition->getColumnCallableMap() as $column => $callable) {
+        foreach ($this->definition->getColumnSetterMap() as $column => $callable) {
             $columns[] = $column;
         }
 
@@ -372,9 +372,16 @@ abstract class ObjectMapping implements IObjectMapping
     public function loadAll(LoadingContext $context, array $objects, array $rows)
     {
         $objectProperties = $this->loadAllRaw($context, $rows);
+        $columnSetterMap  = $this->definition->getColumnSetterMap();
 
         foreach ($objects as $key => $object) {
             $object->hydrate($objectProperties[$key]);
+        }
+
+        foreach ($columnSetterMap as $column => $setterCallback) {
+            foreach ($objects as $key => $object) {
+                $setterCallback($object, $rows[$key]->getColumn($column));
+            }
         }
     }
 
@@ -496,7 +503,7 @@ abstract class ObjectMapping implements IObjectMapping
     ) {
         $objectProperties = $this->persistObjectDataToRows($objects, $rows);
 
-        $this->performLockingOperators($context, $objects, $rows);
+        $this->performLockingOperations($context, $objects, $rows);
 
         $this->performPrePersist($context, $objects, $rows, $objectProperties);
 
@@ -505,7 +512,7 @@ abstract class ObjectMapping implements IObjectMapping
         $this->performPostPersist($context, $objects, $rows, $objectProperties);
     }
 
-    protected function performLockingOperators(PersistenceContext $context, array $objects, array $rows)
+    protected function performLockingOperations(PersistenceContext $context, array $objects, array $rows)
     {
         foreach ($this->definition->getLockingStrategies() as $lockingStrategy) {
             $lockingStrategy->applyLockingDataBeforeCommit($context, $objects, $rows);
@@ -582,9 +589,9 @@ abstract class ObjectMapping implements IObjectMapping
             }
         }
 
-        foreach ($definition->getColumnCallableMap() as $column => $callable) {
+        foreach ($definition->getColumnGetterMap() as $column => $getterCallback) {
             foreach ($objects as $key => $object) {
-                $rows[$key]->setColumn($column, $callable($object));
+                $rows[$key]->setColumn($column, $getterCallback($object));
             }
         }
 
