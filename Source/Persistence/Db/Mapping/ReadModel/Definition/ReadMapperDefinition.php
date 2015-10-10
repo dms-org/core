@@ -10,12 +10,12 @@ use Iddigital\Cms\Core\Model\Object\TypedObject;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\FinalizedMapperDefinition;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\IncompleteMapperDefinitionException;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\MapperDefinition;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\IEntityMapper;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\IObjectMapper;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\IOrm;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\ReadModel\EmbeddedMapperProxy;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\ReadModel\GenericReadModelMapper;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Embedded\EmbeddedObjectRelation;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\EntityRelation;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\IRelation;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\IToManyRelation;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\IToOneRelation;
@@ -118,7 +118,10 @@ class ReadMapperDefinition
         $this->mapper     = $mapper;
         $this->definition = $mapper->getDefinition();
         $this->relations  = $this->definition->getRelations();
-        $this->readDefinition->addColumn($this->definition->getTable()->getPrimaryKeyColumn());
+
+        if ($mapper instanceof IEntityMapper) {
+            $this->readDefinition->addColumn($mapper->getPrimaryTable()->getPrimaryKeyColumn());
+        }
 
         $this->validProperties = $this->definition->getPropertyColumnMap() + $this->definition->getRelations();
     }
@@ -163,7 +166,7 @@ class ReadMapperDefinition
      * $map->properties(['foo']);
      * </code>
      *
-     * @param string[] $propertyAliasMap
+     * @param string[]|callable[] $propertyAliasMap
      *
      * @return void
      */
@@ -176,7 +179,7 @@ class ReadMapperDefinition
         $relations         = $this->definition->getRelations();
         $toPhpConverters   = $this->definition->getDbToPhpPropertyConverterMap();
         $table             = $this->definition->getTable();
-        $phpToDbConverter  = function () {
+        $emptyFunction     = function () {
         };
 
         foreach ($propertyAliasMap as $property => $alias) {
@@ -193,13 +196,22 @@ class ReadMapperDefinition
                             return $i;
                         };
 
-                $this->readDefinition
-                        ->property($alias)
-                        ->mappedVia($phpToDbConverter, $dbToPhpConverter)
+
+                if (is_string($alias)) {
+                    $columnDefiner = $this->readDefinition
+                            ->property($alias)
+                            ->mappedVia($emptyFunction, $dbToPhpConverter);
+                } else {
+                    $columnDefiner = $this->readDefinition
+                            ->accessor($emptyFunction, $alias);
+                }
+
+                $columnDefiner
                         ->to($propertyColumnMap[$property])
                         ->asType($table->findColumn($propertyColumnMap[$property])->getType());
             } else {
                 $relation = $relations[$property];
+                // TODO: Relation accessors
                 $this->readDefinition
                         ->relation($alias)
                         ->asCustom($relation);
@@ -253,10 +265,10 @@ class ReadMapperDefinition
         $this->verifyClassDefined(__METHOD__);
         $this->verifyMapperDefined(__METHOD__);
 
-        if (!isset($this->relations[$propertyName]) || !($this->relations[$propertyName] instanceof EntityRelation)) {
+        if (!isset($this->relations[$propertyName])) {
             throw InvalidArgumentException::format(
-                    'Invalid property to load from parent: property must be mapped to a relation, \'%s\' given',
-                    $propertyName
+                    'Invalid property to load from parent %s: property must be mapped to a relation, \'%s\' given',
+                    $this->mapper->getObjectType(), $propertyName
             );
         }
 

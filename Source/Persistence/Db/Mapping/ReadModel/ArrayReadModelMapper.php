@@ -17,8 +17,6 @@ use Iddigital\Cms\Core\Persistence\Db\Mapping\ReadModel\Definition\ReadMapperDef
  */
 class ArrayReadModelMapper extends ReadModelMapper
 {
-
-
     /**
      * ArrayReadModelMapper constructor.
      *
@@ -62,10 +60,16 @@ class ArrayReadModelMapper extends ReadModelMapper
         $relations         = $fromDefinition->getRelations();
 
         foreach ($nestedPropertyTree as $propertyName => $indexes) {
-            if (isset($propertyColumnMap[$propertyName])) {
+            if (is_int($propertyName)) {
+                $definition->entityTo(function (ArrayReadModel $readModel, $value) use ($indexes) {
+                    $readModel->data[$indexes] = $value;
+                });
+            } elseif (isset($propertyColumnMap[$propertyName])) {
                 foreach ($indexes as $nestedPropertyName => $index) {
                     if (is_int($nestedPropertyName)) {
-                        $definition->properties([$propertyName => $index]);
+                        $definition->properties([$propertyName => function (ArrayReadModel $readModel, $value) use ($index) {
+                            $readModel->data[$index] = $value;
+                        }]);
                     } else {
                         throw InvalidArgumentException::format(
                                 'Invalid property for %s: property cannot have nested properties on property mapped to a column',
@@ -74,21 +78,31 @@ class ArrayReadModelMapper extends ReadModelMapper
                     }
                 }
             } elseif (isset($relations[$propertyName])) {
+                $nestedPropertiesInRelation = [];
+
                 foreach ($indexes as $nestedPropertyName => $index) {
                     if (is_int($nestedPropertyName)) {
-                        $definition->properties([$propertyName => $index]);
+                        $definition->properties([$propertyName => function (ArrayReadModel $readModel, $value) use ($index) {
+                            $readModel->data[$index] = $value;
+                        }]);
                     } else {
-                        $definition
-                                ->relation($propertyName)
-                                ->to($propertyName)
-                                ->load(function (ReadMapperDefinition $definition) use ($index) {
-                                    $this->loadDefinitionFromNestedProperties($definition, $index);
-                                });
+                        $nestedPropertiesInRelation[$nestedPropertyName] = $index;
                     }
+                }
+
+                if ($nestedPropertiesInRelation) {
+                    $definition
+                            ->relation($propertyName)
+                            ->to(function (ArrayReadModel $readModel, ArrayReadModel $relation) use ($indexes) {
+                                $readModel->data[$indexes] = $relation;
+                            })
+                            ->load(function (ReadMapperDefinition $definition) use ($nestedPropertiesInRelation) {
+                                $this->loadDefinitionFromNestedProperties($definition, $nestedPropertiesInRelation);
+                            });
                 }
             } else {
                 throw InvalidArgumentException::format(
-                        'Invalid property for %s: property %s is not a mapped property',
+                        'Invalid property for %s: property \'%s\' is not a mapped property',
                         $fromDefinition->getClassName(), $propertyName
                 );
             }

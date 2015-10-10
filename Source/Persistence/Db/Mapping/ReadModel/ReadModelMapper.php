@@ -11,6 +11,7 @@ use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\FinalizedMapperDefiniti
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Hierarchy\ParentObjectMapping;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\IEmbeddedObjectMapper;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\IEntityMapper;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\IObjectMapper;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\ObjectMapper;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\ReadModel\Definition\ReadMapperDefinition;
 use Iddigital\Cms\Core\Persistence\Db\PersistenceContext;
@@ -35,7 +36,7 @@ use Iddigital\Cms\Core\Persistence\Db\Schema\Table;
 class ReadModelMapper extends ObjectMapper implements IEntityMapper, IEmbeddedObjectMapper
 {
     /**
-     * @var IEntityMapper
+     * @var IObjectMapper
      */
     protected $parentMapper;
 
@@ -46,16 +47,7 @@ class ReadModelMapper extends ObjectMapper implements IEntityMapper, IEmbeddedOb
     {
         parent::__construct($definition->finalize());
 
-        $parentMapper = $definition->getParentMapper();
-
-        if (!($parentMapper instanceof IEntityMapper)) {
-            throw InvalidArgumentException::format(
-                    'Invalid definition given to read model mapper: parent mapper must be instance of %s, %s given',
-                    IEntityMapper::class, get_class($this->parentMapper)
-            );
-        }
-
-        $this->parentMapper = $parentMapper;
+        $this->parentMapper = $definition->getParentMapper();
     }
 
     /**
@@ -86,7 +78,11 @@ class ReadModelMapper extends ObjectMapper implements IEntityMapper, IEmbeddedOb
      */
     public function getRootEntityMapper()
     {
-        return $this->parentMapper;
+        if ($this->parentMapper instanceof IEmbeddedObjectMapper) {
+            return $this->parentMapper->getRootEntityMapper();
+        } else {
+            return $this->parentMapper;
+        }
     }
 
     /**
@@ -96,7 +92,7 @@ class ReadModelMapper extends ObjectMapper implements IEntityMapper, IEmbeddedOb
      */
     public function getPrimaryTable()
     {
-        return $this->parentMapper->getPrimaryTable();
+        return $this->getRootEntityMapper()->getPrimaryTable();
     }
 
     /**
@@ -104,7 +100,7 @@ class ReadModelMapper extends ObjectMapper implements IEntityMapper, IEmbeddedOb
      */
     public function getPrimaryTableName()
     {
-        return $this->parentMapper->getPrimaryTableName();
+        return $this->getRootEntityMapper()->getPrimaryTableName();
     }
 
     /**

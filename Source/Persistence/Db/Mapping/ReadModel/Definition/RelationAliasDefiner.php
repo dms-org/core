@@ -32,7 +32,7 @@ class RelationAliasDefiner
     /**
      * Defines the property name on the read model to map the results to.
      *
-     * @param string $propertyName
+     * @param string|callable $propertyName
      *
      * @return RelationLoadingDefiner
      */

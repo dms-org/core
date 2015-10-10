@@ -8,6 +8,8 @@ use Iddigital\Cms\Core\Persistence\Db\LoadingContext;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\IEmbeddedObjectMapper;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\ParentChildItem;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\ParentChildMap;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\ReadModel\ReadModelMapper;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\ReadModel\Relation\RelationReadModelReference;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\IEmbeddedToOneRelation;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Reference\IToOneRelationReference;
 use Iddigital\Cms\Core\Persistence\Db\PersistenceContext;
@@ -63,8 +65,14 @@ class EmbeddedObjectRelation extends EmbeddedRelation implements IEmbeddedToOneR
      */
     public function withReference(IToOneRelationReference $reference)
     {
-        // TODO: determine if necessary
-        throw NotImplementedException::method(__METHOD__);
+        if ($reference instanceof RelationReadModelReference) {
+            /** @var ReadModelMapper $mapper */
+            $mapper = $reference->getMapper();
+
+            return new self($mapper, $this->objectIssetColumnName);
+        } else {
+            throw NotImplementedException::method(__METHOD__);
+        }
     }
 
     /**

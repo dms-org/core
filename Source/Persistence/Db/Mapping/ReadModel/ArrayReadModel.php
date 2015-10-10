@@ -12,6 +12,10 @@ use Iddigital\Cms\Core\Model\Object\ReadModel;
  */
 class ArrayReadModel extends ReadModel
 {
+    /**
+     * @var array
+     */
+    public $data = [];
 
     /**
      * Defines the structure of this class.
@@ -20,6 +24,6 @@ class ArrayReadModel extends ReadModel
      */
     protected function define(ClassDefinition $class)
     {
-
+        $class->property($this->data)->ignore();
     }
 }

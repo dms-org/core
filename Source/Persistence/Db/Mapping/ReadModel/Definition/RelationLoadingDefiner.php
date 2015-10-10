@@ -6,6 +6,7 @@ use Iddigital\Cms\Core\Persistence\Db\Mapping\IEntityMapper;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\ReadModel\ReadModelMapper;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\ReadModel\Relation\RelationReadModelReference;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\EntityRelation;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\IRelation;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\IToOneRelation;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Reference\ToManyRelationIdentityReference;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Reference\ToManyRelationObjectReference;
@@ -24,7 +25,7 @@ class RelationLoadingDefiner
     private $definition;
 
     /**
-     * @var string
+     * @var string|callable
      */
     private $propertyName;
 
@@ -37,7 +38,7 @@ class RelationLoadingDefiner
      * RelationLoadingDefiner constructor.
      *
      * @param ReadMapperDefinition $definition
-     * @param string               $propertyName
+     * @param string|callable      $propertyName
      * @param callable             $callback
      */
     public function __construct(ReadMapperDefinition $definition, $propertyName, callable $callback)
@@ -98,7 +99,7 @@ class RelationLoadingDefiner
     {
         $readModelDefinition($this->definition);
 
-        call_user_func($this->callback, $this->propertyName, function (EntityRelation $relation) {
+        call_user_func($this->callback, $this->propertyName, function (IRelation $relation) {
             return new RelationReadModelReference(new ReadModelMapper($this->definition));
         });
     }
