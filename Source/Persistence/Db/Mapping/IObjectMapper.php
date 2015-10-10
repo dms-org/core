@@ -82,19 +82,6 @@ interface IObjectMapper
     public function loadAll(LoadingContext $context, array $rows);
 
     /**
-     * Loads an array of arrays from the supplied rows.
-     *
-     * NOTE: indexes are maintained.
-     *
-     * @param LoadingContext $context
-     * @param Row[]          $rows
-     *
-     * @return array[]
-     * @throws InvalidArgumentException
-     */
-    public function loadAllAsArray(LoadingContext $context, array $rows);
-
-    /**
      * @param PersistenceContext $context
      * @param Delete             $deleteQuery
      *

@@ -57,7 +57,7 @@ class ArrayReadModelMapper extends ReadModelMapper
         $fromDefinition = $definition->getParentMapper()->getDefinition();
 
         $propertyColumnMap = $fromDefinition->getPropertyColumnMap();
-        $relations         = $fromDefinition->getRelations();
+        $relations         = $fromDefinition->getPropertyRelationMap();
 
         foreach ($nestedPropertyTree as $propertyName => $indexes) {
             if (is_int($propertyName)) {

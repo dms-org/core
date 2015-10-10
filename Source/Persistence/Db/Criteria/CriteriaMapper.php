@@ -85,7 +85,7 @@ class CriteriaMapper
         $this->primaryTable                = $this->mapper->getDefinition()->getTable();
         $this->propertyColumnMap           = $this->definition->getPropertyColumnMap();
         $this->phpToDbPropertyConverterMap = $this->definition->getPhpToDbPropertyConverterMap();
-        $this->relations                   = $this->definition->getRelations();
+        $this->relations                   = $this->definition->getPropertyRelationMap();
 
         foreach ($this->relations as $property => $relation) {
             if ($relation instanceof EmbeddedObjectRelation) {

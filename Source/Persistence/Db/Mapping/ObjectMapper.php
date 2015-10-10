@@ -143,16 +143,16 @@ abstract class ObjectMapper implements IObjectMapper
             throw new InvalidOperationException('Mapper has not been defined yet');
         }
 
-        $relations = $this->getDefinition()->getRelations();
+        $relationMappings = $this->getDefinition()->getRelationMappings();
 
         foreach ($this->getDefinition()->getSubClassMappings() as $mapping) {
-            foreach ($mapping->getDefinition()->getRelations() as $relation) {
-                $relations[] = $relation;
+            foreach ($mapping->getDefinition()->getRelationMappings() as $relationMapping) {
+                $relationMappings[] = $relationMapping;
             }
         }
 
-        foreach ($relations as $relation) {
-            $mapper = $relation->getMapper();
+        foreach ($relationMappings as $relationMapping) {
+            $mapper = $relationMapping->getRelation()->getMapper();
 
             $mapperId = $mapper->getMapperHash();
             if (isset($mappers[$mapperId])) {
@@ -196,16 +196,6 @@ abstract class ObjectMapper implements IObjectMapper
         }
 
         return $loadedObjects + $newObjects;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    final public function loadAllAsArray(LoadingContext $context, array $rows)
-    {
-        InvalidArgumentException::verifyAllInstanceOf(__METHOD__, 'rows', $rows, Row::class);
-
-        return $this->mapping->loadAllRaw($context, $rows);
     }
 
     /**

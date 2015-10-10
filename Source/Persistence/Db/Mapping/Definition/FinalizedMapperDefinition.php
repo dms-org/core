@@ -2,7 +2,12 @@
 
 namespace Iddigital\Cms\Core\Persistence\Db\Mapping\Definition;
 
+use Iddigital\Cms\Core\Exception\InvalidArgumentException;
 use Iddigital\Cms\Core\Model\Object\FinalizedClassDefinition;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Relation\Accessor\PropertyAccessor;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Relation\RelationMapping;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Relation\ToManyRelationMapping;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Relation\ToOneRelationMapping;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Hierarchy\IObjectMapping;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\IObjectMapper;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\IOrm;
@@ -13,6 +18,7 @@ use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\IToManyRelation;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\IToOneRelation;
 use Iddigital\Cms\Core\Persistence\Db\Schema\ForeignKey;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Table;
+use Iddigital\Cms\Core\Util\Debug;
 
 /**
  * The finalized mapper definition class.
@@ -62,12 +68,12 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
     protected $methodColumnNameMap = [];
 
     /**
-     * @var IToOneRelation[]
+     * @var ToOneRelationMapping[]
      */
     protected $toOneRelations = [];
 
     /**
-     * @var IToManyRelation[]
+     * @var ToManyRelationMapping[]
      */
     protected $toManyRelations = [];
 
@@ -89,7 +95,7 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
     /**
      * @var callable
      */
-    private $relationsFactory;
+    private $relationMappingsFactory;
 
     /**
      * @var callable
@@ -110,7 +116,7 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
      * @param string[]                     $methodColumnNameMap
      * @param IOptimisticLockingStrategy[] $lockingStrategies
      * @param IObjectMapping[]             $subClassMappings
-     * @param callable                     $relationsFactory
+     * @param callable                     $relationMappingsFactory
      * @param callable                     $foreignKeysFactory
      */
     public function __construct(
@@ -125,7 +131,7 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
             array $methodColumnNameMap,
             array $lockingStrategies,
             array $subClassMappings,
-            callable $relationsFactory,
+            callable $relationMappingsFactory,
             callable $foreignKeysFactory
     ) {
         $this->orm                         = $orm;
@@ -143,14 +149,14 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
             $this->subClassMappings[$mapping->getObjectType()] = $mapping;
         }
 
-        $this->relationsFactory   = $relationsFactory;
+        $this->relationMappingsFactory   = $relationMappingsFactory;
         $this->foreignKeysFactory = $foreignKeysFactory;
     }
 
     /**
      * @param IObjectMapper $parentMapper
      *
-     * @return void
+     * @throws InvalidArgumentException
      */
     public function initializeRelations(IObjectMapper $parentMapper)
     {
@@ -158,13 +164,15 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
             return;
         }
 
-        $relations = call_user_func($this->relationsFactory, $this->table, $parentMapper);
+        $relationMappings = call_user_func($this->relationMappingsFactory, $this->table, $parentMapper);
 
-        foreach ($relations as $property => $relation) {
-            if ($relation instanceof IToOneRelation) {
-                $this->toOneRelations[$property] = $relation;
-            } elseif ($relation instanceof IToManyRelation) {
-                $this->toManyRelations[$property] = $relation;
+        foreach ($relationMappings as $relationMapping) {
+            if ($relationMapping instanceof ToOneRelationMapping) {
+                $this->toOneRelations[] = $relationMapping;
+            } elseif ($relationMapping instanceof ToManyRelationMapping) {
+                $this->toManyRelations[] = $relationMapping;
+            } else {
+                throw InvalidArgumentException::format('Unknown relation mapping type: %s', Debug::getType($relationMapping));
             }
         }
 
@@ -250,26 +258,27 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
         }
 
         if ($this->hasInitializedRelations) {
-            $relationsFactory = function () {
-                return $this->getRelations();
+            $relationMappingsFactory = function () {
+                return $this->getRelationMappings();
             };
 
             $foreignKeyFactory = function () {
                 return [];
             };
         } else {
-            $relationsFactory  = $this->relationsFactory;
+            $relationMappingsFactory  = $this->relationMappingsFactory;
             $foreignKeyFactory = $this->foreignKeysFactory;
         }
 
-        $relationsFactory = function (Table $parentTable, IObjectMapper $parentMapper) use ($relationsFactory, $prefix) {
-            $relations = [];
-            /** @var IRelation $relation */
-            foreach ($relationsFactory($parentTable, $parentMapper) as $property => $relation) {
-                $relations[$property] = $relation->withEmbeddedColumnsPrefixedBy($prefix);
+        $relationMappingsFactory = function (Table $parentTable, IObjectMapper $parentMapper) use ($relationMappingsFactory, $prefix) {
+            $mappings = [];
+
+            /** @var RelationMapping $mapping */
+            foreach ($relationMappingsFactory($parentTable, $parentMapper) as $mapping) {
+                $mappings[] = $mapping->withEmbeddedColumnsPrefixedBy($prefix);
             }
 
-            return $relations;
+            return $mappings;
         };
 
         $foreignKeyFactory = function (Table $parentTable) use ($foreignKeyFactory, $prefix) {
@@ -299,7 +308,7 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
                 $methodColumnNameMap,
                 $lockingStrategies,
                 $subClassMappings,
-                $relationsFactory,
+                $relationMappingsFactory,
                 $foreignKeyFactory
         );
 
@@ -375,25 +384,45 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
     }
 
     /**
+     * Gets the relations mapped to properties.
+     *
      * @return IRelation[]
      */
-    public function getRelations()
+    public function getPropertyRelationMap()
     {
-        return $this->toOneRelations + $this->toManyRelations;
+        $relations = [];
+
+        foreach ($this->getRelationMappings() as $mapping) {
+            $accessor = $mapping->getAccessor();
+
+            if ($accessor instanceof PropertyAccessor) {
+                $relations[$accessor->getPropertyName()] = $mapping->getRelation();
+            }
+        }
+
+        return $relations;
     }
 
     /**
-     * @return IToOneRelation[]
+     * @return RelationMapping[]
      */
-    public function getToOneRelations()
+    public function getRelationMappings()
+    {
+        return array_merge($this->toOneRelations, $this->toManyRelations);
+    }
+
+    /**
+     * @return ToOneRelationMapping[]
+     */
+    public function getToOneRelationMappings()
     {
         return $this->toOneRelations;
     }
 
     /**
-     * @return IToManyRelation[]
+     * @return ToManyRelationMapping[]
      */
-    public function getToManyRelations()
+    public function getToManyRelationMappings()
     {
         return $this->toManyRelations;
     }
@@ -403,29 +432,39 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
      *
      * @return IRelation|null
      */
-    public function getRelation($property)
+    public function getRelationMappedToProperty($property)
     {
-        $relations = $this->getRelations();
+        $relations = $this->getRelationMappings();
 
-        return isset($relations[$property]) ? $relations[$property] : null;
+        foreach ($relations as $mapping) {
+            $accessor = $mapping->getAccessor();
+
+            if ($accessor instanceof PropertyAccessor) {
+                if ($accessor->getPropertyName() === $property) {
+                    return $mapping->getRelation();
+                }
+            }
+        }
+
+        return null;
     }
 
     /**
      * @param string $dependencyMode
      *
-     * @return IRelation[]
+     * @return RelationMapping[]
      */
-    public function getRelationsWith($dependencyMode)
+    public function getRelationMappingsWith($dependencyMode)
     {
-        $relations = [];
+        $mappings = [];
 
-        foreach ($this->getRelations() as $property => $relation) {
-            if ($relation->getDependencyMode() === $dependencyMode) {
-                $relations[$property] = $relation;
+        foreach ($this->getRelationMappings() as $mapping) {
+            if ($mapping->getRelation()->getDependencyMode() === $dependencyMode) {
+                $mappings[] = $mapping;
             }
         }
 
-        return $relations;
+        return $mappings;
     }
 
     /**

@@ -6,10 +6,11 @@ use Iddigital\Cms\Core\Model\ITypedObject;
 use Iddigital\Cms\Core\Persistence\Db\Exception\InvalidRowException;
 use Iddigital\Cms\Core\Persistence\Db\LoadingContext;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\FinalizedMapperDefinition;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Relation\IAccessor;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Relation\RelationMapping;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\IObjectMapper;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\ParentChildMap;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\ParentChildrenMap;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Embedded\EmbeddedObjectRelation;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\EntityRelation;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\IEmbeddedToOneRelation;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\IRelation;
@@ -142,8 +143,8 @@ abstract class ObjectMapping implements IObjectMapping
             $columns[] = $column;
         }
 
-        foreach ($this->definition->getRelations() as $relation) {
-            foreach ($relation->getParentColumnsToLoad() as $column) {
+        foreach ($this->definition->getRelationMappings() as $relationMapping) {
+            foreach ($relationMapping->getRelation()->getParentColumnsToLoad() as $column) {
                 $columns[] = $column;
             }
         }
@@ -181,8 +182,8 @@ abstract class ObjectMapping implements IObjectMapping
      */
     final protected function hasEntityRelations()
     {
-        foreach ($this->definition->getRelations() as $relation) {
-            if ($relation instanceof EntityRelation) {
+        foreach ($this->definition->getRelationMappings() as $relation) {
+            if ($relation->getRelation() instanceof EntityRelation) {
                 return true;
             }
         }
@@ -371,27 +372,21 @@ abstract class ObjectMapping implements IObjectMapping
      */
     public function loadAll(LoadingContext $context, array $objects, array $rows)
     {
-        $objectProperties = $this->loadAllRaw($context, $rows);
-        $columnSetterMap  = $this->definition->getColumnSetterMap();
+        $objectProperties = $this->loadAllProperties($context, $rows, $objects);
 
         foreach ($objects as $key => $object) {
             $object->hydrate($objectProperties[$key]);
-        }
-
-        foreach ($columnSetterMap as $column => $setterCallback) {
-            foreach ($objects as $key => $object) {
-                $setterCallback($object, $rows[$key]->getColumn($column));
-            }
         }
     }
 
     /**
      * @param LoadingContext $context
      * @param Row[]          $rows
+     * @param ITypedObject[] $objects
      *
      * @return array[]
      */
-    public function loadAllRaw(LoadingContext $context, array $rows)
+    public function loadAllProperties(LoadingContext $context, array $rows, array $objects)
     {
         /** @var Row[] $rows */
         foreach ($rows as $key => $row) {
@@ -402,6 +397,7 @@ abstract class ObjectMapping implements IObjectMapping
 
         $propertyMap         = $definition->getPropertyColumnMap();
         $dbToPhpConverterMap = $definition->getDbToPhpPropertyConverterMap();
+        $columnSetterMap     = $this->definition->getColumnSetterMap();
 
         $objectProperties = [];
         $columnDataArray  = [];
@@ -426,7 +422,13 @@ abstract class ObjectMapping implements IObjectMapping
             unset($properties);
         }
 
-        $this->loadRelations($context, $rows, $objectProperties);
+        foreach ($columnSetterMap as $column => $setterCallback) {
+            foreach ($objects as $key => $object) {
+                $setterCallback($object, $rows[$key]->getColumn($column));
+            }
+        }
+
+        $this->loadRelations($context, $rows, $objects, $objectProperties);
 
         /** @var IObjectMapping $mapping */
         foreach ($this->subClassMappings as $subClass => $mapping) {
@@ -436,7 +438,7 @@ abstract class ObjectMapping implements IObjectMapping
                 continue;
             }
 
-            foreach ($mapping->loadAllRaw($context, $rowsForSubClass) as $key => $subClassProperties) {
+            foreach ($mapping->loadAllProperties($context, $rowsForSubClass, $objects) as $key => $subClassProperties) {
                 $objectProperties[$key] += $subClassProperties;
             }
         }
@@ -447,6 +449,7 @@ abstract class ObjectMapping implements IObjectMapping
     /**
      * @param LoadingContext $context
      * @param Row[]          $rows
+     * @param ITypedObject[] $objects
      * @param array[]        $objectProperties
      *
      * @return void
@@ -454,9 +457,13 @@ abstract class ObjectMapping implements IObjectMapping
     private function loadRelations(
             LoadingContext $context,
             array $rows,
+            array $objects,
             array &$objectProperties
     ) {
-        foreach ($this->definition->getToOneRelations() as $property => $relation) {
+        foreach ($this->definition->getToOneRelationMappings() as $relationMapping) {
+            $relation = $relationMapping->getRelation();
+            $accessor = $relationMapping->getAccessor();
+
             $map       = new ParentChildMap($this->primaryKeyColumnName);
             $rowKeyMap = new \SplObjectStorage();
 
@@ -468,11 +475,15 @@ abstract class ObjectMapping implements IObjectMapping
             $relation->load($context, $map);
 
             foreach ($map->getItems() as $item) {
-                $objectProperties[$rowKeyMap[$item->getParent()]][$property] = $item->getChild();
+                $objectKey = $rowKeyMap[$item->getParent()];
+                $accessor->set($objects[$objectKey], $objectProperties[$objectKey], $item->getChild());
             }
         }
 
-        foreach ($this->definition->getToManyRelations() as $property => $relation) {
+        foreach ($this->definition->getToManyRelationMappings() as $relationMapping) {
+            $relation = $relationMapping->getRelation();
+            $accessor = $relationMapping->getAccessor();
+
             $map       = new ParentChildrenMap($this->primaryKeyColumnName);
             $rowKeyMap = new \SplObjectStorage();
 
@@ -484,7 +495,9 @@ abstract class ObjectMapping implements IObjectMapping
             $relation->load($context, $map);
 
             foreach ($map->getItems() as $item) {
-                $objectProperties[$rowKeyMap[$item->getParent()]][$property] = $relation->buildCollection($item->getChildren());
+                $objectKey = $rowKeyMap[$item->getParent()];
+
+                $accessor->set($objects[$objectKey], $objectProperties[$objectKey], $relation->buildCollection($item->getChildren()));
             }
         }
     }
@@ -525,9 +538,9 @@ abstract class ObjectMapping implements IObjectMapping
 
     protected function performPrePersist(PersistenceContext $context, array $objects, array $rows, $objectProperties)
     {
-        $this->persistRelations($context, IRelation::DEPENDENT_PARENTS, $rows, $objectProperties);
+        $this->persistRelations($context, IRelation::DEPENDENT_PARENTS, $rows, $objects, $objectProperties);
         $this->persistSubclasses($context, IRelation::DEPENDENT_PARENTS, $objects, $rows);
-        $this->persistEmbeddedRelationsBeforeParent($context, $rows, $objectProperties);
+        $this->persistEmbeddedRelationsBeforeParent($context, $rows, $objects, $objectProperties);
         $this->persistEmbeddedSubclassesBeforeParent($context, $objects, $rows);
     }
 
@@ -542,9 +555,9 @@ abstract class ObjectMapping implements IObjectMapping
 
     protected function performPostPersist(PersistenceContext $context, array $objects, array $rows, array $objectProperties)
     {
-        $this->persistRelations($context, IRelation::DEPENDENT_CHILDREN, $rows, $objectProperties);
+        $this->persistRelations($context, IRelation::DEPENDENT_CHILDREN, $rows, $objects, $objectProperties);
         $this->persistSubclasses($context, IRelation::DEPENDENT_CHILDREN, $objects, $rows);
-        $this->persistEmbeddedRelationsAfterParent($context, $rows, $objectProperties);
+        $this->persistEmbeddedRelationsAfterParent($context, $rows, $objects, $objectProperties);
         $this->persistEmbeddedSubclassesAfterParent($context, $objects, $rows);
     }
 
@@ -604,28 +617,31 @@ abstract class ObjectMapping implements IObjectMapping
         return $objectProperties;
     }
 
-    final protected function loadParentChildMap(array $rows, array $objectProperties, $property)
+    final protected function loadParentChildMap(array $rows, array $objects, array $objectProperties, IAccessor $accessor)
     {
         $map = new ParentChildMap($this->primaryKeyColumnName);
 
         foreach ($objectProperties as $key => $properties) {
-            $map->add($rows[$key], $properties[$property]);
+            $map->add($rows[$key], $accessor->get($objects[$key], $properties));
         }
 
         return $map;
     }
 
-    final protected function persistRelations(PersistenceContext $context, $dependencyMode, array $rows, array $objectProperties)
+    final protected function persistRelations(PersistenceContext $context, $dependencyMode, array $rows, array $objects, array $objectProperties)
     {
         $definition = $this->definition;
 
-        foreach ($definition->getRelationsWith($dependencyMode) as $property => $relation) {
+        foreach ($definition->getRelationMappingsWith($dependencyMode) as $relationMapping) {
+            $relation = $relationMapping->getRelation();
+            $accessor = $relationMapping->getAccessor();
+
             if ($context->isRelationIgnored($relation)) {
                 continue;
             }
 
             if ($relation instanceof IToOneRelation) {
-                $map = $this->loadParentChildMap($rows, $objectProperties, $property);
+                $map = $this->loadParentChildMap($rows, $objects, $objectProperties, $accessor);
 
                 $relation->persist($context, $map);
 
@@ -633,7 +649,7 @@ abstract class ObjectMapping implements IObjectMapping
                 $map = new ParentChildrenMap($this->primaryKeyColumnName);
 
                 foreach ($objectProperties as $key => $properties) {
-                    $map->add($rows[$key], iterator_to_array($properties[$property]));
+                    $map->add($rows[$key], iterator_to_array($accessor->get($objects[$key], $properties)));
                 }
 
                 $relation->persist($context, $map);
@@ -641,30 +657,46 @@ abstract class ObjectMapping implements IObjectMapping
         }
     }
 
-    final protected function persistEmbeddedRelationsBeforeParent(PersistenceContext $context, array $rows, array $objectProperties)
+    final protected function getRelationsToPersist(PersistenceContext $context)
     {
-        foreach ($this->definition->getRelations() as $property => $relation) {
+        /** @var RelationMapping[] $relationMappings */
+        $relationMappings = [];
+
+        foreach ($this->definition->getRelationMappings() as $relationMapping) {
+            $relation = $relationMapping->getRelation();
+
             if ($context->isRelationIgnored($relation)) {
                 continue;
             }
 
+            $relationMappings[] = $relationMapping;
+        }
+
+        return $relationMappings;
+    }
+
+    final protected function persistEmbeddedRelationsBeforeParent(PersistenceContext $context, array $rows, array $objects, array $objectProperties)
+    {
+        foreach ($this->getRelationsToPersist($context) as $relationMapping) {
+            $relation = $relationMapping->getRelation();
+            $accessor = $relationMapping->getAccessor();
+
             if ($relation instanceof IEmbeddedToOneRelation) {
-                $map = $this->loadParentChildMap($rows, $objectProperties, $property);
+                $map = $this->loadParentChildMap($rows, $objects, $objectProperties, $accessor);
 
                 $relation->persistBeforeParent($context, $map);
             }
         }
     }
 
-    final protected function persistEmbeddedRelationsAfterParent(PersistenceContext $context, array $rows, array $objectProperties)
+    final protected function persistEmbeddedRelationsAfterParent(PersistenceContext $context, array $rows, array $objects, array $objectProperties)
     {
-        foreach ($this->definition->getRelations() as $property => $relation) {
-            if ($context->isRelationIgnored($relation)) {
-                continue;
-            }
+        foreach ($this->getRelationsToPersist($context) as $relationMapping) {
+            $relation = $relationMapping->getRelation();
+            $accessor = $relationMapping->getAccessor();
 
             if ($relation instanceof IEmbeddedToOneRelation) {
-                $map = $this->loadParentChildMap($rows, $objectProperties, $property);
+                $map = $this->loadParentChildMap($rows, $objects, $objectProperties, $accessor);
 
                 $relation->persistAfterParent($context, $map);
             }
@@ -743,14 +775,16 @@ abstract class ObjectMapping implements IObjectMapping
     {
         $definition = $this->definition;
 
-        foreach ($definition->getRelationsWith($dependencyMode) as $relation) {
-            $relation->delete($context, $parentDelete);
+        foreach ($definition->getRelationMappingsWith($dependencyMode) as $relationMapping) {
+            $relationMapping->getRelation()->delete($context, $parentDelete);
         }
     }
 
     final protected function deleteEmbeddedRelationsBeforeParent(PersistenceContext $context, Delete $parentDelete)
     {
-        foreach ($this->definition->getRelations() as $relation) {
+        foreach ($this->definition->getRelationMappings() as $relationMapping) {
+            $relation = $relationMapping->getRelation();
+
             if ($relation instanceof IEmbeddedToOneRelation) {
                 $relation->deleteBeforeParent($context, $parentDelete);
             }
@@ -759,7 +793,9 @@ abstract class ObjectMapping implements IObjectMapping
 
     final protected function deleteEmbeddedRelationsAfterParent(PersistenceContext $context, Delete $parentDelete)
     {
-        foreach ($this->definition->getRelations() as $relation) {
+        foreach ($this->definition->getRelationMappings() as $relationMapping) {
+            $relation = $relationMapping->getRelation();
+
             if ($relation instanceof IEmbeddedToOneRelation) {
                 $relation->deleteAfterParent($context, $parentDelete);
             }

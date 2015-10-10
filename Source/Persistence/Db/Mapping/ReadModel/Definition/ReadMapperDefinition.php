@@ -117,13 +117,13 @@ class ReadMapperDefinition
     {
         $this->mapper     = $mapper;
         $this->definition = $mapper->getDefinition();
-        $this->relations  = $this->definition->getRelations();
+        $this->relations  = $this->definition->getPropertyRelationMap();
 
         if ($mapper instanceof IEntityMapper) {
             $this->readDefinition->addColumn($mapper->getPrimaryTable()->getPrimaryKeyColumn());
         }
 
-        $this->validProperties = $this->definition->getPropertyColumnMap() + $this->definition->getRelations();
+        $this->validProperties = $this->definition->getPropertyColumnMap() + $this->relations;
     }
 
     /**
@@ -176,7 +176,7 @@ class ReadMapperDefinition
         $this->verifyMapperDefined(__METHOD__);
 
         $propertyColumnMap = $this->definition->getPropertyColumnMap();
-        $relations         = $this->definition->getRelations();
+        $relations         = $this->definition->getPropertyRelationMap();
         $toPhpConverters   = $this->definition->getDbToPhpPropertyConverterMap();
         $table             = $this->definition->getTable();
         $emptyFunction     = function () {

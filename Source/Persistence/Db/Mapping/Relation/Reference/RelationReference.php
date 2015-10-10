@@ -53,6 +53,6 @@ abstract class RelationReference implements IRelationReference
             return null;
         }
 
-        return $this->mapper->getDefinition()->getRelation($this->bidirectionalRelationProperty);
+        return $this->mapper->getDefinition()->getRelationMappedToProperty($this->bidirectionalRelationProperty);
     }
 }

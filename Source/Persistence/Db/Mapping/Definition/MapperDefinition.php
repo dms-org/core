@@ -13,7 +13,12 @@ use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Embedded\EmbeddedValueO
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Embedded\EnumPropertyColumnDefiner;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\ForeignKey\ForeignKeyLocalColumnsDefiner;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Index\IndexColumnsDefiner;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Relation\Accessor\CustomAccessor;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Relation\Accessor\PropertyAccessor;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Relation\IAccessor;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Relation\RelationUsingDefiner;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Relation\ToManyRelationMapping;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Relation\ToOneRelationMapping;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Subclass\SubClassMappingDefiner;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\EnumMapper;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\IEmbeddedObjectMapper;
@@ -23,6 +28,8 @@ use Iddigital\Cms\Core\Persistence\Db\Mapping\Locking\IOptimisticLockingStrategy
 use Iddigital\Cms\Core\Persistence\Db\Mapping\NullObjectMapper;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Embedded\EmbeddedCollectionRelation;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Embedded\EmbeddedObjectRelation;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\IToManyRelation;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\IToOneRelation;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Column;
 use Iddigital\Cms\Core\Persistence\Db\Schema\ForeignKey;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Index;
@@ -390,9 +397,9 @@ class MapperDefinition extends MapperDefinitionBase
         return new EnumPropertyColumnDefiner(function ($columnName, array $valueMap = null) use ($property, $class, $isNullable) {
             $enumMapper = new EnumMapper($this->orm, $isNullable, $columnName, $class, $valueMap);
 
-            $this->relationFactories[$property] = function () use ($enumMapper) {
+            $this->createRelationMappingFactory(new PropertyAccessor($property), function () use ($enumMapper) {
                 return new EmbeddedObjectRelation($enumMapper, $enumMapper->getEnumValueColumn()->getName());
-            };
+            });
 
             $this->addColumn($enumMapper->getEnumValueColumn());
             $this->mappedProperties[$property] = true;
@@ -412,12 +419,14 @@ class MapperDefinition extends MapperDefinitionBase
         $this->verifyProperty(__METHOD__, $property);
 
         return new EmbeddedValueObjectDefiner($this->orm, function (callable $mapperLoader, $issetColumnName = null) use ($property) {
-            $this->relationFactories[$property] = function (Table $parentTable, IObjectMapper $parentMapper) use (
+
+            $this->createRelationMappingFactory(new PropertyAccessor($property), function (Table $parentTable, IObjectMapper $parentMapper)  use (
                     $mapperLoader,
                     $issetColumnName
             ) {
                 return new EmbeddedObjectRelation($mapperLoader($parentMapper), $issetColumnName);
-            };
+            });
+
             $this->mappedProperties[$property]  = true;
 
             if ($issetColumnName) {
@@ -452,7 +461,7 @@ class MapperDefinition extends MapperDefinitionBase
                 function (callable $mapperLoader, $tableName, $primaryKeyName, $foreignKeyName) use (
                         $property
                 ) {
-                    $this->relationFactories[$property] = function (Table $parentTable, IObjectMapper $parentMapper) use (
+                    $this->createRelationMappingFactory(new PropertyAccessor($property), function (Table $parentTable, IObjectMapper $parentMapper) use (
                             $mapperLoader,
                             $tableName,
                             $primaryKeyName,
@@ -466,7 +475,7 @@ class MapperDefinition extends MapperDefinitionBase
                                 new Column($foreignKeyName, Integer::normal()),
                                 $this->primaryKey
                         );
-                    };
+                    });
 
                     $this->mappedProperties[$property] = true;
                 });
@@ -484,15 +493,56 @@ class MapperDefinition extends MapperDefinitionBase
     {
         $this->verifyProperty(__METHOD__, $property);
 
+        return $this->defineRelationVia(new PropertyAccessor($property), function () use ($property) {
+            $this->mappedProperties[$property] = true;
+        });
+    }
+
+    /**
+     * Defines a relationship via a custom accessor.
+     *
+     * @param callable $getter
+     * @param callable $setter
+     *
+     * @return RelationUsingDefiner
+     * @throws InvalidArgumentException
+     */
+    public function accessorRelation(callable $getter, callable $setter)
+    {
+        return $this->defineRelationVia(new CustomAccessor($getter, $setter), function () {
+            $this->verifyAllPropertiesMapped = false;
+        });
+    }
+
+    protected function defineRelationVia(IAccessor $accessor, callable $definedCallback = null)
+    {
         return new RelationUsingDefiner($this->orm,
-                function (callable $relationFactory, callable $foreignKeyFactory = null) use ($property) {
-                    $this->relationFactories[$property] = $relationFactory;
-                    $this->mappedProperties[$property]  = true;
+                function (callable $relationFactory, callable $foreignKeyFactory = null) use ($accessor, $definedCallback) {
+                    $this->createRelationMappingFactory($accessor, $relationFactory);
 
                     if ($foreignKeyFactory) {
                         $this->foreignKeyFactories[] = $foreignKeyFactory;
                     }
+
+                    if ($definedCallback) {
+                        $definedCallback();
+                    }
                 });
+    }
+
+    protected function createRelationMappingFactory(IAccessor $accessor, callable $relationFactory)
+    {
+        $this->relationFactories[] = function (Table $table, IObjectMapper $parentMapper) use ($accessor, $relationFactory) {
+            $relation = $relationFactory($table, $parentMapper);
+
+            if ($relation instanceof IToOneRelation) {
+                return new ToOneRelationMapping($accessor, $relation);
+            } elseif ($relation instanceof IToManyRelation) {
+                return new ToManyRelationMapping($accessor, $relation);
+            }
+
+            throw InvalidArgumentException::format('Unknown relation type: %s', Debug::getType($relation));
+        };
     }
 
     /**
@@ -639,8 +689,8 @@ class MapperDefinition extends MapperDefinitionBase
 
         $relationsFactory = function (Table $table, IObjectMapper $parentMapper) {
             $relations = [];
-            foreach ($this->relationFactories as $property => $factory) {
-                $relations[$property] = $factory($table, $parentMapper);
+            foreach ($this->relationFactories as $factory) {
+                $relations[] = $factory($table, $parentMapper);
             }
 
             return $relations;

@@ -36,7 +36,8 @@ class PartialLoadCriteria extends Criteria implements IPartialLoadCriteria
     }
 
     /**
-     * Load all the supplied properties.
+     * Load all the supplied properties. Pass an array containing the properties
+     * to load as the indexes and the value as the array index to load the property into.
      *
      * Example:
      * <code>

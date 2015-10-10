@@ -111,8 +111,8 @@ abstract class Orm implements IOrm
             }
         }
 
-        foreach ($mapper->getDefinition()->getRelations() as $relation) {
-            foreach ($relation->getRelationshipTables() as $table) {
+        foreach ($mapper->getDefinition()->getRelationMappings() as $relationMapping) {
+            foreach ($relationMapping->getRelation()->getRelationshipTables() as $table) {
                 $tables[] = $table;
             }
         }

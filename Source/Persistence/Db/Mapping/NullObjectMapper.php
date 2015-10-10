@@ -60,11 +60,6 @@ class NullObjectMapper implements IEntityMapper
     }
 
 
-    public function loadAllAsArray(LoadingContext $context, array $rows)
-    {
-    }
-
-
     public function deleteFromQuery(PersistenceContext $context, Delete $deleteQuery)
     {
     }

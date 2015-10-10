@@ -71,7 +71,9 @@ class ParentObjectMapping extends ObjectMapping
             $lockingColumnNames = array_merge($lockingColumnNames, $lockingStrategy->getLockingColumnNames());
         }
 
-        foreach ($this->definition->getRelations() as $relation) {
+        foreach ($this->definition->getRelationMappings() as $relationMapping) {
+            $relation = $relationMapping->getRelation();
+
             if ($relation instanceof IEmbeddedToOneRelation) {
                 $lockingColumnNames = array_merge($lockingColumnNames, $relation->getMapper()->getMapping()->getLockingColumnNames());
             }

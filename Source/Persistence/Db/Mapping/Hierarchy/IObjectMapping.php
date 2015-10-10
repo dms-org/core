@@ -132,10 +132,11 @@ interface IObjectMapping
      *
      * @param LoadingContext $context
      * @param Row[]          $rows
+     * @param ITypedObject[]     $objects
      *
      * @return array[]
      */
-    public function loadAllRaw(LoadingContext $context, array $rows);
+    public function loadAllProperties(LoadingContext $context, array $rows, array $objects);
 
     /**
      * @param PersistenceContext $context

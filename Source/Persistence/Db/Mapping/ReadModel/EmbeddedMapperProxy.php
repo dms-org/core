@@ -122,14 +122,6 @@ class EmbeddedMapperProxy implements IEmbeddedObjectMapper
         return $this->mapper->loadAll($context, $rows);
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function loadAllAsArray(LoadingContext $context, array $rows)
-    {
-        return $this->mapper->loadAllAsArray($context, $rows);
-    }
-
     // NOT REQUIRED
 
     public function deleteFromQuery(PersistenceContext $context, Delete $deleteQuery)

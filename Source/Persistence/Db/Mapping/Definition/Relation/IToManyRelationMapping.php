@@ -9,7 +9,7 @@ use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\IRelation;
  *
  * @author Elliot Levin <elliotlevin@hotmail.com>
  */
-interface IRelationMapping
+interface IToManyRelationMapping
 {
     /**
      * @return IAccessor

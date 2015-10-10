@@ -12,6 +12,7 @@ class RelationAliasDefiner
      * @var ReadMapperDefinition
      */
     private $definition;
+
     /**
      * @var callable
      */
