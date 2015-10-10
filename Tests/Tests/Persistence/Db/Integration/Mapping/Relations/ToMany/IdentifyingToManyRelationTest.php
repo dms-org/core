@@ -2,12 +2,12 @@
 
 namespace Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\Relations\ToMany;
 
-use Iddigital\Cms\Core\Persistence\Db\Mapping\IEntityMapper;
 use Iddigital\Cms\Core\Persistence\Db\Query\Clause\Join;
 use Iddigital\Cms\Core\Persistence\Db\Query\Delete;
 use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Expr;
 use Iddigital\Cms\Core\Persistence\Db\Query\Upsert;
 use Iddigital\Cms\Core\Persistence\Db\Schema\ForeignKeyMode;
+use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\Relations\Fixtures\ToManyRelation\ChildEntity;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\Relations\Fixtures\ToManyRelation\IdentifyingParentEntityMapper;
 
 /**
@@ -158,5 +158,35 @@ class IdentifyingToManyRelationTest extends ToManyRelationTestBase
                             Expr::tuple([Expr::idParam(1), Expr::idParam(3)])
                     ))
         ]);
+    }
+
+    public function testLoadPartial()
+    {
+        $this->db->setData([
+                'parent_entities' => [
+                        ['id' => 1],
+                ],
+                'child_entities'  => [
+                        ['id' => 10, 'parent_id' => 1, 'val' => 100],
+                        ['id' => 11, 'parent_id' => 1, 'val' => 200],
+                        ['id' => 12, 'parent_id' => 1, 'val' => 300],
+                ]
+        ]);
+
+        $this->assertEquals(
+                [
+                        [
+                                'parent_id' => 1,
+                                'children'  => ChildEntity::collection([
+                                        new ChildEntity(10, 100),
+                                        new ChildEntity(11, 200),
+                                        new ChildEntity(12, 300),
+                                ])
+                        ],
+                ],
+                $this->repo->loadPartial(
+                        $this->repo->partialCriteria()
+                                ->loadAll(['id' => 'parent_id',  'children'])
+                ));
     }
 }

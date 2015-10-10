@@ -2,6 +2,7 @@
 
 namespace Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\Relations\ToManyId;
 
+use Iddigital\Cms\Core\Model\EntityIdCollection;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\IEntityMapper;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\IOrm;
 use Iddigital\Cms\Core\Persistence\Db\Query\BulkUpdate;
@@ -328,5 +329,31 @@ class ToManyIdRelationTest extends DbIntegrationTest
                         ['id' => 11, 'parent_id' => 2, 'val' => 200],
                 ]
         ]);
+    }
+
+    public function testLoadPartial()
+    {
+        $this->db->setData([
+                'parent_entities' => [
+                        ['id' => 1],
+                ],
+                'child_entities'  => [
+                        ['id' => 10, 'parent_id' => 1, 'val' => 100],
+                        ['id' => 11, 'parent_id' => 1, 'val' => 200],
+                        ['id' => 12, 'parent_id' => 1, 'val' => 300],
+                ]
+        ]);
+
+        $this->assertEquals(
+                [
+                        [
+                                'parent_id' => 1,
+                                'child_ids'  => new EntityIdCollection([10, 11, 12])
+                        ],
+                ],
+                $this->repo->loadPartial(
+                        $this->repo->partialCriteria()
+                                ->loadAll(['id' => 'parent_id',  'childIds' => 'child_ids'])
+                ));
     }
 }
