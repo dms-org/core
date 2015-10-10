@@ -4,7 +4,6 @@ namespace Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\Relations\
 
 use Iddigital\Cms\Core\Model\Object\ClassDefinition;
 use Iddigital\Cms\Core\Model\Object\Entity;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\Relations\Fixtures\ToOneRelation\SubEntity;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

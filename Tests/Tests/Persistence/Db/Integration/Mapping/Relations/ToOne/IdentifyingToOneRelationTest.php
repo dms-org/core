@@ -9,6 +9,7 @@ use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Expr;
 use Iddigital\Cms\Core\Persistence\Db\Query\Upsert;
 use Iddigital\Cms\Core\Persistence\Db\Schema\ForeignKeyMode;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\Relations\Fixtures\ToOneRelation\IdentifyingParentEntityMapper;
+use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\Relations\Fixtures\ToOneRelation\SubEntity;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>
@@ -155,5 +156,26 @@ class IdentifyingToOneRelationTest extends ToOneRelationTestBase
                             Expr::tuple([Expr::idParam(1), Expr::idParam(3)])
                     ))
         ]);
+    }
+
+    public function testLoadPartial()
+    {
+        $this->db->setData([
+                'parent_entities' => [
+                        ['id' => 1],
+                ],
+                'sub_entities'    => [
+                        ['id' => 10, 'parent_id' => 1, 'val' => 100],
+                ]
+        ]);
+
+        $this->assertEquals(
+                [
+                        ['child' => new SubEntity(100, 10), 'child.val' => 100],
+                ],
+                $this->repo->loadPartial(
+                        $this->repo->partialCriteria()
+                                ->loadAll(['child', 'child.val'])
+                ));
     }
 }

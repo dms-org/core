@@ -8,7 +8,6 @@ use Iddigital\Cms\Core\Model\ITypedObject;
 use Iddigital\Cms\Core\Model\Object\FinalizedClassDefinition;
 use Iddigital\Cms\Core\Model\Object\FinalizedPropertyDefinition;
 use Iddigital\Cms\Core\Model\Object\TypedObject;
-use Iddigital\Cms\Core\Model\Object\TypedObjectAccessibilityAssertion;
 use Iddigital\Cms\Core\Model\Type\ObjectType;
 
 /**
@@ -18,6 +17,11 @@ use Iddigital\Cms\Core\Model\Type\ObjectType;
  */
 class NestedProperty
 {
+    /**
+     * @var string
+     */
+    protected $name;
+
     /**
      * @var FinalizedPropertyDefinition[]
      */
@@ -40,6 +44,14 @@ class NestedProperty
 
         $this->properties = $properties;
         $this->getter     = $this->makePropertyGetterCallable();
+
+        $nameParts = [];
+
+        foreach ($this->properties as $property) {
+            $nameParts[] = $property->getName();
+        }
+
+        $this->name = implode('.', $nameParts);
     }
 
     /**
@@ -102,6 +114,14 @@ class NestedProperty
     final public function getNestedProperties()
     {
         return $this->properties;
+    }
+
+    /**
+     * @return string
+     */
+    final public function getName()
+    {
+        return $this->name;
     }
 
     /**

@@ -4,7 +4,6 @@ namespace Iddigital\Cms\Core\Model\Criteria;
 
 use Iddigital\Cms\Core\Exception;
 use Iddigital\Cms\Core\Model\IPartialLoadCriteria;
-use Iddigital\Cms\Core\Model\Object\FinalizedPropertyDefinition;
 
 /**
  * The typed object criteria class with the properties of
@@ -72,4 +71,19 @@ class PartialLoadCriteria extends Criteria implements IPartialLoadCriteria
     {
         return $this->nestedPropertiesToLoad;
     }
+
+    /**
+     * @inheritDoc
+     */
+    final public function getAliasNestedPropertyNameMap()
+    {
+        $aliasPropertyNameMap = [];
+
+        foreach ($this->nestedPropertiesToLoad as $alias => $nestedProperty) {
+            $aliasPropertyNameMap[$alias] = $nestedProperty->getName();
+        }
+
+        return $aliasPropertyNameMap;
+    }
+
 }

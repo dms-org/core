@@ -44,4 +44,19 @@ class PropertyTypesTest extends DbIntegrationTest
         $entity = $this->repo->get(1);
         $this->assertEquals(new PropertyTypesEntity(1, 'aBc'), $entity);
     }
+
+    public function testLoadPartial()
+    {
+        $this->db->setData([
+                'property_types' => [
+                        ['id' => 1, 'value' => 'aBc', 'value_upper' => 'ABC', 'value_lower' => 'abc']
+                ]
+        ]);
+
+
+        $this->assertEquals([['id' => 1, 'val' => 'aBc']], $this->repo->loadPartial(
+                $this->repo->partialCriteria()
+                        ->loadAll(['id', 'value' => 'val'])
+        ));
+    }
 }

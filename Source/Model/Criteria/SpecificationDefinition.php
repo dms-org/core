@@ -13,9 +13,6 @@ use Iddigital\Cms\Core\Model\Criteria\Condition\NotCondition;
 use Iddigital\Cms\Core\Model\Criteria\Condition\OrCondition;
 use Iddigital\Cms\Core\Model\Criteria\Condition\PropertyCondition;
 use Iddigital\Cms\Core\Model\ISpecification;
-use Iddigital\Cms\Core\Model\Object\FinalizedPropertyDefinition;
-use Iddigital\Cms\Core\Model\Object\TypedObject;
-use Iddigital\Cms\Core\Model\Type\ObjectType;
 
 /**
  * The typed object specification definition class.

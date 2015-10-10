@@ -2,8 +2,6 @@
 
 namespace Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping;
 
-use Iddigital\Cms\Core\Persistence\Db\Mapping\CustomOrm;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\IEntityMapper;
 use Iddigital\Cms\Core\Persistence\Db\Query\Delete;
 use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Expr;
 use Iddigital\Cms\Core\Persistence\Db\Query\Upsert;
@@ -13,8 +11,8 @@ use Iddigital\Cms\Core\Persistence\Db\Schema\ForeignKeyMode;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Table;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Type\Integer;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Type\Varchar;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\Fixtures\ValueObjectCollection\EntityWithEmails;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\Fixtures\ValueObjectCollection\EmbeddedEmailAddress;
+use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\Fixtures\ValueObjectCollection\EntityWithEmails;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\Fixtures\ValueObjectCollection\EntityWithEmailsMapper;
 
 /**
@@ -214,5 +212,33 @@ class ValueObjectCollectionTest extends DbIntegrationTest
                 'emails'   => [
                 ]
         ]);
+    }
+
+    public function testLoadPartial()
+    {
+        $this->db->setData([
+                'entities' => [
+                        ['id' => 1],
+                ],
+                'emails'   => [
+                        ['id' => 1, 'entity_id' => 1, 'email' => 'test@foo.com'],
+                        ['id' => 2, 'entity_id' => 1, 'email' => 'gmail@foo.com'],
+                ]
+        ]);
+
+        $this->assertEquals(
+                [
+                        [
+                                'emails' => EmbeddedEmailAddress::collection([
+                                        new EmbeddedEmailAddress('test@foo.com'),
+                                        new EmbeddedEmailAddress('gmail@foo.com'),
+                                ]),
+                        ]
+                ],
+                $this->repo->loadPartial(
+                        $this->repo->partialCriteria()
+                                ->loadAll(['emails'])
+                )
+        );
     }
 }

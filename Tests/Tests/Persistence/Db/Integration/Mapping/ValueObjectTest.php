@@ -2,7 +2,6 @@
 
 namespace Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping;
 
-use Iddigital\Cms\Core\Persistence\Db\Mapping\CustomOrm;
 use Iddigital\Cms\Core\Persistence\Db\Query\Delete;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Type\Boolean;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\Fixtures\ValueObject\CurrencyEnum;
@@ -68,7 +67,7 @@ class ValueObjectTest extends DbIntegrationTest
 
     public function testPersistWithSetValueObject()
     {
-        $entity = $this->getTestEntity();
+        $entity                = $this->getTestEntity();
         $entity->nullableMoney = new EmbeddedMoneyObject(200, CurrencyEnum::aud());
 
         $this->repo->save($entity);
@@ -134,7 +133,7 @@ class ValueObjectTest extends DbIntegrationTest
                 ]
         ]);
 
-        $entity = $this->getTestEntity(1);
+        $entity                = $this->getTestEntity(1);
         $entity->nullableMoney = new EmbeddedMoneyObject(200, CurrencyEnum::aud());
 
         $this->assertEquals($entity, $this->repo->get(1));
@@ -206,7 +205,41 @@ class ValueObjectTest extends DbIntegrationTest
         ]);
 
         $this->assertExecutedQueryTypes([
-            'Delete entity' => Delete::class
+                'Delete entity' => Delete::class
         ]);
+    }
+
+    public function testLoadPartial()
+    {
+        $this->db->setData([
+                'entities' => [
+                        [
+                                'id'                 => 1,
+                                'name'               => 'some name',
+                                'cents'              => 101,
+                                'currency'           => 'AUD',
+                                'prefix_cents'       => 497,
+                                'prefix_currency'    => 'USD',
+                                'has_nullable_money' => false,
+                                'nullable_cents'     => null,
+                                'nullable_currency'  => null,
+                        ]
+                ]
+        ]);
+
+        $this->assertEquals(
+                [
+                        [
+                                'name'                   => 'some name',
+                                'money.cents'            => 101,
+                                'nullableMoney.currency' => null,
+                                'prefixedMoney'          => new EmbeddedMoneyObject(497, CurrencyEnum::usd()),
+                        ]
+                ],
+                $this->repo->loadPartial(
+                        $this->repo->partialCriteria()
+                                ->loadAll(['name', 'money.cents', 'nullableMoney.currency', 'prefixedMoney'])
+                )
+        );
     }
 }

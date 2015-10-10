@@ -18,6 +18,17 @@ class ArrayReadModel extends ReadModel
     public $data = [];
 
     /**
+     * ArrayReadModel constructor.
+     *
+     * @param array $data
+     */
+    public function __construct(array $data)
+    {
+        parent::__construct();
+        $this->data = $data;
+    }
+
+    /**
      * Defines the structure of this class.
      *
      * @param ClassDefinition $class

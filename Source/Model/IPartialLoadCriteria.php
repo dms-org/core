@@ -26,4 +26,18 @@ interface IPartialLoadCriteria extends ICriteria
      * @return NestedProperty[]
      */
     public function getAliasNestedPropertyMap();
+
+    /**
+     * Gets the nested property names to load.
+     *
+     * Example:
+     * <code>
+     * [
+     *      'alias' => 'some.nested.property'
+     * ]
+     * </code>
+     *
+     * @return NestedProperty[]
+     */
+    public function getAliasNestedPropertyNameMap();
 }

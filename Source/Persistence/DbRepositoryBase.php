@@ -3,16 +3,18 @@
 namespace Iddigital\Cms\Core\Persistence;
 
 use Iddigital\Cms\Core\Exception;
+use Iddigital\Cms\Core\Model\Criteria\PartialLoadCriteria;
 use Iddigital\Cms\Core\Model\ICriteria;
 use Iddigital\Cms\Core\Model\IEntity;
 use Iddigital\Cms\Core\Model\IObjectSetWithPartialLoadSupport;
 use Iddigital\Cms\Core\Model\IPartialLoadCriteria;
 use Iddigital\Cms\Core\Model\ISpecification;
-use Iddigital\Cms\Core\Model\ITypedObject;
 use Iddigital\Cms\Core\Persistence\Db\Connection\IConnection;
 use Iddigital\Cms\Core\Persistence\Db\Criteria\CriteriaMapper;
 use Iddigital\Cms\Core\Persistence\Db\LoadingContext;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\CustomOrm;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\IObjectMapper;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\ReadModel\ArrayReadModelMapper;
 use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Expr;
 use Iddigital\Cms\Core\Persistence\Db\Query\Select;
 
@@ -123,7 +125,7 @@ abstract class DbRepositoryBase implements IObjectSetWithPartialLoadSupport
      */
     public function partialCriteria()
     {
-        return $this->criteriaMapper->newPartialCriteria();
+        return new PartialLoadCriteria($this->mapper->getDefinition()->getClass());
     }
 
     /**
@@ -155,7 +157,18 @@ abstract class DbRepositoryBase implements IObjectSetWithPartialLoadSupport
      */
     public function loadPartial(IPartialLoadCriteria $criteria)
     {
-        // TODO: Implement loadPartial() method.
+        $aliasPropertyNameMap = $criteria->getAliasNestedPropertyNameMap();
+        $readModelMapper      = new ArrayReadModelMapper(
+                CustomOrm::from([]),
+                $this->mapper,
+                $aliasPropertyNameMap
+        );
+
+        $criteriaMapper = new CriteriaMapper($readModelMapper);
+        $select         = $criteriaMapper->mapCriteriaToSelect($criteria);
+        $rows           = $this->connection->load($select);
+
+        return $readModelMapper->loadAllAsArray($this->loadingContext, $rows->getRows());
     }
 
     public function getIterator()

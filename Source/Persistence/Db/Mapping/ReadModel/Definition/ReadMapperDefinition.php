@@ -16,6 +16,7 @@ use Iddigital\Cms\Core\Persistence\Db\Mapping\IOrm;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\ReadModel\EmbeddedMapperProxy;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\ReadModel\GenericReadModelMapper;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Embedded\EmbeddedObjectRelation;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\EntityRelation;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\IRelation;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\IToManyRelation;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\IToOneRelation;
@@ -219,11 +220,21 @@ class ReadMapperDefinition
                 }
 
                 $relationDefiner->asCustom($relation);
-
-                foreach ($relation->getParentColumnsToLoad() as $column) {
-                    $this->readDefinition->addColumn($table->findColumn($column));
-                }
+                $this->loadRelationColumns($relation);
             }
+        }
+    }
+
+    protected function loadRelationColumns(IRelation $relation)
+    {
+        $table = $this->definition->getTable();
+
+        foreach ($relation->getParentColumnsToLoad() as $column) {
+            $this->readDefinition->addColumn($table->findColumn($column));
+        }
+
+        if ($relation instanceof EntityRelation) {
+            $this->readDefinition->addColumn($table->getPrimaryKeyColumn());
         }
     }
 
@@ -295,9 +306,9 @@ class ReadMapperDefinition
             }
 
             $relationDefiner->asCustom($relation);
+            $this->loadRelationColumns($relation);
         });
     }
-
 
     /**
      * Defines an embedded read model.

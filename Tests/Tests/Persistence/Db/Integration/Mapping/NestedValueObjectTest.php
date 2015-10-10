@@ -3,7 +3,7 @@
 namespace Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping;
 
 use Iddigital\Cms\Core\Persistence\Db\Mapping\CustomOrm;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\IEntityMapper;
+use Iddigital\Cms\Core\Persistence\Db\Query\Select;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\Fixtures\NestedValueObject\LevelOne;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\Fixtures\NestedValueObject\LevelThree;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\Fixtures\NestedValueObject\LevelTwo;
@@ -55,5 +55,33 @@ class NestedValueObjectTest extends DbIntegrationTest
 
         $this->assertEquals($entity, $this->repo->get(1));
         $this->assertSame('foobar', $this->repo->get(1)->one->two->three->val);
+    }
+
+    public function testLoadPartial()
+    {
+        $this->db->setData([
+                'parents' => [
+                        ['id' => 1, 'one_two_three_value' => 'foobar']
+                ]
+        ]);
+
+        $this->assertEquals(
+                [
+                        [
+                                'one'               => new LevelOne(new LevelTwo(new LevelThree('foobar'))),
+                                'one.two'           => new LevelTwo(new LevelThree('foobar')),
+                                'one.two.three'     => new LevelThree('foobar'),
+                                'one.two.three.val' => 'foobar',
+                        ]
+                ],
+                $this->repo->loadPartial(
+                        $this->repo->partialCriteria()
+                                ->loadAll(['one', 'one.two', 'one.two.three', 'one.two.three.val'])
+                )
+        );
+
+        $this->assertExecutedQueryTypes([
+                'Select parent with nested value objects' => Select::class,
+        ]);
     }
 }

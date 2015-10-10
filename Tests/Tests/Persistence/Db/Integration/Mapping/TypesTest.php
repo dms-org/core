@@ -3,7 +3,6 @@
 namespace Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping;
 
 use Iddigital\Cms\Core\Persistence\Db\Mapping\CustomOrm;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\IEntityMapper;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\Fixtures\Types\TypesEntity;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\Fixtures\Types\TypesMapper;
 
@@ -78,5 +77,41 @@ class TypesTest extends DbIntegrationTest
 
         $this->assertTrue($this->repo->has(1));
         $this->assertEquals($entity, $this->repo->get(1));
+    }
+
+    public function testLoadPartial()
+    {
+        $this->db->setData([
+                'types' => [
+                        [
+                                'id'       => 1,
+                                'null'     => null,
+                                'int'      => 12,
+                                'string'   => 'abc',
+                                'bool'     => true,
+                                'float'    => 123.4,
+                                'date'     => '2000-01-01',
+                                'time'     => '12:30:50',
+                                'datetime' => '2010-03-04 12:34:56',
+                        ]
+                ]
+        ]);
+
+
+        $this->assertEquals(
+                [
+                        [
+                                'id'       => 1,
+                                'null'     => null,
+                                'date'     => new \DateTimeImmutable('2000-01-01'),
+                                'datetime' => new \DateTimeImmutable('2010-03-04 12:34:56'),
+                                'float'    => 123.4,
+                        ]
+                ],
+                $this->repo->loadPartial(
+                        $this->repo->partialCriteria()
+                                ->loadAll(['id', 'null', 'date', 'datetime', 'float'])
+                )
+        );
     }
 }

@@ -3,7 +3,6 @@
 namespace Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping;
 
 use Iddigital\Cms\Core\Persistence\Db\Mapping\CustomOrm;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\IEntityMapper;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\Fixtures\Enum\EntityWithEnum;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\Fixtures\Enum\EntityWithEnumMapper;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\Fixtures\Enum\GenderEnum;
@@ -106,5 +105,36 @@ class EnumsTest extends DbIntegrationTest
         $this->repo->save($entity);
 
         $this->assertEquals($entity, $this->repo->get(1));
+    }
+
+    public function testLoadPartial()
+    {
+        $this->db->setData([
+                'data' => [
+                        [
+                                'id'              => 1,
+                                'status'          => StatusEnum::ACTIVE,
+                                'nullable_status' => null,
+                                'gender'          => 'M',
+                                'nullable_gender' => 'F',
+                        ]
+                ]
+        ]);
+
+        $this->assertEquals(
+                [
+                        [
+                                'status'               => StatusEnum::active(),
+                                'status.value'         => StatusEnum::ACTIVE,
+                                'nullableStatus'       => null,
+                                'nullableStatus.value' => null,
+                                'gender'               => GenderEnum::male(),
+                        ]
+                ],
+                $this->repo->loadPartial(
+                        $this->repo->partialCriteria()
+                                ->loadAll(['status', 'status.value', 'nullableStatus', 'nullableStatus.value', 'gender'])
+                )
+        );
     }
 }

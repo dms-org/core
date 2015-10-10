@@ -4,9 +4,11 @@ namespace Iddigital\Cms\Core\Persistence\Db\Mapping\ReadModel;
 
 use Iddigital\Cms\Core\Exception\InvalidArgumentException;
 use Iddigital\Cms\Core\Model\Criteria\NestedProperty;
+use Iddigital\Cms\Core\Persistence\Db\LoadingContext;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\IObjectMapper;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\IOrm;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\ReadModel\Definition\ReadMapperDefinition;
+use Iddigital\Cms\Core\Persistence\Db\Row;
 
 /**
  * The array read model mapper class.
@@ -45,6 +47,24 @@ class ArrayReadModelMapper extends ReadModelMapper
     }
 
     /**
+     * @param LoadingContext $context
+     * @param Row[]          $rows
+     *
+     * @return array[]
+     */
+    public function loadAllAsArray(LoadingContext $context, array $rows)
+    {
+        /** @var ArrayReadModel[] $models */
+        $models = $this->loadAll($context, $rows);
+
+        foreach ($models as $key => $model) {
+            $models[$key] = $model->data;
+        }
+
+        return $models;
+    }
+
+    /**
      * @param ReadMapperDefinition $definition
      * @param string[]|array[]     $nestedPropertyTree
      *
@@ -67,9 +87,11 @@ class ArrayReadModelMapper extends ReadModelMapper
             } elseif (isset($propertyColumnMap[$propertyName])) {
                 foreach ($indexes as $nestedPropertyName => $index) {
                     if (is_int($nestedPropertyName)) {
-                        $definition->properties([$propertyName => function (ArrayReadModel $readModel, $value) use ($index) {
-                            $readModel->data[$index] = $value;
-                        }]);
+                        $definition->properties([
+                                $propertyName => function (ArrayReadModel $readModel, $value) use ($index) {
+                                    $readModel->data[$index] = $value;
+                                }
+                        ]);
                     } else {
                         throw InvalidArgumentException::format(
                                 'Invalid property for %s: property cannot have nested properties on property mapped to a column',
@@ -82,19 +104,26 @@ class ArrayReadModelMapper extends ReadModelMapper
 
                 foreach ($indexes as $nestedPropertyName => $index) {
                     if (is_int($nestedPropertyName)) {
-                        $definition->properties([$propertyName => function (ArrayReadModel $readModel, $value) use ($index) {
-                            $readModel->data[$index] = $value;
-                        }]);
+                        $definition->properties([
+                                $propertyName => function (ArrayReadModel $readModel, $value) use ($index) {
+                                    $readModel->data[$index] = $value;
+                                }
+                        ]);
                     } else {
                         $nestedPropertiesInRelation[$nestedPropertyName] = $index;
                     }
                 }
 
                 if ($nestedPropertiesInRelation) {
+                    $flattenedIndexes   = $this->flattenIndexes($nestedPropertiesInRelation);
+                    $defaultIndexValues = array_fill_keys($flattenedIndexes, null);
+
                     $definition
                             ->relation($propertyName)
-                            ->to(function (ArrayReadModel $readModel, ArrayReadModel $relation) use ($indexes) {
-                                $readModel->data[$indexes] = $relation;
+                            ->to(function (ArrayReadModel $readModel, ArrayReadModel $relationData = null) use ($defaultIndexValues) {
+                                $readModel->data += $relationData
+                                        ? $relationData->data
+                                        : $defaultIndexValues;
                             })
                             ->load(function (ReadMapperDefinition $definition) use ($nestedPropertiesInRelation) {
                                 $this->loadDefinitionFromNestedProperties($definition, $nestedPropertiesInRelation);
@@ -129,5 +158,21 @@ class ArrayReadModelMapper extends ReadModelMapper
         }
 
         return $propertyTree;
+    }
+
+    /**
+     * @param array $propertyIndexTree
+     *
+     * @return string[]
+     */
+    private function flattenIndexes(array $propertyIndexTree)
+    {
+        $indexes = [];
+
+        array_walk_recursive($propertyIndexTree, function ($index) use (&$indexes) {
+            $indexes[] = $index;
+        });
+
+        return $indexes;
     }
 }

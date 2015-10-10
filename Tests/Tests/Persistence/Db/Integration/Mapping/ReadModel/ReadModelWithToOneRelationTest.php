@@ -44,4 +44,28 @@ class ReadModelWithToOneRelationTest extends ReadModelRepositoryTest
                 new ReadModelWithToOneRelation(new SubEntity(300, 12)),
         ], $this->repo->getAll());
     }
+
+    public function testLoadPartial()
+    {
+        $this->db->setData([
+                'parent_entities' => [
+                        ['id' => 1],
+                ],
+                'sub_entities'    => [
+                        ['id' => 10, 'parent_id' => 1, 'val' => 100],
+                ]
+        ]);
+
+        $this->assertEquals(
+                [
+                        [
+                                'subEntity'          => new SubEntity(100, 10),
+                                'subEntity.val'      => 100,
+                        ],
+                ],
+                $this->repo->loadPartial(
+                        $this->repo->partialCriteria()
+                                ->loadAll(['subEntity', 'subEntity.val'])
+                ));
+    }
 }

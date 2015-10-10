@@ -19,6 +19,7 @@ use Iddigital\Cms\Core\Model\IValueObject;
 use Iddigital\Cms\Core\Model\Object\FinalizedPropertyDefinition;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\FinalizedMapperDefinition;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\IObjectMapper;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\ReadModel\ReadModelMapper;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Embedded\EmbeddedObjectRelation;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\IRelation;
 use Iddigital\Cms\Core\Persistence\Db\Query;
@@ -119,7 +120,9 @@ class CriteriaMapper
      */
     public function mapCriteriaToSelect(ICriteria $criteria)
     {
-        $criteria->verifyOfClass($this->mapper->getDefinition()->getClassName());
+        if (!($this->mapper instanceof ReadModelMapper)) {
+            $criteria->verifyOfClass($this->mapper->getDefinition()->getClassName());
+        }
 
         $select = Select::from($this->primaryTable);
 

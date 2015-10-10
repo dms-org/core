@@ -5,7 +5,6 @@ namespace Iddigital\Cms\Core\Persistence;
 use Iddigital\Cms\Core\Exception;
 use Iddigital\Cms\Core\Model\EntityNotFoundException;
 use Iddigital\Cms\Core\Model\IEntity;
-use Iddigital\Cms\Core\Model\IObjectSetWithPartialLoadSupport;
 use Iddigital\Cms\Core\Persistence\Db\Connection\DbOutOfSyncException;
 use Iddigital\Cms\Core\Persistence\Db\Connection\IConnection;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\EntityOutOfSyncException;

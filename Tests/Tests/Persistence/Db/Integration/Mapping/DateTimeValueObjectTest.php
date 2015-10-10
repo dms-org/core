@@ -62,4 +62,25 @@ class DateTimeValueObjectTest extends DbIntegrationTest
                 ]
         ]);
     }
+
+    public function testLoadPartial()
+    {
+        $this->db->setData([
+                'entities' => [
+                        ['id' => 1, 'datetime' => '2000-01-01 10:11:12']
+                ]
+        ]);
+
+        $this->assertEquals(
+                [
+                        [
+                                'datetime' => DateTime::fromString('2000-01-01 10:11:12'),
+                        ]
+                ],
+                $this->repo->loadPartial(
+                        $this->repo->partialCriteria()
+                                ->load('datetime')
+                )
+        );
+    }
 }

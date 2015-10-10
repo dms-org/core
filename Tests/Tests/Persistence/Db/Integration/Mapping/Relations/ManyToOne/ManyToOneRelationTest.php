@@ -297,4 +297,26 @@ class ManyToOneRelationTest extends DbIntegrationTest
                 ]
         ]);
     }
+
+
+    public function testLoadPartial()
+    {
+        $this->db->setData([
+                'parent_entities' => [
+                        ['id' => 1, 'child_id' => 10],
+                ],
+                'sub_entities'    => [
+                        ['id' => 10, 'val' => 100],
+                ]
+        ]);
+
+        $this->assertEquals(
+                [
+                        ['child' => new SubEntity(10, 100), 'child.val' => 100],
+                ],
+                $this->repo->loadPartial(
+                        $this->repo->partialCriteria()
+                                ->loadAll(['child', 'child.val'])
+                ));
+    }
 }
