@@ -211,10 +211,14 @@ class ReadMapperDefinition
                         ->asType($table->findColumn($propertyColumnMap[$property])->getType());
             } else {
                 $relation = $relations[$property];
-                // TODO: Relation accessors
-                $this->readDefinition
-                        ->relation($alias)
-                        ->asCustom($relation);
+
+                if (is_string($alias)) {
+                    $relationDefiner = $this->readDefinition->relation($alias);
+                } else {
+                    $relationDefiner = $this->readDefinition->accessorRelation($emptyFunction, $alias);
+                }
+
+                $relationDefiner->asCustom($relation);
 
                 foreach ($relation->getParentColumnsToLoad() as $column) {
                     $this->readDefinition->addColumn($table->findColumn($column));
@@ -284,7 +288,13 @@ class ReadMapperDefinition
                 $relation = $relation->withReference($relationReferenceLoader($relation));
             }
 
-            $this->readDefinition->relation($alias)->asCustom($relation);
+            if (is_string($alias)) {
+                $relationDefiner = $this->readDefinition->relation($alias);
+            } else {
+                $relationDefiner = $this->readDefinition->accessorRelation(function () {}, $alias);
+            }
+
+            $relationDefiner->asCustom($relation);
         });
     }
 
