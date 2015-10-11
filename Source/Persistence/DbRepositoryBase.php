@@ -156,6 +156,8 @@ abstract class DbRepositoryBase implements IObjectSetWithPartialLoadSupport
      */
     public function loadPartial(IPartialLoadCriteria $criteria)
     {
+        $criteria->verifyOfClass($this->getObjectType());
+
         $aliasPropertyNameMap = $criteria->getAliasNestedPropertyNameMap();
         $readModelMapper      = new ArrayReadModelMapper(
                 $this->mapper,
