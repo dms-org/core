@@ -225,7 +225,9 @@ class Field extends FieldBuilderBase
      */
     public function entityIdsFrom(IEntitySet $entities)
     {
-        return new ArrayOfFieldBuilder($this->type(new ArrayOfEntityIdsType($entities, Field::element()->entityIdFrom($entities)->required()->build())));
+        return new ArrayOfFieldBuilder($this
+                ->type(new ArrayOfEntityIdsType($entities, Field::element()->entityIdFrom($entities)->required()->build()))
+        );
     }
 
     /**

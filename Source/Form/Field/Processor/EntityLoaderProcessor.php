@@ -2,7 +2,6 @@
 
 namespace Iddigital\Cms\Core\Form\Field\Processor;
 
-use Iddigital\Cms\Core\Form\Field\Processor\FieldValidator;
 use Iddigital\Cms\Core\Model\IEntity;
 use Iddigital\Cms\Core\Model\IEntitySet;
 
