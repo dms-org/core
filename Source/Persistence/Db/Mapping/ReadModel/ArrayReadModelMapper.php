@@ -79,11 +79,7 @@ class ArrayReadModelMapper extends ReadModelMapper
         $relations         = $fromDefinition->getPropertyRelationMap();
 
         foreach ($nestedPropertyTree as $propertyName => $indexes) {
-            if (is_int($propertyName)) {
-                $definition->entityTo(function (ArrayReadModel $readModel, $value) use ($indexes) {
-                    $readModel->data[$indexes] = $value;
-                });
-            } elseif (isset($propertyColumnMap[$propertyName])) {
+            if (isset($propertyColumnMap[$propertyName])) {
                 foreach ($indexes as $nestedPropertyName => $index) {
                     if (is_int($nestedPropertyName)) {
                         $definition->properties([
