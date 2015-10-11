@@ -27,7 +27,7 @@ interface IObjectSetWithPartialLoadSupport extends IObjectSet
      *
      * @param IPartialLoadCriteria $criteria
      *
-     * @return ITypedObject[]
+     * @return array[]
      * @throws Exception\TypeMismatchException
      */
     public function loadPartial(IPartialLoadCriteria $criteria);
