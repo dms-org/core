@@ -16,10 +16,11 @@ use Iddigital\Cms\Core\Model\Criteria\NestedProperty;
 use Iddigital\Cms\Core\Model\Criteria\PropertyOrdering;
 use Iddigital\Cms\Core\Model\ICriteria;
 use Iddigital\Cms\Core\Model\IValueObject;
+use Iddigital\Cms\Core\Model\Object\FinalizedClassDefinition;
 use Iddigital\Cms\Core\Model\Object\FinalizedPropertyDefinition;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\FinalizedMapperDefinition;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\IObjectMapper;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\ReadModel\ReadModelMapper;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\ReadModel\ArrayReadModelMapper;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Embedded\EmbeddedObjectRelation;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\IRelation;
 use Iddigital\Cms\Core\Persistence\Db\Query;
@@ -104,11 +105,23 @@ class CriteriaMapper
     }
 
     /**
+     * @return FinalizedClassDefinition
+     */
+    protected function getMappedObjectType()
+    {
+        if ($this->mapper instanceof ArrayReadModelMapper) {
+            return $this->mapper->getParentMapper()->getDefinition()->getClass();
+        } else {
+            return $this->mapper->getDefinition()->getClass();
+        }
+    }
+
+    /**
      * @return Criteria
      */
     public function newCriteria()
     {
-        return new Criteria($this->mapper->getDefinition()->getClass());
+        return new Criteria($this->getMappedObjectType());
     }
 
     /**
@@ -120,9 +133,7 @@ class CriteriaMapper
      */
     public function mapCriteriaToSelect(ICriteria $criteria)
     {
-        if (!($this->mapper instanceof ReadModelMapper)) {
-            $criteria->verifyOfClass($this->mapper->getDefinition()->getClassName());
-        }
+        $criteria->verifyOfClass($this->getMappedObjectType()->getClassName());
 
         $select = Select::from($this->primaryTable);
 

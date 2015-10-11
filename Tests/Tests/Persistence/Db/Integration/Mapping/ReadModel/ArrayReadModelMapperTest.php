@@ -40,7 +40,7 @@ class ArrayReadModelMapperTest extends DbIntegrationTest
     {
         parent::setUp();
 
-        $this->arrayMapper = new ArrayReadModelMapper($this->orm, $this->orm->findEntityMapper(EntityWithValueObject::class), [
+        $this->arrayMapper = new ArrayReadModelMapper($this->orm->findEntityMapper(EntityWithValueObject::class), [
                 'name-index'             => 'name',
                 'sub-object-prop'        => 'money.cents',
                 'sub-object'             => 'money',

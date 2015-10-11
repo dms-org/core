@@ -22,13 +22,12 @@ class ArrayReadModelMapper extends ReadModelMapper
     /**
      * ArrayReadModelMapper constructor.
      *
-     * @param IOrm          $orm
      * @param IObjectMapper $fromMapper
      * @param string[]      $indexPropertyNameMap
      *
      * @throws InvalidArgumentException
      */
-    public function __construct(IOrm $orm, IObjectMapper $fromMapper, array $indexPropertyNameMap)
+    public function __construct(IObjectMapper $fromMapper, array $indexPropertyNameMap)
     {
         $class                  = $fromMapper->getDefinition()->getClass();
         $indexNestedPropertyMap = [];
@@ -39,7 +38,7 @@ class ArrayReadModelMapper extends ReadModelMapper
 
         $nestedPropertyTree = $this->createNestedPropertyTree($indexNestedPropertyMap);
 
-        $definition = new ReadMapperDefinition($orm);
+        $definition = new ReadMapperDefinition($fromMapper->getDefinition()->getOrm());
         $definition->from($fromMapper);
         $this->loadDefinitionFromNestedProperties($definition, $nestedPropertyTree);
 

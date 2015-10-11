@@ -159,7 +159,6 @@ abstract class DbRepositoryBase implements IObjectSetWithPartialLoadSupport
     {
         $aliasPropertyNameMap = $criteria->getAliasNestedPropertyNameMap();
         $readModelMapper      = new ArrayReadModelMapper(
-                CustomOrm::from([]),
                 $this->mapper,
                 $aliasPropertyNameMap
         );

@@ -27,9 +27,11 @@ abstract class CriteriaMapperTestBase extends CmsTestCase
 
     abstract protected function buildMapper();
 
-    protected function assertMappedSelect(ICriteria $criteria, Select $select)
+    protected function assertMappedSelect(ICriteria $criteria, Select $select, CriteriaMapper $mapper = null)
     {
-        $this->assertEquals($select, $this->mapper->mapCriteriaToSelect($criteria));
+        $mapper = $mapper ?: $this->mapper;
+
+        $this->assertEquals($select, $mapper->mapCriteriaToSelect($criteria));
     }
 
     /**
