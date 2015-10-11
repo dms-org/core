@@ -12,7 +12,6 @@ use Iddigital\Cms\Core\Model\ISpecification;
 use Iddigital\Cms\Core\Persistence\Db\Connection\IConnection;
 use Iddigital\Cms\Core\Persistence\Db\Criteria\CriteriaMapper;
 use Iddigital\Cms\Core\Persistence\Db\LoadingContext;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\CustomOrm;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\IObjectMapper;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\ReadModel\ArrayReadModelMapper;
 use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Expr;
