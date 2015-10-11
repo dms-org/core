@@ -150,7 +150,7 @@ class ObjectCollection extends TypedCollection implements ITypedObjectCollection
         $criteria->verifyOfClass($this->getObjectType());
 
         $objects    = array_values($this->matching($criteria));
-        $loadedData = [];
+        $loadedData = array_fill_keys(array_keys($objects), []);
 
         foreach ($criteria->getAliasNestedPropertyMap() as $index => $property) {
             $getter = $property->makePropertyGetterCallable();

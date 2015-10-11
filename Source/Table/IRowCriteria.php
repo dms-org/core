@@ -22,6 +22,27 @@ interface IRowCriteria
     public function getStructure();
 
     /**
+     * Gets the table columns to load.
+     *
+     * @return IColumn[]
+     */
+    public function getColumnsToLoad();
+
+    /**
+     * Gets the table column names to load.
+     *
+     * @return string[]
+     */
+    public function getColumnNamesToLoad();
+
+    /**
+     * Returns whether all columns are loaded.
+     *
+     * @return bool
+     */
+    public function getWhetherLoadsAllColumns();
+
+    /**
      * Gets the conditions which the rows must match
      * to load the rows.
      *

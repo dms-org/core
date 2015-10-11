@@ -3,6 +3,7 @@
 namespace Iddigital\Cms\Core\Table\Criteria;
 
 use Iddigital\Cms\Core\Exception;
+use Iddigital\Cms\Core\Table\IColumn;
 use Iddigital\Cms\Core\Table\IColumnComponent;
 use Iddigital\Cms\Core\Table\IRowCriteria;
 use Iddigital\Cms\Core\Table\ITableStructure;
@@ -18,6 +19,11 @@ class RowCriteria implements IRowCriteria
      * @var ITableStructure
      */
     protected $structure;
+
+    /**
+     * @var IColumn[]
+     */
+    protected $columnsToLoad = [];
 
     /**
      * @var ColumnCondition[]
@@ -68,6 +74,64 @@ class RowCriteria implements IRowCriteria
     public function getConditions()
     {
         return $this->conditions;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getColumnsToLoad()
+    {
+        return $this->columnsToLoad;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getColumnNamesToLoad()
+    {
+        return array_keys($this->columnsToLoad);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getWhetherLoadsAllColumns()
+    {
+        return count(array_diff_key($this->structure->getColumns(), $this->columnsToLoad)) === 0;
+    }
+
+    /**
+     * Loads the supplied columns or load all the columns if null.
+     *
+     * @param array|null $columnNames
+     *
+     * @return static
+     */
+    public function loadAll(array $columnNames = null)
+    {
+        if (is_array($columnNames)) {
+            foreach ($columnNames as $columnName) {
+                $this->columnsToLoad[$columnName] = $this->structure->getColumn($columnName);
+            }
+        } else {
+            $this->columnsToLoad = $this->structure->getColumns();
+        }
+
+        return $this;
+    }
+
+    /**
+     * Loads the supplied column.
+     *
+     * @param string $columnName
+     *
+     * @return static
+     */
+    public function load($columnName)
+    {
+        $this->columnsToLoad[$columnName] = $this->structure->getColumn($columnName);
+
+        return $this;
     }
 
     /**
@@ -137,8 +201,11 @@ class RowCriteria implements IRowCriteria
      */
     public function groupBy($componentId)
     {
+        /** @var IColumn $column */
         list($column, $component) = $this->structure->getColumnAndComponent($componentId);
         $this->groupings[] = new ColumnGrouping($column, $component);
+
+        $this->load($column->getName());
 
         return $this;
     }

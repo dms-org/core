@@ -112,7 +112,7 @@ class ArrayTableDataSource extends TableDataSource
      */
     protected function loadRows(IRowCriteria $criteria = null)
     {
-        $criteria = $criteria ?: $this->criteria();
+        $criteria = $criteria ?: $this->defaultLoadCriteria();
 
         $collection = Traversable::from($this->rows);
 
@@ -138,6 +138,14 @@ class ArrayTableDataSource extends TableDataSource
         }
 
         $collection = $collection->slice($criteria->getRowsToSkip(), $criteria->getAmountOfRows());
+
+        if (!$criteria->getWhetherLoadsAllColumns()) {
+            $columnsToLoadMap = $criteria->getColumnsToLoad();
+
+            $collection = $collection->select(function (TableRow $row) use ($columnsToLoadMap) {
+                return new TableRow(array_intersect_key($row->getData(), $columnsToLoadMap));
+            });
+        }
 
         return $collection->asArray();
     }

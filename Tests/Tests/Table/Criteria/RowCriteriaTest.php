@@ -3,6 +3,7 @@
 namespace Iddigital\Cms\Core\Tests\Table\Criteria;
 
 use Iddigital\Cms\Common\Testing\CmsTestCase;
+use Iddigital\Cms\Core\Exception\InvalidArgumentException;
 use Iddigital\Cms\Core\Form\Field\Builder\Field;
 use Iddigital\Cms\Core\Model\Criteria\OrderingDirection;
 use Iddigital\Cms\Core\Table\Builder\Column;
@@ -49,11 +50,70 @@ class RowCriteriaTest extends CmsTestCase
     public function testNew()
     {
         $this->assertSame($this->structure, $this->criteria->getStructure());
+        $this->assertSame([], $this->criteria->getColumnsToLoad());
+        $this->assertSame([], $this->criteria->getColumnNamesToLoad());
+        $this->assertSame(false, $this->criteria->getWhetherLoadsAllColumns());
         $this->assertSame([], $this->criteria->getConditions());
         $this->assertSame([], $this->criteria->getOrderings());
         $this->assertSame([], $this->criteria->getGroupings());
         $this->assertSame(null, $this->criteria->getAmountOfRows());
         $this->assertSame(0, $this->criteria->getRowsToSkip());
+    }
+
+    public function testLoadAllWithoutParameter()
+    {
+        $this->criteria->loadAll();
+
+        $this->assertSame($this->structure->getColumns(), $this->criteria->getColumnsToLoad());
+        $this->assertSame(true, $this->criteria->getWhetherLoadsAllColumns());
+    }
+
+    public function testLoadAllWithParameter()
+    {
+        $this->criteria->loadAll(['name']);
+
+        $this->assertSame(['name' => $this->structure->getColumn('name')], $this->criteria->getColumnsToLoad());
+        $this->assertSame(['name'], $this->criteria->getColumnNamesToLoad());
+        $this->assertSame(false, $this->criteria->getWhetherLoadsAllColumns());
+    }
+
+    public function testLoad()
+    {
+        $this->criteria->load('age');
+
+        $this->assertSame(['age' => $this->structure->getColumn('age')], $this->criteria->getColumnsToLoad());
+        $this->assertSame(['age'], $this->criteria->getColumnNamesToLoad());
+        $this->assertSame(false, $this->criteria->getWhetherLoadsAllColumns());
+    }
+
+    public function testLoadDuplicates()
+    {
+        $this->criteria->load('age')->load('age');
+
+        $this->assertSame(['age' => $this->structure->getColumn('age')], $this->criteria->getColumnsToLoad());
+    }
+
+    public function testLoadChained()
+    {
+        $this->criteria->load('age')->load('name');
+
+        $this->assertSame(
+                ['age' => $this->structure->getColumn('age'), 'name' => $this->structure->getColumn('name')],
+                $this->criteria->getColumnsToLoad()
+        );
+        $this->assertSame(['age', 'name'], $this->criteria->getColumnNamesToLoad());
+        $this->assertSame(true, $this->criteria->getWhetherLoadsAllColumns());
+    }
+
+    public function testLoadInvalidColumn()
+    {
+        $this->assertThrows(function () {
+            $this->criteria->loadAll(['non_existent']);
+        }, InvalidArgumentException::class);
+
+        $this->assertThrows(function () {
+            $this->criteria->load('non_existent');
+        }, InvalidArgumentException::class);
     }
 
     public function testWhere()
@@ -88,6 +148,13 @@ class RowCriteriaTest extends CmsTestCase
         $this->assertEquals([
                 new ColumnGrouping($column, $component)
         ], $this->criteria->getGroupings());
+    }
+
+    public function testGroupByAutoLoadsColumn()
+    {
+        $this->criteria->groupBy('age');
+
+        $this->assertSame(['age' => $this->structure->getColumn('age')], $this->criteria->getColumnsToLoad());
     }
 
     public function testOffsetAndLimit()

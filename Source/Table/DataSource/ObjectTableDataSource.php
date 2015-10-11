@@ -3,6 +3,7 @@
 namespace Iddigital\Cms\Core\Table\DataSource;
 
 use Iddigital\Cms\Core\Model\IObjectSet;
+use Iddigital\Cms\Core\Model\IObjectSetWithPartialLoadSupport;
 use Iddigital\Cms\Core\Model\ITypedObject;
 use Iddigital\Cms\Core\Table\Data\TableRow;
 use Iddigital\Cms\Core\Table\DataSource\Criteria\RowCriteriaMapper;
@@ -58,25 +59,55 @@ class ObjectTableDataSource extends TableDataSource
      */
     protected function loadRows(IRowCriteria $criteria = null)
     {
+        $objectSource = $this->objectSource;
+
+        $objects          = null;
+        $objectProperties = null;
+        $definition       = $this->definition;
+
         if ($criteria) {
-            $objects = $this->objectSource->matching($this->criteriaMapper->mapCriteria($criteria));
+            $mappedCriteria = $this->criteriaMapper->mapCriteria($criteria);
+
+            if ($criteria->getWhetherLoadsAllColumns()) {
+                $objects = $objectSource->matching($mappedCriteria);
+            } else {
+                $supportsPartialLoad = $objectSource instanceof IObjectSetWithPartialLoadSupport;
+                $definition          = $this->definition->forColumns($criteria->getColumnNamesToLoad());
+
+                if ($definition->requiresObjectInstanceForMapping() || !$supportsPartialLoad) {
+                    $objects = $objectSource->matching($mappedCriteria);
+                } else {
+                    /** @var IObjectSetWithPartialLoadSupport $objectSource */
+                    $objectProperties = $objectSource->loadPartial($mappedCriteria);
+                }
+            }
         } else {
-            $objects = $this->objectSource->getAll();
+            $objects = $objectSource->getAll();
         }
 
-        return $this->mapObjectsToRows($objects);
+        if ($objectProperties === null) {
+            $objectProperties = [];
+
+            foreach ($objects as $key => $object) {
+                $objectProperties[$key] = $object->toArray();
+            }
+        }
+
+        return $this->mapObjectsToRows($definition, $objectProperties, $objects);
     }
 
     /**
-     * @param ITypedObject[] $objects
+     * @param FinalizedObjectTableDefinition $definition
+     * @param array[]                        $objectProperties
+     * @param ITypedObject[]|null            $objects
      *
      * @return ITableRow[]
      */
-    private function mapObjectsToRows(array $objects)
+    private function mapObjectsToRows(FinalizedObjectTableDefinition $definition, array $objectProperties, array $objects = null)
     {
-        $propertyComponentIdMap = $this->definition->getPropertyComponentIdMap();
-        $componentIdCallableMap = $this->definition->getComponentIdCallableMap();
-        $customCallables        = $this->definition->getCustomCallableMappers();
+        $propertyComponentIdMap = $definition->getPropertyComponentIdMap();
+        $componentIdCallableMap = $definition->getComponentIdCallableMap();
+        $customCallables        = $definition->getCustomCallableMappers();
         $rows                   = [];
 
         $componentIdMap = [];
@@ -89,22 +120,25 @@ class ObjectTableDataSource extends TableDataSource
             $componentIdMap[$componentId] = [$column->getName(), $component->getName()];
         }
 
-        foreach ($objects as $object) {
-            $row              = [];
-            $objectProperties = $object->toArray();
+        foreach ($objectProperties as $key => $properties) {
+            $row = [];
 
             foreach ($propertyComponentIdMap as $property => $componentId) {
                 list($columnName, $componentName) = $componentIdMap[$componentId];
-                $row[$columnName][$componentName] = $objectProperties[$property];
+                $row[$columnName][$componentName] = $properties[$property];
             }
 
-            foreach ($componentIdCallableMap as $componentId => $callable) {
-                list($columnName, $componentName) = $componentIdMap[$componentId];
-                $row[$columnName][$componentName] = $callable($object);
-            }
+            if ($objects) {
+                $object = $objects[$key];
 
-            foreach ($customCallables as $customCallable) {
-                $customCallable($row, $object);
+                foreach ($componentIdCallableMap as $componentId => $callable) {
+                    list($columnName, $componentName) = $componentIdMap[$componentId];
+                    $row[$columnName][$componentName] = $callable($object);
+                }
+
+                foreach ($customCallables as $customCallable) {
+                    $customCallable($row, $object);
+                }
             }
 
             $rows[] = new TableRow($row);

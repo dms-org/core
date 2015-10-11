@@ -42,4 +42,19 @@ class TableStructureTest extends CmsTestCase
             $structure->getColumnAndComponent('invalid');
         }, InvalidArgumentException::class);
     }
+
+    public function testWithColumns()
+    {
+        $structure = new TableStructure([
+                $string = Column::from(Field::name('string')->label('String')->string()),
+                $number = Column::from(Field::name('number')->label('Number')->decimal()),
+        ]);
+
+        $structure = $structure->withColumns([$number]);
+
+        $this->assertSame(['number' => $number], $structure->getColumns());
+        $this->assertSame(true, $structure->hasColumn('number'));
+        $this->assertSame(false, $structure->hasColumn('string'));
+        $this->assertSame(['number'], $structure->getColumnNames());
+    }
 }

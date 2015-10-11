@@ -55,4 +55,14 @@ interface ITableStructure
      * @throws InvalidArgumentException
      */
     public function getColumnAndComponent($componentId);
+
+    /**
+     * Returns a new table structure with only the supplied columns.
+     *
+     * @param IColumn[] $columns
+     *
+     * @return static
+     * @throws InvalidArgumentException
+     */
+    public function withColumns(array $columns);
 }

@@ -3,8 +3,6 @@
 namespace Iddigital\Cms\Core\Tests\Table\DataSource;
 
 use Iddigital\Cms\Core\Form\Field\Builder\Field;
-use Iddigital\Cms\Core\Model\Criteria\Condition\ConditionOperator;
-use Iddigital\Cms\Core\Model\Criteria\OrderingDirection;
 use Iddigital\Cms\Core\Model\ObjectCollection;
 use Iddigital\Cms\Core\Table\Builder\Column;
 use Iddigital\Cms\Core\Table\DataSource\Definition\FinalizedObjectTableDefinition;

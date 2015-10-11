@@ -42,8 +42,8 @@ class FinalizedObjectTableDefinition
      *
      * @param FinalizedClassDefinition $class
      * @param ITableStructure          $structure
-     * @param string[]                $propertyComponentIdMap
-     * @param callable[]              $componentIdCallableMap
+     * @param string[]                 $propertyComponentIdMap
+     * @param callable[]               $componentIdCallableMap
      * @param callable[]               $customCallableMappers
      */
     public function __construct(
@@ -62,6 +62,71 @@ class FinalizedObjectTableDefinition
         foreach (array_merge($propertyComponentIdMap, array_keys($componentIdCallableMap)) as $componentId) {
             $this->structure->getColumnAndComponent($componentId);
         }
+    }
+
+    /**
+     * @param string[] $columnNames
+     *
+     * @return FinalizedObjectTableDefinition
+     */
+    public function forColumns(array $columnNames)
+    {
+        $columns = [];
+
+        foreach ($columnNames as $columnName) {
+            $columns[$columnName] = $this->structure->getColumn($columnName);
+        }
+
+        $columnNames = array_fill_keys($columnNames, true);
+
+
+        $propertyComponentIdMap = [];
+
+        foreach ($this->propertyComponentIdMap as $property => $componentId) {
+            $column = $this->getColumnNameFromComponentId($componentId);
+
+            if (isset($columnNames[$column])) {
+                $propertyComponentIdMap[$property] = $componentId;
+            }
+        }
+
+        $componentIdCallableMap = [];
+
+        foreach ($this->componentIdCallableMap as $componentId => $callable) {
+            $column = $this->getColumnNameFromComponentId($componentId);
+
+            if (isset($columnNames[$column])) {
+                $propertyComponentIdMap[$componentId] = $callable;
+            }
+        }
+
+        return new self(
+                $this->class,
+                $this->structure->withColumns($columns),
+                $propertyComponentIdMap,
+                $componentIdCallableMap,
+                $this->customCallableMappers
+        );
+    }
+
+    /**
+     * @param string $componentId
+     *
+     * @return string
+     */
+    private function getColumnNameFromComponentId($componentId)
+    {
+        return explode('.', $componentId)[0];
+    }
+
+    /**
+     * Returns whether this mapping requires object instances to load.
+     *
+     * @return bool
+     */
+    public function requiresObjectInstanceForMapping()
+    {
+        return !empty($this->componentIdCallableMap) || !empty($this->customCallableMappers);
     }
 
     /**
@@ -102,5 +167,23 @@ class FinalizedObjectTableDefinition
     public function getCustomCallableMappers()
     {
         return $this->customCallableMappers;
+    }
+
+    /**
+     * @param string $columnName
+     *
+     * @return string[]
+     */
+    public function getPropertiesRequiredFor($columnName)
+    {
+        $propertyNames = [];
+
+        foreach ($this->propertyComponentIdMap as $propertyName => $componentId) {
+            if($this->getColumnNameFromComponentId($componentId) === $columnName) {
+                $propertyNames[$propertyName] = $propertyName;
+            }
+        }
+
+        return $propertyNames;
     }
 }

@@ -69,6 +69,14 @@ abstract class TableDataSource implements ITableDataSource
     }
 
     /**
+     * @return RowCriteria
+     */
+    protected function defaultLoadCriteria()
+    {
+        return $this->criteria()->loadAll();
+    }
+
+    /**
      * @inheritDoc
      */
     final public function load(IRowCriteria $criteria = null)
