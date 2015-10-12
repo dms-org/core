@@ -4,6 +4,8 @@ namespace Iddigital\Cms\Core\Table\DataSource;
 
 use Iddigital\Cms\Core\Exception\InvalidArgumentException;
 use Iddigital\Cms\Core\Model\Collection;
+use Iddigital\Cms\Core\Table\Chart\DataSource\ChartTableDataSourceAdapter;
+use Iddigital\Cms\Core\Table\Chart\DataSource\Definition\ChartTableMapperDefinition;
 use Iddigital\Cms\Core\Table\Criteria\RowCriteria;
 use Iddigital\Cms\Core\Table\Data\DataTable;
 use Iddigital\Cms\Core\Table\Data\TableRow;
@@ -66,6 +68,18 @@ abstract class TableDataSource implements ITableDataSource
     final public function criteria()
     {
         return new RowCriteria($this->structure);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function asChart(callable $chartMappingCallback, $name = null)
+    {
+        $name       = $name ?: $this->name;
+        $definition = new ChartTableMapperDefinition($this);
+        $chartMappingCallback($definition);
+
+        return new ChartTableDataSourceAdapter($name, $definition->finalize());
     }
 
     /**

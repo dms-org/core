@@ -3,6 +3,7 @@
 namespace Iddigital\Cms\Core\Table\Data;
 
 use Iddigital\Cms\Core\Exception\InvalidArgumentException;
+use Iddigital\Cms\Core\Exception\NotImplementedException;
 use Iddigital\Cms\Core\Table\IColumn;
 use Iddigital\Cms\Core\Table\IColumnComponent;
 use Iddigital\Cms\Core\Table\ITableRow;
@@ -49,13 +50,13 @@ class TableRow implements ITableRow
     /**
      * @inheritDoc
      */
-    public function getCellData(IColumn $column)
+    public function getCellData($column)
     {
-        $columnName = $column->getName();
+        $columnName = $column instanceof IColumn ? $column->getName() : $column;
 
         if (!array_key_exists($columnName, $this->data)) {
             throw InvalidArgumentException::format(
-                    'Invalid column supplied to row: expecting one of (%s), %s given',
+                    'Invalid column supplied to row: expecting one of (%s), \'%s\' given',
                     Debug::formatValues(array_keys($this->data)), $columnName
             );
         }
@@ -64,17 +65,24 @@ class TableRow implements ITableRow
     }
 
     /**
-     * @param IColumn          $column
-     * @param IColumnComponent $component
-     *
-     * @return mixed
-     * @throws InvalidArgumentException
+     * @inheritDoc
      */
-    public function getCellComponentData(IColumn $column, IColumnComponent $component)
+    public function getCellComponentData($column, $component = null)
     {
         $cellData = $this->getCellData($column);
 
-        $componentName = $component->getName();
+        $componentName = $component instanceof IColumnComponent ? $component->getName() : $component;
+
+        if ($componentName === null) {
+            if (count($cellData) === 1) {
+                return reset($cellData);
+            } else {
+                throw InvalidArgumentException::format(
+                        'Invalid column component supplied to row: expecting one of (%s), null given',
+                        Debug::formatValues(array_keys($cellData))
+                );
+            }
+        }
 
         if (!isset($cellData[$componentName]) && !array_key_exists($componentName, $cellData)) {
             throw InvalidArgumentException::format(
@@ -84,5 +92,51 @@ class TableRow implements ITableRow
         }
 
         return $cellData[$componentName];
+    }
+
+    /**
+     * @param string $componentId
+     *
+     * @return bool
+     * @throws InvalidArgumentException
+     */
+    public function offsetExists($componentId)
+    {
+        list($columnName, $componentName) = explode('.', $componentId) + [1 => null];
+
+        if (!array_key_exists($columnName, $this->data)) {
+            return false;
+        }
+
+        $cellData = $this->getCellData($columnName);
+
+        if (!$componentName) {
+            return count($cellData) === 1;
+        } else {
+            return array_key_exists($componentName, $cellData);
+        }
+    }
+
+    /**
+     * @param string $componentId
+     *
+     * @return mixed
+     * @throws InvalidArgumentException
+     */
+    public function offsetGet($componentId)
+    {
+        list($columnName, $componentName) = explode('.', $componentId) + [1 => null];
+
+        return $this->getCellComponentData($columnName, $componentName);
+    }
+
+    public function offsetSet($offset, $value)
+    {
+        throw NotImplementedException::method(__METHOD__);
+    }
+
+    public function offsetUnset($offset)
+    {
+        throw NotImplementedException::method(__METHOD__);
     }
 }

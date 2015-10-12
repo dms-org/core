@@ -49,4 +49,13 @@ interface IColumnComponentType
      * @throws InvalidArgumentException
      */
     public function getOperator($operatorString);
+
+    /**
+     * Returns whether the types are equal
+     *
+     * @param IColumnComponentType $type
+     *
+     * @return bool
+     */
+    public function equals(IColumnComponentType $type);
 }

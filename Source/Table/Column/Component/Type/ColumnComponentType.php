@@ -98,4 +98,14 @@ class ColumnComponentType implements IColumnComponentType
 
         return $this->validOperators[$operatorString];
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function equals(IColumnComponentType $type)
+    {
+        return $this == $type;
+    }
+
+
 }

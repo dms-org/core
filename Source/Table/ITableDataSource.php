@@ -2,6 +2,7 @@
 
 namespace Iddigital\Cms\Core\Table;
 
+use Iddigital\Cms\Core\Table\Chart\IChartDataSource;
 use Iddigital\Cms\Core\Table\Criteria\RowCriteria;
 
 /**
@@ -51,4 +52,25 @@ interface ITableDataSource
      * @return int
      */
     public function count(IRowCriteria $criteria = null);
+
+    /**
+     * Creates a chart data source that will load the data
+     * from this table.
+     *
+     * Example:
+     * <code>
+     * ->asChart(function (ChartTableMapperDefinition $map) {
+     *      $map->structure(new LineChart(
+     *              $map->column('some.table-component')->toAxis(),
+     *              $map->column('some.other-component')->toAxis()
+     *      ));
+     * });
+     * </code>
+     *
+     * @param callable    $chartMappingCallback
+     * @param string|null $name Default to the table data source name
+     *
+     * @return IChartDataSource
+     */
+    public function asChart(callable $chartMappingCallback, $name = null);
 }

@@ -17,6 +17,11 @@ class Column implements IColumn
     /**
      * @var string
      */
+    protected static $debugType = 'column';
+
+    /**
+     * @var string
+     */
     protected $name;
 
     /**
@@ -111,16 +116,16 @@ class Column implements IColumn
                 return reset($this->components);
             } else {
                 throw InvalidArgumentException::format(
-                        'Must supply component name for column %s with more than one component: expecting one of (%s), null given',
-                        $this->name, Debug::formatValues(array_keys($this->components))
+                        'Must supply component name for %s \'%s\' with more than one component: expecting one of (%s), null given',
+                        static::$debugType, $this->name, Debug::formatValues(array_keys($this->components))
                 );
             }
         }
 
         if (!isset($this->components[$componentName])) {
             throw InvalidArgumentException::format(
-                    'Invalid component name for column %s: expecting one of (%s), %s given',
-                    $this->name, Debug::formatValues(array_keys($this->components)), $componentName
+                    'Invalid component name for %s \'%s\': expecting one of (%s), %s given',
+                    static::$debugType, $this->name, Debug::formatValues(array_keys($this->components)), $componentName
             );
         }
 

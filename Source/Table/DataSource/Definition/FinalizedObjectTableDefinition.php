@@ -77,10 +77,9 @@ class FinalizedObjectTableDefinition
             $columns[$columnName] = $this->structure->getColumn($columnName);
         }
 
-        $columnNames = array_fill_keys($columnNames, true);
-
-
+        $columnNames            = array_fill_keys($columnNames, true);
         $propertyComponentIdMap = [];
+        $componentIdCallableMap = [];
 
         foreach ($this->propertyComponentIdMap as $property => $componentId) {
             $column = $this->getColumnNameFromComponentId($componentId);
@@ -90,13 +89,11 @@ class FinalizedObjectTableDefinition
             }
         }
 
-        $componentIdCallableMap = [];
-
         foreach ($this->componentIdCallableMap as $componentId => $callable) {
             $column = $this->getColumnNameFromComponentId($componentId);
 
             if (isset($columnNames[$column])) {
-                $propertyComponentIdMap[$componentId] = $callable;
+                $componentIdCallableMap[$componentId] = $callable;
             }
         }
 
@@ -179,7 +176,7 @@ class FinalizedObjectTableDefinition
         $propertyNames = [];
 
         foreach ($this->propertyComponentIdMap as $propertyName => $componentId) {
-            if($this->getColumnNameFromComponentId($componentId) === $columnName) {
+            if ($this->getColumnNameFromComponentId($componentId) === $columnName) {
                 $propertyNames[$propertyName] = $propertyName;
             }
         }

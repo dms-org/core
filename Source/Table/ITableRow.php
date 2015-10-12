@@ -9,7 +9,7 @@ use Iddigital\Cms\Core\Exception\InvalidArgumentException;
  *
  * @author Elliot Levin <elliotlevin@hotmail.com>
  */
-interface ITableRow
+interface ITableRow extends \ArrayAccess
 {
     /**
      * Gets the row data as an associative array.
@@ -19,19 +19,19 @@ interface ITableRow
     public function getData();
 
     /**
-     * @param IColumn $column
+     * @param IColumn|string $column
      *
      * @return array
      * @throws InvalidArgumentException
      */
-    public function getCellData(IColumn $column);
+    public function getCellData($column);
 
     /**
-     * @param IColumn          $column
-     * @param IColumnComponent $component
+     * @param IColumn|string               $column
+     * @param IColumnComponent|string|null $component
      *
      * @return mixed
      * @throws InvalidArgumentException
      */
-    public function getCellComponentData(IColumn $column, IColumnComponent $component);
+    public function getCellComponentData($column, $component = null);
 }

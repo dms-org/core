@@ -4,6 +4,7 @@ namespace Iddigital\Cms\Core\Tests\Table\Data;
 
 use Iddigital\Cms\Common\Testing\CmsTestCase;
 use Iddigital\Cms\Core\Exception\InvalidArgumentException;
+use Iddigital\Cms\Core\Exception\NotImplementedException;
 use Iddigital\Cms\Core\Table\Data\TableRow;
 use Iddigital\Cms\Core\Table\IColumn;
 use Iddigital\Cms\Core\Table\IColumnComponent;
@@ -19,18 +20,58 @@ class TableRowTest extends CmsTestCase
 
         $this->assertSame(['column' => ['component' => 'data']], $row->getData());
         $this->assertSame(['component' => 'data'], $row->getCellData($this->mockColumn('column')));
+        $this->assertSame(['component' => 'data'], $row->getCellData('column'));
         $this->assertSame('data', $row->getCellComponentData($this->mockColumn('column'), $this->mockComponent('component')));
+        $this->assertSame('data', $row->getCellComponentData('column', 'component'));
+        $this->assertSame('data', $row->getCellComponentData('column'));
+        $this->assertSame(true, isset($row['column']));
+        $this->assertSame(true, isset($row['column.component']));
+        $this->assertSame('data', $row['column']);
+        $this->assertSame('data', $row['column.component']);
+
+        $this->assertSame(false, isset($row['non-existent']));
+        $this->assertSame(false, isset($row['column.non-existent']));
 
         $this->assertThrows(function () use ($row) {
             $row->getCellData($this->mockColumn('non-existent'));
         }, InvalidArgumentException::class);
 
         $this->assertThrows(function () use ($row) {
-            $this->assertSame('data', $row->getCellComponentData($this->mockColumn('column'), $this->mockComponent('non-existent')));
+            $row['non-existent'];
+        }, InvalidArgumentException::class);
+
+
+        $this->assertThrows(function () use ($row) {
+            $row['column.non-existent'];
         }, InvalidArgumentException::class);
 
         $this->assertThrows(function () use ($row) {
-            $this->assertSame('data', $row->getCellComponentData($this->mockColumn('abc'), $this->mockComponent('component')));
+            $row->getCellComponentData($this->mockColumn('column'), $this->mockComponent('non-existent'));
+        }, InvalidArgumentException::class);
+
+        $this->assertThrows(function () use ($row) {
+            $row->getCellComponentData($this->mockColumn('abc'), $this->mockComponent('component'));
+        }, InvalidArgumentException::class);
+    }
+
+    public function testMultipleComponents()
+    {
+        $row = new TableRow(['column' => ['component' => 'data', 'other' => 'other data']]);
+
+        $this->assertSame('data', $row->getCellComponentData('column', 'component'));
+        $this->assertSame('other data', $row->getCellComponentData('column', 'other'));
+        $this->assertSame(false, isset($row['column']));
+        $this->assertSame(true, isset($row['column.component']));
+        $this->assertSame(true, isset($row['column.other']));
+        $this->assertSame('data', $row['column.component']);
+        $this->assertSame('other data', $row['column.other']);
+
+        $this->assertThrows(function () use ($row) {
+            $row->getCellComponentData('column');
+        }, InvalidArgumentException::class);
+
+        $this->assertThrows(function () use ($row) {
+            $row['column'];
         }, InvalidArgumentException::class);
     }
 
@@ -39,6 +80,19 @@ class TableRowTest extends CmsTestCase
         $this->setExpectedException(InvalidArgumentException::class);
 
         new TableRow(['column' => 'data']);
+    }
+
+    public function testUnimplementedMethods()
+    {
+        $row = new TableRow(['column' => ['component' => 'data']]);
+
+        $this->assertThrows(function () use ($row) {
+            unset($row['data']);
+        }, NotImplementedException::class);
+
+        $this->assertThrows(function () use ($row) {
+            $row['data'] = 'foo';
+        }, NotImplementedException::class);
     }
 
     /**

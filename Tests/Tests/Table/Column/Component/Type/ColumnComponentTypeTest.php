@@ -65,4 +65,20 @@ class ColumnComponentTypeTest extends CmsTestCase
                 new ColumnComponentOperator(ConditionOperator::STRING_CONTAINS_CASE_INSENSITIVE, $field),
         ], array_values($type->getConditionOperators()));
     }
+
+    public function testEquals()
+    {
+        $stringField = Field::name('foo')->label('Foo')->string()->build();
+        $intField    = Field::name('foo')->label('Foo')->int()->build();
+
+        $stringType = ColumnComponentType::forField($stringField);
+        $intType    = ColumnComponentType::forField($intField);
+
+        $this->assertTrue($stringType->equals($stringType));
+        $this->assertTrue($intType->equals($intType));
+        $this->assertTrue($stringType->equals(clone $stringType));
+
+        $this->assertFalse($intType->equals($stringType));
+        $this->assertFalse($stringType->equals($intType));
+    }
 }
