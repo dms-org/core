@@ -58,4 +58,15 @@ interface IColumnComponentType
      * @return bool
      */
     public function equals(IColumnComponentType $type);
+
+    /**
+     * Returns an equivalent type with the operator fields with the
+     * supplied name and label.
+     *
+     * @param string $name
+     * @param string $label
+     *
+     * @return static
+     */
+    public function withFieldAs($name, $label);
 }

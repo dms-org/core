@@ -51,4 +51,15 @@ class ColumnComponentOperator implements IColumnComponentOperator
     {
         return $this->field;
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function withFieldAs($name, $label)
+    {
+        $clone = clone $this;
+        $clone->field = $this->field->withName($name, $label);
+
+        return $clone;
+    }
 }

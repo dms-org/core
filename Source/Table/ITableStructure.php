@@ -57,6 +57,16 @@ interface ITableStructure
     public function getColumnAndComponent($componentId);
 
     /**
+     * Gets the column component for the given component id.
+     *
+     * @param string $componentId
+     *
+     * @return IColumnComponent
+     * @throws InvalidArgumentException
+     */
+    public function getComponent($componentId);
+
+    /**
      * Returns a new table structure with only the supplied columns.
      *
      * @param IColumn[] $columns

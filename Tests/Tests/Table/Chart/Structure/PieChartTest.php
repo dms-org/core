@@ -40,7 +40,7 @@ class PieChartTest extends CmsTestCase
     {
         $this->setExpectedException(InvalidArgumentException::class);
 
-        new LineChart(
+        new PieChart(
                 new ChartAxis('type', 'Type', [
                         ColumnComponent::forField(Field::name('t1')->label('T1')->int()->build()),
                         ColumnComponent::forField(Field::name('t2')->label('T2')->int()->build()),
@@ -53,7 +53,7 @@ class PieChartTest extends CmsTestCase
     {
         $this->setExpectedException(InvalidArgumentException::class);
 
-        new LineChart(
+        new PieChart(
                 ChartAxis::forField(Field::name('type')->label('Type')->int()->build()),
                 new ChartAxis('amount', 'Amount', [
                         ColumnComponent::forField(Field::name('a1')->label('A1')->int()->build()),

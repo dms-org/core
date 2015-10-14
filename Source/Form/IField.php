@@ -6,14 +6,14 @@ use Iddigital\Cms\Core\Model\Type\IType;
 
 /**
  * The field interface.
- * 
+ *
  * @author Elliot Levin <elliot@aanet.com.au>
  */
 interface IField
 {
     /**
      * Gets the field name.
-     * 
+     *
      * @return string
      */
     public function getName();
@@ -66,11 +66,12 @@ interface IField
     public function unprocess($processedInput);
 
     /**
-     * Gets an equivalent form field with the supplied name.
+     * Gets an equivalent form field with the supplied name and label.
      *
-     * @param string $name
+     * @param string      $name
+     * @param string|null $label
      *
      * @return IField
      */
-    public function withName($name);
+    public function withName($name, $label = null);
 }

@@ -62,6 +62,9 @@ class Field extends FieldBuilderBase
     }
 
     /**
+     * Constructs a field builder to be used as an element of
+     * an array field.
+     *
      * @return Field
      */
     final public static function element()
@@ -69,6 +72,21 @@ class Field extends FieldBuilderBase
         $labelBuilder        = new self();
         $labelBuilder->name  = '__element';
         $labelBuilder->label = '__element';
+
+        return $labelBuilder;
+    }
+
+    /**
+     * Constructs a field builder to be used as an element of
+     * an array field.
+     *
+     * @return Field
+     */
+    final public static function forType()
+    {
+        $labelBuilder        = new self();
+        $labelBuilder->name  = '__type';
+        $labelBuilder->label = '__type';
 
         return $labelBuilder;
     }

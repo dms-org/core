@@ -21,7 +21,9 @@ class ChartAxisTest extends CmsTestCase
 
         $this->assertSame('name', $axis->getName());
         $this->assertSame('Label', $axis->getLabel());
-        $this->assertSame($component->getType(), $axis->getType());
+        $this->assertTrue($component->getType()->equals($axis->getType()));
+        $this->assertSame('name', $axis->getType()->getOperator('=')->getField()->getName());
+        $this->assertSame('Label', $axis->getType()->getOperator('=')->getField()->getLabel());
         $this->assertSame(['component' => $component], $axis->getComponents());
         $this->assertSame(true, $axis->hasComponent('component'));
         $this->assertSame(false, $axis->hasComponent('non-existent'));
@@ -49,7 +51,7 @@ class ChartAxisTest extends CmsTestCase
 
         $this->assertSame('component', $axis->getName());
         $this->assertSame('Component', $axis->getLabel());
-        $this->assertSame($component->getType(), $axis->getType());
+        $this->assertEquals($component->getType(), $axis->getType());
         $this->assertSame(['component' => $component], $axis->getComponents());
     }
 

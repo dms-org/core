@@ -4,7 +4,10 @@ namespace Iddigital\Cms\Core\Module\Definition;
 
 use Iddigital\Cms\Core\Auth\IAuthSystem;
 use Iddigital\Cms\Core\Exception\InvalidOperationException;
+use Iddigital\Cms\Core\Module\Definition\Chart\ChartDefiner;
 use Iddigital\Cms\Core\Module\Definition\Table\TableDefiner;
+use Iddigital\Cms\Core\Module\Definition\Widget\WidgetLabelDefiner;
+use Iddigital\Cms\Core\Module\Definition\Widget\WidgetTypeDefiner;
 use Iddigital\Cms\Core\Module\IAction;
 use Iddigital\Cms\Core\Table\Chart\IChartDataSource;
 use Iddigital\Cms\Core\Table\ITableDataSource;
@@ -98,16 +101,30 @@ class ModuleDefinition
     }
 
     /**
+     * Defines a chart data source with the supplied name.
+     *
+     * @param string $name
+     *
+     * @return ChartDefiner
+     */
+    public function chart($name)
+    {
+        return new ChartDefiner($name, $this->tables, function (IChartDataSource $chartDataSource) {
+            $this->charts[$chartDataSource->getName()] = $chartDataSource;
+        });
+    }
+
+    /**
      * Defines a widget with the supplied name.
      *
      * @param string $name
      *
-     * @return WidgetDefiner
+     * @return WidgetLabelDefiner
      */
     public function widget($name)
     {
-        return new TableDefiner($name, function (ITableDataSource $tableDataSource) {
-            $this->tables[$tableDataSource->getName()] = $tableDataSource;
+        return new WidgetLabelDefiner($name, $this->tables, $this->charts, function (IWidget $widget) {
+            $this->widgets[$widget->getName()] = $widget;
         });
     }
 
@@ -124,7 +141,9 @@ class ModuleDefinition
         return new FinalizedModuleDefinition(
                 $this->name,
                 $this->actions,
-                $this->tables
+                $this->tables,
+                $this->charts,
+                $this->widgets
         );
     }
 }

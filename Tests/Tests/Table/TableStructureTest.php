@@ -30,6 +30,9 @@ class TableStructureTest extends CmsTestCase
         $this->assertSame([$string, $string->getComponent()], $structure->getColumnAndComponent('string'));
         $this->assertSame([$string, $string->getComponent('string')], $structure->getColumnAndComponent('string.string'));
 
+        $this->assertSame($string->getComponent(), $structure->getComponent('string'));
+        $this->assertSame($string->getComponent('string'), $structure->getComponent('string.string'));
+
         $this->assertThrows(function () use ($structure) {
             $structure->getColumn('other-column');
         }, InvalidArgumentException::class);
@@ -40,6 +43,10 @@ class TableStructureTest extends CmsTestCase
 
         $this->assertThrows(function () use ($structure) {
             $structure->getColumnAndComponent('invalid');
+        }, InvalidArgumentException::class);
+
+        $this->assertThrows(function () use ($structure) {
+            $structure->getComponent('invalid');
         }, InvalidArgumentException::class);
     }
 

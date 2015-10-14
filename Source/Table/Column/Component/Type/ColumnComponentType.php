@@ -102,10 +102,22 @@ class ColumnComponentType implements IColumnComponentType
     /**
      * @inheritDoc
      */
-    public function equals(IColumnComponentType $type)
+    public function withFieldAs($name, $label)
     {
-        return $this == $type;
+        $clone = clone $this;
+
+        foreach ($clone->validOperators as $key => $operator) {
+            $clone->validOperators[$key] = $operator->withFieldAs($name, $label);
+        }
+
+        return $clone;
     }
 
-
+    /**
+     * @inheritDoc
+     */
+    public function equals(IColumnComponentType $type)
+    {
+        return $this->withFieldAs('*', '*') == $type->withFieldAs('*', '*');
+    }
 }

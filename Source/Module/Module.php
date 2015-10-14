@@ -9,8 +9,10 @@ use Iddigital\Cms\Core\Exception\InvalidOperationException;
 use Iddigital\Cms\Core\Form;
 use Iddigital\Cms\Core\Module\Definition\FinalizedModuleDefinition;
 use Iddigital\Cms\Core\Module\Definition\ModuleDefinition;
+use Iddigital\Cms\Core\Table\Chart\IChartDataSource;
 use Iddigital\Cms\Core\Table\ITableDataSource;
 use Iddigital\Cms\Core\Util\Debug;
+use Iddigital\Cms\Core\Widget\IWidget;
 
 /**
  * The module base class.
@@ -45,6 +47,16 @@ abstract class Module implements IModule
     private $tableDataSources = [];
 
     /**
+     * @var IChartDataSource[]
+     */
+    private $chartDataSources = [];
+
+    /**
+     * @var IWidget[]
+     */
+    private $widgets = [];
+
+    /**
      * Module constructor.
      *
      * @param IAuthSystem $authSystem
@@ -74,6 +86,14 @@ abstract class Module implements IModule
 
         foreach ($this->definition->getTables() as $table) {
             $this->tableDataSources[$table->getName()] = $table;
+        }
+
+        foreach ($this->definition->getCharts() as $chart) {
+            $this->chartDataSources[$chart->getName()] = $chart;
+        }
+
+        foreach ($this->definition->getWidgets() as $widget) {
+            $this->widgets[$widget->getName()] = $widget;
         }
     }
 
@@ -122,7 +142,7 @@ abstract class Module implements IModule
         }
 
         throw InvalidArgumentException::format(
-                'Invalid call to %s: unknown action name, expecting one of (%s), %s given',
+                'Invalid call to %s: unknown action name, expecting one of (%s), \'%s\' given',
                 __METHOD__, Debug::formatValues(array_keys($this->parameterizedActions + $this->unparameterizedActions)), $name
         );
     }
@@ -153,7 +173,7 @@ abstract class Module implements IModule
         }
 
         throw InvalidArgumentException::format(
-                'Invalid call to %s: unknown action name, expecting one of (%s), %s given',
+                'Invalid call to %s: unknown action name, expecting one of (%s), \'%s\' given',
                 __METHOD__, Debug::formatValues(array_keys($this->parameterizedActions)), $name
         );
     }
@@ -184,7 +204,7 @@ abstract class Module implements IModule
         }
 
         throw InvalidArgumentException::format(
-                'Invalid call to %s: unknown action name, expecting one of (%s), %s given',
+                'Invalid call to %s: unknown action name, expecting one of (%s), \'%s\' given',
                 __METHOD__, Debug::formatValues(array_keys($this->unparameterizedActions)), $name
         );
     }
@@ -215,7 +235,7 @@ abstract class Module implements IModule
         }
 
         throw InvalidArgumentException::format(
-                'Invalid call to %s: unknown action name, expecting one of (%s), %s given',
+                'Invalid call to %s: unknown table name, expecting one of (%s), \'%s\' given',
                 __METHOD__, Debug::formatValues(array_keys($this->tableDataSources)), $name
         );
     }
@@ -226,5 +246,67 @@ abstract class Module implements IModule
     public function hasTable($name)
     {
         return isset($this->tableDataSources[$name]);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getCharts()
+    {
+        return $this->chartDataSources;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getChart($name)
+    {
+        if (isset($this->chartDataSources[$name])) {
+            return $this->chartDataSources[$name];
+        }
+
+        throw InvalidArgumentException::format(
+                'Invalid call to %s: unknown chart name, expecting one of (%s), \'%s\' given',
+                __METHOD__, Debug::formatValues(array_keys($this->chartDataSources)), $name
+        );
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function hasChart($name)
+    {
+        return isset($this->chartDataSources[$name]);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getWidgets()
+    {
+        return $this->widgets;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getWidget($name)
+    {
+        if (isset($this->widgets[$name])) {
+            return $this->widgets[$name];
+        }
+
+        throw InvalidArgumentException::format(
+                'Invalid call to %s: unknown widget name, expecting one of (%s), \'%s\' given',
+                __METHOD__, Debug::formatValues(array_keys($this->widgets)), $name
+        );
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function hasWidget($name)
+    {
+        return isset($this->widgets[$name]);
     }
 }

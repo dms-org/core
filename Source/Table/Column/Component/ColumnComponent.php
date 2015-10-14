@@ -40,7 +40,7 @@ class ColumnComponent implements IColumnComponent
     {
         $this->name  = $name;
         $this->label = $label;
-        $this->type  = $type;
+        $this->type  = $type->withFieldAs($name, $label);
     }
 
     /**

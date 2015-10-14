@@ -26,4 +26,15 @@ interface IColumnComponentOperator
      * @return IField
      */
     public function getField();
+
+    /**
+     * Returns an equivalent operator with the field with
+     * the new name and label.
+     *
+     * @param string $name
+     * @param string $label
+     *
+     * @return static
+     */
+    public function withFieldAs($name, $label);
 }

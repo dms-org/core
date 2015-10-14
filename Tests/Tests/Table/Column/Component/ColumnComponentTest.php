@@ -22,7 +22,10 @@ class ColumnComponentTest extends CmsTestCase
 
         $this->assertSame('name', $component->getName());
         $this->assertSame('Label', $component->getLabel());
-        $this->assertSame($type, $component->getType());
+        $this->assertNotEquals($type, $component->getType());
+        $this->assertTrue($type->equals($component->getType()));
+        $this->assertSame('name', $component->getType()->getOperator('=')->getField()->getName());
+        $this->assertSame('Label', $component->getType()->getOperator('=')->getField()->getLabel());
     }
 
     public function testForField()

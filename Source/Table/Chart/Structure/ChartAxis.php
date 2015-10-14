@@ -28,9 +28,9 @@ class ChartAxis extends Column implements IChartAxis
     private $type;
 
     /**
-     * @param string               $name
-     * @param string               $label
-     * @param IColumnComponent[]   $components
+     * @param string             $name
+     * @param string             $label
+     * @param IColumnComponent[] $components
      *
      * @throws InvalidArgumentException
      */
@@ -41,10 +41,10 @@ class ChartAxis extends Column implements IChartAxis
 
         /** @var IColumnComponent $firstComponent */
         $firstComponent = reset($components);
-        $this->type = $firstComponent->getType();
+        $this->type     = $firstComponent->getType()->withFieldAs($name, $label);
 
         foreach ($components as $component) {
-            if (!$component->getType()->equals($this->type)) {
+            if (!$component->getType()->getPhpType()->equals($this->type->getPhpType())) {
                 throw InvalidArgumentException::format(
                         'Invalid component supplied to chart axis \'%s\': expecting component type %s, %s given for component \'%s\'',
                         $name, $this->type->getPhpType()->asTypeString(), $component->getType()->getPhpType()->asTypeString(),

@@ -85,6 +85,14 @@ class TableStructure implements ITableStructure
     }
 
     /**
+     * @inheritdoc
+     */
+    final public function getComponent($componentId)
+    {
+        return $this->getColumnAndComponent($componentId)[1];
+    }
+
+    /**
      * @inheritDoc
      */
     public function withColumns(array $columns)

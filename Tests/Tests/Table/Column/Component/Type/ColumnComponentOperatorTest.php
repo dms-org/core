@@ -27,4 +27,16 @@ class ColumnComponentOperatorTest extends CmsTestCase
         $this->setExpectedException(InvalidArgumentException::class);
         new ColumnComponentOperator('invalid-operator', $this->getMockForAbstractClass(IField::class));
     }
+
+    public function testWithFieldAs()
+    {
+        $operator = new ColumnComponentOperator('=', Field::name('foo')->label('Foo')->string()->build());
+        $newOperator = $operator->withFieldAs('bar', 'Bar');
+
+        $this->assertSame('foo', $operator->getField()->getName());
+        $this->assertSame('Foo', $operator->getField()->getLabel());
+
+        $this->assertSame('bar', $newOperator->getField()->getName());
+        $this->assertSame('Bar', $newOperator->getField()->getLabel());
+    }
 }

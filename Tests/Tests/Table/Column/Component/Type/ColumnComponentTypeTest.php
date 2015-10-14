@@ -69,7 +69,7 @@ class ColumnComponentTypeTest extends CmsTestCase
     public function testEquals()
     {
         $stringField = Field::name('foo')->label('Foo')->string()->build();
-        $intField    = Field::name('foo')->label('Foo')->int()->build();
+        $intField    = Field::name('bar')->label('Bar')->int()->build();
 
         $stringType = ColumnComponentType::forField($stringField);
         $intType    = ColumnComponentType::forField($intField);
@@ -80,5 +80,17 @@ class ColumnComponentTypeTest extends CmsTestCase
 
         $this->assertFalse($intType->equals($stringType));
         $this->assertFalse($stringType->equals($intType));
+    }
+
+    public function testWithFieldAs()
+    {
+        $type = ColumnComponentType::forField(Field::name('foo')->label('Foo')->string()->build());
+
+        $type = $type->withFieldAs('bar', 'Bar');
+
+        foreach ($type->getConditionOperators() as $operator) {
+            $this->assertSame('bar', $operator->getField()->getName());
+            $this->assertSame('Bar', $operator->getField()->getLabel());
+        }
     }
 }

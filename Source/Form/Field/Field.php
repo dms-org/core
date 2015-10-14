@@ -5,8 +5,8 @@ namespace Iddigital\Cms\Core\Form\Field;
 use Iddigital\Cms\Core\Exception\InvalidArgumentException;
 use Iddigital\Cms\Core\Form\IField;
 use Iddigital\Cms\Core\Form\IFieldProcessor;
-use Iddigital\Cms\Core\Form\InvalidInputException;
 use Iddigital\Cms\Core\Form\IFieldType;
+use Iddigital\Cms\Core\Form\InvalidInputException;
 use Iddigital\Cms\Core\Language\Message;
 use Iddigital\Cms\Core\Model\Type\IType;
 
@@ -45,7 +45,7 @@ class Field implements IField
     /**
      * @param string            $name
      * @param string            $label
-     * @param IFieldType             $type
+     * @param IFieldType        $type
      * @param IFieldProcessor[] $processors
      */
     public function __construct($name, $label, IFieldType $type, array $processors)
@@ -151,10 +151,11 @@ class Field implements IField
     /**
      * {@inheritdoc}
      */
-    public function withName($name)
+    public function withName($name, $label = null)
     {
-        $clone       = clone $this;
-        $clone->name = $name;
+        $clone        = clone $this;
+        $clone->name  = $name;
+        $clone->label = $label ?: $clone->label;
 
         return $clone;
     }

@@ -105,7 +105,7 @@ class ComputedComponentDefiner
     public function asComponent($componentName, $componentLabel, $componentType)
     {
         if ($componentType instanceof FieldBuilderBase) {
-            $componentType = ColumnComponentType::forField($componentType->build());
+            $componentType = ColumnComponentType::forField($componentType->build()->withName($componentName, $componentLabel));
         } elseif ($componentType instanceof IField) {
             $componentType = ColumnComponentType::forField($componentType);
         }
