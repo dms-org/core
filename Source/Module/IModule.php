@@ -5,8 +5,9 @@ namespace Iddigital\Cms\Core\Module;
 use Iddigital\Cms\Core\Exception\InvalidArgumentException;
 use Iddigital\Cms\Core\Form;
 use Iddigital\Cms\Core\Auth\IPermission;
-use Iddigital\Cms\Core\Persistence\IRepository;
+use Iddigital\Cms\Core\Table\Chart\IChartDataSource;
 use Iddigital\Cms\Core\Table\ITableDataSource;
+use Iddigital\Cms\Core\Widget\IWidget;
 
 /**
  * The API for a module.
@@ -134,4 +135,56 @@ interface IModule
      * @return bool
      */
     public function hasTable($name);
+
+    /**
+     * Gets the chart data sources.
+     *
+     * @return IChartDataSource[]
+     */
+    public function getCharts();
+
+    /**
+     * Gets the chart data source with the supplied name.
+     *
+     * @param string $name
+     *
+     * @return IChartDataSource
+     * @throws InvalidArgumentException
+     */
+    public function getChart($name);
+
+    /**
+     * Returns whether the module contains the supplied chart.
+     *
+     * @param string $name
+     *
+     * @return bool
+     */
+    public function hasChart($name);
+
+    /**
+     * Gets the widgets.
+     *
+     * @return IWidget[]
+     */
+    public function getWidgets();
+
+    /**
+     * Gets the widget with the supplied name.
+     *
+     * @param string $name
+     *
+     * @return IWidget
+     * @throws InvalidArgumentException
+     */
+    public function getWidget($name);
+
+    /**
+     * Returns whether the module contains the supplied widget.
+     *
+     * @param string $name
+     *
+     * @return bool
+     */
+    public function hasWidget($name);
 }

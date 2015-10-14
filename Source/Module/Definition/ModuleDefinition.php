@@ -6,7 +6,9 @@ use Iddigital\Cms\Core\Auth\IAuthSystem;
 use Iddigital\Cms\Core\Exception\InvalidOperationException;
 use Iddigital\Cms\Core\Module\Definition\Table\TableDefiner;
 use Iddigital\Cms\Core\Module\IAction;
+use Iddigital\Cms\Core\Table\Chart\IChartDataSource;
 use Iddigital\Cms\Core\Table\ITableDataSource;
+use Iddigital\Cms\Core\Widget\IWidget;
 
 /**
  * The module definition class
@@ -34,6 +36,16 @@ class ModuleDefinition
      * @var ITableDataSource[]
      */
     private $tables = [];
+
+    /**
+     * @var IChartDataSource[]
+     */
+    private $charts = [];
+
+    /**
+     * @var IWidget[]
+     */
+    private $widgets = [];
 
     /**
      * ModuleDefinition constructor.
@@ -79,6 +91,20 @@ class ModuleDefinition
      * @return TableDefiner
      */
     public function table($name)
+    {
+        return new TableDefiner($name, function (ITableDataSource $tableDataSource) {
+            $this->tables[$tableDataSource->getName()] = $tableDataSource;
+        });
+    }
+
+    /**
+     * Defines a widget with the supplied name.
+     *
+     * @param string $name
+     *
+     * @return WidgetDefiner
+     */
+    public function widget($name)
     {
         return new TableDefiner($name, function (ITableDataSource $tableDataSource) {
             $this->tables[$tableDataSource->getName()] = $tableDataSource;

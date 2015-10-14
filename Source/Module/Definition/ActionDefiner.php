@@ -148,7 +148,7 @@ class ActionDefiner
     }
 
     /**
-     * Adds an array of required permission for executing this action.
+     * Adds an array of required permissions for executing this action.
      *
      * @param string[]|IPermission[] $permissions
      *
