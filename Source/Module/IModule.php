@@ -12,7 +12,7 @@ use Iddigital\Cms\Core\Widget\IWidget;
 /**
  * The API for a module.
  *
- * A module represents is an abstraction over the API surrounding a given entity (aggregate root).
+ * A module represents a collection of actions, permissions, tables, charts, widgets etc.
  * 
  * @author Elliot Levin <elliot@aanet.com.au>
  */
