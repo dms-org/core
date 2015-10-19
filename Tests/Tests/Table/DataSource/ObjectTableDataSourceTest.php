@@ -44,14 +44,13 @@ class ObjectTableDataSourceTest extends PeopleTableDataSourceTest
     }
 
     /**
-     * @param string          $name
      * @param ITableStructure $structure
      *
      * @return ITableDataSource
      */
-    protected function buildDataSource($name, ITableStructure $structure)
+    protected function buildDataSource(ITableStructure $structure)
     {
-        return new ObjectTableDataSource($name, $this->definition, new ObjectCollection(TestPerson::class, [
+        return new ObjectTableDataSource($this->definition, new ObjectCollection(TestPerson::class, [
                 new TestPerson('Joe', 'Go', 29),
                 new TestPerson('Harold', 'Php', 38),
                 new TestPerson('Samantha', 'Sharp', 20),

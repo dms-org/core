@@ -49,7 +49,7 @@ class WidgetTypeDefiner extends WidgetDefinerBase
             );
         }
 
-        return new TableWidgetDefiner($this->name, $this->label, $this->tables[$tableName], $this->callback);
+        return new TableWidgetDefiner($this->name, $this->label, $this->tables[$tableName]->getDataSource(), $this->callback);
     }
 
     /**
@@ -69,6 +69,6 @@ class WidgetTypeDefiner extends WidgetDefinerBase
             );
         }
 
-        return new ChartWidgetDefiner($this->name, $this->label, $this->charts[$chartName], $this->callback);
+        return new ChartWidgetDefiner($this->name, $this->label, $this->charts[$chartName]->getDataSource(), $this->callback);
     }
 }

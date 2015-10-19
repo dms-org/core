@@ -3,7 +3,7 @@
 namespace Iddigital\Cms\Core\Module\Definition\Chart;
 
 use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Table\ITableDataSource;
+use Iddigital\Cms\Core\Module\ITableDisplay;
 use Iddigital\Cms\Core\Util\Debug;
 
 /**
@@ -19,7 +19,7 @@ class ChartDefiner
     protected $name;
 
     /**
-     * @var ITableDataSource[]
+     * @var ITableDisplay[]
      */
     protected $tables;
 
@@ -31,9 +31,9 @@ class ChartDefiner
     /**
      * ChartDefiner constructor.
      *
-     * @param string             $name
-     * @param ITableDataSource[] $tables
-     * @param callable           $callback
+     * @param string          $name
+     * @param ITableDisplay[] $tables
+     * @param callable        $callback
      */
     public function __construct($name, array $tables, callable $callback)
     {
@@ -59,6 +59,6 @@ class ChartDefiner
             );
         }
 
-        return new TableChartMappingDefiner($this->name, $this->tables[$tableName], $this->callback);
+        return new TableChartMappingDefiner($this->name, $this->tables[$tableName]->getDataSource(), $this->callback);
     }
 }

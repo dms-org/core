@@ -2,11 +2,9 @@
 
 namespace Iddigital\Cms\Core\Table\Chart\DataSource;
 
-use Iddigital\Cms\Core\Table\Builder\Table;
 use Iddigital\Cms\Core\Table\Chart\DataSource\Criteria\ChartTableCriteriaMapper;
 use Iddigital\Cms\Core\Table\Chart\DataSource\Definition\FinalizedChartTableMapperDefinition;
 use Iddigital\Cms\Core\Table\Chart\IChartCriteria;
-use Iddigital\Cms\Core\Table\DataSource\ArrayTableDataSource;
 use Iddigital\Cms\Core\Table\ITableDataSource;
 
 /**
@@ -42,12 +40,11 @@ class ChartTableDataSourceAdapter extends ChartDataSource
     protected $componentIdCallableMap = [];
 
     /**
-     * @param string                              $name
      * @param FinalizedChartTableMapperDefinition $definition
      */
-    public function __construct($name, FinalizedChartTableMapperDefinition $definition)
+    public function __construct(FinalizedChartTableMapperDefinition $definition)
     {
-        parent::__construct($name, $definition->getStructure());
+        parent::__construct($definition->getStructure());
         $this->definition             = $definition;
         $this->tableDataSource        = $definition->getTableDataSource();
         $this->criteriaMapper         = new ChartTableCriteriaMapper($definition);

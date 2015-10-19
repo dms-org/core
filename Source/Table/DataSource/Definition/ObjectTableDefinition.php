@@ -106,6 +106,14 @@ class ObjectTableDefinition
     /**
      * Defines a custom mapping callback.
      *
+     * Example:
+     * <code>
+     * ->custom(function ($row, SomeObject $object) {
+     *      $row['column.component'] = $object->component;
+     *      $row['column.other']     = $object->getData();
+     * });
+     * </code>
+     *
      * @param callable $customMappingCallback
      *
      * @return void

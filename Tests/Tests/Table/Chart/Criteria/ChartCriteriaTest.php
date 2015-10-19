@@ -60,4 +60,30 @@ class ChartCriteriaTest extends CmsTestCase
                 new AxisOrdering($structure->getAxis('x'), OrderingDirection::DESC)
         ], $criteria->getOrderings());
     }
+
+    public function testOrderByAsc()
+    {
+        $structure = $this->makeStructure();
+        $criteria = new ChartCriteria($structure);
+
+        $criteria->orderByAsc('x')
+                ->orderByDesc('x');
+
+        $this->assertEquals([
+                new AxisOrdering($structure->getAxis('x'), OrderingDirection::ASC),
+                new AxisOrdering($structure->getAxis('x'), OrderingDirection::DESC),
+        ], $criteria->getOrderings());
+    }
+
+    public function testFromExisting()
+    {
+        $structure = $this->makeStructure();
+        $criteria = new ChartCriteria($structure);
+
+        $criteria
+                ->where('x', '>', 5)
+                ->orderByAsc('x');
+
+        $this->assertEquals(ChartCriteria::fromExisting($criteria), $criteria);
+    }
 }

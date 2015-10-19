@@ -3,6 +3,7 @@
 namespace Iddigital\Cms\Core\Table\Chart\Criteria;
 
 use Iddigital\Cms\Core\Exception;
+use Iddigital\Cms\Core\Model\Criteria\OrderingDirection;
 use Iddigital\Cms\Core\Table\Chart\IChartCriteria;
 use Iddigital\Cms\Core\Table\Chart\IChartStructure;
 
@@ -36,6 +37,21 @@ class ChartCriteria implements IChartCriteria
     public function __construct(IChartStructure $structure)
     {
         $this->structure = $structure;
+    }
+
+    /**
+     * @param IChartCriteria $criteria
+     *
+     * @return ChartCriteria
+     */
+    public static function fromExisting(IChartCriteria $criteria)
+    {
+        $self = new self($criteria->getStructure());
+
+        $self->conditions = $criteria->getConditions();
+        $self->orderings  = $criteria->getOrderings();
+
+        return $self;
     }
 
     /**
@@ -100,5 +116,29 @@ class ChartCriteria implements IChartCriteria
         $this->orderings[] = new AxisOrdering($axis, $direction);
 
         return $this;
+    }
+
+    /**
+     * Adds an ASC ordering
+     *
+     * @param string $axisName
+     *
+     * @return static
+     */
+    public function orderByAsc($axisName)
+    {
+        return $this->orderBy($axisName, OrderingDirection::ASC);
+    }
+
+    /**
+     * Adds an DESC ordering
+     *
+     * @param string $axisName
+     *
+     * @return static
+     */
+    public function orderByDesc($axisName)
+    {
+        return $this->orderBy($axisName, OrderingDirection::DESC);
     }
 }

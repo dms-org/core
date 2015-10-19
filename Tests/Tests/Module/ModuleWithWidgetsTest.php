@@ -73,7 +73,7 @@ class ModuleWithWidgetsTest extends ModuleTestBase
     {
         /** @var TableWidget $widget */
         $widget    = $this->module->getWidget('table-widget.all');
-        $dataTable = $this->module->getTable('data-table');
+        $dataTable = $this->module->getTable('data-table')->getDataSource();
 
         $this->assertSame($dataTable, $widget->getTableDataSource());
         $this->assertSame('table-widget.all', $widget->getName());
@@ -86,7 +86,7 @@ class ModuleWithWidgetsTest extends ModuleTestBase
     {
         /** @var TableWidget $widget */
         $widget    = $this->module->getWidget('table-widget.with-criteria');
-        $dataTable = $this->module->getTable('data-table');
+        $dataTable = $this->module->getTable('data-table')->getDataSource();
 
         $this->assertSame($dataTable, $widget->getTableDataSource());
         $this->assertSame('table-widget.with-criteria', $widget->getName());
@@ -100,7 +100,7 @@ class ModuleWithWidgetsTest extends ModuleTestBase
     {
         /** @var ChartWidget $widget */
         $widget    = $this->module->getWidget('chart-widget.all');
-        $lineChart = $this->module->getChart('line-chart');
+        $lineChart = $this->module->getChart('line-chart')->getDataSource();
 
         $this->assertSame($lineChart, $widget->getChartDataSource());
         $this->assertSame('chart-widget.all', $widget->getName());
@@ -113,7 +113,7 @@ class ModuleWithWidgetsTest extends ModuleTestBase
     {
         /** @var ChartWidget $widget */
         $widget    = $this->module->getWidget('chart-widget.with-criteria');
-        $lineChart = $this->module->getChart('line-chart');
+        $lineChart = $this->module->getChart('line-chart')->getDataSource();
 
         $this->assertSame($lineChart, $widget->getChartDataSource());
         $this->assertSame('chart-widget.with-criteria', $widget->getName());

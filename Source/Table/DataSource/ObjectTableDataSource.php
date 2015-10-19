@@ -39,13 +39,12 @@ class ObjectTableDataSource extends TableDataSource
     /**
      * ArrayTableDataSource constructor.
      *
-     * @param string                         $name
      * @param FinalizedObjectTableDefinition $definition
      * @param IObjectSet                     $objectSource
      */
-    public function __construct($name, FinalizedObjectTableDefinition $definition, IObjectSet $objectSource)
+    public function __construct(FinalizedObjectTableDefinition $definition, IObjectSet $objectSource)
     {
-        parent::__construct($name, $definition->getStructure());
+        parent::__construct($definition->getStructure());
 
         $this->objectSource   = $objectSource;
         $this->criteriaMapper = new RowCriteriaMapper($definition);

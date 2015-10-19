@@ -101,9 +101,9 @@ class FormTest extends FormBuilderTestBase
     {
         $form = Form::create()
                 ->section('Details', [
-                        Field::name('name')->label('Name')->string()->initialValue('abc'),
+                        Field::name('name')->label('Name')->string()->value('abc'),
                         Field::name('foo')->label('Foo')->int(),
-                        Field::name('bar')->label('Bar')->decimal()->initialValue(10.0),
+                        Field::name('bar')->label('Bar')->decimal()->value(10.0),
                 ])
                 ->build();
 

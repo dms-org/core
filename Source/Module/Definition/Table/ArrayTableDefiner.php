@@ -37,11 +37,11 @@ class ArrayTableDefiner extends TableDefinerBase
      *
      * @param ITableStructure $structure
      *
-     * @return void
+     * @return TableViewsDefiner
      */
     public function withStructure(ITableStructure $structure)
     {
-        call_user_func($this->callback, new ArrayTableDataSource($this->name, $structure, $this->data));
+        return new TableViewsDefiner($this->name, $this->callback, new ArrayTableDataSource($structure, $this->data));
     }
 
     /**
@@ -49,10 +49,10 @@ class ArrayTableDefiner extends TableDefinerBase
      *
      * @param IColumn[] $columns
      *
-     * @return void
+     * @return TableViewsDefiner
      */
     public function withColumns(array $columns)
     {
-        $this->withStructure(Table::create($columns));
+        return $this->withStructure(Table::create($columns));
     }
 }

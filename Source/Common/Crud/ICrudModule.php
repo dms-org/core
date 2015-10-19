@@ -2,7 +2,6 @@
 
 namespace Iddigital\Cms\Core\Common\Crud;
 
-use Iddigital\Cms\Core\Model\IEntityCollection;
 use Iddigital\Cms\Core\Module\IParameterizedAction;
 use Iddigital\Cms\Core\Persistence\IRepository;
 

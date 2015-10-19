@@ -12,13 +12,6 @@ use Iddigital\Cms\Core\Table\Chart\Criteria\ChartCriteria;
 interface IChartDataSource
 {
     /**
-     * Gets the name of the data source.
-     *
-     * @return string
-     */
-    public function getName();
-
-    /**
      * Gets the chart structure for data source.
      *
      * @return IChartStructure

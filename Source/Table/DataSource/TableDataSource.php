@@ -25,11 +25,6 @@ use Pinq\ITraversable;
 abstract class TableDataSource implements ITableDataSource
 {
     /**
-     * @var string
-     */
-    protected $name;
-
-    /**
      * @var ITableStructure
      */
     protected $structure;
@@ -37,21 +32,11 @@ abstract class TableDataSource implements ITableDataSource
     /**
      * TableDataSource constructor.
      *
-     * @param string          $name
      * @param ITableStructure $structure
      */
-    public function __construct($name, ITableStructure $structure)
+    public function __construct(ITableStructure $structure)
     {
-        $this->name      = $name;
         $this->structure = $structure;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    final public function getName()
-    {
-        return $this->name;
     }
 
     /**
@@ -73,13 +58,12 @@ abstract class TableDataSource implements ITableDataSource
     /**
      * @inheritDoc
      */
-    public function asChart(callable $chartMappingCallback, $name = null)
+    public function asChart(callable $chartMappingCallback)
     {
-        $name       = $name ?: $this->name;
         $definition = new ChartTableMapperDefinition($this);
         $chartMappingCallback($definition);
 
-        return new ChartTableDataSourceAdapter($name, $definition->finalize());
+        return new ChartTableDataSourceAdapter($definition->finalize());
     }
 
     /**

@@ -36,7 +36,8 @@ class ModuleWithWidgets extends Module
                 ])
                 ->withColumns([
                         Column::from(Field::name('x')->label('X-val')->int()),
-                ]);
+                ])
+                ->withoutViews();
 
         $module->chart('line-chart')
                 ->fromTable('data-table')
@@ -45,7 +46,8 @@ class ModuleWithWidgets extends Module
                             $map->column('x')->toAxis(),
                             $map->column('x')->toAxis('y', 'Y-val')
                     ));
-                });
+                })
+                ->withoutViews();
 
         $module->widget('table-widget.all')
                 ->label('Table Widget #1')

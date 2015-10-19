@@ -5,6 +5,8 @@ namespace Iddigital\Cms\Core\Tests\Module;
 use Iddigital\Cms\Core\Auth\IPermission;
 use Iddigital\Cms\Core\Exception\InvalidArgumentException;
 use Iddigital\Cms\Core\Form\Field\Builder\Field;
+use Iddigital\Cms\Core\Module\Chart\ChartDisplay;
+use Iddigital\Cms\Core\Module\Chart\ChartView;
 use Iddigital\Cms\Core\Module\Module;
 use Iddigital\Cms\Core\Table\Chart\DataSource\ChartTableDataSourceAdapter;
 use Iddigital\Cms\Core\Table\Chart\Structure\ChartAxis;
@@ -48,12 +50,14 @@ class ModuleWithChartsTest extends ModuleTestBase
         $this->assertSame(true, $this->module->hasChart('pie-chart'));
         $this->assertSame(false, $this->module->hasChart('foo-chart'));
 
+        $this->assertSame('line-chart', $this->module->getChart('line-chart')->getName());
+        $this->assertSame('pie-chart', $this->module->getChart('pie-chart')->getName());
 
-        $this->assertInstanceOf(ChartTableDataSourceAdapter::class, $this->module->getChart('line-chart'));
-        $this->assertInstanceOf(ChartTableDataSourceAdapter::class, $this->module->getChart('pie-chart'));
+        $this->assertInstanceOf(ChartTableDataSourceAdapter::class, $this->module->getChart('line-chart')->getDataSource());
+        $this->assertInstanceOf(ChartTableDataSourceAdapter::class, $this->module->getChart('pie-chart')->getDataSource());
 
         $this->assertSame(
-                ['line-chart' => ChartTableDataSourceAdapter::class, 'pie-chart' => ChartTableDataSourceAdapter::class],
+                ['line-chart' => ChartDisplay::class, 'pie-chart' => ChartDisplay::class],
                 array_map('get_class', $this->module->getCharts())
         );
 
@@ -64,11 +68,13 @@ class ModuleWithChartsTest extends ModuleTestBase
 
     public function testLineChart()
     {
-        /** @var ChartTableDataSourceAdapter $chart */
-        $chart     = $this->module->getChart('line-chart');
-        $dataTable = $this->module->getTable('data-table');
+        /** @var ChartTableDataSourceAdapter $chartDataSource */
+        $chart           = $this->module->getChart('line-chart');
+        $chartDataSource = $chart->getDataSource();
 
-        $this->assertSame($dataTable, $chart->getDefinition()->getTableDataSource());
+        $dataTable = $this->module->getTable('data-table')->getDataSource();
+
+        $this->assertSame($dataTable, $chartDataSource->getDefinition()->getTableDataSource());
         $this->assertSame('line-chart', $chart->getName());
 
         $this->assertEquals([
@@ -79,29 +85,46 @@ class ModuleWithChartsTest extends ModuleTestBase
                         $dataTable->getStructure()->getComponent('y'),
                         $dataTable->getStructure()->getComponent('y2'),
                 ])
-        ], $chart->getStructure()->getAxes());
+        ], $chartDataSource->getStructure()->getAxes());
 
-        $this->assertCount(3, $chart->load()->getRows());
+        $this->assertCount(3, $chartDataSource->load()->getRows());
+
+        $this->assertEquals(
+                new ChartView('default', 'Default', true, $chartDataSource->criteria()->orderByAsc('x')),
+                $chart->getDefaultView()
+        );
+
+        $this->assertEquals(
+                new ChartView('reversed', 'Reversed', false, $chartDataSource->criteria()->orderByDesc('x')),
+                $chart->getView('reversed')
+        );
+
+        $this->assertSame(['default', 'reversed'], array_keys($chart->getViews()));
     }
 
     public function testPieChart()
     {
-        /** @var ChartTableDataSourceAdapter $chart */
-        $chart = $this->module->getChart('pie-chart');
-        $dataTable = $this->module->getTable('data-table');
+        /** @var ChartTableDataSourceAdapter $chartDataSource */
+        $chart           = $this->module->getChart('pie-chart');
+        $chartDataSource = $chart->getDataSource();
 
-        $this->assertSame($dataTable, $chart->getDefinition()->getTableDataSource());
+        $dataTable = $this->module->getTable('data-table')->getDataSource();
+
+        $this->assertSame($dataTable, $chartDataSource->getDefinition()->getTableDataSource());
         $this->assertSame('pie-chart', $chart->getName());
 
         $this->assertEquals([
                 'is_even' => new ChartAxis('is_even', 'Is Even', [
                         ColumnComponent::forField(Field::name('is_even')->label('Is Even')->bool()->build())
                 ]),
-                'y' => new ChartAxis('y', 'Y-Val', [
+                'y'       => new ChartAxis('y', 'Y-Val', [
                         $dataTable->getStructure()->getComponent('y'),
                 ])
-        ], $chart->getStructure()->getAxes());
+        ], $chartDataSource->getStructure()->getAxes());
 
-        $this->assertCount(3, $chart->load()->getRows());
+        $this->assertCount(3, $chartDataSource->load()->getRows());
+
+        $this->assertEquals(ChartView::createDefault(), $chart->getDefaultView());
+        $this->assertSame([], $chart->getViews());
     }
 }

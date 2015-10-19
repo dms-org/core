@@ -140,6 +140,19 @@ class RowCriteriaTest extends CmsTestCase
         ], $this->criteria->getOrderings());
     }
 
+    public function testOrderByAscAndDesc()
+    {
+        $this->criteria
+                ->orderByAsc('name.first_name')
+                ->orderByDesc('name.last_name');
+
+        $name = $this->structure->getColumn('name');
+        $this->assertEquals([
+                new ColumnOrdering($name, $name->getComponent('first_name'), OrderingDirection::ASC),
+                new ColumnOrdering($name, $name->getComponent('last_name'), OrderingDirection::DESC),
+        ], $this->criteria->getOrderings());
+    }
+
     public function testGroupBy()
     {
         $this->criteria->groupBy('age');
@@ -163,5 +176,18 @@ class RowCriteriaTest extends CmsTestCase
 
         $this->assertSame(10, $this->criteria->getRowsToSkip());
         $this->assertSame(25, $this->criteria->getAmountOfRows());
+    }
+
+    public function testFromExisting()
+    {
+        $this->criteria
+                ->loadAll()
+                ->where('name.last_name', '!=', null)
+                ->groupBy('age')
+                ->orderByAsc('name.first_name')
+                ->skipRows(10)
+                ->maxRows(25);
+
+        $this->assertEquals(RowCriteria::fromExisting($this->criteria), $this->criteria);
     }
 }

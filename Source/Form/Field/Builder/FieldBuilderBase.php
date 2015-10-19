@@ -145,7 +145,7 @@ abstract class FieldBuilderBase
      *
      * @return static
      */
-    public function initialValue($value)
+    public function value($value)
     {
         $this->initialValue = $value;
 

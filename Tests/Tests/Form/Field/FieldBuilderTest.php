@@ -71,7 +71,7 @@ class FieldBuilderTest extends FieldBuilderTestBase
 
     public function testInitialValue()
     {
-        $field = $this->field()->initialValue('abcdef')->string()->build();
+        $field = $this->field()->value('abcdef')->string()->build();
 
         $this->assertSame('abcdef', $field->getInitialValue());
     }

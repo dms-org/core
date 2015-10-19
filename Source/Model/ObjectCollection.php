@@ -8,7 +8,6 @@ use Iddigital\Cms\Core\Model\Object\FinalizedClassDefinition;
 use Iddigital\Cms\Core\Model\Object\TypedObject;
 use Iddigital\Cms\Core\Model\Type\Builder\Type;
 use Iddigital\Cms\Core\Model\Type\ObjectType;
-use Pinq\Collection;
 use Pinq\Direction;
 use Pinq\Iterators\IIteratorScheme;
 

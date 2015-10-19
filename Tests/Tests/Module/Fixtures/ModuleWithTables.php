@@ -4,9 +4,11 @@ namespace Iddigital\Cms\Core\Tests\Module\Fixtures;
 
 use Iddigital\Cms\Core\Form\Field\Builder\Field;
 use Iddigital\Cms\Core\Module\Definition\ModuleDefinition;
+use Iddigital\Cms\Core\Module\Definition\Table\TableViewDefinition;
 use Iddigital\Cms\Core\Module\Module;
 use Iddigital\Cms\Core\Table\Builder\Column;
 use Iddigital\Cms\Core\Table\DataSource\Definition\ObjectTableDefinition;
+use Iddigital\Cms\Core\Table\ITableDataSource;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>
@@ -33,7 +35,8 @@ class ModuleWithTables extends Module
                 ])
                 ->withColumns([
                         Column::from(Field::name('col')->label('Column')->string())
-                ]);
+                ])
+                ->withoutViews();
 
 
         $module->table('object-table')
@@ -45,6 +48,15 @@ class ModuleWithTables extends Module
                 ->withStructure(function (ObjectTableDefinition $map) {
                     $map->property('id')->to(Field::name('id')->label('Id')->int());
                     $map->property('name')->to(Field::name('name')->label('Name')->string());
+                })
+                ->withViews(function (TableViewDefinition $view) {
+                    $view->name('default', 'Default')
+                            ->asDefault()
+                            ->loadAll();
+
+                    $view->name('ordered', 'Ordered')
+                            ->loadAll()
+                            ->orderByAsc('name');
                 });
     }
 }

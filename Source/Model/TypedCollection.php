@@ -6,7 +6,6 @@ use Iddigital\Cms\Core\Exception;
 use Iddigital\Cms\Core\Model\Type\Builder\Type;
 use Iddigital\Cms\Core\Model\Type\IType;
 use Iddigital\Cms\Core\Util\Debug;
-use Pinq\Collection;
 use Pinq\Iterators\IIteratorScheme;
 
 /**

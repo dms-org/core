@@ -3,6 +3,7 @@
 namespace Iddigital\Cms\Core\Tests\Module\Fixtures;
 
 use Iddigital\Cms\Core\Form\Field\Builder\Field;
+use Iddigital\Cms\Core\Module\Definition\Chart\ChartViewDefinition;
 use Iddigital\Cms\Core\Module\Definition\ModuleDefinition;
 use Iddigital\Cms\Core\Module\Module;
 use Iddigital\Cms\Core\Table\Builder\Column;
@@ -38,7 +39,8 @@ class ModuleWithCharts extends Module
                         Column::from(Field::name('x')->label('X-Val')->int()),
                         Column::from(Field::name('y')->label('Y-Val')->int()),
                         Column::from(Field::name('y2')->label('Y2-Val')->int()),
-                ]);
+                ])
+                ->withoutViews();
 
         $module->chart('line-chart')
                 ->fromTable('data-table')
@@ -50,7 +52,15 @@ class ModuleWithCharts extends Module
                                     $map->column('y2')->asComponent(),
                             ])
                     ));
-                });
+                })
+                ->withViews(function (ChartViewDefinition $view) {
+                    $view->name('default', 'Default')
+                            ->asDefault()
+                            ->orderByAsc('x');
+
+                    $view->name('reversed', 'Reversed')
+                            ->orderByDesc('x');
+                });;
 
         $module->chart('pie-chart')
                 ->fromTable('data-table')
@@ -64,6 +74,7 @@ class ModuleWithCharts extends Module
                                     ->toAxis('is_even', 'Is Even', Field::forType()->bool()),
                             $map->column('y')->toAxis()
                     ));
-                });
+                })
+                ->withoutViews();
     }
 }

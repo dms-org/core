@@ -22,9 +22,14 @@ use Iddigital\Cms\Core\Widget\IWidget;
 abstract class Module implements IModule
 {
     /**
+     * @var IAuthSystem
+     */
+    protected $authSystem;
+
+    /**
      * @var FinalizedModuleDefinition
      */
-    private $definition;
+    protected $definition;
 
     /**
      * @var IPermission[]
@@ -42,14 +47,14 @@ abstract class Module implements IModule
     private $unparameterizedActions = [];
 
     /**
-     * @var ITableDataSource[]
+     * @var ITableDisplay[]
      */
-    private $tableDataSources = [];
+    private $tables = [];
 
     /**
-     * @var IChartDataSource[]
+     * @var IChartDisplay[]
      */
-    private $chartDataSources = [];
+    private $charts = [];
 
     /**
      * @var IWidget[]
@@ -69,6 +74,7 @@ abstract class Module implements IModule
         $definition = new ModuleDefinition($authSystem);
         $this->define($definition);
         $this->definition = $definition->finalize();
+        $this->authSystem = $authSystem;
 
         foreach ($this->definition->getPermissions() as $permission) {
             $this->permissions[$permission->getName()] = $permission;
@@ -85,11 +91,11 @@ abstract class Module implements IModule
         }
 
         foreach ($this->definition->getTables() as $table) {
-            $this->tableDataSources[$table->getName()] = $table;
+            $this->tables[$table->getName()] = $table;
         }
 
         foreach ($this->definition->getCharts() as $chart) {
-            $this->chartDataSources[$chart->getName()] = $chart;
+            $this->charts[$chart->getName()] = $chart;
         }
 
         foreach ($this->definition->getWidgets() as $widget) {
@@ -107,9 +113,17 @@ abstract class Module implements IModule
     abstract protected function define(ModuleDefinition $module);
 
     /**
+     * @return IAuthSystem
+     */
+    final public function getAuthSystem()
+    {
+        return $this->authSystem;
+    }
+
+    /**
      * {@inheritDoc}
      */
-    public function getName()
+    final public function getName()
     {
         return $this->definition->getName();
     }
@@ -222,7 +236,7 @@ abstract class Module implements IModule
      */
     public function getTables()
     {
-        return $this->tableDataSources;
+        return $this->tables;
     }
 
     /**
@@ -230,13 +244,13 @@ abstract class Module implements IModule
      */
     public function getTable($name)
     {
-        if (isset($this->tableDataSources[$name])) {
-            return $this->tableDataSources[$name];
+        if (isset($this->tables[$name])) {
+            return $this->tables[$name];
         }
 
         throw InvalidArgumentException::format(
                 'Invalid call to %s: unknown table name, expecting one of (%s), \'%s\' given',
-                __METHOD__, Debug::formatValues(array_keys($this->tableDataSources)), $name
+                __METHOD__, Debug::formatValues(array_keys($this->tables)), $name
         );
     }
 
@@ -245,7 +259,7 @@ abstract class Module implements IModule
      */
     public function hasTable($name)
     {
-        return isset($this->tableDataSources[$name]);
+        return isset($this->tables[$name]);
     }
 
     /**
@@ -253,7 +267,7 @@ abstract class Module implements IModule
      */
     public function getCharts()
     {
-        return $this->chartDataSources;
+        return $this->charts;
     }
 
     /**
@@ -261,13 +275,13 @@ abstract class Module implements IModule
      */
     public function getChart($name)
     {
-        if (isset($this->chartDataSources[$name])) {
-            return $this->chartDataSources[$name];
+        if (isset($this->charts[$name])) {
+            return $this->charts[$name];
         }
 
         throw InvalidArgumentException::format(
                 'Invalid call to %s: unknown chart name, expecting one of (%s), \'%s\' given',
-                __METHOD__, Debug::formatValues(array_keys($this->chartDataSources)), $name
+                __METHOD__, Debug::formatValues(array_keys($this->charts)), $name
         );
     }
 
@@ -276,7 +290,7 @@ abstract class Module implements IModule
      */
     public function hasChart($name)
     {
-        return isset($this->chartDataSources[$name]);
+        return isset($this->charts[$name]);
     }
 
     /**

@@ -3,6 +3,7 @@
 namespace Iddigital\Cms\Core\Table\Criteria;
 
 use Iddigital\Cms\Core\Exception;
+use Iddigital\Cms\Core\Model\Criteria\OrderingDirection;
 use Iddigital\Cms\Core\Table\IColumn;
 use Iddigital\Cms\Core\Table\IColumnComponent;
 use Iddigital\Cms\Core\Table\IRowCriteria;
@@ -58,6 +59,25 @@ class RowCriteria implements IRowCriteria
     public function __construct(ITableStructure $structure)
     {
         $this->structure = $structure;
+    }
+
+    /**
+     * @param IRowCriteria $criteria
+     *
+     * @return RowCriteria
+     */
+    public static function fromExisting(IRowCriteria $criteria)
+    {
+        $self = new self($criteria->getStructure());
+
+        $self->columnsToLoad = $criteria->getColumnsToLoad();
+        $self->conditions    = $criteria->getConditions();
+        $self->orderings     = $criteria->getOrderings();
+        $self->groupings     = $criteria->getGroupings();
+        $self->rowsToSkip    = $criteria->getRowsToSkip();
+        $self->amountOfRows  = $criteria->getAmountOfRows();
+
+        return $self;
     }
 
     /**
@@ -182,6 +202,30 @@ class RowCriteria implements IRowCriteria
         $this->orderings[] = new ColumnOrdering($column, $component, $direction);
 
         return $this;
+    }
+
+    /**
+     * Adds an ASC ordering
+     *
+     * @param string $componentId
+     *
+     * @return static
+     */
+    public function orderByAsc($componentId)
+    {
+        return $this->orderBy($componentId, OrderingDirection::ASC);
+    }
+
+    /**
+     * Adds an DESC ordering
+     *
+     * @param string $componentId
+     *
+     * @return static
+     */
+    public function orderByDesc($componentId)
+    {
+        return $this->orderBy($componentId, OrderingDirection::DESC);
     }
 
     /**

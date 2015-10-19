@@ -9,6 +9,8 @@ use Iddigital\Cms\Core\Module\Definition\Table\TableDefiner;
 use Iddigital\Cms\Core\Module\Definition\Widget\WidgetLabelDefiner;
 use Iddigital\Cms\Core\Module\Definition\Widget\WidgetTypeDefiner;
 use Iddigital\Cms\Core\Module\IAction;
+use Iddigital\Cms\Core\Module\IChartDisplay;
+use Iddigital\Cms\Core\Module\ITableDisplay;
 use Iddigital\Cms\Core\Table\Chart\IChartDataSource;
 use Iddigital\Cms\Core\Table\ITableDataSource;
 use Iddigital\Cms\Core\Widget\IWidget;
@@ -36,12 +38,12 @@ class ModuleDefinition
     private $actions = [];
 
     /**
-     * @var ITableDataSource[]
+     * @var ITableDisplay[]
      */
     private $tables = [];
 
     /**
-     * @var IChartDataSource[]
+     * @var IChartDisplay[]
      */
     private $charts = [];
 
@@ -95,8 +97,8 @@ class ModuleDefinition
      */
     public function table($name)
     {
-        return new TableDefiner($name, function (ITableDataSource $tableDataSource) {
-            $this->tables[$tableDataSource->getName()] = $tableDataSource;
+        return new TableDefiner($name, function (ITableDisplay $table) {
+            $this->tables[$table->getName()] = $table;
         });
     }
 
@@ -109,8 +111,8 @@ class ModuleDefinition
      */
     public function chart($name)
     {
-        return new ChartDefiner($name, $this->tables, function (IChartDataSource $chartDataSource) {
-            $this->charts[$chartDataSource->getName()] = $chartDataSource;
+        return new ChartDefiner($name, $this->tables, function (IChartDisplay $chart) {
+            $this->charts[$chart->getName()] = $chart;
         });
     }
 

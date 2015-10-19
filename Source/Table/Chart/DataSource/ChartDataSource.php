@@ -17,11 +17,6 @@ use Iddigital\Cms\Core\Table\Chart\IChartStructure;
 abstract class ChartDataSource implements IChartDataSource
 {
     /**
-     * @var string
-     */
-    protected $name;
-
-    /**
      * @var IChartStructure
      */
     protected $structure;
@@ -29,21 +24,11 @@ abstract class ChartDataSource implements IChartDataSource
     /**
      * ChartDataSource constructor.
      *
-     * @param string          $name
      * @param IChartStructure $structure
      */
-    public function __construct($name, IChartStructure $structure)
+    public function __construct(IChartStructure $structure)
     {
-        $this->name      = $name;
         $this->structure = $structure;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    final public function getName()
-    {
-        return $this->name;
     }
 
     /**

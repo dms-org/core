@@ -13,13 +13,6 @@ use Iddigital\Cms\Core\Table\Criteria\RowCriteria;
 interface ITableDataSource
 {
     /**
-     * Gets the name of the data source.
-     *
-     * @return string
-     */
-    public function getName();
-
-    /**
      * Gets the table structure for data source.
      *
      * @return ITableStructure
@@ -67,10 +60,9 @@ interface ITableDataSource
      * });
      * </code>
      *
-     * @param callable    $chartMappingCallback
-     * @param string|null $name Default to the table data source name
+     * @param callable $chartMappingCallback
      *
      * @return IChartDataSource
      */
-    public function asChart(callable $chartMappingCallback, $name = null);
+    public function asChart(callable $chartMappingCallback);
 }

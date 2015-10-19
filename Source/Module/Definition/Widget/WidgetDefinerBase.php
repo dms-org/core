@@ -2,8 +2,8 @@
 
 namespace Iddigital\Cms\Core\Module\Definition\Widget;
 
-use Iddigital\Cms\Core\Table\Chart\IChartDataSource;
-use Iddigital\Cms\Core\Table\ITableDataSource;
+use Iddigital\Cms\Core\Module\IChartDisplay;
+use Iddigital\Cms\Core\Module\ITableDisplay;
 
 /**
  * The widget definer base class
@@ -18,12 +18,12 @@ abstract class WidgetDefinerBase
     protected $name;
 
     /**
-     * @var ITableDataSource[]|null
+     * @var ITableDisplay[]|null
      */
     protected $tables;
 
     /**
-     * @var IChartDataSource[]|null
+     * @var IChartDisplay[]|null
      */
     protected $charts;
 
@@ -35,10 +35,10 @@ abstract class WidgetDefinerBase
     /**
      * WidgetDefiner constructor.
      *
-     * @param string                  $name
-     * @param ITableDataSource[]|null $tables
-     * @param IChartDataSource[]|null $charts
-     * @param callable                $callback
+     * @param string               $name
+     * @param ITableDisplay[]|null $tables
+     * @param IChartDisplay[]|null $charts
+     * @param callable             $callback
      */
     public function __construct($name, array $tables = null, array $charts = null, callable $callback)
     {

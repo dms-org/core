@@ -39,7 +39,6 @@ class CriteriaMapperTest extends CmsTestCase
     protected function setUp()
     {
         $tableDataSource = new ArrayTableDataSource(
-                'table',
                 Table::create([
                         Column::from(Field::name('age')->label('Age')->int()),
                         Column::from(Field::name('salary')->label('Salary')->int()),

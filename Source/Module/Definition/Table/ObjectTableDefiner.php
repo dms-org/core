@@ -47,7 +47,7 @@ class ObjectTableDefiner extends TableDefinerBase
      *
      * @param callable $structureDefinitionCallback
      *
-     * @return void
+     * @return TableViewsDefiner
      */
     public function withStructure(callable $structureDefinitionCallback)
     {
@@ -57,8 +57,7 @@ class ObjectTableDefiner extends TableDefinerBase
 
         $structureDefinitionCallback($definition);
 
-        call_user_func($this->callback, new ObjectTableDataSource(
-                $this->name,
+        return new TableViewsDefiner($this->name, $this->callback, new ObjectTableDataSource(
                 $definition->finalize(),
                 $this->data
         ));

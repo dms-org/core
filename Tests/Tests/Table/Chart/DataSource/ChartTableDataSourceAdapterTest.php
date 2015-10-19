@@ -10,7 +10,6 @@ use Iddigital\Cms\Core\Table\Builder\Table;
 use Iddigital\Cms\Core\Table\Chart\DataSource\Definition\ChartTableMapperDefinition;
 use Iddigital\Cms\Core\Table\Chart\Structure\ChartAxis;
 use Iddigital\Cms\Core\Table\Chart\Structure\LineChart;
-use Iddigital\Cms\Core\Table\Chart\Structure\PieChart;
 use Iddigital\Cms\Core\Table\DataSource\ArrayTableDataSource;
 
 /**
@@ -21,7 +20,6 @@ class ChartTableDataSourceAdapterTest extends CmsTestCase
     protected function makeTableDataSource()
     {
         return new ArrayTableDataSource(
-                'table',
                 Table::create([
                         Column::name('name')->label('Name')->components([
                                 Field::name('first_name')->label('First Name')->string(),
@@ -48,14 +46,13 @@ class ChartTableDataSourceAdapterTest extends CmsTestCase
                     $map->column('age')->toAxis(),
                     $map->column('salary')->toAxis()
             ));
-        }, 'chart-name');
+        });
     }
 
     public function testNew()
     {
         $chart = $this->createLineChart();
 
-        $this->assertSame('chart-name', $chart->getName());
         $this->assertEquals(new LineChart(
                 ChartAxis::forField(Field::name('age')->label('Age')->int()->build()),
                 ChartAxis::forField(Field::name('salary')->label('Salary')->int()->build())

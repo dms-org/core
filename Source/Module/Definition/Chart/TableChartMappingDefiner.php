@@ -15,10 +15,12 @@ class TableChartMappingDefiner
      * @var string
      */
     private $name;
+
     /**
      * @var ITableDataSource
      */
     private $tableSource;
+
     /**
      * @var callable
      */
@@ -54,12 +56,12 @@ class TableChartMappingDefiner
      *
      * @param callable $mapDefinitionCallback
      *
-     * @return void
+     * @return ChartViewsDefiner
      */
     public function map(callable $mapDefinitionCallback)
     {
-        $chartDataSource = $this->tableSource->asChart($mapDefinitionCallback, $this->name);
+        $chartDataSource = $this->tableSource->asChart($mapDefinitionCallback);
 
-        call_user_func($this->callback, $chartDataSource);
+        return new ChartViewsDefiner($this->name, $this->callback, $chartDataSource);
     }
 }

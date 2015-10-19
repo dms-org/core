@@ -84,7 +84,7 @@ class FormObjectDefinition extends FormBuilder
 
         return FormObjectFieldNameBuilder::callback(function ($fieldName) use ($propertyName) {
             $this->fieldPropertyMap[$fieldName] = $propertyName;
-        })->initialValue($property);
+        })->value($property);
     }
 
     /**

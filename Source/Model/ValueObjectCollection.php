@@ -3,7 +3,6 @@
 namespace Iddigital\Cms\Core\Model;
 
 use Iddigital\Cms\Core\Exception;
-use Pinq\Collection;
 use Pinq\Iterators\IIteratorScheme;
 
 /**

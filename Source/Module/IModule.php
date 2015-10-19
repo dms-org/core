@@ -113,7 +113,7 @@ interface IModule
     /**
      * Gets the table data sources.
      *
-     * @return ITableDataSource[]
+     * @return ITableDisplay[]
      */
     public function getTables();
 
@@ -122,7 +122,7 @@ interface IModule
      *
      * @param string $name
      *
-     * @return ITableDataSource
+     * @return ITableDisplay
      * @throws InvalidArgumentException
      */
     public function getTable($name);
@@ -139,7 +139,7 @@ interface IModule
     /**
      * Gets the chart data sources.
      *
-     * @return IChartDataSource[]
+     * @return IChartDisplay[]
      */
     public function getCharts();
 
@@ -148,7 +148,7 @@ interface IModule
      *
      * @param string $name
      *
-     * @return IChartDataSource
+     * @return IChartDisplay
      * @throws InvalidArgumentException
      */
     public function getChart($name);
