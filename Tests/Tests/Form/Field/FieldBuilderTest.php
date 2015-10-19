@@ -69,6 +69,13 @@ class FieldBuilderTest extends FieldBuilderTestBase
         $this->assertSame('Name', $field->getLabel());
     }
 
+    public function testInitialValue()
+    {
+        $field = $this->field()->initialValue('abcdef')->string()->build();
+
+        $this->assertSame('abcdef', $field->getInitialValue());
+    }
+
     public function testRequiredField()
     {
         $field = $this->field()->string()->required()->build();

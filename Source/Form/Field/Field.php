@@ -9,6 +9,7 @@ use Iddigital\Cms\Core\Form\IFieldType;
 use Iddigital\Cms\Core\Form\InvalidInputException;
 use Iddigital\Cms\Core\Language\Message;
 use Iddigital\Cms\Core\Model\Type\IType;
+use Iddigital\Cms\Core\Util\Debug;
 
 /**
  * The field class.
@@ -43,12 +44,20 @@ class Field implements IField
     private $processedType;
 
     /**
+     * @var mixed
+     */
+    private $initialValue;
+
+    /**
      * @param string            $name
      * @param string            $label
      * @param IFieldType        $type
      * @param IFieldProcessor[] $processors
+     * @param mixed             $initialValue
+     *
+     * @throws InvalidArgumentException
      */
-    public function __construct($name, $label, IFieldType $type, array $processors)
+    public function __construct($name, $label, IFieldType $type, array $processors, $initialValue = null)
     {
         InvalidArgumentException::verifyAllInstanceOf(__METHOD__, 'processors', $processors, IFieldProcessor::class);
         InvalidArgumentException::verifyNotNull(__METHOD__, 'name', $name);
@@ -62,6 +71,18 @@ class Field implements IField
         $this->processedType = $this->processors
                 ? end($this->processors)->getProcessedType()
                 : $type->getPhpTypeOfInput();
+
+
+        if ($initialValue !== null) {
+            if (!$type->getProcessedPhpType()->isOfType($initialValue)) {
+                throw InvalidArgumentException::format(
+                        'Invalid initial value for form field \'%s\': expecting type of %s, %s given',
+                        $name, $type->getPhpTypeOfInput()->asTypeString(), Debug::getType($this->initialValue)
+                );
+            }
+
+            $this->initialValue = $this->unprocess($initialValue);
+        }
     }
 
     /**
@@ -104,6 +125,14 @@ class Field implements IField
     public function getProcessedType()
     {
         return $this->processedType;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getInitialValue()
+    {
+        return $this->initialValue;
     }
 
     /**

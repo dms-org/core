@@ -19,6 +19,6 @@ class FormWithDefaultValuesTest extends CmsTestCase
                 'inner_awesome' => 'cool',
         ];
 
-        $this->assertEquals($expectedValues, FormWithDefaults::initialValues());
+        $this->assertSame($expectedValues, FormWithDefaults::initialValues());
     }
 }

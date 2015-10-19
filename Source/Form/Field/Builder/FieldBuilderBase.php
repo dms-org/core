@@ -45,13 +45,19 @@ abstract class FieldBuilderBase
      */
     protected $processors = [];
 
+    /**
+     * @var mixed
+     */
+    protected $initialValue = null;
+
     final protected function __construct(FieldBuilderBase $previous = null)
     {
         if ($previous) {
-            $this->name       = $previous->name;
-            $this->label      = $previous->label;
-            $this->type       = $previous->type;
-            $this->processors = $previous->processors;
+            $this->name         = $previous->name;
+            $this->label        = $previous->label;
+            $this->type         = $previous->type;
+            $this->processors   = $previous->processors;
+            $this->initialValue = $previous->initialValue;
         }
     }
 
@@ -66,7 +72,8 @@ abstract class FieldBuilderBase
                 $this->name,
                 $this->label,
                 $this->type,
-                $this->processors
+                $this->processors,
+                $this->initialValue
         );
     }
 
@@ -124,6 +131,23 @@ abstract class FieldBuilderBase
         }
 
         $this->type = $this->type->with($typeAttribute, $value);
+
+        return $this;
+    }
+
+    /**
+     * Sets the initial value of the field.
+     *
+     * The supplied value is the *processed* initial value and hence
+     * must be of the processed type.
+     *
+     * @param mixed $value
+     *
+     * @return static
+     */
+    public function initialValue($value)
+    {
+        $this->initialValue = $value;
 
         return $this;
     }

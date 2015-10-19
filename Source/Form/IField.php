@@ -47,6 +47,14 @@ interface IField
     public function getProcessors();
 
     /**
+     * Gets the initial value of the field.
+     *
+     * @return mixed
+     * @throws InvalidInputException
+     */
+    public function getInitialValue();
+
+    /**
      * Processes the field input.
      *
      * @param mixed $input

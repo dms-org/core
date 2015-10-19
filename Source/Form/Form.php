@@ -30,6 +30,11 @@ class Form implements IForm
     private $processors;
 
     /**
+     * @var array
+     */
+    private $initialValues = [];
+
+    /**
      * @param IFormSection[]   $sections
      * @param IFormProcessor[] $processors
      *
@@ -52,6 +57,10 @@ class Form implements IForm
 
                 $this->fields[$fieldName] = $field;
             }
+        }
+
+        foreach ($this->fields as $name => $field) {
+            $this->initialValues[$name] = $field->getInitialValue();
         }
     }
 
@@ -93,6 +102,14 @@ class Form implements IForm
     final public function asStagedForm()
     {
         return new StagedForm(new IndependentFormStage($this), []);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    final public function getInitialValues()
+    {
+        return $this->initialValues;
     }
 
     /**

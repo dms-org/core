@@ -96,4 +96,21 @@ class FormTest extends FormBuilderTestBase
         $this->assertSame($form, $stagedForm->getFirstStage()->loadForm());
         $this->assertSame([], $stagedForm->getFollowingStages());
     }
+
+    public function testGetInitialValues()
+    {
+        $form = Form::create()
+                ->section('Details', [
+                        Field::name('name')->label('Name')->string()->initialValue('abc'),
+                        Field::name('foo')->label('Foo')->int(),
+                        Field::name('bar')->label('Bar')->decimal()->initialValue(10.0),
+                ])
+                ->build();
+
+        $this->assertSame([
+            'name' => 'abc',
+            'foo' => null,
+            'bar' => 10.0
+        ], $form->getInitialValues());
+    }
 }

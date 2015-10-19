@@ -59,31 +59,7 @@ abstract class FormObject extends TypedObject implements IDataTransferObject, IF
     {
         $this->formDefinition = $definition;
         $this->form           = $definition->getForm();
-        $this->initialValues  = $this->loadInitialValues();
-    }
-
-    private function loadInitialValues()
-    {
-        return $this->formDefinition->getForm()->unprocess($this->getRawInitialValues());
-    }
-
-    private function getRawInitialValues()
-    {
-        $initialValues = [];
-
-        foreach ($this->formDefinition->getPropertyFieldMap() as $property => $field) {
-            $initialValues[$field] = $this->{$property};
-        }
-
-        foreach ($this->formDefinition->getPropertyInnerFormMap() as $property => $innerForm) {
-            $innerValues = $innerForm->getNewFormInstance()->getRawInitialValues();
-
-            foreach ($innerForm->getEmbeddedFieldMap() as $fieldName => $innerFieldName) {
-                $initialValues[$fieldName] = isset($innerValues[$innerFieldName]) ? $innerValues[$innerFieldName] : null;
-            }
-        }
-
-        return $initialValues;
+        $this->initialValues  = $this->form->getInitialValues();
     }
 
     /**

@@ -67,4 +67,12 @@ interface IForm
      * @return IStagedForm
      */
     public function asStagedForm();
+
+    /**
+     * Gets the array of initial values indexed by the respective field
+     * name.
+     *
+     * @return array[]
+     */
+    public function getInitialValues();
 }
