@@ -3,9 +3,9 @@
 namespace Iddigital\Cms\Core\Persistence;
 
 use Iddigital\Cms\Core\Exception;
+use Iddigital\Cms\Core\Model\EntityCollection;
 use Iddigital\Cms\Core\Model\ICriteria;
 use Iddigital\Cms\Core\Model\IEntity;
-use Iddigital\Cms\Core\Model\IEntityCollection;
 use Iddigital\Cms\Core\Model\ISpecification;
 
 /**
@@ -18,7 +18,7 @@ use Iddigital\Cms\Core\Model\ISpecification;
 class ArrayRepository implements IRepository
 {
     /**
-     * @var IEntityCollection
+     * @var EntityCollection
      */
     private $collection;
 
@@ -30,9 +30,9 @@ class ArrayRepository implements IRepository
     /**
      * ArrayRepository constructor.
      *
-     * @param IEntityCollection $collection
+     * @param EntityCollection $collection
      */
-    public function __construct(IEntityCollection $collection)
+    public function __construct(EntityCollection $collection)
     {
         $this->collection = $collection;
 
