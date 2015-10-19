@@ -2,6 +2,8 @@
 
 namespace Iddigital\Cms\Core;
 
+use Interop\Container\ContainerInterface;
+
 /**
  * The API for a CMS.
  * 
@@ -11,7 +13,7 @@ interface ICms
 {
     /**
      * Get the loaded packages.
-     * 
+     *
      * @return IPackage[]
      */
     public function getPackages();
@@ -47,4 +49,12 @@ interface ICms
      * @return Language\ILanguageProvider
      */
     public function getLang();
+
+    /**
+     * Gets the inversion of control container used within
+     * this cms instance.
+     *
+     * @return ContainerInterface
+     */
+    public function getIocContainer();
 }

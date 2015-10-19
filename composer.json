@@ -19,7 +19,8 @@
     },
     "require": {
         "timetoogo/pinq": "~3.2",
-        "doctrine/dbal": "~2.5"
+        "doctrine/dbal": "~2.5",
+        "container-interop/container-interop": "~1.1"
     },
     "require-dev": {
         "iddigital/cms.common.testing": "dev-master"

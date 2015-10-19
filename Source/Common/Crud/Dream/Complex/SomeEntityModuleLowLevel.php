@@ -5,6 +5,7 @@ namespace Iddigital\Cms\Core\Common\Crud\Dream\Complex;
 use Iddigital\Cms\Core\Form\Builder\Form;
 use Iddigital\Cms\Core\Form\Field\Builder\Field;
 use Iddigital\Cms\Core\Form\IForm;
+use Iddigital\Cms\Core\Module\Definition\ModuleDefinition;
 use Iddigital\Cms\Core\Persistence\Db\Connection\IConnection;
 use Iddigital\Cms\Core\Table\Builder\Table;
 
@@ -28,19 +29,18 @@ class SomeEntityModuleLowLevel extends CrudModule
         return new ProductRepository($connection);
     }
 
-    protected function actions(ActionListDefinition $actions)
+    protected function actions(ModuleDefinition $actions)
     {
-        $actions->name('create')
-                ->label('Create')
-                ->bind(Form::create()
+        $actions->action('create')
+                ->authorize(self::PERMISSION_CREATE)
+                ->form(Form::create()
                         ->section('Details', [
                                 Field::name('data')->label('Data')->string()->required()->maxLength(500)
                         ])
                 )
-                ->to(function (array $input) {
+                ->handler(function (array $input) {
                     $this->repository->save(new Product(null, $input['data']));
-                })
-                ->authorize(self::PERMISSION_CREATE);
+                });
 
         $actions->name('edit')
                 ->label('Create')
