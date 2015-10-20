@@ -38,6 +38,7 @@ class UniquePropertyValidator extends FieldValidator
      */
     protected function validate($input, array &$messages)
     {
+        // TODO: Account for fields which are same as the initial value
         $criteria = $this->objects->criteria()
                 ->where($this->propertyName, '=', $input);
 
