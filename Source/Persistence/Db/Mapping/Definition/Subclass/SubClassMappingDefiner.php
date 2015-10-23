@@ -20,6 +20,43 @@ class SubClassMappingDefiner extends SubClassDefinerBase
      *
      * This is the using the single table inheritance pattern.
      *
+     * **Example:**
+     * <code>
+     * $map->type(Player::class);
+     * $map->toTable('players');
+     *
+     * $map->idToPrimaryKey('id');
+     * $map->column('type')->asEnum(['footballer', 'cricketer', 'bowler']);
+     * $map->property('name')->to('name')->asVarchar(255);
+     *
+     * $map->subclass()->withTypeInColumn('type', 'footballer')->define(function (MapperDefinition $map) {
+     *      $map->type(Footballer::class);
+     *      $map->property('club')->to('club')->asVarchar(255);
+     * });
+     *
+     * $map->subclass()->withTypeInColumn('type', 'cricketer')->define(function (MapperDefinition $map) {
+     *      $map->type(Cricketer::class);
+     *      $map->property('battingAverage')->to('batting_average')->asInt();
+     *
+     *      $map->subclass()->withTypeInColumn('type', 'bowler')->define(function (MapperDefinition $map) {
+     *           $map->type(Bowler::class);
+     *           $map->property('bowlingAverage')->to('bowling_average')->asInt();
+     *      });
+     * });
+     * </code>
+     *
+     * **This will create a schema as such:**
+     * <code>
+     * | players                                                     |
+     * |-----------------|-------------------------------------------|
+     * | id              | INT PRIMARY KEY                           |
+     * | name            | VARCHAR(255)                              |
+     * | club            | NULLABLE VARCHAR(255)                     |
+     * | batting_average | NULLABLE INT                              |
+     * | bowling_average | NULLABLE INT                              |
+     * | type            | ENUM('footballer', 'cricketer', 'bowler') |
+     * </code>
+     *
      * @param string $columnName
      * @param mixed  $classTypeValue
      *
@@ -28,8 +65,8 @@ class SubClassMappingDefiner extends SubClassDefinerBase
     public function withTypeInColumn($columnName, $classTypeValue)
     {
         return new SubClassDefinitionDefiner(
+                $this->orm,
                 $this->parentDefinition,
-                $this->subClassDefinition,
                 function (MapperDefinition $subClassDefinition) use ($columnName, $classTypeValue) {
                     foreach ($subClassDefinition->getColumns() as $column) {
                         $this->parentDefinition->addColumn($column->asNullable());
@@ -47,10 +84,59 @@ class SubClassMappingDefiner extends SubClassDefinerBase
                                         $columnName,
                                         $classTypeValue
                                 );
-                            }
+                            },
+                            $subClassDefinition
                     );
                 }
         );
+    }
+
+    /**
+     * Defines the of class type of the object to be determined
+     * via the value of a column. This is a shortcut for a group
+     * of subclasses without any extra properties. This will create
+     * an ENUM column with the supplied
+     *
+     * This is the using the single table inheritance pattern.
+     *
+     * **Example:**
+     * <code>
+     * $map->type(Car::class);
+     * $map->toTable('cars');
+     *
+     * $map->idToPrimaryKey('id');
+     * $map->property('brand')->to('brand')->asVarchar(255);
+     *
+     * $map->subclass()->withTypeInColumnMap('type', [
+     *      'sedan'       => SedanCar::class,
+     *      'hatch'       => HatchCar::class,
+     *      'convertible' => ConvertibleCar::class,
+     *      'family'      => FamilyCar::class,
+     * ]);
+     *
+     * </code>
+     *
+     * **This will create a schema as such:**
+     * <code>
+     * | players                                                  |
+     * |--------|-------------------------------------------------|
+     * | id     | INT PRIMARY KEY                                 |
+     * | brand  | VARCHAR(255)                                    |
+     * | type   | ENUM('sedan', 'hatch', 'convertible', 'family') |
+     * </code>
+     *
+     * @param string   $columnName
+     * @param string[] $columnValueClassTypeMap
+     *
+     * @return void
+     */
+    public function withTypeInColumnMap($columnName, array $columnValueClassTypeMap)
+    {
+        foreach ($columnValueClassTypeMap as $columnValue => $classType) {
+            $this->withTypeInColumn($columnName, $columnValue)->asType($classType);
+        }
+
+        $this->parentDefinition->column($columnName)->asEnum(array_keys($columnValueClassTypeMap));
     }
 
     /**
@@ -60,6 +146,56 @@ class SubClassMappingDefiner extends SubClassDefinerBase
      *
      * This is the using the class table inheritance pattern.
      *
+     * **Example:**
+     * <code>
+     * $map->type(Player::class);
+     * $map->toTable('players');
+     *
+     * $map->idToPrimaryKey('id');
+     * $map->property('name')->to('name')->asVarchar(255);
+     *
+     * $map->subclass()->asSeparateTable('footballers')->define(function (MapperDefinition $map) {
+     *      $map->type(Footballer::class);
+     *      $map->property('club')->to('club')->asVarchar(255);
+     * });
+     *
+     * $map->subclass()->asSeparateTable('cricketers')->define(function (MapperDefinition $map) {
+     *      $map->type(Cricketer::class);
+     *      $map->property('battingAverage')->to('batting_average')->asInt();
+     *
+     *      $map->subclass()->asSeparateTable('bowlers')->define(function (MapperDefinition $map) {
+     *           $map->type(Bowler::class);
+     *           $map->property('bowlingAverage')->to('bowling_average')->asInt();
+     *      });
+     * });
+     * </code>
+     *
+     * **This will create a schema as such:**
+     * <code>
+     * | players                   |
+     * |---------|-----------------|
+     * | id      | INT PRIMARY KEY |
+     * | name    | VARCHAR(255)    |
+     *
+     *
+     * | footballers                                           |
+     * |-------------|-----------------------------------------|
+     * | id          | INT PRIMARY KEY REFERENCES (players.id) |
+     * | club        | VARCHAR(255)                            |
+     *
+     *
+     * | cricketers                                                |
+     * |-----------------|-----------------------------------------|
+     * | id              | INT PRIMARY KEY REFERENCES (players.id) |
+     * | batting_average | INT                                     |
+     *
+     *
+     * | bowlers                                                      |
+     * |-----------------|--------------------------------------------|
+     * | id              | INT PRIMARY KEY REFERENCES (cricketers.id) |
+     * | bowling_average | INT                                        |
+     * </code>
+     *
      * @param string $tableName
      *
      * @return SubClassDefinitionDefiner
@@ -67,19 +203,22 @@ class SubClassMappingDefiner extends SubClassDefinerBase
     public function asSeparateTable($tableName)
     {
         return new SubClassDefinitionDefiner(
+                $this->orm,
                 $this->parentDefinition,
-                $this->subClassDefinition,
                 function (MapperDefinition $subClassDefinition) use ($tableName) {
-                    $finalizedSubClassDefinition = $subClassDefinition->finalize($tableName);
 
                     call_user_func(
                             $this->callback,
-                            function (Table $parentTable) use ($finalizedSubClassDefinition) {
+                            function (Table $parentTable) use ($subClassDefinition, $tableName) {
+                                $subClassDefinition->idToPrimaryKey($parentTable->getPrimaryKeyColumnName());
+                                $finalizedSubClassDefinition = $subClassDefinition->finalize($tableName);
+
                                 return new JoinedTableObjectMapping(
                                         $parentTable,
                                         $finalizedSubClassDefinition
                                 );
-                            }
+                            },
+                            $subClassDefinition
                     );
                 }
         );

@@ -554,12 +554,11 @@ class MapperDefinition extends MapperDefinitionBase
     public function subclass()
     {
         $this->verifyDefinedClass();
-        $subClassDefinition = new MapperDefinition($this->orm, $this);
 
         return new SubClassMappingDefiner(
+                $this->orm,
                 $this,
-                $subClassDefinition,
-                function (callable $mappingLoader) use ($subClassDefinition) {
+                function (callable $mappingLoader, MapperDefinition $subClassDefinition) {
                     $subClassDefinition->verifyDefinedClass();
                     $subClassName = $subClassDefinition->class->getClassName();
 

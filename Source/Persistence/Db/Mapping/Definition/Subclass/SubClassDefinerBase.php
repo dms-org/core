@@ -3,6 +3,7 @@
 namespace Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Subclass;
 
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\MapperDefinition;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\IOrm;
 
 /**
  * The sub class definer base.
@@ -12,14 +13,14 @@ use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\MapperDefinition;
 abstract class SubClassDefinerBase
 {
     /**
-     * @var MapperDefinition
+     * @var IOrm
      */
-    protected $parentDefinition;
+    protected $orm;
 
     /**
      * @var MapperDefinition
      */
-    protected $subClassDefinition;
+    protected $parentDefinition;
 
     /**
      * @var callable
@@ -29,14 +30,22 @@ abstract class SubClassDefinerBase
     /**
      * SubClassDefinerBase constructor.
      *
+     * @param IOrm             $orm
      * @param MapperDefinition $parentDefinition
-     * @param MapperDefinition $subClassDefinition
      * @param callable         $callback
      */
-    public function __construct(MapperDefinition $parentDefinition, MapperDefinition $subClassDefinition, callable $callback)
+    public function __construct(IOrm $orm, MapperDefinition $parentDefinition, callable $callback)
     {
-        $this->parentDefinition   = $parentDefinition;
-        $this->subClassDefinition = $subClassDefinition;
-        $this->callback           = $callback;
+        $this->parentDefinition = $parentDefinition;
+        $this->callback         = $callback;
+        $this->orm              = $orm;
+    }
+
+    /**
+     * @return MapperDefinition
+     */
+    protected function constructSubclassDefinition()
+    {
+        return new MapperDefinition($this->orm, $this->parentDefinition);
     }
 }

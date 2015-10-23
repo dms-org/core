@@ -2,6 +2,8 @@
 
 namespace Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Subclass;
 
+use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\MapperDefinition;
+
 /**
  * The subclass definition definer.
  *
@@ -14,13 +16,35 @@ class SubClassDefinitionDefiner extends SubClassDefinerBase
      *
      * The callback will be passed an instance of @see MapperDefinition
      *
+     * Example:
+     * <code>
+     * ->define(function (MapperDefinition $map) {
+     *      $map->type(SomeClass::class);
+     * });
+     * </code>
+     *
      * @param callable $subClassMapperDefinitionCallback
      *
      * @return void
      */
     public function define(callable $subClassMapperDefinitionCallback)
     {
-        call_user_func($subClassMapperDefinitionCallback, $this->subClassDefinition);
-        call_user_func($this->callback, $this->subClassDefinition);
+        $subclassDefinition = $this->constructSubclassDefinition();
+        call_user_func($subClassMapperDefinitionCallback, $subclassDefinition);
+        call_user_func($this->callback, $subclassDefinition);
+    }
+
+    /**
+     * Defines the type of the subclass without any extra properties mappings.
+     *
+     * @param string $classType
+     *
+     * @return void
+     */
+    public function asType($classType)
+    {
+        $this->define(function (MapperDefinition $map) use ($classType) {
+            $map->type($classType);
+        });
     }
 }
