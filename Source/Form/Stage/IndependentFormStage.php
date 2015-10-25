@@ -29,9 +29,9 @@ class IndependentFormStage extends FormStage
     /**
      * @inheritDoc
      */
-    public function requiresPreviousSubmission()
+    public function getRequiredFieldNames()
     {
-        return false;
+        return [];
     }
 
     /**
@@ -40,5 +40,13 @@ class IndependentFormStage extends FormStage
     protected function getForm(array $previousSubmission = null)
     {
         return $this->form;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getDefinedFieldNames()
+    {
+        return $this->form->getFieldNames();
     }
 }

@@ -149,7 +149,7 @@ class StagedFormBuilderTest extends FormBuilderTestBase
                     ->section('Second Stage', [
                             Field::name('name')->label('Name')->string()->required()->maxLength($data['length'])
                     ]);
-        })->then(function (array $data) {
+        }, ['name'])->then(function (array $data) {
             return Form::create()
                     ->section('Third Stage', [
                             Field::name('field')->label($data['name'] . ':' . $data['length'])->string()->required()

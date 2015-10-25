@@ -2,6 +2,7 @@
 
 namespace Iddigital\Cms\Core\Form\Object\Stage;
 
+use Iddigital\Cms\Core\Exception\InvalidArgumentException;
 use Iddigital\Cms\Core\Form\IStagedForm;
 use Iddigital\Cms\Core\Form\Object\FinalizedFormObjectDefinition;
 use Iddigital\Cms\Core\Form\Stage\DependentFormStage;
@@ -26,7 +27,7 @@ class FinalizedStagedFormObjectDefinition
     protected $stagedForm;
 
     /**
-     * @var callable[]
+     * @var FormStageCallback[]
      */
     private $defineStageCallbacks;
 
@@ -38,11 +39,13 @@ class FinalizedStagedFormObjectDefinition
     /**
      * FinalizedStagedFormObjectDefinition constructor.
      *
-     * @param StagedFormObject $formObject
-     * @param callable[]       $defineStageCallbacks
+     * @param StagedFormObject    $formObject
+     * @param FormStageCallback[] $defineStageCallbacks
      */
     public function __construct(StagedFormObject $formObject, array $defineStageCallbacks)
     {
+        InvalidArgumentException::verifyAllInstanceOf(__METHOD__, 'defineStageCallbacks', $defineStageCallbacks, FormStageCallback::class);
+
         $this->formObject           = $formObject;
         $this->defineStageCallbacks = $defineStageCallbacks;
         $this->loadStagedForm($defineStageCallbacks);
@@ -67,37 +70,39 @@ class FinalizedStagedFormObjectDefinition
     }
 
     /**
-     * @param array $defineStageCallbacks
+     * @param FormStageCallback[] $defineStageCallbacks
      *
      * @return StagedForm
      */
     private function loadStagedForm(array $defineStageCallbacks)
     {
-        /** @var callable $firstCallback */
-        /** @var FinalizedFormObjectDefinition $previousStageDefinition */
+        /** @var FormStageCallback $firstCallback */
         $firstCallback           = array_shift($defineStageCallbacks);
-        $previousStageDefinition = $firstCallback($this->formObject);
+        $previousStageDefinition = $firstCallback->defineFormStage($this->formObject);
         $firstStage              = new IndependentFormStage($previousStageDefinition->getForm());
         $this->formDefinitions   = [$previousStageDefinition];
         $stages                  = [];
 
         foreach ($defineStageCallbacks as $defineStageCallback) {
-            $stages[] = new DependentFormStage(function (array $previousSubmission) use (
-                    $defineStageCallback,
-                    &$previousStageDefinition
-            ) {
+            $stages[] = new DependentFormStage(
+                    function (array $previousSubmission) use (
+                            $defineStageCallback,
+                            &$previousStageDefinition
+                    ) {
+                        foreach ($previousStageDefinition->getPropertyFieldMap() as $property => $field) {
+                            $this->formObject->{$property} = $previousSubmission[$field];
+                        }
 
-                foreach ($previousStageDefinition->getPropertyFieldMap() as $property => $field) {
-                    $this->formObject->{$property} = $previousSubmission[$field];
-                }
+                        /** @var FinalizedFormObjectDefinition $formObjectDefinition */
+                        $formObjectDefinition    = $defineStageCallback->defineFormStage($this->formObject);
+                        $this->formDefinitions[] = $formObjectDefinition;
+                        $previousStageDefinition = $formObjectDefinition;
 
-                /** @var FinalizedFormObjectDefinition $formObjectDefinition */
-                $formObjectDefinition    = $defineStageCallback($this->formObject);
-                $this->formDefinitions[] = $formObjectDefinition;
-                $previousStageDefinition = $formObjectDefinition;
-
-                return $formObjectDefinition->getForm();
-            });
+                        return $formObjectDefinition->getForm();
+                    },
+                    $defineStageCallback->getFieldsDefinedWithinStage(),
+                    $defineStageCallback->getFieldsDependentOn()
+            );
         }
 
         $this->stagedForm = new StagedForm($firstStage, $stages);

@@ -13,19 +13,40 @@ use Iddigital\Cms\Core\Form\Stage\IndependentFormStage;
 interface IStagedForm
 {
     /**
+     * Gets the first stage.
+     *
      * @return IndependentFormStage
      */
     public function getFirstStage();
 
     /**
+     * Gets the stages after the first stage.
+     *
      * @return IFormStage[]
      */
     public function getFollowingStages();
 
     /**
+     * Gets all the stages.
+     *
+     * @return IFormStage[]
+     */
+    public function getAllStages();
+
+    /**
+     * Gets the number of stages.
+     *
      * @return int
      */
     public function getAmountOfStages();
+
+    /**
+     * @param string $fieldName
+     *
+     * @return IFormStage
+     * @throws InvalidArgumentException If no known field is defined.
+     */
+    public function getStageWithFieldName($fieldName);
 
     /**
      * @param int $stageNumber The 1-based stage number
@@ -36,13 +57,23 @@ interface IStagedForm
     public function getStage($stageNumber);
 
     /**
+     * Gets the required field names for the supplied form stage.
+     *
+     * @param int $stageNumber
+     *
+     * @return string[]
+     * @throws InvalidArgumentException If the stage number is out of the range
+     */
+    public function getRequiredFieldNamesForStage($stageNumber);
+
+    /**
      * Gets the form the the stage using the previous stages submission data.
      *
      * @param int   $stageNumber
      * @param array $previousStagesSubmission
      *
      * @return IForm
-     * @throws InvalidArgumentException If it is out of range
+     * @throws InvalidArgumentException If the stage number is out of the range
      * @throws InvalidFormSubmissionException
      */
     public function getFormForStage($stageNumber, array $previousStagesSubmission);

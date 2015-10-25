@@ -2,6 +2,8 @@
 
 namespace Iddigital\Cms\Core\Form;
 
+use Iddigital\Cms\Core\Exception\InvalidArgumentException;
+
 /**
  * The form interface.
  *
@@ -53,11 +55,28 @@ interface IForm
     public function getFields();
 
     /**
+     * Gets the names of the fields within the form.
+     *
+     * @return string[]
+     */
+    public function getFieldNames();
+
+    /**
+     * Returns whether the field with the supplied name exists.
+     *
+     * @param string $fieldName
+     *
+     * @return bool
+     */
+    public function hasField($fieldName);
+
+    /**
      * Gets the field with the supplied name or null if it does not exist.
      *
      * @param string $fieldName
      *
-     * @return IField|null
+     * @return IField
+     * @throws InvalidArgumentException
      */
     public function getField($fieldName);
 

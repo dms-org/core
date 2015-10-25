@@ -5,6 +5,7 @@ namespace Iddigital\Cms\Core\Tests\Form;
 use Iddigital\Cms\Core\Exception\InvalidArgumentException;
 use Iddigital\Cms\Core\Form\Builder\Form;
 use Iddigital\Cms\Core\Form\Field\Builder\Field;
+use Iddigital\Cms\Core\Form\IField;
 use Iddigital\Cms\Core\Form\IStagedForm;
 
 /**
@@ -12,6 +13,28 @@ use Iddigital\Cms\Core\Form\IStagedForm;
  */
 class FormTest extends FormBuilderTestBase
 {
+    public function testFieldNames()
+    {
+        $form = Form::create()
+                ->section('Details', [
+                        Field::name('name')->label('Name')->string(),
+                ])
+                ->build();
+
+        $this->assertSame(
+                ['name'],
+                $form->getFieldNames()
+        );
+
+        $this->assertTrue($form->hasField('name'));
+        $this->assertFalse($form->hasField('non-existent'));
+
+        $this->assertInstanceOf(IField::class, $form->getField('name'));
+        $this->assertThrows(function () use ($form) {
+            $form->getField('non-existent');
+        });
+    }
+
     public function testProcessIgnoresExtraKeys()
     {
         $form = Form::create()

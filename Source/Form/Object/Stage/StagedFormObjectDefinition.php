@@ -20,7 +20,7 @@ class StagedFormObjectDefinition
     private $finalizedClass;
 
     /**
-     * @var callable[]
+     * @var FormStageCallback[]
      */
     private $stageCallbacks = [];
 
@@ -47,13 +47,42 @@ class StagedFormObjectDefinition
      * </code>
      *
      * @param callable $defineStageCallback
+     * @param string[] $fieldNamesWithinStage
      *
      * @return void
      */
-    public function stage(callable $defineStageCallback)
+    public function stage(callable $defineStageCallback, array $fieldNamesWithinStage = [])
     {
-        $this->stageCallbacks[] = function (StagedFormObject $instance) use ($defineStageCallback) {
-            $defineStageCallback    = \Closure::bind(
+        $this->defineStage($defineStageCallback, $fieldNamesWithinStage);
+    }
+
+    /**
+     * Defines a stage dependent on the supplied fields in the form object.
+     *
+     * Example:
+     * <code>
+     * ->stageDependentOn(['field_in_previous_stage'], function (FormObjectDefinition $form) {
+     *      $form->section('Section Title', [
+     *              $form->field($this->field)->name('field')->label('Field')->string(),
+     *      ]);
+     * });
+     * </code>
+     *
+     * @param string[] $fieldNames
+     * @param callable $defineStageCallback
+     * @param string[] $fieldNamesWithinStage
+     *
+     * @return void
+     */
+    public function stageDependentOn(array $fieldNames, callable $defineStageCallback, array $fieldNamesWithinStage = [])
+    {
+        $this->defineStage($defineStageCallback, $fieldNamesWithinStage, $fieldNames);
+    }
+
+    protected function defineStage(callable $defineStageCallback, array $fieldNamesWithinStage, array $dependentOnFields = null)
+    {
+        $this->stageCallbacks[] = new FormStageCallback(function (StagedFormObject $instance) use ($defineStageCallback) {
+            $defineStageCallback = \Closure::bind(
                     Reflection::fromCallable($defineStageCallback)->getClosure(),
                     $instance
             );
@@ -68,7 +97,7 @@ class StagedFormObjectDefinition
             $defineStageCallback($form);
 
             return $form->finalize($this->finalizedClass);
-        };
+        }, $dependentOnFields, $fieldNamesWithinStage);
     }
 
 

@@ -53,7 +53,7 @@ class ArrayOfIntsStagedForm extends StagedFormObject
             ]);
         });
 
-        $form->stage(function (FormObjectDefinition $form) {
+        $form->stageDependentOn(['length'], function (FormObjectDefinition $form) {
             $form->section('Numbers', [
                     $form->field($this->ints)
                             ->name('ints')

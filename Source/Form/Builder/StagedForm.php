@@ -123,24 +123,42 @@ class StagedForm
 
     /**
      * @param IForm|Form|callable $formStage
+     * @param string[]            $fieldNamesDefinedInStage Only required for fields that are depended on.
      *
      * @return StagedForm
      * @throws InvalidArgumentException
      */
-    public function then($formStage)
+    public function then($formStage, array $fieldNamesDefinedInStage = [])
     {
-        $this->followingStages[] = self::parseStage($formStage);
+        $this->followingStages[] = self::parseStage($formStage, null, $fieldNamesDefinedInStage);
+
+        return $this;
+    }
+
+    /**
+     * @param string[] $fieldNames
+     * @param callable $formStage
+     * @param string[] $fieldNamesDefinedInStage
+     *
+     * @return StagedForm
+     * @throws InvalidArgumentException
+     */
+    public function thenDependingOn(array $fieldNames, callable $formStage, array $fieldNamesDefinedInStage = [])
+    {
+        $this->followingStages[] = self::parseStage($formStage, $fieldNames, $fieldNamesDefinedInStage);
 
         return $this;
     }
 
     /**
      * @param IForm|Form|callable $formStageArgument
+     * @param string[]|null       $requiredFieldNames
+     * @param string[]            $fieldNamesDefinedInStage
      *
      * @return DependentFormStage|IndependentFormStage
      * @throws InvalidArgumentException
      */
-    protected static function parseStage($formStageArgument)
+    protected static function parseStage($formStageArgument, array $requiredFieldNames = null, array $fieldNamesDefinedInStage = [])
     {
         if ($formStageArgument instanceof Form) {
             $formStageArgument = $formStageArgument->build();
@@ -162,7 +180,7 @@ class StagedForm
 
                 return new IndependentFormStage($form);
             } elseif ($requiredParameters === 1) {
-                return new DependentFormStage($formStageArgument);
+                return new DependentFormStage($formStageArgument, $fieldNamesDefinedInStage, $requiredFieldNames);
             }
 
             throw InvalidArgumentException::format(

@@ -81,7 +81,7 @@ class Form implements IForm
     }
 
     /**
-     * @return IForm[]
+     * {@inheritdoc}
      */
     final public function getFields()
     {
@@ -91,9 +91,32 @@ class Form implements IForm
     /**
      * {@inheritdoc}
      */
+    final public function getFieldNames()
+    {
+        return array_keys($this->fields);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    final public function hasField($fieldName)
+    {
+        return isset($this->fields[$fieldName]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     final public function getField($fieldName)
     {
-        return isset($this->fields[$fieldName]) ? $this->fields[$fieldName] : null;
+        if (!isset($this->fields[$fieldName])) {
+            throw InvalidArgumentException::format(
+                    'Invalid call to %s: invalid field name, expecting one of (%s), \'%s\' given',
+                    __METHOD__, Debug::formatValues($this->getFieldNames()), $fieldName
+            );
+        }
+
+        return $this->fields[$fieldName];
     }
 
     /**

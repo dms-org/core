@@ -3,7 +3,6 @@
 namespace Iddigital\Cms\Core\Form\Object\Stage;
 
 use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Form\IForm;
 use Iddigital\Cms\Core\Form\IFormStage;
 use Iddigital\Cms\Core\Form\InvalidFormSubmissionException;
 use Iddigital\Cms\Core\Form\IStagedForm;
@@ -92,11 +91,35 @@ abstract class StagedFormObject extends TypedObject implements IDataTransferObje
     }
 
     /**
+     * @inheritDoc
+     */
+    final public function getAllStages()
+    {
+        return $this->stagedFormForClone->getAllStages();
+    }
+
+    /**
      * @return int
      */
     final public function getAmountOfStages()
     {
         return $this->stagedFormForClone->getAmountOfStages();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    final public function getStageWithFieldName($fieldName)
+    {
+        return $this->stagedFormForClone->getStageWithFieldName($fieldName);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    final public function getRequiredFieldNamesForStage($stageNumber)
+    {
+        return $this->stagedFormForClone->getRequiredFieldNamesForStage($stageNumber);
     }
 
     /**

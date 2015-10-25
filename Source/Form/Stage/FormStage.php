@@ -6,6 +6,7 @@ use Iddigital\Cms\Core\Exception\InvalidArgumentException;
 use Iddigital\Cms\Core\Form\Builder\Form;
 use Iddigital\Cms\Core\Form\IForm;
 use Iddigital\Cms\Core\Form\IFormStage;
+use Iddigital\Cms\Core\Util\Debug;
 
 /**
  * The form stage base class
@@ -14,6 +15,22 @@ use Iddigital\Cms\Core\Form\IFormStage;
  */
 abstract class FormStage implements IFormStage
 {
+    /**
+     * @inheritDoc
+     */
+    final public function requiresPreviousSubmission()
+    {
+        return $this->areAllFieldsRequired() || count($this->getRequiredFieldNames()) > 0;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function areAllFieldsRequired()
+    {
+        return $this->getRequiredFieldNames() === null;
+    }
+
     /**
      * @inheritDoc
      */
@@ -30,6 +47,16 @@ abstract class FormStage implements IFormStage
 
         if ($form instanceof Form) {
             $form = $form->build();
+        }
+
+        /** @var IForm $form */
+        foreach ($this->getDefinedFieldNames() as $fieldName) {
+            if (!$form->hasField($fieldName)) {
+                throw InvalidArgumentException::format(
+                        'Invalid form loaded from form stage: form must have \'%s\' field defined, (%s) given',
+                        $fieldName, Debug::formatValues($form->getFieldNames())
+                );
+            }
         }
 
         return $form;

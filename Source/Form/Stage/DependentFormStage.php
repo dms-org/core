@@ -2,6 +2,8 @@
 
 namespace Iddigital\Cms\Core\Form\Stage;
 
+use Iddigital\Cms\Core\Exception\InvalidArgumentException;
+
 /**
  * The dependent form stage base class
  *
@@ -15,21 +17,54 @@ class DependentFormStage extends FormStage
     protected $loadFormCallback;
 
     /**
+     * @var string[]
+     */
+    protected $definedFieldNames;
+
+    /**
+     * @var string[]
+     */
+    protected $requiredFieldNames;
+
+    /**
      * DependentFormStage constructor.
      *
-     * @param callable $loadFormCallback
+     * @param callable      $loadFormCallback
+     * @param string[]      $definedFieldNames
+     * @param string[]|null $requiredFieldNames NULL if all fields are required.
+     *
+     * @throws InvalidArgumentException
      */
-    public function __construct(callable $loadFormCallback)
+    public function __construct(callable $loadFormCallback, array $definedFieldNames, array $requiredFieldNames = null)
     {
-        $this->loadFormCallback = $loadFormCallback;
+        InvalidArgumentException::verify(
+                $requiredFieldNames === null || !empty($requiredFieldNames),
+                'Required field names cannot be empty'
+        );
+
+        if ($requiredFieldNames !== null) {
+            InvalidArgumentException::verifyAll(__METHOD__, 'requiredFieldNames', $requiredFieldNames, 'is_string');
+        }
+
+        $this->loadFormCallback   = $loadFormCallback;
+        $this->definedFieldNames  = $definedFieldNames;
+        $this->requiredFieldNames = $requiredFieldNames;
     }
 
     /**
      * @inheritDoc
      */
-    public function requiresPreviousSubmission()
+    public function getRequiredFieldNames()
     {
-        return true;
+        return $this->requiredFieldNames;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getDefinedFieldNames()
+    {
+        return $this->definedFieldNames;
     }
 
     /**

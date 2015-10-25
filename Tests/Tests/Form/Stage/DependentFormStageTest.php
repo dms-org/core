@@ -21,9 +21,12 @@ class DependentFormStageTest extends CmsTestCase
             $passedData = $previousData;
 
             return $form;
-        });
+        }, [], ['some_required_field']);
 
         $this->assertTrue($stage->requiresPreviousSubmission());
+        $this->assertFalse($stage->areAllFieldsRequired());
+        $this->assertSame([], $stage->getDefinedFieldNames());
+        $this->assertSame(['some_required_field'], $stage->getRequiredFieldNames());
         $this->assertSame($form, $stage->loadForm(['foo' => 'bar']));
         $this->assertSame(['foo' => 'bar'], $passedData);
 
@@ -37,8 +40,17 @@ class DependentFormStageTest extends CmsTestCase
     {
         $stage = new DependentFormStage(function (array $previousData) {
             return Form::create();
-        });
+        }, [], null);
 
         $this->assertInstanceOf(IForm::class, $stage->loadForm([]));
+    }
+
+    public function testEmptyRequiredFields()
+    {
+        $this->setExpectedException(InvalidArgumentException::class);
+
+        new DependentFormStage(function (array $previousData) {
+            return Form::create();
+        }, [], []);
     }
 }

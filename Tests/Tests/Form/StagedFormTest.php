@@ -2,6 +2,7 @@
 
 namespace Iddigital\Cms\Core\Tests\Form;
 
+use Iddigital\Cms\Core\Exception\InvalidArgumentException;
 use Iddigital\Cms\Core\Form\Builder\Form;
 use Iddigital\Cms\Core\Form\Builder\StagedForm;
 use Iddigital\Cms\Core\Form\Field\Builder\Field;
@@ -96,6 +97,43 @@ class StagedFormTest extends FormBuilderTestBase
         $this->assertEquals(
                 Field::name('foo')->label('bar')->string()->build(),
                 $form->getFormForStage(3, ['first' => 'foo', 'second' => 'bar'])->getField('foo')
+        );
+
+        $this->assertSame([$form->getFirstStage(), $form->getStage(2), $form->getStage(3)], $form->getAllStages());
+        $this->assertSame([], $form->getRequiredFieldNamesForStage(1));
+        $this->assertSame([], $form->getRequiredFieldNamesForStage(2));
+        $this->assertSame(['first', 'second'], $form->getRequiredFieldNamesForStage(3));
+        $this->assertSame($form->getStage(1), $form->getStageWithFieldName('first'));
+        $this->assertSame($form->getStage(2), $form->getStageWithFieldName('second'));
+        $this->assertThrows(function () use ($form) {
+            $form->getStageWithFieldName('invalid-field');
+        }, InvalidArgumentException::class);
+    }
+
+    public function testFormDependingOnSpecificFields()
+    {
+        $form = StagedForm::begin(
+                Form::create()
+                        ->section('First Stage', [
+                                Field::name('first')->label('String')->string(),
+                                Field::name('count')->label('Number')->int()->required(),
+                        ])
+        )->thenDependingOn(['count'], function (array $data) {
+            return Form::create()
+                    ->section('Second Stage', [
+                            Field::name('field: ' . $data['count'])->label('Label')->string()
+                    ]);
+        })->build();
+
+
+        $this->assertSame([], $form->getRequiredFieldNamesForStage(1));
+        $this->assertSame(['count'], $form->getRequiredFieldNamesForStage(2));
+        $this->assertSame(['count'], $form->getRequiredFieldNamesForStage(2));
+
+
+        $this->assertEquals(
+                Field::name('field: 3')->label('Label')->string()->build(),
+                $form->getFormForStage(2, ['count' => '3'])->getField('field: 3')
         );
     }
 }
