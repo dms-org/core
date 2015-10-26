@@ -79,6 +79,7 @@ class Field implements IField
     {
         if ($initialValue === null) {
             $this->initialValue = null;
+            return;
         }
 
         $processedPhpType = $this->type->getProcessedPhpType();
