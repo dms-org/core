@@ -94,4 +94,14 @@ interface IForm
      * @return array[]
      */
     public function getInitialValues();
+
+    /**
+     * Returns an equivalent form with the supplied initial field values.
+     *
+     * @param array $initialValues
+     *
+     * @return IForm
+     * @throws InvalidArgumentException
+     */
+    public function withInitialValues(array $initialValues);
 }

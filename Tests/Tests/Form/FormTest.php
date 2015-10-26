@@ -131,9 +131,49 @@ class FormTest extends FormBuilderTestBase
                 ->build();
 
         $this->assertSame([
-            'name' => 'abc',
-            'foo' => null,
-            'bar' => 10.0
+                'name' => 'abc',
+                'foo'  => null,
+                'bar'  => 10.0
         ], $form->getInitialValues());
     }
+
+    public function testWithInitialValues()
+    {
+        $form = Form::create()
+                ->section('Details', [
+                        Field::name('name')->label('Name')->string()->value('abc'),
+                        Field::name('foo')->label('Foo')->int(),
+                        Field::name('bar')->label('Bar')->decimal()->value(10.0),
+                ])
+                ->build();
+
+        $newForm = $form->withInitialValues([
+                'name' => 'another',
+                'foo'  => 10,
+                'bar'  => -10.0
+        ]);
+
+        $this->assertNotEquals($form, $newForm);
+
+        $this->assertSame([
+                'name' => 'abc',
+                'foo'  => null,
+                'bar'  => 10.0
+        ], $form->getInitialValues());
+
+        $this->assertSame([
+                'name' => 'another',
+                'foo'  => 10,
+                'bar'  => -10.0
+        ], $newForm->getInitialValues());
+
+        $this->assertThrows(function () use ($form) {
+            $form->withInitialValues(['non-existent-field' => 'abc']);
+        }, InvalidArgumentException::class);
+
+        $this->assertThrows(function () use ($form) {
+            $form->withInitialValues(['foo' => 'invalid-value-for-int']);
+        }, InvalidArgumentException::class);
+    }
+
 }

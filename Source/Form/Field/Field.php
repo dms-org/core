@@ -72,17 +72,25 @@ class Field implements IField
                 ? end($this->processors)->getProcessedType()
                 : $type->getPhpTypeOfInput();
 
+        $this->setInitialValue($initialValue);
+    }
 
-        if ($initialValue !== null) {
-            if (!$type->getProcessedPhpType()->isOfType($initialValue)) {
-                throw InvalidArgumentException::format(
-                        'Invalid initial value for form field \'%s\': expecting type of %s, %s given',
-                        $name, $type->getPhpTypeOfInput()->asTypeString(), Debug::getType($this->initialValue)
-                );
-            }
-
-            $this->initialValue = $this->unprocess($initialValue);
+    private function setInitialValue($initialValue)
+    {
+        if ($initialValue === null) {
+            $this->initialValue = null;
         }
+
+        $processedPhpType = $this->type->getProcessedPhpType();
+
+        if (!$processedPhpType->isOfType($initialValue)) {
+            throw InvalidArgumentException::format(
+                    'Invalid initial value for form field \'%s\': expecting type of %s, %s given',
+                    $this->name, $processedPhpType->asTypeString(), Debug::getType($this->initialValue)
+            );
+        }
+
+        $this->initialValue = $this->unprocess($initialValue);
     }
 
     /**
@@ -178,7 +186,7 @@ class Field implements IField
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function withName($name, $label = null)
     {
@@ -188,4 +196,17 @@ class Field implements IField
 
         return $clone;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function withInitialValue($value)
+    {
+        $clone = clone $this;
+        $clone->setInitialValue($value);
+
+        return $clone;
+    }
+
+
 }

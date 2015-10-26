@@ -82,4 +82,13 @@ interface IField
      * @return IField
      */
     public function withName($name, $label = null);
+
+    /**
+     * Gets an equivalent form field with the supplied initial value.
+     *
+     * @param mixed $value
+     *
+     * @return IField
+     */
+    public function withInitialValue($value);
 }

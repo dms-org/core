@@ -211,4 +211,34 @@ class Form implements IForm
 
         return $unprocessedSubmission;
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function withInitialValues(array $initialValues)
+    {
+        $newFields = [];
+
+        foreach ($initialValues as $fieldName => $initialValue) {
+            $field = $this->getField($fieldName);
+
+            $newFields[$field->getName()] = $field->withInitialValue($initialValue);
+        }
+
+        $sections = [];
+
+        foreach ($this->sections as $section) {
+            $newFieldsInSection = [];
+
+            foreach ($section->getFields() as $field) {
+                $newFieldsInSection[] = isset($newFields[$field->getName()])
+                        ? $newFields[$field->getName()]
+                        : $field;
+            }
+
+            $sections[] = new FormSection($section->getTitle(), $newFieldsInSection);
+        }
+
+        return new Form($sections, $this->processors);
+    }
 }
