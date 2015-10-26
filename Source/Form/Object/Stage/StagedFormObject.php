@@ -117,9 +117,9 @@ abstract class StagedFormObject extends TypedObject implements IDataTransferObje
     /**
      * @inheritDoc
      */
-    final public function getRequiredFieldNamesForStage($stageNumber)
+    final public function getRequiredFieldGroupedByStagesForStage($stageNumber)
     {
-        return $this->stagedFormForClone->getRequiredFieldNamesForStage($stageNumber);
+        return $this->stagedFormForClone->getRequiredFieldGroupedByStagesForStage($stageNumber);
     }
 
     /**

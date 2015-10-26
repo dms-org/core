@@ -59,12 +59,19 @@ interface IStagedForm
     /**
      * Gets the required field names for the supplied form stage.
      *
+     * Returns an array in the format:
+     * <code>
+     * [
+     *      <stage number> => [<array of required field names>] or '*' // '*' = all fields in stage
+     * ]
+     * </code>
+     *
      * @param int $stageNumber
      *
-     * @return string[]
+     * @return string[][]|string[]
      * @throws InvalidArgumentException If the stage number is out of the range
      */
-    public function getRequiredFieldNamesForStage($stageNumber);
+    public function getRequiredFieldGroupedByStagesForStage($stageNumber);
 
     /**
      * Gets the form the the stage using the previous stages submission data.

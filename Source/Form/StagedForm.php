@@ -51,7 +51,7 @@ class StagedForm implements IStagedForm
                 foreach ($stage->getRequiredFieldNames() as $requiredFieldName) {
                     if (!isset($definedFieldNames[$requiredFieldName])) {
                         throw InvalidArgumentException::format(
-                                'Invalid required field in stage %d: expecting one of (%s) previously defined fields, \'%s\' given',
+                                'Invalid required field in stage %d: expecting one of previously defined fields (%s), \'%s\' given',
                                 $stageNumber, Debug::formatValues(array_keys($definedFieldNames)), $requiredFieldName
                         );
                     }
@@ -143,50 +143,57 @@ class StagedForm implements IStagedForm
     /**
      * @inheritDoc
      */
-    public function getRequiredFieldNamesForStage($stageNumber)
+    public function getRequiredFieldGroupedByStagesForStage($stageNumber)
     {
+        $requiredFields = [];
+        $this->getRequiredFieldsForStage($stageNumber, $requiredFields);
+        ksort($requiredFields, SORT_ASC);
+
+        return $requiredFields;
+    }
+
+    protected function getRequiredFieldsForStage($stageNumber, array &$requiredFields)
+    {
+        if (isset($requiredFields[$stageNumber]) && $requiredFields[$stageNumber] === '*') {
+            return;
+        }
+
         $stage = $this->getStage($stageNumber);
 
         if ($stage->areAllFieldsRequired()) {
-            $requiredFieldsAsKeys = array_filter(
-                    $this->fieldNameStageNumberMap,
-                    function ($currentStage) use ($stageNumber) {
-                        return $currentStage < $stageNumber;
-                    }
-            );
+            foreach (range(1, $stageNumber - 1) as $previousStageNumber) {
+                $previousStage = $this->getStage($previousStageNumber);
 
-            return array_keys($requiredFieldsAsKeys);
-        }
-
-        $requiredFieldNames = array_fill_keys($stage->getRequiredFieldNames(), true);
-
-        foreach ($stage->getRequiredFieldNames() as $requiredFieldName) {
-            $requiredFieldNames += array_fill_keys($this->getRequiredFieldsForField($requiredFieldName), true);
-        }
-
-        return array_keys($requiredFieldNames);
-    }
-
-    protected function getRequiredFieldsForField($fieldName, IFormStage $stage = null)
-    {
-        $stage       = $stage ?: $this->getStageWithFieldName($fieldName);
-        $fieldsNames = array_fill_keys($stage->getRequiredFieldNames(), true);
-
-        if ($stage->areAllFieldsRequired()) {
-            foreach ($this->getAllStages() as $previousStage) {
-                if ($previousStage === $stage) {
-                    break;
-                }
-
-                $fieldsNames += array_fill_keys($previousStage->getDefinedFieldNames(), true);
+                $requiredFields[$previousStageNumber] =
+                        $previousStage instanceof IndependentFormStage
+                        ? $previousStage->getDefinedFieldNames()
+                        : '*';
             }
         } else {
             foreach ($stage->getRequiredFieldNames() as $requiredFieldName) {
-                $fieldsNames += array_fill_keys($this->getRequiredFieldsForField($requiredFieldName), true);
+                $previousStageNumber = $this->fieldNameStageNumberMap[$requiredFieldName];
+
+                if (isset($requiredFields[$previousStageNumber])) {
+                    if ($requiredFields[$previousStageNumber] !== '*'
+                        && !in_array($requiredFieldName, $requiredFields[$previousStageNumber], true)) {
+                        $requiredFields[$previousStageNumber][] = $requiredFieldName;
+                    }
+                } else {
+                    $requiredFields[$previousStageNumber] = [$requiredFieldName];
+                }
+
+                $this->getRequiredFieldsForStage($previousStageNumber, $requiredFields);
             }
         }
+    }
 
-        return array_keys($fieldsNames);
+    protected function getStageNumberFromStage(IFormStage $stage)
+    {
+        if ($stage === $this->firstStage) {
+            return 1;
+        } else {
+            return array_search($stage, $this->followingStages, true) + 2;
+        }
     }
 
     /**
@@ -194,27 +201,23 @@ class StagedForm implements IStagedForm
      */
     public function getFormForStage($stageNumber, array $previousStagesSubmission)
     {
-        $requiredFields = $this->getRequiredFieldNamesForStage($stageNumber);
-
-        if ($missingFields = array_diff($requiredFields, array_keys($previousStagesSubmission))) {
-            throw InvalidArgumentException::format(
-                    'Invalid call to %s: cannot load form of stage %d, missing required form fields (%s)',
-                    __METHOD__, $stageNumber, Debug::formatValues($missingFields)
-            );
-        }
-
-        $fieldsGroupedByStages = array_fill_keys(range(1, $stageNumber - 1), []);
-
-        foreach ($requiredFields as $fieldName) {
-            $stageNumberForField                           = $this->fieldNameStageNumberMap[$fieldName];
-            $fieldsGroupedByStages[$stageNumberForField][] = $fieldName;
-        }
-
+        $requiredFields      = $this->getRequiredFieldGroupedByStagesForStage($stageNumber);
         $processedSubmission = [];
 
-        foreach ($fieldsGroupedByStages as $previousStageNumber => $fieldNames) {
+        foreach ($requiredFields as $previousStageNumber => $requiredFieldNames) {
             $stage        = $this->getStage($previousStageNumber);
             $formForStage = $stage->loadForm($processedSubmission);
+
+            if ($requiredFieldNames === '*') {
+                $requiredFieldNames = $formForStage->getFieldNames();
+            }
+
+            if ($missingFields = array_diff($requiredFieldNames, array_keys($previousStagesSubmission))) {
+                throw InvalidArgumentException::format(
+                        'Invalid call to %s: cannot load form for stage %d, missing required form fields (%s)',
+                        __METHOD__, $previousStageNumber, Debug::formatValues($missingFields)
+                );
+            }
 
             foreach ($formForStage->getFieldNames() as $fieldName) {
                 if (isset($previousStagesSubmission[$fieldName])) {

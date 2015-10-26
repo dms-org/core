@@ -100,9 +100,11 @@ class StagedFormTest extends FormBuilderTestBase
         );
 
         $this->assertSame([$form->getFirstStage(), $form->getStage(2), $form->getStage(3)], $form->getAllStages());
-        $this->assertSame([], $form->getRequiredFieldNamesForStage(1));
-        $this->assertSame([], $form->getRequiredFieldNamesForStage(2));
-        $this->assertSame(['first', 'second'], $form->getRequiredFieldNamesForStage(3));
+
+        $this->assertSame([], $form->getRequiredFieldGroupedByStagesForStage(1));
+        $this->assertSame([], $form->getRequiredFieldGroupedByStagesForStage(2));
+        $this->assertSame([1 => ['first'], 2 => ['second']], $form->getRequiredFieldGroupedByStagesForStage(3));
+
         $this->assertSame($form->getStage(1), $form->getStageWithFieldName('first'));
         $this->assertSame($form->getStage(2), $form->getStageWithFieldName('second'));
         $this->assertThrows(function () use ($form) {
@@ -126,14 +128,138 @@ class StagedFormTest extends FormBuilderTestBase
         })->build();
 
 
-        $this->assertSame([], $form->getRequiredFieldNamesForStage(1));
-        $this->assertSame(['count'], $form->getRequiredFieldNamesForStage(2));
-        $this->assertSame(['count'], $form->getRequiredFieldNamesForStage(2));
+        $this->assertSame([], $form->getRequiredFieldGroupedByStagesForStage(1));
+        $this->assertSame([1 => ['count']], $form->getRequiredFieldGroupedByStagesForStage(2));
 
 
         $this->assertEquals(
                 Field::name('field: 3')->label('Label')->string()->build(),
                 $form->getFormForStage(2, ['count' => '3'])->getField('field: 3')
         );
+
+        $this->assertThrows(function () use ($form) {
+            $form->getFormForStage(3, ['first' => 'abc']);
+        }, InvalidArgumentException::class);
+    }
+
+    public function testFormDependentOnDependentFields()
+    {
+        $form = StagedForm::begin(
+                Form::create()
+                        ->section('First Stage', [
+                                Field::name('first')->label('String')->string(),
+                                Field::name('count')->label('Number')->int()->required(),
+                        ])
+        )->thenDependingOn(['count'], function (array $data) {
+            return Form::create()
+                    ->section('Second Stage', [
+                            Field::name('dependent')->label('Label (' . $data['count'] . ')')->string()->required()
+                    ]);
+        }, ['dependent'])->thenDependingOn(['dependent'], function (array $data) {
+            return Form::create()
+                    ->section('Third Stage', [
+                            Field::name('field: ' . $data['dependent'])->label('Label')->string()
+                    ]);
+        })->build();
+
+
+        $this->assertSame([], $form->getRequiredFieldGroupedByStagesForStage(1));
+        $this->assertSame([1 => ['count']], $form->getRequiredFieldGroupedByStagesForStage(2));
+        $this->assertSame([1 => ['count'], 2 => ['dependent']], $form->getRequiredFieldGroupedByStagesForStage(3));
+
+
+        $this->assertEquals(
+                Field::name('dependent')->label('Label (3)')->string()->required()->build(),
+                $form->getFormForStage(2, ['count' => '3'])->getField('dependent')
+        );
+
+        $this->assertEquals(
+                Field::name('field: abc')->label('Label')->string()->build(),
+                $form->getFormForStage(3, ['count' => '3', 'dependent' => 'abc'])->getField('field: abc')
+        );
+
+        $this->assertThrows(function () use ($form) {
+            $form->getFormForStage(3, ['dependent' => 'abc']);
+        }, InvalidArgumentException::class);
+    }
+
+    public function testFormDependentOnAllFields()
+    {
+        $form = StagedForm::begin(
+                Form::create()
+                        ->section('First Stage', [
+                                Field::name('first')->label('String')->string(),
+                                Field::name('count')->label('Number')->int()->required(),
+                        ])
+        )->thenDependingOn(['count'], function (array $data) {
+            return Form::create()
+                    ->section('Second Stage', [
+                            Field::name('dependent')->label('Label (' . $data['count'] . ')')->string()->required()
+                    ]);
+        })->then(function (array $data) {
+            return Form::create()
+                    ->section('Third Stage', [
+                            Field::name('field: ' . $data['dependent'])->label('Label')->string()
+                    ]);
+        })->build();
+
+
+        $this->assertSame([], $form->getRequiredFieldGroupedByStagesForStage(1));
+        $this->assertSame([1 => ['count']], $form->getRequiredFieldGroupedByStagesForStage(2));
+        $this->assertSame([1 => ['first', 'count'], 2 => '*'], $form->getRequiredFieldGroupedByStagesForStage(3));
+
+
+        $this->assertEquals(
+                Field::name('dependent')->label('Label (3)')->string()->required()->build(),
+                $form->getFormForStage(2, ['count' => '3'])->getField('dependent')
+        );
+
+        $this->assertEquals(
+                Field::name('field: abc')->label('Label')->string()->build(),
+                $form->getFormForStage(3, ['first' => 'abc', 'count' => '3', 'dependent' => 'abc'])->getField('field: abc')
+        );
+
+        $this->assertThrows(function () use ($form) {
+            $form->getFormForStage(3, ['count' => '3', 'dependent' => 'abc']);
+        }, InvalidArgumentException::class);
+    }
+
+    public function testThrowsExceptionForDependingOnFutureStage()
+    {
+        $this->setExpectedException(InvalidArgumentException::class);
+
+        StagedForm::begin(
+                Form::create()
+                        ->section('First Stage', [
+                                Field::name('first')->label('String')->string(),
+                        ])
+        )->thenDependingOn(['count'], function (array $data) {
+            return Form::create()
+                    ->section('Second Stage', [
+                            Field::name('dependent')->label('Label (' . $data['count'] . ')')->string()->required()
+                    ]);
+        })->then(
+                Form::create()
+                        ->section('Third Stage', [
+                                Field::name('count')->label('Count')->string(),
+                        ])
+        )->build();
+    }
+
+    public function testThrowsExceptionForDependingOnNonExistentField()
+    {
+        $this->setExpectedException(InvalidArgumentException::class);
+
+        StagedForm::begin(
+                Form::create()
+                        ->section('First Stage', [
+                                Field::name('first')->label('String')->string(),
+                        ])
+        )->thenDependingOn(['abc'], function (array $data) {
+            return Form::create()
+                    ->section('Second Stage', [
+                            Field::name('dependent')->label('Label (' . $data['count'] . ')')->string()->required()
+                    ]);
+        })->build();
     }
 }
