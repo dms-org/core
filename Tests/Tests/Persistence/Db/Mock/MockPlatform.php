@@ -128,6 +128,10 @@ class MockPlatform extends Platform
                 $column = $expr->getName();
 
                 return function ($row) use ($table, $column) {
+                    if ($row instanceof ICollection) {
+                        $row = $row->first();
+                    }
+
                     return $row[$table][$column];
                 };
 

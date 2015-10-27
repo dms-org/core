@@ -69,4 +69,34 @@ class GlobalOrderIndexTest extends DbIntegrationTest
         $this->assertSame(3, $e2->orderIndex);
         $this->assertSame(4, $e3->orderIndex);
     }
+
+    public function testPersistNewToExisting()
+    {
+        $this->db->setData([
+                'data' => [
+                        ['id' => 1, 'order_index' => 1],
+                        ['id' => 2, 'order_index' => 2],
+                ]
+        ]);
+
+        $this->repo->saveAll([
+                $e1 = new OrderedEntity(),
+                $e2 = new OrderedEntity(),
+                $e3 = new OrderedEntity(),
+        ]);
+
+        $this->assertDatabaseDataSameAs([
+                'data' => [
+                        ['id' => 1, 'order_index' => 1],
+                        ['id' => 2, 'order_index' => 2],
+                        ['id' => 3, 'order_index' => 3],
+                        ['id' => 4, 'order_index' => 4],
+                        ['id' => 5, 'order_index' => 5],
+                ]
+        ]);
+
+        $this->assertSame(3, $e1->orderIndex);
+        $this->assertSame(4, $e2->orderIndex);
+        $this->assertSame(5, $e3->orderIndex);
+    }
 }
