@@ -2,6 +2,7 @@
 
 namespace Iddigital\Cms\Core\Form\Object;
 
+use Iddigital\Cms\Core\Exception\InvalidArgumentException;
 use Iddigital\Cms\Core\Form\IForm;
 use Iddigital\Cms\Core\Form\InvalidFormSubmissionException;
 use Iddigital\Cms\Core\Model\IDataTransferObject;
@@ -152,6 +153,14 @@ abstract class FormObject extends TypedObject implements IDataTransferObject, IF
     final public function getInitialValues()
     {
         return $this->initialValues;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    final public function withInitialValues(array $initialValues)
+    {
+        return $this->form->withInitialValues($initialValues);
     }
 
     /**
