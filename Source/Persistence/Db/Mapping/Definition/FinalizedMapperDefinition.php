@@ -9,13 +9,12 @@ use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Relation\RelationMappin
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Relation\ToManyRelationMapping;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Relation\ToOneRelationMapping;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Hierarchy\IObjectMapping;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\Hook\IPersistHook;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\IObjectMapper;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\IOrm;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Locking\IOptimisticLockingStrategy;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\NullObjectMapper;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\IRelation;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\IToManyRelation;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\IToOneRelation;
 use Iddigital\Cms\Core\Persistence\Db\Schema\ForeignKey;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Table;
 use Iddigital\Cms\Core\Util\Debug;
@@ -93,6 +92,11 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
     private $lockingStrategies = [];
 
     /**
+     * @var IPersistHook[]
+     */
+    private $persistHooks = [];
+
+    /**
      * @var callable
      */
     private $relationMappingsFactory;
@@ -115,6 +119,7 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
      * @param callable[]                   $dbToPhpPropertyConverterMap
      * @param string[]                     $methodColumnNameMap
      * @param IOptimisticLockingStrategy[] $lockingStrategies
+     * @param IPersistHook[]               $persistHooks
      * @param IObjectMapping[]             $subClassMappings
      * @param callable                     $relationMappingsFactory
      * @param callable                     $foreignKeysFactory
@@ -130,6 +135,7 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
             array $dbToPhpPropertyConverterMap,
             array $methodColumnNameMap,
             array $lockingStrategies,
+            array $persistHooks,
             array $subClassMappings,
             callable $relationMappingsFactory,
             callable $foreignKeysFactory
@@ -144,13 +150,14 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
         $this->dbToPhpPropertyConverterMap = $dbToPhpPropertyConverterMap;
         $this->methodColumnNameMap         = $methodColumnNameMap;
         $this->lockingStrategies           = $lockingStrategies;
+        $this->persistHooks                = $persistHooks;
 
         foreach ($subClassMappings as $mapping) {
             $this->subClassMappings[$mapping->getObjectType()] = $mapping;
         }
 
-        $this->relationMappingsFactory   = $relationMappingsFactory;
-        $this->foreignKeysFactory = $foreignKeysFactory;
+        $this->relationMappingsFactory = $relationMappingsFactory;
+        $this->foreignKeysFactory      = $foreignKeysFactory;
     }
 
     /**
@@ -198,6 +205,16 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
         $this->table = $this->table->withForeignKeys(
                 array_merge($this->table->getForeignKeys(), [$foreignKey])
         );
+    }
+
+    /**
+     * @param IPersistHook $persistHook
+     *
+     * @return void
+     */
+    public function addPersistHook(IPersistHook $persistHook)
+    {
+        $this->persistHooks[] = $persistHook;
     }
 
     /**
@@ -257,6 +274,11 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
             $lockingStrategies[$key] = $lockingStrategy->withColumnNamesPrefixedBy($prefix);
         }
 
+        $persistHooks = [];
+        foreach ($this->persistHooks as $key => $persistHook) {
+            $persistHooks[$key] = $persistHook->withColumnNamesPrefixedBy($prefix);
+        }
+
         if ($this->hasInitializedRelations) {
             $relationMappingsFactory = function () {
                 return $this->getRelationMappings();
@@ -266,8 +288,8 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
                 return [];
             };
         } else {
-            $relationMappingsFactory  = $this->relationMappingsFactory;
-            $foreignKeyFactory = $this->foreignKeysFactory;
+            $relationMappingsFactory = $this->relationMappingsFactory;
+            $foreignKeyFactory       = $this->foreignKeysFactory;
         }
 
         $relationMappingsFactory = function (Table $parentTable, IObjectMapper $parentMapper) use ($relationMappingsFactory, $prefix) {
@@ -307,6 +329,7 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
                 $this->dbToPhpPropertyConverterMap,
                 $methodColumnNameMap,
                 $lockingStrategies,
+                $persistHooks,
                 $subClassMappings,
                 $relationMappingsFactory,
                 $foreignKeyFactory
@@ -476,6 +499,14 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
     }
 
     /**
+     * @return IPersistHook[]
+     */
+    public function getPersistHooks()
+    {
+        return $this->persistHooks;
+    }
+
+    /**
      * @return IObjectMapping[]
      */
     public function getSubClassMappings()
@@ -520,5 +551,17 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
         $clone->table = $table;
 
         return $clone;
+    }
+
+    /**
+     * @param string $columnName
+     *
+     * @return string|null
+     */
+    public function getPropertyLinkedToColumn($columnName)
+    {
+        $columnName = array_search($columnName, $this->propertyColumnNameMap, true);
+
+        return $columnName ? $columnName : null;
     }
 }

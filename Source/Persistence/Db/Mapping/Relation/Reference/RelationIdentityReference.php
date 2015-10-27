@@ -51,24 +51,20 @@ abstract class RelationIdentityReference extends RelationReference
 
     /**
      * @param PersistenceContext $context
-     * @param Column             $foreignKeyToParent
+     * @param Column[]           $modifiedColumns
      * @param array              $children
      *
      * @return Row[]
      * @throws InvalidArgumentException
      */
-    final protected function bulkUpdateForeignKeys(PersistenceContext $context, Column $foreignKeyToParent = null, array $children)
+    final protected function bulkUpdateForeignKeys(PersistenceContext $context, array $modifiedColumns, array $children)
     {
         $primaryKey     = $this->mapper->getPrimaryTable()->getPrimaryKeyColumn();
         $primaryKeyName = $primaryKey->getName();
 
-        if ($foreignKeyToParent) {
-            $columns = [$primaryKey, $foreignKeyToParent];
-        } else {
-            $columns = [$primaryKey];
-        }
+        $columnsToPersist = array_merge([$primaryKey], $modifiedColumns);
 
-        $rowSet = new RowSet($this->mapper->getPrimaryTable()->withColumnsIgnoringConstraints($columns));
+        $rowSet = new RowSet($this->mapper->getPrimaryTable()->withColumnsButIgnoringConstraints($columnsToPersist));
         $rows   = [];
 
         foreach ($children as $key => $childId) {
@@ -79,7 +75,7 @@ abstract class RelationIdentityReference extends RelationReference
             }
         }
 
-        if ($foreignKeyToParent) {
+        if ($modifiedColumns) {
             if ($rowSet->count() > 0) {
                 $context->bulkUpdate($rowSet);
             }

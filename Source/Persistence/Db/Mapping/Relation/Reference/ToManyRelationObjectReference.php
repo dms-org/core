@@ -39,12 +39,12 @@ class ToManyRelationObjectReference extends RelationObjectReference implements I
 
     /**
      * @param PersistenceContext $context
-     * @param Column             $foreignKeyToParent
+     * @param Column[]           $modifiedColumns
      * @param array              $children
      *
      * @return Row[]
      */
-    public function syncRelated(PersistenceContext $context, Column $foreignKeyToParent = null, array $children)
+    public function syncRelated(PersistenceContext $context, array $modifiedColumns, array $children)
     {
         return $this->persistChildrenIgnoringBidirectionalRelation($context, $children);
     }

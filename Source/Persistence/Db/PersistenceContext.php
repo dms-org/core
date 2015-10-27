@@ -4,6 +4,8 @@ namespace Iddigital\Cms\Core\Persistence\Db;
 
 use Iddigital\Cms\Core\Exception\InvalidArgumentException;
 use Iddigital\Cms\Core\Model\IEntity;
+use Iddigital\Cms\Core\Persistence\Db\Connection\IConnection;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\Hook\IPersistHook;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\IRelation;
 use Iddigital\Cms\Core\Persistence\Db\Query\BulkUpdate;
 use Iddigital\Cms\Core\Persistence\Db\Query\IQuery;
@@ -14,12 +16,17 @@ use Iddigital\Cms\Core\Persistence\Db\Query\Upsert;
  *
  * @author Elliot Levin <elliotlevin@hotmail.com>
  */
-class PersistenceContext
+class PersistenceContext extends ConnectionContext
 {
     /**
      * @var IRelation[][]
      */
     private $ignoreRelationStack = [];
+
+    /**
+     * @var IPersistHook[][]
+     */
+    private $ignorePersistHookStack = [];
 
     /**
      * @var IEntity[]
@@ -40,6 +47,14 @@ class PersistenceContext
      * @var callable[]
      */
     private $completionCallbacks = [];
+
+    /**
+     * @inheritDoc
+     */
+    public function __construct(IConnection $connection)
+    {
+        parent::__construct($connection);
+    }
 
     /**
      * @param IEntity $entity
@@ -120,6 +135,36 @@ class PersistenceContext
         }
 
         return in_array($relation, end($this->ignoreRelationStack), true);
+    }
+
+    /**
+     * @param callable       $operation
+     * @param IPersistHook[] $persistHooks
+     *
+     * @return mixed
+     */
+    public function ignorePersistHooksFor(callable $operation, array $persistHooks)
+    {
+        InvalidArgumentException::verifyAllInstanceOf(__METHOD__, 'persistHooks', $persistHooks, IPersistHook::class);
+        $this->ignorePersistHookStack[] = $persistHooks;
+        $result                         = $operation();
+        array_pop($this->ignorePersistHookStack);
+
+        return $result;
+    }
+
+    /**
+     * @param IPersistHook $persistHook
+     *
+     * @return bool
+     */
+    public function isPersistHookIgnored(IPersistHook $persistHook)
+    {
+        if (empty($this->ignorePersistHookStack)) {
+            return false;
+        }
+
+        return in_array($persistHook, end($this->ignorePersistHookStack), true);
     }
 
     /**

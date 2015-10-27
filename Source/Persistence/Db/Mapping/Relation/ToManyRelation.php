@@ -31,7 +31,7 @@ class ToManyRelation extends ToManyRelationBase
     /**
      * @var Column
      */
-    protected $foreignKeyColumn;
+    protected $foreignKeyToParentColumn;
 
     /**
      * The order to load the related objects.
@@ -67,8 +67,8 @@ class ToManyRelation extends ToManyRelationBase
             $orderPersistColumn = null
     ) {
         parent::__construct($reference, $mode, self::DEPENDENT_CHILDREN);
-        $this->foreignKeyToParent = $parentForeignKey;
-        $this->foreignKeyColumn   = $this->table->getColumn($this->foreignKeyToParent);
+        $this->foreignKeyToParent       = $parentForeignKey;
+        $this->foreignKeyToParentColumn = $this->table->getColumn($this->foreignKeyToParent);
 
         $this->orderByColumnNameDirectionMap = $orderByColumnNameDirectionMap;
 
@@ -108,7 +108,7 @@ class ToManyRelation extends ToManyRelationBase
             $this->mode->syncInvalidatedRelationsQuery(
                     $context,
                     $this->table,
-                    $this->foreignKeyColumn,
+                    $this->foreignKeyToParentColumn,
                     $this->getInvalidatedRelationExpr($map)
             );
         }
@@ -123,7 +123,7 @@ class ToManyRelation extends ToManyRelationBase
                 $this->mapper,
                 $parentDelete,
                 $this->table,
-                $this->foreignKeyColumn,
+                $this->foreignKeyToParentColumn,
                 $parentDelete->getTable()->getPrimaryKeyColumn()
         );
     }
@@ -156,7 +156,11 @@ class ToManyRelation extends ToManyRelationBase
 
         /** @var Row[][] $rowGroups */
         $rowGroups = [];
-        $rows      = $this->reference->syncRelated($context, $this->foreignKeyColumn, $children);
+        $rows      = $this->reference->syncRelated(
+                $context,
+                array_filter([$this->foreignKeyToParentColumn, $this->orderPersistColumn]),
+                $children
+        );
 
         foreach ($childKeyParentMap as $rowKey => $parentKey) {
             $rowGroups[$parentKey][] = $rows[$rowKey];
@@ -196,9 +200,9 @@ class ToManyRelation extends ToManyRelationBase
             // an extra step must be taken because the primary key will
             // only be known after inserting so the foreign key to itself
             // will have to be updated separately afterwards
-            $context->bulkUpdate(new RowSet($this->table->withColumnsIgnoringConstraints([
+            $context->bulkUpdate(new RowSet($this->table->withColumnsButIgnoringConstraints([
                     $this->primaryKey,
-                    $this->foreignKeyColumn
+                    $this->foreignKeyToParentColumn
             ]), $selfReferencingChildRows));
         }
     }
@@ -215,7 +219,7 @@ class ToManyRelation extends ToManyRelationBase
             if ($parent->hasColumn($primaryKey)) {
 
                 $equalsParentForeignKey = Expr::equal(
-                        $this->column($this->foreignKeyColumn),
+                        $this->column($this->foreignKeyToParentColumn),
                         Expr::idParam($parent->getColumn($primaryKey))
                 );
 
@@ -256,9 +260,9 @@ class ToManyRelation extends ToManyRelationBase
             $parentIds[] = Expr::idParam($parent->getColumn($primaryKey));
         }
 
-        $select = $this->select();
-        $select->addRawColumn($this->foreignKeyToParent);
-        $select->where(Expr::in($this->column($this->foreignKeyColumn), Expr::tuple($parentIds)));
+        $select = $this->select()
+                ->addRawColumn($this->foreignKeyToParent)
+                ->where(Expr::in($this->column($this->foreignKeyToParentColumn), Expr::tuple($parentIds)));
 
         foreach ($this->orderByColumnNameDirectionMap as $column => $direction) {
             $select->orderBy(new Ordering($this->column($this->table->getColumn($column)), $direction));

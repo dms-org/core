@@ -32,10 +32,10 @@ interface IToManyRelationReference extends IRelationReference
 
     /**
      * @param PersistenceContext $context
-     * @param Column|null        $foreignKeyToParent
+     * @param Column[]           $modifiedColumns
      * @param array              $children
      *
      * @return Row[]
      */
-    public function syncRelated(PersistenceContext $context, Column $foreignKeyToParent = null, array $children);
+    public function syncRelated(PersistenceContext $context, array $modifiedColumns, array $children);
 }

@@ -6,11 +6,11 @@ use Iddigital\Cms\Core\Persistence\Db\Connection\IConnection;
 use Iddigital\Cms\Core\Persistence\Db\Query\Select;
 
 /**
- * The persistence context class
+ * The loading context class
  *
  * @author Elliot Levin <elliotlevin@hotmail.com>
  */
-class LoadingContext
+class LoadingContext extends ConnectionContext
 {
     /**
      * @var IdentityMap[]
@@ -18,18 +18,11 @@ class LoadingContext
     private $identityMaps = [];
 
     /**
-     * @var IConnection
-     */
-    private $connection;
-
-    /**
-     * LoadingContext constructor.
-     *
-     * @param IConnection $connection
+     * @inheritDoc
      */
     public function __construct(IConnection $connection)
     {
-        $this->connection = $connection;
+        parent::__construct($connection);
     }
 
     /**

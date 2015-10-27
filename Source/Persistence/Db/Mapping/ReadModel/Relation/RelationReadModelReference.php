@@ -62,7 +62,7 @@ class RelationReadModelReference extends RelationObjectReference implements IToO
         throw NotImplementedException::method(__METHOD__);
     }
 
-    public function syncRelated(PersistenceContext $context, Column $foreignKeyToParent = null, array $children)
+    public function syncRelated(PersistenceContext $context, array $modifiedColumns, array $children)
     {
         throw NotImplementedException::method(__METHOD__);
     }

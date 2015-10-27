@@ -35,14 +35,14 @@ class ToOneRelationIdentityReference extends RelationIdentityReference implement
 
     /**
      * @param PersistenceContext $context
-     * @param Column             $foreignKeyToParent
+     * @param Column[]           $modifiedColumns
      * @param array              $children
      *
      * @return Row[]
      * @throws InvalidArgumentException
      */
-    public function syncRelated(PersistenceContext $context, Column $foreignKeyToParent = null, array $children)
+    public function syncRelated(PersistenceContext $context, array $modifiedColumns, array $children)
     {
-        return $this->bulkUpdateForeignKeys($context, $foreignKeyToParent, $children);
+        return $this->bulkUpdateForeignKeys($context, $modifiedColumns, $children);
     }
 }

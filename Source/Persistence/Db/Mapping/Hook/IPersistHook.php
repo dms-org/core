@@ -1,22 +1,26 @@
 <?php
 
-namespace Iddigital\Cms\Core\Persistence\Db\Mapping\Locking;
+namespace Iddigital\Cms\Core\Persistence\Db\Mapping\Hook;
 
 use Iddigital\Cms\Core\Model\ITypedObject;
 use Iddigital\Cms\Core\Persistence\Db\PersistenceContext;
 use Iddigital\Cms\Core\Persistence\Db\Row;
 
 /**
- * The optimistic locking strategy interface.
+ * The persist hook interface.
  *
  * @author Elliot Levin <elliotlevin@hotmail.com>
  */
-interface IOptimisticLockingStrategy
+interface IPersistHook
 {
     /**
-     * @return string[]
+     * @param PersistenceContext $context
+     * @param ITypedObject[]     $objects
+     * @param Row[]              $rows
+     *
+     * @return void
      */
-    public function getLockingColumnNames();
+    public function fireBeforeCommit(PersistenceContext $context, array $objects, array $rows);
 
     /**
      * @param PersistenceContext $context
@@ -25,16 +29,7 @@ interface IOptimisticLockingStrategy
      *
      * @return void
      */
-    public function applyLockingDataBeforeCommit(PersistenceContext $context, array $objects, array $rows);
-
-    /**
-     * @param PersistenceContext $context
-     * @param ITypedObject[]     $objects
-     * @param Row[]              $rows
-     *
-     * @return void
-     */
-    public function applyLockingDataAfterCommit(PersistenceContext $context, array $objects, array $rows);
+    public function fireAfterCommit(PersistenceContext $context, array $objects, array $rows);
 
     /**
      * @param string $prefix

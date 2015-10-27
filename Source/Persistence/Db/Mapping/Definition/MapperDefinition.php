@@ -12,6 +12,7 @@ use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Embedded\EmbeddedCollec
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Embedded\EmbeddedValueObjectDefiner;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Embedded\EnumPropertyColumnDefiner;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\ForeignKey\ForeignKeyLocalColumnsDefiner;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Hook\HookTypeDefiner;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Index\IndexColumnsDefiner;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Relation\Accessor\CustomAccessor;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Relation\Accessor\PropertyAccessor;
@@ -139,6 +140,11 @@ class MapperDefinition extends MapperDefinitionBase
      * @var IOptimisticLockingStrategy[]
      */
     private $lockingStrategies = [];
+
+    /**
+     * @var callable[]
+     */
+    private $persistHookFactories = [];
 
     /**
      * MapperDefinition constructor.
@@ -420,14 +426,15 @@ class MapperDefinition extends MapperDefinitionBase
 
         return new EmbeddedValueObjectDefiner($this->orm, function (callable $mapperLoader, $issetColumnName = null) use ($property) {
 
-            $this->createRelationMappingFactory(new PropertyAccessor($property), function (Table $parentTable, IObjectMapper $parentMapper)  use (
-                    $mapperLoader,
-                    $issetColumnName
-            ) {
-                return new EmbeddedObjectRelation($mapperLoader($parentMapper), $issetColumnName);
-            });
+            $this->createRelationMappingFactory(new PropertyAccessor($property),
+                    function (Table $parentTable, IObjectMapper $parentMapper) use (
+                            $mapperLoader,
+                            $issetColumnName
+                    ) {
+                        return new EmbeddedObjectRelation($mapperLoader($parentMapper), $issetColumnName);
+                    });
 
-            $this->mappedProperties[$property]  = true;
+            $this->mappedProperties[$property] = true;
 
             if ($issetColumnName) {
                 $this->addColumn(new Column($issetColumnName, new Boolean()));
@@ -461,21 +468,22 @@ class MapperDefinition extends MapperDefinitionBase
                 function (callable $mapperLoader, $tableName, $primaryKeyName, $foreignKeyName) use (
                         $property
                 ) {
-                    $this->createRelationMappingFactory(new PropertyAccessor($property), function (Table $parentTable, IObjectMapper $parentMapper) use (
-                            $mapperLoader,
-                            $tableName,
-                            $primaryKeyName,
-                            $foreignKeyName
-                    ) {
-                        return new EmbeddedCollectionRelation(
-                                $mapperLoader($parentMapper),
-                                $parentTable->getName(),
-                                $tableName,
-                                $this->buildPrimaryKeyColumn($primaryKeyName),
-                                new Column($foreignKeyName, Integer::normal()),
-                                $this->primaryKey
-                        );
-                    });
+                    $this->createRelationMappingFactory(new PropertyAccessor($property),
+                            function (Table $parentTable, IObjectMapper $parentMapper) use (
+                                    $mapperLoader,
+                                    $tableName,
+                                    $primaryKeyName,
+                                    $foreignKeyName
+                            ) {
+                                return new EmbeddedCollectionRelation(
+                                        $mapperLoader($parentMapper),
+                                        $parentTable->getName(),
+                                        $tableName,
+                                        $this->buildPrimaryKeyColumn($primaryKeyName),
+                                        new Column($foreignKeyName, Integer::normal()),
+                                        $this->primaryKey
+                                );
+                            });
 
                     $this->mappedProperties[$property] = true;
                 });
@@ -652,6 +660,18 @@ class MapperDefinition extends MapperDefinitionBase
         $this->lockingStrategies[] = $strategy;
     }
 
+    /**
+     * Defines a persist hook.
+     *
+     * @return HookTypeDefiner
+     */
+    public function hook()
+    {
+        return new HookTypeDefiner(function (callable $persistHookFactory) {
+            $this->persistHookFactories[] = $persistHookFactory;
+        });
+    }
+
     protected function getAllMappedProperties()
     {
         return ($this->parent ? $this->parent->getAllMappedProperties() : []) + $this->mappedProperties;
@@ -705,6 +725,11 @@ class MapperDefinition extends MapperDefinitionBase
             return $foreignKeys;
         };
 
+        $persistHooks = [];
+        foreach ($this->persistHookFactories as $factory) {
+            $persistHooks[] = $factory($table, $this->propertyColumnMap);
+        }
+
         $subClassMappings = [];
         foreach ($this->subClassMappingFactories as $factory) {
             $subClassMappings[] = $factory($table);
@@ -721,6 +746,7 @@ class MapperDefinition extends MapperDefinitionBase
                 $this->dbToPhpPropertyConverterMap,
                 $this->methodColumnMap,
                 $this->lockingStrategies,
+                $persistHooks,
                 $subClassMappings,
                 $relationsFactory,
                 $foreignKeysFactory

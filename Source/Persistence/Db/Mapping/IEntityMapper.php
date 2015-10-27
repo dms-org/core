@@ -5,6 +5,7 @@ namespace Iddigital\Cms\Core\Persistence\Db\Mapping;
 use Iddigital\Cms\Core\Exception\InvalidArgumentException;
 use Iddigital\Cms\Core\Model\IEntity;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\FinalizedMapperDefinition;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\Hook\IPersistHook;
 use Iddigital\Cms\Core\Persistence\Db\PersistenceContext;
 use Iddigital\Cms\Core\Persistence\Db\Query\Select;
 use Iddigital\Cms\Core\Persistence\Db\Row;
@@ -66,6 +67,15 @@ interface IEntityMapper extends IObjectMapper
      * @return void
      */
     public function addForeignKey(ForeignKey $foreignKey);
+
+    /**
+     * Adds a persist hook to the entity mapper.
+     *
+     * @param IPersistHook $persistHook
+     *
+     * @return void
+     */
+    public function addPersistHook(IPersistHook $persistHook);
 
     /**
      * @param Row[] $rows

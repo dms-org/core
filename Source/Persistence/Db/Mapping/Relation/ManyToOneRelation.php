@@ -94,7 +94,7 @@ class ManyToOneRelation extends ToOneRelationBase
         }
 
         $primaryKey = $this->mapper->getPrimaryTable()->getPrimaryKeyColumnName();
-        $rows       = $this->reference->syncRelated($context, null, $children);
+        $rows       = $this->reference->syncRelated($context, [], $children);
 
         foreach ($rows as $key => $row) {
             $parent = $parents[$key];

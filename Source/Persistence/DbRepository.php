@@ -174,7 +174,7 @@ class DbRepository extends DbRepositoryBase implements IRepository
         $this->connection->beginTransaction();
 
         try {
-            $context = new PersistenceContext();
+            $context = new PersistenceContext($this->connection);
             $action($context);
 
             foreach ($context->getOperations() as $operation) {

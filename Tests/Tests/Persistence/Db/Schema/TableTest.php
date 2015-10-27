@@ -97,7 +97,7 @@ class TableTest extends CmsTestCase
                 [$id = $this->idColumn(), $data = new Column('data', new Varchar(255))],
                 [new Index('index', false, ['data'])],
                 [new ForeignKey('fk', ['id'], 'other_table', ['fk'], ForeignKeyMode::CASCADE, ForeignKeyMode::CASCADE)]
-        ))->withColumnsIgnoringConstraints([$id]);
+        ))->withColumnsButIgnoringConstraints([$id]);
 
         $this->assertEquals(
                 new Table('table', [$id]),

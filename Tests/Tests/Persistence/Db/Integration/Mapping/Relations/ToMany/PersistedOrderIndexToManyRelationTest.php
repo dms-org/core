@@ -2,10 +2,13 @@
 
 namespace Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\Relations\ToMany;
 
+use Iddigital\Cms\Core\Persistence\Db\Mapping\Hook\OrderIndexPropertyLoaderHook;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\IEntityMapper;
 use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Expr;
 use Iddigital\Cms\Core\Persistence\Db\Query\Select;
 use Iddigital\Cms\Core\Persistence\Db\Query\Upsert;
 use Iddigital\Cms\Core\Persistence\Db\Schema\ForeignKeyMode;
+use Iddigital\Cms\Core\Persistence\DbRepository;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\Relations\Fixtures\ToManyRelation\ChildEntity;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\Relations\Fixtures\ToManyRelation\Ordered\ParentWithChildOrderPersistenceColumnEntityMapper;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\Relations\Fixtures\ToManyRelation\ParentEntity;
@@ -16,12 +19,31 @@ use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\Relations\Fixtur
 class PersistedOrderIndexToManyRelationTest extends ToManyRelationTestBase
 {
     /**
+     * @var IEntityMapper
+     */
+    protected $childMapper;
+
+    /**
+     * @var DbRepository
+     */
+    protected $childRepo;
+
+    /**
      * @inheritDoc
      */
     protected function loadOrm()
     {
         return ParentWithChildOrderPersistenceColumnEntityMapper::orm();
     }
+
+    public function setUp()
+    {
+        parent::setUp();
+
+        $this->childMapper = $this->orm->getEntityMapper(ChildEntity::class);
+        $this->childRepo   = new DbRepository($this->connection, $this->childMapper);
+    }
+
 
     /**
      * @inheritDoc
@@ -44,6 +66,12 @@ class PersistedOrderIndexToManyRelationTest extends ToManyRelationTestBase
     public function testLoad()
     {
 
+    }
+
+    public function testRegistersPersistHookInRelatedMapper()
+    {
+        $this->assertCount(1, $this->childMapper->getDefinition()->getPersistHooks());
+        $this->assertInstanceOf(OrderIndexPropertyLoaderHook::class, $this->childMapper->getDefinition()->getPersistHooks()[0]);
     }
 
     public function testBulkPersist()
@@ -102,7 +130,6 @@ class PersistedOrderIndexToManyRelationTest extends ToManyRelationTestBase
 
         $this->assertEquals($entities, $this->repo->getAll());
     }
-
 
     public function testBulkLoad()
     {
@@ -163,5 +190,43 @@ class PersistedOrderIndexToManyRelationTest extends ToManyRelationTestBase
                         ))
                         ->orderByAsc(Expr::tableColumn($this->childEntities, 'order_index'))
         );
+    }
+
+    public function testPersistingChildDirectlyGeneratesSequentialOrderIndices()
+    {
+        $this->childRepo->saveAll([
+                new ChildEntity(null, 999),
+                new ChildEntity(null, 99),
+                new ChildEntity(null, 9),
+        ]);
+
+        $this->assertDatabaseDataSameAs([
+                'parent_entities' => [
+                ],
+                'child_entities'  => [
+                        ['id' => 1, 'parent_id' => null, 'order_index' => 1, 'val' => 999],
+                        ['id' => 2, 'parent_id' => null, 'order_index' => 2, 'val' => 99],
+                        ['id' => 3, 'parent_id' => null, 'order_index' => 3, 'val' => 9],
+                ]
+        ]);
+
+        $this->childRepo->saveAll([
+                new ChildEntity(null, 1),
+                new ChildEntity(null, 2),
+                new ChildEntity(null, 3),
+        ]);
+        
+        $this->assertDatabaseDataSameAs([
+                'parent_entities' => [
+                ],
+                'child_entities'  => [
+                        ['id' => 1, 'parent_id' => null, 'order_index' => 1, 'val' => 999],
+                        ['id' => 2, 'parent_id' => null, 'order_index' => 2, 'val' => 99],
+                        ['id' => 3, 'parent_id' => null, 'order_index' => 3, 'val' => 9],
+                        ['id' => 4, 'parent_id' => null, 'order_index' => 4, 'val' => 1],
+                        ['id' => 5, 'parent_id' => null, 'order_index' => 5, 'val' => 2],
+                        ['id' => 6, 'parent_id' => null, 'order_index' => 6, 'val' => 3],
+                ]
+        ]);
     }
 }

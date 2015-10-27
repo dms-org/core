@@ -5,21 +5,21 @@ namespace Iddigital\Cms\Core\Tests\Persistence\Db\Mock;
 use Iddigital\Cms\Core\Exception\NotImplementedException;
 use Iddigital\Cms\Core\Persistence\Db\Platform\CompiledQueryBuilder;
 use Iddigital\Cms\Core\Persistence\Db\Platform\Platform;
-use Iddigital\Cms\Core\Persistence\Db\Query\BulkUpdate;
 use Iddigital\Cms\Core\Persistence\Db\Query\Clause\Join;
 use Iddigital\Cms\Core\Persistence\Db\Query\Clause\Ordering;
 use Iddigital\Cms\Core\Persistence\Db\Query\Delete;
+use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Aggregate;
 use Iddigital\Cms\Core\Persistence\Db\Query\Expression\BinOp;
 use Iddigital\Cms\Core\Persistence\Db\Query\Expression\ColumnExpr;
 use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Count;
 use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Expr;
+use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Max;
 use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Parameter;
 use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Tuple;
 use Iddigital\Cms\Core\Persistence\Db\Query\Expression\UnaryOp;
 use Iddigital\Cms\Core\Persistence\Db\Query\Query;
 use Iddigital\Cms\Core\Persistence\Db\Query\Select;
 use Iddigital\Cms\Core\Persistence\Db\Query\Update;
-use Iddigital\Cms\Core\Persistence\Db\Query\Upsert;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Table;
 use Pinq\Collection;
 use Pinq\Direction;
@@ -68,11 +68,15 @@ class MockPlatform extends Platform
 
     public function compilePreparedUpdate(Table $table, array $updateColumns, array $whereColumnNameParameterMap)
     {
-        return new PhpPreparedCompiledQuery(function (MockDatabase $database, array $parameters) use ($table, $updateColumns, $whereColumnNameParameterMap) {
+        return new PhpPreparedCompiledQuery(function (MockDatabase $database, array $parameters) use (
+                $table,
+                $updateColumns,
+                $whereColumnNameParameterMap
+        ) {
             $affectedRows = 0;
 
             $primaryKey = $table->getPrimaryKeyColumnName();
-            $table = $database->getTable($table->getName());
+            $table      = $database->getTable($table->getName());
 
             $whereConditions = [];
             foreach ($whereColumnNameParameterMap as $column => $parameterName) {
@@ -130,6 +134,13 @@ class MockPlatform extends Platform
             case $expr instanceof Count:
                 return function (ICollection $group) {
                     return $group->count();
+                };
+
+            case $expr instanceof Max:
+                $argument = $this->compileExpression($expr->getArgument());
+
+                return function (ICollection $group) use ($argument) {
+                    return $group->maximum($argument);
                 };
 
             case $expr instanceof Parameter:
@@ -215,7 +226,7 @@ class MockPlatform extends Platform
 
     private function compileUnaryOp(UnaryOp $expr)
     {
-        $operand  = $this->compileExpression($expr->getOperand());
+        $operand = $this->compileExpression($expr->getOperand());
 
         switch ($expr->getOperator()) {
             case UnaryOp::IS_NULL:
@@ -248,7 +259,14 @@ class MockPlatform extends Platform
             $rows = $this->performWhere($query, $rows);
 
             $isGrouped      = !empty($query->getGroupBy());
-            $isImpliedGroup = in_array(Count::class, array_map('get_class', $query->getAliasColumnMap()), true);
+            $isImpliedGroup = false;
+
+            foreach ($query->getAliasColumnMap() as $expression) {
+                if ($expression instanceof Aggregate) {
+                    $isImpliedGroup = true;
+                    break;
+                }
+            }
 
             if ($isGrouped) {
                 $compiledGroupings = $this->compileExpressions($query->getGroupBy());

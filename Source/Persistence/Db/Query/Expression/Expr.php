@@ -111,6 +111,23 @@ abstract class Expr
     }
 
     /**
+     * @param Type  $type
+     * @param array $params
+     *
+     * @return Tuple
+     */
+    public static function tupleParams(Type $type, array $params)
+    {
+        $expressions = [];
+
+        foreach ($params as $param) {
+            $expressions[] = new Parameter($type, $param);
+        }
+
+        return new Tuple($expressions);
+    }
+
+    /**
      * @param Expr $left
      * @param Expr $right
      *
@@ -317,5 +334,15 @@ abstract class Expr
     public static function count()
     {
         return new Count();
+    }
+
+    /**
+     * @param Expr $argument
+     *
+     * @return Max
+     */
+    public static function max(Expr $argument)
+    {
+        return new Max($argument);
     }
 }

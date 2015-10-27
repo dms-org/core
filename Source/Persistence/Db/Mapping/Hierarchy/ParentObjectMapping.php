@@ -6,6 +6,7 @@ use Iddigital\Cms\Core\Exception\InvalidArgumentException;
 use Iddigital\Cms\Core\Model\ITypedObject;
 use Iddigital\Cms\Core\Persistence\Db\LoadingContext;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\FinalizedMapperDefinition;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\Hook\IPersistHook;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\IEmbeddedToOneRelation;
 use Iddigital\Cms\Core\Persistence\Db\PersistenceContext;
 use Iddigital\Cms\Core\Persistence\Db\Query\Delete;
@@ -54,6 +55,16 @@ class ParentObjectMapping extends ObjectMapping
     public function addForeignKey(ForeignKey $foreignKey)
     {
         $this->definition->addForeignKey($foreignKey);
+    }
+
+    /**
+     * @param ForeignKey $persistHook
+     *
+     * @return void
+     */
+    public function addPersistHook(IPersistHook $persistHook)
+    {
+        $this->definition->addPersistHook($persistHook);
     }
 
     /**

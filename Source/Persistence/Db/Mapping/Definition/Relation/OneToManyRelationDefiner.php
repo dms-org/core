@@ -2,6 +2,7 @@
 
 namespace Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Relation;
 
+use Iddigital\Cms\Core\Persistence\Db\Mapping\Hook\OrderIndexPropertyLoaderHook;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\IEntityMapper;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Mode\IdentifyingRelationMode;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Mode\NonIdentifyingRelationMode;
@@ -104,6 +105,11 @@ class OneToManyRelationDefiner extends RelationTypeDefinerBase
      * order index of the related objects to the supplied column.
      * This will automatically load the columns in the persisted order.
      *
+     * This will also automatically register a persist hook on the related
+     * entity mappers that will load new sequential order indexes if the
+     * entities are persisted outside of the relationship and directly through
+     * its own entity mapper.
+     *
      * @param string $columnName
      *
      * @return OneToManyRelationDefiner
@@ -140,10 +146,23 @@ class OneToManyRelationDefiner extends RelationTypeDefinerBase
                             : ForeignKeyMode::SET_NULL
             ));
 
+            if ($this->orderPersistColumn) {
+                $persistHook = new OrderIndexPropertyLoaderHook(
+                        $mapper->getPrimaryTable(),
+                        $this->orderPersistColumn,
+                        $columnName,
+                        $mapper->getDefinition()->getPropertyLinkedToColumn($this->orderPersistColumn)
+                );
+
+                $mapper->addPersistHook($persistHook);
+            } else {
+                $persistHook = null;
+            }
+
             return new ToManyRelation(
                     $this->loadIds
                             ? new ToManyRelationIdentityReference($mapper)
-                            : new ToManyRelationObjectReference($mapper, $this->bidirectionalRelationProperty),
+                            : new ToManyRelationObjectReference($mapper, $this->bidirectionalRelationProperty, $persistHook),
                     $columnName,
                     $this->identifying
                             ? new IdentifyingRelationMode()

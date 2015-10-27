@@ -1,0 +1,204 @@
+<?php
+
+namespace Iddigital\Cms\Core\Persistence\Db\Mapping\Hook;
+
+use Iddigital\Cms\Core\Model\ITypedObject;
+use Iddigital\Cms\Core\Persistence\Db\PersistenceContext;
+use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Expr;
+use Iddigital\Cms\Core\Persistence\Db\Query\Select;
+use Iddigital\Cms\Core\Persistence\Db\Row;
+use Iddigital\Cms\Core\Persistence\Db\Schema\Column;
+use Iddigital\Cms\Core\Persistence\Db\Schema\Table;
+
+/**
+ * Loads a property of new objects with an integer
+ * containing the next valid order index integer.
+ *
+ * The order index numbers a 1-based.
+ *
+ * @author Elliot Levin <elliotlevin@hotmail.com>
+ */
+class OrderIndexPropertyLoaderHook implements IPersistHook
+{
+    /**
+     * @var Table
+     */
+    protected $table;
+
+    /**
+     * @var Column
+     */
+    protected $orderColumn;
+
+    /**
+     * @var Column|null
+     */
+    protected $groupingColumn;
+
+    /**
+     * @var string|null
+     */
+    protected $orderPropertyName;
+
+    /**
+     * OrderIndexPropertyLoaderHook constructor.
+     *
+     * @param Table       $table
+     * @param string      $orderColumn
+     * @param string|null $groupingColumn
+     * @param string|null $orderPropertyName
+     */
+    public function __construct(Table $table, $orderColumn, $groupingColumn = null, $orderPropertyName = null)
+    {
+        $this->table             = $table;
+        $this->orderColumn       = $table->getColumn($orderColumn);
+        $this->groupingColumn    = $groupingColumn ? $table->getColumn($groupingColumn) : null;
+        $this->orderPropertyName = $orderPropertyName;
+    }
+
+    /**
+     * @param PersistenceContext $context
+     * @param ITypedObject[]     $objects
+     * @param Row[]              $rows
+     *
+     * @return void
+     */
+    public function fireBeforeCommit(PersistenceContext $context, array $objects, array $rows)
+    {
+        $orderColumn           = $this->orderColumn->getName();
+        $rowsWithoutOrderIndex = [];
+
+        foreach ($rows as $row) {
+            if (!$row->hasColumn($orderColumn)) {
+                $rowsWithoutOrderIndex[] = $row;
+            }
+        }
+
+        if ($rowsWithoutOrderIndex) {
+            if ($this->groupingColumn) {
+                $this->loadGroupedOrderIndexes($context, $rowsWithoutOrderIndex);
+            } else {
+                $this->loadOrderIndexes($context, $rowsWithoutOrderIndex);
+            }
+        }
+    }
+
+    /**
+     * @param PersistenceContext $context
+     * @param Row[]              $rows
+     *
+     * @return void
+     */
+    protected function loadGroupedOrderIndexes(PersistenceContext $context, array $rows)
+    {
+        /** @var Row[][] $groupedRows */
+        $groupedRows        = [];
+        $groupingValues     = [];
+        $groupingColumnName = $this->groupingColumn->getName();
+
+        foreach ($rows as $row) {
+            $groupingValue = $row->getColumn($groupingColumnName);
+            $groupHash     = $groupingValue instanceof \DateTimeInterface
+                    ? $groupingValue->format('Y-m-d H:i:s')
+                    : $groupingValue;
+
+            $groupingValues[$groupHash] = $groupingValue;
+            $groupedRows[$groupHash][]  = $row;
+        }
+
+        $groupingColumn = Expr::column($this->table->getName(), $this->groupingColumn);
+        $select         = Select::from($this->table)
+                ->addColumn('order_index', Expr::max(Expr::column($this->table->getName(), $this->orderColumn)))
+                ->addColumn('group', $groupingColumn)
+                ->where(Expr::in(
+                        $groupingColumn,
+                        Expr::tupleParams($this->groupingColumn->getType(), $groupingValues)
+                ))
+                ->addGroupBy($groupingColumn);
+
+        $orderIndexes        = $context->getConnection()->load($select)->asArray();
+        $indexedOrderIndexes = [];
+
+        foreach ($orderIndexes as $orderIndexRow) {
+            $groupHash = $orderIndexRow['group'] instanceof \DateTimeInterface
+                    ? $orderIndexRow['group']->format('Y-m-d H:i:s')
+                    : $orderIndexRow['group'];
+
+            $indexedOrderIndexes[$groupHash] = $orderIndexRow['order_index'];
+        }
+
+        $orderColumn = $this->orderColumn->getName();
+
+        foreach ($groupedRows as $groupHash => $rows) {
+            $orderIndex = isset($indexedOrderIndexes[$groupHash])
+                    ? $indexedOrderIndexes[$groupHash] + 1
+                    : 1;
+
+            foreach ($rows as $row) {
+                $row->setColumn($orderColumn, $orderIndex);
+                $orderIndex++;
+            }
+        }
+    }
+
+    /**
+     * @param PersistenceContext $context
+     * @param Row[]              $rows
+     *
+     * @return void
+     */
+    protected function loadOrderIndexes(PersistenceContext $context, array $rows)
+    {
+        $select = Select::from($this->table)
+                ->addColumn('order_index', Expr::max(Expr::column($this->table->getName(), $this->orderColumn)));
+
+        $orderIndexRows = $context->getConnection()->load($select)->asArray();
+
+        $orderIndex = isset($orderIndexRows[0]['order_index'])
+                ? $orderIndexRows[0]['order_index'] + 1
+                : 1;
+
+        $orderColumn = $this->orderColumn->getName();
+        foreach ($rows as $row) {
+            $row->setColumn($orderColumn, $orderIndex);
+            $orderIndex++;
+        }
+    }
+
+    /**
+     * @param PersistenceContext $context
+     * @param ITypedObject[]     $objects
+     * @param Row[]              $rows
+     *
+     * @return void
+     */
+    public function fireAfterCommit(PersistenceContext $context, array $objects, array $rows)
+    {
+        if ($this->orderPropertyName) {
+            $orderColumn = $this->orderColumn->getName();
+
+            foreach ($objects as $key => $object) {
+                $object->hydrate([
+                        $this->orderPropertyName => $rows[$key]->getColumn($orderColumn)
+                ]);
+            }
+        }
+    }
+
+    /**
+     * @param string $prefix
+     *
+     * @return static
+     */
+    public function withColumnNamesPrefixedBy($prefix)
+    {
+        $clone                 = clone $this;
+        $clone->table          = $clone->table->withPrefix($prefix);
+        $clone->orderColumn    = $clone->orderColumn->withPrefix($prefix);
+        $clone->groupingColumn = $clone->groupingColumn
+                ? $clone->groupingColumn->withPrefix($prefix)
+                : null;
+
+        return $clone;
+    }
+}

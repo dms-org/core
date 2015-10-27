@@ -27,12 +27,12 @@ class ToOneRelationObjectReference extends RelationObjectReference implements IT
 
     /**
      * @param PersistenceContext $context
-     * @param Column             $foreignKeyToParent
+     * @param Column[]           $modifiedColumns
      * @param array              $children
      *
      * @return int[]
      */
-    public function syncRelated(PersistenceContext $context, Column $foreignKeyToParent = null, array $children)
+    public function syncRelated(PersistenceContext $context, array $modifiedColumns, array $children)
     {
         return $this->persistChildrenIgnoringBidirectionalRelation($context, $children);
     }

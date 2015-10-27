@@ -66,6 +66,11 @@ class DoctrineExpressionCompiler
             case $expr instanceof Expression\Count:
                 return $this->doctrinePlatform->getCountExpression('*');
 
+            case $expr instanceof Expression\Max:
+                return $this->doctrinePlatform->getMaxExpression(
+                        $this->compileExpression($queryBuilder, $expr->getArgument())
+                );
+
             case $expr instanceof Expression\BinOp:
                 return (string)$this->compileBinOp($queryBuilder, $expr);
 

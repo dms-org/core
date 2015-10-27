@@ -3,8 +3,9 @@
 namespace Iddigital\Cms\Core\Tests\Persistence\Db;
 
 use Iddigital\Cms\Common\Testing\CmsTestCase;
+use Iddigital\Cms\Core\Persistence\Db\Connection\IConnection;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\Hook\IPersistHook;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\IRelation;
-use Iddigital\Cms\Core\Persistence\Db\Operations\IOperation;
 use Iddigital\Cms\Core\Persistence\Db\PersistenceContext;
 use Iddigital\Cms\Core\Persistence\Db\Query\IQuery;
 use Iddigital\Cms\Core\Persistence\Db\Row;
@@ -15,16 +16,25 @@ use Iddigital\Cms\Core\Tests\Persistence\Db\Fixtures\MockEntity;
  */
 class PersistenceContextTest extends CmsTestCase
 {
+    protected function buildPersistenceContext()
+    {
+        /** @var IConnection $connection */
+        $connection = $this->getMockForAbstractClass(IConnection::class);
+
+        return new PersistenceContext($connection);
+    }
+
     public function testGetters()
     {
-        $context = new PersistenceContext();
+        $context = $this->buildPersistenceContext();
 
+        $this->assertInstanceOf(IConnection::class, $context->getConnection());
         $this->assertSame([], $context->getOperations());
     }
 
     public function testMarkingPersistence()
     {
-        $context = new PersistenceContext();
+        $context = $this->buildPersistenceContext();
 
         $entity = new MockEntity();
         $row    = $this->getMockBuilder(Row::class)->disableOriginalConstructor()->getMock();
@@ -43,7 +53,7 @@ class PersistenceContextTest extends CmsTestCase
 
     public function testQueueOperation()
     {
-        $context = new PersistenceContext();
+        $context = $this->buildPersistenceContext();
 
         $operation = $this->getMockForAbstractClass(IQuery::class);
 
@@ -54,7 +64,7 @@ class PersistenceContextTest extends CmsTestCase
 
     public function testCompletionsCallbacks()
     {
-        $context = new PersistenceContext();
+        $context = $this->buildPersistenceContext();
 
         $i = '';
         $context->afterCommit(function () use (&$i) {
@@ -71,7 +81,7 @@ class PersistenceContextTest extends CmsTestCase
 
     public function testIgnoringRelations()
     {
-        $context = new PersistenceContext();
+        $context = $this->buildPersistenceContext();
 
         $relation = $this->getMockForAbstractClass(IRelation::class);
         $this->assertFalse($context->isRelationIgnored($relation));
@@ -87,5 +97,25 @@ class PersistenceContextTest extends CmsTestCase
         $this->assertTrue($called);
         $this->assertSame('abc', $result);
         $this->assertFalse($context->isRelationIgnored($relation));
+    }
+
+    public function testIgnoringPersistenceHooks()
+    {
+        $context = $this->buildPersistenceContext();
+
+        $hook = $this->getMockForAbstractClass(IPersistHook::class);
+        $this->assertFalse($context->isPersistHookIgnored($hook));
+
+        $called = false;
+        $result = $context->ignorePersistHooksFor(function () use (&$called, $context, $hook) {
+            $this->assertTrue($context->isPersistHookIgnored($hook));
+            $called = true;
+
+            return 'abc';
+        }, [$hook]);
+
+        $this->assertTrue($called);
+        $this->assertSame('abc', $result);
+        $this->assertFalse($context->isPersistHookIgnored($hook));
     }
 }

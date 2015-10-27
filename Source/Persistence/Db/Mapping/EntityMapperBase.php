@@ -7,6 +7,7 @@ use Iddigital\Cms\Core\Model\IEntity;
 use Iddigital\Cms\Core\Persistence\Db\LoadingContext;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\FinalizedMapperDefinition;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Hierarchy\ParentObjectMapping;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\Hook\IPersistHook;
 use Iddigital\Cms\Core\Persistence\Db\PersistenceContext;
 use Iddigital\Cms\Core\Persistence\Db\Query\Delete;
 use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Expr;
@@ -126,6 +127,15 @@ abstract class EntityMapperBase extends ObjectMapper implements IEntityMapper
     final public function addForeignKey(ForeignKey $foreignKey)
     {
         $this->mapping->addForeignKey($foreignKey);
+        $this->loadFromDefinition($this->getDefinition());
+    }
+
+    /**
+     * @inheritDoc
+     */
+    final public function addPersistHook(IPersistHook $persistHook)
+    {
+        $this->mapping->addPersistHook($persistHook);
         $this->loadFromDefinition($this->getDefinition());
     }
 

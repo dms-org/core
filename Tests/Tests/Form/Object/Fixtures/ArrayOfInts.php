@@ -2,7 +2,9 @@
 
 namespace Iddigital\Cms\Core\Tests\Form\Object\Fixtures;
 
+use Iddigital\Cms\Core\Exception\InvalidArgumentException;
 use Iddigital\Cms\Core\Form\Field\Builder\Field as Field;
+use Iddigital\Cms\Core\Form\IForm;
 use Iddigital\Cms\Core\Form\Object\DependentFormObject;
 use Iddigital\Cms\Core\Form\Object\FormObjectDefinition;
 use Iddigital\Cms\Core\Model\Object\ClassDefinition;

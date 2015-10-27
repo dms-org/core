@@ -542,6 +542,7 @@ abstract class ObjectMapping implements IObjectMapping
         $this->persistSubclasses($context, IRelation::DEPENDENT_PARENTS, $objects, $rows);
         $this->persistEmbeddedRelationsBeforeParent($context, $rows, $objects, $objectProperties);
         $this->persistEmbeddedSubclassesBeforeParent($context, $objects, $rows);
+        $this->prePersistHooks($context, $objects, $rows);
     }
 
     /**
@@ -559,6 +560,7 @@ abstract class ObjectMapping implements IObjectMapping
         $this->persistSubclasses($context, IRelation::DEPENDENT_CHILDREN, $objects, $rows);
         $this->persistEmbeddedRelationsAfterParent($context, $rows, $objects, $objectProperties);
         $this->persistEmbeddedSubclassesAfterParent($context, $objects, $rows);
+        $this->postPersistHooks($context, $objects, $rows);
     }
 
     /**
@@ -626,6 +628,28 @@ abstract class ObjectMapping implements IObjectMapping
         }
 
         return $map;
+    }
+
+    final protected function prePersistHooks(PersistenceContext $context, array $objects, array $rows)
+    {
+        foreach ($this->definition->getPersistHooks() as $hook) {
+            if ($context->isPersistHookIgnored($hook)) {
+                continue;
+            }
+
+            $hook->fireBeforeCommit($context, $objects, $rows);
+        }
+    }
+
+    final protected function postPersistHooks(PersistenceContext $context, array $objects, array $rows)
+    {
+        foreach ($this->definition->getPersistHooks() as $hook) {
+            if ($context->isPersistHookIgnored($hook)) {
+                continue;
+            }
+
+            $hook->fireAfterCommit($context, $objects, $rows);
+        }
     }
 
     final protected function persistRelations(PersistenceContext $context, $dependencyMode, array $rows, array $objects, array $objectProperties)

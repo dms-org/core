@@ -260,7 +260,7 @@ class Table
      *
      * @return Table
      */
-    public function withColumnsIgnoringConstraints(array $columns)
+    public function withColumnsButIgnoringConstraints(array $columns)
     {
         if ($this->columns === $columns) {
             return $this;

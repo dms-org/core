@@ -9,6 +9,7 @@ use Iddigital\Cms\Core\Model\ITypedObject;
 use Iddigital\Cms\Core\Persistence\Db\LoadingContext;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\FinalizedMapperDefinition;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Hierarchy\ParentObjectMapping;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\Hook\IPersistHook;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\IEmbeddedObjectMapper;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\IEntityMapper;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\IObjectMapper;
@@ -211,4 +212,8 @@ class ReadModelMapper extends ObjectMapper implements IEntityMapper, IEmbeddedOb
         throw NotImplementedException::method(__METHOD__);
     }
 
+    public function addPersistHook(IPersistHook $persistHook)
+    {
+        throw NotImplementedException::method(__METHOD__);
+    }
 }

@@ -46,13 +46,13 @@ class ToManyRelationIdentityReference extends RelationIdentityReference implemen
 
     /**
      * @param PersistenceContext $context
-     * @param Column             $foreignKeyToParent
+     * @param Column[]           $modifiedColumns
      * @param array              $children
      *
      * @return Row[]
      */
-    public function syncRelated(PersistenceContext $context, Column $foreignKeyToParent = null, array $children)
+    public function syncRelated(PersistenceContext $context, array $modifiedColumns, array $children)
     {
-        return $this->bulkUpdateForeignKeys($context, $foreignKeyToParent, $children);
+        return $this->bulkUpdateForeignKeys($context, $modifiedColumns, $children);
     }
 }

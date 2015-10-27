@@ -4,8 +4,8 @@ namespace Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Reference;
 
 use Iddigital\Cms\Core\Exception\InvalidArgumentException;
 use Iddigital\Cms\Core\Model\IEntity;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\Hook\IPersistHook;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\IEntityMapper;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\IRelation;
 use Iddigital\Cms\Core\Persistence\Db\PersistenceContext;
 use Iddigital\Cms\Core\Persistence\Db\Query\Select;
 use Iddigital\Cms\Core\Persistence\Db\Row;
@@ -18,16 +18,28 @@ use Iddigital\Cms\Core\Persistence\Db\Row;
 abstract class RelationObjectReference extends RelationReference
 {
     /**
+     * @var IPersistHook|null
+     */
+    protected $persistHookToIgnore;
+
+    /**
      * ToOneRelationObjectReference constructor.
      *
-     * @param IEntityMapper $mapper
-     * @param string|null   $bidirectionalRelationProperty
+     * @param IEntityMapper     $mapper
+     * @param string|null       $bidirectionalRelationProperty
+     * @param IPersistHook|null $persistHookToIgnore
      *
      * @throws InvalidArgumentException
      */
-    public function __construct(IEntityMapper $mapper, $bidirectionalRelationProperty = null)
+    public function __construct(IEntityMapper $mapper, $bidirectionalRelationProperty = null, IPersistHook $persistHookToIgnore = null)
     {
         parent::__construct($mapper, $bidirectionalRelationProperty);
+
+        // TODO: Reference the persist hook by some sort of scalar id
+        // because if the hook ever cloned via ::withColumnsPrefixedBy
+        // this reference will no longer be valid and hence not be ignored
+        // when persisting
+        $this->persistHookToIgnore = $persistHookToIgnore;
     }
 
     /**
@@ -71,7 +83,11 @@ abstract class RelationObjectReference extends RelationReference
 
         return $context->ignoreRelationsFor(
                 function () use ($context, $children) {
-                    return $this->mapper->persistAll($context, array_filter($children));
+                    return $context->ignorePersistHooksFor(function () use ($context, $children) {
+
+                        return $this->mapper->persistAll($context, array_filter($children));
+
+                    }, $this->persistHookToIgnore ? [$this->persistHookToIgnore] : []);
                 },
                 $bidirectionalRelation ? [$bidirectionalRelation] : []
         );

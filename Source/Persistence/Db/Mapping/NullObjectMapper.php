@@ -4,6 +4,7 @@ namespace Iddigital\Cms\Core\Persistence\Db\Mapping;
 
 use Iddigital\Cms\Core\Model\IEntity;
 use Iddigital\Cms\Core\Persistence\Db\LoadingContext;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\Hook\IPersistHook;
 use Iddigital\Cms\Core\Persistence\Db\PersistenceContext;
 use Iddigital\Cms\Core\Persistence\Db\Query\Delete;
 use Iddigital\Cms\Core\Persistence\Db\Row;
@@ -81,6 +82,10 @@ class NullObjectMapper implements IEntityMapper
     }
 
     public function addForeignKey(ForeignKey $foreignKey)
+    {
+    }
+
+    public function addPersistHook(IPersistHook $persistHook)
     {
     }
 

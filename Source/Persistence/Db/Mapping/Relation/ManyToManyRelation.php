@@ -170,7 +170,7 @@ class ManyToManyRelation extends ToManyRelationBase
         $primaryKey        = $map->getPrimaryKeyColumn();
         $relatedPrimaryKey = $this->mapper->getPrimaryTable()->getPrimaryKeyColumnName();
         $children          = $map->getAllChildren();
-        $rows              = $this->reference->syncRelated($context, null, $children);
+        $rows              = $this->reference->syncRelated($context, [], $children);
 
         /** @var Row[] $childRowMap */
         $childRowMap = [];

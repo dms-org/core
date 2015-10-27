@@ -54,6 +54,7 @@ class DoctrineExpressionCompilerTest extends DoctrineTestBase
             //
             // Aggregates
             [Expr::count(), 'COUNT(*)'],
+            [Expr::max($testColumn), 'MAX(`table`.`column`)'],
             //
             // Parameter
             [Expr::param(Text::long(), 'foobar'), '?', [1 => 'foobar']],

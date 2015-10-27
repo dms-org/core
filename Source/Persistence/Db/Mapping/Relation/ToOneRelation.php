@@ -104,7 +104,7 @@ class ToOneRelation extends ToOneRelationBase
             $children[$key] = $item->getChild();
         }
 
-        $rows = $this->reference->syncRelated($context, $this->foreignKeyColumn, $children);
+        $rows = $this->reference->syncRelated($context, [$this->foreignKeyColumn], $children);
 
         $selfReferencingChildRows = [];
 
@@ -129,7 +129,7 @@ class ToOneRelation extends ToOneRelationBase
             // an extra step must be taken because the primary key will
             // only be known after inserting so the foreign key to itself
             // will have to be updated separately afterwards
-            $context->bulkUpdate(new RowSet($this->table->withColumnsIgnoringConstraints([
+            $context->bulkUpdate(new RowSet($this->table->withColumnsButIgnoringConstraints([
                     $this->primaryKey,
                     $this->foreignKeyColumn
             ]), $selfReferencingChildRows));

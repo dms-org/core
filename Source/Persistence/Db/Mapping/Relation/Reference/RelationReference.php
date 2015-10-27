@@ -3,6 +3,7 @@
 namespace Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Reference;
 
 use Iddigital\Cms\Core\Exception\InvalidArgumentException;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\Hook\IPersistHook;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\IEntityMapper;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\IRelation;
 
@@ -19,15 +20,15 @@ abstract class RelationReference implements IRelationReference
     protected $mapper;
 
     /**
-     * @var null|string
+     * @var string|null
      */
     private $bidirectionalRelationProperty;
 
     /**
      * RelationReference constructor.
      *
-     * @param IEntityMapper $mapper
-     * @param string|null   $bidirectionalRelationProperty
+     * @param IEntityMapper     $mapper
+     * @param string|null       $bidirectionalRelationProperty
      */
     public function __construct(IEntityMapper $mapper, $bidirectionalRelationProperty = null)
     {
