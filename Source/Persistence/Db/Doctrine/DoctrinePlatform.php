@@ -2,6 +2,7 @@
 
 namespace Iddigital\Cms\Core\Persistence\Db\Doctrine;
 
+use Doctrine\DBAL\Connection as DbalConnection;
 use Doctrine\DBAL\Platforms\AbstractPlatform as DoctrineAbstractPlatform;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Iddigital\Cms\Core\Exception\InvalidArgumentException;
@@ -25,7 +26,7 @@ use Iddigital\Cms\Core\Persistence\Db\Schema\Table;
 class DoctrinePlatform extends Platform
 {
     /**
-     * @var \Doctrine\DBAL\Connection
+     * @var DbalConnection
      */
     protected $doctrineConnection;
 
@@ -42,9 +43,9 @@ class DoctrinePlatform extends Platform
     /**
      * DoctrinePlatform constructor.
      *
-     * @param \Doctrine\DBAL\Connection $doctrineConnection
+     * @param DbalConnection $doctrineConnection
      */
-    public function __construct(\Doctrine\DBAL\Connection $doctrineConnection)
+    public function __construct(DbalConnection $doctrineConnection)
     {
         $this->doctrineConnection = $doctrineConnection;
         $this->doctrinePlatform   = $doctrineConnection->getDatabasePlatform();
@@ -319,12 +320,12 @@ class DoctrinePlatform extends Platform
     }
 
     /**
-     * @param $whereColumn
+     * @param $identifier
      *
      * @return string
      */
-    protected function identifier($whereColumn)
+    protected function identifier($identifier)
     {
-        return $this->doctrinePlatform->quoteSingleIdentifier($whereColumn);
+        return $this->doctrinePlatform->quoteSingleIdentifier($identifier);
     }
 }

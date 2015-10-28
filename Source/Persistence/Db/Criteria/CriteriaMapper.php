@@ -407,8 +407,8 @@ class CriteriaMapper
 
         if (!isset($dbOperatorMap[$operator])) {
             throw InvalidOperationException::format(
-                    'Object criteria cannot be mapped to select: property \'%s\' of type \'%s\' does not support the \'%s\' operator',
-                    $property->getName(), $property->getType()->asTypeString(), $operator
+                    'Object criteria cannot be mapped to select: property %s::$%s of type \'%s\' does not support the \'%s\' operator',
+                    $property->getAccessibility()->getDeclaredClass(), $property->getName(), $property->getType()->asTypeString(), $operator
             );
         }
 

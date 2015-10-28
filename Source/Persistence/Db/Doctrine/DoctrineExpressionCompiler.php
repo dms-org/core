@@ -32,7 +32,7 @@ class DoctrineExpressionCompiler
      */
     public function __construct(DoctrinePlatform $platform)
     {
-        $this->platform = $platform;
+        $this->platform         = $platform;
         $this->doctrinePlatform = $platform->getDoctrinePlatform();
     }
 
