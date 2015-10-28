@@ -15,6 +15,7 @@ use Iddigital\Cms\Core\Persistence\Db\LoadingContext;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\IObjectMapper;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\ReadModel\ArrayReadModelMapper;
 use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Expr;
+use Iddigital\Cms\Core\Persistence\Db\Query\IQuery;
 use Iddigital\Cms\Core\Persistence\Db\Query\Select;
 
 /**
@@ -109,6 +110,18 @@ abstract class DbRepositoryBase implements IObjectSetWithPartialLoadSupport
         $count = (int)$rows[0]['count'] - $offset;
 
         return $limit !== null ? min($limit, $count) : $count;
+    }
+
+    /**
+     * Executes the supplied query on the current db connection.
+     *
+     * @param IQuery $query
+     *
+     * @return mixed
+     */
+    protected function execute(IQuery $query)
+    {
+        return $query->executeOn($this->connection);
     }
 
     /**

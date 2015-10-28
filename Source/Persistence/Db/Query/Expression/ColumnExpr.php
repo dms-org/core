@@ -62,6 +62,16 @@ class ColumnExpr extends Expr
     }
 
     /**
+     * Gets an array of the expressions contained within this expression.
+     *
+     * @return Expr[]
+     */
+    public function getChildren()
+    {
+        return [];
+    }
+
+    /**
      * Gets the resulting type of the expression
      *
      * @return Type

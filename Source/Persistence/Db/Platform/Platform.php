@@ -4,6 +4,7 @@ namespace Iddigital\Cms\Core\Persistence\Db\Platform;
 
 use Iddigital\Cms\Core\Exception\InvalidArgumentException;
 use Iddigital\Cms\Core\Persistence\Db\Query\Delete;
+use Iddigital\Cms\Core\Persistence\Db\Query\ResequenceOrderIndexColumn;
 use Iddigital\Cms\Core\Persistence\Db\Query\Select;
 use Iddigital\Cms\Core\Persistence\Db\Query\Update;
 use Iddigital\Cms\Core\Persistence\Db\Row;
@@ -254,4 +255,23 @@ abstract class Platform implements IPlatform
      * @return void
      */
     abstract protected function compileDeleteQuery(Delete $query, CompiledQueryBuilder $compiled);
+
+    /**
+     *{@inheritDoc}
+     */
+    public function compileResequenceOrderIndexColumn(ResequenceOrderIndexColumn $query)
+    {
+        $compiled = new CompiledQueryBuilder();
+        $this->compileResequenceOrderIndexColumnQuery($query, $compiled);
+
+        return $compiled->build();
+    }
+
+    /**
+     * @param ResequenceOrderIndexColumn $query
+     * @param CompiledQueryBuilder       $compiled
+     *
+     * @return void
+     */
+    abstract protected function compileResequenceOrderIndexColumnQuery(ResequenceOrderIndexColumn $query, CompiledQueryBuilder $compiled);
 }

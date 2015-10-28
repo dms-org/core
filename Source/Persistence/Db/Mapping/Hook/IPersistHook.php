@@ -4,6 +4,7 @@ namespace Iddigital\Cms\Core\Persistence\Db\Mapping\Hook;
 
 use Iddigital\Cms\Core\Model\ITypedObject;
 use Iddigital\Cms\Core\Persistence\Db\PersistenceContext;
+use Iddigital\Cms\Core\Persistence\Db\Query\Delete;
 use Iddigital\Cms\Core\Persistence\Db\Row;
 
 /**
@@ -20,7 +21,7 @@ interface IPersistHook
      *
      * @return void
      */
-    public function fireBeforeCommit(PersistenceContext $context, array $objects, array $rows);
+    public function fireBeforePersist(PersistenceContext $context, array $objects, array $rows);
 
     /**
      * @param PersistenceContext $context
@@ -29,7 +30,23 @@ interface IPersistHook
      *
      * @return void
      */
-    public function fireAfterCommit(PersistenceContext $context, array $objects, array $rows);
+    public function fireAfterPersist(PersistenceContext $context, array $objects, array $rows);
+
+    /**
+     * @param PersistenceContext $context
+     * @param Delete             $deleteQuery
+     *
+     * @return void
+     */
+    public function fireBeforeDelete(PersistenceContext $context, Delete $deleteQuery);
+
+    /**
+     * @param PersistenceContext $context
+     * @param Delete             $deleteQuery
+     *
+     * @return void
+     */
+    public function fireAfterDelete(PersistenceContext $context, Delete $deleteQuery);
 
     /**
      * @param string $prefix

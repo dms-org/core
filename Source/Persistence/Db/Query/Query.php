@@ -159,6 +159,18 @@ abstract class Query implements IQuery
     }
 
     /**
+     * @param string $alias
+     *
+     * @return static
+     */
+    public function setAlias($alias)
+    {
+        $this->alias = $alias;
+
+        return $this;
+    }
+
+    /**
      * @param Table $table
      *
      * @return static

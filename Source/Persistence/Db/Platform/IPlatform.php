@@ -3,6 +3,8 @@
 namespace Iddigital\Cms\Core\Persistence\Db\Platform;
 
 use Iddigital\Cms\Core\Persistence\Db\Query\Delete;
+use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Expr;
+use Iddigital\Cms\Core\Persistence\Db\Query\ResequenceOrderIndexColumn;
 use Iddigital\Cms\Core\Persistence\Db\Query\Select;
 use Iddigital\Cms\Core\Persistence\Db\Query\Update;
 use Iddigital\Cms\Core\Persistence\Db\RowSet;
@@ -32,7 +34,7 @@ interface IPlatform
      *
      * Note: row keys are maintained.
      *
-     * @param RowSet $rows
+     * @param RowSet      $rows
      * @param string|null $lockingColumnDataPrefix
      *
      * @return array
@@ -76,6 +78,18 @@ interface IPlatform
      * @return CompiledQuery
      */
     public function compileDelete(Delete $query);
+
+    /**
+     * Compiles an array of queries that will update the supplied column to a set of (1-based) incrementing integers
+     * ordered against the current values in the column.
+     *
+     * This can be used to remove duplicates and gaps within the existing values.
+     *
+     * @param ResequenceOrderIndexColumn $query
+     *
+     * @return CompiledQuery
+     */
+    public function compileResequenceOrderIndexColumn(ResequenceOrderIndexColumn $query);
 
     /**
      * Compiles a prepared insert query with the values as named parameters named with their respective column.

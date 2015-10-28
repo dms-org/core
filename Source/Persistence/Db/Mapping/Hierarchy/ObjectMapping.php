@@ -637,7 +637,7 @@ abstract class ObjectMapping implements IObjectMapping
                 continue;
             }
 
-            $hook->fireBeforeCommit($context, $objects, $rows);
+            $hook->fireBeforePersist($context, $objects, $rows);
         }
     }
 
@@ -648,7 +648,7 @@ abstract class ObjectMapping implements IObjectMapping
                 continue;
             }
 
-            $hook->fireAfterCommit($context, $objects, $rows);
+            $hook->fireAfterPersist($context, $objects, $rows);
         }
     }
 
@@ -777,6 +777,7 @@ abstract class ObjectMapping implements IObjectMapping
         $this->deleteSubclasses($context, IRelation::DEPENDENT_CHILDREN, $deleteQuery);
         $this->deleteEmbeddedRelationsBeforeParent($context, $deleteQuery);
         $this->deleteEmbeddedSubclassesBeforeParent($context, $deleteQuery);
+        $this->preDeleteHooks($context, $deleteQuery);
     }
 
     /**
@@ -793,6 +794,29 @@ abstract class ObjectMapping implements IObjectMapping
         $this->deleteSubclasses($context, IRelation::DEPENDENT_PARENTS, $deleteQuery);
         $this->deleteEmbeddedRelationsAfterParent($context, $deleteQuery);
         $this->deleteEmbeddedSubclassesAfterParent($context, $deleteQuery);
+        $this->postDeleteHooks($context, $deleteQuery);
+    }
+
+    final protected function preDeleteHooks(PersistenceContext $context, Delete $parentDelete)
+    {
+        foreach ($this->definition->getPersistHooks() as $hook) {
+            if ($context->isPersistHookIgnored($hook)) {
+                continue;
+            }
+
+            $hook->fireBeforeDelete($context, $parentDelete);
+        }
+    }
+
+    final protected function postDeleteHooks(PersistenceContext $context, Delete $parentDelete)
+    {
+        foreach ($this->definition->getPersistHooks() as $hook) {
+            if ($context->isPersistHookIgnored($hook)) {
+                continue;
+            }
+
+            $hook->fireAfterDelete($context, $parentDelete);
+        }
     }
 
     final protected function deleteRelations(PersistenceContext $context, $dependencyMode, Delete $parentDelete)

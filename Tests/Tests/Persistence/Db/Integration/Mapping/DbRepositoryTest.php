@@ -7,7 +7,6 @@ use Iddigital\Cms\Core\Model\Criteria\SpecificationDefinition;
 use Iddigital\Cms\Core\Model\EntityNotFoundException;
 use Iddigital\Cms\Core\Model\IEntity;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\CustomOrm;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\IEntityMapper;
 use Iddigital\Cms\Core\Tests\Model\Criteria\Fixtures\MockSpecification;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Fixtures\MockEntity;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\Fixtures\Id\EmptyEntity;

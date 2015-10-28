@@ -12,6 +12,7 @@ use Iddigital\Cms\Core\Persistence\Db\Schema\Type\Type;
  */
 class BinOp extends Expr
 {
+    // Bool
     const EQUAL = 'equal';
     const NOT_EQUAL = 'not-equal';
     const LESS_THAN = 'less-than';
@@ -24,6 +25,10 @@ class BinOp extends Expr
     const OR_ = 'or';
     const STR_CONTAINS = 'str-contains';
     const STR_CONTAINS_CASE_INSENSITIVE = 'str-contains-case-insensitive';
+
+    // Math
+    const ADD = 'add';
+    const SUBTRACT = 'subtract';
 
     /**
      * @var Expr
@@ -79,13 +84,24 @@ class BinOp extends Expr
     }
 
     /**
+     * @inheritDoc
+     */
+    public function getChildren()
+    {
+        return [$this->left, $this->right];
+    }
+
+    /**
      * Gets the resulting type of the expression
      *
      * @return Type
      */
     public function getResultingType()
     {
-        // bool
-        return new Boolean();
+        if (in_array($this->operator, [self::ADD, self::SUBTRACT])) {
+            return $this->left->getResultingType();
+        } else {
+            return new Boolean();
+        }
     }
 }

@@ -31,4 +31,12 @@ abstract class ArgumentAggregate extends Aggregate
     {
         return $this->argument;
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function getChildren()
+    {
+        return [$this->argument];
+    }
 }

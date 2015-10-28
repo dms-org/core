@@ -6,6 +6,7 @@ use Iddigital\Cms\Core\Exception\NotImplementedException;
 use Iddigital\Cms\Core\Persistence\Db\Connection\Connection;
 use Iddigital\Cms\Core\Persistence\Db\Query\BulkUpdate;
 use Iddigital\Cms\Core\Persistence\Db\Query\Delete;
+use Iddigital\Cms\Core\Persistence\Db\Query\ResequenceOrderIndexColumn;
 use Iddigital\Cms\Core\Persistence\Db\Query\Select;
 use Iddigital\Cms\Core\Persistence\Db\Query\Update;
 use Iddigital\Cms\Core\Persistence\Db\Query\Upsert;
@@ -98,6 +99,15 @@ class MockConnection extends Connection
     {
         $this->queryLog[] = $query;
         return $this->db->query($this->platform->compileDelete($query));
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function resequenceOrderIndexColumn(ResequenceOrderIndexColumn $query)
+    {
+        $this->queryLog[] = $query;
+        return $this->db->query($this->platform->compileResequenceOrderIndexColumn($query));
     }
 
     /**

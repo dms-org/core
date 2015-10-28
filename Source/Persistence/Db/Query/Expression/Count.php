@@ -12,6 +12,15 @@ use Iddigital\Cms\Core\Persistence\Db\Schema\Type\Type;
  */
 class Count extends Aggregate
 {
+    /**
+     * Gets an array of the expressions contained within this expression.
+     *
+     * @return Expr[]
+     */
+    public function getChildren()
+    {
+        return [];
+    }
 
     /**
      * Gets the resulting type of the expression

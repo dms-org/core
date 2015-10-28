@@ -4,6 +4,7 @@ namespace Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping;
 
 use Iddigital\Cms\Core\Persistence\Db\Mapping\IEntityMapper;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\IOrm;
+use Iddigital\Cms\Core\Persistence\Db\Query\IQuery;
 use Iddigital\Cms\Core\Persistence\Db\Query\Query;
 use Iddigital\Cms\Core\Persistence\DbRepository;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Mock\MockConnection;
@@ -109,7 +110,7 @@ abstract class DbIntegrationTest extends MockDatabaseTestBase
         $this->assertEquals(array_values($queries), $this->connection->getQueryLog(), $message);
     }
 
-    protected function assertExecutedQueryNumber($number, Query $query, $message = '')
+    protected function assertExecutedQueryNumber($number, IQuery $query, $message = '')
     {
         $this->assertEquals($query, $this->connection->getQueryLog()[$number - 1], $message);
     }

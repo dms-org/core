@@ -38,6 +38,14 @@ class Tuple extends Expr
     }
 
     /**
+     * @inheritDoc
+     */
+    public function getChildren()
+    {
+        return $this->expressions;
+    }
+
+    /**
      * Gets the resulting type of the expression
      * @return Type
      * @throws InvalidOperationException

@@ -20,6 +20,7 @@ class UnaryOp extends Expr
      * @var string
      */
     private $operator;
+
     /**
      * @var Expr
      */
@@ -88,6 +89,14 @@ class UnaryOp extends Expr
     public function getOperand()
     {
         return $this->operand;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getChildren()
+    {
+        return [$this->operand];
     }
 
     /**

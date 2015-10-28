@@ -3,8 +3,12 @@
 namespace Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\Hook;
 
 use Iddigital\Cms\Core\Persistence\Db\Mapping\IOrm;
+use Iddigital\Cms\Core\Persistence\Db\Query\Delete;
 use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Expr;
+use Iddigital\Cms\Core\Persistence\Db\Query\Reorder;
+use Iddigital\Cms\Core\Persistence\Db\Query\ResequenceOrderIndexColumn;
 use Iddigital\Cms\Core\Persistence\Db\Query\Select;
+use Iddigital\Cms\Core\Persistence\Db\Query\Update;
 use Iddigital\Cms\Core\Persistence\Db\Query\Upsert;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\DbIntegrationTest;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\Hook\Fixtures\GroupedOrderIndex\OrderedEntity;
@@ -177,5 +181,130 @@ class GroupedOrderIndexTest extends DbIntegrationTest
         $this->assertSame(4, $e4->orderIndex);
         $this->assertSame(5, $e5->orderIndex);
         $this->assertSame(6, $e6->orderIndex);
+    }
+
+    public function testRemoveResequencesOrderIndex()
+    {
+        $this->db->setData([
+                'data' => [
+                        ['id' => 1, 'group' => 'group-1', 'order_index' => 1],
+                        ['id' => 2, 'group' => 'group-1', 'order_index' => 2],
+                        ['id' => 3, 'group' => 'group-1', 'order_index' => 3],
+                        //
+                        ['id' => 4, 'group' => 'group-2', 'order_index' => 1],
+                        ['id' => 5, 'group' => 'group-2', 'order_index' => 2],
+                        ['id' => 6, 'group' => 'group-2', 'order_index' => 3],
+                        //
+                        ['id' => 7, 'group' => 'group-3', 'order_index' => 1],
+                        ['id' => 8, 'group' => 'group-3', 'order_index' => 2],
+                        ['id' => 9, 'group' => 'group-3', 'order_index' => 3],
+                ]
+        ]);
+
+        $this->repo->removeAllById([2, 4, 7, 8]);
+
+
+        $this->assertDatabaseDataSameAs([
+                'data' => [
+                        ['id' => 1, 'group' => 'group-1', 'order_index' => 1],
+                        ['id' => 3, 'group' => 'group-1', 'order_index' => 2],
+                        //
+                        ['id' => 5, 'group' => 'group-2', 'order_index' => 1],
+                        ['id' => 6, 'group' => 'group-2', 'order_index' => 2],
+                        //
+                        ['id' => 9, 'group' => 'group-3', 'order_index' => 1],
+                ]
+        ]);
+
+        $this->assertExecutedQueryTypes([
+                'Delete entities'        => Delete::class,
+                'Resequence order index' => ResequenceOrderIndexColumn::class,
+        ]);
+
+        $this->assertExecutedQueryNumber(2, new ResequenceOrderIndexColumn(
+                $this->table->getStructure(),
+                'order_index',
+                'group'
+        ));
+    }
+
+    public function testReorderRowBackwards()
+    {
+        $this->db->setData([
+                'data' => [
+                        ['id' => 1, 'group' => 'group-1', 'order_index' => 1],
+                        ['id' => 2, 'group' => 'group-1', 'order_index' => 2],
+                        ['id' => 3, 'group' => 'group-1', 'order_index' => 3],
+                        //
+                        ['id' => 4, 'group' => 'group-2', 'order_index' => 1],
+                        ['id' => 5, 'group' => 'group-2', 'order_index' => 2],
+                        ['id' => 6, 'group' => 'group-2', 'order_index' => 3],
+                ]
+        ]);
+
+        (new Reorder($this->table->getStructure(), 'order_index'))
+                ->withPrimaryKey(6)
+                ->toNewIndex(1)
+                ->groupedBy('group')
+                ->executeOn($this->connection);
+
+
+        $this->assertDatabaseDataSameAs([
+                'data' => [
+                        ['id' => 1, 'group' => 'group-1', 'order_index' => 1],
+                        ['id' => 2, 'group' => 'group-1', 'order_index' => 2],
+                        ['id' => 3, 'group' => 'group-1', 'order_index' => 3],
+                        //
+                        ['id' => 4, 'group' => 'group-2', 'order_index' => 2],
+                        ['id' => 5, 'group' => 'group-2', 'order_index' => 3],
+                        ['id' => 6, 'group' => 'group-2', 'order_index' => 1],
+                ]
+        ]);
+
+        $this->assertExecutedQueryTypes([
+                'Load current index and group' => Select::class,
+                'Shift other rows'             => Update::class,
+                'Update to new index'          => Update::class,
+        ]);
+    }
+
+    public function testReorderRowForwards()
+    {
+        $this->db->setData([
+                'data' => [
+                        ['id' => 1, 'group' => 'group-1', 'order_index' => 1],
+                        ['id' => 2, 'group' => 'group-1', 'order_index' => 2],
+                        ['id' => 3, 'group' => 'group-1', 'order_index' => 3],
+                        //
+                        ['id' => 4, 'group' => 'group-2', 'order_index' => 1],
+                        ['id' => 5, 'group' => 'group-2', 'order_index' => 2],
+                        ['id' => 6, 'group' => 'group-2', 'order_index' => 3],
+                ]
+        ]);
+
+        (new Reorder($this->table->getStructure(), 'order_index'))
+                ->withPrimaryKey(1)
+                ->toNewIndex(2)
+                ->groupedBy('group')
+                ->executeOn($this->connection);
+
+
+        $this->assertDatabaseDataSameAs([
+                'data' => [
+                        ['id' => 1, 'group' => 'group-1', 'order_index' => 2],
+                        ['id' => 2, 'group' => 'group-1', 'order_index' => 1],
+                        ['id' => 3, 'group' => 'group-1', 'order_index' => 3],
+                        //
+                        ['id' => 4, 'group' => 'group-2', 'order_index' => 1],
+                        ['id' => 5, 'group' => 'group-2', 'order_index' => 2],
+                        ['id' => 6, 'group' => 'group-2', 'order_index' => 3],
+                ]
+        ]);
+
+        $this->assertExecutedQueryTypes([
+                'Load current index and group' => Select::class,
+                'Shift other rows'             => Update::class,
+                'Update to new index'          => Update::class,
+        ]);
     }
 }

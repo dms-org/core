@@ -24,6 +24,44 @@ abstract class Expr
     abstract public function getResultingType();
 
     /**
+     * Gets an array of the expressions contained within this expression.
+     *
+     * @return Expr[]
+     */
+    abstract public function getChildren();
+
+    /**
+     * Walks the current expression and the children expressions.
+     *
+     * @param callable $callback
+     *
+     * @return void
+     */
+    final public function walk(callable $callback)
+    {
+        $callback($this);
+
+        foreach ($this->getChildren() as $child) {
+            $child->walk($callback);
+        }
+    }
+
+    /**
+     * @param Expr[]   $expressions
+     * @param callable $callback
+     *
+     * @return void
+     */
+    public static function walkAll(array $expressions, callable $callback)
+    {
+        InvalidArgumentException::verifyAllInstanceOf(__METHOD__, 'expressions', $expressions, __CLASS__);
+
+        foreach ($expressions as $expression) {
+            $expression->walk($callback);
+        }
+    }
+
+    /**
      * @param string $table
      * @param Column $column
      *
@@ -258,6 +296,28 @@ abstract class Expr
     public static function strContainsCaseInsensitive(Expr $left, Expr $right)
     {
         return new BinOp($left, BinOp::STR_CONTAINS_CASE_INSENSITIVE, $right);
+    }
+
+    /**
+     * @param Expr $left
+     * @param Expr $right
+     *
+     * @return BinOp
+     */
+    public static function add(Expr $left, Expr $right)
+    {
+        return new BinOp($left, BinOp::ADD, $right);
+    }
+
+    /**
+     * @param Expr $left
+     * @param Expr $right
+     *
+     * @return BinOp
+     */
+    public static function subtract(Expr $left, Expr $right)
+    {
+        return new BinOp($left, BinOp::SUBTRACT, $right);
     }
 
     /**

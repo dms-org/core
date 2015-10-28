@@ -7,6 +7,7 @@ use Iddigital\Cms\Core\Persistence\Db\Platform\IPlatform;
 use Iddigital\Cms\Core\Persistence\Db\Query\BulkUpdate;
 use Iddigital\Cms\Core\Persistence\Db\Query\Delete;
 use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Expr;
+use Iddigital\Cms\Core\Persistence\Db\Query\ResequenceOrderIndexColumn;
 use Iddigital\Cms\Core\Persistence\Db\Query\Select;
 use Iddigital\Cms\Core\Persistence\Db\Query\Update;
 use Iddigital\Cms\Core\Persistence\Db\Query\Upsert;
@@ -207,4 +208,15 @@ abstract class Connection implements IConnection
                 $lockingColumnNameParameterMap + [$primaryKey => $primaryKey]
         ));
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function resequenceOrderIndexColumn(ResequenceOrderIndexColumn $query)
+    {
+        $compiled = $this->loadQueryFrom($this->platform->compileResequenceOrderIndexColumn($query));
+        $compiled->execute();
+    }
+
+
 }

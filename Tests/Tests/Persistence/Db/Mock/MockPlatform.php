@@ -18,6 +18,7 @@ use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Parameter;
 use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Tuple;
 use Iddigital\Cms\Core\Persistence\Db\Query\Expression\UnaryOp;
 use Iddigital\Cms\Core\Persistence\Db\Query\Query;
+use Iddigital\Cms\Core\Persistence\Db\Query\ResequenceOrderIndexColumn;
 use Iddigital\Cms\Core\Persistence\Db\Query\Select;
 use Iddigital\Cms\Core\Persistence\Db\Query\Update;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Table;
@@ -223,6 +224,14 @@ class MockPlatform extends Platform
                 return function ($row) use ($left, $right) {
                     return !in_array($left($row), $right($row));
                 };
+            case BinOp::ADD:
+                return function ($row) use ($left, $right) {
+                    return $left($row) + $right($row);
+                };
+            case BinOp::SUBTRACT:
+                return function ($row) use ($left, $right) {
+                    return $left($row) - $right($row);
+                };
         }
 
         throw NotImplementedException::format('Unknown bin op %s', $expr->getOperator());
@@ -265,12 +274,11 @@ class MockPlatform extends Platform
             $isGrouped      = !empty($query->getGroupBy());
             $isImpliedGroup = false;
 
-            foreach ($query->getAliasColumnMap() as $expression) {
+            Expr::walkAll($query->getAliasColumnMap(), function (Expr $expression) use (&$isImpliedGroup) {
                 if ($expression instanceof Aggregate) {
                     $isImpliedGroup = true;
-                    break;
                 }
-            }
+            });
 
             if ($isGrouped) {
                 $compiledGroupings = $this->compileExpressions($query->getGroupBy());
@@ -503,6 +511,58 @@ class MockPlatform extends Platform
         return new PhpCompiledQuery($compiledQuery);
     }
 
+    /**
+     * @inheritDoc
+     */
+    public function compileResequenceOrderIndexColumn(ResequenceOrderIndexColumn $query)
+    {
+        $compiledQuery = function (MockDatabase $database) use ($query) {
+            $tableName  = $query->getTable()->getName();
+            $columnName = $query->getColumn()->getName();
+            $rows       = $this->loadTableRows($database, $tableName, $tableName);
+
+            if ($query->hasWhereCondition()) {
+                $rows = $rows->where($this->compileExpression($query->getWhereCondition()));
+            }
+
+            if ($query->hasGroupingColumn()) {
+                $groupColumnName = $query->getGroupingColumn()->getName();
+
+                $rows = $rows->groupBy(function (array $row) use ($tableName, $groupColumnName) {
+                    return $row[$tableName][$groupColumnName];
+                });
+            } else {
+                $rows = $rows->groupBy(function () {
+                    return 1;
+                });
+            }
+
+            $rows = $rows->selectMany(function (ICollection $group) use ($tableName, $columnName) {
+                $orderIndex = 1;
+
+                $group
+                        ->orderByAscending(function (array $row) use ($tableName, $columnName) {
+                            return $row[$tableName][$columnName];
+                        })
+                        ->apply(function (array &$row) use ($tableName, $columnName, &$orderIndex) {
+                            $row[$tableName][$columnName] = $orderIndex++;
+                        });
+
+                return $group;
+            });
+
+            $newRows = $rows
+                    ->select(function (array &$row) use ($tableName) {
+                        return $row[$tableName];
+                    });
+
+            $database->getTable($tableName)->setRows($newRows->asArray());
+        };
+
+        return new PhpCompiledQuery($compiledQuery);
+    }
+
+
     protected function compileSelectQuery(Select $query, CompiledQueryBuilder $compiled)
     {
 
@@ -514,6 +574,11 @@ class MockPlatform extends Platform
     }
 
     protected function compileDeleteQuery(Delete $query, CompiledQueryBuilder $compiled)
+    {
+
+    }
+
+    protected function compileResequenceOrderIndexColumnQuery(ResequenceOrderIndexColumn $query, CompiledQueryBuilder $compiled)
     {
 
     }

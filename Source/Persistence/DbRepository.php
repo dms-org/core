@@ -13,6 +13,7 @@ use Iddigital\Cms\Core\Persistence\Db\PersistenceContext;
 use Iddigital\Cms\Core\Persistence\Db\Query\Delete;
 use Iddigital\Cms\Core\Persistence\Db\Query\Expression\ColumnExpr;
 use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Expr;
+use Iddigital\Cms\Core\Persistence\Db\Query\Reorder;
 use Iddigital\Cms\Core\Persistence\Db\Query\Select;
 
 /**
@@ -76,6 +77,18 @@ class DbRepository extends DbRepositoryBase implements IRepository
         }
 
         return $values;
+    }
+
+    /**
+     * Builds a reorder query for the supplied column name.
+     *
+     * @param string $columnName
+     *
+     * @return Reorder
+     */
+    final protected function reorder($columnName)
+    {
+        return new Reorder($this->mapper->getPrimaryTable(), $columnName);
     }
 
     /**

@@ -4,7 +4,9 @@ namespace Iddigital\Cms\Core\Persistence\Db\Mapping\Hook;
 
 use Iddigital\Cms\Core\Model\ITypedObject;
 use Iddigital\Cms\Core\Persistence\Db\PersistenceContext;
+use Iddigital\Cms\Core\Persistence\Db\Query\Delete;
 use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Expr;
+use Iddigital\Cms\Core\Persistence\Db\Query\ResequenceOrderIndexColumn;
 use Iddigital\Cms\Core\Persistence\Db\Query\Select;
 use Iddigital\Cms\Core\Persistence\Db\Row;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Column;
@@ -15,6 +17,10 @@ use Iddigital\Cms\Core\Persistence\Db\Schema\Table;
  * containing the next valid order index integer.
  *
  * The order index numbers a 1-based.
+ *
+ * This will also automatically resequence the column
+ * when a DELETE query is performed to avoid gaps in the
+ * sequence.
  *
  * @author Elliot Levin <elliotlevin@hotmail.com>
  */
@@ -63,7 +69,7 @@ class OrderIndexPropertyLoaderHook implements IPersistHook
      *
      * @return void
      */
-    public function fireBeforeCommit(PersistenceContext $context, array $objects, array $rows)
+    public function fireBeforePersist(PersistenceContext $context, array $objects, array $rows)
     {
         $orderColumn           = $this->orderColumn->getName();
         $rowsWithoutOrderIndex = [];
@@ -172,7 +178,7 @@ class OrderIndexPropertyLoaderHook implements IPersistHook
      *
      * @return void
      */
-    public function fireAfterCommit(PersistenceContext $context, array $objects, array $rows)
+    public function fireAfterPersist(PersistenceContext $context, array $objects, array $rows)
     {
         if ($this->orderPropertyName) {
             $orderColumn = $this->orderColumn->getName();
@@ -183,6 +189,32 @@ class OrderIndexPropertyLoaderHook implements IPersistHook
                 ]);
             }
         }
+    }
+
+    /**
+     * @param PersistenceContext $context
+     * @param Delete             $deleteQuery
+     *
+     * @return void
+     */
+    public function fireBeforeDelete(PersistenceContext $context, Delete $deleteQuery)
+    {
+
+    }
+
+    /**
+     * @param PersistenceContext $context
+     * @param Delete             $deleteQuery
+     *
+     * @return void
+     */
+    public function fireAfterDelete(PersistenceContext $context, Delete $deleteQuery)
+    {
+        $context->queue(new ResequenceOrderIndexColumn(
+                $this->table,
+                $this->orderColumn->getName(),
+                $this->groupingColumn ? $this->groupingColumn->getName() : null
+        ));
     }
 
     /**

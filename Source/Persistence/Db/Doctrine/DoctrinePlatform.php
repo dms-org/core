@@ -6,6 +6,7 @@ use Doctrine\DBAL\Connection as DbalConnection;
 use Doctrine\DBAL\Platforms\AbstractPlatform as DoctrineAbstractPlatform;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Iddigital\Cms\Core\Exception\InvalidArgumentException;
+use Iddigital\Cms\Core\Persistence\Db\Doctrine\Resequence\ResequenceCompilerFactory;
 use Iddigital\Cms\Core\Persistence\Db\Platform\CompiledQuery;
 use Iddigital\Cms\Core\Persistence\Db\Platform\CompiledQueryBuilder;
 use Iddigital\Cms\Core\Persistence\Db\Platform\Platform;
@@ -14,6 +15,7 @@ use Iddigital\Cms\Core\Persistence\Db\Query\Delete;
 use Iddigital\Cms\Core\Persistence\Db\Query\Expression;
 use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Expr;
 use Iddigital\Cms\Core\Persistence\Db\Query\Query;
+use Iddigital\Cms\Core\Persistence\Db\Query\ResequenceOrderIndexColumn;
 use Iddigital\Cms\Core\Persistence\Db\Query\Select;
 use Iddigital\Cms\Core\Persistence\Db\Query\Update;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Table;
@@ -41,6 +43,11 @@ class DoctrinePlatform extends Platform
     protected $expressionCompiler;
 
     /**
+     * @var IResequenceCompiler
+     */
+    protected $resequenceCompiler;
+
+    /**
      * DoctrinePlatform constructor.
      *
      * @param DbalConnection $doctrineConnection
@@ -50,6 +57,8 @@ class DoctrinePlatform extends Platform
         $this->doctrineConnection = $doctrineConnection;
         $this->doctrinePlatform   = $doctrineConnection->getDatabasePlatform();
         $this->expressionCompiler = new DoctrineExpressionCompiler($this);
+        $this->resequenceCompiler = ResequenceCompilerFactory::buildFor($this);
+
         parent::__construct();
     }
 
@@ -59,6 +68,14 @@ class DoctrinePlatform extends Platform
     public function getDoctrinePlatform()
     {
         return $this->doctrinePlatform;
+    }
+
+    /**
+     * @return DoctrineExpressionCompiler
+     */
+    public function getExpressionCompiler()
+    {
+        return $this->expressionCompiler;
     }
 
     /**
@@ -314,10 +331,27 @@ class DoctrinePlatform extends Platform
         }
     }
 
+    /**
+     * @inheritDoc
+     */
+    public function compileResequenceOrderIndexColumn(ResequenceOrderIndexColumn $query)
+    {
+        return $this->resequenceCompiler->compileResequenceQuery($this->doctrineConnection->createQueryBuilder(), $query);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function compileResequenceOrderIndexColumnQuery(ResequenceOrderIndexColumn $query, CompiledQueryBuilder $compiled)
+    {
+
+    }
+
     private function compileExpression(QueryBuilder $queryBuilder, Expr $expr)
     {
         return $this->expressionCompiler->compileExpression($queryBuilder, $expr);
     }
+
 
     /**
      * @param $identifier

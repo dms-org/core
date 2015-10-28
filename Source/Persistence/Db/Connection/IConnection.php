@@ -5,6 +5,7 @@ namespace Iddigital\Cms\Core\Persistence\Db\Connection;
 use Iddigital\Cms\Core\Persistence\Db\Platform\IPlatform;
 use Iddigital\Cms\Core\Persistence\Db\Query\BulkUpdate;
 use Iddigital\Cms\Core\Persistence\Db\Query\Delete;
+use Iddigital\Cms\Core\Persistence\Db\Query\ResequenceOrderIndexColumn;
 use Iddigital\Cms\Core\Persistence\Db\Query\Select;
 use Iddigital\Cms\Core\Persistence\Db\Query\Update;
 use Iddigital\Cms\Core\Persistence\Db\Query\Upsert;
@@ -129,4 +130,16 @@ interface IConnection
      * @return void
      */
     public function bulkUpdate(BulkUpdate $query);
+
+    /**
+     * This will fill a column with (1-based) incrementing integers ordered by
+     * to the values already in that column.
+     *
+     * This can be used to remove duplicates and gaps within the existing values.
+     *
+     * @param ResequenceOrderIndexColumn $query
+     *
+     * @return void
+     */
+    public function resequenceOrderIndexColumn(ResequenceOrderIndexColumn $query);
 }

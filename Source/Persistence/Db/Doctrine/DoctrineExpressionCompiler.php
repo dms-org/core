@@ -143,6 +143,12 @@ class DoctrineExpressionCompiler
                         0
                 );
 
+            case Expression\BinOp::ADD:
+                return '(' . $left . ' + ' . $right . ')';
+
+            case Expression\BinOp::SUBTRACT:
+                return '(' . $left . ' - ' . $right . ')';
+
         }
 
         throw InvalidArgumentException::format('Unknown binary operator: ' . $expr->getOperator());
