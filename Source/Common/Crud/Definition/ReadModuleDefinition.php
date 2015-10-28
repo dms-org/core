@@ -3,6 +3,7 @@
 namespace Iddigital\Cms\Core\Common\Crud\Definition;
 
 use Iddigital\Cms\Core\Auth\IAuthSystem;
+use Iddigital\Cms\Core\Model\IObjectSet;
 use Iddigital\Cms\Core\Model\ITypedCollection;
 use Iddigital\Cms\Core\Module\Definition\ModuleDefinition;
 
@@ -14,7 +15,7 @@ use Iddigital\Cms\Core\Module\Definition\ModuleDefinition;
 class ReadModuleDefinition extends ModuleDefinition
 {
     /**
-     * @var ITypedCollection
+     * @var IObjectSet
      */
     protected $dataSource;
 
@@ -26,10 +27,10 @@ class ReadModuleDefinition extends ModuleDefinition
     /**
      * ReadModuleDefinition constructor.
      *
-     * @param IAuthSystem      $authSystem
-     * @param ITypedCollection $dataSource
+     * @param IAuthSystem $authSystem
+     * @param IObjectSet  $dataSource
      */
-    public function __construct(IAuthSystem $authSystem, ITypedCollection $dataSource)
+    public function __construct(IAuthSystem $authSystem, IObjectSet $dataSource)
     {
         parent::__construct($authSystem);
         $this->dataSource = $dataSource;

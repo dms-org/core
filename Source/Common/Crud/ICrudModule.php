@@ -2,51 +2,61 @@
 
 namespace Iddigital\Cms\Core\Common\Crud;
 
+use Iddigital\Cms\Core\Exception\InvalidOperationException;
 use Iddigital\Cms\Core\Module\IParameterizedAction;
-use Iddigital\Cms\Core\Persistence\IRepository;
 
 /**
  * The interface for a CRUD module.
  *
  * This provides a set of CRUD actions and displays regarding
- * a repository.
+ * a set of objects.
  *
  * @author Elliot Levin <elliot@aanet.com.au>
  */
 interface ICrudModule extends IReadModule
 {
     /**
-     * Gets the type of entities contained within the repository.
+     * Returns whether the modules allows objects to be created.
      *
-     * @return string
+     * @return bool
      */
-    public function getEntityType();
+    public function allowsCreate();
 
     /**
-     * Gets the underlying repository instance.
-     *
-     * @return IRepository
-     */
-    public function getRepository();
-
-    /**
-     * Gets the create entity action.
+     * Gets the create object action.
      *
      * @return IParameterizedAction
+     * @throws InvalidOperationException
      */
     public function getCreateAction();
 
     /**
-     * Gets the edit entity action.
+     * Returns whether the modules allows objects to be edited.
+     *
+     * @return bool
+     */
+    public function allowsEdit();
+
+    /**
+     * Gets the edit object action.
      *
      * @return IParameterizedAction
+     * @throws InvalidOperationException
      */
     public function getEditAction();
 
     /**
-     * Gets remove entity action.
+     * Returns whether the modules allows objects to be removed.
+     *
+     * @return bool
+     */
+    public function allowsRemove();
+
+    /**
+     * Gets the remove object action.
      *
      * @return IParameterizedAction
+     * @throws InvalidOperationException
      */
     public function getRemoveAction();
 }

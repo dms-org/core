@@ -35,6 +35,23 @@ class ReadModuleDream extends ReadModule
     {
         $module->name('people');
 
+        $module->actionOnObject('create-foo')
+                ->authorize('create-foo.permission')
+                ->handler(function (Person $person) {
+                    $person->createFoo();
+                    $this->repository->save($person);
+                });
+
+        $module->detailsForm(function (Person $person) {
+            return Form::create()
+                    ->section('Details', [
+                            Field::name('email')->label('Email')->string()->email()->value($person->email)->uniqueIn($this->repository, 'email'),
+                            Field::name('first_name')->label('First Name')->string()->value($person->firstName),
+                            Field::name('last_name')->label('Last Name')->string()->value($person->lastName),
+                            Field::name('age')->label('Age')->int()->value($person->age),
+                    ]);
+        });
+
         $module->summaryTable(function (ObjectTableDefinition $map) {
             $map->column(Column::name('name')->label('Name')->components([
                     Field::name('first_name')->label('First Name')->string(),
@@ -53,23 +70,6 @@ class ReadModuleDream extends ReadModule
                     ->orderByAsc(['category.name', 'category_sort_order'])
                     ->groupBy('category.id')
                     ->withSortColumnPropertyAs('categorySortOrder');
-        });
-
-        $module->actionOnObject('create-foo')
-                ->authorize('create-foo.permission')
-                ->handler(function (Person $person) {
-                    $person->createFoo();
-                    $this->repository->save($person);
-                });
-
-        $module->detailsForm(function (Person $person) {
-            return Form::create()
-                    ->section('Details', [
-                            Field::name('email')->label('Email')->string()->email()->value($person->email)->uniqueIn($this->repository, 'email'),
-                            Field::name('first_name')->label('First Name')->string()->value($person->firstName),
-                            Field::name('last_name')->label('Last Name')->string()->value($person->lastName),
-                            Field::name('age')->label('Age')->int()->value($person->age),
-                    ]);
         });
     }
 }
