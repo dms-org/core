@@ -2,12 +2,14 @@
 
 namespace Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\Hook;
 
+use Iddigital\Cms\Core\Exception\InvalidArgumentException;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\IOrm;
 use Iddigital\Cms\Core\Persistence\Db\Query\Delete;
 use Iddigital\Cms\Core\Persistence\Db\Query\Reorder;
 use Iddigital\Cms\Core\Persistence\Db\Query\ResequenceOrderIndexColumn;
 use Iddigital\Cms\Core\Persistence\Db\Query\Select;
 use Iddigital\Cms\Core\Persistence\Db\Query\Update;
+use Iddigital\Cms\Core\Persistence\PersistenceException;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\DbIntegrationTest;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\Hook\Fixtures\GlobalOrderIndex\OrderedEntity;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\Hook\Fixtures\GlobalOrderIndex\OrderedEntityMapper;
@@ -206,5 +208,32 @@ class GlobalOrderIndexTest extends DbIntegrationTest
                 'Shift other rows'    => Update::class,
                 'Update to new index' => Update::class,
         ]);
+    }
+
+    public function testThrowsExceptionOnNonExistentRow()
+    {
+        $this->setExpectedException(PersistenceException::class);
+
+        $this->db->setData([
+                'data' => [
+                        ['id' => 1, 'order_index' => 1],
+                        ['id' => 2, 'order_index' => 2],
+                ]
+        ]);
+
+        (new Reorder($this->table->getStructure(), 'order_index'))
+                ->withPrimaryKey(3)
+                ->toNewIndex(4)
+                ->executeOn($this->connection);
+    }
+
+    public function testInvalidIndexThrowsException()
+    {
+        $this->setExpectedException(InvalidArgumentException::class);
+
+        (new Reorder($this->table->getStructure(), 'order_index'))
+                ->withPrimaryKey(3)
+                ->toNewIndex(0)// Index must be >=1
+                ->executeOn($this->connection);
     }
 }

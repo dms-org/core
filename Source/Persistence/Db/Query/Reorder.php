@@ -70,14 +70,22 @@ class Reorder implements IQuery
     }
 
     /**
-     * Sets the new order index
+     * Sets the new (1-based) order index
      *
      * @param int $newIndex
      *
      * @return static
+     * @throws InvalidArgumentException If the index is invalid
      */
     public function toNewIndex($newIndex)
     {
+        if ($newIndex <= 0) {
+            throw InvalidArgumentException::format(
+                    'Invalid call to %s: new order index must be >=1, %d given',
+                    __METHOD__, $newIndex
+            );
+        }
+
         $this->newIndex = $newIndex;
 
         return $this;

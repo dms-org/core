@@ -35,7 +35,7 @@ class DbOutOfSyncException extends BaseException
     public function __construct(Row $rowBeingPersisted, Row $currentRowInDb = null)
     {
         parent::__construct(sprintf(
-                'Could not persist row on table %s with primary key %d: the row has been %s in another instance',
+                'Could not persist row on table \'%s\' with primary key \'%s\': the row has been %s in another instance',
                 $rowBeingPersisted->getTable()->getName(), $rowBeingPersisted->getPrimaryKey(),
                 $currentRowInDb ? 'updated' : 'deleted'
         ));
