@@ -153,7 +153,7 @@ class Reorder implements IQuery
             $newIndex = Expr::param($orderIndexType, $this->newIndex);
             $one      = Expr::param($orderIndexType, 1);
 
-            // First update: shift in the way of the new index
+            // First update: shift rows in the way of the new index
 
             if ($this->newIndex > $this->primaryKey) {
                 // UPDATE _ SET index = index - 1 WHERE index <= :new_index AND index > :old_index
@@ -187,8 +187,6 @@ class Reorder implements IQuery
                 $updateRow->where($inGroup);
             }
 
-            // Order is important as the first update is designed
-            // to leave a gap for the new row at the new index.
             $connection->update($update);
             $connection->update($updateRow);
         });
