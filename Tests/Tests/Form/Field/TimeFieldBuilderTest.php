@@ -65,9 +65,9 @@ class TimeFieldBuilderTest extends FieldBuilderTestBase
                 new TypeValidator(Type::string()->nullable()),
                 new DateFormatValidator(Type::string()->nullable(), 'H:i:s'),
                 new DateTimeProcessor('H:i:s', null, DateTimeProcessor::MODE_ZERO_DATE),
-                new GreaterThanOrEqualValidator(Type::object(\DateTime::class)->nullable(), $this->buildTime('01:30:00')),
-                new LessThanValidator(Type::object(\DateTime::class)->nullable(), $this->buildTime('15:45:00')),
-                new DefaultValueProcessor(Type::object(\DateTime::class)->nullable(), $this->buildTime('12:00:00')),
+                new GreaterThanOrEqualValidator(Type::object(\DateTimeImmutable::class)->nullable(), $this->buildTime('01:30:00')),
+                new LessThanValidator(Type::object(\DateTimeImmutable::class)->nullable(), $this->buildTime('15:45:00')),
+                new DefaultValueProcessor(Type::object(\DateTimeImmutable::class)->nullable(), $this->buildTime('12:00:00')),
         ], $field->getProcessors());
 
         $this->assertEquals($this->buildTime('01:30:00'), $field->getType()->get(TimeType::ATTR_MIN));
@@ -81,13 +81,13 @@ class TimeFieldBuilderTest extends FieldBuilderTestBase
                 ])
         ]);
 
-        $this->assertEquals(Type::object(\DateTime::class), $field->getProcessedType());
+        $this->assertEquals(Type::object(\DateTimeImmutable::class), $field->getProcessedType());
     }
 
     protected function buildTime($time)
     {
-        $time = \DateTime::createFromFormat('H:i:s', $time);
-        $time->setDate(0, 1, 1);
+        $time = \DateTimeImmutable::createFromFormat('H:i:s', $time);
+        $time = $time->setDate(0, 1, 1);
 
         return $time;
     }

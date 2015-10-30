@@ -174,8 +174,18 @@ abstract class FieldBuilderBase
     public function defaultTo($value)
     {
         return $this
-                ->process(new DefaultValueProcessor($this->getCurrentProcessedType(), $value))
+                ->process(new DefaultValueProcessor($this->getCurrentProcessedType(), $this->processDefaultValue($value)))
                 ->attr(FieldType::ATTR_DEFAULT, $value);
+    }
+
+    /**
+     * @param mixed $value
+     *
+     * @return mixed
+     */
+    protected function processDefaultValue($value)
+    {
+        return $value;
     }
 
     /**

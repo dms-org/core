@@ -42,13 +42,13 @@ class DateFieldBuilder extends FieldBuilderBase
      * Validates the date time is greater than or equal to
      * the supplied date time
      *
-     * @param \DateTime $min
+     * @param \DateTimeInterface $min
      *
      * @return static
      */
-    public function min(\DateTime $min)
+    public function min(\DateTimeInterface $min)
     {
-        $min = $this->processCopy($min);
+        $min = $this->processDateTime($min);
 
         return $this
                 ->attr(DateType::ATTR_MIN, $min)
@@ -58,16 +58,16 @@ class DateFieldBuilder extends FieldBuilderBase
     /**
      * Validates the date time is greater than the supplied date time
      *
-     * @param \DateTime $value
+     * @param \DateTimeInterface $value
      *
      * @return static
      */
-    public function greaterThan(\DateTime $value)
+    public function greaterThan(\DateTimeInterface $value)
     {
-        $value = $this->processCopy($value);
+        $value = $this->processDateTime($value);
 
         return $this
-                ->attr(DateType::ATTR_MIN, $this->copy($value)->add($this->type->getUnit()))
+                ->attr(DateType::ATTR_MIN, $value->add($this->type->getUnit()))
                 ->validate(new GreaterThanValidator($this->getCurrentProcessedType(), $value));
     }
 
@@ -75,13 +75,13 @@ class DateFieldBuilder extends FieldBuilderBase
      * Validates the date time is less than or equal to
      * the supplied date time
      *
-     * @param \DateTime $max
+     * @param \DateTimeInterface $max
      *
      * @return static
      */
-    public function max(\DateTime $max)
+    public function max(\DateTimeInterface $max)
     {
-        $max = $this->processCopy($max);
+        $max = $this->processDateTime($max);
 
         return $this
                 ->attr(DateType::ATTR_MAX, $max)
@@ -91,39 +91,44 @@ class DateFieldBuilder extends FieldBuilderBase
     /**
      * Validates the date time is greater than the supplied date time
      *
-     * @param \DateTime $value
+     * @param \DateTimeInterface $value
      *
      * @return static
      */
-    public function lessThan(\DateTime $value)
+    public function lessThan(\DateTimeInterface $value)
     {
-        $value = $this->processCopy($value);
+        $value = $this->processDateTime($value);
 
         return $this
-                ->attr(DateType::ATTR_MAX, $this->copy($value)->sub($this->type->getUnit()))
+                ->attr(DateType::ATTR_MAX, $value->sub($this->type->getUnit()))
                 ->validate(new LessThanValidator($this->getCurrentProcessedType(), $value));
     }
 
     /**
-     * @param \DateTime $value
+     * @param \DateTimeInterface $value
      *
-     * @return \DateTime
+     * @return \DateTimeImmutable
      */
-    protected function processCopy(\DateTime $value)
+    protected function processDateTime(\DateTimeInterface $value)
     {
-        $copy = $this->copy($value);
-        DateTimeProcessor::zeroUnusedParts($this->type->getMode(), $copy);
+        $newDateTime = \DateTimeImmutable::createFromFormat(
+                'Y-m-d H:i:s',
+                $value->format('Y-m-d H:i:s'),
+                $value->getTimezone()
+        );
 
-        return $copy;
+        return DateTimeProcessor::zeroUnusedParts($this->type->getMode(), $newDateTime);
     }
 
     /**
-     * @param \DateTime $value
-     *
-     * @return \DateTime
+     * @inheritDoc
      */
-    protected function copy(\DateTime $value)
+    protected function processDefaultValue($value)
     {
-        return clone $value;
+        if ($value instanceof \DateTimeInterface) {
+            return $this->processDateTime($value);
+        } else {
+            return parent::processDefaultValue($value);
+        }
     }
 }

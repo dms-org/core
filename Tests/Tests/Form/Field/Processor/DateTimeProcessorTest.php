@@ -24,7 +24,7 @@ class DateTimeProcessorTest extends FieldProcessorTest
      */
     protected function processedType()
     {
-        return Type::object(\DateTime::class)->nullable();
+        return Type::object(\DateTimeImmutable::class)->nullable();
     }
 
     /**
@@ -34,8 +34,8 @@ class DateTimeProcessorTest extends FieldProcessorTest
     {
         return [
             [null, null],
-            ['2000-01-01 00:00:00', \DateTime::createFromFormat('Y-m-d H:i:s', '2000-01-01 00:00:00')],
-            ['2001-02-03 12:12:11', \DateTime::createFromFormat('Y-m-d H:i:s', '2001-02-03 12:12:11')],
+            ['2000-01-01 00:00:00', \DateTimeImmutable::createFromFormat('Y-m-d H:i:s', '2000-01-01 00:00:00')],
+            ['2001-02-03 12:12:11', \DateTimeImmutable::createFromFormat('Y-m-d H:i:s', '2001-02-03 12:12:11')],
         ];
     }
 
@@ -46,8 +46,8 @@ class DateTimeProcessorTest extends FieldProcessorTest
     {
         return [
             [null, null],
-            [\DateTime::createFromFormat('Y-m-d H:i:s', '2000-01-01 00:00:00'), '2000-01-01 00:00:00'],
-            [\DateTime::createFromFormat('Y-m-d H:i:s', '2001-02-03 12:12:11'), '2001-02-03 12:12:11'],
+            [\DateTimeImmutable::createFromFormat('Y-m-d H:i:s', '2000-01-01 00:00:00'), '2000-01-01 00:00:00'],
+            [\DateTimeImmutable::createFromFormat('Y-m-d H:i:s', '2001-02-03 12:12:11'), '2001-02-03 12:12:11'],
         ];
     }
 

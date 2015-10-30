@@ -36,7 +36,7 @@ class DateTimeProcessor extends FieldProcessor
      */
     public function __construct($format, \DateTimeZone $timeZone = null, $mode = null)
     {
-        parent::__construct(new ObjectType(\DateTime::class));
+        parent::__construct(new ObjectType(\DateTimeImmutable::class));
 
         $this->format   = $format;
         $this->timeZone = $timeZone;
@@ -46,13 +46,14 @@ class DateTimeProcessor extends FieldProcessor
     protected function doProcess($input, array &$messages)
     {
         $format = '!' . $this->format;
+
         if ($this->timeZone) {
-            $dateTime = \DateTime::createFromFormat($format, $input, $this->timeZone);
+            $dateTime = \DateTimeImmutable::createFromFormat($format, $input, $this->timeZone);
         } else {
-            $dateTime = \DateTime::createFromFormat($format, $input);
+            $dateTime = \DateTimeImmutable::createFromFormat($format, $input);
         }
 
-        self::zeroUnusedParts($this->mode, $dateTime);
+        $dateTime = self::zeroUnusedParts($this->mode, $dateTime);
 
         return $dateTime;
     }
@@ -68,16 +69,18 @@ class DateTimeProcessor extends FieldProcessor
      * mode.
      *
      * @param string|null        $mode
-     * @param \DateTime $dateTime
+     * @param \DateTimeImmutable $dateTime
      *
-     * @return void
+     * @return \DateTimeImmutable
      */
-    public static function zeroUnusedParts($mode, \DateTime $dateTime)
+    public static function zeroUnusedParts($mode, \DateTimeImmutable $dateTime)
     {
         if ($mode === self::MODE_ZERO_TIME) {
-            $dateTime->setTime(0, 0, 0);
+            $dateTime = $dateTime->setTime(0, 0, 0);
         } elseif ($mode === self::MODE_ZERO_DATE) {
-            $dateTime->setDate(0, 1, 1);
+            $dateTime = $dateTime->setDate(0, 1, 1);
         }
+
+        return $dateTime;
     }
 }

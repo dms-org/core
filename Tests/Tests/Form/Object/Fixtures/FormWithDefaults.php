@@ -17,7 +17,7 @@ class FormWithDefaults extends IndependentFormObject
     public $terms = ['foo', 'bar', 'baz'];
 
     /**
-     * @var \DateTime
+     * @var \DateTimeImmutable
      */
     public $eventDate;
 
@@ -28,7 +28,7 @@ class FormWithDefaults extends IndependentFormObject
 
     protected function defineForm(FormObjectDefinition $form)
     {
-        $this->eventDate = new \DateTime('2015-01-01');
+        $this->eventDate = new \DateTimeImmutable('2015-01-01');
 
         $form->section('Words', [
             //

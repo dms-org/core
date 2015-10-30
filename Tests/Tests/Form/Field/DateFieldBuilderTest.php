@@ -33,7 +33,7 @@ class DateFieldBuilderTest extends FieldBuilderTestBase
 
     public function testMax()
     {
-        $max   = new \DateTime('2000-01-01');
+        $max   = new \DateTimeImmutable('2000-01-01');
         $field = $this->field()->max($max)->build();
 
         $this->assertAttributes([
@@ -42,7 +42,7 @@ class DateFieldBuilderTest extends FieldBuilderTestBase
                 DateType::ATTR_TIMEZONE => null,
         ], $field);
 
-        $this->assertEquals(new \DateTime('1998-03-21'), $field->process('1998-03-21'));
+        $this->assertEquals(new \DateTimeImmutable('1998-03-21'), $field->process('1998-03-21'));
         $this->assertFieldThrows($field, '2001-03-15', [
                 new Message(LessThanOrEqualValidator::MESSAGE, [
                         'field' => 'Name',
@@ -65,9 +65,9 @@ class DateFieldBuilderTest extends FieldBuilderTestBase
                 new TypeValidator(Type::string()->nullable()),
                 new DateFormatValidator(Type::string()->nullable(), 'Y-m-d'),
                 new DateTimeProcessor('Y-m-d', null, DateTimeProcessor::MODE_ZERO_TIME),
-                new GreaterThanOrEqualValidator(Type::object(\DateTime::class)->nullable(), new \DateTime('1970-01-01')),
-                new LessThanValidator(Type::object(\DateTime::class)->nullable(), new \DateTime('2000-01-01')),
-                new DefaultValueProcessor(Type::object(\DateTime::class)->nullable(), new \DateTime('1970-01-01')),
+                new GreaterThanOrEqualValidator(Type::object(\DateTimeImmutable::class)->nullable(), new \DateTime('1970-01-01')),
+                new LessThanValidator(Type::object(\DateTimeImmutable::class)->nullable(), new \DateTime('2000-01-01')),
+                new DefaultValueProcessor(Type::object(\DateTimeImmutable::class)->nullable(), new \DateTimeImmutable('1970-01-01')),
         ], $field->getProcessors());
 
         $this->assertEquals(new \DateTime('1970-01-01'), $field->getType()->get(DateType::ATTR_MIN));
@@ -81,6 +81,6 @@ class DateFieldBuilderTest extends FieldBuilderTestBase
                 ])
         ]);
 
-        $this->assertEquals(Type::object(\DateTime::class), $field->getProcessedType());
+        $this->assertEquals(Type::object(\DateTimeImmutable::class), $field->getProcessedType());
     }
 }

@@ -64,9 +64,9 @@ class DateTimeFieldBuilderTest extends FieldBuilderTestBase
                 new TypeValidator(Type::string()->nullable()),
                 new DateFormatValidator(Type::string()->nullable(), 'Y-m-d H:i:s'),
                 new DateTimeProcessor('Y-m-d H:i:s'),
-                new GreaterThanOrEqualValidator(Type::object(\DateTime::class)->nullable(), new \DateTime('1970-01-01 00:00:01')),
-                new LessThanValidator(Type::object(\DateTime::class)->nullable(), new \DateTime('2000-01-01 00:00:00')),
-                new DefaultValueProcessor(Type::object(\DateTime::class)->nullable(), new \DateTime('1970-01-01  00:00:00')),
+                new GreaterThanOrEqualValidator(Type::object(\DateTimeImmutable::class)->nullable(), new \DateTime('1970-01-01 00:00:01')),
+                new LessThanValidator(Type::object(\DateTimeImmutable::class)->nullable(), new \DateTime('2000-01-01 00:00:00')),
+                new DefaultValueProcessor(Type::object(\DateTimeImmutable::class)->nullable(), new \DateTimeImmutable('1970-01-01  00:00:00')),
         ], $field->getProcessors());
 
         $this->assertEquals(new \DateTime('1970-01-01 00:00:01'), $field->getType()->get(DateTimeType::ATTR_MIN));
@@ -80,6 +80,6 @@ class DateTimeFieldBuilderTest extends FieldBuilderTestBase
                 ])
         ]);
 
-        $this->assertEquals(Type::object(\DateTime::class), $field->getProcessedType());
+        $this->assertEquals(Type::object(\DateTimeImmutable::class), $field->getProcessedType());
     }
 }

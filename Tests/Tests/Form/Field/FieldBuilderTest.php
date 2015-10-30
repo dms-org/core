@@ -222,7 +222,7 @@ class FieldBuilderTest extends FieldBuilderTestBase
         $this->assertSame('Y-m-d', $type->get(DateType::ATTR_FORMAT));
         $this->assertHasProcessor(new DateFormatValidator(PhpType::string()->nullable(), 'Y-m-d'), $field);
         $this->assertHasProcessor(new DateTimeProcessor('Y-m-d', new \DateTimeZone('UTC'), DateTimeProcessor::MODE_ZERO_TIME), $field);
-        $this->assertEquals(PhpType::object(\DateTime::class)->nullable(), $field->getProcessedType());
+        $this->assertEquals(PhpType::object(\DateTimeImmutable::class)->nullable(), $field->getProcessedType());
     }
 
     public function testDateTime()
@@ -235,7 +235,7 @@ class FieldBuilderTest extends FieldBuilderTestBase
         $this->assertSame('Y-m-d H:i:s', $type->get(DateTimeType::ATTR_FORMAT));
         $this->assertHasProcessor(new DateFormatValidator(PhpType::string()->nullable(), 'Y-m-d H:i:s'), $field);
         $this->assertHasProcessor(new DateTimeProcessor('Y-m-d H:i:s', new \DateTimeZone('UTC')), $field);
-        $this->assertEquals(PhpType::object(\DateTime::class)->nullable(), $field->getProcessedType());
+        $this->assertEquals(PhpType::object(\DateTimeImmutable::class)->nullable(), $field->getProcessedType());
     }
 
     public function testTime()
@@ -248,7 +248,7 @@ class FieldBuilderTest extends FieldBuilderTestBase
         $this->assertSame('H:i:s', $type->get(TimeType::ATTR_FORMAT));
         $this->assertHasProcessor(new DateFormatValidator(PhpType::string()->nullable(), 'H:i:s'), $field);
         $this->assertHasProcessor(new DateTimeProcessor('H:i:s', new \DateTimeZone('UTC'), DateTimeProcessor::MODE_ZERO_DATE), $field);
-        $this->assertEquals(PhpType::object(\DateTime::class)->nullable(), $field->getProcessedType());
+        $this->assertEquals(PhpType::object(\DateTimeImmutable::class)->nullable(), $field->getProcessedType());
     }
 
     public function testFileField()

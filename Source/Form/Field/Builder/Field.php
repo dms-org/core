@@ -133,7 +133,9 @@ class Field extends FieldBuilderBase
 
     /**
      * Validates the input with the supplied format and
-     * converts the input to a \DateTime instance.
+     * converts the input to a DateTimeImmutable instance.
+     *
+     * @see \DateTimeImmutable
      *
      * @param string        $format
      * @param \DateTimeZone $timeZone
@@ -147,7 +149,9 @@ class Field extends FieldBuilderBase
 
     /**
      * Validates the input with the supplied format and
-     * converts the input to a \DateTime instance.
+     * converts the input to a DateTimeImmutable instance.
+     *
+     * @see \DateTimeImmutable
      *
      * @param string        $format
      * @param \DateTimeZone $timeZone
@@ -161,7 +165,9 @@ class Field extends FieldBuilderBase
 
     /**
      * Validates the input with the supplied format and
-     * converts the input to a \DateTime instance.
+     * converts the input to a DateTimeImmutable instance.
+     *
+     * @see \DateTimeImmutable
      *
      * @param string        $format
      * @param \DateTimeZone $timeZone

@@ -87,7 +87,7 @@ class Field implements IField
         if (!$processedPhpType->isOfType($initialValue)) {
             throw InvalidArgumentException::format(
                     'Invalid initial value for form field \'%s\': expecting type of %s, %s given',
-                    $this->name, $processedPhpType->asTypeString(), Debug::getType($this->initialValue)
+                    $this->name, $processedPhpType->asTypeString(), Debug::getType($initialValue)
             );
         }
 
