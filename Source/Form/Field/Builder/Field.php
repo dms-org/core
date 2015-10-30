@@ -350,7 +350,6 @@ class Field extends FieldBuilderBase
      * @param IFieldProcessor[] $processors
      *
      * @return FieldBuilderBase
-     *
      */
     public function custom(IType $type, array $processors)
     {

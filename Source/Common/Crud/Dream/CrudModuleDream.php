@@ -43,7 +43,7 @@ class CrudModuleDream extends ReadModule
         $module->crudForm(function (CrudFormDefinition $form, Person $person = null) {
             $form->section('Details', [
                 //
-                $form->field(Field::name('first_name')->label('First Name')->string()->required())
+                $form->field(Field::name('first_name')->label('First Name')->string()->required()->minLength())
                         ->bindToProperty('firstName'),
                 //
                 $form->field(Field::name('last_name')->label('Last Name')->string()->required())
