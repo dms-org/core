@@ -49,10 +49,10 @@ class ModuleWithActionsTest extends ModuleTestBase
 
     public function testActionGetters()
     {
-        $this->assertCount(5, $this->module->getActions());
+        $this->assertCount(6, $this->module->getActions());
         $this->assertContainsOnlyInstancesOf(IAction::class, $this->module->getParameterizedActions());
 
-        $this->assertCount(3, $this->module->getParameterizedActions());
+        $this->assertCount(4, $this->module->getParameterizedActions());
         $this->assertContainsOnlyInstancesOf(IParameterizedAction::class, $this->module->getParameterizedActions());
 
         $this->assertCount(2, $this->module->getUnparameterizedActions());
@@ -118,6 +118,18 @@ class ModuleWithActionsTest extends ModuleTestBase
 
         $this->assertInstanceOf(IParameterizedAction::class, $action);
         $this->assertSame('mapped-form-action', $action->getName());
+        $this->assertEquals([Permission::named('permission.one')], $action->getRequiredPermissions());
+        $this->assertEquals(TestDto::class, $action->getReturnDtoType());
+        $this->assertEquals(true, $action->hasReturnDtoType());
+        $this->assertEquals(new TestDto('input-handled'), $action->run(['data' => 'input']));
+    }
+
+    public function testParameterizedActionWithDefaultFormMapping()
+    {
+        $action = $this->module->getParameterizedAction('array-form-action');
+
+        $this->assertInstanceOf(IParameterizedAction::class, $action);
+        $this->assertSame('array-form-action', $action->getName());
         $this->assertEquals([Permission::named('permission.one')], $action->getRequiredPermissions());
         $this->assertEquals(TestDto::class, $action->getReturnDtoType());
         $this->assertEquals(true, $action->hasReturnDtoType());

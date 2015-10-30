@@ -5,6 +5,7 @@ namespace Iddigital\Cms\Core\Tests\Module\Fixtures;
 use Iddigital\Cms\Core\Auth\Permission;
 use Iddigital\Cms\Core\Form\Builder\Form;
 use Iddigital\Cms\Core\Form\Field\Builder\Field;
+use Iddigital\Cms\Core\Model\Object\ArrayDataObject;
 use Iddigital\Cms\Core\Module\Definition\ModuleDefinition;
 use Iddigital\Cms\Core\Module\Module;
 
@@ -50,6 +51,16 @@ class ModuleWithActions extends Module
                 ->returns(TestDto::class)
                 ->handler(function (TestDto $input) {
                     return new TestDto($input->data . '-handled');
+                });
+
+        $module->action('array-form-action')
+                ->authorize(Permission::named('permission.one'))
+                ->form(Form::create()->section('Input', [
+                        Field::name('data')->label('Data')->string()
+                ]))
+                ->returns(TestDto::class)
+                ->handler(function (ArrayDataObject $input) {
+                    return new TestDto($input['data'] . '-handled');
                 });
 
 

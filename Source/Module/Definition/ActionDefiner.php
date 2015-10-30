@@ -19,6 +19,7 @@ use Iddigital\Cms\Core\Module\Handler\CustomUnparameterizedActionHandler;
 use Iddigital\Cms\Core\Module\IParameterizedActionHandler;
 use Iddigital\Cms\Core\Module\IStagedFormDtoMapping;
 use Iddigital\Cms\Core\Module\IUnparameterizedActionHandler;
+use Iddigital\Cms\Core\Module\Mapping\ArrayDataObjectFormMapping;
 use Iddigital\Cms\Core\Module\Mapping\CustomStagedFormDtoMapping;
 use Iddigital\Cms\Core\Module\Mapping\FormObjectMapping;
 use Iddigital\Cms\Core\Module\Mapping\StagedFormObjectMapping;
@@ -78,6 +79,47 @@ class ActionDefiner
     /**
      * Sets the required form to be submitted for the action.
      *
+     * If the supplied forms are an instance of {@see FormObject} or {@see StagedFormObject}
+     * the form submission will be bound to an instance of the form object.
+     *
+     * Example:
+     * <code>
+     * ->form(new SomeFormObject())
+     * ->handler(function (SomeFormObject $input) {
+     *      // ...
+     * })
+     * </code>
+     *
+     * If however the supplied form is just a plain {@see IForm} or {@see IStagedForm},
+     * you can supply your own custom form submission mapping as the second parameter.
+     *
+     * Example:
+     * <code>
+     * ->form(
+     *      Form::create()->section('Section', [
+     *          // Fields...
+     *      ]),
+     *      function (array $input) {
+     *           return new SomeDto($input['data']);
+     *      }
+     * )->handler(function (SomeDto $input) {
+     *      // ...
+     * })
+     * </code>
+     *
+     * If no mapping is supplied, the form submission will automatically mapped to an
+     * instance of {@see ArrayDataObject} containing the supplied form data. This can
+     * be used just as a normal array.
+     *
+     * Example:
+     * <code>
+     * ->form(Form::create()->section('Section', [
+     *      // Fields...
+     * ]))->handler(function (ArrayDataObject $input) {
+     *      // ...
+     * })
+     * </code>
+     *
      * @param IForm|IStagedForm|FormObject|StagedFormObject|FormBuilder|StagedFormBuilder $form
      * @param IStagedFormDtoMapping|callable|null                                         $submissionToDtoMapping
      *
@@ -117,10 +159,7 @@ class ActionDefiner
             } elseif (is_callable($submissionToDtoMapping)) {
                 $mapping = new CustomStagedFormDtoMapping($stagedForm, $handlerParameterType, $submissionToDtoMapping);
             } else {
-                throw InvalidArgumentException::format(
-                        'Invalid mapping supplied to %s: the supplied form type requires a mapping handler, %s given',
-                        __METHOD__, Debug::getType($submissionToDtoMapping)
-                );
+                $mapping = new ArrayDataObjectFormMapping($stagedForm);
             }
 
             return $mapping;
@@ -178,8 +217,7 @@ class ActionDefiner
     }
 
     /**
-     * Defines the action handler. This will be
-     * executed when the action is run.
+     * Defines the action handler. This will be executed when the action is run.
      *
      * @param callable|IParameterizedActionHandler|IUnparameterizedActionHandler $handler
      *
