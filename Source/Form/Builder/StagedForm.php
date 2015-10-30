@@ -5,6 +5,7 @@ namespace Iddigital\Cms\Core\Form\Builder;
 use Iddigital\Cms\Core\Exception\InvalidArgumentException;
 use Iddigital\Cms\Core\Form\IForm;
 use Iddigital\Cms\Core\Form\IFormStage;
+use Iddigital\Cms\Core\Form\IStagedForm;
 use Iddigital\Cms\Core\Form\Stage\DependentFormStage;
 use Iddigital\Cms\Core\Form\Stage\IndependentFormStage;
 use Iddigital\Cms\Core\Form\StagedForm as ActualStagedForm;
@@ -146,6 +147,22 @@ class StagedForm
     public function thenDependingOn(array $fieldNames, callable $formStage, array $fieldNamesDefinedInStage = [])
     {
         $this->followingStages[] = self::parseStage($formStage, $fieldNames, $fieldNamesDefinedInStage);
+
+        return $this;
+    }
+
+    /**
+     * Embeds the supplied staged form within the current staged form.
+     *
+     * @param IStagedForm $embeddedForm
+     *
+     * @return StagedForm
+     */
+    public function embed(IStagedForm $embeddedForm)
+    {
+        foreach ($embeddedForm->getAllStages() as $stage) {
+            $this->followingStages[] = $stage;
+        }
 
         return $this;
     }
