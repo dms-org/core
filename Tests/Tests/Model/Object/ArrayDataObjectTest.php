@@ -95,4 +95,11 @@ class ArrayDataObjectTest extends TypedObjectTest
                 'foo'  => 'bar',
         ], $newData->getArray());
     }
+
+    public function testJsonSerializing()
+    {
+        $this->assertSame($this->object->getArray(), $this->object->jsonSerialize());
+
+        $this->assertSame(json_encode($this->object->getArray()), json_encode($this->object));
+    }
 }

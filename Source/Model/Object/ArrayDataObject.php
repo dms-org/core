@@ -13,7 +13,7 @@ use Iddigital\Cms\Core\Util\Debug;
  *
  * @author Elliot Levin <elliotlevin@hotmail.com>
  */
-class ArrayDataObject extends ValueObject implements IDataTransferObject, \ArrayAccess
+class ArrayDataObject extends ValueObject implements IDataTransferObject, \ArrayAccess, \JsonSerializable
 {
     /**
      * @var array
@@ -148,5 +148,15 @@ class ArrayDataObject extends ValueObject implements IDataTransferObject, \Array
                 'Invalid call to %s: cannot unset array index \'%s\' on class %s as it is immutable, use %s::%s method instead',
                 __METHOD__, $index, __CLASS__, __CLASS__, 'without'
         );
+    }
+
+    /**
+     * Gets the data which can be serialized as json
+     *
+     * @return array
+     */
+    public function jsonSerialize()
+    {
+        return $this->data;
     }
 }

@@ -6,27 +6,21 @@ use Iddigital\Cms\Core\Form\Builder\Form;
 use Iddigital\Cms\Core\Form\Builder\StagedForm;
 use Iddigital\Cms\Core\Form\Field\Builder\Field;
 use Iddigital\Cms\Core\Form\IStagedForm;
+use Iddigital\Cms\Core\Model\Object\ArrayDataObject;
 use Iddigital\Cms\Core\Module\IStagedFormDtoMapping;
-use Iddigital\Cms\Core\Module\Mapping\CustomStagedFormDtoMapping;
-use Iddigital\Cms\Core\Tests\Module\Mapping\Fixtures\TestDto;
+use Iddigital\Cms\Core\Module\Mapping\ArrayDataObjectFormMapping;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>
  */
-class CustomStagedFormDtoMappingTest extends StagedFormDtoMappingTest
+class ArrayDataObjectFormMappingTest extends StagedFormDtoMappingTest
 {
     /**
      * @return IStagedFormDtoMapping
      */
     protected function mapping()
     {
-        return new CustomStagedFormDtoMapping(
-                $this->expectedForm(),
-                TestDto::class,
-                function (array $data) {
-                    return TestDto::from($data['field']);
-                }
-        );
+        return new ArrayDataObjectFormMapping($this->expectedForm());
     }
 
     /**
@@ -48,7 +42,7 @@ class CustomStagedFormDtoMappingTest extends StagedFormDtoMappingTest
      */
     protected function expectedDtoType()
     {
-        return TestDto::class;
+        return ArrayDataObject::class;
     }
 
     /**
@@ -57,8 +51,8 @@ class CustomStagedFormDtoMappingTest extends StagedFormDtoMappingTest
     public function mappingTests()
     {
         return [
-                [['field' => 0], TestDto::from(false)],
-                [['field' => 1], TestDto::from(true)],
+                [['field' => 0], new ArrayDataObject(['field' => false])],
+                [['field' => 1], new ArrayDataObject(['field' => true])],
         ];
     }
 }
