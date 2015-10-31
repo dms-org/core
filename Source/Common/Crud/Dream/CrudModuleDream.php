@@ -12,7 +12,7 @@ use Iddigital\Cms\Core\Table\DataSource\Definition\ObjectTableDefinition;
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>
  */
-class CrudModuleDream extends ReadModule
+class CrudModuleDream extends CrudModule
 {
     /**
      * @var IPeopleRepository
@@ -43,7 +43,7 @@ class CrudModuleDream extends ReadModule
         $module->crudForm(function (CrudFormDefinition $form, Person $person = null) {
             $form->section('Details', [
                 //
-                $form->field(Field::name('first_name')->label('First Name')->string()->required()->minLength())
+                $form->field(Field::name('first_name')->label('First Name')->string()->required())
                         ->bindToProperty('firstName'),
                 //
                 $form->field(Field::name('last_name')->label('Last Name')->string()->required())
@@ -75,6 +75,10 @@ class CrudModuleDream extends ReadModule
                     ]);
                 }
             });
+
+            if ($form->isDetailsForm()) {
+                //
+            }
 
             if ($form->isCreateForm()) {
                 //
