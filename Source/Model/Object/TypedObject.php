@@ -5,7 +5,6 @@ namespace Iddigital\Cms\Core\Model\Object;
 use Iddigital\Cms\Core\Exception\InvalidOperationException;
 use Iddigital\Cms\Core\Model\Criteria\Criteria;
 use Iddigital\Cms\Core\Model\ITypedObject;
-use Iddigital\Cms\Core\Model\ITypedObjectCollection;
 use Iddigital\Cms\Core\Model\ObjectCollection;
 use Iddigital\Cms\Core\Model\Type\Builder\Type;
 use Iddigital\Cms\Core\Model\Type\ObjectType;
@@ -30,7 +29,7 @@ abstract class TypedObject implements ITypedObject, \Serializable
     /**
      * @var array
      */
-    protected $properties;
+    private $properties;
 
     public function __construct()
     {

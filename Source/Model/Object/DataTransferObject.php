@@ -6,7 +6,7 @@ use Iddigital\Cms\Core\Exception;
 use Iddigital\Cms\Core\Model\IDataTransferObject;
 
 /**
- * The data transfer object base class.
+ * The data transfer object (dto) base class.
  *
  * @author Elliot Levin <elliotlevin@hotmail.com>
  */
