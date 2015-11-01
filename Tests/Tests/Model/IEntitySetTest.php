@@ -111,6 +111,21 @@ abstract class IEntitySetTest extends CmsTestCase
         $entity = $this->collection->get(1);
         $this->assertInstanceOf(TestEntity::class, $entity);
         $this->assertSame(1, $entity->getId());
+
+        $this->assertThrows(function () {
+            $this->collection->get(100);
+        }, EntityNotFoundException::class);
+    }
+
+
+    public function testGetAllEntityById()
+    {
+        $entities = $this->collection->getAllById([1, 5, 10]);
+        $this->assertEquals([$this->entityMock(1), $this->entityMock(5), $this->entityMock(10)], $entities);
+
+        $this->assertThrows(function () {
+            $this->collection->getAllById([1, 5, 9]);
+        }, EntityNotFoundException::class);
     }
 
     public function testGetEntityByValidIdThrows()
@@ -124,6 +139,7 @@ abstract class IEntitySetTest extends CmsTestCase
         $entity = $this->collection->tryGet(5);
         $this->assertInstanceOf(TestEntity::class, $entity);
         $this->assertSame(5, $entity->getId());
+        $this->assertSame(null, $this->collection->tryGet(2));
     }
 
     public function testTryGetEntityByValidIdReturnsNull()

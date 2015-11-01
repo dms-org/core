@@ -146,6 +146,7 @@ class DbRepository extends DbRepositoryBase implements IRepository
         }
 
         /** @var IEntity $object */
+
         return $object->hasId()
                 ? $this->has($object->getId())
                 : false;
@@ -187,6 +188,30 @@ class DbRepository extends DbRepositoryBase implements IRepository
         }
 
         return $entity;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getAllById(array $ids)
+    {
+        $entities = $this->tryGetAll($ids);
+
+        if (count($entities) !== count(array_unique($ids, SORT_NUMERIC))) {
+            $idLookup = [];
+
+            foreach ($entities as $entity) {
+                $idLookup[$entity->getId()] = true;
+            }
+
+            foreach ($ids as $id) {
+                if (!isset($idLookup[$id])) {
+                    throw new EntityNotFoundException($this->getEntityType(), $id);
+                }
+            }
+        }
+
+        return $entities;
     }
 
     /**

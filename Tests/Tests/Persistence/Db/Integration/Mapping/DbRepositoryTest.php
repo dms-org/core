@@ -127,6 +127,23 @@ class DbRepositoryTest extends DbIntegrationTest
         $this->assertTrue($this->repo->has(1));
         $this->assertEquals($entity, $this->repo->get(1));
         $this->assertNotSame($entity, $this->repo->get(1));
+
+        $this->assertThrows(function () {
+            $this->repo->get(100);
+        }, EntityNotFoundException::class);
+    }
+
+    public function testGetAllByIds()
+    {
+        $entities = $this->makeEntities(5);
+
+        $this->repo->saveAll($entities);
+
+        $this->assertEquals([$entities[0], $entities[1], $entities[2]], $this->repo->getAllById([1, 2, 3]));
+
+        $this->assertThrows(function () {
+            $this->repo->getAllById([1, 2, 3, 100]);
+        }, EntityNotFoundException::class);
     }
 
     public function testTryGetInvalidId()
@@ -145,7 +162,7 @@ class DbRepositoryTest extends DbIntegrationTest
         $this->assertEquals($entities, $this->repo->getAll());
     }
 
-    public function testTryGetAll()
+    public function testTryGetAllById()
     {
         $entities = $this->makeEntities(5);
 

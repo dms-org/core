@@ -66,6 +66,15 @@ interface IEntitySet extends IObjectSet
     public function get($id);
 
     /**
+     * Returns the entities with the given ids.
+     *
+     * @param int[] $ids
+     * @return IEntity[]
+     * @throws EntityNotFoundException
+     */
+    public function getAllById(array $ids);
+
+    /**
      * Returns the entity with the given id or null if does not exist.
      *
      * @param int $id

@@ -4,10 +4,10 @@ namespace Iddigital\Cms\Core\Persistence;
 
 use Iddigital\Cms\Core\Exception;
 use Iddigital\Cms\Core\Model\EntityCollection;
+use Iddigital\Cms\Core\Model\EntityNotFoundException;
 use Iddigital\Cms\Core\Model\ICriteria;
 use Iddigital\Cms\Core\Model\IEntity;
 use Iddigital\Cms\Core\Model\ISpecification;
-use Iddigital\Cms\Core\Model\ITypedObject;
 
 /**
  * An implementation of the repository using an in-memory store.
@@ -120,6 +120,14 @@ class ArrayRepository implements IRepository
     public function get($id)
     {
         return $this->collection->get($id);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getAllById(array $ids)
+    {
+        return $this->collection->getAllById($ids);
     }
 
     /**

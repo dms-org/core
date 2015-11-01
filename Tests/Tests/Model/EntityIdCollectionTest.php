@@ -2,6 +2,7 @@
 
 namespace Iddigital\Cms\Core\Tests\Model;
 
+use Iddigital\Cms\Common\Testing\CmsTestCase;
 use Iddigital\Cms\Core\Exception\InvalidArgumentException;
 use Iddigital\Cms\Core\Model\EntityCollection;
 use Iddigital\Cms\Core\Model\EntityIdCollection;
@@ -11,7 +12,7 @@ use Iddigital\Cms\Core\Model\TypedCollection;
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>
  */
-class EntityIdCollectionTest extends IEntitySetTest
+class EntityIdCollectionTest extends CmsTestCase
 {
     public function testNewCollection()
     {

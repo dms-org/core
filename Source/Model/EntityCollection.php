@@ -151,6 +151,25 @@ class EntityCollection extends ObjectCollection implements IEntityCollection
     /**
      * {@inheritDoc}
      */
+    public function getAllById(array $ids)
+    {
+        $this->toOrderedMap();
+
+        $entities = [];
+        foreach ($ids as $id) {
+            if (isset($this->identityMap[$id])) {
+                $entities[] = $this->identityMap[$id];
+            } else {
+                throw new EntityNotFoundException($this->elementType->getClass(), $id);
+            }
+        }
+
+        return $entities;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function tryGet($id)
     {
         $this->toOrderedMap();
