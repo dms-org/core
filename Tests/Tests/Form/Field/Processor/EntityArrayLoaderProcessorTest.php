@@ -3,7 +3,6 @@
 namespace Iddigital\Cms\Core\Tests\Form\Field\Processor;
 
 use Iddigital\Cms\Core\Form\Field\Processor\EntityArrayLoaderProcessor;
-use Iddigital\Cms\Core\Form\Field\Processor\FieldValidator;
 use Iddigital\Cms\Core\Form\IFieldProcessor;
 use Iddigital\Cms\Core\Model\IEntity;
 use Iddigital\Cms\Core\Model\IEntitySet;
@@ -27,7 +26,7 @@ class EntityArrayLoaderProcessorTest extends FieldProcessorTest
             ->willReturn(Type::object(\stdClass::class));
         
         $entitiesMock->expects($this->any())
-            ->method('tryGetAll')
+            ->method('getAllById')
             ->will($this->returnCallback(function (array $ids) {
                 $entities = [];
 

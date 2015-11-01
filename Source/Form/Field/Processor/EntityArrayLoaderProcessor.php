@@ -27,7 +27,7 @@ class EntityArrayLoaderProcessor extends FieldProcessor
 
     protected function doProcess($input, array &$messages)
     {
-        return $this->entities->tryGetAll($input);
+        return $this->entities->getAllById($input);
     }
 
     protected function doUnprocess($input)
