@@ -79,6 +79,36 @@ class EntityCollection extends ObjectCollection implements IEntityCollection
     }
 
     /**
+     * Performs an identity or id comparison to check of objects are equal.
+     *
+     * @param IEntity[] $objects
+     *
+     * @return bool
+     */
+    protected function doesContainsObjects(array $objects)
+    {
+        $this->toOrderedMap();
+
+        $objectsLookup = new \SplObjectStorage();
+
+        foreach ($this->elements as $object) {
+            $objectsLookup[$object] = true;
+        }
+
+        foreach ($objects as $object) {
+            if (!isset($objectsLookup[$object])) {
+                $id = $object->getId();
+
+                if ($id === null || !isset($this->identityMap[$id])) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    /**
      * {@inheritDoc}
      */
     public function has($id)

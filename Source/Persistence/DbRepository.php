@@ -2,7 +2,8 @@
 
 namespace Iddigital\Cms\Core\Persistence;
 
-use Iddigital\Cms\Core\Exception;
+use Iddigital\Cms\Core\Exception\InvalidArgumentException;
+use Iddigital\Cms\Core\Exception\TypeMismatchException;
 use Iddigital\Cms\Core\Model\EntityNotFoundException;
 use Iddigital\Cms\Core\Model\IEntity;
 use Iddigital\Cms\Core\Persistence\Db\Connection\DbOutOfSyncException;
@@ -120,6 +121,10 @@ class DbRepository extends DbRepositoryBase implements IRepository
      */
     public function hasAll(array $ids)
     {
+        if (empty($ids)) {
+            return true;
+        }
+
         $rows = $this->connection->load(
                 $this->select()
                         ->setColumns(['count' => Expr::count()])
@@ -127,6 +132,47 @@ class DbRepository extends DbRepositoryBase implements IRepository
         )->asArray();
 
         return empty($rows) ? false : (int)$rows[0]['count'] === count($ids);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function contains($object)
+    {
+        $objectType = $this->getObjectType();
+
+        if (!($object instanceof $objectType)) {
+            throw TypeMismatchException::argument(__METHOD__, 'object', $objectType, $object);
+        }
+
+        /** @var IEntity $object */
+        return $object->hasId()
+                ? $this->has($object->getId())
+                : false;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function containsAll(array $objects)
+    {
+        if (empty($objects)) {
+            return true;
+        }
+
+        TypeMismatchException::verifyAllInstanceOf(__METHOD__, 'objects', $objects, $this->getObjectType());
+        $ids = [];
+
+        /** @var IEntity[] $objects */
+        foreach ($objects as $object) {
+            $id = $object->getId();
+
+            if ($id !== null) {
+                $ids[] = $id;
+            }
+        }
+
+        return empty($ids) ? false : $this->hasAll($ids);
     }
 
     /**
@@ -249,7 +295,7 @@ class DbRepository extends DbRepositoryBase implements IRepository
      */
     public function removeAll(array $entities)
     {
-        Exception\InvalidArgumentException::verifyAllInstanceOf(__METHOD__, 'entities', $entities, $this->getEntityType());
+        InvalidArgumentException::verifyAllInstanceOf(__METHOD__, 'entities', $entities, $this->getEntityType());
 
         $ids = [];
 

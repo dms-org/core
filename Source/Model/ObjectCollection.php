@@ -8,6 +8,7 @@ use Iddigital\Cms\Core\Model\Object\FinalizedClassDefinition;
 use Iddigital\Cms\Core\Model\Object\TypedObject;
 use Iddigital\Cms\Core\Model\Type\Builder\Type;
 use Iddigital\Cms\Core\Model\Type\ObjectType;
+use Iddigital\Cms\Core\Util\Debug;
 use Pinq\Direction;
 use Pinq\Iterators\IIteratorScheme;
 
@@ -74,6 +75,49 @@ class ObjectCollection extends TypedCollection implements ITypedObjectCollection
     public function getObjectType()
     {
         return $this->elementType->getClass();
+    }
+
+    public function contains($object)
+    {
+        $objectType = $this->getObjectType();
+
+        if (!($object instanceof $objectType)) {
+            throw Exception\TypeMismatchException::argument(__METHOD__, 'object', $objectType, $object);
+        }
+
+        return $this->doesContainsObjects([$object]);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function containsAll(array $objects)
+    {
+        Exception\TypeMismatchException::verifyAllInstanceOf(__METHOD__, 'objects', $objects, $this->getObjectType());
+
+        return $this->doesContainsObjects($objects);
+    }
+
+    /**
+     * @param object[] $objects
+     *
+     * @return bool
+     */
+    protected function doesContainsObjects(array $objects)
+    {
+        $objectsLookup = new \SplObjectStorage();
+
+        foreach ($this->elements as $object) {
+            $objectsLookup[$object] = true;
+        }
+
+        foreach ($objects as $object) {
+            if (!isset($objectsLookup[$object])) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**

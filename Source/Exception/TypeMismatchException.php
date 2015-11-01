@@ -11,6 +11,8 @@ use Iddigital\Cms\Core\Model\Type\Builder\Type;
  */
 class TypeMismatchException extends BaseException
 {
+    use TypeAsserts;
+
     /**
      * @param string $method
      * @param string $argumentName
@@ -24,7 +26,7 @@ class TypeMismatchException extends BaseException
         $actualType = Type::from($argument)->asTypeString();
 
         return new self(
-                "Invalid call to {$method}: expecting {$argumentName} to be of type {$expectedType}, {$actualType} given"
+                "Invalid call to {$method}: expecting \${$argumentName} to be of type {$expectedType}, {$actualType} given"
         );
     }
 }

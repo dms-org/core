@@ -7,6 +7,7 @@ use Iddigital\Cms\Core\Model\Criteria\SpecificationDefinition;
 use Iddigital\Cms\Core\Model\EntityNotFoundException;
 use Iddigital\Cms\Core\Model\IEntity;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\CustomOrm;
+use Iddigital\Cms\Core\Tests\Form\Field\Processor\Validator\Fixtures\TestEntity;
 use Iddigital\Cms\Core\Tests\Model\Criteria\Fixtures\MockSpecification;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Fixtures\MockEntity;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\Fixtures\Id\EmptyEntity;
@@ -98,6 +99,11 @@ class DbRepositoryTest extends DbIntegrationTest
 
         $this->assertSame(range(1, 10), $ids);
         $this->assertTrue($this->repo->hasAll($ids));
+    }
+
+    public function testHasAll()
+    {
+        $this->assertTrue($this->repo->hasAll([]));
     }
 
     public function testGetInvalidId()
@@ -289,5 +295,48 @@ class DbRepositoryTest extends DbIntegrationTest
                 new EmptyEntity(4),
                 new EmptyEntity(5),
         ], $this->repo->satisfying($spec));
+    }
+
+    public function testContains()
+    {
+        $this->db->setData([
+            'data' => [
+                    ['id' => 1],
+                    ['id' => 2],
+            ]
+        ]);
+
+        $this->assertSame(true, $this->repo->contains(new EmptyEntity(1)));
+        $this->assertSame(true, $this->repo->contains(new EmptyEntity(2)));
+
+        $this->assertSame(false, $this->repo->contains(new EmptyEntity(null)));
+        $this->assertSame(false, $this->repo->contains(new EmptyEntity(3)));
+
+        $this->assertThrows(function () {
+            $this->repo->contains(new TestEntity(1));
+        }, TypeMismatchException::class);
+    }
+
+    public function testContainsAll()
+    {
+        $this->db->setData([
+                'data' => [
+                        ['id' => 1],
+                        ['id' => 2],
+                ]
+        ]);
+
+        $this->assertSame(true, $this->repo->containsAll([]));
+        $this->assertSame(true, $this->repo->containsAll([new EmptyEntity(1)]));
+        $this->assertSame(true, $this->repo->containsAll([new EmptyEntity(2)]));
+        $this->assertSame(true, $this->repo->containsAll([new EmptyEntity(1), new EmptyEntity(2)]));
+
+        $this->assertSame(false, $this->repo->containsAll([new EmptyEntity(null)]));
+        $this->assertSame(false, $this->repo->containsAll([new EmptyEntity(3)]));
+        $this->assertSame(false, $this->repo->containsAll([new EmptyEntity(1), new EmptyEntity(2), new EmptyEntity(3)]));
+
+        $this->assertThrows(function () {
+            $this->repo->containsAll([new EmptyEntity(1), new EmptyEntity(2), new EmptyEntity(3), new TestEntity(1)]);
+        }, TypeMismatchException::class);
     }
 }

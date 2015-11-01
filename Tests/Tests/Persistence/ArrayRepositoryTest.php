@@ -91,4 +91,18 @@ class ArrayRepositoryTest extends IEntitySetTest
         $this->assertFalse($this->collection->has(11));
         $this->assertSame([1, 5, 12], $this->getEntityIds($this->collection->getAll()));
     }
+
+    public function testContains()
+    {
+        $this->assertTrue($this->collection->contains($this->collection->get(1)));
+
+        $this->assertFalse($this->collection->contains(new TestEntity(100)));
+    }
+
+    public function testContainAll()
+    {
+        $this->assertTrue($this->collection->containsAll([$this->collection->get(1)]));
+
+        $this->assertFalse($this->collection->containsAll([new TestEntity(100)]));
+    }
 }

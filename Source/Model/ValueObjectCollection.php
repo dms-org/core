@@ -35,4 +35,25 @@ class ValueObjectCollection extends ObjectCollection implements IValueObjectColl
 
         parent::__construct($valueObjectType, $valueObjects, $scheme, $source);
     }
+
+    /**
+     * Performs a value-wise comparison to see if objects
+     * are equal.
+     *
+     * @param IValueObject[] $objects
+     *
+     * @return bool
+     */
+    protected function doesContainsObjects(array $objects)
+    {
+        $objectsLookup = $this->asArray();
+
+        foreach ($objects as $object) {
+            if (!in_array($object, $objectsLookup, false)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
 }

@@ -7,6 +7,7 @@ use Iddigital\Cms\Core\Model\EntityCollection;
 use Iddigital\Cms\Core\Model\ICriteria;
 use Iddigital\Cms\Core\Model\IEntity;
 use Iddigital\Cms\Core\Model\ISpecification;
+use Iddigital\Cms\Core\Model\ITypedObject;
 
 /**
  * An implementation of the repository using an in-memory store.
@@ -95,6 +96,22 @@ class ArrayRepository implements IRepository
     public function hasAll(array $ids)
     {
         return $this->collection->hasAll($ids);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function contains($object)
+    {
+        return $this->collection->contains($object);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function containsAll(array $objects)
+    {
+        return $this->collection->containsAll($objects);
     }
 
     /**

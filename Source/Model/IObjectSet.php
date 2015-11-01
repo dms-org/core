@@ -41,6 +41,26 @@ interface IObjectSet extends ITypedCollection, \Countable
     public function count();
 
     /**
+     * Returns whether the supplied object is contained within this set.
+     *
+     * @param ITypedObject $object
+     *
+     * @return bool
+     * @throws Exception\TypeMismatchException
+     */
+    public function contains($object);
+
+    /**
+     * Returns whether the supplied objects are all contained within this set.
+     *
+     * @param ITypedObject[] $objects
+     *
+     * @return bool
+     * @throws Exception\TypeMismatchException
+     */
+    public function containsAll(array $objects);
+
+    /**
      * Returns the amount of objects matching the supplied criteria
      *
      * @param ICriteria $criteria

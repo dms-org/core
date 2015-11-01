@@ -14,6 +14,7 @@ use Iddigital\Cms\Core\Model\Type\ObjectType;
 use Iddigital\Cms\Core\Tests\Model\Criteria\Fixtures\MockSpecification;
 use Iddigital\Cms\Core\Tests\Model\Fixtures\SubObject;
 use Iddigital\Cms\Core\Tests\Model\Fixtures\TestEntity;
+use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\Fixtures\Id\EmptyEntity;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>
@@ -84,7 +85,7 @@ abstract class IEntitySetTest extends CmsTestCase
         $this->assertEquals([1, 5, 10, 11, 12], $this->getEntityIds($entities));
     }
 
-    public function testContains()
+    public function testHas()
     {
         $this->assertTrue($this->collection->has(1));
         $this->assertTrue($this->collection->has(5));
@@ -95,7 +96,7 @@ abstract class IEntitySetTest extends CmsTestCase
         $this->assertFalse($this->collection->has(54));
     }
 
-    public function testContainsAll()
+    public function testHasAll()
     {
         $this->assertTrue($this->collection->hasAll([1]));
         $this->assertTrue($this->collection->hasAll([1, 5, 10, 11, 12]));
@@ -232,5 +233,34 @@ abstract class IEntitySetTest extends CmsTestCase
         return array_values(array_map(function (TestEntity $i) {
             return $i->getId();
         }, $entities));
+    }
+
+    public function testContains()
+    {
+        $this->assertSame(true, $this->collection->contains($this->entityMock(1)));
+        $this->assertSame(true, $this->collection->contains($this->entityMock(5)));
+
+        $this->assertSame(false, $this->collection->contains($this->entityMock(7)));
+        $this->assertSame(false, $this->collection->contains($this->entityMock(2)));
+
+        $this->assertThrows(function () {
+            $this->collection->contains(new EmptyEntity(1));
+        }, TypeMismatchException::class);
+    }
+
+    public function testContainsAll()
+    {
+        $this->assertSame(true, $this->collection->containsAll([]));
+        $this->assertSame(true, $this->collection->containsAll([$this->entityMock(1)]));
+        $this->assertSame(true, $this->collection->containsAll([$this->entityMock(5)]));
+        $this->assertSame(true, $this->collection->containsAll([$this->entityMock(1), $this->entityMock(5)]));
+
+        $this->assertSame(false, $this->collection->containsAll([$this->entityMock(null)]));
+        $this->assertSame(false, $this->collection->containsAll([$this->entityMock(3)]));
+        $this->assertSame(false, $this->collection->containsAll([$this->entityMock(1), $this->entityMock(5), $this->entityMock(3)]));
+
+        $this->assertThrows(function () {
+            $this->collection->containsAll([$this->entityMock(1), $this->entityMock(2), new EmptyEntity(3)]);
+        }, TypeMismatchException::class);
     }
 }

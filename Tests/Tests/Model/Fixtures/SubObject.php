@@ -3,7 +3,6 @@
 namespace Iddigital\Cms\Core\Tests\Model\Fixtures;
 
 use Iddigital\Cms\Core\Model\Object\ClassDefinition;
-use Iddigital\Cms\Core\Model\Object\Entity;
 use Iddigital\Cms\Core\Model\Object\ValueObject;
 
 /**
