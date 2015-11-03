@@ -39,6 +39,17 @@ interface IForm
     public function process(array $submission);
 
     /**
+     * Returns whether the supplied array contains the expected types
+     * of processed values.
+     *
+     * @param array $processedSubmission
+     *
+     * @return void
+     * @throws InvalidArgumentException
+     */
+    public function validateProcessedValues(array $processedSubmission);
+
+    /**
      * Unprocesses the form submission back into the initial format.
      *
      * @param array $processedSubmission

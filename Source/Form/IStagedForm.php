@@ -86,6 +86,19 @@ interface IStagedForm
     public function getFormForStage($stageNumber, array $previousStagesSubmission);
 
     /**
+     * Creates a new staged form without the first stage.
+     *
+     * The following stage is loaded with the supplied form data
+     * for the first stage.
+     *
+     * @param array $processedFirstStageData
+     *
+     * @return IStagedForm
+     * @throws InvalidArgumentException
+     */
+    public function withSubmittedFirstStage(array $processedFirstStageData);
+
+    /**
      * Processes the forms submission through all stages.
      *
      * @param array $submission

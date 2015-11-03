@@ -222,4 +222,43 @@ class StagedFormBuilderTest extends FormBuilderTestBase
                         ->getLabel()
         );
     }
+
+    public function testEmbeddedStagedForm()
+    {
+        $form = StagedForm::begin(
+                Form::create()
+                        ->section('First Stage', [
+                                Field::name('first')->label('Input')->string()
+                        ])
+        )->embed(
+                $innerForm = StagedForm::begin(
+                        Form::create()
+                                ->section('Second Stage', [
+                                        Field::name('second')->label('Input')->string()
+                                ])
+                )->build()
+        )->build();
+
+        $this->assertCount(2, $form->getAllStages());
+        $this->assertSame($innerForm->getFirstStage(), $form->getStage(2));
+    }
+
+    public function testFromExisting()
+    {
+        $innerForm = StagedForm::begin(
+                Form::create()
+                        ->section('First Stage', [
+                                Field::name('first')->label('Input')->string()
+                        ])
+        )->then(function (array $data) {
+            return Form::create()
+                    ->section('Second Stage', [
+                            Field::name('second')->label('Input')->string()
+                    ]);
+        })->build();
+
+        $form = StagedForm::fromExisting($innerForm)->build();
+
+        $this->assertEquals($innerForm, $form);
+    }
 }

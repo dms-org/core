@@ -2,8 +2,6 @@
 
 namespace Iddigital\Cms\Core\Form\Binding\Field;
 
-use Iddigital\Cms\Core\Form\IField;
-
 /**
  * The custom property binding class.
  *

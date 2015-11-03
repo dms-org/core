@@ -3,6 +3,7 @@
 namespace Iddigital\Cms\Core\Form;
 
 use Iddigital\Cms\Core\Exception\InvalidArgumentException;
+use Iddigital\Cms\Core\Exception\InvalidOperationException;
 use Iddigital\Cms\Core\Form\Stage\IndependentFormStage;
 use Iddigital\Cms\Core\Util\Debug;
 
@@ -27,6 +28,11 @@ class StagedForm implements IStagedForm
      * @var int[]
      */
     protected $fieldNameStageNumberMap = [];
+
+    /**
+     * @var array
+     */
+    protected $knownFormData = [];
 
     /**
      * StagedForm constructor.
@@ -166,8 +172,8 @@ class StagedForm implements IStagedForm
 
                 $requiredFields[$previousStageNumber] =
                         $previousStage instanceof IndependentFormStage
-                        ? $previousStage->getDefinedFieldNames()
-                        : '*';
+                                ? $previousStage->getDefinedFieldNames()
+                                : '*';
             }
         } else {
             foreach ($stage->getRequiredFieldNames() as $requiredFieldName) {
@@ -175,7 +181,8 @@ class StagedForm implements IStagedForm
 
                 if (isset($requiredFields[$previousStageNumber])) {
                     if ($requiredFields[$previousStageNumber] !== '*'
-                        && !in_array($requiredFieldName, $requiredFields[$previousStageNumber], true)) {
+                            && !in_array($requiredFieldName, $requiredFields[$previousStageNumber], true)
+                    ) {
                         $requiredFields[$previousStageNumber][] = $requiredFieldName;
                     }
                 } else {
@@ -202,7 +209,7 @@ class StagedForm implements IStagedForm
     public function getFormForStage($stageNumber, array $previousStagesSubmission)
     {
         $requiredFields      = $this->getRequiredFieldGroupedByStagesForStage($stageNumber);
-        $processedSubmission = [];
+        $processedSubmission = $this->knownFormData;
 
         foreach ($requiredFields as $previousStageNumber => $requiredFieldNames) {
             $stage        = $this->getStage($previousStageNumber);
@@ -234,12 +241,40 @@ class StagedForm implements IStagedForm
     /**
      * {@inheritdoc]
      */
+    public function withSubmittedFirstStage(array $processedFirstStageData)
+    {
+        if ($this->getAmountOfStages() === 1) {
+            throw InvalidOperationException::format(
+                    'Invalid call to %s: staged form only contains one stage',
+                    __METHOD__
+            );
+        }
+
+        $this->firstStage->loadForm()
+                ->validateProcessedValues($processedFirstStageData);
+
+        $newFirstStage      = new IndependentFormStage($this->getStage(2)->loadForm($processedFirstStageData));
+        $newFollowingStages = array_slice($this->followingStages, 1);
+
+        $stagedForm                = new StagedForm($newFirstStage, $newFollowingStages);
+        $stagedForm->knownFormData = $processedFirstStageData;
+
+        return $stagedForm;
+    }
+
+    /**
+     * {@inheritdoc]
+     */
     public function process(array $submission)
     {
-        $processed = $this->firstStage->loadForm()->process($submission);
+        $processed              = $this->firstStage->loadForm()->process($submission);
+        $processedWithKnownData = $processed + $this->knownFormData;
 
         foreach ($this->followingStages as $stage) {
-            $processed += $stage->loadForm($processed)->process($submission);
+            $currentProcessedStage = $stage->loadForm($processedWithKnownData)->process($submission);
+
+            $processed += $currentProcessedStage;
+            $processedWithKnownData += $currentProcessedStage;
         }
 
         return $processed;

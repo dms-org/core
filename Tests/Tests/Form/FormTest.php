@@ -176,4 +176,57 @@ class FormTest extends FormBuilderTestBase
         }, InvalidArgumentException::class);
     }
 
+    public function testValidateProcessedSubmission()
+    {
+        $form = Form::create()
+                ->section('Details', [
+                        Field::name('name')->label('Name')->string()->value('abc'),
+                        Field::name('foo')->label('Foo')->int()->required(),
+                        Field::name('bar')->label('Bar')->decimal()->value(10.0),
+                ])
+                ->build();
+
+        $form->validateProcessedValues([
+                'name' => '123',
+                'foo' => 123,
+                'bar' => 0.0,
+        ]);
+
+        $form->validateProcessedValues([
+                'name' => 'aaaa',
+                'foo' => -343,
+                'bar' => 0.1,
+        ]);
+
+        $form->validateProcessedValues([
+                'name' => null,
+                'foo' => 0,
+                'bar' => null,
+        ]);
+
+        $this->assertThrows(function () use ($form) {
+            $form->validateProcessedValues([
+                    'name' => '',
+                    'foo' => null, // Wrong
+                    'bar' => 11.0,
+            ]);
+        }, InvalidArgumentException::class);
+
+        $this->assertThrows(function () use ($form) {
+            $form->validateProcessedValues([
+                    'name' => 100, // Wrong
+                    'foo' => 1,
+                    'bar' => 11.0,
+            ]);
+        }, InvalidArgumentException::class);
+
+        $this->assertThrows(function () use ($form) {
+            $form->validateProcessedValues([
+                    'name' => '123',
+                    'foo' => 123,
+                    'bar' => 0.0,
+                    'non-existent' => true // Wrong
+            ]);
+        }, InvalidArgumentException::class);
+    }
 }

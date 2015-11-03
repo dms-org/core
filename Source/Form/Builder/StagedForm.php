@@ -123,6 +123,20 @@ class StagedForm
     }
 
     /**
+     * @param IStagedForm $form
+     *
+     * @return StagedForm
+     */
+    public static function fromExisting(IStagedForm $form)
+    {
+        $self = new self($form->getFirstStage());
+
+        $self->followingStages = $form->getFollowingStages();
+
+        return $self;
+    }
+
+    /**
      * @param IForm|Form|callable $formStage
      * @param string[]            $fieldNamesDefinedInStage Only required for fields that are depended on.
      *

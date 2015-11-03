@@ -5,6 +5,7 @@ namespace Iddigital\Cms\Core\Form;
 use Iddigital\Cms\Core\Exception\InvalidArgumentException;
 use Iddigital\Cms\Core\Form\Stage\IndependentFormStage;
 use Iddigital\Cms\Core\Language\Message;
+use Iddigital\Cms\Core\Model\Type\Builder\Type;
 use Iddigital\Cms\Core\Util\Debug;
 
 /**
@@ -181,10 +182,10 @@ class Form implements IForm
     /**
      * {@inheritDoc}
      */
-    public function unprocess(array $processedSubmission)
+    public function validateProcessedValues(array $processedSubmission)
     {
         $processedKeys = array_keys($processedSubmission);
-        $fieldKeys = array_keys($this->fields);
+        $fieldKeys     = array_keys($this->fields);
 
         sort($processedKeys);
         sort($fieldKeys);
@@ -195,6 +196,25 @@ class Form implements IForm
                     Debug::formatValues($fieldKeys), Debug::formatValues($processedKeys)
             );
         }
+
+        foreach ($processedSubmission as $fieldName => $value) {
+            $expectedType = $this->fields[$fieldName]->getProcessedType();
+
+            if (!$expectedType->isOfType($value)) {
+                throw InvalidArgumentException::format(
+                        'Invalid processed submission: expecting value for field \'%s\' to be of type %s, %s given',
+                        $fieldName, $expectedType->asTypeString(), Type::from($value)->asTypeString()
+                );
+            }
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function unprocess(array $processedSubmission)
+    {
+        $this->validateProcessedValues($processedSubmission);
 
         $submission = array_intersect_key($processedSubmission, $this->fields);
 

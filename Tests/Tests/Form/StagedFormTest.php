@@ -6,6 +6,8 @@ use Iddigital\Cms\Core\Exception\InvalidArgumentException;
 use Iddigital\Cms\Core\Form\Builder\Form;
 use Iddigital\Cms\Core\Form\Builder\StagedForm;
 use Iddigital\Cms\Core\Form\Field\Builder\Field;
+use Iddigital\Cms\Core\Form\Stage\DependentFormStage;
+use Iddigital\Cms\Core\Form\Stage\IndependentFormStage;
 use Iddigital\Cms\Core\Model\Type\Builder\Type;
 
 /**
@@ -263,23 +265,57 @@ class StagedFormTest extends FormBuilderTestBase
         })->build();
     }
 
-    public function testEmbeddedStagedForm()
+    public function testWithSubmittedFirstStage()
+    {
+        $form = $this->buildTestStagedForm()->withSubmittedFirstStage([
+                'fields' => 3
+        ]);
+
+        $this->assertCount(1, $form->getAllStages());
+
+        $this->assertSame(
+                ['field_1' => 'FOO', 'field_2' => 'BAR', 'field_3' => 'BAZ'],
+                $form->process(['field_1' => 'foo', 'field_2' => 'bar', 'field_3' => 'baz'])
+        );
+    }
+
+    public function testWithSubmittedFirstStageWithFollowingDepdendentStage()
     {
         $form = StagedForm::begin(
                 Form::create()
                         ->section('First Stage', [
-                                Field::name('first')->label('Input')->string()
+                                Field::name('first')->label('String')->string(),
+                                Field::name('count')->label('Number')->int()->required(),
                         ])
-        )->embed(
-                $innerForm = StagedForm::begin(
-                        Form::create()
-                                ->section('Second Stage', [
-                                        Field::name('second')->label('Input')->string()
-                                ])
-                )->build()
-        )->build();
+        )->thenDependingOn(['count'], function (array $data) {
+            return Form::create()
+                    ->section('Second Stage', [
+                            Field::name('dependent')->label('Label (' . $data['count'] . ')')->string()->required()
+                    ]);
+        })->then(function (array $data) {
+            return Form::create()
+                    ->section('Third Stage', [
+                            Field::name('field: ' . $data['first'] . ' - ' . $data['dependent'])->label('Label')->string()
+                    ]);
+        })->build();
+
+        $form = $form->withSubmittedFirstStage([
+            'first' => 'ABC',
+            'count' => 123
+        ]);
 
         $this->assertCount(2, $form->getAllStages());
-        $this->assertSame($innerForm->getFirstStage(), $form->getStage(2));
+        $this->assertInstanceOf(IndependentFormStage::class, $form->getStage(1));
+        $this->assertInstanceOf(DependentFormStage::class, $form->getStage(2));
+
+        $this->assertSame(
+                ['field: ABC - bar'],
+                $form->getFormForStage(2, ['dependent' => 'bar'])->getFieldNames()
+        );
+
+        $this->assertSame(
+                ['dependent' => 'foo', 'field: ABC - foogit s' => 'bar'],
+                $form->process(['dependent' => 'foo', 'field: ABC - foo' => 'bar'])
+        );
     }
 }
