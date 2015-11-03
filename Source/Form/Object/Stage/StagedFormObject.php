@@ -142,6 +142,14 @@ abstract class StagedFormObject extends TypedObject implements IDataTransferObje
     }
 
     /**
+     * @inheritDoc
+     */
+    final public function withSubmittedFirstStage(array $processedFirstStageData)
+    {
+        return $this->stagedFormForClone->withSubmittedFirstStage($processedFirstStageData);
+    }
+
+    /**
      * Processes the forms submission through all stages.
      *
      * @param array $submission

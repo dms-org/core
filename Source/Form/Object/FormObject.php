@@ -2,7 +2,6 @@
 
 namespace Iddigital\Cms\Core\Form\Object;
 
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
 use Iddigital\Cms\Core\Form\IForm;
 use Iddigital\Cms\Core\Form\InvalidFormSubmissionException;
 use Iddigital\Cms\Core\Model\IDataTransferObject;
@@ -102,7 +101,15 @@ abstract class FormObject extends TypedObject implements IDataTransferObject, IF
     /**
      * {@inheritDoc}
      */
-    final  public function process(array $submission)
+    final public function validateProcessedValues(array $processedSubmission)
+    {
+        $this->form->validateProcessedValues($processedSubmission);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    final public function process(array $submission)
     {
         return $this->form->process($submission);
     }

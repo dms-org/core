@@ -314,7 +314,7 @@ class StagedFormTest extends FormBuilderTestBase
         );
 
         $this->assertSame(
-                ['dependent' => 'foo', 'field: ABC - foogit s' => 'bar'],
+                ['dependent' => 'foo', 'field: ABC - foo' => 'bar'],
                 $form->process(['dependent' => 'foo', 'field: ABC - foo' => 'bar'])
         );
     }
