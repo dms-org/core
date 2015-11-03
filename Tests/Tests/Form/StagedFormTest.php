@@ -317,5 +317,17 @@ class StagedFormTest extends FormBuilderTestBase
                 ['dependent' => 'foo', 'field: ABC - foo' => 'bar'],
                 $form->process(['dependent' => 'foo', 'field: ABC - foo' => 'bar'])
         );
+
+        $finalStageFrom = $form->withSubmittedFirstStage([
+                'dependent' => 'Hello',
+        ]);
+
+        $this->assertCount(1, $finalStageFrom->getAllStages());
+        $this->assertInstanceOf(IndependentFormStage::class, $finalStageFrom->getStage(1));
+
+        $this->assertSame(
+                ['field: ABC - Hello'],
+                $finalStageFrom->getFirstStage()->loadForm()->getFieldNames()
+        );
     }
 }

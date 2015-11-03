@@ -253,6 +253,8 @@ class StagedForm implements IStagedForm
         $this->firstStage->loadForm()
                 ->validateProcessedValues($processedFirstStageData);
 
+        $processedFirstStageData += $this->knownFormData;
+
         $newFirstStage      = new IndependentFormStage($this->getStage(2)->loadForm($processedFirstStageData));
         $newFollowingStages = array_slice($this->followingStages, 1);
 
