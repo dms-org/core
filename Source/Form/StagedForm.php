@@ -4,6 +4,7 @@ namespace Iddigital\Cms\Core\Form;
 
 use Iddigital\Cms\Core\Exception\InvalidArgumentException;
 use Iddigital\Cms\Core\Exception\InvalidOperationException;
+use Iddigital\Cms\Core\Form\Stage\DependentFormStage;
 use Iddigital\Cms\Core\Form\Stage\IndependentFormStage;
 use Iddigital\Cms\Core\Util\Debug;
 
@@ -256,7 +257,19 @@ class StagedForm implements IStagedForm
         $processedFirstStageData += $this->knownFormData;
 
         $newFirstStage      = new IndependentFormStage($this->getStage(2)->loadForm($processedFirstStageData));
+        /** @var IFormStage[] $newFollowingStages */
         $newFollowingStages = array_slice($this->followingStages, 1);
+        $knownFieldNames    = array_keys($processedFirstStageData);
+
+        foreach ($newFollowingStages as $key => $followingStage) {
+            if ($followingStage instanceof DependentFormStage && $followingStage->getRequiredFieldNames() !== null) {
+                $knowsAllRequiredFields = empty(array_diff($followingStage->getRequiredFieldNames(), $knownFieldNames));
+
+                if ($knowsAllRequiredFields) {
+                    $newFollowingStages[$key] = new IndependentFormStage($followingStage->loadForm($processedFirstStageData));
+                }
+            }
+        }
 
         $stagedForm                = new StagedForm($newFirstStage, $newFollowingStages);
         $stagedForm->knownFormData = $processedFirstStageData;

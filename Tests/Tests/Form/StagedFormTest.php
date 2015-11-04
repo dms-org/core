@@ -279,7 +279,7 @@ class StagedFormTest extends FormBuilderTestBase
         );
     }
 
-    public function testWithSubmittedFirstStageWithFollowingDepdendentStage()
+    public function testWithSubmittedFirstStageWithFollowingDependentStage()
     {
         $form = StagedForm::begin(
                 Form::create()
@@ -300,8 +300,8 @@ class StagedFormTest extends FormBuilderTestBase
         })->build();
 
         $form = $form->withSubmittedFirstStage([
-            'first' => 'ABC',
-            'count' => 123
+                'first' => 'ABC',
+                'count' => 123
         ]);
 
         $this->assertCount(2, $form->getAllStages());
@@ -328,6 +328,46 @@ class StagedFormTest extends FormBuilderTestBase
         $this->assertSame(
                 ['field: ABC - Hello'],
                 $finalStageFrom->getFirstStage()->loadForm()->getFieldNames()
+        );
+    }
+
+    public function testWithSubmittedFirstStageWillSimplifyDependentFormStagesIfAllRequiredFieldsAreSupplied()
+    {
+        $form = StagedForm::begin(
+                Form::create()
+                        ->section('First Stage', [
+                                Field::name('first')->label('String')->string(),
+                                Field::name('count')->label('Number')->int()->required(),
+                        ])
+        )->then(
+                Form::create()
+                        ->section('Second Stage', [
+                                Field::name('second')->label('Label')->string()->required()
+                        ])
+        )->thenDependingOn(['first'], function (array $data) {
+            return Form::create()
+                    ->section('Third Stage', [
+                            Field::name('field: ' . $data['first'])->label('Label')->string()
+                    ]);
+        })->build();
+
+        $form = $form->withSubmittedFirstStage([
+                'first' => 'ABC',
+                'count' => 123
+        ]);
+
+        $this->assertCount(2, $form->getAllStages());
+        $this->assertInstanceOf(IndependentFormStage::class, $form->getStage(1));
+        $this->assertInstanceOf(IndependentFormStage::class, $form->getStage(2));
+
+        $this->assertSame(
+                ['field: ABC'],
+                $form->getStage(2)->loadForm()->getFieldNames()
+        );
+
+        $this->assertSame(
+                ['second' => 'foo', 'field: ABC' => 'bar'],
+                $form->process(['second' => 'foo', 'field: ABC' => 'bar'])
         );
     }
 }
