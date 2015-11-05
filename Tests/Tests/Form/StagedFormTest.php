@@ -3,6 +3,7 @@
 namespace Iddigital\Cms\Core\Tests\Form;
 
 use Iddigital\Cms\Core\Exception\InvalidArgumentException;
+use Iddigital\Cms\Core\Exception\InvalidOperationException;
 use Iddigital\Cms\Core\Form\Builder\Form;
 use Iddigital\Cms\Core\Form\Builder\StagedForm;
 use Iddigital\Cms\Core\Form\Field\Builder\Field;
@@ -45,6 +46,13 @@ class StagedFormTest extends FormBuilderTestBase
         $form = $this->buildTestStagedForm();
 
         $this->assertCount(3, $form->getFormForStage(2, ['fields' => ' 3'])->getFields());
+    }
+
+    public function testGetFirstForm()
+    {
+        $form = $this->buildTestStagedForm();
+
+        $this->assertSame(['fields'], $form->getFirstForm()->getFieldNames());
     }
 
     public function testProcess()
@@ -274,7 +282,7 @@ class StagedFormTest extends FormBuilderTestBase
         $this->assertCount(1, $form->getAllStages());
 
         $this->assertSame(
-                ['field_1' => 'FOO', 'field_2' => 'BAR', 'field_3' => 'BAZ'],
+                ['fields' => 3, 'field_1' => 'FOO', 'field_2' => 'BAR', 'field_3' => 'BAZ'],
                 $form->process(['field_1' => 'foo', 'field_2' => 'bar', 'field_3' => 'baz'])
         );
     }
@@ -301,7 +309,7 @@ class StagedFormTest extends FormBuilderTestBase
 
         $form = $form->withSubmittedFirstStage([
                 'first' => 'ABC',
-                'count' => 123
+                'count' => 123,
         ]);
 
         $this->assertCount(2, $form->getAllStages());
@@ -314,7 +322,12 @@ class StagedFormTest extends FormBuilderTestBase
         );
 
         $this->assertSame(
-                ['dependent' => 'foo', 'field: ABC - foo' => 'bar'],
+                [
+                        'first'            => 'ABC',
+                        'count'            => 123,
+                        'dependent'        => 'foo',
+                        'field: ABC - foo' => 'bar'
+                ],
                 $form->process(['dependent' => 'foo', 'field: ABC - foo' => 'bar'])
         );
 
@@ -366,8 +379,41 @@ class StagedFormTest extends FormBuilderTestBase
         );
 
         $this->assertSame(
-                ['second' => 'foo', 'field: ABC' => 'bar'],
+                [
+                        'first'      => 'ABC',
+                        'count'      => 123,
+                        'second'     => 'foo',
+                        'field: ABC' => 'bar'
+                ],
                 $form->process(['second' => 'foo', 'field: ABC' => 'bar'])
         );
+    }
+
+    public function testSubmitFirstStageProcessesData()
+    {
+        $form = $this->buildTestStagedForm()->submitFirstStage([
+                'fields' => '3 '
+        ]);
+
+        $this->assertCount(1, $form->getAllStages());
+
+        $this->assertSame(
+                ['fields' => 3, 'field_1' => 'FOO', 'field_2' => 'BAR', 'field_3' => 'BAZ'],
+                $form->process(['field_1' => 'foo', 'field_2' => 'bar', 'field_3' => 'baz'])
+        );
+    }
+
+    public function testWithSubmittedFirstStageThrowsIfOnlyOneStage()
+    {
+        $this->setExpectedException(InvalidOperationException::class);
+
+        $form = StagedForm::begin(
+                Form::create()
+                        ->section('First Stage', [
+                                Field::name('first')->label('String')->string(),
+                        ])
+        )->build();
+
+        $form->withSubmittedFirstStage(['first' => 'abc']);
     }
 }

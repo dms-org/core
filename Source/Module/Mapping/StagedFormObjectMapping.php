@@ -34,4 +34,16 @@ class StagedFormObjectMapping extends StagedFormDtoMapping
     {
         return $this->stagedFormObject->submitNew($submission);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function withSubmittedFirstStage(array $firstStageSubmission)
+    {
+        $clone = parent::withSubmittedFirstStage($firstStageSubmission);
+
+        $clone->stagedFormObject = $clone->getStagedForm();
+
+        return $clone;
+    }
 }

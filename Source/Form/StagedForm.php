@@ -150,6 +150,14 @@ class StagedForm implements IStagedForm
     /**
      * @inheritDoc
      */
+    public function getFirstForm()
+    {
+        return $this->firstStage->loadForm();
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function getRequiredFieldGroupedByStagesForStage($stageNumber)
     {
         $requiredFields = [];
@@ -242,6 +250,16 @@ class StagedForm implements IStagedForm
     /**
      * {@inheritdoc]
      */
+    public function submitFirstStage(array $firstStageSubmission)
+    {
+        return $this->withSubmittedFirstStage(
+                $this->firstStage->loadForm()->process($firstStageSubmission)
+        );
+    }
+
+    /**
+     * {@inheritdoc]
+     */
     public function withSubmittedFirstStage(array $processedFirstStageData)
     {
         if ($this->getAmountOfStages() === 1) {
@@ -256,7 +274,7 @@ class StagedForm implements IStagedForm
 
         $processedFirstStageData += $this->knownFormData;
 
-        $newFirstStage      = new IndependentFormStage($this->getStage(2)->loadForm($processedFirstStageData));
+        $newFirstStage = new IndependentFormStage($this->getStage(2)->loadForm($processedFirstStageData));
         /** @var IFormStage[] $newFollowingStages */
         $newFollowingStages = array_slice($this->followingStages, 1);
         $knownFieldNames    = array_keys($processedFirstStageData);
@@ -282,14 +300,13 @@ class StagedForm implements IStagedForm
      */
     public function process(array $submission)
     {
-        $processed              = $this->firstStage->loadForm()->process($submission);
-        $processedWithKnownData = $processed + $this->knownFormData;
-
+        $processed = $this->knownFormData;
+        $processed += $this->firstStage->loadForm()->process($submission);
+        
         foreach ($this->followingStages as $stage) {
-            $currentProcessedStage = $stage->loadForm($processedWithKnownData)->process($submission);
+            $currentProcessedStage = $stage->loadForm($processed)->process($submission);
 
             $processed += $currentProcessedStage;
-            $processedWithKnownData += $currentProcessedStage;
         }
 
         return $processed;

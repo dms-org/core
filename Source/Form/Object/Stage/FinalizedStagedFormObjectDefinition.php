@@ -37,6 +37,11 @@ class FinalizedStagedFormObjectDefinition
     protected $formDefinitions = [];
 
     /**
+     * @var array
+     */
+    protected $knownProperties = [];
+
+    /**
      * FinalizedStagedFormObjectDefinition constructor.
      *
      * @param StagedFormObject    $formObject
@@ -58,7 +63,10 @@ class FinalizedStagedFormObjectDefinition
      */
     public function forInstance(StagedFormObject $formObject)
     {
-        return new self($formObject, $this->defineStageCallbacks);
+        $self = new self($formObject, $this->defineStageCallbacks);
+        $self->knownProperties = $this->knownProperties;
+
+        return $self;
     }
 
     /**
@@ -89,9 +97,7 @@ class FinalizedStagedFormObjectDefinition
                             $defineStageCallback,
                             &$previousStageDefinition
                     ) {
-                        foreach ($previousStageDefinition->getPropertyFieldMap() as $property => $field) {
-                            $this->formObject->{$property} = $previousSubmission[$field];
-                        }
+                        $this->loadSubmittedFieldsIntoObjectProperties($previousStageDefinition, $previousSubmission);
 
                         /** @var FinalizedFormObjectDefinition $formObjectDefinition */
                         $formObjectDefinition    = $defineStageCallback->defineFormStage($this->formObject);
@@ -108,9 +114,25 @@ class FinalizedStagedFormObjectDefinition
         $this->stagedForm = new StagedForm($firstStage, $stages);
     }
 
+    protected function loadSubmittedFieldsIntoObjectProperties(FinalizedFormObjectDefinition $definition, array $processedSubmission)
+    {
+        $properties = [];
+        $object     = new \ReflectionObject($this->formObject);
+
+        foreach ($definition->getPropertyFieldMap() as $propertyName => $field) {
+            $property = $object->getProperty($propertyName);
+            $property->setAccessible(true);
+            $property->setValue($this->formObject, $processedSubmission[$field]);
+
+            $properties[$propertyName] = $processedSubmission[$field];
+        }
+
+        return $properties;
+    }
+
     public function submit(array $submission)
     {
-        $properties            = [];
+        $properties            = $this->knownProperties;
         $this->formDefinitions = [$this->formDefinitions[0]];
         $processed             = $this->stagedForm->process($submission);
 
@@ -121,5 +143,22 @@ class FinalizedStagedFormObjectDefinition
         }
 
         return $properties;
+    }
+
+    public function withSubmittedFirstStage(array $processedFirstStageData)
+    {
+        $clone = $this->forInstance(clone $this->formObject);
+
+        $clone->stagedForm = $clone->stagedForm->withSubmittedFirstStage($processedFirstStageData);
+
+        $properties = $clone->loadSubmittedFieldsIntoObjectProperties($clone->formDefinitions[0], $processedFirstStageData);
+        $clone->knownProperties += $properties;
+
+        array_shift($clone->defineStageCallbacks);
+        array_shift($clone->formDefinitions);
+
+        $clone->formObject->loadFinalizedStagedFormDefinition($clone);
+
+        return $clone->formObject;
     }
 }

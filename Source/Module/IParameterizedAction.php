@@ -4,6 +4,7 @@ namespace Iddigital\Cms\Core\Module;
 
 use Iddigital\Cms\Core\Auth\UserForbiddenException;
 use Iddigital\Cms\Core\Exception\InvalidArgumentException;
+use Iddigital\Cms\Core\Exception\InvalidOperationException;
 use Iddigital\Cms\Core\Form\InvalidFormSubmissionException;
 use Iddigital\Cms\Core\Form\IStagedForm;
 use Iddigital\Cms\Core\Model\IDataTransferObject;
@@ -41,4 +42,18 @@ interface IParameterizedAction extends IAction
      * @throws InvalidFormSubmissionException if the form data is invalid
      */
     public function run(array $data);
+
+    /**
+     * Returns an equivalent parameterized action with the first stage
+     * of the form filled out with the supplied data.
+     *
+     * @param array $data
+     *
+     * @return static
+     * @throws UserForbiddenException if the authenticated user does not have the required permissions.
+     * @throws InvalidArgumentException if the form is invalid
+     * @throws InvalidFormSubmissionException if the form data is invalid
+     * @throws InvalidOperationException If there is only one stage
+     */
+    public function submitFirstStage(array $data);
 }

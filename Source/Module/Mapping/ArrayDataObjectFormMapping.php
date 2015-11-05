@@ -4,6 +4,7 @@ namespace Iddigital\Cms\Core\Module\Mapping;
 
 use Iddigital\Cms\Core\Form;
 use Iddigital\Cms\Core\Form\IStagedForm;
+use Iddigital\Cms\Core\Form\Object\Stage\StagedFormObject;
 use Iddigital\Cms\Core\Model\Object\ArrayDataObject;
 
 /**
@@ -20,6 +21,11 @@ class ArrayDataObjectFormMapping extends StagedFormDtoMapping
      */
     public function __construct(IStagedForm $stagedForm)
     {
+        if ($stagedForm instanceof StagedFormObject) {
+            $stagedForm = clone $stagedForm;
+            $stagedForm = $stagedForm->getStagedFormDefinition()->getStagedForm();
+        }
+
         parent::__construct($stagedForm, ArrayDataObject::class);
     }
 

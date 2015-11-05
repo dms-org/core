@@ -3,6 +3,7 @@
 namespace Iddigital\Cms\Core\Tests\Form\Object\Stage\Fixtures;
 
 use Iddigital\Cms\Common\Testing\CmsTestCase;
+use Iddigital\Cms\Core\Exception\InvalidArgumentException;
 use Iddigital\Cms\Core\Form\Field\Type\ArrayOfType;
 use Iddigital\Cms\Core\Form\InvalidFormSubmissionException;
 use Iddigital\Cms\Core\Form\Stage\IndependentFormStage;
@@ -117,5 +118,57 @@ class ArrayOfIntsStagedFormTest extends CmsTestCase
                 'length' => '1',
                 'ints'   => ['1', '2', '4'],
         ]);
+    }
+
+    public function testSubmitFirstStage()
+    {
+        $submitted = $this->form->submitFirstStage([
+                'length' => ' 5 ',
+        ]);
+
+        $this->assertNull($this->form->length);
+        $this->assertNull($this->form->ints);
+
+        $this->assertSame(5, $submitted->length);
+        $this->assertSame(null, $submitted->ints);
+
+        $this->assertCount(1, $submitted->getAllStages());
+        $this->assertInstanceOf(IndependentFormStage::class, $submitted->getStage(1));
+        $this->assertSame(5, $submitted->getFirstForm()->getField('ints')->getType()->get(ArrayOfType::ATTR_MAX_ELEMENTS));
+
+        $this->assertThrows(function () {
+            $this->form->submitFirstStage(['length' => 'abc']);
+        }, InvalidFormSubmissionException::class);
+    }
+
+    public function testWithSubmittedFirstStage()
+    {
+        $submitted = $this->form->withSubmittedFirstStage([
+                'length' => 3,
+        ]);
+
+        $this->assertNull($this->form->length);
+        $this->assertNull($this->form->ints);
+
+        $this->assertSame(3, $submitted->length);
+        $this->assertSame(null, $submitted->ints);
+
+        $this->assertCount(1, $submitted->getAllStages());
+        $this->assertInstanceOf(IndependentFormStage::class, $submitted->getStage(1));
+        $this->assertSame(3, $submitted->getFirstForm()->getField('ints')->getType()->get(ArrayOfType::ATTR_MAX_ELEMENTS));
+
+        $this->assertThrows(function () {
+            $this->form->withSubmittedFirstStage(['length' => 'abc']);
+        }, InvalidArgumentException::class);
+
+        $submitted->submit([
+                'ints'   => ['1', '2', '4'],
+        ]);
+
+        $this->assertNull($this->form->length);
+        $this->assertNull($this->form->ints);
+
+        $this->assertSame(3, $submitted->length);
+        $this->assertSame([1, 2, 4], $submitted->ints);
     }
 }

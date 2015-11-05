@@ -41,6 +41,13 @@ interface IStagedForm
     public function getAmountOfStages();
 
     /**
+     * Gets the form of the first stage.
+     *
+     * @return IForm
+     */
+    public function getFirstForm();
+
+    /**
      * @param string $fieldName
      *
      * @return IFormStage
@@ -88,12 +95,24 @@ interface IStagedForm
     /**
      * Creates a new staged form without the first stage.
      *
-     * The following stage is loaded with the supplied form data
+     * The following stages are loaded with the supplied form data
+     * for the first stage.
+     *
+     * @param array $firstStageSubmission
+     *
+     * @return static
+     */
+    public function submitFirstStage(array $firstStageSubmission);
+
+    /**
+     * Creates a new staged form without the first stage.
+     *
+     * The following stages are loaded with the supplied form data
      * for the first stage.
      *
      * @param array $processedFirstStageData
      *
-     * @return IStagedForm
+     * @return static
      * @throws InvalidArgumentException
      */
     public function withSubmittedFirstStage(array $processedFirstStageData);

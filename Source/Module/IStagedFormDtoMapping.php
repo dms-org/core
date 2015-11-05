@@ -38,4 +38,14 @@ interface IStagedFormDtoMapping
      * @throws InvalidFormSubmissionException
      */
     public function mapFormSubmissionToDto(array $submission);
+
+    /**
+     * Returns an equivalent dto mapping with the first stage of
+     * the form submitted with the supplied data.
+     *
+     * @param array $firstStageSubmission
+     *
+     * @return IStagedFormDtoMapping|static
+     */
+    public function withSubmittedFirstStage(array $firstStageSubmission);
 }

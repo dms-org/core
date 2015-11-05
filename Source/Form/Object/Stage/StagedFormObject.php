@@ -3,6 +3,7 @@
 namespace Iddigital\Cms\Core\Form\Object\Stage;
 
 use Iddigital\Cms\Core\Exception\InvalidArgumentException;
+use Iddigital\Cms\Core\Form\IForm;
 use Iddigital\Cms\Core\Form\IFormStage;
 use Iddigital\Cms\Core\Form\InvalidFormSubmissionException;
 use Iddigital\Cms\Core\Form\IStagedForm;
@@ -34,18 +35,38 @@ abstract class StagedFormObject extends TypedObject implements IDataTransferObje
     private $stagedFormForClone;
 
     /**
+     * @var bool
+     */
+    private $isCloningDuplicate = false;
+
+    /**
      * StagedFormObject constructor.
      */
     public function __construct()
     {
         $definition = new StagedFormObjectDefinition(static::definition());
         $this->defineForm($definition);
-        $this->formDefinition     = $definition->finalize($this);
-        $this->stagedForm         = $this->formDefinition->getStagedForm();
-        $this->stagedFormForClone = $this->formDefinition->forInstance(clone $this)->getStagedForm();
+        $this->loadFinalizedStagedFormDefinition($definition->finalize($this));
 
         // TODO: Clean up handling of submission / stages
         //  parent::__construct();
+    }
+
+    /**
+     * @param FinalizedStagedFormObjectDefinition $definition
+     *
+     * @return void
+     */
+    final public function loadFinalizedStagedFormDefinition(FinalizedStagedFormObjectDefinition $definition)
+    {
+        $this->formDefinition = $definition;
+        $this->stagedForm     = $definition->getStagedForm();
+
+        if (!$this->isCloningDuplicate) {
+            $this->isCloningDuplicate = true;
+            $this->stagedFormForClone = $definition->forInstance(clone $this)->getStagedForm();
+            $this->isCloningDuplicate = false;
+        }
     }
 
     /**
@@ -56,6 +77,7 @@ abstract class StagedFormObject extends TypedObject implements IDataTransferObje
         $class->property($this->formDefinition)->ignore();
         $class->property($this->stagedForm)->ignore();
         $class->property($this->stagedFormForClone)->ignore();
+        $class->property($this->isCloningDuplicate)->ignore();
 
         return $this->defineClass($class);
     }
@@ -73,6 +95,22 @@ abstract class StagedFormObject extends TypedObject implements IDataTransferObje
      * @param StagedFormObjectDefinition $form
      */
     abstract protected function defineForm(StagedFormObjectDefinition $form);
+
+
+    public function __clone()
+    {
+        if ($this->formDefinition) {
+            $this->loadFinalizedStagedFormDefinition($this->formDefinition->forInstance($this));
+        }
+    }
+
+    /**
+     * @return FinalizedStagedFormObjectDefinition
+     */
+    final public function getStagedFormDefinition()
+    {
+        return $this->formDefinition;
+    }
 
     /**
      * @return IndependentFormStage
@@ -104,6 +142,14 @@ abstract class StagedFormObject extends TypedObject implements IDataTransferObje
     final public function getAmountOfStages()
     {
         return $this->stagedFormForClone->getAmountOfStages();
+    }
+
+    /**
+     * @return IForm
+     */
+    final public function getFirstForm()
+    {
+        return $this->stagedFormForClone->getFirstForm();
     }
 
     /**
@@ -143,10 +189,22 @@ abstract class StagedFormObject extends TypedObject implements IDataTransferObje
 
     /**
      * @inheritDoc
+     * @return static
+     */
+    final public function submitFirstStage(array $firstStageSubmission)
+    {
+        return $this->formDefinition->withSubmittedFirstStage(
+                $this->getFirstForm()->process($firstStageSubmission)
+        );
+    }
+
+    /**
+     * @inheritDoc
+     * @return static
      */
     final public function withSubmittedFirstStage(array $processedFirstStageData)
     {
-        return $this->stagedFormForClone->withSubmittedFirstStage($processedFirstStageData);
+        return $this->formDefinition->withSubmittedFirstStage($processedFirstStageData);
     }
 
     /**
@@ -203,8 +261,6 @@ abstract class StagedFormObject extends TypedObject implements IDataTransferObje
     final public function submitNew(array $submission)
     {
         $clone = clone $this;
-
-        $clone->formDefinition = $clone->formDefinition->forInstance($clone);
 
         return $clone->submit($submission);
     }

@@ -81,4 +81,17 @@ class ParameterizedAction extends Action implements IParameterizedAction
 
         return $handler->run($dto);
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function submitFirstStage(array $data)
+    {
+        $clone = clone $this;
+
+        $clone->formDtoMapping = $clone->formDtoMapping->withSubmittedFirstStage($data);
+        $clone->stagedForm     = $clone->formDtoMapping->getStagedForm();
+
+        return $clone;
+    }
 }
