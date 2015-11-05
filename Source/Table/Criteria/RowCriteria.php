@@ -188,7 +188,7 @@ class RowCriteria implements IRowCriteria
     }
 
     /**
-     * Adds an ordering
+     * Adds an ordering on the supplied column component.
      *
      * @param string $componentId
      * @param string $direction
@@ -205,7 +205,7 @@ class RowCriteria implements IRowCriteria
     }
 
     /**
-     * Adds an ASC ordering
+     * Adds an ascending ordering on the supplied column component.
      *
      * @param string $componentId
      *
@@ -217,7 +217,7 @@ class RowCriteria implements IRowCriteria
     }
 
     /**
-     * Adds an DESC ordering
+     * Adds an descending ordering on the supplied column component.
      *
      * @param string $componentId
      *
@@ -263,6 +263,8 @@ class RowCriteria implements IRowCriteria
     }
 
     /**
+     * Skips the supplied number of rows from the start.
+     *
      * @param int $rowNumber
      *
      * @return static
@@ -283,6 +285,8 @@ class RowCriteria implements IRowCriteria
     }
 
     /**
+     * Limits the amount of rows to the supplied number.
+     *
      * @param int $amountOfRows
      *
      * @return static

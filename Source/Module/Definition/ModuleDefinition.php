@@ -25,32 +25,32 @@ class ModuleDefinition
     /**
      * @var IAuthSystem
      */
-    private $authSystem;
+    protected $authSystem;
 
     /**
      * @var string
      */
-    private $name;
+    protected $name;
 
     /**
      * @var IAction[]
      */
-    private $actions = [];
+    protected $actions = [];
 
     /**
      * @var ITableDisplay[]
      */
-    private $tables = [];
+    protected $tables = [];
 
     /**
      * @var IChartDisplay[]
      */
-    private $charts = [];
+    protected $charts = [];
 
     /**
      * @var IWidget[]
      */
-    private $widgets = [];
+    protected $widgets = [];
 
     /**
      * ModuleDefinition constructor.

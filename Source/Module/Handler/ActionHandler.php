@@ -70,7 +70,7 @@ abstract class ActionHandler implements IActionHandler
 
         if (!($result instanceof $returnType)) {
             throw TypeMismatchException::format(
-                    'Invalid return type from action handler %s: expecting %s, %s given',
+                    'Invalid return value from action handler %s: expecting %s, %s given',
                     get_class($this), $returnType, Debug::getType($result)
             );
         }

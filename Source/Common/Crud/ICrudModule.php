@@ -2,8 +2,8 @@
 
 namespace Iddigital\Cms\Core\Common\Crud;
 
+use Iddigital\Cms\Core\Common\Crud\Action\Object\IObjectAction;
 use Iddigital\Cms\Core\Exception\InvalidOperationException;
-use Iddigital\Cms\Core\Module\IParameterizedAction;
 
 /**
  * The interface for a CRUD module.
@@ -15,6 +15,10 @@ use Iddigital\Cms\Core\Module\IParameterizedAction;
  */
 interface ICrudModule extends IReadModule
 {
+    const CREATE_ACTION = 'create';
+    const EDIT_ACTION = 'edit';
+    const REMOVE_ACTION = 'remove';
+
     /**
      * Returns whether the modules allows objects to be created.
      *
@@ -25,7 +29,7 @@ interface ICrudModule extends IReadModule
     /**
      * Gets the create object action.
      *
-     * @return IParameterizedAction
+     * @return IObjectAction
      * @throws InvalidOperationException
      */
     public function getCreateAction();
@@ -40,7 +44,7 @@ interface ICrudModule extends IReadModule
     /**
      * Gets the edit object action.
      *
-     * @return IParameterizedAction
+     * @return IObjectAction
      * @throws InvalidOperationException
      */
     public function getEditAction();
@@ -55,7 +59,7 @@ interface ICrudModule extends IReadModule
     /**
      * Gets the remove object action.
      *
-     * @return IParameterizedAction
+     * @return IObjectAction
      * @throws InvalidOperationException
      */
     public function getRemoveAction();

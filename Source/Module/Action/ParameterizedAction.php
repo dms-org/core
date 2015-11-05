@@ -42,7 +42,7 @@ class ParameterizedAction extends Action implements IParameterizedAction
         if ($formDtoMapping->getDtoType() !== $handler->getDtoType()) {
             throw TypeMismatchException::format(
                     "Cannot construct %s: form dto type %s does not match handler dto type %s",
-                    __METHOD__, $formDtoMapping->getDtoType(), $handler->getDtoType()
+                    __METHOD__, $formDtoMapping->getDtoType() ?: 'null', $handler->getDtoType() ?: 'null'
             );
         }
 

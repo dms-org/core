@@ -3,8 +3,13 @@
 namespace Iddigital\Cms\Core\Common\Crud\Definition;
 
 use Iddigital\Cms\Core\Auth\IAuthSystem;
+use Iddigital\Cms\Core\Common\Crud\Action\Object\IObjectAction;
 use Iddigital\Cms\Core\Common\Crud\Definition\Action\ObjectActionDefiner;
-use Iddigital\Cms\Core\Model\IObjectSet;
+use Iddigital\Cms\Core\Common\Crud\Definition\Table\SummaryTableDefinition;
+use Iddigital\Cms\Core\Exception\InvalidArgumentException;
+use Iddigital\Cms\Core\Model\IEntitySet;
+use Iddigital\Cms\Core\Model\Object\FinalizedClassDefinition;
+use Iddigital\Cms\Core\Model\Object\TypedObject;
 use Iddigital\Cms\Core\Module\Definition\ModuleDefinition;
 use Iddigital\Cms\Core\Module\ITableDisplay;
 
@@ -21,7 +26,12 @@ class ReadModuleDefinition extends ModuleDefinition
     protected $classType;
 
     /**
-     * @var IObjectSet
+     * @var FinalizedClassDefinition
+     */
+    protected $class;
+
+    /**
+     * @var IEntitySet
      */
     protected $dataSource;
 
@@ -29,6 +39,11 @@ class ReadModuleDefinition extends ModuleDefinition
      * @var callable
      */
     protected $labelObjectCallback;
+
+    /**
+     * @var callable
+     */
+    protected $crudFormDefinitionCallback;
 
     /**
      * @var ITableDisplay
@@ -39,17 +54,34 @@ class ReadModuleDefinition extends ModuleDefinition
      * ReadModuleDefinition constructor.
      *
      * @param IAuthSystem $authSystem
-     * @param IObjectSet  $dataSource
+     * @param IEntitySet  $dataSource
+     *
+     * @throws InvalidArgumentException
      */
-    public function __construct(IAuthSystem $authSystem, IObjectSet $dataSource)
+    public function __construct(IAuthSystem $authSystem, IEntitySet $dataSource)
     {
         parent::__construct($authSystem);
         $this->dataSource = $dataSource;
         $this->classType  = $this->dataSource->getObjectType();
+
+
+        if (!is_a($this->classType, TypedObject::class, true)) {
+            throw InvalidArgumentException::format(
+                    'Class type from data source must be an instance of %s, %s given',
+                    TypedObject::class, $this->classType
+            );
+        }
+
+        /** @var string|TypedObject $classType */
+        $classType   = $this->classType;
+        $this->class = $classType::definition();
     }
 
     /**
      * Defines an action that operates on an object from the data source.
+     *
+     * This creates a parameterized action that with a staged form
+     * with the fist form stage loading the entity
      *
      * @param string $name
      *
@@ -57,8 +89,14 @@ class ReadModuleDefinition extends ModuleDefinition
      */
     public function objectAction($name)
     {
-        return $this->action($name)
-                ->
+        return new ObjectActionDefiner(
+                $this->dataSource,
+                $this->authSystem,
+                $name,
+                function (IObjectAction $action) {
+                    $this->actions[$action->getName()] = $action;
+                }
+        );
     }
 
     /**
@@ -72,6 +110,32 @@ class ReadModuleDefinition extends ModuleDefinition
         return new LabelObjectStrategyDefiner($this->classType, function (callable $labelObjectCallback) {
             $this->labelObjectCallback = $labelObjectCallback;
         });
+    }
+
+    /**
+     * Defines the object details form.
+     *
+     * The callback is passed an instance of {@see CrudFormDefinition} and the
+     * object instance of which the details are referring.
+     *
+     * Example:
+     * <code>
+     * $module->crudForm(function (CrudFormDefinition $form, Person $person = null) {
+     *      $form->section('Details', [
+     *              $form->field(Field::name('name')->label('Label')->string()->required())
+     *                      ->bindToProperty('name'),
+     *              // ...
+     *      ]);
+     * });
+     * </code>
+     *
+     * @param callable $formDefinitionCallback
+     *
+     * @return void
+     */
+    public function crudForm(callable $formDefinitionCallback)
+    {
+        $this->crudFormDefinitionCallback = $formDefinitionCallback;
     }
 
     /**
@@ -90,7 +154,7 @@ class ReadModuleDefinition extends ModuleDefinition
      */
     public function summaryTable(callable $summaryTableDefinitionCallback)
     {
-        $definition = new SummaryTableDefinition($this);
+        $definition = new SummaryTableDefinition($this, $this->class, $this->dataSource);
         $summaryTableDefinitionCallback($definition);
 
         $this->summaryTable = $definition->finalize();

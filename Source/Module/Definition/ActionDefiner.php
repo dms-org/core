@@ -35,32 +35,32 @@ class ActionDefiner
     /**
      * @var IAuthSystem
      */
-    private $authSystem;
+    protected $authSystem;
 
     /**
      * @var string
      */
-    private $name;
+    protected $name;
 
     /**
      * @var callable
      */
-    private $callback;
+    protected $callback;
 
     /**
      * @var callable|null
      */
-    private $formDtoMappingCallback = null;
+    protected $formDtoMappingCallback = null;
 
     /**
      * @var IPermission[]
      */
-    private $requiredPermissions = [];
+    protected $requiredPermissions = [];
 
     /**
      * @var string|null
      */
-    private $returnDtoType = null;
+    protected $returnDtoType = null;
 
     /**
      * ActionDefiner constructor.

@@ -1,6 +1,6 @@
 <?php
 
-namespace Iddigital\Cms\Core\Common\Crud\Action;
+namespace Iddigital\Cms\Core\Common\Crud\Action\Object;
 
 use Iddigital\Cms\Core\Exception\InvalidArgumentException;
 use Iddigital\Cms\Core\Model\IDataTransferObject;

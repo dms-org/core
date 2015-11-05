@@ -3,7 +3,9 @@
 namespace Iddigital\Cms\Core\Common\Crud\Dream;
 
 use Iddigital\Cms\Core\Auth\IAuthSystem;
+use Iddigital\Cms\Core\Common\Crud\Definition\Form\CrudFormDefinition;
 use Iddigital\Cms\Core\Common\Crud\Definition\ReadModuleDefinition;
+use Iddigital\Cms\Core\Common\Crud\Definition\Table\SummaryTableDefinition;
 use Iddigital\Cms\Core\Common\Crud\ReadModule;
 use Iddigital\Cms\Core\Form\Builder\Form;
 use Iddigital\Cms\Core\Form\Field\Builder\Field;
@@ -95,24 +97,30 @@ class ReadModuleDream extends ReadModule
             });
         });
 
-        $module->summaryTable(function (ObjectTableDefinition $map) {
-            $map->column(Column::name('name')->label('Name')->components([
+        $module->summaryTable(function (SummaryTableDefinition $table) {
+            $table->column(Column::name('name')->label('Name')->components([
                     Field::name('first_name')->label('First Name')->string(),
                     Field::name('last_name')->label('Last Name')->string(),
             ]));
 
-            $map->property('firstName')->toComponent('name.first_name');
-            $map->property('lastName')->toComponent('name.last_name');
-            $map->property('age')->to(Field::name('age')->label('Age')->int());
+            $table->mapProperty('firstName')->toComponent('name.first_name');
+            $table->mapProperty('lastName')->toComponent('name.last_name');
+            $table->mapProperty('age')->to(Field::name('age')->label('Age')->int());
 
-            $map->view('Default')
-                    ->default()
+            $table->mapColumnToAction()
+
+            $table->view('default', 'Default')
+                    ->asDefault()
+                    ->loadAll()
                     ->orderByAsc(['product_name']);
 
-            $map->view('Categories')
+            $table->view('category', 'Category')
+                    ->loadAll()
                     ->orderByAsc(['category.name', 'category_sort_order'])
                     ->groupBy('category.id')
-                    ->withSortColumnPropertyAs('categorySortOrder');
+                    ->withReorder(function (Person $entity, $newOrderIndex) {
+                        $this->repository->reorderPersonInCategory($entity, $newOrderIndex);
+                    });
         });
     }
 }

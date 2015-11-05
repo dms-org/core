@@ -3,11 +3,11 @@
 namespace Iddigital\Cms\Core\Common\Crud\Dream;
 
 use Iddigital\Cms\Core\Auth\IAuthSystem;
-use Iddigital\Cms\Core\Common\Crud\ReadModule;
+use Iddigital\Cms\Core\Common\Crud\Definition\Form\CrudFormDefinition;
+use Iddigital\Cms\Core\Common\Crud\Definition\Table\SummaryTableDefinition;
 use Iddigital\Cms\Core\Form\Field\Builder\Field;
 use Iddigital\Cms\Core\Module\Definition\ModuleDefinition;
 use Iddigital\Cms\Core\Table\Builder\Column;
-use Iddigital\Cms\Core\Table\DataSource\Definition\ObjectTableDefinition;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>
@@ -34,9 +34,9 @@ class CrudModuleDream extends CrudModule
     {
         $module->name('people');
 
-        $module->labelObject()->fromProperty('first_name');
+        $module->labelObjects()->fromProperty('first_name');
         // Or
-        $module->labelObject()->fromCallback(function (Person $person) {
+        $module->labelObjects()->fromCallback(function (Person $person) {
             return $person->getFullName();
         });
 
@@ -86,24 +86,29 @@ class CrudModuleDream extends CrudModule
 
             if ($form->isEditForm()) {
                 //
+                $form->onSubmit(function (array $input) use ($person) {
+                    $person->foo = $input['data'];
+                });
             }
         });
 
-        $module->summaryTable(function (SummaryTableDefinition $map) {
-            $map->column(Column::name('name')->label('Name')->components([
+        $module->summaryTable(function (SummaryTableDefinition $table) {
+            $table->column(Column::name('name')->label('Name')->components([
                     Field::name('first_name')->label('First Name')->string(),
                     Field::name('last_name')->label('Last Name')->string(),
             ]));
 
-            $map->property('firstName')->toComponent('name.first_name');
-            $map->property('lastName')->toComponent('name.last_name');
-            $map->property('age')->to(Field::name('age')->label('Age')->int());
+            $table->mapProperty('firstName')->toComponent('name.first_name');
+            $table->mapProperty('lastName')->toComponent('name.last_name');
+            $table->mapProperty('age')->to(Field::name('age')->label('Age')->int());
 
-            $map->view('Default')
-                    ->default()
+            $table->view('default', 'Default')
+                    ->asDefault()
+                    ->loadAll()
                     ->orderByAsc(['product_name']);
 
-            $map->view('Categories')
+            $table->view('categories', 'Categories')
+                    ->loadAll()
                     ->orderByAsc(['category.name', 'category_sort_order'])
                     ->groupBy('category.id')
                     ->withReorder(function (Person $entity, $newOrderIndex) {
