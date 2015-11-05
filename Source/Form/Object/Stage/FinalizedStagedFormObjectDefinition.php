@@ -63,7 +63,7 @@ class FinalizedStagedFormObjectDefinition
      */
     public function forInstance(StagedFormObject $formObject)
     {
-        $self = new self($formObject, $this->defineStageCallbacks);
+        $self                  = new self($formObject, $this->defineStageCallbacks);
         $self->knownProperties = $this->knownProperties;
 
         return $self;
@@ -85,30 +85,32 @@ class FinalizedStagedFormObjectDefinition
     private function loadStagedForm(array $defineStageCallbacks)
     {
         /** @var FormStageCallback $firstCallback */
+        $currentStageIndex       = 0;
         $firstCallback           = array_shift($defineStageCallbacks);
         $previousStageDefinition = $firstCallback->defineFormStage($this->formObject);
         $firstStage              = new IndependentFormStage($previousStageDefinition->getForm());
-        $this->formDefinitions   = [$previousStageDefinition];
+        $this->formDefinitions   = [$currentStageIndex => $previousStageDefinition];
         $stages                  = [];
 
         foreach ($defineStageCallbacks as $defineStageCallback) {
+            $currentStageIndex++;
+
             $stages[] = new DependentFormStage(
-                    function (array $previousSubmission) use (
-                            $defineStageCallback,
-                            &$previousStageDefinition
-                    ) {
+                    function (array $previousSubmission) use ($defineStageCallback, $currentStageIndex) {
+                        $previousStageDefinition = $this->formDefinitions[$currentStageIndex - 1];
                         $this->loadSubmittedFieldsIntoObjectProperties($previousStageDefinition, $previousSubmission);
 
                         /** @var FinalizedFormObjectDefinition $formObjectDefinition */
-                        $formObjectDefinition    = $defineStageCallback->defineFormStage($this->formObject);
-                        $this->formDefinitions[] = $formObjectDefinition;
-                        $previousStageDefinition = $formObjectDefinition;
+                        $formObjectDefinition                      = $defineStageCallback->defineFormStage($this->formObject);
+                        $this->formDefinitions[$currentStageIndex] = $formObjectDefinition;
 
                         return $formObjectDefinition->getForm();
                     },
                     $defineStageCallback->getFieldsDefinedWithinStage(),
                     $defineStageCallback->getFieldsDependentOn()
             );
+
+            $currentStageIndex++;
         }
 
         $this->stagedForm = new StagedForm($firstStage, $stages);

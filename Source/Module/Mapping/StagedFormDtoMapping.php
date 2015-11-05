@@ -54,11 +54,11 @@ abstract class StagedFormDtoMapping implements IStagedFormDtoMapping
     /**
      * @inheritDoc
      */
-    public function withSubmittedFirstStage(array $firstStageSubmission)
+    public function withSubmittedFirstStage(array $processedFirstStageData)
     {
         $clone = clone $this;
 
-        $clone->stagedForm = $clone->stagedForm->submitFirstStage($firstStageSubmission);
+        $clone->stagedForm = $clone->stagedForm->withSubmittedFirstStage($processedFirstStageData);
 
         return $clone;
     }

@@ -2,6 +2,8 @@
 
 namespace Iddigital\Cms\Core\Tests\Module\Action;
 
+use Iddigital\Cms\Core\Exception\InvalidArgumentException;
+use Iddigital\Cms\Core\Form\InvalidFormSubmissionException;
 use Iddigital\Cms\Core\Model\Object\ArrayDataObject;
 use Iddigital\Cms\Core\Module\Action\ParameterizedAction;
 use Iddigital\Cms\Core\Module\Handler\CustomParameterizedActionHandler;
@@ -153,5 +155,39 @@ class ParameterizedActionTest extends ActionTest
 
         $actionWithoutFirstStage->run(['ints' => ['10', '20', '30']]);
         $this->assertTrue($called, 'Must call handler');
+
+        $this->assertThrows(function () use ($action) {
+            $action->submitFirstStage(['length' => 'abc']);
+        }, InvalidFormSubmissionException::class);
+    }
+
+    public function testWithSubmittedFirstStageReturnsEquivalentAction()
+    {
+        $called = false;
+        $action = new ParameterizedAction(
+                'name',
+                $this->mockAuth(),
+                [],
+                new ArrayDataObjectFormMapping(new ArrayOfIntsStagedForm()),
+                new CustomParameterizedActionHandler(function (ArrayDataObject $form) use (&$called) {
+                    $this->assertSame(3, $form['length']);
+                    $this->assertSame([10, 20, 30], $form['ints']);
+                    $called = true;
+                })
+        );
+
+        $this->assertSame(2, $action->getStagedForm()->getAmountOfStages());
+
+        $actionWithoutFirstStage = $action->withSubmittedFirstStage(['length' => 3]);
+
+        $this->assertInstanceOf(ParameterizedAction::class, $actionWithoutFirstStage);
+        $this->assertSame(1, $actionWithoutFirstStage->getStagedForm()->getAmountOfStages());
+
+        $actionWithoutFirstStage->run(['ints' => ['10', '20', '30']]);
+        $this->assertTrue($called, 'Must call handler');
+
+        $this->assertThrows(function () use ($action) {
+            $action->withSubmittedFirstStage(['length' => '3 ']);
+        }, InvalidArgumentException::class);
     }
 }

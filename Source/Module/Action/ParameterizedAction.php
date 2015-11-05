@@ -3,6 +3,9 @@
 namespace Iddigital\Cms\Core\Module\Action;
 
 use Iddigital\Cms\Core\Auth\IAuthSystem;
+use Iddigital\Cms\Core\Auth\UserForbiddenException;
+use Iddigital\Cms\Core\Exception\InvalidArgumentException;
+use Iddigital\Cms\Core\Exception\InvalidOperationException;
 use Iddigital\Cms\Core\Exception\TypeMismatchException;
 use Iddigital\Cms\Core\Form;
 use Iddigital\Cms\Core\Form\IStagedForm;
@@ -87,9 +90,19 @@ class ParameterizedAction extends Action implements IParameterizedAction
      */
     public function submitFirstStage(array $data)
     {
+        return $this->withSubmittedFirstStage(
+                $this->formDtoMapping->getStagedForm()->getFirstForm()->process($data)
+        );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function withSubmittedFirstStage(array $processedData)
+    {
         $clone = clone $this;
 
-        $clone->formDtoMapping = $clone->formDtoMapping->withSubmittedFirstStage($data);
+        $clone->formDtoMapping = $clone->formDtoMapping->withSubmittedFirstStage($processedData);
         $clone->stagedForm     = $clone->formDtoMapping->getStagedForm();
 
         return $clone;

@@ -41,11 +41,12 @@ interface IStagedFormDtoMapping
 
     /**
      * Returns an equivalent dto mapping with the first stage of
-     * the form submitted with the supplied data.
+     * the form submitted with the supplied data that is already
+     * in the correct format.
      *
-     * @param array $firstStageSubmission
+     * @param array $processedFirstStageData
      *
      * @return IStagedFormDtoMapping|static
      */
-    public function withSubmittedFirstStage(array $firstStageSubmission);
+    public function withSubmittedFirstStage(array $processedFirstStageData);
 }

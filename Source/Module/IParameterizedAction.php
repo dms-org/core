@@ -38,7 +38,6 @@ interface IParameterizedAction extends IAction
      *
      * @return IDataTransferObject|null
      * @throws UserForbiddenException if the authenticated user does not have the required permissions.
-     * @throws InvalidArgumentException if the form is invalid
      * @throws InvalidFormSubmissionException if the form data is invalid
      */
     public function run(array $data);
@@ -51,9 +50,24 @@ interface IParameterizedAction extends IAction
      *
      * @return static
      * @throws UserForbiddenException if the authenticated user does not have the required permissions.
-     * @throws InvalidArgumentException if the form is invalid
      * @throws InvalidFormSubmissionException if the form data is invalid
      * @throws InvalidOperationException If there is only one stage
      */
     public function submitFirstStage(array $data);
+
+    /**
+     * Returns an equivalent parameterized action with the first stage
+     * of the form filled out with the supplied processed data.
+     *
+     * This will *not* process the data through the form and is expected
+     * to be in the correct format.
+     *
+     * @param array $processedData
+     *
+     * @return static
+     * @throws UserForbiddenException if the authenticated user does not have the required permissions.
+     * @throws InvalidArgumentException If processed form data is invalid
+     * @throws InvalidOperationException If there is only one stage
+     */
+    public function withSubmittedFirstStage(array $processedData);
 }
