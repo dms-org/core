@@ -2,6 +2,7 @@
 
 namespace Iddigital\Cms\Core\Table\DataSource;
 
+use Iddigital\Cms\Core\Model\Criteria\NestedProperty;
 use Iddigital\Cms\Core\Model\IObjectSet;
 use Iddigital\Cms\Core\Model\IObjectSetWithPartialLoadSupport;
 use Iddigital\Cms\Core\Model\ITypedObject;
@@ -89,6 +90,20 @@ class ObjectTableDataSource extends TableDataSource
 
             foreach ($objects as $key => $object) {
                 $objectProperties[$key] = $object->toArray();
+            }
+
+            // Load nested properties from object instances, eg 'some.nested.value'
+            foreach ($this->definition->getPropertyComponentIdMap() as $propertyName => $componentId) {
+                if (strpos($propertyName, '.') !== false) {
+                    $propertyGetter = NestedProperty::parsePropertyName(
+                            $this->definition->getClass(),
+                            $propertyName
+                    )->makePropertyGetterCallable();
+
+                    foreach ($objects as $key => $object) {
+                        $objectProperties[$key][$propertyName] = $propertyGetter($object);
+                    }
+                }
             }
         }
 

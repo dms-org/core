@@ -2,6 +2,7 @@
 
 namespace Iddigital\Cms\Core\Table\DataSource\Definition;
 
+use Iddigital\Cms\Core\Model\Criteria\NestedProperty;
 use Iddigital\Cms\Core\Model\Object\FinalizedClassDefinition;
 use Iddigital\Cms\Core\Table\IColumn;
 use Iddigital\Cms\Core\Table\TableStructure;
@@ -58,7 +59,7 @@ class ObjectTableDefinition
      */
     public function property($propertyName)
     {
-        $this->class->getProperty($propertyName);
+        NestedProperty::parsePropertyName($this->class, $propertyName);
 
         return new ColumnMappingDefiner(
                 function (IColumn $column) use ($propertyName) {
