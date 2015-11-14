@@ -40,7 +40,7 @@ class CrudModuleDream extends CrudModule
             return $person->getFullName();
         });
 
-        $module->crudForm(function (CrudFormDefinition $form, Person $person = null) {
+        $module->crudForm(function (CrudFormDefinition $form) {
             $form->section('Details', [
                 //
                 $form->field(Field::name('first_name')->label('First Name')->string()->required())
@@ -53,7 +53,7 @@ class CrudModuleDream extends CrudModule
                         ->bindToProperty('age'),
             ]);
 
-            $form->dependentOn(['age'], function (CrudFormDefinition $form, array $data) use ($person) {
+            $form->dependentOn(['age'], function (CrudFormDefinition $form, array $data) {
                 if ($data['age'] > 50) {
                     $form->section('Retirement', [
                         //
@@ -86,7 +86,7 @@ class CrudModuleDream extends CrudModule
 
             if ($form->isEditForm()) {
                 //
-                $form->onSubmit(function (array $input) use ($person) {
+                $form->onSubmit(function (Person $person, array $input) {
                     $person->foo = $input['data'];
                 });
             }

@@ -41,11 +41,24 @@ class ObjectFormObjectMapping extends ObjectActionFormMapping
     public function mapFormSubmissionToDto(array $submission)
     {
         $stagedFormObject = $this->stagedFormObject->submitNew($submission);
-        $this->stagedFormObject->with
 
         return new ObjectActionParameter(
                 $stagedFormObject->getObject(),
                 $stagedFormObject
         );
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function withSubmittedFirstStage(array $firstStageSubmission)
+    {
+        $clone = parent::withSubmittedFirstStage($firstStageSubmission);
+
+        $clone->stagedFormObject = $clone->getStagedForm();
+
+        return $clone;
+    }
+
+
 }

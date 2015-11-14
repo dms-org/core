@@ -10,6 +10,7 @@ use Iddigital\Cms\Core\Common\Crud\Action\Object\Mapping\ArrayObjectActionFormMa
 use Iddigital\Cms\Core\Common\Crud\Action\Object\Mapping\ObjectFormObjectMapping;
 use Iddigital\Cms\Core\Common\Crud\Action\Object\Mapping\WrapperObjectActionFormMapping;
 use Iddigital\Cms\Core\Common\Crud\Action\Object\ObjectAction;
+use Iddigital\Cms\Core\Common\Crud\Form\ObjectForm;
 use Iddigital\Cms\Core\Common\Crud\Form\ObjectStagedFormObject;
 use Iddigital\Cms\Core\Exception\InvalidArgumentException;
 use Iddigital\Cms\Core\Form\Builder\Form as FormBuilder;
@@ -47,9 +48,7 @@ class ObjectActionDefiner extends ActionDefiner
     {
         parent::__construct($authSystem, $name, $callback);
 
-        $this->objectFormStage = Form::create()->section('Object', [
-                ObjectStagedFormObject::objectField(Field::create(), $dataSource)
-        ]);
+        $this->objectFormStage = ObjectForm::build($dataSource);
     }
 
 
@@ -119,7 +118,7 @@ class ObjectActionDefiner extends ActionDefiner
                 /** @var IStagedFormDtoMapping $innerMapping */
                 $innerMapping = $innerCallback($handlerParameterType);
 
-                return new WrapperObjectActionFormMapping($this->objectFormStage->asStagedForm(), $innerMapping);
+                return new WrapperObjectActionFormMapping($this->objectFormStage, $innerMapping);
             };
         }
 
@@ -157,7 +156,7 @@ class ObjectActionDefiner extends ActionDefiner
         }
 
         if (!$this->formDtoMappingCallback) {
-            $formMapping = new WrapperObjectActionFormMapping($this->objectFormStage->asStagedForm());
+            $formMapping = new WrapperObjectActionFormMapping($this->objectFormStage);
         } else {
             $formMapping = call_user_func($this->formDtoMappingCallback, $handler->getDtoType());
         }

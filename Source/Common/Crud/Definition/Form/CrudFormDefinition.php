@@ -2,7 +2,11 @@
 
 namespace Iddigital\Cms\Core\Common\Crud\Definition\Form;
 
+use Iddigital\Cms\Core\Common\Crud\Action\Object\IObjectAction;
 use Iddigital\Cms\Core\Common\Crud\Form\FormWithBinding;
+use Iddigital\Cms\Core\Common\Crud\Form\ObjectForm;
+use Iddigital\Cms\Core\Common\Crud\ICrudModule;
+use Iddigital\Cms\Core\Common\Crud\IReadModule;
 use Iddigital\Cms\Core\Exception\InvalidArgumentException;
 use Iddigital\Cms\Core\Exception\InvalidOperationException;
 use Iddigital\Cms\Core\Form\Binding\IFieldBinding;
@@ -13,8 +17,11 @@ use Iddigital\Cms\Core\Form\IFormSection;
 use Iddigital\Cms\Core\Form\IFormStage;
 use Iddigital\Cms\Core\Form\Stage\DependentFormStage;
 use Iddigital\Cms\Core\Form\Stage\IndependentFormStage;
+use Iddigital\Cms\Core\Form\StagedForm;
+use Iddigital\Cms\Core\Model\IEntitySet;
 use Iddigital\Cms\Core\Model\Object\FinalizedClassDefinition;
 use Iddigital\Cms\Core\Util\Debug;
+use Iddigital\Cms\Core\Util\Reflection;
 
 /**
  * The CRUD form definition class.
@@ -22,16 +29,15 @@ use Iddigital\Cms\Core\Util\Debug;
  * Provides a readable API for definition forms bound to
  * objects, for creation, viewing and updating.
  *
- * This constructs a staged form contains instances of
- * @see    FormWithBinding
+ * This constructs a staged form contains instances of {@see FormWithBinding}
  *
  * @author Elliot Levin <elliotlevin@hotmail.com>
  */
 class CrudFormDefinition
 {
-    const MODE_DETAILS = 'details';
-    const MODE_CREATE = 'create';
-    const MODE_EDIT = 'edit';
+    const MODE_DETAILS = IReadModule::DETAILS_ACTION;
+    const MODE_CREATE = ICrudModule::CREATE_ACTION;
+    const MODE_EDIT = ICrudModule::EDIT_ACTION;
 
     protected static $modes = [self::MODE_DETAILS, self::MODE_CREATE, self::MODE_EDIT];
 
@@ -78,13 +84,14 @@ class CrudFormDefinition
     /**
      * CrudFormDefinition constructor.
      *
+     * @param IEntitySet               $dataSource
      * @param FinalizedClassDefinition $class
      * @param string                   $mode
      * @param bool                     $isDependent
      *
      * @throws InvalidArgumentException
      */
-    public function __construct(FinalizedClassDefinition $class, $mode, $isDependent = false)
+    public function __construct(IEntitySet $dataSource, FinalizedClassDefinition $class, $mode, $isDependent = false)
     {
         if (!in_array($mode, self::$modes, true)) {
             throw InvalidArgumentException::format(
@@ -96,6 +103,10 @@ class CrudFormDefinition
         $this->class       = $class;
         $this->mode        = $mode;
         $this->isDependent = $isDependent;
+
+        if ($this->mode !== self::MODE_CREATE) {
+            $this->stages[] = new IndependentFormStage(ObjectForm::build($dataSource));
+        }
     }
 
     /**
@@ -200,11 +211,13 @@ class CrudFormDefinition
     /**
      * Defines a section of the form that is dependent on other fields.
      *
-     * The supplied callback will be passed the values for the dependent fields.
+     * The supplied callback will be passed the values for the dependent fields
+     * as the second parameter and the object instance as the third parameter or
+     * NULL if it is a create form.
      *
      * Example:
      * <code>
-     * $form->depdendentOn(['name'], function (CrudFormDefinition $form, array $input) use ($object) {
+     * $form->dependentOn(['name'], function (CrudFormDefinition $form, array $input, Person $object = null) {
      *      if ($input['name'] === 'John') {
      *          // ...
      *      } else {
@@ -227,21 +240,68 @@ class CrudFormDefinition
             );
         }
 
-        $this->enterNewStage();
+        $this->finishCurrentStage();
+
+        // If the callback requires a third parameter, this will be entity instance
+        // to which the form is bound to. If so, ensure that it is marked as dependent
+        // on the object id field.
+        if (Reflection::fromCallable($dependentStageDefineCallback)->getNumberOfParameters() > 2 && !$this->isCreateForm()) {
+            $previousFieldNames[] = IObjectAction::OBJECT_FIELD_NAME;
+        }
 
         $this->stages[] = new DependentFormStage(function (array $previousData) use ($dependentStageDefineCallback) {
             $this->isDependent = true;
-            $dependentStageDefineCallback($this, $previousData);
+            $dependentStageDefineCallback(
+                    $this,
+                    $previousData,
+                    isset($previousData[IObjectAction::OBJECT_FIELD_NAME])
+                            ? $previousData[IObjectAction::OBJECT_FIELD_NAME]
+                            : null
+            );
             $this->isDependent = false;
 
             $form = $this->buildFormForCurrentStage();
             $this->exitStage();
 
             return $form;
-        }, null, $previousFieldNames);
+        }, null, array_unique($previousFieldNames));
     }
 
-    protected function enterNewStage()
+    /**
+     * Defines a section of the form that is dependent on the object which the form is bound to.
+     *
+     * The supplied callback will be passed the object instance as the second parameter.
+     *
+     * NOTE: This will ignore the fields defined in this section if it is a create form.
+     *
+     * Example:
+     * <code>
+     * $form->dependentOnObject(function (CrudFormDefinition $form, Person $person) {
+     *      if ($person->isAdmin()) {
+     *          // ...
+     *      } else {
+     *          // ...
+     *      }
+     * });
+     * </code>
+     *
+     * @param callable $dependentStageDefineCallback
+     *
+     * @return void
+     * @throws InvalidOperationException
+     */
+    public function dependentOnObject(callable $dependentStageDefineCallback)
+    {
+        if ($this->isCreateForm()) {
+            return;
+        }
+
+        $this->dependentOn([], function (CrudFormDefinition $definition, array $previousData, $object) use ($dependentStageDefineCallback) {
+            $dependentStageDefineCallback($definition, $object);
+        });
+    }
+
+    protected function finishCurrentStage()
     {
         if ($this->currentStageSections) {
             $this->stages[] = new IndependentFormStage($this->buildFormForCurrentStage());
@@ -271,9 +331,11 @@ class CrudFormDefinition
      * This will be executed when the form is submitted
      * after the form data has been bound to the object.
      *
+     * This will NOT be called on a details form.
+     *
      * Example:
      * <code>
-     * $form->onSubmit(function (array $input) use ($object) {
+     * $form->onSubmit(function (Person $object, array $input) {
      *      $object->doSomething($input['data']);
      * });
      * </code>
@@ -285,5 +347,24 @@ class CrudFormDefinition
     public function onSubmit(callable $callback)
     {
         $this->onSubmitCallbacks[] = $callback;
+    }
+
+    /**
+     * @return FinalizedCrudFormDefinition
+     */
+    public function finalize()
+    {
+        $this->finishCurrentStage();
+
+        $stages     = $this->stages;
+        $firstStage = array_shift($stages);
+
+        $stagedForm = new StagedForm($firstStage, $stages);
+
+        return new FinalizedCrudFormDefinition(
+                $this->mode,
+                $stagedForm,
+                $this->onSubmitCallbacks
+        );
     }
 }

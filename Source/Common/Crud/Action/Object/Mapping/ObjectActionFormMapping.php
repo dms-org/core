@@ -20,7 +20,7 @@ abstract class ObjectActionFormMapping extends StagedFormDtoMapping implements I
     /**
      * @var string|null
      */
-    private $dataDtoType;
+    protected $dataDtoType;
 
     /**
      * @inheritDoc

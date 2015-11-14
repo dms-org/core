@@ -10,9 +10,7 @@ use Iddigital\Cms\Core\Common\Crud\ReadModule;
 use Iddigital\Cms\Core\Form\Builder\Form;
 use Iddigital\Cms\Core\Form\Field\Builder\Field;
 use Iddigital\Cms\Core\Model\Object\ArrayDataObject;
-use Iddigital\Cms\Core\Module\Definition\ModuleDefinition;
 use Iddigital\Cms\Core\Table\Builder\Column;
-use Iddigital\Cms\Core\Table\DataSource\Definition\ObjectTableDefinition;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>
@@ -60,7 +58,7 @@ class ReadModuleDream extends ReadModule
                     $this->repository->save($person);
                 });
 
-        $module->crudForm(function (CrudFormDefinition $form, Person $person = null) {
+        $module->crudForm(function (CrudFormDefinition $form) {
             $form->section('Details', [
                 //
                 $form->field(Field::name('first_name')->label('First Name')->string()->required())
@@ -73,8 +71,31 @@ class ReadModuleDream extends ReadModule
                         ->bindToProperty('age'),
             ]);
 
-            $form->dependentOn(['age'], function (CrudFormDefinition $form, array $data) use ($person) {
+            $form->dependentOn(['age'], function (CrudFormDefinition $form, array $data) {
                 if ($data['age'] > 50) {
+                    $form->section('Retirement', [
+                        //
+                        $form->field(Field::name('pension')->label('Pension')->bool()->required())
+                                ->bindToProperty('pension'),
+                    ]);
+                } else {
+                    $form->section('Job', [
+                        //
+                        $form->field(Field::name('job')->label('Job')->string()->required())
+                                ->bindToCallbacks(function (Person $person) {
+                                    return $person->job;
+                                }, function (Person $person, $job) {
+                                    $person->job = $job;
+                                }),
+                        // Or
+                        $form->field(Field::name('job')->label('Job')->string()->required())
+                                ->bindToGetSetMethods('getJob', 'setJob'),
+                    ]);
+                }
+            });
+
+            $form->dependentOnObject(function (CrudFormDefinition $form, Person $person = null) {
+                if ($person) {
                     $form->section('Retirement', [
                         //
                         $form->field(Field::name('pension')->label('Pension')->bool()->required())
@@ -107,8 +128,6 @@ class ReadModuleDream extends ReadModule
             $table->mapProperty('lastName')->toComponent('name.last_name');
             $table->mapProperty('age')->to(Field::name('age')->label('Age')->int());
 
-            $table->mapColumnToAction()
-
             $table->view('default', 'Default')
                     ->asDefault()
                     ->loadAll()
@@ -116,8 +135,8 @@ class ReadModuleDream extends ReadModule
 
             $table->view('category', 'Category')
                     ->loadAll()
-                    ->orderByAsc(['category.name', 'category_sort_order'])
                     ->groupBy('category.id')
+                    ->orderByAsc(['category.name', 'category_sort_order'])
                     ->withReorder(function (Person $entity, $newOrderIndex) {
                         $this->repository->reorderPersonInCategory($entity, $newOrderIndex);
                     });

@@ -2,6 +2,7 @@
 
 namespace Iddigital\Cms\Core\Common\Crud\Table;
 
+use Iddigital\Cms\Core\Common\Crud\Action\Table\IReorderAction;
 use Iddigital\Cms\Core\Exception\InvalidArgumentException;
 use Iddigital\Cms\Core\Module\ITableDisplay;
 

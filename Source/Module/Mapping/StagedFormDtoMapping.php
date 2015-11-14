@@ -16,12 +16,12 @@ abstract class StagedFormDtoMapping implements IStagedFormDtoMapping
     /**
      * @var IStagedForm
      */
-    private $stagedForm;
+    protected $stagedForm;
 
     /**
      * @var string
      */
-    private $dtoType;
+    protected $dtoType;
 
     /**
      * FormDtoMapping constructor.

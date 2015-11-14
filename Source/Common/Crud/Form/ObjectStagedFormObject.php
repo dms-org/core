@@ -42,22 +42,6 @@ abstract class ObjectStagedFormObject extends StagedFormObject
     }
 
     /**
-     * Builds the field to load an entity from the supplied source.
-     *
-     * @param FieldNameBuilder $fieldBuilder
-     * @param IEntitySet       $dataSource
-     *
-     * @return Field
-     */
-    final public static function objectField(FieldNameBuilder $fieldBuilder, IEntitySet $dataSource)
-    {
-        return $fieldBuilder
-                ->name(IObjectAction::OBJECT_FIELD_NAME)
-                ->label('Object')
-                ->entityFrom($dataSource);
-    }
-
-    /**
      * Defines the structure of this class.
      *
      * @param ClassDefinition $class
@@ -86,7 +70,7 @@ abstract class ObjectStagedFormObject extends StagedFormObject
     {
         $form->stage(function (FormObjectDefinition $form) {
             $form->section('Object', [
-                    self::objectField($form->field($this->object), $this->dataSource)
+                    ObjectForm::objectField($form->field($this->object), $this->dataSource)
             ]);
         });
 

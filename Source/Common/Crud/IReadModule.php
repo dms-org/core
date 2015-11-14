@@ -3,11 +3,11 @@
 namespace Iddigital\Cms\Core\Common\Crud;
 
 use Iddigital\Cms\Core\Common\Crud\Action\Object\IObjectAction;
+use Iddigital\Cms\Core\Common\Crud\Table\ISummaryTable;
 use Iddigital\Cms\Core\Exception\InvalidArgumentException;
 use Iddigital\Cms\Core\Exception\InvalidOperationException;
 use Iddigital\Cms\Core\Model\IObjectSet;
 use Iddigital\Cms\Core\Module\IModule;
-use Iddigital\Cms\Core\Module\ITableDisplay;
 
 /**
  * The interface for a read module.
@@ -37,6 +37,13 @@ interface IReadModule extends IModule
     public function getObjectSource();
 
     /**
+     * Gets the table display for the summary table.
+     *
+     * @return ISummaryTable
+     */
+    public function getSummaryTable();
+
+    /**
      * Gets the defined object actions.
      *
      * @return IObjectAction[]
@@ -62,13 +69,6 @@ interface IReadModule extends IModule
      * @throws InvalidArgumentException
      */
     public function getObjectAction($name);
-
-    /**
-     * Gets the table display for the summary table.
-     *
-     * @return ITableDisplay
-     */
-    public function getSummaryTable();
 
     /**
      * Returns whether the modules allows view in details.

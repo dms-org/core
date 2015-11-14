@@ -85,7 +85,9 @@ class NestedProperty
 
             $properties[] = $property;
 
-            if ($key < $partsCount - 1) {
+            $notLastProperty = $key < $partsCount - 1;
+
+            if ($notLastProperty) {
                 if ($property->getType()->isNullable()) {
                     $nullable = true;
                 }

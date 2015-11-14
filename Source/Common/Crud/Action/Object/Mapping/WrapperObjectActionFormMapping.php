@@ -5,6 +5,7 @@ namespace Iddigital\Cms\Core\Common\Crud\Action\Object\Mapping;
 use Iddigital\Cms\Core\Common\Crud\Action\Object\IObjectAction;
 use Iddigital\Cms\Core\Common\Crud\Action\Object\ObjectActionParameter;
 use Iddigital\Cms\Core\Form\Builder\StagedForm;
+use Iddigital\Cms\Core\Form\IForm;
 use Iddigital\Cms\Core\Form\InvalidFormSubmissionException;
 use Iddigital\Cms\Core\Form\IStagedForm;
 use Iddigital\Cms\Core\Model\IDataTransferObject;
@@ -19,9 +20,14 @@ use Iddigital\Cms\Core\Module\IStagedFormDtoMapping;
 class WrapperObjectActionFormMapping extends ObjectActionFormMapping
 {
     /**
-     * @var IStagedForm
+     * @var IStagedForm|null
      */
     private $objectForm;
+
+    /**
+     * @var array|null
+     */
+    private $objectData;
 
     /**
      * @var IStagedFormDtoMapping|null
@@ -31,10 +37,10 @@ class WrapperObjectActionFormMapping extends ObjectActionFormMapping
     /**
      * @inheritDoc
      */
-    public function __construct(IStagedForm $objectForm, IStagedFormDtoMapping $dataFormMapping = null)
+    public function __construct(IForm $objectForm, IStagedFormDtoMapping $dataFormMapping = null)
     {
         if ($dataFormMapping) {
-            $stagedForm  = StagedForm::fromExisting($objectForm)->embed($dataFormMapping->getStagedForm());
+            $stagedForm  = StagedForm::fromExisting($objectForm->asStagedForm())->embed($dataFormMapping->getStagedForm());
             $dataDtoType = $dataFormMapping->getDtoType();
         } else {
             $stagedForm  = $objectForm;
@@ -56,7 +62,10 @@ class WrapperObjectActionFormMapping extends ObjectActionFormMapping
      */
     public function mapFormSubmissionToDto(array $submission)
     {
-        $objectData = $this->objectForm->process($submission);
+        $objectData = $this->objectData
+                ? $this->objectData
+                : $this->objectForm->process($submission);
+
         $dataDto    = $this->dataFormMapping
                 ? $this->dataFormMapping->mapFormSubmissionToDto($submission)
                 : null;
@@ -66,4 +75,25 @@ class WrapperObjectActionFormMapping extends ObjectActionFormMapping
                 $dataDto
         );
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function withSubmittedFirstStage(array $firstStageSubmission)
+    {
+        /** @var self $clone */
+        $clone = clone $this;
+
+        if ($clone->objectData) {
+            $clone->dataFormMapping = $clone->dataFormMapping->withSubmittedFirstStage($firstStageSubmission);
+        } else {
+            $clone->objectData = $firstStageSubmission;
+        }
+
+        $clone->stagedForm = $clone->dataFormMapping->getStagedForm();
+
+        return $clone;
+    }
+
+
 }

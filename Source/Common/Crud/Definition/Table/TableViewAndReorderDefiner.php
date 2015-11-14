@@ -33,7 +33,7 @@ class TableViewAndReorderDefiner extends TableViewDefiner
      *
      * Example:
      * <code>
-     * ->withReorder(function (Person, $newIndex) {
+     * ->withReorder(function (Person $person, $newIndex) {
      *      $this->repository->reorderPersonInGroup($person, $newIndex);
      * });
      * </code>

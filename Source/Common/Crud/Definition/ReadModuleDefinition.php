@@ -5,8 +5,14 @@ namespace Iddigital\Cms\Core\Common\Crud\Definition;
 use Iddigital\Cms\Core\Auth\IAuthSystem;
 use Iddigital\Cms\Core\Common\Crud\Action\Object\IObjectAction;
 use Iddigital\Cms\Core\Common\Crud\Definition\Action\ObjectActionDefiner;
+use Iddigital\Cms\Core\Common\Crud\Definition\Form\CrudFormDefinition;
 use Iddigital\Cms\Core\Common\Crud\Definition\Table\SummaryTableDefinition;
+use Iddigital\Cms\Core\Common\Crud\Form\FormWithBinding;
+use Iddigital\Cms\Core\Common\Crud\IReadModule;
 use Iddigital\Cms\Core\Exception\InvalidArgumentException;
+use Iddigital\Cms\Core\Form\Builder\Form;
+use Iddigital\Cms\Core\Form\IForm;
+use Iddigital\Cms\Core\Model\IEntity;
 use Iddigital\Cms\Core\Model\IEntitySet;
 use Iddigital\Cms\Core\Model\Object\FinalizedClassDefinition;
 use Iddigital\Cms\Core\Model\Object\TypedObject;
@@ -43,7 +49,7 @@ class ReadModuleDefinition extends ModuleDefinition
     /**
      * @var callable
      */
-    protected $crudFormDefinitionCallback;
+    protected $detailsFormDefinition;
 
     /**
      * @var ITableDisplay
@@ -115,12 +121,11 @@ class ReadModuleDefinition extends ModuleDefinition
     /**
      * Defines the object details form.
      *
-     * The callback is passed an instance of {@see CrudFormDefinition} and the
-     * object instance of which the details are referring.
+     * The callback is passed an instance of {@see CrudFormDefinition}.
      *
      * Example:
      * <code>
-     * $module->crudForm(function (CrudFormDefinition $form, Person $person = null) {
+     * $module->crudForm(function (CrudFormDefinition $form) {
      *      $form->section('Details', [
      *              $form->field(Field::name('name')->label('Label')->string()->required())
      *                      ->bindToProperty('name'),
@@ -135,7 +140,38 @@ class ReadModuleDefinition extends ModuleDefinition
      */
     public function crudForm(callable $formDefinitionCallback)
     {
-        $this->crudFormDefinitionCallback = $formDefinitionCallback;
+        $definition = $this->loadCrudFormDefinition(CrudFormDefinition::MODE_DETAILS, $formDefinitionCallback);
+
+        $this->objectAction(IReadModule::DETAILS_ACTION)
+                ->authorize('')// TODO: Permission
+                ->returns(IForm::class)
+                ->handler(function (IEntity $entity) use ($definition) {
+                    $stages = $definition->getStagedForm()->withSubmittedFirstStage([
+                            IObjectAction::OBJECT_FIELD_NAME => $entity
+                    ]);
+
+                    $form         = Form::create();
+                    $previousData = [];
+
+                    foreach ($stages->getAllStages() as $stage) {
+                        /** @var FormWithBinding $currentStageForm */
+                        $currentStageForm = $stage->loadForm($previousData);
+                        $currentStageForm = $currentStageForm->getBinding()->getForm($entity);
+
+                        $form->embed($currentStageForm);
+                        $previousData += $currentStageForm->getInitialValues();
+                    }
+
+                    return $form->build();
+                });
+    }
+
+    protected function loadCrudFormDefinition($mode, callable $callback)
+    {
+        $definition = new CrudFormDefinition($this->dataSource, $this->class, $mode);
+        $callback($definition);
+
+        return $definition->finalize();
     }
 
     /**
@@ -143,8 +179,28 @@ class ReadModuleDefinition extends ModuleDefinition
      *
      * Example:
      * <code>
-     * ->summaryTable(function (SummaryTableDefinition $map) {
-     *      // TODO: example
+     * ->summaryTable(function (SummaryTableDefinition $table) {
+     *      $table->column(Column::name('name')->label('Name')->components([
+     *              Field::name('first_name')->label('First Name')->string(),
+     *              Field::name('last_name')->label('Last Name')->string(),
+     *      ]));
+     *
+     *      $table->mapProperty('firstName')->toComponent('name.first_name');
+     *      $table->mapProperty('lastName')->toComponent('name.last_name');
+     *      $table->mapProperty('age')->to(Field::name('age')->label('Age')->int());
+     *
+     *      $table->view('default', 'Default')
+     *              ->asDefault()
+     *              ->loadAll()
+     *              ->orderByAsc(['product_name']);
+     *
+     *      $table->view('category', 'Category')
+     *              ->loadAll()
+     *              ->groupBy('category.id')
+     *              ->orderByAsc(['category.name', 'category_sort_order'])
+     *              ->withReorder(function (Person $entity, $newOrderIndex) {
+     *                  $this->repository->reorderPersonInCategory($entity, $newOrderIndex);
+     *              });
      * });
      * </code>
      *

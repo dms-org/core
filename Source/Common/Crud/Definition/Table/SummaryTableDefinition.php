@@ -2,16 +2,16 @@
 
 namespace Iddigital\Cms\Core\Common\Crud\Definition\Table;
 
+use Iddigital\Cms\Core\Common\Crud\Action\Table\IReorderAction;
+use Iddigital\Cms\Core\Common\Crud\Action\Table\ReorderAction;
 use Iddigital\Cms\Core\Common\Crud\Definition\ReadModuleDefinition;
 use Iddigital\Cms\Core\Common\Crud\IReadModule;
+use Iddigital\Cms\Core\Common\Crud\Table\ISummaryTable;
+use Iddigital\Cms\Core\Common\Crud\Table\SummaryTable;
 use Iddigital\Cms\Core\Exception\InvalidOperationException;
-use Iddigital\Cms\Core\Form\Builder\Form;
-use Iddigital\Cms\Core\Form\Field\Builder\Field;
 use Iddigital\Cms\Core\Model\IObjectSet;
-use Iddigital\Cms\Core\Model\Object\ArrayDataObject;
 use Iddigital\Cms\Core\Model\Object\FinalizedClassDefinition;
 use Iddigital\Cms\Core\Module\Definition\Table\TableViewDefiner;
-use Iddigital\Cms\Core\Module\Table\TableDisplay;
 use Iddigital\Cms\Core\Table\DataSource\Definition\ColumnMappingDefiner;
 use Iddigital\Cms\Core\Table\DataSource\Definition\ObjectTableDefinition;
 use Iddigital\Cms\Core\Table\DataSource\ObjectTableDataSource;
@@ -54,6 +54,11 @@ class SummaryTableDefinition
      * @var TableViewDefiner[]
      */
     protected $viewDefiners = [];
+
+    /**
+     * @var IReorderAction[]
+     */
+    protected $viewNameReorderActionMap = [];
 
     /**
      * SummaryTableDefinition constructor.
@@ -165,14 +170,17 @@ class SummaryTableDefinition
 
     private function definerReorderAction($viewName, callable $reorderCallback)
     {
-        $this->moduleDefinition
-                ->objectAction(IReadModule::SUMMARY_TABLE . '.' . $viewName . '.reorder')
-                ->form(Form::create()->section('Reorder', [
-                        Field::name('new_index')->label('New Index')->int()->required()->greaterThan(0)
-                ]))
-                ->handler(function ($object, ArrayDataObject $data) use ($reorderCallback) {
-                    $reorderCallback($object, $data['new_index']);
-                });
+        $reorderActionName = IReadModule::SUMMARY_TABLE . '.' . $viewName . '.reorder';
+
+        $reorderAction = new ReorderAction(
+                $reorderActionName,
+                $this->moduleDefinition->getAuthSystem(),
+                [], // TODO: permissions
+                $reorderCallback
+        );
+
+        $this->viewNameReorderActionMap[$viewName] = $reorderAction;
+        $this->moduleDefinition->custom()->action($reorderAction);
     }
 
     private function finalizeTableStructure()
@@ -192,7 +200,7 @@ class SummaryTableDefinition
     /**
      * Finalizes the structure of the summary table.
      *
-     * @return TableDisplay
+     * @return ISummaryTable
      */
     public function finalize()
     {
@@ -203,6 +211,6 @@ class SummaryTableDefinition
             $views[] = $definer->finalize();
         }
 
-        return new TableDisplay(IReadModule::SUMMARY_TABLE, $dataSource, $views);
+        return new SummaryTable(IReadModule::SUMMARY_TABLE, $dataSource, $views, $this->viewNameReorderActionMap);
     }
 }

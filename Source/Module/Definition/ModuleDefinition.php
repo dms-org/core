@@ -7,12 +7,9 @@ use Iddigital\Cms\Core\Exception\InvalidOperationException;
 use Iddigital\Cms\Core\Module\Definition\Chart\ChartDefiner;
 use Iddigital\Cms\Core\Module\Definition\Table\TableDefiner;
 use Iddigital\Cms\Core\Module\Definition\Widget\WidgetLabelDefiner;
-use Iddigital\Cms\Core\Module\Definition\Widget\WidgetTypeDefiner;
 use Iddigital\Cms\Core\Module\IAction;
 use Iddigital\Cms\Core\Module\IChartDisplay;
 use Iddigital\Cms\Core\Module\ITableDisplay;
-use Iddigital\Cms\Core\Table\Chart\IChartDataSource;
-use Iddigital\Cms\Core\Table\ITableDataSource;
 use Iddigital\Cms\Core\Widget\IWidget;
 
 /**
@@ -60,6 +57,14 @@ class ModuleDefinition
     public function __construct(IAuthSystem $authSystem)
     {
         $this->authSystem = $authSystem;
+    }
+
+    /**
+     * @return IAuthSystem
+     */
+    public function getAuthSystem()
+    {
+        return $this->authSystem;
     }
 
     /**
@@ -128,6 +133,16 @@ class ModuleDefinition
         return new WidgetLabelDefiner($name, $this->tables, $this->charts, function (IWidget $widget) {
             $this->widgets[$widget->getName()] = $widget;
         });
+    }
+
+    /**
+     * Gets the fluent custom properties definer.
+     *
+     * @return CustomPropertiesDefiner
+     */
+    public function custom()
+    {
+        return new CustomPropertiesDefiner($this->actions, $this->tables, $this->charts);
     }
 
     /**
