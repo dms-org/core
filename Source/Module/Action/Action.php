@@ -35,7 +35,7 @@ abstract class Action implements IAction
     /**
      * @var IActionHandler
      */
-    private $handler;
+    protected $handler;
 
     /**
      * @var string|null
@@ -88,7 +88,7 @@ abstract class Action implements IAction
     /**
      * @return IActionHandler
      */
-    final public function getHandler()
+    public function getHandler()
     {
         return $this->handler;
     }

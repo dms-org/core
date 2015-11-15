@@ -151,9 +151,7 @@ class ModuleDefinition
      */
     public function finalize()
     {
-        if (!$this->name) {
-            throw InvalidOperationException::format('Cannot finalize module definition: name has not been defined');
-        }
+        $this->verifyCanBeFinalized();
 
         return new FinalizedModuleDefinition(
                 $this->name,
@@ -162,5 +160,16 @@ class ModuleDefinition
                 $this->charts,
                 $this->widgets
         );
+    }
+
+    /**
+     * @return void
+     * @throws InvalidOperationException
+     */
+    protected function verifyCanBeFinalized()
+    {
+        if (!$this->name) {
+            throw InvalidOperationException::format('Cannot finalize module definition: name has not been defined');
+        }
     }
 }

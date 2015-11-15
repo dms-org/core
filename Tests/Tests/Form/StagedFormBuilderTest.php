@@ -243,6 +243,26 @@ class StagedFormBuilderTest extends FormBuilderTestBase
         $this->assertSame($innerForm->getFirstStage(), $form->getStage(2));
     }
 
+    public function testEmbeddedStage()
+    {
+        $form = StagedForm::begin(
+                Form::create()
+                        ->section('First Stage', [
+                                Field::name('first')->label('Input')->string()
+                        ])
+        )->embedStage(
+                $innerFormStage = new IndependentFormStage(
+                        Form::create()
+                                ->section('Second Stage', [
+                                        Field::name('second')->label('Input')->string()
+                                ])->build()
+                )
+        )->build();
+
+        $this->assertCount(2, $form->getAllStages());
+        $this->assertSame($innerFormStage, $form->getStage(2));
+    }
+
     public function testFromExisting()
     {
         $innerForm = StagedForm::begin(

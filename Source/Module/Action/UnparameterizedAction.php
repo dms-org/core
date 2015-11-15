@@ -26,6 +26,15 @@ class UnparameterizedAction extends Action implements IUnparameterizedAction
         parent::__construct($name, $auth, $requiredPermissions, $handler);
     }
 
+
+    /**
+     * @return IUnparameterizedActionHandler
+     */
+    final public function getHandler()
+    {
+        return $this->handler;
+    }
+
     /**
      * {@inheritDoc}
      */

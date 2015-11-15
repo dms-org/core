@@ -3,9 +3,6 @@
 namespace Iddigital\Cms\Core\Module\Action;
 
 use Iddigital\Cms\Core\Auth\IAuthSystem;
-use Iddigital\Cms\Core\Auth\UserForbiddenException;
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Exception\InvalidOperationException;
 use Iddigital\Cms\Core\Exception\TypeMismatchException;
 use Iddigital\Cms\Core\Form;
 use Iddigital\Cms\Core\Form\IStagedForm;
@@ -53,6 +50,14 @@ class ParameterizedAction extends Action implements IParameterizedAction
         $this->formDtoMapping = $formDtoMapping;
     }
 
+
+    /**
+     * @return IParameterizedActionHandler
+     */
+    final public function getHandler()
+    {
+        return $this->handler;
+    }
 
     /**
      * {@inheritDoc}
