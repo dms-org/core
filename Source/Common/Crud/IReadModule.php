@@ -4,10 +4,10 @@ namespace Iddigital\Cms\Core\Common\Crud;
 
 use Iddigital\Cms\Core\Common\Crud\Action\Object\IObjectAction;
 use Iddigital\Cms\Core\Common\Crud\Table\ISummaryTable;
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Exception\InvalidOperationException;
 use Iddigital\Cms\Core\Model\IObjectSet;
+use Iddigital\Cms\Core\Module\IAction;
 use Iddigital\Cms\Core\Module\IModule;
+use Iddigital\Cms\Core\Module\IUnparameterizedAction;
 
 /**
  * The interface for a read module.
@@ -20,6 +20,10 @@ use Iddigital\Cms\Core\Module\IModule;
 interface IReadModule extends IModule
 {
     const SUMMARY_TABLE = 'summary-table';
+
+    const VIEW_PERMISSION = 'view';
+
+    const SUMMARY_TABLE_ACTION = 'summary-table';
     const DETAILS_ACTION = 'details';
 
     /**
@@ -66,9 +70,16 @@ interface IReadModule extends IModule
      * @param string $name
      *
      * @return IObjectAction
-     * @throws InvalidArgumentException
+     * @throws UnsupportedActionException
      */
     public function getObjectAction($name);
+
+    /**
+     * Gets the action to view the summary table.
+     *
+     * @return IUnparameterizedAction
+     */
+    public function getSummaryTableAction();
 
     /**
      * Returns whether the modules allows view in details.
@@ -81,7 +92,7 @@ interface IReadModule extends IModule
      * Gets view object details action.
      *
      * @return IObjectAction
-     * @throws InvalidOperationException
+     * @throws UnsupportedActionException
      */
     public function getDetailsAction();
 }

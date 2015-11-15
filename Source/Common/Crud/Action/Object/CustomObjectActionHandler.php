@@ -21,12 +21,16 @@ class CustomObjectActionHandler extends ObjectActionHandler
     /**
      * @param callable    $handler
      * @param string|null $returnDtoType
+     * @param string|null $objectType
+     * @param string|null $dataDtoType
      *
      * @throws InvalidHandlerClassException
      */
-    public function __construct(callable $handler, $returnDtoType = null)
+    public function __construct(callable $handler, $returnDtoType = null, $objectType = null, $dataDtoType = null)
     {
-        list($objectType, $dataDtoType) = $this->loadTypeHintsFromCallable($handler);
+        if (!$objectType || !$dataDtoType) {
+            list($objectType, $dataDtoType) = $this->loadTypeHintsFromCallable($handler);
+        }
 
         parent::__construct($objectType, $dataDtoType, $returnDtoType);
     }

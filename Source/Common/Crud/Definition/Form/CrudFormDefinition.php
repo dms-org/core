@@ -9,6 +9,7 @@ use Iddigital\Cms\Core\Common\Crud\ICrudModule;
 use Iddigital\Cms\Core\Common\Crud\IReadModule;
 use Iddigital\Cms\Core\Exception\InvalidArgumentException;
 use Iddigital\Cms\Core\Exception\InvalidOperationException;
+use Iddigital\Cms\Core\Exception\InvalidReturnValueException;
 use Iddigital\Cms\Core\Form\Binding\IFieldBinding;
 use Iddigital\Cms\Core\Form\Field\Builder\FieldBuilderBase;
 use Iddigital\Cms\Core\Form\FormSection;
@@ -20,6 +21,7 @@ use Iddigital\Cms\Core\Form\Stage\IndependentFormStage;
 use Iddigital\Cms\Core\Form\StagedForm;
 use Iddigital\Cms\Core\Model\IEntitySet;
 use Iddigital\Cms\Core\Model\Object\FinalizedClassDefinition;
+use Iddigital\Cms\Core\Model\Object\TypedObject;
 use Iddigital\Cms\Core\Util\Debug;
 use Iddigital\Cms\Core\Util\Reflection;
 
@@ -77,9 +79,19 @@ class CrudFormDefinition
     protected $currentStageFieldBindings = [];
 
     /**
+     * @var callable
+     */
+    protected $createObjectCallback;
+
+    /**
      * @var callable[]
      */
     protected $onSubmitCallbacks = [];
+
+    /**
+     * @var callable[]
+     */
+    protected $onSaveCallbacks = [];
 
     /**
      * CrudFormDefinition constructor.
@@ -107,6 +119,10 @@ class CrudFormDefinition
         if ($this->mode !== self::MODE_CREATE) {
             $this->stages[] = new IndependentFormStage(ObjectForm::build($dataSource));
         }
+
+        $this->createObjectCallback = function () use ($class) {
+            return $class->newCleanInstance();
+        };
     }
 
     /**
@@ -326,6 +342,55 @@ class CrudFormDefinition
     }
 
     /**
+     * Defines a callback to create new instances of the object.
+     * The callback can either return an instance or the class
+     * name of the object of which to construct.
+     *
+     * This is only called when a create form is submitted.
+     *
+     * Example:
+     * <code>
+     * $form->createObject(function (array $input) {
+     *      if ($input['type'] === 'new') {
+     *          return NewObject::class;
+     *          // Or
+     *          return new NewObject(...);
+     *      }
+     *
+     *      return DefaultObject::class;
+     * });
+     * </code>
+     *
+     * @param callable $callback
+     *
+     * @return void
+     */
+    public function createObject(callable $callback)
+    {
+        $this->createObjectCallback = function (array $input) use ($callback) {
+            $className = $this->class->getClassName();
+
+            /** @var TypedObject|string $instance */
+            $instance = $callback($input);
+
+            if (is_string($instance)) {
+                if (class_exists($instance) && is_a($instance, $className, true)) {
+                    $instance = $instance::definition()->newCleanInstance();
+                }
+            }
+
+            if (!($instance instanceof $className)) {
+                throw InvalidReturnValueException::format(
+                        'Invalid create object callback return value: expecting class compatible with %s, %s given',
+                        $className, is_string($instance) ? $instance : Debug::getType($instance)
+                );
+            }
+
+            return $instance;
+        };
+    }
+
+    /**
      * Defines an form submission callback.
      *
      * This will be executed when the form is submitted
@@ -350,6 +415,30 @@ class CrudFormDefinition
     }
 
     /**
+     * Defines an object save callback.
+     *
+     * This will be executed when the form is submitted
+     * after the object has been saved to the underlying data source.
+     *
+     * This will NOT be called on a details form.
+     *
+     * Example:
+     * <code>
+     * $form->onSave(function (Person $object, array $input) {
+     *      $this->sendEmailToAdmin($object);
+     * });
+     * </code>
+     *
+     * @param callable $callback
+     *
+     * @return void
+     */
+    public function onSave(callable $callback)
+    {
+        $this->onSaveCallbacks[] = $callback;
+    }
+
+    /**
      * @return FinalizedCrudFormDefinition
      */
     public function finalize()
@@ -364,7 +453,9 @@ class CrudFormDefinition
         return new FinalizedCrudFormDefinition(
                 $this->mode,
                 $stagedForm,
-                $this->onSubmitCallbacks
+                $this->createObjectCallback,
+                $this->onSubmitCallbacks,
+                $this->onSaveCallbacks
         );
     }
 }

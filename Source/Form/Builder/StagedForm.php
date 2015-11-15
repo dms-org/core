@@ -182,6 +182,20 @@ class StagedForm
     }
 
     /**
+     * Embeds the form stage within the current staged form.
+     *
+     * @param IFormStage $stage
+     *
+     * @return StagedForm
+     */
+    public function embedStage(IFormStage $stage)
+    {
+        $this->followingStages[] = $stage;
+
+        return $this;
+    }
+
+    /**
      * @param IForm|Form|callable $formStageArgument
      * @param string[]|null       $requiredFieldNames
      * @param string[]            $fieldNamesDefinedInStage

@@ -13,7 +13,7 @@ use Iddigital\Cms\Core\Module\IModule;
 interface IPackage
 {
     /**
-     * Gets the permissions.
+     * Gets the namespaced permissions.
      *
      * @return IPermission[]
      */

@@ -3,10 +3,11 @@
 namespace Iddigital\Cms\Core\Common\Crud\Dream;
 
 use Iddigital\Cms\Core\Auth\IAuthSystem;
+use Iddigital\Cms\Core\Common\Crud\CrudModule;
+use Iddigital\Cms\Core\Common\Crud\Definition\CrudModuleDefinition;
 use Iddigital\Cms\Core\Common\Crud\Definition\Form\CrudFormDefinition;
 use Iddigital\Cms\Core\Common\Crud\Definition\Table\SummaryTableDefinition;
 use Iddigital\Cms\Core\Form\Field\Builder\Field;
-use Iddigital\Cms\Core\Module\Definition\ModuleDefinition;
 use Iddigital\Cms\Core\Table\Builder\Column;
 
 /**
@@ -30,7 +31,7 @@ class CrudModuleDream extends CrudModule
     /**
      * @inheritDoc
      */
-    final protected function defineReadModule(ModuleDefinition $module)
+    final protected function defineCrudModule(CrudModuleDefinition $module)
     {
         $module->name('people');
 
@@ -39,6 +40,13 @@ class CrudModuleDream extends CrudModule
         $module->labelObjects()->fromCallback(function (Person $person) {
             return $person->getFullName();
         });
+
+        $module->objectAction('clone')
+                ->authorize(self::EDIT_PERMISSION)
+                ->handler(function (Person $person) {
+                    $person->setId(null);
+                    $this->repository->save($person);
+                });
 
         $module->crudForm(function (CrudFormDefinition $form) {
             $form->section('Details', [
@@ -91,6 +99,12 @@ class CrudModuleDream extends CrudModule
                 });
             }
         });
+
+        $module->removeAction()
+            ->afterRemove(function (Person $person) {
+                $this->deletePhotosOf($person);
+            })
+            ->deleteFromRepository();
 
         $module->summaryTable(function (SummaryTableDefinition $table) {
             $table->column(Column::name('name')->label('Name')->components([

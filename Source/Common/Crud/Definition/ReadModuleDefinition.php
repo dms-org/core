@@ -3,13 +3,17 @@
 namespace Iddigital\Cms\Core\Common\Crud\Definition;
 
 use Iddigital\Cms\Core\Auth\IAuthSystem;
+use Iddigital\Cms\Core\Common\Crud\Action\Crud\ViewDetailsAction;
 use Iddigital\Cms\Core\Common\Crud\Action\Object\IObjectAction;
 use Iddigital\Cms\Core\Common\Crud\Definition\Action\ObjectActionDefiner;
 use Iddigital\Cms\Core\Common\Crud\Definition\Form\CrudFormDefinition;
 use Iddigital\Cms\Core\Common\Crud\Definition\Table\SummaryTableDefinition;
 use Iddigital\Cms\Core\Common\Crud\Form\FormWithBinding;
 use Iddigital\Cms\Core\Common\Crud\IReadModule;
+use Iddigital\Cms\Core\Common\Crud\Table\ISummaryTable;
+use Iddigital\Cms\Core\Common\Crud\UnsupportedActionException;
 use Iddigital\Cms\Core\Exception\InvalidArgumentException;
+use Iddigital\Cms\Core\Exception\InvalidOperationException;
 use Iddigital\Cms\Core\Form\Builder\Form;
 use Iddigital\Cms\Core\Form\IForm;
 use Iddigital\Cms\Core\Model\IEntity;
@@ -17,7 +21,6 @@ use Iddigital\Cms\Core\Model\IEntitySet;
 use Iddigital\Cms\Core\Model\Object\FinalizedClassDefinition;
 use Iddigital\Cms\Core\Model\Object\TypedObject;
 use Iddigital\Cms\Core\Module\Definition\ModuleDefinition;
-use Iddigital\Cms\Core\Module\ITableDisplay;
 
 /**
  * The read module definition class.
@@ -52,7 +55,7 @@ class ReadModuleDefinition extends ModuleDefinition
     protected $detailsFormDefinition;
 
     /**
-     * @var ITableDisplay
+     * @var ISummaryTable
      */
     protected $summaryTable;
 
@@ -140,36 +143,29 @@ class ReadModuleDefinition extends ModuleDefinition
      */
     public function crudForm(callable $formDefinitionCallback)
     {
+        $this->loadDetailsAction($formDefinitionCallback);
+    }
+
+    protected function loadDetailsAction(callable $formDefinitionCallback)
+    {
         $definition = $this->loadCrudFormDefinition(CrudFormDefinition::MODE_DETAILS, $formDefinitionCallback);
 
-        $this->objectAction(IReadModule::DETAILS_ACTION)
-                ->authorize('')// TODO: Permission
-                ->returns(IForm::class)
-                ->handler(function (IEntity $entity) use ($definition) {
-                    $stages = $definition->getStagedForm()->withSubmittedFirstStage([
-                            IObjectAction::OBJECT_FIELD_NAME => $entity
-                    ]);
+        if (!$definition) {
+            return;
+        }
 
-                    $form         = Form::create();
-                    $previousData = [];
-
-                    foreach ($stages->getAllStages() as $stage) {
-                        /** @var FormWithBinding $currentStageForm */
-                        $currentStageForm = $stage->loadForm($previousData);
-                        $currentStageForm = $currentStageForm->getBinding()->getForm($entity);
-
-                        $form->embed($currentStageForm);
-                        $previousData += $currentStageForm->getInitialValues();
-                    }
-
-                    return $form->build();
-                });
+        $this->custom()->action(new ViewDetailsAction($this->dataSource, $this->authSystem, $definition));
     }
 
     protected function loadCrudFormDefinition($mode, callable $callback)
     {
         $definition = new CrudFormDefinition($this->dataSource, $this->class, $mode);
-        $callback($definition);
+
+        try {
+            $callback($definition);
+        } catch (UnsupportedActionException $e) {
+            return null;
+        }
 
         return $definition->finalize();
     }
@@ -179,7 +175,7 @@ class ReadModuleDefinition extends ModuleDefinition
      *
      * Example:
      * <code>
-     * ->summaryTable(function (SummaryTableDefinition $table) {
+     * $module->summaryTable(function (SummaryTableDefinition $table) {
      *      $table->column(Column::name('name')->label('Name')->components([
      *              Field::name('first_name')->label('First Name')->string(),
      *              Field::name('last_name')->label('Last Name')->string(),
@@ -214,5 +210,47 @@ class ReadModuleDefinition extends ModuleDefinition
         $summaryTableDefinitionCallback($definition);
 
         $this->summaryTable = $definition->finalize();
+
+        $this->action(IReadModule::SUMMARY_TABLE_ACTION)
+                ->authorize(IReadModule::VIEW_PERMISSION)
+                ->returns(ISummaryTable::class)
+                ->handler(function () {
+                    return $this->summaryTable;
+                });
+    }
+
+    /**
+     * @return FinalizedReadModuleDefinition
+     * @throws InvalidOperationException
+     */
+    public function finalize()
+    {
+        $this->verifyCanBeFinalized();
+
+        return new FinalizedReadModuleDefinition(
+                $this->name,
+                $this->labelObjectCallback,
+                $this->summaryTable,
+                $this->actions,
+                $this->tables,
+                $this->charts,
+                $this->widgets
+        );
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function verifyCanBeFinalized()
+    {
+        parent::verifyCanBeFinalized();
+
+        if (!$this->labelObjectCallback) {
+            throw InvalidOperationException::format('Cannot finalize module definition: label objects callback has not been defined');
+        }
+
+        if (!$this->summaryTable) {
+            throw InvalidOperationException::format('Cannot finalize module definition: summary table has not been defined');
+        }
     }
 }

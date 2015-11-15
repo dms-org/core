@@ -9,8 +9,6 @@ use Iddigital\Cms\Core\Exception\InvalidOperationException;
 use Iddigital\Cms\Core\Form;
 use Iddigital\Cms\Core\Module\Definition\FinalizedModuleDefinition;
 use Iddigital\Cms\Core\Module\Definition\ModuleDefinition;
-use Iddigital\Cms\Core\Table\Chart\IChartDataSource;
-use Iddigital\Cms\Core\Table\ITableDataSource;
 use Iddigital\Cms\Core\Util\Debug;
 use Iddigital\Cms\Core\Widget\IWidget;
 
@@ -71,8 +69,13 @@ abstract class Module implements IModule
      */
     public function __construct(IAuthSystem $authSystem)
     {
-        $definition = new ModuleDefinition($authSystem);
-        $this->define($definition);
+        $definition         = new ModuleDefinition($authSystem);
+        $overrideDefinition = $this->define($definition);
+
+        if ($overrideDefinition) {
+            $definition = $overrideDefinition;
+        }
+
         $this->definition = $definition->finalize();
         $this->authSystem = $authSystem;
 
@@ -107,8 +110,6 @@ abstract class Module implements IModule
      * Defines the module.
      *
      * @param ModuleDefinition $module
-     *
-     * @return void
      */
     abstract protected function define(ModuleDefinition $module);
 
@@ -147,7 +148,7 @@ abstract class Module implements IModule
     /**
      * @inheritDoc
      */
-    public function getAction($name)
+    final public function getAction($name)
     {
         if (isset($this->unparameterizedActions[$name])) {
             return $this->unparameterizedActions[$name];
@@ -164,7 +165,7 @@ abstract class Module implements IModule
     /**
      * @inheritDoc
      */
-    public function hasAction($name)
+    final public function hasAction($name)
     {
         return isset($this->parameterizedActions[$name]) || isset($this->unparameterizedActions[$name]);
     }
@@ -172,7 +173,7 @@ abstract class Module implements IModule
     /**
      * @inheritDoc
      */
-    public function getParameterizedActions()
+    final public function getParameterizedActions()
     {
         return $this->parameterizedActions;
     }
@@ -180,7 +181,7 @@ abstract class Module implements IModule
     /**
      * @inheritDoc
      */
-    public function getParameterizedAction($name)
+    final public function getParameterizedAction($name)
     {
         if (isset($this->parameterizedActions[$name])) {
             return $this->parameterizedActions[$name];
@@ -195,7 +196,7 @@ abstract class Module implements IModule
     /**
      * @inheritDoc
      */
-    public function hasParameterizedAction($name)
+    final public function hasParameterizedAction($name)
     {
         return isset($this->parameterizedActions[$name]);
     }
@@ -203,7 +204,7 @@ abstract class Module implements IModule
     /**
      * @inheritDoc
      */
-    public function getUnparameterizedActions()
+    final public function getUnparameterizedActions()
     {
         return $this->unparameterizedActions;
     }
@@ -211,7 +212,7 @@ abstract class Module implements IModule
     /**
      * @inheritDoc
      */
-    public function getUnparameterizedAction($name)
+    final public function getUnparameterizedAction($name)
     {
         if (isset($this->unparameterizedActions[$name])) {
             return $this->unparameterizedActions[$name];
@@ -226,7 +227,7 @@ abstract class Module implements IModule
     /**
      * @inheritDoc
      */
-    public function hasUnparameterizedAction($name)
+    final public function hasUnparameterizedAction($name)
     {
         return isset($this->unparameterizedActions[$name]);
     }
@@ -234,7 +235,7 @@ abstract class Module implements IModule
     /**
      * {@inheritDoc}
      */
-    public function getTables()
+    final public function getTables()
     {
         return $this->tables;
     }
@@ -242,7 +243,7 @@ abstract class Module implements IModule
     /**
      * @inheritDoc
      */
-    public function getTable($name)
+    final public function getTable($name)
     {
         if (isset($this->tables[$name])) {
             return $this->tables[$name];
@@ -257,7 +258,7 @@ abstract class Module implements IModule
     /**
      * @inheritDoc
      */
-    public function hasTable($name)
+    final public function hasTable($name)
     {
         return isset($this->tables[$name]);
     }
@@ -265,7 +266,7 @@ abstract class Module implements IModule
     /**
      * {@inheritDoc}
      */
-    public function getCharts()
+    final public function getCharts()
     {
         return $this->charts;
     }
@@ -273,7 +274,7 @@ abstract class Module implements IModule
     /**
      * @inheritDoc
      */
-    public function getChart($name)
+    final public function getChart($name)
     {
         if (isset($this->charts[$name])) {
             return $this->charts[$name];
@@ -288,7 +289,7 @@ abstract class Module implements IModule
     /**
      * @inheritDoc
      */
-    public function hasChart($name)
+    final public function hasChart($name)
     {
         return isset($this->charts[$name]);
     }
@@ -296,7 +297,7 @@ abstract class Module implements IModule
     /**
      * {@inheritDoc}
      */
-    public function getWidgets()
+    final public function getWidgets()
     {
         return $this->widgets;
     }
@@ -304,7 +305,7 @@ abstract class Module implements IModule
     /**
      * @inheritDoc
      */
-    public function getWidget($name)
+    final public function getWidget($name)
     {
         if (isset($this->widgets[$name])) {
             return $this->widgets[$name];
@@ -319,7 +320,7 @@ abstract class Module implements IModule
     /**
      * @inheritDoc
      */
-    public function hasWidget($name)
+    final public function hasWidget($name)
     {
         return isset($this->widgets[$name]);
     }

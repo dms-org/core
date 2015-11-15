@@ -63,6 +63,15 @@ class Permission extends ValueObject implements IPermission
     }
 
     /**
+     * @inheritDoc
+     */
+    public function inNamespace($namespace)
+    {
+        return self::named($namespace . '.' . $this->name);
+    }
+
+
+    /**
      * {@inheritDoc}
      */
     public function equals(IPermission $permission)
