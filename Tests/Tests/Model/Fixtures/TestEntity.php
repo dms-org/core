@@ -40,4 +40,12 @@ class TestEntity extends Entity
         $class->property($this->prop)->asString();
         $class->property($this->object)->nullable()->asObject(SubObject::class);
     }
+
+    /**
+     * @return string
+     */
+    public function getProp()
+    {
+        return $this->prop;
+    }
 }

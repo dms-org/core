@@ -8,10 +8,11 @@ use Iddigital\Cms\Core\Model\ITypedObject;
 use Iddigital\Cms\Core\Model\Object\FinalizedClassDefinition;
 use Iddigital\Cms\Core\Model\Object\FinalizedPropertyDefinition;
 use Iddigital\Cms\Core\Model\Object\TypedObject;
+use Iddigital\Cms\Core\Model\Type\IType;
 use Iddigital\Cms\Core\Model\Type\ObjectType;
 
 /**
- * The property criterion base class.
+ * The nested member expression class.
  *
  * @author Elliot Levin <elliotlevin@hotmail.com>
  */
@@ -119,6 +120,17 @@ class NestedProperty
     }
 
     /**
+     * @return IType
+     */
+    final public function getResultingType()
+    {
+        /** @var FinalizedPropertyDefinition $lastProperty */
+        $lastProperty = end($this->properties);
+
+        return $lastProperty->getType();
+    }
+
+    /**
      * @return string
      */
     final public function getName()
@@ -127,7 +139,7 @@ class NestedProperty
     }
 
     /**
-     * @return \Closure
+     * @return Closure
      */
     final public function makePropertyGetterCallable()
     {

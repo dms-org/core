@@ -42,17 +42,14 @@ class PropertyCondition extends Condition
      */
     final public function __construct(NestedProperty $property, $conditionOperator, $value)
     {
-        $properties = $property->getNestedProperties();
+        $lastPropertyType = $property->getResultingType();
 
-        /** @var FinalizedPropertyDefinition $lastProperty */
-        $lastProperty = end($properties);
-
-        $operators = $lastProperty->getType()->getConditionOperatorTypes();
+        $operators = $lastPropertyType->getConditionOperatorTypes();
 
         if (!isset($operators[$conditionOperator])) {
             throw InvalidArgumentException::format(
                     'Invalid condition operator for property of type %s: expecting one of (%s), %s given',
-                    $lastProperty->getType()->asTypeString(), Debug::formatValues(array_keys($operators)), $conditionOperator
+                    $lastPropertyType->asTypeString(), Debug::formatValues(array_keys($operators)), $conditionOperator
             );
         }
 
