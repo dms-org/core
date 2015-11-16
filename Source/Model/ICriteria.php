@@ -4,7 +4,7 @@ namespace Iddigital\Cms\Core\Model;
 
 use Iddigital\Cms\Core\Exception;
 use Iddigital\Cms\Core\Model\Criteria\Condition\Condition;
-use Iddigital\Cms\Core\Model\Criteria\PropertyOrdering;
+use Iddigital\Cms\Core\Model\Criteria\MemberOrdering;
 use Iddigital\Cms\Core\Model\Object\FinalizedClassDefinition;
 
 /**
@@ -46,9 +46,16 @@ interface ICriteria
     public function getCondition();
 
     /**
+     * Gets whether the criteria contains any orderings.
+     *
+     * @return bool
+     */
+    public function hasOrderings();
+
+    /**
      * Gets the orderings of the object.
      *
-     * @return PropertyOrdering[]
+     * @return MemberOrdering[]
      */
     public function getOrderings();
 
@@ -67,9 +74,10 @@ interface ICriteria
     public function hasLimitAmount();
 
     /**
-     * Gets the maximum amount of objects to return.
+     * Gets the maximum amount of objects to return or null
+     * if no limit is set.
      *
-     * @return int
+     * @return int|null
      */
     public function getLimitAmount();
 }

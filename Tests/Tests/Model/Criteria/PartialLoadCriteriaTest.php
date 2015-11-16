@@ -3,8 +3,10 @@
 namespace Iddigital\Cms\Core\Tests\Model\Criteria;
 
 use Iddigital\Cms\Common\Testing\CmsTestCase;
-use Iddigital\Cms\Core\Model\Criteria\NestedProperty;
+use Iddigital\Cms\Core\Model\Criteria\Member\MemberPropertyExpression;
+use Iddigital\Cms\Core\Model\Criteria\NestedMember;
 use Iddigital\Cms\Core\Model\Criteria\PartialLoadCriteria;
+use Iddigital\Cms\Core\Tests\Model\Fixtures\SubObject;
 use Iddigital\Cms\Core\Tests\Model\Fixtures\TestEntity;
 
 /**
@@ -16,7 +18,7 @@ class PartialLoadCriteriaTest extends CmsTestCase
     {
         $criteria = new PartialLoadCriteria(TestEntity::definition());
 
-        $this->assertSame([], $criteria->getAliasNestedPropertyMap());
+        $this->assertSame([], $criteria->getAliasNestedMemberMap());
     }
 
     public function testLoadProperty()
@@ -25,8 +27,10 @@ class PartialLoadCriteriaTest extends CmsTestCase
 
         $criteria->load('prop');
 
-        $this->assertEquals(['prop' => NestedProperty::parsePropertyName(TestEntity::definition(), 'prop')],
-                $criteria->getAliasNestedPropertyMap());
+        $this->assertEquals(
+                ['prop' => new NestedMember([new MemberPropertyExpression(TestEntity::definition()->getProperty('prop'), false)])],
+                $criteria->getAliasNestedMemberMap()
+        );
     }
 
     public function testLoadPropertyWithAlias()
@@ -35,8 +39,12 @@ class PartialLoadCriteriaTest extends CmsTestCase
 
         $criteria->load('prop', 'alias');
 
-        $this->assertEquals(['alias' => NestedProperty::parsePropertyName(TestEntity::definition(), 'prop')],
-                $criteria->getAliasNestedPropertyMap());
+        $this->assertEquals([
+                'alias' => new NestedMember([
+                        new MemberPropertyExpression(TestEntity::definition()->getProperty('prop'), false)
+                ])
+        ],
+                $criteria->getAliasNestedMemberMap());
     }
 
     public function testLoadAllProperties()
@@ -50,9 +58,12 @@ class PartialLoadCriteriaTest extends CmsTestCase
         ]);
 
         $this->assertEquals([
-                'prop'     => NestedProperty::parsePropertyName(TestEntity::definition(), 'prop'),
-                'object'   => NestedProperty::parsePropertyName(TestEntity::definition(), 'object'),
-                'sub-prop' => NestedProperty::parsePropertyName(TestEntity::definition(), 'object.prop'),
-        ], $criteria->getAliasNestedPropertyMap());
+                'prop'     => new NestedMember([new MemberPropertyExpression(TestEntity::definition()->getProperty('prop'), false)]),
+                'object'   => new NestedMember([new MemberPropertyExpression(TestEntity::definition()->getProperty('object'), false)]),
+                'sub-prop' => new NestedMember([
+                        new MemberPropertyExpression(TestEntity::definition()->getProperty('object'), false),
+                        new MemberPropertyExpression(SubObject::definition()->getProperty('prop'), true),
+                ]),
+        ], $criteria->getAliasNestedMemberMap());
     }
 }

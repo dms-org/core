@@ -3,6 +3,7 @@
 namespace Iddigital\Cms\Core\Model\Criteria;
 
 use Iddigital\Cms\Core\Exception\NotImplementedException;
+use Iddigital\Cms\Core\Model\Object\FinalizedPropertyDefinition;
 use Iddigital\Cms\Core\Model\Type\IType;
 
 /**
@@ -34,11 +35,36 @@ interface IMemberExpression
     public function getResultingType();
 
     /**
-     * Returns a callable that takes a parameter of the
-     * source
+     * Returns whether the resulting expression is a property value.
+     *
+     * @return bool
+     */
+    public function isPropertyValue();
+
+    /**
+     * Gets the property of which the expression returns.
+     *
+     * @return FinalizedPropertyDefinition|null
+     */
+    public function getProperty();
+
+    /**
+     * Returns a callable that takes a parameter of the source type
+     * and returns the value of the object member.
      *
      * @return callable
      * @throws NotImplementedException
      */
     public function createGetterCallable();
+
+    /**
+     * Returns a callable that takes a parameter an array of the source types
+     * and returns an array containing values of the object members.
+     *
+     * NOTE: array keys are maintained
+     *
+     * @return callable
+     * @throws NotImplementedException
+     */
+    public function createArrayGetterCallable();
 }

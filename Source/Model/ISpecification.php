@@ -83,4 +83,36 @@ interface ISpecification
      * @throws Exception\TypeMismatchException
      */
     public function isSatisfiedBy(ITypedObject $object);
+
+    /**
+     * Returns whether all the object satisfies the specification.
+     *
+     * @param ITypedObject[] $objects
+     *
+     * @return bool
+     * @throws Exception\TypeMismatchException
+     */
+    public function isSatisfiedByAll(array $objects);
+
+    /**
+     * Returns whether all the object satisfies the specification.
+     *
+     * @param ITypedObject[] $objects
+     *
+     * @return bool
+     * @throws Exception\TypeMismatchException
+     */
+    public function isSatisfiedByAny(array $objects);
+
+    /**
+     * Returns only the objects which is satisfied by this specification.
+     *
+     * NOTE: keys are maintained
+     *
+     * @param ITypedObject[] $objects
+     *
+     * @return ITypedObject[]
+     * @throws Exception\TypeMismatchException
+     */
+    public function filter(array $objects);
 }

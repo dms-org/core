@@ -2,7 +2,6 @@
 
 namespace Iddigital\Cms\Core\Model\Criteria\Member;
 
-use Iddigital\Cms\Core\Model\Criteria\IMemberExpression;
 use Iddigital\Cms\Core\Model\Object\FinalizedPropertyDefinition;
 use Iddigital\Cms\Core\Model\Type\Builder\Type;
 
@@ -11,17 +10,12 @@ use Iddigital\Cms\Core\Model\Type\Builder\Type;
  *
  * @author Elliot Levin <elliotlevin@hotmail.com>
  */
-class MemberPropertyExpression implements IMemberExpression
+class MemberPropertyExpression extends MemberExpression
 {
     /**
      * @var FinalizedPropertyDefinition
      */
     protected $property;
-
-    /**
-     * @var bool
-     */
-    protected $isSourceNullable;
 
     /**
      * MemberPropertyExpression constructor.
@@ -31,20 +25,23 @@ class MemberPropertyExpression implements IMemberExpression
      */
     public function __construct(FinalizedPropertyDefinition $property, $isSourceNullable)
     {
-        $this->property         = $property;
-        $this->isSourceNullable = $isSourceNullable;
+        $sourceType = Type::object($property->getAccessibility()->getDeclaredClass());
+
+        parent::__construct($isSourceNullable ? $sourceType->nullable() : $sourceType, $property->getType());
+
+        $this->property = $property;
     }
 
     /**
-     * @return boolean
+     * @inheritDoc
      */
-    public function isIsSourceNullable()
+    public function isPropertyValue()
     {
-        return $this->isSourceNullable;
+        return true;
     }
 
     /**
-     * @return FinalizedPropertyDefinition
+     * @inheritDoc
      */
     public function getProperty()
     {
@@ -62,38 +59,20 @@ class MemberPropertyExpression implements IMemberExpression
     /**
      * @inheritDoc
      */
-    public function getSourceType()
-    {
-        $type = Type::object($this->property->getAccessibility()->getDeclaredClass());
-
-        return $this->isSourceNullable
-                ? $type->nullable()
-                : $type;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getResultingType()
-    {
-        $type = $this->property->getType();
-
-        return $this->isSourceNullable
-                ? $type->nullable()
-                : $type;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function createGetterCallable()
+    public function createArrayGetterCallable()
     {
         $name = $this->property->getName();
 
-        return $this->ensureAccessible(function ($object) use ($name) {
-            return $object === null
-                    ? null
-                    : $object->{$name};
+        return $this->ensureAccessible(function (array $objects) use ($name) {
+            $results = [];
+
+            foreach ($objects as $key => $object) {
+                $results[$key] = $object === null
+                        ? null
+                        : $object->{$name};
+            }
+
+            return $results;
         });
     }
 

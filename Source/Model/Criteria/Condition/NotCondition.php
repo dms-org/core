@@ -36,17 +36,14 @@ class NotCondition extends Condition
     }
 
     /**
-     * Returns a callable that takes an object and returns a boolean
-     * whether the object passes the condition.
-     *
-     * @return callable
+     * @inheritdoc
      */
-    protected function makeFilterCallable()
+    protected function makeArrayFilterCallable()
     {
         $innerCondition = $this->condition->getFilterCallable();
 
-        return function (ITypedObject $object) use ($innerCondition) {
-            return !$innerCondition($object);
+        return function (array $objects) use ($innerCondition) {
+            return array_diff_key($objects, $innerCondition($objects));
         };
     }
 }

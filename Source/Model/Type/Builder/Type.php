@@ -237,7 +237,7 @@ class Type
                     $types = null;
                 }
 
-                return self::arrayOf($types ? UnionType::create($types) : self::$mixed);
+                return self::arrayOf($types ? UnionType::create($types) : self::mixed());
             case 'object':
                 if ($default instanceof ITypedCollection) {
                     return self::collectionOf($default->getElementType());

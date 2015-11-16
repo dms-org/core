@@ -7,6 +7,7 @@ use Iddigital\Cms\Core\Auth\IPermission;
 use Iddigital\Cms\Core\Common\Crud\Action\Object\CustomObjectActionHandler;
 use Iddigital\Cms\Core\Common\Crud\Action\Object\Mapping\ArrayObjectActionFormMapping;
 use Iddigital\Cms\Core\Common\Crud\Action\Object\ObjectAction;
+use Iddigital\Cms\Core\Exception\TypeMismatchException;
 use Iddigital\Cms\Core\Form\Builder\Form;
 use Iddigital\Cms\Core\Form\Field\Builder\Field;
 use Iddigital\Cms\Core\Model\Object\ArrayDataObject;
@@ -24,7 +25,7 @@ class ReorderAction extends ObjectAction implements IReorderAction
      * @param IPermission[] $requiredPermissions
      * @param callable      $reorderCallback
      *
-     * @throws \Iddigital\Cms\Core\Exception\TypeMismatchException
+     * @throws TypeMismatchException
      */
     public function __construct(
             $name,

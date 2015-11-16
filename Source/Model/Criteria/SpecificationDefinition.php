@@ -11,7 +11,7 @@ use Iddigital\Cms\Core\Model\Criteria\Condition\ConditionOperator;
 use Iddigital\Cms\Core\Model\Criteria\Condition\InstanceOfCondition;
 use Iddigital\Cms\Core\Model\Criteria\Condition\NotCondition;
 use Iddigital\Cms\Core\Model\Criteria\Condition\OrCondition;
-use Iddigital\Cms\Core\Model\Criteria\Condition\PropertyCondition;
+use Iddigital\Cms\Core\Model\Criteria\Condition\MemberCondition;
 use Iddigital\Cms\Core\Model\ISpecification;
 
 /**
@@ -42,22 +42,29 @@ class SpecificationDefinition extends ObjectCriteriaBase
     /**
      * Defines a where condition on the criteria.
      *
-     * Example:
+     * Examples:
      * <code>
      * ->where('some.nested.property', '=', 100)
+     * //
+     * ->where('some.collection.count()', '>', 5)
+     * //
+     * ->where('some.friends.average(income)', '<=', 50000)
+     * //
+     * ->where('load(relatedId).name', '=', 'Joe')
      * </code>
      *
-     * @param string $propertyName
+     * @param string $memberExpression
      * @param string $operator
      * @param mixed  $value
      *
      * @return static
      * @throws InvalidArgumentException
+     * @throws InvalidMemberExpressionException
      */
-    final public function where($propertyName, $operator, $value)
+    final public function where($memberExpression, $operator, $value)
     {
-        $this->append(new PropertyCondition(
-                NestedProperty::parsePropertyName($this->class, $propertyName),
+        $this->append(new MemberCondition(
+                $this->memberExpressionParser->parse($this->class, $memberExpression),
                 $operator,
                 $value
         ));
@@ -144,56 +151,56 @@ class SpecificationDefinition extends ObjectCriteriaBase
      * Defines a condition that is satisfied when the condition
      * property contains the supplied string.
      *
-     * @param string $propertyName
+     * @param string $memberExpression
      * @param mixed  $value
      *
      * @return static
      */
-    final public function whereStringContains($propertyName, $value)
+    final public function whereStringContains($memberExpression, $value)
     {
-        return $this->where($propertyName, ConditionOperator::STRING_CONTAINS, $value);
+        return $this->where($memberExpression, ConditionOperator::STRING_CONTAINS, $value);
     }
 
     /**
      * Defines a condition that is satisfied when the condition
      * property contains the supplied string insensitive to case.
      *
-     * @param string $propertyName
+     * @param string $memberExpression
      * @param mixed  $value
      *
      * @return static
      */
-    final public function whereStringContainsCaseInsensitive($propertyName, $value)
+    final public function whereStringContainsCaseInsensitive($memberExpression, $value)
     {
-        return $this->where($propertyName, ConditionOperator::STRING_CONTAINS_CASE_INSENSITIVE, $value);
+        return $this->where($memberExpression, ConditionOperator::STRING_CONTAINS_CASE_INSENSITIVE, $value);
     }
 
     /**
      * Defines a condition that is satisfied when the value
      * is found within the array/collection of the property.
      *
-     * @param string $propertyName
+     * @param string $memberExpression
      * @param array  $values
      *
      * @return static
      */
-    final public function whereIn($propertyName, array $values)
+    final public function whereIn($memberExpression, array $values)
     {
-        return $this->where($propertyName, ConditionOperator::IN, $values);
+        return $this->where($memberExpression, ConditionOperator::IN, $values);
     }
 
     /**
      * Defines a condition that is satisfied when the value
      * is NOT found within the array/collection of the property.
      *
-     * @param string $propertyName
+     * @param string $memberExpression
      * @param array  $values
      *
      * @return static
      */
-    final public function whereNotIn($propertyName, array $values)
+    final public function whereNotIn($memberExpression, array $values)
     {
-        return $this->where($propertyName, ConditionOperator::NOT_IN, $values);
+        return $this->where($memberExpression, ConditionOperator::NOT_IN, $values);
     }
 
     /**

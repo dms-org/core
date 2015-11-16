@@ -8,8 +8,6 @@ use Iddigital\Cms\Core\Model\Object\FinalizedClassDefinition;
 use Iddigital\Cms\Core\Model\Object\TypedObject;
 use Iddigital\Cms\Core\Model\Type\Builder\Type;
 use Iddigital\Cms\Core\Model\Type\ObjectType;
-use Iddigital\Cms\Core\Util\Debug;
-use Pinq\Direction;
 use Pinq\Iterators\IIteratorScheme;
 
 /**
@@ -152,27 +150,28 @@ class ObjectCollection extends TypedCollection implements ITypedObjectCollection
     {
         $criteria->verifyOfClass($this->getObjectType());
 
-        $collection = $this;
+        $objects = $this->asArray();
 
         if ($criteria->hasCondition()) {
-            $collection = $collection->where($criteria->getCondition()->getFilterCallable());
+            $objects = call_user_func($criteria->getCondition()->getArrayFilterCallable(), $objects);
         }
 
-        $first = true;
-        foreach ($criteria->getOrderings() as $ordering) {
-            $direction = $ordering->isAsc() ? Direction::ASCENDING : Direction::DESCENDING;
+        if ($criteria->hasOrderings()) {
+            $multisortArgs = [];
 
-            if ($first) {
-                $collection = $collection->orderBy($ordering->getOrderCallable(), $direction);
-                $first      = false;
-            } else {
-                $collection = $collection->thenBy($ordering->getOrderCallable(), $direction);
+            foreach ($criteria->getOrderings() as $ordering) {
+                $direction    = $ordering->isAsc() ? \SORT_ASC : \SORT_DESC;
+                $memberGetter = $ordering->getArrayOrderCallable();
+
+                $multisortArgs[] = $memberGetter($objects);
+                $multisortArgs[] = $direction;
             }
+
+            $multisortArgs[] =& $objects;
+            call_user_func_array('array_multisort', $multisortArgs);
         }
 
-        $collection = $collection->slice($criteria->getStartOffset(), $criteria->getLimitAmount());
-
-        return $collection->asArray();
+        return array_slice($objects, $criteria->getStartOffset(), $criteria->getLimitAmount());
     }
 
     /**
@@ -182,7 +181,7 @@ class ObjectCollection extends TypedCollection implements ITypedObjectCollection
     {
         $specification->verifyOfClass($this->getObjectType());
 
-        return $this->where($specification->getCondition()->getFilterCallable())->asArray();
+        return $specification->filter($this->asArray());
     }
 
     /**
@@ -195,11 +194,12 @@ class ObjectCollection extends TypedCollection implements ITypedObjectCollection
         $objects    = array_values($this->matching($criteria));
         $loadedData = array_fill_keys(array_keys($objects), []);
 
-        foreach ($criteria->getAliasNestedPropertyMap() as $index => $property) {
-            $getter = $property->makePropertyGetterCallable();
+        foreach ($criteria->getAliasNestedMemberMap() as $index => $nestedMember) {
+            $getter       = $nestedMember->makeArrayGetterCallable();
+            $memberValues = $getter($objects);
 
-            foreach ($objects as $key => $object) {
-                $loadedData[$key][$index] = $getter($object);
+            foreach ($memberValues as $key => $memberValue) {
+                $loadedData[$key][$index] = $memberValue;
             }
         }
 

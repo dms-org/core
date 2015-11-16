@@ -17,18 +17,18 @@ class OrCondition extends CompositeCondition
      *
      * @return callable
      */
-    protected function makeFilterCallable()
+    protected function makeArrayFilterCallable()
     {
         $conditions = $this->conditions;
         /** @var Condition $firstCondition */
         $firstCondition = array_shift($conditions);
-        $filter = $firstCondition->getFilterCallable();
+        $filter = $firstCondition->getArrayFilterCallable();
 
         foreach ($conditions as $condition) {
-            $innerFilter = $condition->getFilterCallable();
+            $innerFilter = $condition->getArrayFilterCallable();
 
-            $filter = function (ITypedObject $object) use ($innerFilter, $filter) {
-                return $innerFilter($object) || $filter($object);
+            $filter = function (array $objects) use ($innerFilter, $filter) {
+                return $innerFilter($objects) + $filter($objects);
             };
         }
 

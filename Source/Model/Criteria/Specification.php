@@ -25,7 +25,7 @@ abstract class Specification extends ObjectCriteriaBase implements ISpecificatio
     /**
      * @var callable
      */
-    private $filterCallable;
+    private $arrayFilterCallable;
 
     /**
      * Specification constructor.
@@ -56,7 +56,7 @@ abstract class Specification extends ObjectCriteriaBase implements ISpecificatio
             );
         }
 
-        $this->filterCallable = $this->condition->getFilterCallable();
+        $this->arrayFilterCallable = $this->condition->getArrayFilterCallable();
     }
 
     /**
@@ -133,20 +133,36 @@ abstract class Specification extends ObjectCriteriaBase implements ISpecificatio
     }
 
     /**
-     * Returns whether the object satisfies the specification.
-     *
-     * @param ITypedObject $object
-     *
-     * @return bool
-     * @throws Exception\TypeMismatchException
+     * @inheritDoc
      */
     public function isSatisfiedBy(ITypedObject $object)
     {
-        $type = $this->type;
-        if (!($object instanceof $type)) {
-            throw Exception\TypeMismatchException::argument(__METHOD__, 'object', $type, $object);
-        }
+        return count($this->filter([$object])) === 1;
+    }
 
-        return call_user_func($this->filterCallable, $object);
+    /**
+     * @inheritDoc
+     */
+    public function isSatisfiedByAll(array $objects)
+    {
+        return count($this->filter($objects)) === count($objects);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function isSatisfiedByAny(array $objects)
+    {
+        return count($this->filter($objects)) > 0;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function filter(array $objects)
+    {
+        Exception\TypeMismatchException::verifyAllInstanceOf(__METHOD__, 'objects', $objects, $this->type);
+
+        return call_user_func($this->arrayFilterCallable, $objects);
     }
 }

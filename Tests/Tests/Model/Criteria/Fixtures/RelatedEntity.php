@@ -1,15 +1,15 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Model\Fixtures;
+namespace Iddigital\Cms\Core\Tests\Model\Criteria\Fixtures;
 
 use Iddigital\Cms\Core\Model\Object\ClassDefinition;
-use Iddigital\Cms\Core\Model\Object\ValueObject;
+use Iddigital\Cms\Core\Model\Object\Entity;
 use Iddigital\Cms\Core\Model\Type\Builder\Type;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>
  */
-class SubObject extends ValueObject
+class RelatedEntity extends Entity
 {
     /**
      * @var string
@@ -27,25 +27,31 @@ class SubObject extends ValueObject
     public $numbers;
 
     /**
-     * @inheritDoc
+     * RelatedEntity constructor.
+     *
+     * @param string $prop
+     * @param int       $number
+     * @param \int[] $numbers
      */
-    public function __construct($prop = '', $number = 0, $numbers = [])
+    public function __construct($prop, $number, array $numbers)
     {
         parent::__construct();
-        $this->prop = $prop;
-        $this->numbers = $numbers;
+        $this->prop    = $prop;
         $this->number = $number;
+        $this->numbers = $numbers;
     }
 
     /**
-     * Defines the structure of this value object.
-     *
-     * @param ClassDefinition $class
+     * @inheritDoc
      */
-    protected function define(ClassDefinition $class)
+    protected function defineEntity(ClassDefinition $class)
     {
         $class->property($this->prop)->asString();
+
         $class->property($this->number)->asInt();
+
         $class->property($this->numbers)->asArrayOf(Type::int());
     }
+
+
 }

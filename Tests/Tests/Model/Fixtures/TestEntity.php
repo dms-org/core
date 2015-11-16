@@ -4,6 +4,7 @@ namespace Iddigital\Cms\Core\Tests\Model\Fixtures;
 
 use Iddigital\Cms\Core\Model\Object\ClassDefinition;
 use Iddigital\Cms\Core\Model\Object\Entity;
+use Iddigital\Cms\Core\Model\ValueObjectCollection;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>
@@ -21,13 +22,29 @@ class TestEntity extends Entity
     public $object;
 
     /**
+     * @var ValueObjectCollection|SubObject[]
+     */
+    public $objects;
+
+    /**
      * @inheritDoc
      */
-    public function __construct($id = null, $prop = '', SubObject $object = null)
+    public function __construct($id = null, $prop = '', SubObject $object = null, array $objects = [])
     {
         parent::__construct($id);
-        $this->prop = $prop;
-        $this->object = $object;
+        $this->prop    = $prop;
+        $this->object  = $object;
+        $this->objects = SubObject::collection($objects);
+    }
+
+    /**
+     * @param array $objects
+     *
+     * @return TestEntity
+     */
+    public static function withSubObjects(array $objects)
+    {
+        return new self(null, '', null, $objects);
     }
 
     /**
@@ -39,6 +56,7 @@ class TestEntity extends Entity
     {
         $class->property($this->prop)->asString();
         $class->property($this->object)->nullable()->asObject(SubObject::class);
+        $class->property($this->objects)->asCollectionOf(SubObject::type());
     }
 
     /**

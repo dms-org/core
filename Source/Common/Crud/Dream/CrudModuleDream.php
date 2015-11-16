@@ -116,6 +116,15 @@ class CrudModuleDream extends CrudModule
             $table->mapProperty('lastName')->toComponent('name.last_name');
             $table->mapProperty('age')->to(Field::name('age')->label('Age')->int());
 
+            $table->mapProperty('categoryId')->toComponent('category.id');
+            $table->mapProperty('load(categoryId).name')->toComponent('category.name');
+            $table->mapProperty('loadAll(categoryIds).average(...)')->toComponent('...');
+            $table->mapProperty('loadAll(categoryIds).average(...)')->toComponent('...');
+            $table->mapProperty('friends.average(income)')->toComponent('...');
+            $table->mapProperty('friends.flatten(friends)')->toComponent('...');
+            $table->mapProperty('load(categoryId, App\Store\Category).')->toComponent('...');
+            $table->mapProperty('loadAll(friends.flatten(relativesIds)).')->toComponent('...');
+
             $table->view('default', 'Default')
                     ->asDefault()
                     ->loadAll()

@@ -2,6 +2,8 @@
 
 namespace Iddigital\Cms\Core\Model\Criteria\Condition;
 
+use Iddigital\Cms\Core\Model\ITypedObject;
+
 /**
  * The condition base class
  *
@@ -12,29 +14,43 @@ abstract class Condition
     /**
      * @var callable
      */
-    protected $filterCallable;
+    protected $arrayFilterCallable;
 
     /**
      * Condition constructor.
      */
     public function __construct()
     {
-        $this->filterCallable = $this->makeFilterCallable();
+        $this->arrayFilterCallable = $this->makeArrayFilterCallable();
     }
 
     /**
-     * Returns a callable that takes an object and returns a boolean
-     * whether the object passes the condition.
+     * Returns a callable that takes an array of objects and returns the
+     * objects which satisfy the condition.
+     *
+     * NOTE: array keys are maintained.
      *
      * @return callable
      */
-    abstract protected function makeFilterCallable();
+    abstract protected function makeArrayFilterCallable();
 
     /**
      * @return callable
      */
     final public function getFilterCallable()
     {
-        return $this->filterCallable;
+        $arrayCallback = $this->arrayFilterCallable;
+
+        return function (ITypedObject $object) use ($arrayCallback) {
+            return count($arrayCallback([$object])) === 1;
+        };
+    }
+
+    /**
+     * @return callable
+     */
+    final public function getArrayFilterCallable()
+    {
+        return $this->arrayFilterCallable;
     }
 }

@@ -4,21 +4,21 @@ namespace Iddigital\Cms\Core\Model\Criteria\Condition;
 
 use Iddigital\Cms\Core\Exception\InvalidArgumentException;
 use Iddigital\Cms\Core\Exception\TypeMismatchException;
-use Iddigital\Cms\Core\Model\Criteria\NestedProperty;
-use Iddigital\Cms\Core\Model\Object\FinalizedPropertyDefinition;
+use Iddigital\Cms\Core\Model\Criteria\IMemberExpression;
+use Iddigital\Cms\Core\Model\Criteria\NestedMember;
 use Iddigital\Cms\Core\Util\Debug;
 
 /**
- * The property condition class.
+ * The member condition class.
  *
  * @author Elliot Levin <elliotlevin@hotmail.com>
  */
-class PropertyCondition extends Condition
+class MemberCondition extends Condition
 {
     /**
-     * @var NestedProperty
+     * @var NestedMember
      */
-    private $nestedProperty;
+    private $member;
 
     /**
      * @var string
@@ -31,18 +31,18 @@ class PropertyCondition extends Condition
     private $value;
 
     /**
-     * PropertyCondition constructor.
+     * MemberCondition constructor.
      *
-     * @param NestedProperty $property
-     * @param string         $conditionOperator
-     * @param mixed          $value
+     * @param NestedMember $member
+     * @param string       $conditionOperator
+     * @param mixed        $value
      *
      * @throws InvalidArgumentException
      * @throws TypeMismatchException
      */
-    final public function __construct(NestedProperty $property, $conditionOperator, $value)
+    final public function __construct(NestedMember $member, $conditionOperator, $value)
     {
-        $lastPropertyType = $property->getResultingType();
+        $lastPropertyType = $member->getResultingType();
 
         $operators = $lastPropertyType->getConditionOperatorTypes();
 
@@ -60,7 +60,7 @@ class PropertyCondition extends Condition
 
         ConditionOperator::validate($conditionOperator);
 
-        $this->nestedProperty    = $property;
+        $this->member            = $member;
         $this->conditionOperator = $conditionOperator;
         $this->value             = $value;
 
@@ -84,24 +84,39 @@ class PropertyCondition extends Condition
     }
 
     /**
-     * @return FinalizedPropertyDefinition[]
+     * @return IMemberExpression[]
      */
-    final public function getNestedProperties()
+    final public function getNestedMembers()
     {
-        return $this->nestedProperty->getNestedProperties();
+        return $this->member->getParts();
     }
 
-    protected function makeFilterCallable()
+    protected function makeArrayFilterCallable()
     {
-        $getter = $this->nestedProperty->makePropertyGetterCallable();
+        $getter = $this->member->makeArrayGetterCallable();
         $value  = $this->value;
 
-        return ConditionOperator::makeOperatorCallable(
-                $getter,
+        $comparer = ConditionOperator::makeOperatorCallable(
+                function ($memberValue) {
+                    return $memberValue;
+                },
                 $this->conditionOperator,
                 function () use ($value) {
                     return $value;
                 }
         );
+
+        return function (array $objects) use ($getter, $comparer) {
+            $values   = $getter($objects);
+            $filtered = [];
+
+            foreach ($values as $key => $memberValue) {
+                if ($comparer($memberValue)) {
+                    $filtered[$key] = $objects[$key];
+                }
+            }
+
+            return $filtered;
+        };
     }
 }

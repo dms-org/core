@@ -3,7 +3,7 @@
 namespace Iddigital\Cms\Core\Model;
 
 use Iddigital\Cms\Core\Exception;
-use Iddigital\Cms\Core\Model\Criteria\NestedProperty;
+use Iddigital\Cms\Core\Model\Criteria\NestedMember;
 
 /**
  * The object search criteria that also defines the properties of
@@ -14,30 +14,31 @@ use Iddigital\Cms\Core\Model\Criteria\NestedProperty;
 interface IPartialLoadCriteria extends ICriteria
 {
     /**
-     * Gets the nested properties to load.
+     * Gets the nested members to load.
      *
      * Example:
      * <code>
      * [
-     *      'alias' => [NestedProperty('some-property')]
+     *      'alias' => [NestedMember('some-expression')]
      * ]
      * </code>
      *
-     * @return NestedProperty[]
+     * @return NestedMember[]
      */
-    public function getAliasNestedPropertyMap();
+    public function getAliasNestedMemberMap();
 
     /**
-     * Gets the nested property names to load.
+     * Gets the nested member strings names to load.
      *
      * Example:
      * <code>
      * [
-     *      'alias' => 'some.nested.property'
+     *      'alias'     => 'some.nested.property',
+     *      'aggregate' => 'some.nested.collection.count()',
      * ]
      * </code>
      *
-     * @return NestedProperty[]
+     * @return string[]
      */
-    public function getAliasNestedPropertyNameMap();
+    public function getAliasNestedMemberStringMap();
 }

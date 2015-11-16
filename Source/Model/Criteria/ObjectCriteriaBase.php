@@ -24,13 +24,20 @@ class ObjectCriteriaBase
     protected $condition;
 
     /**
+     * @var IMemberExpressionParser|null
+     */
+    protected $memberExpressionParser;
+
+    /**
      * Criteria constructor.
      *
-     * @param FinalizedClassDefinition $class
+     * @param FinalizedClassDefinition     $class
+     * @param IMemberExpressionParser|null $memberExpressionParser
      */
-    public function __construct(FinalizedClassDefinition $class)
+    public function __construct(FinalizedClassDefinition $class, IMemberExpressionParser $memberExpressionParser = null)
     {
-        $this->class = $class;
+        $this->class                  = $class;
+        $this->memberExpressionParser = $memberExpressionParser ?: new MemberExpressionParser();
     }
 
     /**

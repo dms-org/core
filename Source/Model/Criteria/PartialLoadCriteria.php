@@ -14,22 +14,28 @@ use Iddigital\Cms\Core\Model\IPartialLoadCriteria;
 class PartialLoadCriteria extends Criteria implements IPartialLoadCriteria
 {
     /**
-     * @var NestedProperty[]
+     * @var NestedMember[]
      */
-    private $nestedPropertiesToLoad = [];
+    private $nestedMembersToLoad = [];
 
     /**
-     * Loads the supplied property.
+     * Loads the supplied member.
      *
-     * @param string      $propertyName
+     * Example:
+     * <code>
+     * ->load('some.nested.property', 'array-index')
+     * </code>
+     *
+     * @param string      $memberExpression
      * @param string|null $loadAsIndex
      *
      * @return static
      * @throws Exception\InvalidOperationException
      */
-    final public function load($propertyName, $loadAsIndex = null)
+    final public function load($memberExpression, $loadAsIndex = null)
     {
-        $this->nestedPropertiesToLoad[$loadAsIndex ?: $propertyName] = NestedProperty::parsePropertyName($this->class, $propertyName);
+        $this->nestedMembersToLoad[$loadAsIndex ?: $memberExpression] = $this->memberExpressionParser->parse($this->class,
+                $memberExpression);
 
         return $this;
     }
@@ -42,48 +48,48 @@ class PartialLoadCriteria extends Criteria implements IPartialLoadCriteria
      * <code>
      * ->loadAll([
      *      'some.nested.property' => 'alias-index',
-     *      'propertyWithoutIndex',
+     *      'propertyIndexedByThisString',
      * ])
      * </code>
      *
-     * @param string[] $propertyNameIndexMap
+     * @param string[] $memberExpressionIndexMap
      *
      * @return static
      * @throws Exception\InvalidOperationException
      */
-    final public function loadAll(array $propertyNameIndexMap)
+    final public function loadAll(array $memberExpressionIndexMap)
     {
-        foreach ($propertyNameIndexMap as $propertyName => $loadAsIndex) {
-            if (is_int($propertyName)) {
-                $propertyName = $loadAsIndex;
+        foreach ($memberExpressionIndexMap as $memberExpression => $loadAsIndex) {
+            if (is_int($memberExpression)) {
+                $memberExpression = $loadAsIndex;
             }
 
-            $this->nestedPropertiesToLoad[$loadAsIndex] = NestedProperty::parsePropertyName($this->class, $propertyName);
+            $this->nestedMembersToLoad[$loadAsIndex] = $this->memberExpressionParser->parse($this->class, $memberExpression);
         }
 
         return $this;
     }
 
     /**
-     * @return NestedProperty[]
+     * @inheritdoc
      */
-    final public function getAliasNestedPropertyMap()
+    final public function getAliasNestedMemberMap()
     {
-        return $this->nestedPropertiesToLoad;
+        return $this->nestedMembersToLoad;
     }
 
     /**
      * @inheritDoc
      */
-    final public function getAliasNestedPropertyNameMap()
+    final public function getAliasNestedMemberStringMap()
     {
-        $aliasPropertyNameMap = [];
+        $aliasMemberStringMap = [];
 
-        foreach ($this->nestedPropertiesToLoad as $alias => $nestedProperty) {
-            $aliasPropertyNameMap[$alias] = $nestedProperty->getName();
+        foreach ($this->nestedMembersToLoad as $alias => $nestedMember) {
+            $aliasMemberStringMap[$alias] = $nestedMember->asString();
         }
 
-        return $aliasPropertyNameMap;
+        return $aliasMemberStringMap;
     }
 
 }

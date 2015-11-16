@@ -21,11 +21,11 @@ class MemberPropertyExpressionTest extends CmsTestCase
         $this->assertSame($prop, $member->getProperty());
         $this->assertSame('prop', $member->asString());
 
-        $getter = $member->createGetterCallable();
+        $getter = $member->createArrayGetterCallable();
         $this->assertInternalType('callable', $getter);
         $this->assertSame(TestEntity::class, (new \ReflectionFunction($getter))->getClosureScopeClass()->getName());
 
-        $this->assertSame('abc', $getter(new TestEntity(null, 'abc')));
+        $this->assertSame([1 => 'abc'], $getter([1 => new TestEntity(null, 'abc')]));
     }
 
     public function testNewNullable()
@@ -37,11 +37,11 @@ class MemberPropertyExpressionTest extends CmsTestCase
         $this->assertSame($prop, $member->getProperty());
         $this->assertSame('prop', $member->asString());
 
-        $getter = $member->createGetterCallable();
+        $getter = $member->createArrayGetterCallable();
         $this->assertInternalType('callable', $getter);
         $this->assertSame(TestEntity::class, (new \ReflectionFunction($getter))->getClosureScopeClass()->getName());
 
-        $this->assertSame('abc', $getter(new TestEntity(null, 'abc')));
-        $this->assertSame(null, $getter(null));
+        $this->assertSame([1 => 'abc'], $getter([1 => new TestEntity(null, 'abc')]));
+        $this->assertSame([1 => null], $getter([1 => null]));
     }
 }

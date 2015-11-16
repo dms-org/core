@@ -10,10 +10,10 @@ use Iddigital\Cms\Core\Model\Criteria\Condition\ConditionOperator;
 use Iddigital\Cms\Core\Model\Criteria\Condition\InstanceOfCondition;
 use Iddigital\Cms\Core\Model\Criteria\Condition\NotCondition;
 use Iddigital\Cms\Core\Model\Criteria\Condition\OrCondition;
-use Iddigital\Cms\Core\Model\Criteria\Condition\PropertyCondition;
+use Iddigital\Cms\Core\Model\Criteria\Condition\MemberCondition;
 use Iddigital\Cms\Core\Model\Criteria\Criteria;
 use Iddigital\Cms\Core\Model\Criteria\NestedProperty;
-use Iddigital\Cms\Core\Model\Criteria\PropertyOrdering;
+use Iddigital\Cms\Core\Model\Criteria\MemberOrdering;
 use Iddigital\Cms\Core\Model\ICriteria;
 use Iddigital\Cms\Core\Model\IValueObject;
 use Iddigital\Cms\Core\Model\Object\FinalizedClassDefinition;
@@ -194,10 +194,10 @@ class CriteriaMapper
         }
     }
 
-    protected function mapOrdering(PropertyOrdering $ordering)
+    protected function mapOrdering(MemberOrdering $ordering)
     {
         return new Ordering(
-                $this->mapProperty($ordering->getNestedProperties()),
+                $this->mapProperty($ordering->getNestedMembers()),
                 $ordering->isAsc() ? Ordering::ASC : Ordering::DESC
         );
     }
@@ -218,7 +218,7 @@ class CriteriaMapper
             }
 
             return Expr::compoundOr($expressions);
-        } elseif ($condition instanceof PropertyCondition) {
+        } elseif ($condition instanceof MemberCondition) {
             return $this->mapPropertyCondition($condition, $select);
         } elseif ($condition instanceof InstanceOfCondition) {
             return $this->mapper->getMapping()->getClassConditionExpr($select, $condition->getClass());
@@ -231,9 +231,9 @@ class CriteriaMapper
         );
     }
 
-    private function mapPropertyCondition(PropertyCondition $condition, Select $select)
+    private function mapPropertyCondition(MemberCondition $condition, Select $select)
     {
-        $properties   = $condition->getNestedProperties();
+        $properties   = $condition->getNestedMembers();
         $property     = array_shift($properties);
         $propertyName = $property->getName();
 
@@ -246,7 +246,7 @@ class CriteriaMapper
             }
 
             return $this->createEmbeddedMapper($this->embeddedObjects[$propertyName])->mapPropertyCondition(
-                    new PropertyCondition(
+                    new MemberCondition(
                             new NestedProperty($properties),
                             $condition->getOperator(),
                             $condition->getValue()
@@ -442,7 +442,7 @@ class CriteriaMapper
 
         foreach ($embeddedDefinition->getProperties() as $property) {
             $columnExpressions[] = $embeddedMapper->mapPropertyCondition(
-                    new PropertyCondition(
+                    new MemberCondition(
                             new NestedProperty([$property]),
                             $operator,
                             $embeddedProperties[$property->getName()]

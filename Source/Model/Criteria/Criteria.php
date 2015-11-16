@@ -14,7 +14,7 @@ use Iddigital\Cms\Core\Model\ICriteria;
 class Criteria extends SpecificationDefinition implements ICriteria
 {
     /**
-     * @var PropertyOrdering[]
+     * @var MemberOrdering[]
      */
     private $orderings = [];
 
@@ -31,22 +31,37 @@ class Criteria extends SpecificationDefinition implements ICriteria
     /**
      * {@inheritDoc}
      */
+    final public function hasOrderings()
+    {
+        return count($this->orderings) > 0;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     final public function getOrderings()
     {
         return $this->orderings;
     }
 
     /**
-     * @param string $propertyName
+     * Adds an ordering to the criteria.
+     *
+     * Example:
+     * <code>
+     * ->orderBy('some.property', OrderingDirection::ASC)
+     * </code>
+     *
+     * @param string $memberExpression
      * @param string $direction
      *
      * @return static
      * @throws InvalidArgumentException
      */
-    final public function orderBy($propertyName, $direction)
+    final public function orderBy($memberExpression, $direction)
     {
-        $this->orderings[] = new PropertyOrdering(
-                NestedProperty::parsePropertyName($this->class, $propertyName),
+        $this->orderings[] = new MemberOrdering(
+                $this->memberExpressionParser->parse($this->class, $memberExpression),
                 $direction
         );
 
@@ -54,19 +69,39 @@ class Criteria extends SpecificationDefinition implements ICriteria
     }
 
     /**
-     * {@inheritDoc}
+     * Adds an ascending ordering to the criteria.
+     *
+     * Example:
+     * <code>
+     * ->orderByAsc('some.property')
+     * </code>
+     *
+     * @param string $memberExpression
+     *
+     * @return static
+     * @throws InvalidArgumentException
      */
-    final public function orderByAsc($propertyName)
+    final public function orderByAsc($memberExpression)
     {
-        return $this->orderBy($propertyName, OrderingDirection::ASC);
+        return $this->orderBy($memberExpression, OrderingDirection::ASC);
     }
 
     /**
-     * {@inheritDoc}
+     * Adds an descending ordering to the criteria.
+     *
+     * Example:
+     * <code>
+     * ->orderByDesc('some.property')
+     * </code>
+     *
+     * @param string $memberExpression
+     *
+     * @return static
+     * @throws InvalidArgumentException
      */
-    final public function orderByDesc($propertyName)
+    final public function orderByDesc($memberExpression)
     {
-        return $this->orderBy($propertyName, OrderingDirection::DESC);
+        return $this->orderBy($memberExpression, OrderingDirection::DESC);
     }
 
     /**

@@ -12,23 +12,20 @@ use Iddigital\Cms\Core\Model\ITypedObject;
 class AndCondition extends CompositeCondition
 {
     /**
-     * Returns a callable that takes an object and returns a boolean
-     * whether the object passes the condition.
-     *
-     * @return callable
+     * @inheritdoc
      */
-    protected function makeFilterCallable()
+    protected function makeArrayFilterCallable()
     {
         $conditions = $this->conditions;
         /** @var Condition $firstCondition */
         $firstCondition = array_shift($conditions);
-        $filter = $firstCondition->getFilterCallable();
+        $filter = $firstCondition->getArrayFilterCallable();
 
         foreach ($conditions as $condition) {
-            $innerFilter = $condition->getFilterCallable();
+            $innerFilter = $condition->getArrayFilterCallable();
 
-            $filter = function (ITypedObject $object) use ($innerFilter, $filter) {
-                return $innerFilter($object) && $filter($object);
+            $filter = function (array $objects) use ($innerFilter, $filter) {
+                return array_intersect_key($innerFilter($objects), $filter($objects));
             };
         }
 

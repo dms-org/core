@@ -2,8 +2,6 @@
 
 namespace Iddigital\Cms\Core\Model\Criteria\Condition;
 
-use Iddigital\Cms\Core\Model\ITypedObject;
-
 /**
  * The instance of condition class.
  *
@@ -30,12 +28,23 @@ class InstanceOfCondition extends Condition
         return $this->class;
     }
 
-    protected function makeFilterCallable()
+    /**
+     * @inheritdoc
+     */
+    protected function makeArrayFilterCallable()
     {
         $class = $this->class;
 
-        return function (ITypedObject $object) use ($class) {
-            return $object instanceof $class;
+        return function (array $objects) use ($class) {
+            $filtered = [];
+
+            foreach ($objects as $key => $object) {
+                if ($object instanceof $class) {
+                    $filtered[$key] = $object;
+                }
+            }
+
+            return $filtered;
         };
     }
 }

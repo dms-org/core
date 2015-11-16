@@ -139,7 +139,7 @@ class NestedProperty
     }
 
     /**
-     * @return Closure
+     * @return \Closure
      */
     final public function makePropertyGetterCallable()
     {

@@ -6,16 +6,16 @@ use Iddigital\Cms\Core\Exception\InvalidArgumentException;
 use Iddigital\Cms\Core\Model\Object\FinalizedPropertyDefinition;
 
 /**
- * The property ordering class
+ * The member ordering class
  *
  * @author Elliot Levin <elliotlevin@hotmail.com>
  */
-class PropertyOrdering
+class MemberOrdering
 {
     /**
-     * @var NestedProperty
+     * @var NestedMember
      */
-    private $nestedProperty;
+    private $nestedMember;
 
     /**
      * @var string
@@ -25,25 +25,25 @@ class PropertyOrdering
     /**
      * PropertyOrdering constructor.
      *
-     * @param NestedProperty $nestedProperty
+     * @param NestedMember $nestedMember
      * @param string         $direction
      *
      * @throws InvalidArgumentException
      */
-    public function __construct(NestedProperty $nestedProperty, $direction)
+    public function __construct(NestedMember $nestedMember, $direction)
     {
         OrderingDirection::validate($direction);
 
-        $this->nestedProperty = $nestedProperty;
+        $this->nestedMember = $nestedMember;
         $this->direction      = $direction;
     }
 
     /**
-     * @return FinalizedPropertyDefinition[]
+     * @return IMemberExpressionParser[]
      */
-    final  public function getNestedProperties()
+    final public function getNestedMembers()
     {
-        return $this->nestedProperty->getNestedProperties();
+        return $this->nestedMember->getParts();
     }
 
     /**
@@ -63,13 +63,13 @@ class PropertyOrdering
     }
 
     /**
-     * Returns a callable which takes a object as a parameter
-     * and returns the value to order by.
+     * Returns a callable which takes an array of objects
+     * and returns an array of values to order by.
      *
      * @return callable
      */
-    public function getOrderCallable()
+    public function getArrayOrderCallable()
     {
-        return $this->nestedProperty->makePropertyGetterCallable();
+        return $this->nestedMember->makeArrayGetterCallable();
     }
 }
