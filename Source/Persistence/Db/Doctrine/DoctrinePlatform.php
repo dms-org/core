@@ -352,7 +352,6 @@ class DoctrinePlatform extends Platform
         return $this->expressionCompiler->compileExpression($queryBuilder, $expr);
     }
 
-
     /**
      * @param $identifier
      *

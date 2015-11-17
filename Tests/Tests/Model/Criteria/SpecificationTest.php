@@ -3,7 +3,6 @@
 namespace Iddigital\Cms\Core\Tests\Model\Criteria;
 
 use Iddigital\Cms\Common\Testing\CmsTestCase;
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
 use Iddigital\Cms\Core\Exception\InvalidOperationException;
 use Iddigital\Cms\Core\Exception\TypeMismatchException;
 use Iddigital\Cms\Core\Model\Criteria\Condition\AndCondition;
@@ -14,7 +13,6 @@ use Iddigital\Cms\Core\Model\Criteria\Condition\OrCondition;
 use Iddigital\Cms\Core\Model\Criteria\InvalidMemberExpressionException;
 use Iddigital\Cms\Core\Model\Criteria\Member\MemberPropertyExpression;
 use Iddigital\Cms\Core\Model\Criteria\NestedMember;
-use Iddigital\Cms\Core\Model\Criteria\NestedProperty;
 use Iddigital\Cms\Core\Model\Criteria\SpecificationDefinition;
 use Iddigital\Cms\Core\Tests\Model\Criteria\Fixtures\MockSpecification;
 use Iddigital\Cms\Core\Tests\Model\Fixtures\SubclassEntity;
@@ -181,8 +179,12 @@ class SpecificationTest extends CmsTestCase
 
         $this->assertEquals(
                 new AndCondition([
-                        new MemberCondition(new NestedMember([new MemberPropertyExpression(TestEntity::definition()->getProperty('prop'), false)]), '=', 'foo'),
-                        new MemberCondition(new NestedMember([new MemberPropertyExpression(TestEntity::definition()->getProperty('prop'), false)]), '!=', 'bar'),
+                        new MemberCondition(new NestedMember([
+                                new MemberPropertyExpression(TestEntity::definition()->getProperty('prop'), false)
+                        ]), '=', 'foo'),
+                        new MemberCondition(new NestedMember([
+                                new MemberPropertyExpression(TestEntity::definition()->getProperty('prop'), false)
+                        ]), '!=', 'bar'),
                 ]),
                 $spec1->and_($spec2)->getCondition()
         );
@@ -212,8 +214,12 @@ class SpecificationTest extends CmsTestCase
 
         $this->assertEquals(
                 new OrCondition([
-                        new MemberCondition(new NestedMember([new MemberPropertyExpression(TestEntity::definition()->getProperty('prop'), false)]), '=', 'foo'),
-                        new MemberCondition(new NestedMember([new MemberPropertyExpression(TestEntity::definition()->getProperty('prop'), false)]), '!=', 'bar'),
+                        new MemberCondition(new NestedMember([
+                                new MemberPropertyExpression(TestEntity::definition()->getProperty('prop'), false)
+                        ]), '=', 'foo'),
+                        new MemberCondition(new NestedMember([
+                                new MemberPropertyExpression(TestEntity::definition()->getProperty('prop'), false)
+                        ]), '!=', 'bar'),
                 ]),
                 $spec1->or_($spec2)->getCondition()
         );
@@ -239,7 +245,9 @@ class SpecificationTest extends CmsTestCase
 
         $this->assertEquals(
                 new NotCondition(
-                        new MemberCondition(new NestedMember([new MemberPropertyExpression(TestEntity::definition()->getProperty('prop'), false)]), '=', 'foo')
+                        new MemberCondition(new NestedMember([
+                                new MemberPropertyExpression(TestEntity::definition()->getProperty('prop'), false)
+                        ]), '=', 'foo')
                 ),
                 $spec1->not()->getCondition()
         );

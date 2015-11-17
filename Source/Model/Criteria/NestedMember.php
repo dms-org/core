@@ -3,13 +3,8 @@
 namespace Iddigital\Cms\Core\Model\Criteria;
 
 use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Exception\InvalidOperationException;
-use Iddigital\Cms\Core\Model\ITypedObject;
-use Iddigital\Cms\Core\Model\Object\FinalizedClassDefinition;
 use Iddigital\Cms\Core\Model\Object\FinalizedPropertyDefinition;
-use Iddigital\Cms\Core\Model\Object\TypedObject;
 use Iddigital\Cms\Core\Model\Type\IType;
-use Iddigital\Cms\Core\Model\Type\ObjectType;
 
 /**
  * The nested member expression class.
@@ -24,6 +19,11 @@ class NestedMember
     protected $parts;
 
     /**
+     * @var string
+     */
+    protected $expressionString;
+
+    /**
      * PropertyCriterion constructor.
      *
      * @param IMemberExpression[] $parts
@@ -34,6 +34,14 @@ class NestedMember
         InvalidArgumentException::verifyAllInstanceOf(__METHOD__, 'parts', $parts, IMemberExpression::class);
 
         $this->parts = $parts;
+
+        $names = [];
+
+        foreach ($this->parts as $part) {
+            $names[] = $part->asString();
+        }
+
+        $this->expressionString = implode('.', $names);
     }
 
     /**
@@ -81,13 +89,7 @@ class NestedMember
      */
     final public function asString()
     {
-        $names = [];
-
-        foreach ($this->parts as $part) {
-            $names[] = $part->asString();
-        }
-
-        return implode('.', $names);
+        return $this->expressionString;
     }
 
     /**

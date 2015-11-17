@@ -3,6 +3,7 @@
 namespace Iddigital\Cms\Core\Persistence\Db\Query\Expression;
 
 use Iddigital\Cms\Core\Exception\InvalidArgumentException;
+use Iddigital\Cms\Core\Persistence\Db\Query\Select;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Column;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Table;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Type\Integer;
@@ -404,5 +405,45 @@ abstract class Expr
     public static function max(Expr $argument)
     {
         return new Max($argument);
+    }
+
+    /**
+     * @param Expr $argument
+     *
+     * @return Min
+     */
+    public static function min(Expr $argument)
+    {
+        return new Min($argument);
+    }
+
+    /**
+     * @param Expr $argument
+     *
+     * @return Avg
+     */
+    public static function avg(Expr $argument)
+    {
+        return new Avg($argument);
+    }
+
+    /**
+     * @param Expr $argument
+     *
+     * @return Sum
+     */
+    public static function sum(Expr $argument)
+    {
+        return new Sum($argument);
+    }
+
+    /**
+     * @param Select $select
+     *
+     * @return SubSelect
+     */
+    public static function subSelect(Select $select)
+    {
+        return new SubSelect($select);
     }
 }

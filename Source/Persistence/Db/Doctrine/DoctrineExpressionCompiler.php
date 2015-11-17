@@ -26,6 +26,11 @@ class DoctrineExpressionCompiler
     protected $doctrinePlatform;
 
     /**
+     * @var int
+     */
+    protected $subSelectCounter = 0;
+
+    /**
      * DoctrineExpressionCompiler constructor.
      *
      * @param DoctrinePlatform $platform
@@ -71,6 +76,21 @@ class DoctrineExpressionCompiler
                         $this->compileExpression($queryBuilder, $expr->getArgument())
                 );
 
+            case $expr instanceof Expression\Min:
+                return $this->doctrinePlatform->getMinExpression(
+                        $this->compileExpression($queryBuilder, $expr->getArgument())
+                );
+
+            case $expr instanceof Expression\Avg:
+                return $this->doctrinePlatform->getAvgExpression(
+                        $this->compileExpression($queryBuilder, $expr->getArgument())
+                );
+
+            case $expr instanceof Expression\Sum:
+                return $this->doctrinePlatform->getSumExpression(
+                        $this->compileExpression($queryBuilder, $expr->getArgument())
+                );
+
             case $expr instanceof Expression\BinOp:
                 return (string)$this->compileBinOp($queryBuilder, $expr);
 
@@ -88,6 +108,9 @@ class DoctrineExpressionCompiler
 
             case $expr instanceof Expression\UnaryOp:
                 return $this->compileUnaryOp($queryBuilder, $expr);
+
+            case $expr instanceof Expression\SubSelect:
+                return $this->compileSubSelect($queryBuilder, $expr);
         }
 
         throw InvalidArgumentException::format('Unknown expression type: ' . get_class($expr));
@@ -170,5 +193,17 @@ class DoctrineExpressionCompiler
         }
 
         throw InvalidArgumentException::format('Unknown unary operator: ' . $expr->getOperator());
+    }
+
+    private function compileSubSelect(QueryBuilder $queryBuilder, Expression\SubSelect $expr)
+    {
+        $subSelect      = $this->platform->compileSelect($expr->getSelect());
+        $subSelectAlias = $this->doctrinePlatform->quoteSingleIdentifier('__sub_select_' . $this->subSelectCounter++);
+
+        foreach ($subSelect->getParameters() as $parameter) {
+            $queryBuilder->createPositionalParameter($parameter);
+        }
+
+        return '(' . $subSelect->getSql() . ') AS ' . $subSelectAlias;
     }
 }

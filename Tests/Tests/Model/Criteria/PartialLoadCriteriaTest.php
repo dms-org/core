@@ -3,7 +3,9 @@
 namespace Iddigital\Cms\Core\Tests\Model\Criteria;
 
 use Iddigital\Cms\Common\Testing\CmsTestCase;
+use Iddigital\Cms\Core\Model\Criteria\Member\CollectionCountMethodExpression;
 use Iddigital\Cms\Core\Model\Criteria\Member\MemberPropertyExpression;
+use Iddigital\Cms\Core\Model\Criteria\MemberExpressionNode;
 use Iddigital\Cms\Core\Model\Criteria\NestedMember;
 use Iddigital\Cms\Core\Model\Criteria\PartialLoadCriteria;
 use Iddigital\Cms\Core\Tests\Model\Fixtures\SubObject;
@@ -65,5 +67,50 @@ class PartialLoadCriteriaTest extends CmsTestCase
                         new MemberPropertyExpression(SubObject::definition()->getProperty('prop'), true),
                 ]),
         ], $criteria->getAliasNestedMemberMap());
+    }
+
+    public function testAliasMemberTree()
+    {
+        $criteria = new PartialLoadCriteria(TestEntity::definition());
+
+        $criteria->loadAll([
+                'prop',
+                'object',
+                'object.prop'            => 'sub-prop',
+                'object.numbers'         => 'sub-numbers',
+                'object.numbers.count()' => 'sub-numbers-count',
+        ]);
+
+        $this->assertEquals([
+                new MemberExpressionNode(
+                        new MemberPropertyExpression(TestEntity::definition()->getProperty('prop'), false),
+                        [],
+                        ['prop']
+                ),
+                new MemberExpressionNode(
+                        new MemberPropertyExpression(TestEntity::definition()->getProperty('object'), false),
+                        [
+                                new MemberExpressionNode(
+                                        new MemberPropertyExpression(SubObject::definition()->getProperty('prop'), true),
+                                        [],
+                                        ['sub-prop']
+                                ),
+                                new MemberExpressionNode(
+                                        new MemberPropertyExpression(SubObject::definition()->getProperty('numbers'), true),
+                                        [
+                                                new MemberExpressionNode(
+                                                        new CollectionCountMethodExpression(
+                                                                SubObject::definition()->getProperty('numbers')->getType()->nullable()
+                                                        ),
+                                                        [],
+                                                        ['sub-numbers-count']
+                                                ),
+                                        ],
+                                        ['sub-numbers']
+                                ),
+                        ],
+                        ['object']
+                ),
+        ], $criteria->getAliasMemberTree());
     }
 }

@@ -7,7 +7,7 @@ use Iddigital\Cms\Core\Persistence\Db\Schema\Column;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Type\Type;
 
 /**
- * The column class.
+ * The column expression class.
  *
  * @author Elliot Levin <elliotlevin@hotmail.com>
  */
@@ -24,7 +24,7 @@ class ColumnExpr extends Expr
     private $column;
 
     /**
-     * Column constructor.
+     * ColumnExpr constructor.
      *
      * @param string $table
      * @param Column $column

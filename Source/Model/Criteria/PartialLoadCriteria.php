@@ -19,43 +19,18 @@ class PartialLoadCriteria extends Criteria implements IPartialLoadCriteria
     private $nestedMembersToLoad = [];
 
     /**
-     * Loads the supplied member.
-     *
-     * Example:
-     * <code>
-     * ->load('some.nested.property', 'array-index')
-     * </code>
-     *
-     * @param string      $memberExpression
-     * @param string|null $loadAsIndex
-     *
-     * @return static
-     * @throws Exception\InvalidOperationException
+     * @inheritdoc
      */
     final public function load($memberExpression, $loadAsIndex = null)
     {
-        $this->nestedMembersToLoad[$loadAsIndex ?: $memberExpression] = $this->memberExpressionParser->parse($this->class,
-                $memberExpression);
+        $loadAsIndex                             = $loadAsIndex ?: $memberExpression;
+        $this->nestedMembersToLoad[$loadAsIndex] = $this->memberExpressionParser->parse($this->class, $memberExpression);
 
         return $this;
     }
 
     /**
-     * Load all the supplied properties. Pass an array containing the properties
-     * to load as the indexes and the value as the array index to load the property into.
-     *
-     * Example:
-     * <code>
-     * ->loadAll([
-     *      'some.nested.property' => 'alias-index',
-     *      'propertyIndexedByThisString',
-     * ])
-     * </code>
-     *
-     * @param string[] $memberExpressionIndexMap
-     *
-     * @return static
-     * @throws Exception\InvalidOperationException
+     * @inheritdoc
      */
     final public function loadAll(array $memberExpressionIndexMap)
     {
@@ -92,4 +67,60 @@ class PartialLoadCriteria extends Criteria implements IPartialLoadCriteria
         return $aliasMemberStringMap;
     }
 
+    /**
+     * @inheritdoc
+     */
+    public function getAliasMemberTree()
+    {
+        $arrayTree     = [];
+        $hashMemberMap = [];
+
+        foreach ($this->nestedMembersToLoad as $alias => $nestedMember) {
+            $currentMemberHash = '';
+            $currentNode       =& $arrayTree;
+
+            foreach ($nestedMember->getParts() as $part) {
+                $memberString = $part->asString();
+                $currentMemberHash .= '||' . $memberString;
+
+                $currentNode =& $currentNode[$memberString];
+                $hashMemberMap[$currentMemberHash] = $part;
+            }
+
+            $currentNode[] = $alias;
+        }
+
+        return $this->buildMemberNodeFromTree('', $arrayTree, $hashMemberMap);
+    }
+
+    protected function buildMemberNodeFromTree($currentMemberHash, array $aliasTree, array $hashMemberMap)
+    {
+        $aliases   = [];
+        $children = [];
+
+        foreach ($aliasTree as $memberString => $node) {
+            if (is_string($node)) {
+                // It is an alias
+                $aliases[] = $node;
+            } elseif (is_array($node)) {
+                // It is child nodes
+                $children[] = $this->buildMemberNodeFromTree(
+                        $currentMemberHash . '||' . $memberString,
+                        $node,
+                        $hashMemberMap
+                );
+            }
+        }
+
+        if ($currentMemberHash === '') {
+            // Root node, just need node array
+            return $children;
+        }
+
+        return new MemberExpressionNode(
+                $hashMemberMap[$currentMemberHash],
+                $children,
+                $aliases
+        );
+    }
 }

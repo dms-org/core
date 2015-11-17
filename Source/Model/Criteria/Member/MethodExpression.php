@@ -2,7 +2,6 @@
 
 namespace Iddigital\Cms\Core\Model\Criteria\Member;
 
-use Iddigital\Cms\Core\Model\Criteria\IMemberExpressionParser;
 use Iddigital\Cms\Core\Model\Type\IType;
 
 /**
@@ -25,14 +24,16 @@ abstract class MethodExpression extends MemberExpression
     /**
      * MemberMethodExpression constructor.
      *
-     * @param IType                   $sourceType
-     * @param string                  $name
-     * @param string[]                $arguments
-     * @param IType                   $returnType
+     * @param IType    $sourceType
+     * @param string   $name
+     * @param string[] $arguments
+     * @param IType    $returnType
      */
     public function __construct(IType $sourceType, $name, array $arguments, IType $returnType)
     {
-        parent::__construct($sourceType, $returnType);
+        $expressionString = $name . '(' . implode(',', $arguments) . ')';
+
+        parent::__construct($sourceType, $returnType, $expressionString);
         $this->name      = $name;
         $this->arguments = $arguments;
 
@@ -58,13 +59,5 @@ abstract class MethodExpression extends MemberExpression
     public function getArguments()
     {
         return $this->arguments;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function asString()
-    {
-        return $this->name . '(' . implode(',', $this->arguments) . ')';
     }
 }

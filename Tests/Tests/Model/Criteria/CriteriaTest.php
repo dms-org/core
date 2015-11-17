@@ -3,7 +3,6 @@
 namespace Iddigital\Cms\Core\Tests\Model\Criteria;
 
 use Iddigital\Cms\Common\Testing\CmsTestCase;
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
 use Iddigital\Cms\Core\Exception\TypeMismatchException;
 use Iddigital\Cms\Core\Model\Criteria\Condition\AndCondition;
 use Iddigital\Cms\Core\Model\Criteria\Condition\InstanceOfCondition;

@@ -3,6 +3,7 @@
 namespace Iddigital\Cms\Core\Model;
 
 use Iddigital\Cms\Core\Exception;
+use Iddigital\Cms\Core\Model\Criteria\MemberExpressionNode;
 use Iddigital\Cms\Core\Model\Criteria\PartialLoadCriteria;
 use Iddigital\Cms\Core\Model\Object\FinalizedClassDefinition;
 use Iddigital\Cms\Core\Model\Object\TypedObject;
@@ -194,16 +195,27 @@ class ObjectCollection extends TypedCollection implements ITypedObjectCollection
         $objects    = array_values($this->matching($criteria));
         $loadedData = array_fill_keys(array_keys($objects), []);
 
-        foreach ($criteria->getAliasNestedMemberMap() as $index => $nestedMember) {
-            $getter       = $nestedMember->makeArrayGetterCallable();
-            $memberValues = $getter($objects);
-
-            foreach ($memberValues as $key => $memberValue) {
-                $loadedData[$key][$index] = $memberValue;
-            }
+        foreach ($criteria->getAliasMemberTree() as $node) {
+            $this->loadMemberNode($loadedData, $objects, $node);
         }
 
         return $loadedData;
     }
 
+    protected function loadMemberNode(array &$loadedData, array $currentValues, MemberExpressionNode $node)
+    {
+        $getter = $node->getMemberExpression()->createArrayGetterCallable();
+
+        $memberValues = $getter($currentValues);
+
+        foreach ($node->getLoadAliases() as $loadAlias) {
+            foreach ($memberValues as $key => $memberValue) {
+                $loadedData[$key][$loadAlias] = $memberValue;
+            }
+        }
+
+        foreach ($node->getChildren() as $childNode) {
+            $this->loadMemberNode($loadedData, $memberValues, $childNode);
+        }
+    }
 }

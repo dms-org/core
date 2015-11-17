@@ -23,6 +23,14 @@ class PhpCompiledQuery extends CompiledQuery
         $this->compiled = $compiled;
     }
 
+    /**
+     * @return callable
+     */
+    public function getCompiled()
+    {
+        return $this->compiled;
+    }
+
     public function executeOn(MockDatabase $database)
     {
         return call_user_func($this->compiled, $database, $this->getParameters());

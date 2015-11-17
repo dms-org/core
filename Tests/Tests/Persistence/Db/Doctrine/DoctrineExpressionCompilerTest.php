@@ -7,7 +7,9 @@ use Doctrine\DBAL\Query\QueryBuilder;
 use Iddigital\Cms\Core\Persistence\Db\Doctrine\DoctrineExpressionCompiler;
 use Iddigital\Cms\Core\Persistence\Db\Doctrine\DoctrinePlatform;
 use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Expr;
+use Iddigital\Cms\Core\Persistence\Db\Query\Select;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Column;
+use Iddigital\Cms\Core\Persistence\Db\Schema\Table;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Type\Date;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Type\DateTime;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Type\Integer;
@@ -55,6 +57,9 @@ class DoctrineExpressionCompilerTest extends DoctrineTestBase
             // Aggregates
             [Expr::count(), 'COUNT(*)'],
             [Expr::max($testColumn), 'MAX(`table`.`column`)'],
+            [Expr::min($testColumn), 'MIN(`table`.`column`)'],
+            [Expr::avg($testColumn), 'AVG(`table`.`column`)'],
+            [Expr::sum($testColumn), 'SUM(`table`.`column`)'],
             //
             // Parameter
             [Expr::param(Text::long(), 'foobar'), '?', [1 => 'foobar']],
@@ -99,6 +104,12 @@ class DoctrineExpressionCompilerTest extends DoctrineTestBase
             [Expr::not($testColumn), 'NOT(`table`.`column`)'],
             [Expr::isNull($testColumn), '`table`.`column` IS NULL'],
             [Expr::isNotNull($testColumn), '`table`.`column` IS NOT NULL'],
+            // Sub select
+            [Expr::subSelect(
+                    (new Select(new Table('table', [$testColumn->getColumn()])))
+                            ->addRawColumn($testColumn->getName())
+                            ->where($testColumn)
+            ), '(SELECT `table`.`column` AS `column` FROM `table` WHERE `table`.`column`) AS `__sub_select_0`'],
         ];
     }
 

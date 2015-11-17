@@ -3,6 +3,7 @@
 namespace Iddigital\Cms\Core\Model;
 
 use Iddigital\Cms\Core\Exception;
+use Iddigital\Cms\Core\Model\Criteria\MemberExpressionNode;
 use Iddigital\Cms\Core\Model\Criteria\NestedMember;
 
 /**
@@ -41,4 +42,48 @@ interface IPartialLoadCriteria extends ICriteria
      * @return string[]
      */
     public function getAliasNestedMemberStringMap();
+
+    /**
+     * Returns a tree structure containing a tree of
+     * member expressions to load.
+     *
+     * Example:
+     * <code>
+     * // For
+     * [
+     *      'alias'     => 'some.property',
+     *      'aggregate' => 'some.collection.count()',
+     *      'val'       => 'value',
+     * ]
+     * // Will return (pseudo-code)
+     * [
+     *      MemberExpressionNode(
+     *          PropertyMemberExpression('some'),
+     *          children => [
+     *              MemberExpressionNode(
+     *                  PropertyMemberExpression('property'),
+     *                  aliases => ['alias']
+     *              ),
+     *              MemberExpressionNode(
+     *                  PropertyMemberExpression('property'),
+     *                  children => [
+     *                       MemberExpressionNode(
+     *                          CollectionCountMethodExpression('),
+     *                          aliases => ['count']
+     *                       )
+     *                  ]
+     *              )
+     *      ),
+     *      MemberExpressionNode(
+     *          PropertyMemberExpression('value'),
+     *          aliases => ['val']
+     *      )
+     * ]
+     * </code>
+     *
+     * @see MemberExpressionNode
+     *
+     * @return MemberExpressionNode[]
+     */
+    public function getAliasMemberTree();
 }

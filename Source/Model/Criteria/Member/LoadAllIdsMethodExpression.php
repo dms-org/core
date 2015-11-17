@@ -4,7 +4,9 @@ namespace Iddigital\Cms\Core\Model\Criteria\Member;
 
 use Iddigital\Cms\Core\Exception\InvalidArgumentException;
 use Iddigital\Cms\Core\Model\Criteria\NestedMember;
+use Iddigital\Cms\Core\Model\EntityCollection;
 use Iddigital\Cms\Core\Model\IEntitySet;
+use Iddigital\Cms\Core\Model\Type\Builder\Type;
 use Iddigital\Cms\Core\Model\Type\IType;
 use Iddigital\Cms\Core\Model\Type\WithElementsType;
 
@@ -32,7 +34,7 @@ class LoadAllIdsMethodExpression extends MethodExpression
      */
     public function __construct(IType $sourceType, NestedMember $member, IEntitySet $dataSource)
     {
-        parent::__construct($sourceType, self::METHOD_NAME, [$member->asString()], $dataSource->getElementType());
+        parent::__construct($sourceType, self::METHOD_NAME, [$member->asString()], Type::collectionOf($dataSource->getElementType()));
         $this->dataSource = $dataSource;
         $this->member     = $member;
 
@@ -95,7 +97,16 @@ class LoadAllIdsMethodExpression extends MethodExpression
                 }
             }
 
-            return $relatedIdGroups;
+            $entityType = $this->dataSource->getEntityType();
+
+            foreach ($relatedEntityGroups as $key => $group) {
+                $relatedEntityGroups[$key] = new EntityCollection(
+                        $entityType,
+                        $group
+                );
+            }
+
+            return $relatedEntityGroups;
         };
     }
 }

@@ -9,12 +9,16 @@ use Iddigital\Cms\Core\Persistence\Db\Query\Clause\Join;
 use Iddigital\Cms\Core\Persistence\Db\Query\Clause\Ordering;
 use Iddigital\Cms\Core\Persistence\Db\Query\Delete;
 use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Aggregate;
+use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Avg;
 use Iddigital\Cms\Core\Persistence\Db\Query\Expression\BinOp;
 use Iddigital\Cms\Core\Persistence\Db\Query\Expression\ColumnExpr;
 use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Count;
 use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Expr;
 use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Max;
+use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Min;
 use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Parameter;
+use Iddigital\Cms\Core\Persistence\Db\Query\Expression\SubSelect;
+use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Sum;
 use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Tuple;
 use Iddigital\Cms\Core\Persistence\Db\Query\Expression\UnaryOp;
 use Iddigital\Cms\Core\Persistence\Db\Query\Query;
@@ -104,25 +108,25 @@ class MockPlatform extends Platform
         });
     }
 
-    protected function compileExpressions(array $exprs)
+    protected function compileExpressions(MockDatabase $database, array $exprs)
     {
         $compiled = [];
 
         foreach ($exprs as $key => $expr) {
-            $compiled[$key] = $this->compileExpression($expr);
+            $compiled[$key] = $this->compileExpression($database, $expr);
         }
 
         return $compiled;
     }
 
-    protected function compileExpression(Expr $expr)
+    protected function compileExpression(MockDatabase $database, Expr $expr)
     {
         switch (true) {
             case $expr instanceof BinOp:
-                return $this->compileBinOp($expr);
+                return $this->compileBinOp($database, $expr);
 
             case $expr instanceof UnaryOp:
-                return $this->compileUnaryOp($expr);
+                return $this->compileUnaryOp($database, $expr);
 
             case $expr instanceof ColumnExpr:
                 $table  = $expr->getTable();
@@ -142,10 +146,31 @@ class MockPlatform extends Platform
                 };
 
             case $expr instanceof Max:
-                $argument = $this->compileExpression($expr->getArgument());
+                $argument = $this->compileExpression($database, $expr->getArgument());
 
                 return function (ICollection $group) use ($argument) {
                     return $group->maximum($argument);
+                };
+
+            case $expr instanceof Min:
+                $argument = $this->compileExpression($database, $expr->getArgument());
+
+                return function (ICollection $group) use ($argument) {
+                    return $group->minimum($argument);
+                };
+
+            case $expr instanceof Avg:
+                $argument = $this->compileExpression($database, $expr->getArgument());
+
+                return function (ICollection $group) use ($argument) {
+                    return $group->average($argument);
+                };
+
+            case $expr instanceof Sum:
+                $argument = $this->compileExpression($database, $expr->getArgument());
+
+                return function (ICollection $group) use ($argument) {
+                    return $group->sum($argument);
                 };
 
             case $expr instanceof Parameter:
@@ -156,7 +181,7 @@ class MockPlatform extends Platform
                 };
 
             case $expr instanceof Tuple:
-                $compiled = $this->compileExpressions($expr->getExpressions());
+                $compiled = $this->compileExpressions($database, $expr->getExpressions());
 
                 return function ($row) use ($compiled) {
                     $values = [];
@@ -167,13 +192,20 @@ class MockPlatform extends Platform
                     return $values;
                 };
 
+            case $expr instanceof SubSelect:
+                $compiled = $this->compileSelect($expr->getSelect())->getCompiled();
+
+                return function ($row) use ($compiled, $database) {
+                    return $compiled($database, $row);
+                };
+
         }
     }
 
-    private function compileBinOp(BinOp $expr)
+    private function compileBinOp(MockDatabase $database, BinOp $expr)
     {
-        $left  = $this->compileExpression($expr->getLeft());
-        $right = $this->compileExpression($expr->getRight());
+        $left  = $this->compileExpression($database, $expr->getLeft());
+        $right = $this->compileExpression($database, $expr->getRight());
 
         switch ($expr->getOperator()) {
             case BinOp::AND_:
@@ -237,9 +269,9 @@ class MockPlatform extends Platform
         throw NotImplementedException::format('Unknown bin op %s', $expr->getOperator());
     }
 
-    private function compileUnaryOp(UnaryOp $expr)
+    private function compileUnaryOp(MockDatabase $database, UnaryOp $expr)
     {
-        $operand = $this->compileExpression($expr->getOperand());
+        $operand = $this->compileExpression($database, $expr->getOperand());
 
         switch ($expr->getOperator()) {
             case UnaryOp::IS_NULL:
@@ -266,10 +298,17 @@ class MockPlatform extends Platform
      */
     public function compileSelect(Select $query)
     {
-        $compiledQuery = function (MockDatabase $database) use ($query) {
+        $compiledQuery = function (MockDatabase $database, array $outerData = null) use ($query) {
             $rows = $this->loadFromTableRows($query, $database);
+
+            if ($outerData) {
+                $rows = $rows->select(function (array $row) use ($outerData) {
+                    return $row + $outerData;
+                });
+            }
+
             $rows = $this->performJoins($query, $database, $rows);
-            $rows = $this->performWhere($query, $rows);
+            $rows = $this->performWhere($database, $query, $rows);
 
             $isGrouped      = !empty($query->getGroupBy());
             $isImpliedGroup = false;
@@ -281,7 +320,7 @@ class MockPlatform extends Platform
             });
 
             if ($isGrouped) {
-                $compiledGroupings = $this->compileExpressions($query->getGroupBy());
+                $compiledGroupings = $this->compileExpressions($database, $query->getGroupBy());
                 $rows              = $rows->groupBy(function (array $row) use ($compiledGroupings) {
                     $grouping = [];
 
@@ -298,16 +337,16 @@ class MockPlatform extends Platform
             }
 
             foreach ($query->getHaving() as $having) {
-                $rows = $rows->where($this->compileExpression($having));
+                $rows = $rows->where($this->compileExpression($database, $having));
             }
 
             if (!$isImpliedGroup) {
-                $rows = $this->performOrderBy($query, $rows);
+                $rows = $this->performOrderBy($database, $query, $rows);
             }
 
             $rows = $this->performLimitAndOffset($query, $rows);
 
-            $aliasCompiledMap = $this->compileExpressions($query->getAliasColumnMap());
+            $aliasCompiledMap = $this->compileExpressions($database, $query->getAliasColumnMap());
             $rows             = $rows->select(function ($rowOrGroup) use ($aliasCompiledMap) {
                 $selected = [];
 
@@ -344,7 +383,7 @@ class MockPlatform extends Platform
     {
         foreach ($query->getJoins() as $join) {
             $joinedTable  = $join->getTable();
-            $onConditions = $this->compileExpressions($join->getOn());
+            $onConditions = $this->compileExpressions($database, $join->getOn());
             $joinedRows   = $this->loadTableRows($database, $joinedTable->getName(), $join->getAlias());
 
             switch ($join->getType()) {
@@ -388,29 +427,29 @@ class MockPlatform extends Platform
         });
     }
 
-    protected function performWhere(Query $query, ICollection $rows)
+    protected function performWhere(MockDatabase $database, Query $query, ICollection $rows)
     {
         foreach ($query->getWhere() as $where) {
-            $rows = $rows->where($this->compileExpression($where));
+            $rows = $rows->where($this->compileExpression($database, $where));
         }
 
         return $rows;
     }
 
-    protected function performOrderBy(Query $query, ICollection $rows)
+    protected function performOrderBy(MockDatabase $database, Query $query, ICollection $rows)
     {
         $orderings = $query->getOrderings();
         if ($orderings) {
             /** @var Ordering $first */
             $first = array_pop($orderings);
             $rows  = $rows->orderBy(
-                    $this->compileExpression($first->getExpression()),
+                    $this->compileExpression($database, $first->getExpression()),
                     $first->getMode() === Ordering::ASC ? Direction::ASCENDING : Direction::DESCENDING
             );
 
             foreach ($orderings as $ordering) {
                 $rows = $rows->thenBy(
-                        $this->compileExpression($ordering->getExpression()),
+                        $this->compileExpression($database, $ordering->getExpression()),
                         $ordering->getMode() === Ordering::ASC ? Direction::ASCENDING : Direction::DESCENDING
                 );
             }
@@ -436,13 +475,13 @@ class MockPlatform extends Platform
         $compiledQuery = function (MockDatabase $database) use ($query) {
             $allRows = $rows = $this->loadFromTableRows($query, $database);
             $rows    = $this->performJoins($query, $database, $rows);
-            $rows    = $this->performWhere($query, $rows);
-            $rows    = $this->performOrderBy($query, $rows);
+            $rows    = $this->performWhere($database, $query, $rows);
+            $rows    = $this->performOrderBy($database, $query, $rows);
             $rows    = $this->performLimitAndOffset($query, $rows);
 
             $table            = $query->getTableAlias();
             $primaryKey       = $query->getTable()->getPrimaryKeyColumnName();
-            $compiledSets     = $this->compileExpressions($query->getColumnSetMap());
+            $compiledSets     = $this->compileExpressions($database, $query->getColumnSetMap());
             $updatedRowsCount = $rows->count();
 
             $updatedRows = $rows
@@ -482,8 +521,8 @@ class MockPlatform extends Platform
         $compiledQuery = function (MockDatabase $database) use ($query) {
             $allRows = $rows = $this->loadFromTableRows($query, $database);
             $rows    = $this->performJoins($query, $database, $rows);
-            $rows    = $this->performWhere($query, $rows);
-            $rows    = $this->performOrderBy($query, $rows);
+            $rows    = $this->performWhere($database, $query, $rows);
+            $rows    = $this->performOrderBy($database, $query, $rows);
             $rows    = $this->performLimitAndOffset($query, $rows);
 
             $table       = $query->getTableAlias();
@@ -522,7 +561,7 @@ class MockPlatform extends Platform
             $rows       = $this->loadTableRows($database, $tableName, $tableName);
 
             if ($query->hasWhereCondition()) {
-                $rows = $rows->where($this->compileExpression($query->getWhereCondition()));
+                $rows = $rows->where($this->compileExpression($database, $query->getWhereCondition()));
             }
 
             if ($query->hasGroupingColumn()) {

@@ -13,6 +13,11 @@ use Iddigital\Cms\Core\Model\Type\IType;
 abstract class MemberExpression implements IMemberExpression
 {
     /**
+     * @var string
+     */
+    protected $expressionString;
+
+    /**
      * @var IType
      */
     protected $sourceType;
@@ -23,16 +28,19 @@ abstract class MemberExpression implements IMemberExpression
     protected $resultType;
 
     /**
-     * @param IType $sourceType
-     * @param IType $resultType
+     * @param IType  $sourceType
+     * @param IType  $resultType
+     * @param string $expressionString
      */
-    public function __construct(IType $sourceType, IType $resultType)
+    public function __construct(IType $sourceType, IType $resultType, $expressionString)
     {
         $this->sourceType = $sourceType;
 
         $this->resultType = $sourceType->isNullable()
                 ? $resultType->nullable()
                 : $resultType;
+
+        $this->expressionString = $expressionString;
     }
 
     /**
@@ -49,6 +57,14 @@ abstract class MemberExpression implements IMemberExpression
     public function getResultingType()
     {
         return $this->resultType;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function asString()
+    {
+        return $this->expressionString;
     }
 
     /**

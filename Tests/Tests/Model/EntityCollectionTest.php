@@ -221,13 +221,15 @@ class EntityCollectionTest extends IEntitySetTest
         $data = $collection->loadPartial(
                 $collection->partialCriteria()
                         ->loadAll([
-                                'objects.flatten(numbers).count()' => 'flat-count'
+                                'objects.max(number)'              => 'max-num',
+                                'objects.flatten(numbers)'         => 'flat',
+                                'objects.flatten(numbers).count()' => 'flat-count',
                         ])
         );
 
         $this->assertSame([
-                ['flat-count' => 9],
-                ['flat-count' => 4],
+                ['max-num' => 15, 'flat' => [1, 2, 3, 4, 5, 6, 7, 8, 9], 'flat-count' => 9],
+                ['max-num' => 20, 'flat' => [1, 2, 4, 5], 'flat-count' => 4],
         ], $data);
     }
 }

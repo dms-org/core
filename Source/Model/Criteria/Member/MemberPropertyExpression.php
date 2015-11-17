@@ -27,7 +27,11 @@ class MemberPropertyExpression extends MemberExpression
     {
         $sourceType = Type::object($property->getAccessibility()->getDeclaredClass());
 
-        parent::__construct($isSourceNullable ? $sourceType->nullable() : $sourceType, $property->getType());
+        parent::__construct(
+                $isSourceNullable ? $sourceType->nullable() : $sourceType,
+                $property->getType(),
+                $property->getName()
+        );
 
         $this->property = $property;
     }
@@ -46,14 +50,6 @@ class MemberPropertyExpression extends MemberExpression
     public function getProperty()
     {
         return $this->property;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function asString()
-    {
-        return $this->property->getName();
     }
 
     /**
