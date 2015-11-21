@@ -24,7 +24,7 @@ class MemberConditionTest extends CmsTestCase
     {
         $condition = new MemberCondition($this->member(), '=', 'foo');
 
-        $this->assertEquals($this->member()->getParts(), $condition->getNestedMembers());
+        $this->assertEquals($this->member(), $condition->getNestedMember());
         $this->assertSame('=', $condition->getOperator());
         $this->assertSame('foo', $condition->getValue());
     }

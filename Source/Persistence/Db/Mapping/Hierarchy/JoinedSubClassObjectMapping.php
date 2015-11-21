@@ -26,7 +26,7 @@ use Iddigital\Cms\Core\Persistence\Db\Schema\Table;
  *
  * @author Elliot Levin <elliotlevin@hotmail.com>
  */
-class JoinedTableObjectMapping extends SubClassObjectMapping
+class JoinedSubClassObjectMapping extends SubClassObjectMapping
 {
     /**
      * @var Table
@@ -141,7 +141,7 @@ class JoinedTableObjectMapping extends SubClassObjectMapping
         // foreign key.
 
         $parentAlias = $this->parentTable->getName();
-        $joinAlias   = $query->getAliasFor($this->classTable->getName());
+        $joinAlias   = $query->generateUniqueAliasFor($this->classTable->getName());
 
         $query->join(Join::inner(
                 $this->classTable,
@@ -162,7 +162,7 @@ class JoinedTableObjectMapping extends SubClassObjectMapping
     protected function addLoadClausesToSelect(Select $select)
     {
         $parentAlias = $this->parentTable->getName();
-        $joinAlias   = $select->getAliasFor($this->classTable->getName());
+        $joinAlias   = $select->generateUniqueAliasFor($this->classTable->getName());
 
         $select->join(Join::left(
                 $this->classTable,
@@ -249,7 +249,7 @@ class JoinedTableObjectMapping extends SubClassObjectMapping
         $subclassDelete = $deleteQuery->copy()->setTable($this->classTable);
 
         $fromAlias   = $subclassDelete->getTableAlias();
-        $parentAlias = $subclassDelete->getAliasFor($deleteQuery->getTable()->getName());
+        $parentAlias = $subclassDelete->generateUniqueAliasFor($deleteQuery->getTable()->getName());
 
         $subclassDelete->prependJoin(Join::inner(
                 $deleteQuery->getTable(),

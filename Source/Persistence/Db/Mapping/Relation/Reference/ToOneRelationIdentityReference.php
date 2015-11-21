@@ -16,6 +16,14 @@ use Iddigital\Cms\Core\Persistence\Db\Schema\Column;
 class ToOneRelationIdentityReference extends RelationIdentityReference implements IToOneRelationReference
 {
     /**
+     * @return ToOneRelationObjectReference
+     */
+    public function asObjectReference()
+    {
+        return new ToOneRelationObjectReference($this->mapper, $this->bidirectionalRelationProperty);
+    }
+
+    /**
      * @param LoadingContext $context
      * @param Row[]          $rows
      *

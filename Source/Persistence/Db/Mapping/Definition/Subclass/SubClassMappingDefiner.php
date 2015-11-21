@@ -3,8 +3,8 @@
 namespace Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Subclass;
 
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\MapperDefinition;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Hierarchy\EmbeddedObjectMapping;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Hierarchy\JoinedTableObjectMapping;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\Hierarchy\EmbeddedSubClassObjectMapping;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\Hierarchy\JoinedSubClassObjectMapping;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Table;
 
 /**
@@ -78,7 +78,7 @@ class SubClassMappingDefiner extends SubClassDefinerBase
                             function (Table $parentTable) use ($subClassDefinition, $columnName, $classTypeValue) {
                                 $finalizedSubClassDefinition = $subClassDefinition->finalize($parentTable->getName());
 
-                                return new EmbeddedObjectMapping(
+                                return new EmbeddedSubClassObjectMapping(
                                         $parentTable,
                                         $finalizedSubClassDefinition,
                                         $columnName,
@@ -213,7 +213,7 @@ class SubClassMappingDefiner extends SubClassDefinerBase
                                 $subClassDefinition->idToPrimaryKey($parentTable->getPrimaryKeyColumnName());
                                 $finalizedSubClassDefinition = $subClassDefinition->finalize($tableName);
 
-                                return new JoinedTableObjectMapping(
+                                return new JoinedSubClassObjectMapping(
                                         $parentTable,
                                         $finalizedSubClassDefinition
                                 );

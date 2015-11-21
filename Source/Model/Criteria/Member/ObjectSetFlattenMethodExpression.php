@@ -69,6 +69,14 @@ class ObjectSetFlattenMethodExpression extends ObjectSetMethodExpression
     }
 
     /**
+     * @return NestedMember
+     */
+    public function getMember()
+    {
+        return $this->member;
+    }
+
+    /**
      * @inheritDoc
      */
     public function isPropertyValue()

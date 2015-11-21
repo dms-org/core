@@ -12,11 +12,6 @@ use Iddigital\Cms\Core\Exception\InvalidArgumentException;
 abstract class CompositeCondition extends Condition
 {
     /**
-     * @var Condition[]
-     */
-    protected $conditions;
-
-    /**
      * CompositeCondition constructor.
      *
      * @param Condition[] $conditions
@@ -26,20 +21,20 @@ abstract class CompositeCondition extends Condition
         InvalidArgumentException::verify(count($conditions) > 1, 'conditions must have greater than one inner condition');
         InvalidArgumentException::verifyAllInstanceOf(__METHOD__, 'conditions', $conditions, Condition::class);
 
-        $this->conditions = [];
+        $unwrappedConditions = [];
         $class            = get_class($this);
         foreach ($conditions as $condition) {
             if ($condition instanceof $class) {
                 /** @var CompositeCondition $condition */
                 foreach ($condition->getConditions() as $inner) {
-                    $this->conditions[] = $inner;
+                    $unwrappedConditions[] = $inner;
                 }
             } else {
-                $this->conditions[] = $condition;
+                $unwrappedConditions[] = $condition;
             }
         }
 
-        parent::__construct();
+        parent::__construct($unwrappedConditions);
     }
 
     /**
@@ -47,6 +42,6 @@ abstract class CompositeCondition extends Condition
      */
     public function getConditions()
     {
-        return $this->conditions;
+        return $this->children;
     }
 }

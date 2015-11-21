@@ -71,25 +71,8 @@ class DoctrineExpressionCompiler
             case $expr instanceof Expression\Count:
                 return $this->doctrinePlatform->getCountExpression('*');
 
-            case $expr instanceof Expression\Max:
-                return $this->doctrinePlatform->getMaxExpression(
-                        $this->compileExpression($queryBuilder, $expr->getArgument())
-                );
-
-            case $expr instanceof Expression\Min:
-                return $this->doctrinePlatform->getMinExpression(
-                        $this->compileExpression($queryBuilder, $expr->getArgument())
-                );
-
-            case $expr instanceof Expression\Avg:
-                return $this->doctrinePlatform->getAvgExpression(
-                        $this->compileExpression($queryBuilder, $expr->getArgument())
-                );
-
-            case $expr instanceof Expression\Sum:
-                return $this->doctrinePlatform->getSumExpression(
-                        $this->compileExpression($queryBuilder, $expr->getArgument())
-                );
+            case $expr instanceof Expression\SimpleAggregate:
+                return $this->compileSimpleAggregate($queryBuilder, $expr);
 
             case $expr instanceof Expression\BinOp:
                 return (string)$this->compileBinOp($queryBuilder, $expr);
@@ -194,6 +177,28 @@ class DoctrineExpressionCompiler
 
         throw InvalidArgumentException::format('Unknown unary operator: ' . $expr->getOperator());
     }
+
+    private function compileSimpleAggregate(QueryBuilder $queryBuilder, Expression\SimpleAggregate $expr)
+    {
+        $argument = $this->compileExpression($queryBuilder, $expr->getArgument());
+
+        switch ($expr->getType()) {
+            case Expression\SimpleAggregate::SUM:
+                return $this->doctrinePlatform->getSumExpression($argument);
+
+            case Expression\SimpleAggregate::AVG:
+                return $this->doctrinePlatform->getAvgExpression($argument);
+
+            case Expression\SimpleAggregate::MAX:
+                return $this->doctrinePlatform->getMaxExpression($argument);
+
+            case Expression\SimpleAggregate::MIN:
+                return $this->doctrinePlatform->getMinExpression($argument);
+        }
+
+        throw InvalidArgumentException::format('Unknown aggregate type: ' . $expr->getType());
+    }
+
 
     private function compileSubSelect(QueryBuilder $queryBuilder, Expression\SubSelect $expr)
     {

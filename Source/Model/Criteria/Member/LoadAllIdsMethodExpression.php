@@ -15,52 +15,24 @@ use Iddigital\Cms\Core\Model\Type\WithElementsType;
  *
  * @author Elliot Levin <elliotlevin@hotmail.com>
  */
-class LoadAllIdsMethodExpression extends MethodExpression
+class LoadAllIdsMethodExpression extends LoadIdFromEntitySetMethodExpression
 {
     const METHOD_NAME = 'loadAll';
-
-    /**
-     * @var NestedMember
-     */
-    protected $member;
-
-    /**
-     * @var IEntitySet
-     */
-    protected $dataSource;
 
     /**
      * @inheritDoc
      */
     public function __construct(IType $sourceType, NestedMember $member, IEntitySet $dataSource)
     {
-        parent::__construct($sourceType, self::METHOD_NAME, [$member->asString()], Type::collectionOf($dataSource->getElementType()));
-        $this->dataSource = $dataSource;
-        $this->member     = $member;
+        parent::__construct($sourceType, self::METHOD_NAME, $member, $dataSource);
 
-        if (!($member->getResultingType() instanceof WithElementsType)) {
+        $idCollectionType = $member->getResultingType();
+        if (!($idCollectionType instanceof WithElementsType) || !$idCollectionType->getElementType()->isSubsetOf(Type::int())) {
             throw InvalidArgumentException::format(
-                    'Invalid member supplied to %s: \'%s\' must result in collection type, %s given',
-                    __METHOD__, $member->asString(), $member->getResultingType()->asTypeString()
+                    'Invalid call to method \'%s\', argument \'%s\' must result in collection type of int, %s given',
+                    self::METHOD_NAME, $member->asString(), $idCollectionType->asTypeString()
             );
         }
-    }
-
-
-    /**
-     * @inheritDoc
-     */
-    public function isPropertyValue()
-    {
-        return false;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getProperty()
-    {
-        return null;
     }
 
     /**

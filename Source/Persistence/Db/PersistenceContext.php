@@ -5,6 +5,7 @@ namespace Iddigital\Cms\Core\Persistence\Db;
 use Iddigital\Cms\Core\Exception\InvalidArgumentException;
 use Iddigital\Cms\Core\Model\IEntity;
 use Iddigital\Cms\Core\Persistence\Db\Connection\IConnection;
+use Iddigital\Cms\Core\Persistence\Db\Connection\Dummy\DummyConnection;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Hook\IPersistHook;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\IRelation;
 use Iddigital\Cms\Core\Persistence\Db\Query\BulkUpdate;
@@ -54,6 +55,16 @@ class PersistenceContext extends ConnectionContext
     public function __construct(IConnection $connection)
     {
         parent::__construct($connection);
+    }
+
+    /**
+     * Builds a persistence context with a fake connection.
+     *
+     * @return PersistenceContext
+     */
+    public static function dummy()
+    {
+        return new PersistenceContext(new DummyConnection());
     }
 
     /**

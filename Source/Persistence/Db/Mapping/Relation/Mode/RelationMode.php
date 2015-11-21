@@ -27,7 +27,7 @@ abstract class RelationMode implements IRelationMode
     final protected function foreignKeyJoin(Query $newQuery, Query $parentQuery, Column $foreignKeyToParentColumn, Column $parentKeyColumn)
     {
         $parentTable = $parentQuery->getTable();
-        $tableAlias  = $newQuery->getAliasFor($parentTable->getName());
+        $tableAlias  = $newQuery->generateUniqueAliasFor($parentTable->getName());
 
         return $newQuery->prependJoin(Join::inner($parentTable, $tableAlias, [
                 Expr::equal(

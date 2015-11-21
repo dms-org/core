@@ -5,6 +5,7 @@ namespace Iddigital\Cms\Core\Persistence\Db\Mapping\Relation;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\IEntityMapper;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Mode\IRelationMode;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Reference\IRelationReference;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Reference\RelationIdentityReference;
 use Iddigital\Cms\Core\Persistence\Db\PersistenceContext;
 use Iddigital\Cms\Core\Persistence\Db\Query\Delete;
 use Iddigital\Cms\Core\Persistence\Db\Query\Expression\ColumnExpr;
@@ -19,7 +20,7 @@ use Iddigital\Cms\Core\Persistence\Db\Schema\Table;
  *
  * @author Elliot Levin <elliotlevin@hotmail.com>
  */
-abstract class EntityRelation extends Relation implements IRelation
+abstract class EntityRelation extends Relation implements ISeparateTableRelation
 {
     /**
      * @var IRelationReference
@@ -41,14 +42,14 @@ abstract class EntityRelation extends Relation implements IRelation
      *
      * @var Table
      */
-    protected $table;
+    protected $relatedTable;
 
     /**
      * The primary key of the related table.
      *
      * @var Column
      */
-    protected $primaryKey;
+    protected $relatedPrimaryKey;
 
     /**
      * Relation constructor.
@@ -68,11 +69,33 @@ abstract class EntityRelation extends Relation implements IRelation
     ) {
         parent::__construct($reference->getMapper(), $dependencyMode, $relationshipTables, $parentColumnsToLoad);
 
-        $this->reference  = $reference;
-        $this->mapper     = $reference->getMapper();
-        $this->mode       = $mode;
-        $this->table      = $this->mapper->getPrimaryTable();
-        $this->primaryKey = $this->table->getPrimaryKeyColumn();
+        $this->reference         = $reference;
+        $this->mapper            = $reference->getMapper();
+        $this->mode              = $mode;
+        $this->relatedTable      = $this->mapper->getPrimaryTable();
+        $this->relatedPrimaryKey = $this->relatedTable->getPrimaryKeyColumn();
+    }
+
+    /**
+     * @return static
+     */
+    final public function withObjectReference()
+    {
+        $clone = clone $this;
+
+        if ($clone->reference instanceof RelationIdentityReference) {
+            $clone->reference = $clone->reference->asObjectReference();
+        }
+
+        return $clone;
+    }
+
+    /**
+     * @return IRelationReference
+     */
+    final public function getReference()
+    {
+        return $this->reference;
     }
 
     /**
@@ -81,6 +104,14 @@ abstract class EntityRelation extends Relation implements IRelation
     final public function getEntityMapper()
     {
         return $this->mapper;
+    }
+
+    /**
+     * @return Column
+     */
+    final public function getRelatedPrimaryKey()
+    {
+        return $this->mapper->getPrimaryTable()->getPrimaryKeyColumn();
     }
 
     /**
@@ -99,7 +130,7 @@ abstract class EntityRelation extends Relation implements IRelation
     final protected function rowSet(array $rows = [])
     {
         return new RowSet(
-                $this->table,
+                $this->relatedTable,
                 $rows
         );
     }
@@ -129,6 +160,6 @@ abstract class EntityRelation extends Relation implements IRelation
      */
     protected function column(Column $column)
     {
-        return Expr::column($this->table->getName(), $column);
+        return Expr::column($this->relatedTable->getName(), $column);
     }
 }

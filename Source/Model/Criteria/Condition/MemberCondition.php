@@ -4,8 +4,8 @@ namespace Iddigital\Cms\Core\Model\Criteria\Condition;
 
 use Iddigital\Cms\Core\Exception\InvalidArgumentException;
 use Iddigital\Cms\Core\Exception\TypeMismatchException;
-use Iddigital\Cms\Core\Model\Criteria\IMemberExpression;
 use Iddigital\Cms\Core\Model\Criteria\NestedMember;
+use Iddigital\Cms\Core\Model\Type\Builder\Type;
 use Iddigital\Cms\Core\Util\Debug;
 
 /**
@@ -42,23 +42,34 @@ class MemberCondition extends Condition
      */
     final public function __construct(NestedMember $member, $conditionOperator, $value)
     {
-        $lastPropertyType = $member->getResultingType();
+        $expressionType = $member->getResultingType();
 
-        $operators = $lastPropertyType->getConditionOperatorTypes();
+        $operators = $expressionType->getConditionOperatorTypes();
 
         if (!isset($operators[$conditionOperator])) {
             throw InvalidArgumentException::format(
-                    'Invalid condition operator for property of type %s: expecting one of (%s), %s given',
-                    $lastPropertyType->asTypeString(), Debug::formatValues(array_keys($operators)), $conditionOperator
+                    'Invalid condition operator for member \'%s\' of type %s: expecting one of (%s), %s given',
+                    $member->asString(), $expressionType->asTypeString(), Debug::formatValues(array_keys($operators)), $conditionOperator
             );
         }
 
         $valueType = $operators[$conditionOperator]->getValueType();
         if (!$valueType->isOfType($value)) {
-            throw TypeMismatchException::argument(__METHOD__, 'value', $valueType->asTypeString(), $value);
+            throw TypeMismatchException::format(
+                    'Invalid condition value for member \'%s\' with operator \'%s\': expecting value to match member type %s, %s given',
+                    $member->asString(), $conditionOperator, $valueType->asTypeString(), Type::from($value)->asTypeString()
+            );
         }
 
         ConditionOperator::validate($conditionOperator);
+
+        $nullSafeOperators = [ConditionOperator::EQUALS, ConditionOperator::NOT_EQUALS];
+        if ($value === null && !in_array($conditionOperator, $nullSafeOperators, true)) {
+            throw InvalidArgumentException::format(
+                    'Invalid condition operator for member \'%s\' of type %s: only the (%s) operators support a NULL operand, %s given',
+                    $member->asString(), $expressionType->asTypeString(), Debug::formatValues($nullSafeOperators), $conditionOperator
+            );
+        }
 
         $this->member            = $member;
         $this->conditionOperator = $conditionOperator;
@@ -84,11 +95,11 @@ class MemberCondition extends Condition
     }
 
     /**
-     * @return IMemberExpression[]
+     * @return NestedMember
      */
-    final public function getNestedMembers()
+    final public function getNestedMember()
     {
-        return $this->member->getParts();
+        return $this->member;
     }
 
     protected function makeArrayFilterCallable()

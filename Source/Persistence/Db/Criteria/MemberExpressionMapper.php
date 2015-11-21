@@ -2,35 +2,38 @@
 
 namespace Iddigital\Cms\Core\Persistence\Db\Criteria;
 
+use Iddigital\Cms\Core\Exception\BaseException;
 use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Exception\InvalidOperationException;
-use Iddigital\Cms\Core\Model\Criteria\Condition\AndCondition;
-use Iddigital\Cms\Core\Model\Criteria\Condition\Condition;
-use Iddigital\Cms\Core\Model\Criteria\Condition\ConditionOperator;
-use Iddigital\Cms\Core\Model\Criteria\Condition\InstanceOfCondition;
-use Iddigital\Cms\Core\Model\Criteria\Condition\NotCondition;
-use Iddigital\Cms\Core\Model\Criteria\Condition\OrCondition;
-use Iddigital\Cms\Core\Model\Criteria\Condition\MemberCondition;
-use Iddigital\Cms\Core\Model\Criteria\Criteria;
+use Iddigital\Cms\Core\Model\Criteria\IMemberExpression;
+use Iddigital\Cms\Core\Model\Criteria\Member\CollectionCountMethodExpression;
+use Iddigital\Cms\Core\Model\Criteria\Member\LoadIdFromEntitySetMethodExpression;
+use Iddigital\Cms\Core\Model\Criteria\Member\MemberPropertyExpression;
+use Iddigital\Cms\Core\Model\Criteria\Member\ObjectSetAggregateMethodExpression;
+use Iddigital\Cms\Core\Model\Criteria\Member\ObjectSetAverageMethodExpression;
+use Iddigital\Cms\Core\Model\Criteria\Member\ObjectSetFlattenMethodExpression;
+use Iddigital\Cms\Core\Model\Criteria\Member\ObjectSetMaximumMethodExpression;
+use Iddigital\Cms\Core\Model\Criteria\Member\ObjectSetMinimumMethodExpression;
+use Iddigital\Cms\Core\Model\Criteria\Member\ObjectSetSumMethodExpression;
 use Iddigital\Cms\Core\Model\Criteria\NestedMember;
-use Iddigital\Cms\Core\Model\Criteria\NestedProperty;
-use Iddigital\Cms\Core\Model\Criteria\MemberOrdering;
-use Iddigital\Cms\Core\Model\ICriteria;
-use Iddigital\Cms\Core\Model\IValueObject;
-use Iddigital\Cms\Core\Model\Object\FinalizedClassDefinition;
 use Iddigital\Cms\Core\Model\Object\FinalizedPropertyDefinition;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\FinalizedMapperDefinition;
+use Iddigital\Cms\Core\Persistence\Db\Criteria\MemberMapping\ColumnMapping;
+use Iddigital\Cms\Core\Persistence\Db\Criteria\MemberMapping\MemberMapping;
+use Iddigital\Cms\Core\Persistence\Db\Criteria\MemberMapping\ToManyRelationAggregateMapping;
+use Iddigital\Cms\Core\Persistence\Db\Criteria\MemberMapping\ToManyRelationCountMapping;
+use Iddigital\Cms\Core\Persistence\Db\Criteria\MemberMapping\ToManyRelationMapping;
+use Iddigital\Cms\Core\Persistence\Db\Criteria\MemberMapping\ToOneEmbeddedObjectMapping;
+use Iddigital\Cms\Core\Persistence\Db\Criteria\MemberMapping\ToOneEntityRelationMapping;
+use Iddigital\Cms\Core\Persistence\Db\Criteria\MemberMapping\ToOneIdRelationMapping;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\IEntityMapper;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\IObjectMapper;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\ReadModel\ArrayReadModelMapper;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Embedded\EmbeddedObjectRelation;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\EntityRelation;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\IRelation;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\IToManyRelation;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Reference\RelationObjectReference;
 use Iddigital\Cms\Core\Persistence\Db\Query;
-use Iddigital\Cms\Core\Persistence\Db\Query\Clause\Ordering;
-use Iddigital\Cms\Core\Persistence\Db\Query\Expression\BinOp;
-use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Expr;
-use Iddigital\Cms\Core\Persistence\Db\Query\Select;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Column;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Table;
+use Iddigital\Cms\Core\Persistence\Db\Query\Expression\SimpleAggregate;
+use Iddigital\Cms\Core\Util\Debug;
 
 /**
  * The member expression mapper class.
@@ -40,93 +43,257 @@ use Iddigital\Cms\Core\Persistence\Db\Schema\Table;
 class MemberExpressionMapper
 {
     /**
-     * @var IObjectMapper
+     * @var IEntityMapper
      */
-    private $mapper;
+    private $rootEntityMapper;
 
     /**
-     * @var FinalizedMapperDefinition
-     */
-    private $definition;
-
-    /**
-     * @var Table
-     */
-    private $primaryTable;
-
-    /**
-     * @var string[]
-     */
-    private $propertyColumnMap;
-
-    /**
-     * @var callable[]
-     */
-    private $phpToDbPropertyConverterMap;
-
-    /**
-     * @var IRelation[]
-     */
-    private $relations;
-
-    /**
-     * @var EmbeddedObjectRelation[]
-     */
-    private $embeddedObjects = [];
-
-    /**
-     * CriteriaMapper constructor.
+     * MemberExpressionMapper constructor.
      *
-     * @param IObjectMapper $mapper
+     * @param IEntityMapper $mapper
      */
-    public function __construct(IObjectMapper $mapper)
+    public function __construct(IEntityMapper $mapper)
     {
-        $mapper->initializeRelations();
-
-        $this->mapper                      = $mapper;
-        $this->definition                  = $this->mapper->getDefinition();
-        $this->primaryTable                = $this->mapper->getDefinition()->getTable();
-        $this->propertyColumnMap           = $this->definition->getPropertyColumnMap();
-        $this->phpToDbPropertyConverterMap = $this->definition->getPhpToDbPropertyConverterMap();
-        $this->relations                   = $this->definition->getPropertyRelationMap();
-
-        foreach ($this->relations as $property => $relation) {
-            if ($relation instanceof EmbeddedObjectRelation) {
-                $this->embeddedObjects[$property] = $relation;
-            }
-        }
+        $this->rootEntityMapper = $mapper;
     }
 
     /**
-     * @return IObjectMapper
-     */
-    final public function getMapper()
-    {
-        return $this->mapper;
-    }
-
-    /**
-     * @return FinalizedClassDefinition
-     */
-    protected function getMappedObjectType()
-    {
-        if ($this->mapper instanceof ArrayReadModelMapper) {
-            return $this->mapper->getParentMapper()->getDefinition()->getClass();
-        } else {
-            return $this->mapper->getDefinition()->getClass();
-        }
-    }
-
-    /**
-     * Maps the supplied member expression to an expression.
+     * Maps the supplied member expression.
      *
      * @param NestedMember $member
      *
-     * @return Expr
+     * @return MemberMapping
+     * @throws MemberExpressionMappingException
+     */
+    public function mapMemberExpression(NestedMember $member)
+    {
+        try {
+            $nestedRelations = $this->mapMemberExpressionsToRelations(
+                    $this->rootEntityMapper,
+                    $member->getPartsExceptLast()
+            );
+
+            return $this->mapFinalMember($nestedRelations, $member->getLastPart());
+        } catch (BaseException $e) {
+            if ($e instanceof MemberExpressionMappingException) {
+                throw $e;
+            }
+
+            throw MemberExpressionMappingException::format(
+                    'Could not map member expression \'%s\' of entity type %s: %s',
+                    $member->asString(), $this->rootEntityMapper->getObjectType(), $e->getMessage()
+            );
+        }
+    }
+
+    /**
+     * @param IRelation[]       $nestedRelations
+     * @param IMemberExpression $lastPart
+     *
+     * @return MemberMapping
      * @throws InvalidArgumentException
      */
-    public function mapMemberExpressionToSql(NestedMember $member)
+    protected function mapFinalMember(array $nestedRelations, IMemberExpression $lastPart)
     {
+        switch (true) {
+            case $lastPart instanceof MemberPropertyExpression:
+                return $this->mapFinalPropertyToMapping($nestedRelations, $lastPart->getProperty());
 
+            case $lastPart instanceof LoadIdFromEntitySetMethodExpression:
+                $relations    = $this->mapLoadExpressionToRelations($this->rootEntityMapper, $lastPart);
+                $lastRelation = array_pop($nestedRelations);
+
+                return $this->mapFinalRelationToMapping(array_merge($nestedRelations, $relations), $lastRelation);
+
+            case $lastPart instanceof CollectionCountMethodExpression:
+                $lastRelation = array_pop($nestedRelations);
+
+                return new ToManyRelationCountMapping($this->rootEntityMapper, $nestedRelations, $lastRelation);
+
+            case $lastPart instanceof ObjectSetAggregateMethodExpression:
+                $lastRelation = array_pop($nestedRelations);
+
+                return $this->mapFinalAggregateExpression($nestedRelations, $lastRelation, $lastPart);
+
+            case $lastPart instanceof ObjectSetFlattenMethodExpression:
+                $relations    = $this->mapMemberExpressionsToRelations($this->rootEntityMapper, [$lastPart]);
+                $lastRelation = array_pop($nestedRelations);
+
+                return $this->mapFinalRelationToMapping(array_merge($nestedRelations, $relations), $lastRelation);
+        }
+
+        throw InvalidArgumentException::format('unknown final member expression type %s', Debug::getType($lastPart));
+    }
+
+    protected function mapFinalPropertyToMapping(array $nestedRelations, FinalizedPropertyDefinition $property)
+    {
+        $property = $property->getName();
+
+        /** @var IRelation $lastRelation */
+        $lastRelation = end($nestedRelations);
+        $definition   = $lastRelation ? $lastRelation->getMapper()->getDefinition() : $this->rootEntityMapper->getDefinition();
+
+        if (isset($definition->getPropertyColumnMap()[$property])) {
+            $columnName                  = $definition->getPropertyColumnMap()[$property];
+            $phpToDbPropertyConverterMap = $definition->getPhpToDbPropertyConverterMap();
+
+            return new ColumnMapping(
+                    $this->rootEntityMapper,
+                    $nestedRelations,
+                    $definition->getTable()->getColumn($columnName),
+                    isset($phpToDbPropertyConverterMap[$property]) ? $phpToDbPropertyConverterMap[$property] : null
+            );
+        } elseif ($relation = $definition->getRelationMappedToProperty($property)) {
+            return $this->mapFinalRelationToMapping($nestedRelations, $relation);
+        }
+
+        throw InvalidArgumentException::format('cannot map property \'%s\' of tpe %s, property is not mapped according to mapper definition');
+    }
+
+    /**
+     * @param IRelation[] $nestedRelations
+     * @param IRelation   $lastRelation
+     *
+     * @return MemberMapping
+     */
+    protected function mapFinalRelationToMapping(array $nestedRelations, $lastRelation)
+    {
+        if ($lastRelation instanceof IToManyRelation) {
+            return new ToManyRelationMapping($this->rootEntityMapper, $nestedRelations, $lastRelation);
+        } elseif ($lastRelation instanceof EntityRelation) {
+            if ($lastRelation->getReference() instanceof RelationObjectReference) {
+                return new ToOneEntityRelationMapping($this->rootEntityMapper, $nestedRelations, $lastRelation);
+            } else {
+                return new ToOneIdRelationMapping($this->rootEntityMapper, $nestedRelations, $lastRelation);
+            }
+        } else {
+            /** @var EmbeddedObjectRelation $lastRelation */
+            return new ToOneEmbeddedObjectMapping($this->rootEntityMapper, $nestedRelations, $lastRelation);
+        }
+    }
+
+    /**
+     * @param IRelation[]                        $nestedRelations
+     * @param IToManyRelation                    $lastRelation
+     *
+     * @param ObjectSetAggregateMethodExpression $lastPart
+     *
+     * @return MemberMapping
+     * @throws InvalidArgumentException
+     */
+    protected function mapFinalAggregateExpression(
+            array $nestedRelations,
+            IToManyRelation $lastRelation,
+            ObjectSetAggregateMethodExpression $lastPart
+    ) {
+        switch (true) {
+            case $lastPart instanceof ObjectSetAverageMethodExpression:
+                $aggregateType = SimpleAggregate::AVG;
+                break;
+
+            case $lastPart instanceof ObjectSetSumMethodExpression:
+                $aggregateType = SimpleAggregate::SUM;
+                break;
+
+            case $lastPart instanceof ObjectSetMaximumMethodExpression:
+                $aggregateType = SimpleAggregate::MAX;
+                break;
+
+            case $lastPart instanceof ObjectSetMinimumMethodExpression:
+                $aggregateType = SimpleAggregate::MIN;
+                break;
+
+            default:
+                throw InvalidArgumentException::format('unknown aggregate expression type %s', Debug::getType($lastPart));
+        }
+
+        $argumentMapping = $this->mapMemberExpression($lastPart->getAggregatedMember());
+
+        return new ToManyRelationAggregateMapping(
+                $this->rootEntityMapper,
+                $nestedRelations,
+                $lastRelation,
+                $aggregateType,
+                $argumentMapping
+        );
+    }
+
+    /**
+     * @param IObjectMapper       $mapper
+     * @param IMemberExpression[] $memberExpressions
+     *
+     * @return IRelation[]
+     * @throws BaseException
+     * @throws InvalidArgumentException
+     */
+    protected function mapMemberExpressionsToRelations(IObjectMapper $mapper, array $memberExpressions)
+    {
+        $nestedRelations = [];
+
+        foreach ($memberExpressions as $part) {
+            if ($part instanceof ObjectSetFlattenMethodExpression) {
+                $relationsToAdd = $this->mapMemberExpressionsToRelations($mapper, $part->getMember()->getParts());
+            } //
+            elseif ($part instanceof LoadIdFromEntitySetMethodExpression) {
+                $relationsToAdd = $this->mapLoadExpressionToRelations($mapper, $part);
+            } //
+            elseif ($part instanceof MemberPropertyExpression) {
+                $relationsToAdd = [$this->mapPropertyToRelation($mapper, $part)];
+            } //
+            else {
+                throw InvalidArgumentException::format('invalid member part \'%s\', must be a relation expression', $part->asString());
+            }
+
+            $nestedRelations = array_merge($nestedRelations, $relationsToAdd);
+
+            /** @var IRelation $lastRelation */
+            $lastRelation = end($relationsToAdd);
+            $mapper       = $lastRelation->getMapper();
+        }
+
+        return $nestedRelations;
+    }
+
+    /**
+     * @param IObjectMapper                       $mapper
+     * @param LoadIdFromEntitySetMethodExpression $part
+     *
+     * @return IRelation[]
+     */
+    protected function mapLoadExpressionToRelations(IObjectMapper $mapper, LoadIdFromEntitySetMethodExpression $part)
+    {
+        /** @var EntityRelation $relationToLoadAsObject */
+        $innerRelations         = $this->mapMemberExpressionsToRelations($mapper, $part->getIdMember()->getParts());
+        $relationToLoadAsObject = array_pop($innerRelations);
+
+        $relationsToAdd   = $innerRelations;
+        $relationsToAdd[] = $relationToLoadAsObject->withObjectReference();
+
+        return $relationsToAdd;
+    }
+
+    /**
+     * @param IObjectMapper            $mapper
+     * @param MemberPropertyExpression $part
+     *
+     * @return IRelation
+     * @throws BaseException
+     */
+    private function mapPropertyToRelation(IObjectMapper $mapper, MemberPropertyExpression $part)
+    {
+        $definition = $mapper->getDefinition();
+
+        $property = $part->getProperty();
+
+        $relation = $definition->getRelationMappedToProperty($property->getName());
+
+        if (!$relation) {
+            throw BaseException::format(
+                    'invalid property \'%s\' of type %s, must be mapped to a relation',
+                    $property->getName(), $definition->getClassName()
+            );
+        }
+
+        return $relation;
     }
 }

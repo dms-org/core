@@ -9,16 +9,13 @@ use Iddigital\Cms\Core\Persistence\Db\Query\Clause\Join;
 use Iddigital\Cms\Core\Persistence\Db\Query\Clause\Ordering;
 use Iddigital\Cms\Core\Persistence\Db\Query\Delete;
 use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Aggregate;
-use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Avg;
 use Iddigital\Cms\Core\Persistence\Db\Query\Expression\BinOp;
 use Iddigital\Cms\Core\Persistence\Db\Query\Expression\ColumnExpr;
 use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Count;
 use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Expr;
-use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Max;
-use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Min;
 use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Parameter;
+use Iddigital\Cms\Core\Persistence\Db\Query\Expression\SimpleAggregate;
 use Iddigital\Cms\Core\Persistence\Db\Query\Expression\SubSelect;
-use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Sum;
 use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Tuple;
 use Iddigital\Cms\Core\Persistence\Db\Query\Expression\UnaryOp;
 use Iddigital\Cms\Core\Persistence\Db\Query\Query;
@@ -145,33 +142,8 @@ class MockPlatform extends Platform
                     return $group->count();
                 };
 
-            case $expr instanceof Max:
-                $argument = $this->compileExpression($database, $expr->getArgument());
-
-                return function (ICollection $group) use ($argument) {
-                    return $group->maximum($argument);
-                };
-
-            case $expr instanceof Min:
-                $argument = $this->compileExpression($database, $expr->getArgument());
-
-                return function (ICollection $group) use ($argument) {
-                    return $group->minimum($argument);
-                };
-
-            case $expr instanceof Avg:
-                $argument = $this->compileExpression($database, $expr->getArgument());
-
-                return function (ICollection $group) use ($argument) {
-                    return $group->average($argument);
-                };
-
-            case $expr instanceof Sum:
-                $argument = $this->compileExpression($database, $expr->getArgument());
-
-                return function (ICollection $group) use ($argument) {
-                    return $group->sum($argument);
-                };
+            case $expr instanceof SimpleAggregate:
+                return $this->compileSimpleAggregate($database, $expr);
 
             case $expr instanceof Parameter:
                 $parameter = $this->mapValueToDbFormat($expr->getType(), $expr->getValue());
@@ -291,6 +263,35 @@ class MockPlatform extends Platform
         }
 
         throw NotImplementedException::format('Unknown unary op %s', $expr->getOperator());
+    }
+
+    private function compileSimpleAggregate(MockDatabase $database, SimpleAggregate $expr)
+    {
+        $argument = $this->compileExpression($database, $expr->getArgument());
+
+        switch ($expr->getType()) {
+            case SimpleAggregate::SUM:
+                return function (ICollection $group) use ($argument) {
+                    return $group->sum($argument);
+                };
+
+            case SimpleAggregate::AVG:
+                return function (ICollection $group) use ($argument) {
+                    return $group->average($argument);
+                };
+
+            case SimpleAggregate::MIN:
+                return function (ICollection $group) use ($argument) {
+                    return $group->minimum($argument);
+                };
+
+            case SimpleAggregate::MAX:
+                return function (ICollection $group) use ($argument) {
+                    return $group->maximum($argument);
+                };
+        }
+
+        throw NotImplementedException::format('Unknown aggregate type %s', $expr->getType());
     }
 
     /**

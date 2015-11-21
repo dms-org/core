@@ -17,6 +17,14 @@ use Iddigital\Cms\Core\Persistence\Db\Schema\Column;
 class ToManyRelationIdentityReference extends RelationIdentityReference implements IToManyRelationReference
 {
     /**
+     * @return ToManyRelationObjectReference
+     */
+    public function asObjectReference()
+    {
+        return new ToManyRelationObjectReference($this->mapper, $this->bidirectionalRelationProperty);
+    }
+
+    /**
      * @param array $children
      *
      * @return ITypedCollection

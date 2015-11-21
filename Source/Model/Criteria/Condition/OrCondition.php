@@ -2,8 +2,6 @@
 
 namespace Iddigital\Cms\Core\Model\Criteria\Condition;
 
-use Iddigital\Cms\Core\Model\ITypedObject;
-
 /**
  * The logical or condition class.
  *
@@ -19,10 +17,10 @@ class OrCondition extends CompositeCondition
      */
     protected function makeArrayFilterCallable()
     {
-        $conditions = $this->conditions;
+        $conditions = $this->getConditions();
         /** @var Condition $firstCondition */
         $firstCondition = array_shift($conditions);
-        $filter = $firstCondition->getArrayFilterCallable();
+        $filter         = $firstCondition->getArrayFilterCallable();
 
         foreach ($conditions as $condition) {
             $innerFilter = $condition->getArrayFilterCallable();

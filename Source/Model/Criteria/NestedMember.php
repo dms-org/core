@@ -53,6 +53,14 @@ class NestedMember
     }
 
     /**
+     * @return IMemberExpression[]
+     */
+    final public function getPartsExceptLast()
+    {
+        return array_slice($this->parts, 0, -1);
+    }
+
+    /**
      * @return IMemberExpression
      */
     final public function getLastPart()

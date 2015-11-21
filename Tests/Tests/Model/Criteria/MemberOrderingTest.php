@@ -23,7 +23,7 @@ class MemberOrderingTest extends CmsTestCase
     {
         $ordering = new MemberOrdering($this->member(), OrderingDirection::ASC);
 
-        $this->assertEquals($this->member()->getParts(), $ordering->getNestedMembers());
+        $this->assertEquals($this->member(), $ordering->getNestedMember());
         $this->assertSame(OrderingDirection::ASC, $ordering->getDirection());
     }
 

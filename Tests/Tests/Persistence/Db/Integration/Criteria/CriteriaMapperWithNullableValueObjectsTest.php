@@ -59,7 +59,7 @@ class CriteriaMapperWithNullableValueObjectsTest extends CriteriaMapperTestBase
 
         $this->assertMappedSelect($criteria,
                 $this->selectAllColumns()
-                        ->where(Expr::compoundAnd([
+                        ->where(Expr::compoundOr([
                                 Expr::notEqual(
                                         $this->column('nullable_cents'),
                                         Expr::param($this->columnType('nullable_cents'), 0)

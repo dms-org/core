@@ -39,11 +39,11 @@ class MemberOrdering
     }
 
     /**
-     * @return IMemberExpressionParser[]
+     * @return NestedMember
      */
-    final public function getNestedMembers()
+    final public function getNestedMember()
     {
-        return $this->nestedMember->getParts();
+        return $this->nestedMember;
     }
 
     /**

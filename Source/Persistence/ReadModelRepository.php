@@ -4,7 +4,6 @@ namespace Iddigital\Cms\Core\Persistence;
 
 use Iddigital\Cms\Core\Exception;
 use Iddigital\Cms\Core\Exception\NotImplementedException;
-use Iddigital\Cms\Core\Model\ITypedObject;
 use Iddigital\Cms\Core\Persistence\Db\Connection\IConnection;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\IObjectMapper;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\IOrm;

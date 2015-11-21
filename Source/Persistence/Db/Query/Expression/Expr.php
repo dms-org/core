@@ -344,10 +344,14 @@ abstract class Expr
     /**
      * @param Expr $operand
      *
-     * @return UnaryOp
+     * @return Expr
      */
     public static function not(Expr $operand)
     {
+        if ($operand instanceof BinOp && $operand->getOperator() === BinOp::EQUAL) {
+            return self::notEqual($operand->getLeft(), $operand->getRight());
+        }
+
         return UnaryOp::not($operand);
     }
 
@@ -400,41 +404,41 @@ abstract class Expr
     /**
      * @param Expr $argument
      *
-     * @return Max
+     * @return SimpleAggregate
      */
     public static function max(Expr $argument)
     {
-        return new Max($argument);
+        return new SimpleAggregate(SimpleAggregate::MAX, $argument);
     }
 
     /**
      * @param Expr $argument
      *
-     * @return Min
+     * @return SimpleAggregate
      */
     public static function min(Expr $argument)
     {
-        return new Min($argument);
+        return new SimpleAggregate(SimpleAggregate::MIN, $argument);
     }
 
     /**
      * @param Expr $argument
      *
-     * @return Avg
+     * @return SimpleAggregate
      */
     public static function avg(Expr $argument)
     {
-        return new Avg($argument);
+        return new SimpleAggregate(SimpleAggregate::AVG, $argument);
     }
 
     /**
      * @param Expr $argument
      *
-     * @return Sum
+     * @return SimpleAggregate
      */
     public static function sum(Expr $argument)
     {
-        return new Sum($argument);
+        return new SimpleAggregate(SimpleAggregate::SUM, $argument);
     }
 
     /**

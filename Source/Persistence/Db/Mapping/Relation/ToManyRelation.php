@@ -9,9 +9,11 @@ use Iddigital\Cms\Core\Persistence\Db\Mapping\ParentChildrenMap;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Mode\IRelationMode;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Reference\IToManyRelationReference;
 use Iddigital\Cms\Core\Persistence\Db\PersistenceContext;
+use Iddigital\Cms\Core\Persistence\Db\Query\Clause\Join;
 use Iddigital\Cms\Core\Persistence\Db\Query\Clause\Ordering;
 use Iddigital\Cms\Core\Persistence\Db\Query\Delete;
 use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Expr;
+use Iddigital\Cms\Core\Persistence\Db\Query\Select;
 use Iddigital\Cms\Core\Persistence\Db\Row;
 use Iddigital\Cms\Core\Persistence\Db\RowSet;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Column;
@@ -68,21 +70,21 @@ class ToManyRelation extends ToManyRelationBase
     ) {
         parent::__construct($reference, $mode, self::DEPENDENT_CHILDREN);
         $this->foreignKeyToParent       = $parentForeignKey;
-        $this->foreignKeyToParentColumn = $this->table->getColumn($this->foreignKeyToParent);
+        $this->foreignKeyToParentColumn = $this->relatedTable->getColumn($this->foreignKeyToParent);
 
         $this->orderByColumnNameDirectionMap = $orderByColumnNameDirectionMap;
 
         foreach ($orderByColumnNameDirectionMap as $columnName => $direction) {
-            $this->table->getColumn($columnName);
+            $this->relatedTable->getColumn($columnName);
         }
 
         if ($orderPersistColumn) {
-            $this->orderPersistColumn = $this->table->findColumn($orderPersistColumn);
+            $this->orderPersistColumn = $this->relatedTable->findColumn($orderPersistColumn);
 
             if (!$this->orderPersistColumn) {
                 throw InvalidRelationException::format(
                         'Invalid order persist column %s does not exist on related table %s',
-                        $orderPersistColumn, $this->table->getName()
+                        $orderPersistColumn, $this->relatedTable->getName()
                 );
             }
         }
@@ -107,7 +109,7 @@ class ToManyRelation extends ToManyRelationBase
         if ($map->hasAnyParentsWithPrimaryKeys()) {
             $this->mode->syncInvalidatedRelationsQuery(
                     $context,
-                    $this->table,
+                    $this->relatedTable,
                     $this->foreignKeyToParentColumn,
                     $this->getInvalidatedRelationExpr($map)
             );
@@ -122,7 +124,7 @@ class ToManyRelation extends ToManyRelationBase
                 $context,
                 $this->mapper,
                 $parentDelete,
-                $this->table,
+                $this->relatedTable,
                 $this->foreignKeyToParentColumn,
                 $parentDelete->getTable()->getPrimaryKeyColumn()
         );
@@ -200,8 +202,8 @@ class ToManyRelation extends ToManyRelationBase
             // an extra step must be taken because the primary key will
             // only be known after inserting so the foreign key to itself
             // will have to be updated separately afterwards
-            $context->bulkUpdate(new RowSet($this->table->withColumnsButIgnoringConstraints([
-                    $this->primaryKey,
+            $context->bulkUpdate(new RowSet($this->relatedTable->withColumnsButIgnoringConstraints([
+                    $this->relatedPrimaryKey,
                     $this->foreignKeyToParentColumn
             ]), $selfReferencingChildRows));
         }
@@ -234,7 +236,7 @@ class ToManyRelation extends ToManyRelationBase
                 if ($childrenIds) {
                     $expressions[] = Expr::and_(
                             $equalsParentForeignKey,
-                            Expr::notIn($this->column($this->table->getPrimaryKeyColumn()), Expr::tuple($childrenIds))
+                            Expr::notIn($this->column($this->relatedTable->getPrimaryKeyColumn()), Expr::tuple($childrenIds))
                     );
                 } else {
                     $expressions[] = $equalsParentForeignKey;
@@ -264,9 +266,7 @@ class ToManyRelation extends ToManyRelationBase
                 ->addRawColumn($this->foreignKeyToParent)
                 ->where(Expr::in($this->column($this->foreignKeyToParentColumn), Expr::tuple($parentIds)));
 
-        foreach ($this->orderByColumnNameDirectionMap as $column => $direction) {
-            $select->orderBy(new Ordering($this->column($this->table->getColumn($column)), $direction));
-        }
+        $this->addOrderByClausesToSelect($select, $this->relatedTable->getName());
 
         $indexedGroups = [];
 
@@ -297,5 +297,47 @@ class ToManyRelation extends ToManyRelationBase
 
             $item->setChildren($childValues);
         }
+    }
+
+    private function addOrderByClausesToSelect(Select $select, $tableAlias)
+    {
+        foreach ($this->orderByColumnNameDirectionMap as $column => $direction) {
+            $select->orderBy(new Ordering(Expr::column($tableAlias, $this->relatedTable->getColumn($column)), $direction));
+        }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function joinSelectToRelatedTable($parentTableAlias, $joinType, Select $select)
+    {
+        $relatedTableAlias = $select->generateUniqueAliasFor($this->relatedTable->getName());
+
+        $select->join(new Join($joinType, $this->relatedTable, $relatedTableAlias, [
+                $this->getRelationJoinCondition($parentTableAlias, $relatedTableAlias)
+        ]));
+
+        $this->addOrderByClausesToSelect($select, $relatedTableAlias);
+
+        return $relatedTableAlias;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getRelationSelectTable()
+    {
+        return $this->relatedTable;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getRelationJoinCondition($parentTableAlias, $relatedTableAlias)
+    {
+        return Expr::equal(
+                Expr::column($parentTableAlias, $this->relatedPrimaryKey),
+                Expr::column($relatedTableAlias, $this->foreignKeyToParentColumn)
+        );
     }
 }

@@ -23,7 +23,7 @@ abstract class RelationObjectReference extends RelationReference
     protected $persistHookToIgnore;
 
     /**
-     * ToOneRelationObjectReference constructor.
+     * RelationObjectReference constructor.
      *
      * @param IEntityMapper     $mapper
      * @param string|null       $bidirectionalRelationProperty

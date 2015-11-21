@@ -41,4 +41,5 @@ class EmbeddedObjectMemberMapping extends MemberMapping
     {
         return count($this->embeddedRelation->getMapper()->getDefinition()->getTable()->getColumns()) === 1;
     }
+
 }

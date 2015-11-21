@@ -9,10 +9,12 @@ use Iddigital\Cms\Core\Model\ValueObjectCollection;
 use Iddigital\Cms\Core\Persistence\Db\LoadingContext;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\IEmbeddedObjectMapper;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\ParentChildrenMap;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\ISeparateTableRelation;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\IToManyRelation;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Mode\IdentifyingRelationMode;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Reference\IToManyRelationReference;
 use Iddigital\Cms\Core\Persistence\Db\PersistenceContext;
+use Iddigital\Cms\Core\Persistence\Db\Query\Clause\Join;
 use Iddigital\Cms\Core\Persistence\Db\Query\Delete;
 use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Expr;
 use Iddigital\Cms\Core\Persistence\Db\Query\Select;
@@ -30,7 +32,7 @@ use Iddigital\Cms\Core\Persistence\Db\Schema\Table;
  *
  * @author Elliot Levin <elliotlevin@hotmail.com>
  */
-class EmbeddedCollectionRelation extends EmbeddedRelation implements IToManyRelation
+class EmbeddedCollectionRelation extends EmbeddedRelation implements IToManyRelation, ISeparateTableRelation
 {
     /**
      * @var IdentifyingRelationMode
@@ -292,5 +294,38 @@ class EmbeddedCollectionRelation extends EmbeddedRelation implements IToManyRela
 
             $item->setChildren($children);
         }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function joinSelectToRelatedTable($parentTableAlias, $joinType, Select $select)
+    {
+        $childTableAlias = $select->generateUniqueAliasFor($this->childrenTable->getName());
+
+        $select->join(new Join($joinType, $this->childrenTable, $childTableAlias, [
+                $this->getRelationJoinCondition($parentTableAlias, $childTableAlias)
+        ]));
+
+        return $childTableAlias;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getRelationSelectTable()
+    {
+        return $this->childrenTable;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getRelationJoinCondition($parentTableAlias, $relatedTableAlias)
+    {
+        return Expr::equal(
+                Expr::column($parentTableAlias, $this->parentPrimaryKey),
+                Expr::column($relatedTableAlias, $this->foreignKeyToParent)
+        );
     }
 }

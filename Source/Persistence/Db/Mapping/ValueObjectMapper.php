@@ -12,7 +12,6 @@ use Iddigital\Cms\Core\Persistence\Db\Mapping\Hierarchy\ParentObjectMapping;
 use Iddigital\Cms\Core\Persistence\Db\PersistenceContext;
 use Iddigital\Cms\Core\Persistence\Db\Query\Delete;
 use Iddigital\Cms\Core\Persistence\Db\Row;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Table;
 
 /**
  * The value object mapper base class.
@@ -54,7 +53,7 @@ abstract class ValueObjectMapper extends ObjectMapper implements IEmbeddedObject
 
         if ($parentMapper) {
             foreach ($parentMapper->getDefinition()->getTable()->getColumns() as $column) {
-                $definition->addColumn($column);
+              //  $definition->addColumn($column);
                 $this->parentColumns[] = $column->getName();
             }
         }

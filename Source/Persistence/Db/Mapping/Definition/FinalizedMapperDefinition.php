@@ -10,6 +10,7 @@ use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Relation\ToManyRelation
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Relation\ToOneRelationMapping;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Hierarchy\IObjectMapping;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Hook\IPersistHook;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\IEmbeddedObjectMapper;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\IObjectMapper;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\IOrm;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Locking\IOptimisticLockingStrategy;
@@ -40,6 +41,11 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
      * @var Table
      */
     private $table;
+
+    /**
+     * @var Table
+     */
+    private $entityTable;
 
     /**
      * @var IObjectMapping[]
@@ -123,6 +129,7 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
      * @param IObjectMapping[]             $subClassMappings
      * @param callable                     $relationMappingsFactory
      * @param callable                     $foreignKeysFactory
+     * @param Table|null                   $entityTable
      */
     public function __construct(
             IOrm $orm,
@@ -138,7 +145,8 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
             array $persistHooks,
             array $subClassMappings,
             callable $relationMappingsFactory,
-            callable $foreignKeysFactory
+            callable $foreignKeysFactory,
+            Table $entityTable = null
     ) {
         $this->orm                         = $orm;
         $this->class                       = $class;
@@ -158,20 +166,27 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
 
         $this->relationMappingsFactory = $relationMappingsFactory;
         $this->foreignKeysFactory      = $foreignKeysFactory;
+        $this->entityTable             = $entityTable ?: $table;
     }
 
     /**
-     * @param IObjectMapper $parentMapper
+     * @param IObjectMapper $mapper
      *
      * @throws InvalidArgumentException
      */
-    public function initializeRelations(IObjectMapper $parentMapper)
+    public function initializeRelations(IObjectMapper $mapper)
     {
         if ($this->hasInitializedRelations) {
             return;
         }
 
-        $relationMappings = call_user_func($this->relationMappingsFactory, $this->table, $parentMapper);
+        if ($mapper instanceof IEmbeddedObjectMapper && $mapper->getRootEntityMapper()) {
+            $this->entityTable = $mapper->getRootEntityMapper()->getPrimaryTable();
+        } else {
+            $this->entityTable = $this->table;
+        }
+
+        $relationMappings = call_user_func($this->relationMappingsFactory, $this->entityTable, $mapper);
 
         foreach ($relationMappings as $relationMapping) {
             if ($relationMapping instanceof ToOneRelationMapping) {
@@ -189,7 +204,7 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
         ));
 
         foreach ($this->subClassMappings as $mapping) {
-            $mapping->initializeRelations($parentMapper);
+            $mapping->initializeRelations($mapper);
         }
 
         $this->hasInitializedRelations = true;
@@ -247,7 +262,8 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
             return $this;
         }
 
-        $table = $this->table->withPrefix($prefix);
+        $table       = $this->table->withPrefix($prefix);
+        $entityTable = $this->entityTable->withPrefix($prefix);
 
         $propertyColumnNameMap = [];
         foreach ($this->propertyColumnNameMap as $property => $column) {
@@ -332,7 +348,8 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
                 $persistHooks,
                 $subClassMappings,
                 $relationMappingsFactory,
-                $foreignKeyFactory
+                $foreignKeyFactory,
+                $entityTable
         );
 
         if ($this->hasInitializedRelations) {
@@ -356,6 +373,16 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
     public function getTable()
     {
         return $this->table;
+    }
+
+    /**
+     * Gets the table structure for the entity that contains this definition.
+     *
+     * @return Table
+     */
+    public function getEntityTable()
+    {
+        return $this->entityTable;
     }
 
     /**

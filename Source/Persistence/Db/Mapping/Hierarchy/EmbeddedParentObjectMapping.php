@@ -3,11 +3,13 @@
 namespace Iddigital\Cms\Core\Persistence\Db\Mapping\Hierarchy;
 
 use Iddigital\Cms\Core\Exception\InvalidArgumentException;
+use Iddigital\Cms\Core\Model\ITypedObject;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\FinalizedMapperDefinition;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\IEntityMapper;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\NullObjectMapper;
 use Iddigital\Cms\Core\Persistence\Db\PersistenceContext;
 use Iddigital\Cms\Core\Persistence\Db\Query\Delete;
+use Iddigital\Cms\Core\Persistence\Db\Row;
 
 /**
  * The embedded object mapping class.
@@ -58,6 +60,27 @@ class EmbeddedParentObjectMapping extends ParentObjectMapping implements IEmbedd
         if ($this->rootEntityMapper && !($this->rootEntityMapper instanceof NullObjectMapper)) {
             $this->primaryKeyColumnName = $this->rootEntityMapper->getPrimaryTable()->getPrimaryKeyColumnName();
         }
+    }
+
+    /**
+     * @param PersistenceContext $context
+     * @param ITypedObject[]     $objects
+     *
+     * @return Row[]
+     */
+    public function persistAllObjects(PersistenceContext $context, array $objects)
+    {
+        $rows = [];
+
+        foreach ($objects as $key => $object) {
+            $rows[$key] = new Row($this->table);
+        }
+
+        $this->persistAllBeforeParent($context, $objects, $rows);
+        $this->persistAll($context, $objects, $rows);
+        $this->persistAllAfterParent($context, $objects, $rows);
+
+        return $rows;
     }
 
     public function persistAllBeforeParent(PersistenceContext $context, array $objects, array $rows)

@@ -2,6 +2,7 @@
 
 namespace Iddigital\Cms\Core\Model\Criteria\Condition;
 
+use Iddigital\Cms\Core\Exception\InvalidArgumentException;
 use Iddigital\Cms\Core\Model\ITypedObject;
 
 /**
@@ -12,16 +13,47 @@ use Iddigital\Cms\Core\Model\ITypedObject;
 abstract class Condition
 {
     /**
+     * @var Condition[]
+     */
+    protected $children;
+
+    /**
      * @var callable
      */
     protected $arrayFilterCallable;
 
     /**
      * Condition constructor.
+     *
+     * @param Condition[] $children
      */
-    public function __construct()
+    public function __construct(array $children = [])
     {
+        InvalidArgumentException::verifyAllInstanceOf(__METHOD__, 'children', $children, __CLASS__);
+        $this->children            = $children;
         $this->arrayFilterCallable = $this->makeArrayFilterCallable();
+    }
+
+    /**
+     * @return Condition[]
+     */
+    public function getChildren()
+    {
+        return $this->children;
+    }
+
+    /**
+     * @param callable $callable
+     *
+     * @return void
+     */
+    public function walkRecursive(callable $callable)
+    {
+        $callable($this);
+
+        foreach ($this->children as $child) {
+            $child->walkRecursive($callable);
+        }
     }
 
     /**

@@ -36,7 +36,6 @@ abstract class BaseType implements IType
      */
     protected function loadValidOperatorTypes()
     {
-        $mixed = Type::mixed();
         $arrayOfThis = Type::arrayOf($this);
 
         return [

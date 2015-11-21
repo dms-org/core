@@ -7,8 +7,10 @@ use Iddigital\Cms\Core\Persistence\Db\Mapping\ParentChildMap;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Mode\IRelationMode;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Reference\IToOneRelationReference;
 use Iddigital\Cms\Core\Persistence\Db\PersistenceContext;
+use Iddigital\Cms\Core\Persistence\Db\Query\Clause\Join;
 use Iddigital\Cms\Core\Persistence\Db\Query\Delete;
 use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Expr;
+use Iddigital\Cms\Core\Persistence\Db\Query\Select;
 use Iddigital\Cms\Core\Persistence\Db\Row;
 use Iddigital\Cms\Core\Persistence\Db\RowSet;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Column;
@@ -64,7 +66,7 @@ class ToOneRelation extends ToOneRelationBase
         if ($map->hasAnyParentsWithPrimaryKeys()) {
             $this->mode->syncInvalidatedRelationsQuery(
                     $context,
-                    $this->table,
+                    $this->relatedTable,
                     $this->foreignKeyColumn,
                     $this->getInvalidatedRelationExpr($map)
             );
@@ -79,7 +81,7 @@ class ToOneRelation extends ToOneRelationBase
                 $context,
                 $this->mapper,
                 $parentDelete,
-                $this->table,
+                $this->relatedTable,
                 $this->foreignKeyColumn,
                 $parentDelete->getTable()->getPrimaryKeyColumn()
         );
@@ -129,8 +131,8 @@ class ToOneRelation extends ToOneRelationBase
             // an extra step must be taken because the primary key will
             // only be known after inserting so the foreign key to itself
             // will have to be updated separately afterwards
-            $context->bulkUpdate(new RowSet($this->table->withColumnsButIgnoringConstraints([
-                    $this->primaryKey,
+            $context->bulkUpdate(new RowSet($this->relatedTable->withColumnsButIgnoringConstraints([
+                    $this->relatedPrimaryKey,
                     $this->foreignKeyColumn
             ]), $selfReferencingChildRows));
         }
@@ -157,7 +159,7 @@ class ToOneRelation extends ToOneRelationBase
                 if ($childId !== null) {
                     $expressions[] = Expr::and_(
                             $equalsParentForeignKey,
-                            Expr::notEqual($this->column($this->primaryKey), Expr::idParam($childId))
+                            Expr::notEqual($this->column($this->relatedPrimaryKey), Expr::idParam($childId))
                     );
                 } else {
                     $expressions[] = $equalsParentForeignKey;
@@ -165,7 +167,7 @@ class ToOneRelation extends ToOneRelationBase
             }
         }
 
-        return $expressions ? Expr::compoundOr($expressions) :  Expr::false();
+        return $expressions ? Expr::compoundOr($expressions) : Expr::false();
     }
 
     /**
@@ -200,5 +202,38 @@ class ToOneRelation extends ToOneRelationBase
             $parentKey = $item->getParent()->getColumn($primaryKey);
             $item->setChild(isset($values[$parentKey]) ? $values[$parentKey] : null);
         }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function joinSelectToRelatedTable($parentTableAlias, $joinType, Select $select)
+    {
+        $relatedTableAlias = $select->generateUniqueAliasFor($this->relatedTable->getName());
+
+        $select->join(new Join($joinType, $this->relatedTable, $relatedTableAlias, [
+                $this->getRelationJoinCondition($parentTableAlias, $relatedTableAlias)
+        ]));
+
+        return $relatedTableAlias;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getRelationSelectTable()
+    {
+        return $this->relatedTable;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getRelationJoinCondition($parentTableAlias, $relatedTableAlias)
+    {
+        return Expr::equal(
+                Expr::column($parentTableAlias, $this->relatedPrimaryKey),
+                Expr::column($relatedTableAlias, $this->foreignKeyColumn)
+        );
     }
 }

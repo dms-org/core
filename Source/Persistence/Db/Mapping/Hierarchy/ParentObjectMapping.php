@@ -58,7 +58,7 @@ class ParentObjectMapping extends ObjectMapping
     }
 
     /**
-     * @param ForeignKey $persistHook
+     * @param IPersistHook $persistHook
      *
      * @return void
      */
@@ -144,6 +144,18 @@ class ParentObjectMapping extends ObjectMapping
         $this->persistAll($context, $objects, $rows);
 
         return $rows;
+    }
+
+
+    /**
+     * @param PersistenceContext $context
+     * @param ITypedObject       $object
+     *
+     * @return Row
+     */
+    public function persistObject(PersistenceContext $context, ITypedObject $object)
+    {
+        return $this->persistAllObjects($context, [0 => $object])[0];
     }
 
     /**

@@ -23,13 +23,18 @@ abstract class RelationIdentityReference extends RelationReference
     protected $primaryKeyColumn;
 
     /**
-     * @inheritDoc
+     * @param IEntityMapper $mapper
      */
-    public function __construct(IEntityMapper $mapper, $bidirectionalRelationProperty = null)
+    public function __construct(IEntityMapper $mapper)
     {
         parent::__construct($mapper);
         $this->primaryKeyColumn = $this->mapper->getPrimaryTable()->getPrimaryKeyColumn();
     }
+
+    /**
+     * @return RelationObjectReference
+     */
+    abstract public function asObjectReference();
 
     /**
      * @return Select

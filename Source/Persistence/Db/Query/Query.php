@@ -2,12 +2,14 @@
 
 namespace Iddigital\Cms\Core\Persistence\Db\Query;
 
+use Iddigital\Cms\Core\Exception\InvalidArgumentException;
 use Iddigital\Cms\Core\Persistence\Db\Query\Clause\Join;
 use Iddigital\Cms\Core\Persistence\Db\Query\Clause\Ordering;
 use Iddigital\Cms\Core\Persistence\Db\Query\Expression\BinOp;
 use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Expr;
 use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Parameter;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Table;
+use Iddigital\Cms\Core\Util\Debug;
 
 /**
  * The db query base class.
@@ -71,7 +73,7 @@ abstract class Query implements IQuery
      */
     public static function copyFrom(Query $otherQuery)
     {
-        $self = new static($otherQuery->table);
+        $self            = new static($otherQuery->table);
         $self->joins     = $otherQuery->joins;
         $self->where     = $otherQuery->where;
         $self->orderings = $otherQuery->orderings;
@@ -96,11 +98,35 @@ abstract class Query implements IQuery
     }
 
     /**
+     * @param string $alias
+     *
+     * @return Table
+     * @throws InvalidArgumentException
+     */
+    public function getTableFromAlias($alias)
+    {
+        if ($this->alias === $alias) {
+            return $this->table;
+        }
+
+        foreach ($this->joins as $join) {
+            if ($join->getAlias() === $alias) {
+                return $join->getTable();
+            }
+        }
+
+        throw InvalidArgumentException::format(
+                'Invalid alias supplied to %s: expecting one of (%s), \'%s\' given',
+                __METHOD__, Debug::formatValues($this->getAliases()), $alias
+        );
+    }
+
+    /**
      * @param string $tableName
      *
      * @return string
      */
-    public function getAliasFor($tableName)
+    public function generateUniqueAliasFor($tableName)
     {
         $aliases = array_flip($this->getAliases());
         if (!isset($aliases[$tableName])) {
@@ -178,7 +204,7 @@ abstract class Query implements IQuery
     public function setTable(Table $table)
     {
         $this->table = $table;
-        $this->alias = $this->getAliasFor($table->getName());
+        $this->alias = $this->generateUniqueAliasFor($table->getName());
 
         return $this;
     }

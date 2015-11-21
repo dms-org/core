@@ -97,7 +97,7 @@ abstract class ObjectMapping implements IObjectMapping
         $this->definition            = $definition;
         $this->objectType            = $definition->getClassName();
         $this->subClassMappings      = $definition->getSubClassMappings();
-        $this->primaryKeyColumnName  = $definition->getTable()->getPrimaryKeyColumnName();
+        $this->primaryKeyColumnName  = $definition->getEntityTable()->getPrimaryKeyColumnName();
         $this->mappingTables         = $this->loadMappingTables($definition);
         $this->specificColumnsToLoad = $this->loadRequiredColumns($definition);
         $this->specificColumnsToLoad = array_merge($this->specificColumnsToLoad, $this->findAllColumnsToLoad());
@@ -167,7 +167,7 @@ abstract class ObjectMapping implements IObjectMapping
         $columns = [];
 
         foreach ($this->subClassMappings as $mapping) {
-            if ($mapping instanceof EmbeddedObjectMapping) {
+            if ($mapping instanceof EmbeddedSubClassObjectMapping) {
                 foreach ($mapping->getAllColumnsToLoad() as $column) {
                     $columns[] = $column;
                 }
@@ -546,6 +546,8 @@ abstract class ObjectMapping implements IObjectMapping
     }
 
     /**
+     * Queues the necessary queries to persist the mapped data to the supplied context.
+     *
      * @param PersistenceContext $context
      * @param Row[]              $rows
      * @param array|null         $extraData

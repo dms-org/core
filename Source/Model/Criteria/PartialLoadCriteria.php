@@ -72,55 +72,6 @@ class PartialLoadCriteria extends Criteria implements IPartialLoadCriteria
      */
     public function getAliasMemberTree()
     {
-        $arrayTree     = [];
-        $hashMemberMap = [];
-
-        foreach ($this->nestedMembersToLoad as $alias => $nestedMember) {
-            $currentMemberHash = '';
-            $currentNode       =& $arrayTree;
-
-            foreach ($nestedMember->getParts() as $part) {
-                $memberString = $part->asString();
-                $currentMemberHash .= '||' . $memberString;
-
-                $currentNode =& $currentNode[$memberString];
-                $hashMemberMap[$currentMemberHash] = $part;
-            }
-
-            $currentNode[] = $alias;
-        }
-
-        return $this->buildMemberNodeFromTree('', $arrayTree, $hashMemberMap);
-    }
-
-    protected function buildMemberNodeFromTree($currentMemberHash, array $aliasTree, array $hashMemberMap)
-    {
-        $aliases   = [];
-        $children = [];
-
-        foreach ($aliasTree as $memberString => $node) {
-            if (is_string($node)) {
-                // It is an alias
-                $aliases[] = $node;
-            } elseif (is_array($node)) {
-                // It is child nodes
-                $children[] = $this->buildMemberNodeFromTree(
-                        $currentMemberHash . '||' . $memberString,
-                        $node,
-                        $hashMemberMap
-                );
-            }
-        }
-
-        if ($currentMemberHash === '') {
-            // Root node, just need node array
-            return $children;
-        }
-
-        return new MemberExpressionNode(
-                $hashMemberMap[$currentMemberHash],
-                $children,
-                $aliases
-        );
+        return MemberExpressionTree::buildTree($this->nestedMembersToLoad);
     }
 }

@@ -2,7 +2,6 @@
 
 namespace Iddigital\Cms\Core\Persistence\Db\Mapping;
 
-use Iddigital\Cms\Core\Model\IEntity;
 use Iddigital\Cms\Core\Model\Object\TypedObject;
 use Iddigital\Cms\Core\Persistence\Db\Row;
 

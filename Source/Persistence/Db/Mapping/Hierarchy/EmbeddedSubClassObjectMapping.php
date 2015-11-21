@@ -21,7 +21,7 @@ use Iddigital\Cms\Core\Persistence\Db\Schema\Table;
  *
  * @author Elliot Levin <elliotlevin@hotmail.com>
  */
-class EmbeddedObjectMapping extends SubClassObjectMapping implements IEmbeddedObjectMapping
+class EmbeddedSubClassObjectMapping extends SubClassObjectMapping implements IEmbeddedObjectMapping
 {
     /**
      * @var string

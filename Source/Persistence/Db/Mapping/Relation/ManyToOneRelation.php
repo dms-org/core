@@ -6,8 +6,10 @@ use Iddigital\Cms\Core\Persistence\Db\LoadingContext;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\ParentChildMap;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Reference\IToOneRelationReference;
 use Iddigital\Cms\Core\Persistence\Db\PersistenceContext;
+use Iddigital\Cms\Core\Persistence\Db\Query\Clause\Join;
 use Iddigital\Cms\Core\Persistence\Db\Query\Delete;
 use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Expr;
+use Iddigital\Cms\Core\Persistence\Db\Query\Select;
 use Iddigital\Cms\Core\Persistence\Db\Row;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Column;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Table;
@@ -142,5 +144,38 @@ class ManyToOneRelation extends ToOneRelationBase
             $parentKey = $item->getParent()->getColumn($this->foreignKeyToRelated);
             $item->setChild(isset($values[$parentKey]) ? $values[$parentKey] : null);
         }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function joinSelectToRelatedTable($parentTableAlias, $joinType, Select $select)
+    {
+        $relatedTableAlias = $select->generateUniqueAliasFor($this->relatedTable->getName());
+
+        $select->join(new Join($joinType, $this->relatedTable, $relatedTableAlias, [
+                $this->getRelationJoinCondition($parentTableAlias, $relatedTableAlias)
+        ]));
+
+        return $relatedTableAlias;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getRelationSelectTable()
+    {
+        return $this->relatedTable;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getRelationJoinCondition($parentTableAlias, $relatedTableAlias)
+    {
+        return Expr::equal(
+                Expr::column($parentTableAlias, $this->foreignKeyColumn),
+                Expr::column($relatedTableAlias, $this->relatedPrimaryKey)
+        );
     }
 }

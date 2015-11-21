@@ -124,6 +124,7 @@ class CrudModuleDream extends CrudModule
             $table->mapProperty('friends.flatten(friends)')->toComponent('...');
             $table->mapProperty('load(categoryId, App\Store\Category).')->toComponent('...');
             $table->mapProperty('loadAll(friends.flatten(relativesIds)).')->toComponent('...');
+            $table->mapProperty('friends.average(income.months.sum(amount))')->toComponent('...');
 
             $table->view('default', 'Default')
                     ->asDefault()

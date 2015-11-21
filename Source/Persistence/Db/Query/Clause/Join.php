@@ -41,13 +41,15 @@ class Join
      * Join constructor.
      *
      * @param string $type
-     * @param Table $table
+     * @param Table  $table
      * @param string $alias
      * @param Expr[] $on
      */
-    private function __construct($type, Table $table, $alias, array $on)
+    public function __construct($type, Table $table, $alias, array $on)
     {
+        InvalidArgumentException::verify(in_array($type, [self::INNER, self::LEFT, self::RIGHT]), 'on', 'Invalid join type \'%s\' given', $type);
         InvalidArgumentException::verifyAllInstanceOf(__METHOD__, 'on', $on, Expr::class);
+
         $this->type  = $type;
         $this->table = $table;
         $this->alias = $alias;
@@ -55,7 +57,7 @@ class Join
     }
 
     /**
-     * @param Table $table
+     * @param Table  $table
      * @param string $alias
      * @param Expr[] $on
      *
@@ -67,7 +69,7 @@ class Join
     }
 
     /**
-     * @param Table $table
+     * @param Table  $table
      * @param string $alias
      * @param Expr[] $on
      *
@@ -79,7 +81,7 @@ class Join
     }
 
     /**
-     * @param Table $table
+     * @param Table  $table
      * @param string $alias
      * @param Expr[] $on
      *

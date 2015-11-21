@@ -12,7 +12,7 @@ use Iddigital\Cms\Core\Model\ISpecification;
 use Iddigital\Cms\Core\Persistence\Db\Connection\IConnection;
 use Iddigital\Cms\Core\Persistence\Db\Criteria\CriteriaMapper;
 use Iddigital\Cms\Core\Persistence\Db\LoadingContext;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\IObjectMapper;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\IEntityMapper;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\ReadModel\ArrayReadModelMapper;
 use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Expr;
 use Iddigital\Cms\Core\Persistence\Db\Query\IQuery;
@@ -36,7 +36,7 @@ abstract class DbRepositoryBase implements IObjectSetWithPartialLoadSupport
     protected $connection;
 
     /**
-     * @var IObjectMapper
+     * @var IEntityMapper
      */
     protected $mapper;
 
@@ -46,12 +46,12 @@ abstract class DbRepositoryBase implements IObjectSetWithPartialLoadSupport
     protected $criteriaMapper;
 
     /**
-     * DbRepository constructor.
+     * DbRepositoryBase constructor.
      *
      * @param IConnection   $connection
-     * @param IObjectMapper $mapper
+     * @param IEntityMapper $mapper
      */
-    public function __construct(IConnection $connection, IObjectMapper $mapper)
+    public function __construct(IConnection $connection, IEntityMapper $mapper)
     {
         $this->connection     = $connection;
         $this->loadingContext = new LoadingContext($connection);

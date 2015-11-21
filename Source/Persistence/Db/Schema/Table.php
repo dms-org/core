@@ -178,7 +178,7 @@ class Table
 
         if (!$column) {
             throw InvalidArgumentException::format(
-                    'Could not get column from table %s: expecting one of (%s), %s given',
+                    'Could not get column from table \'%s\': expecting one of (%s), %s given',
                     $this->name, Debug::formatValues($this->getColumnNames()), $name
             );
         }
@@ -190,10 +190,13 @@ class Table
      * @param string $name
      *
      * @return Column|null
+     * @throws InvalidArgumentException
      */
     public function findColumn($name)
     {
-        InvalidArgumentException::verify(is_string($name), 'Column name must be string, %s given', gettype($name));
+        if (!is_string($name)) {
+            throw InvalidArgumentException::format('Column name must be string, %s given', gettype($name));
+        }
 
         return isset($this->columns[$name]) ? $this->columns[$name] : null;
     }

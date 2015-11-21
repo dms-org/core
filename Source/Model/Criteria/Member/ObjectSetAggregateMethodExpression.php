@@ -31,6 +31,14 @@ abstract class ObjectSetAggregateMethodExpression extends ObjectSetMethodExpress
     }
 
     /**
+     * @return NestedMember
+     */
+    public function getAggregatedMember()
+    {
+        return $this->member;
+    }
+
+    /**
      * @inheritDoc
      */
     public function isPropertyValue()

@@ -72,6 +72,16 @@ class UnaryOp extends Expr
      */
     public static function not(Expr $operand)
     {
+        if ($operand instanceof self) {
+            if ($operand->getOperator() === self::IS_NULL) {
+                return self::isNotNull($operand->getOperand());
+            } elseif ($operand->getOperator() === self::IS_NOT_NULL) {
+                return self::isNull($operand->getOperand());
+            } elseif ($operand->getOperator() === self::NOT) {
+                return $operand->getOperand();
+            }
+        }
+
         return new self(self::NOT, $operand, new Boolean());
     }
 

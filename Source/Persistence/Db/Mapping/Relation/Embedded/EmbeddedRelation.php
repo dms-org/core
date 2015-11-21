@@ -31,4 +31,12 @@ abstract class EmbeddedRelation extends Relation implements IRelation
     {
         parent::__construct($mapper, $dependencyMode, $relationshipTables, $parentColumnsToLoad);
     }
+
+    /**
+     * @return IEmbeddedObjectMapper
+     */
+    final public function getEmbeddedObjectMapper()
+    {
+        return $this->mapper;
+    }
 }

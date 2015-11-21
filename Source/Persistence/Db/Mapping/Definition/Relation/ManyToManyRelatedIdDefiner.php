@@ -2,7 +2,6 @@
 
 namespace Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Relation;
 
-use Iddigital\Cms\Core\Persistence\Db\Mapping\IEntityMapper;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\ManyToManyRelation;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Reference\ToManyRelationIdentityReference;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Reference\ToManyRelationObjectReference;
@@ -20,8 +19,14 @@ class ManyToManyRelatedIdDefiner extends ManyToManyRelationDefinerBase
      */
     private $parentIdColumn;
 
-    public function __construct(callable $callback, callable $mapperLoader, $joinTable, $parentIdColumn, $bidirectionalRelationProperty, $loadIds)
-    {
+    public function __construct(
+            callable $callback,
+            callable $mapperLoader,
+            $joinTable,
+            $parentIdColumn,
+            $bidirectionalRelationProperty,
+            $loadIds
+    ) {
         parent::__construct($callback, $mapperLoader, $joinTable, $bidirectionalRelationProperty, $loadIds);
         $this->parentIdColumn = $parentIdColumn;
     }
@@ -44,7 +49,7 @@ class ManyToManyRelatedIdDefiner extends ManyToManyRelationDefinerBase
                             : new ToManyRelationObjectReference($mapper, $this->bidirectionalRelationProperty),
                     $this->joinTableName,
                     $parentTable->getName(),
-                    $parentTable->getPrimaryKeyColumnName(),
+                    $parentTable->getPrimaryKeyColumn(),
                     $this->parentIdColumn,
                     $column
             );

@@ -7,11 +7,11 @@ use Iddigital\Cms\Core\Exception\TypeMismatchException;
 use Iddigital\Cms\Core\Persistence\Db\LoadingContext;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\ParentChildrenMap;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Reference\IToManyRelationReference;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Reference\RelationObjectReference;
 use Iddigital\Cms\Core\Persistence\Db\PersistenceContext;
 use Iddigital\Cms\Core\Persistence\Db\Query\Clause\Join;
 use Iddigital\Cms\Core\Persistence\Db\Query\Delete;
 use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Expr;
+use Iddigital\Cms\Core\Persistence\Db\Query\Select;
 use Iddigital\Cms\Core\Persistence\Db\Row;
 use Iddigital\Cms\Core\Persistence\Db\RowSet;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Column;
@@ -47,14 +47,14 @@ class ManyToManyRelation extends ToManyRelationBase
     private $parentTableName;
 
     /**
-     * @var string
+     * @var Column
      */
-    private $parentTableIdName;
+    private $parentTablePrimaryKey;
 
     /**
      * @var Column
      */
-    private $parentIdColumn;
+    private $parentForeignKeyColumn;
 
     /**
      * @var array
@@ -62,14 +62,14 @@ class ManyToManyRelation extends ToManyRelationBase
     private $relatedTableName;
 
     /**
-     * @var string
+     * @var Column
      */
-    private $relatedTableIdName;
+    private $relatedTablePrimaryKey;
 
     /**
      * @var Column
      */
-    private $relatedIdColumn;
+    private $relatedForeignKeyColumn;
 
     /**
      * ManyToManyRelation constructor.
@@ -77,9 +77,9 @@ class ManyToManyRelation extends ToManyRelationBase
      * @param IToManyRelationReference $reference
      * @param string                   $joinTableName
      * @param string                   $parentTableName
-     * @param string                   $parentTableIdName
-     * @param string                   $parentIdColumn
-     * @param string                   $relatedIdColumn
+     * @param Column                   $parentTablePrimaryKey
+     * @param string                   $parentForeignKeyColumnName
+     * @param string                   $relatedForeignKeyColumnName
      *
      * @throws InvalidArgumentException
      */
@@ -87,18 +87,18 @@ class ManyToManyRelation extends ToManyRelationBase
             IToManyRelationReference $reference,
             $joinTableName,
             $parentTableName,
-            $parentTableIdName,
-            $parentIdColumn,
-            $relatedIdColumn
+            Column $parentTablePrimaryKey,
+            $parentForeignKeyColumnName,
+            $relatedForeignKeyColumnName
     ) {
-        $mapper                  = $reference->getMapper();
-        $this->parentTableName   = $parentTableName;
-        $this->parentTableIdName = $parentTableIdName;
-        $this->parentIdColumn    = new Column($parentIdColumn, Integer::normal());
+        $mapper                       = $reference->getMapper();
+        $this->parentTableName        = $parentTableName;
+        $this->parentTablePrimaryKey  = $parentTablePrimaryKey;
+        $this->parentForeignKeyColumn = new Column($parentForeignKeyColumnName, Integer::normal());
 
-        $this->relatedTableName   = $mapper->getPrimaryTableName();
-        $this->relatedTableIdName = $mapper->getPrimaryTable()->getPrimaryKeyColumnName();
-        $this->relatedIdColumn    = new Column($relatedIdColumn, Integer::normal());
+        $this->relatedTableName        = $mapper->getPrimaryTableName();
+        $this->relatedTablePrimaryKey  = $mapper->getPrimaryTable()->getPrimaryKeyColumn();
+        $this->relatedForeignKeyColumn = new Column($relatedForeignKeyColumnName, Integer::normal());
 
         $inverseRelation = $reference->getBidirectionalRelation();
         if ($inverseRelation) {
@@ -130,29 +130,27 @@ class ManyToManyRelation extends ToManyRelationBase
                 $reference,
                 $this->joinTable->getName(),
                 $this->parentTableName,
-                $this->parentTableIdName,
-                $this->parentIdColumn->getName(),
-                $this->relatedTableName,
-                $this->relatedTableIdName,
-                $this->relatedIdColumn->getName()
+                $this->parentTablePrimaryKey,
+                $this->parentForeignKeyColumn->getName(),
+                $this->relatedForeignKeyColumn->getName()
         );
     }
 
     private function buildJoinTable($name)
     {
-        return new Table($name, [$this->parentIdColumn, $this->relatedIdColumn], [], [
+        return new Table($name, [$this->parentForeignKeyColumn, $this->relatedForeignKeyColumn], [], [
                 ForeignKey::createWithNamingConvention(
                         $name,
-                        [$this->parentIdColumn->getName()],
+                        [$this->parentForeignKeyColumn->getName()],
                         $this->parentTableName,
-                        [$this->parentTableIdName],
+                        [$this->parentTablePrimaryKey->getName()],
                         ForeignKeyMode::CASCADE, ForeignKeyMode::CASCADE
                 ),
                 ForeignKey::createWithNamingConvention(
                         $name,
-                        [$this->relatedIdColumn->getName()],
+                        [$this->relatedForeignKeyColumn->getName()],
                         $this->relatedTableName,
-                        [$this->relatedTableIdName],
+                        [$this->relatedTablePrimaryKey->getName()],
                         ForeignKeyMode::CASCADE, ForeignKeyMode::CASCADE
                 ),
         ]);
@@ -185,8 +183,8 @@ class ManyToManyRelation extends ToManyRelationBase
             $context->queue($delete);
         }
 
-        $parentIdColumn  = $this->parentIdColumn->getName();
-        $relatedIdColumn = $this->relatedIdColumn->getName();
+        $parentIdColumn  = $this->parentForeignKeyColumn->getName();
+        $relatedIdColumn = $this->relatedForeignKeyColumn->getName();
         $joinTableRows   = [];
 
         foreach ($map->getItems() as $item) {
@@ -233,7 +231,7 @@ class ManyToManyRelation extends ToManyRelationBase
             $parent = $item->getParent();
             if ($parent->hasColumn($primaryKey)) {
                 $expressions[] = Expr::equal(
-                        Expr::tableColumn($this->joinTable, $this->parentIdColumn->getName()),
+                        Expr::tableColumn($this->joinTable, $this->parentForeignKeyColumn->getName()),
                         Expr::idParam($parent->getColumn($primaryKey))
                 );
             }
@@ -263,17 +261,17 @@ class ManyToManyRelation extends ToManyRelationBase
             $parentIds[] = Expr::idParam($parent->getColumn($primaryKey));
         }
 
-        $alias = $select->getAliasFor($this->joinTable->getName());
+        $alias = $select->generateUniqueAliasFor($this->joinTable->getName());
         $select->join(Join::right($this->joinTable, $alias, [
-                Expr::equal(Expr::column($alias, $this->relatedIdColumn), $this->column($this->primaryKey))
+                Expr::equal(Expr::column($alias, $this->relatedForeignKeyColumn), $this->column($this->relatedPrimaryKey))
         ]));
 
-        $parentIdColumn = Expr::column($alias, $this->parentIdColumn);
+        $parentIdColumn = Expr::column($alias, $this->parentForeignKeyColumn);
         $select->where(Expr::in($parentIdColumn, Expr::tuple($parentIds)));
-        $select->addColumn($this->parentIdColumn->getName(), $parentIdColumn);
+        $select->addColumn($this->parentForeignKeyColumn->getName(), $parentIdColumn);
 
         $indexedGroups = [];
-        $parentIdName  = $this->parentIdColumn->getName();
+        $parentIdName  = $this->parentForeignKeyColumn->getName();
 
         $rows = $context->query($select)->getRows();
         foreach ($rows as $row) {
@@ -310,14 +308,13 @@ class ManyToManyRelation extends ToManyRelationBase
         // INNER JOIN <parent table> ON  <parent table>.<primary key> = <join table>.<parent key>
         // WHERE <delete parent conditions>
 
-
         $delete           = $parentDelete->copy()->setTable($this->joinTable);
-        $alias            = $delete->getAliasFor($parentDelete->getTable()->getName());
+        $alias            = $delete->generateUniqueAliasFor($parentDelete->getTable()->getName());
         $parentPrimaryKey = Expr::column($alias, $parentDelete->getTable()->getPrimaryKeyColumn());
 
         $joinOnCondition = Expr::equal(
                 $parentPrimaryKey,
-                Expr::tableColumn($this->joinTable, $this->parentIdColumn->getName())
+                Expr::tableColumn($this->joinTable, $this->parentForeignKeyColumn->getName())
         );
 
         $isSelfReferencing = $parentDelete->getTable()->getName() === $this->mapper->getPrimaryTableName();
@@ -326,7 +323,7 @@ class ManyToManyRelation extends ToManyRelationBase
             // INNER JOIN <parent table> ON  <parent table>.<primary key> = <join table>.<parent key> OR <parent table>.<primary key> = <join table>.<related key>
             $joinOnCondition = Expr::or_($joinOnCondition, Expr::equal(
                     $parentPrimaryKey,
-                    Expr::tableColumn($this->joinTable, $this->relatedIdColumn->getName())
+                    Expr::tableColumn($this->joinTable, $this->relatedForeignKeyColumn->getName())
             ));
         }
 
@@ -335,4 +332,50 @@ class ManyToManyRelation extends ToManyRelationBase
 
         $context->queue($relatedDelete);
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function joinSelectToRelatedTable($parentTableAlias, $joinType, Select $select)
+    {
+        $joinTableAlias = $select->generateUniqueAliasFor($this->joinTable->getName());
+
+        $select->join(new Join($joinType, $this->joinTable, $joinTableAlias, [
+                $this->getRelationJoinCondition($parentTableAlias, $joinTableAlias)
+        ]));
+
+        $relatedTableAlias = $select->generateUniqueAliasFor($this->relatedTable->getName());
+
+        $select->join(new Join($joinType, $this->relatedTable, $relatedTableAlias, [
+                Expr::equal(
+                        Expr::column($joinTableAlias, $this->relatedForeignKeyColumn),
+                        Expr::column($relatedTableAlias, $this->relatedPrimaryKey)
+                )
+        ]));
+
+        return $relatedTableAlias;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getRelationSelectTable()
+    {
+        return $this->joinTable;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getRelationJoinCondition($parentTableAlias, $relatedTableAlias)
+    {
+        $joinTableAlias = $relatedTableAlias;
+
+        return Expr::equal(
+                Expr::column($parentTableAlias, $this->parentTablePrimaryKey),
+                Expr::column($joinTableAlias, $this->parentForeignKeyColumn)
+        );
+    }
+
+
 }

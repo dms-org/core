@@ -17,7 +17,7 @@ abstract class ConnectionContext
     protected $connection;
 
     /**
-     * LoadingContext constructor.
+     * ConnectionContext constructor.
      *
      * @param IConnection $connection
      */

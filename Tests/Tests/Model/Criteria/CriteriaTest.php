@@ -3,6 +3,7 @@
 namespace Iddigital\Cms\Core\Tests\Model\Criteria;
 
 use Iddigital\Cms\Common\Testing\CmsTestCase;
+use Iddigital\Cms\Core\Exception\InvalidArgumentException;
 use Iddigital\Cms\Core\Exception\TypeMismatchException;
 use Iddigital\Cms\Core\Model\Criteria\Condition\AndCondition;
 use Iddigital\Cms\Core\Model\Criteria\Condition\InstanceOfCondition;
@@ -303,5 +304,22 @@ class CriteriaTest extends CmsTestCase
                         ]), '!=', 'bar'),
                 ])),
                 $criteria->getCondition());
+    }
+
+    public function testThrowsExceptionForInvalidOperatorWithNull()
+    {
+        $criteria = TestEntity::criteria();
+
+        // = and != are value
+        $criteria->where('object', '!=', null);
+        $criteria->where('object', '=', null);
+
+        $this->assertThrows(function () use ($criteria) {
+            $criteria->where('object', '>', null);
+        }, InvalidArgumentException::class);
+
+        $this->assertThrows(function () use ($criteria) {
+            $criteria->where('object', '<=', null);
+        }, InvalidArgumentException::class);
     }
 }
