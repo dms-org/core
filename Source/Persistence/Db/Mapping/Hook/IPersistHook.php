@@ -15,6 +15,13 @@ use Iddigital\Cms\Core\Persistence\Db\Row;
 interface IPersistHook
 {
     /**
+     * Gets a unique string to represent this persist hook.
+     *
+     * @return string
+     */
+    public function getIdString();
+
+    /**
      * @param PersistenceContext $context
      * @param ITypedObject[]     $objects
      * @param Row[]              $rows

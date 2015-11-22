@@ -19,7 +19,7 @@ class OneEntity extends Entity
     public $others;
 
     /**
-     * SubEntity constructor.
+     * OneEntity constructor.
      *
      * @param int|null        $id
      * @param AnotherEntity[] $others

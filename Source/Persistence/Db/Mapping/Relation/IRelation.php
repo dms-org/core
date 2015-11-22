@@ -18,6 +18,13 @@ interface IRelation
     const DEPENDENT_CHILDREN = 'dependent-children';
 
     /**
+     * Gets a unique string for this relation.
+     *
+     * @return string
+     */
+    public function getIdString();
+
+    /**
      * @return string
      */
     public function getDependencyMode();

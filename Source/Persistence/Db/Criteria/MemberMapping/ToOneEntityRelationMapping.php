@@ -8,6 +8,8 @@ use Iddigital\Cms\Core\Exception\NotImplementedException;
 use Iddigital\Cms\Core\Model\Criteria\Condition\ConditionOperator;
 use Iddigital\Cms\Core\Model\IEntity;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\IEntityMapper;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\ReadModel\Relation\MemberRelation;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\ReadModel\Relation\ToOneMemberRelation;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\EntityRelation;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\IRelation;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\ISeparateTableRelation;
@@ -23,7 +25,7 @@ use Iddigital\Cms\Core\Util\Debug;
  *
  * @author Elliot Levin <elliotlevin@hotmail.com>
  */
-class ToOneEntityRelationMapping extends ToOneRelationMapping
+class ToOneEntityRelationMapping extends ToOneRelationMapping implements IFinalRelationMemberMapping
 {
     /**
      * @var IToOneRelation|ISeparateTableRelation|EntityRelation
@@ -52,6 +54,14 @@ class ToOneEntityRelationMapping extends ToOneRelationMapping
     /**
      * @inheritDoc
      */
+    public function asMemberRelation()
+    {
+        return new ToOneMemberRelation($this);
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function getWhereConditionExpr(Select $select, $tableAlias, $operator, $value)
     {
         $allowedOperators = [
@@ -62,7 +72,7 @@ class ToOneEntityRelationMapping extends ToOneRelationMapping
         ];
 
         if (!in_array($operator, $allowedOperators, true)) {
-            throw InvalidOperationException::format(
+            throw MemberExpressionMappingException::format(
                     'Cannot compare entity of type %s using the \'%s\' operator, only (%s) are supported',
                     $this->getRelatedObjectType(), $operator, Debug::formatValues($allowedOperators)
             );
@@ -85,7 +95,7 @@ class ToOneEntityRelationMapping extends ToOneRelationMapping
                 $conditions[] = $this->loadWhereConditionExpr($tableAlias, ConditionOperator::EQUALS, $entity);
             }
 
-            return Expr::compoundAnd($conditions);
+            return Expr::compoundOr($conditions);
         }
 
         $entityType = $this->getRelatedObjectType();
@@ -106,6 +116,8 @@ class ToOneEntityRelationMapping extends ToOneRelationMapping
             );
         }
 
+        $relatedPrimaryKey = $this->relation->getRelatedPrimaryKey();
+
         if ($idValue === false) {
             if ($operator === ConditionOperator::EQUALS) {
                 // The entity has no id, it has not been persisted yet,
@@ -117,12 +129,14 @@ class ToOneEntityRelationMapping extends ToOneRelationMapping
                 return Expr::true();
             }
         } elseif ($idValue === null) {
-            return Expr::isNull(Expr::column($tableAlias, $this->relation->getRelatedPrimaryKey()));
+            return $operator === ConditionOperator::EQUALS
+                    ? Expr::isNull(Expr::column($tableAlias, $relatedPrimaryKey))
+                    : Expr::isNotNull(Expr::column($tableAlias, $relatedPrimaryKey));
         } else {
             return new BinOp(
-                    Expr::column($tableAlias, $this->relation->getRelatedPrimaryKey()),
+                    Expr::column($tableAlias, $relatedPrimaryKey),
                     $this->mapConditionOperator($operator),
-                    Expr::idParam($idValue)
+                    Expr::param($relatedPrimaryKey->getType(), $idValue)
             );
         }
     }

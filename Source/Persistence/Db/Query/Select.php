@@ -20,6 +20,11 @@ use Iddigital\Cms\Core\Util\Debug;
 class Select extends Query
 {
     /**
+     * @var string[]
+     */
+    private $outerSelectAliases = [];
+
+    /**
      * @var Expr[]|null
      */
     private $aliasColumnMap = null;
@@ -59,6 +64,23 @@ class Select extends Query
     }
 
     /**
+     * Builds a select for use as a subselect within this select instance.
+     *
+     * @param Table $fromTable
+     *
+     * @return Select
+     */
+    public function buildSubSelect(Table $fromTable)
+    {
+        $subSelect = Select::from($fromTable);
+        $subSelect->setAlias($this->generateUniqueAliasFor($fromTable->getName()));
+
+        $subSelect->outerSelectAliases = $this->getTakenAliases();
+
+        return $subSelect;
+    }
+
+    /**
      * Gets the structure of the result set of this select.
      *
      * @return Table
@@ -68,8 +90,7 @@ class Select extends Query
         $columns = [];
 
         foreach ($this->aliasColumnMap as $alias => $expr) {
-            $isPrimaryKey = !$this->getJoins() && $expr instanceof ColumnExpr && $expr->getColumn()->isPrimaryKey();
-            $columns[] = new Column($alias,  $expr->getResultingType(), $isPrimaryKey);
+            $columns[] = new Column($alias,  $expr->getResultingType());
         }
 
         return new Table('__result_set__', $columns);
@@ -81,6 +102,14 @@ class Select extends Query
     public function getAliasColumnMap()
     {
         return $this->aliasColumnMap;
+    }
+
+    /**
+     * @return string[]
+     */
+    protected function getTakenAliases()
+    {
+        return array_merge(parent::getTakenAliases(), $this->outerSelectAliases);
     }
 
     /**
@@ -170,6 +199,16 @@ class Select extends Query
     public function addHaving(Expr $having)
     {
         $this->having[] = $having;
+
+        return $this;
+    }
+
+    /**
+     * @return static
+     */
+    public function removeOuterSelectAliases()
+    {
+        $this->outerSelectAliases = [];
 
         return $this;
     }

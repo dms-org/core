@@ -70,8 +70,9 @@ class PersistedOrderIndexToManyRelationTest extends ToManyRelationTestBase
 
     public function testRegistersPersistHookInRelatedMapper()
     {
-        $this->assertCount(1, $this->childMapper->getDefinition()->getPersistHooks());
-        $this->assertInstanceOf(OrderIndexPropertyLoaderHook::class, $this->childMapper->getDefinition()->getPersistHooks()[0]);
+        $hooks = $this->childMapper->getDefinition()->getPersistHooks();
+        $this->assertCount(1, $hooks);
+        $this->assertInstanceOf(OrderIndexPropertyLoaderHook::class, reset($hooks));
     }
 
     public function testBulkPersist()

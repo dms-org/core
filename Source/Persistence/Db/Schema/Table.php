@@ -178,7 +178,7 @@ class Table
 
         if (!$column) {
             throw InvalidArgumentException::format(
-                    'Could not get column from table \'%s\': expecting one of (%s), %s given',
+                    'Could not get column from table \'%s\': expecting one of (%s), \'%s\' given',
                     $this->name, Debug::formatValues($this->getColumnNames()), $name
             );
         }

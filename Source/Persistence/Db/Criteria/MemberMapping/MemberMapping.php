@@ -8,6 +8,7 @@ use Iddigital\Cms\Core\Model\Criteria\Condition\ConditionOperator;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\IEntityMapper;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\IRelation;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\ISeparateTableRelation;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\IToOneRelation;
 use Iddigital\Cms\Core\Persistence\Db\Query\Clause\Join;
 use Iddigital\Cms\Core\Persistence\Db\Query\Clause\Ordering;
 use Iddigital\Cms\Core\Persistence\Db\Query\Expression\BinOp;
@@ -199,15 +200,10 @@ abstract class MemberMapping
     abstract protected function getSingleValueExpressionInSelect(Select $select, $tableAlias);
 
     /**
-     * @param Select   $select
-     * @param string   $tableAlias
-     * @param callable $expressionCallback
-     *
-     * @return Expr
+     * @return ISeparateTableRelation[]
      */
-    protected function loadExpressionWithNecessarySubselects(Select $select, $tableAlias, callable $expressionCallback)
+    public function getSeperateTableRelations()
     {
-        /** @var ISeparateTableRelation[] $separateTableRelations */
         $separateTableRelations = [];
 
         foreach ($this->nestedRelations as $nestedRelation) {
@@ -216,8 +212,22 @@ abstract class MemberMapping
             }
         }
 
+        return $separateTableRelations;
+    }
+
+    /**
+     * @param Select   $select
+     * @param string   $tableAlias
+     * @param callable $expressionCallback
+     *
+     * @return Expr
+     */
+    protected function loadExpressionWithNecessarySubselects(Select $select, $tableAlias, callable $expressionCallback)
+    {
+        $separateTableRelations = $this->getSeperateTableRelations();
+
         if ($separateTableRelations) {
-            return $this->getExpressionByJoiningRelations($select, $tableAlias, $separateTableRelations, $expressionLoader);
+            return $this->getExpressionByJoiningRelations($select, $tableAlias, $separateTableRelations, $expressionCallback);
         } else {
             return $expressionCallback($select, $tableAlias);
         }
@@ -260,16 +270,20 @@ abstract class MemberMapping
 
         /** @var ISeparateTableRelation $firstRelation */
         $firstRelation = array_shift($separateTableRelations);
-        $subSelect     = new Select($firstRelation->getRelationSelectTable());
+        $subSelect     = $firstRelation->getRelationSubSelect($select, $tableAlias);
 
-        $subSelect->where(
-                $firstRelation->getRelationJoinCondition($select->getTableAlias(), $subSelect->getTableAlias())
-        );
+        $tableAlias = $subSelect->getTableAlias();
 
         foreach ($separateTableRelations as $relation) {
+            if ($relation instanceof IToOneRelation) {
+                $joinType = Join::LEFT;
+            } else {
+                $joinType = Join::INNER;
+            }
+
             $tableAlias = $relation->joinSelectToRelatedTable(
                     $tableAlias,
-                    Join::INNER,
+                    $joinType,
                     $subSelect
             );
         }

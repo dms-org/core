@@ -52,8 +52,9 @@ abstract class EntityRelation extends Relation implements ISeparateTableRelation
     protected $relatedPrimaryKey;
 
     /**
-     * Relation constructor.
+     * EntityRelation constructor.
      *
+     * @param string             $idString
      * @param IRelationReference $reference
      * @param IRelationMode|null $mode
      * @param string             $dependencyMode
@@ -61,19 +62,26 @@ abstract class EntityRelation extends Relation implements ISeparateTableRelation
      * @param string[]           $parentColumnsToLoad
      */
     public function __construct(
+            $idString,
             IRelationReference $reference,
             IRelationMode $mode = null,
             $dependencyMode,
             array $relationshipTables = [],
             array $parentColumnsToLoad = []
     ) {
-        parent::__construct($reference->getMapper(), $dependencyMode, $relationshipTables, $parentColumnsToLoad);
+        parent::__construct($idString, $reference->getMapper(), $dependencyMode, $relationshipTables, $parentColumnsToLoad);
 
-        $this->reference         = $reference;
-        $this->mapper            = $reference->getMapper();
-        $this->mode              = $mode;
+        $this->reference = $reference;
+        $this->mapper    = $reference->getMapper();
+        $this->mode      = $mode;
+
         $this->relatedTable      = $this->mapper->getPrimaryTable();
         $this->relatedPrimaryKey = $this->relatedTable->getPrimaryKeyColumn();
+
+        $this->mapper->onUpdatedPrimaryTable(function (Table $primaryTable) {
+            $this->relatedTable      = $primaryTable;
+            $this->relatedPrimaryKey = $primaryTable->getPrimaryKeyColumn();
+        });
     }
 
     /**
@@ -140,7 +148,7 @@ abstract class EntityRelation extends Relation implements ISeparateTableRelation
      */
     final protected function select()
     {
-        return $this->reference->getSelect();
+        return Select::from($this->relatedTable);
     }
 
     /**

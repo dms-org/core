@@ -22,6 +22,10 @@ class NullObjectMapper implements IEntityMapper
     {
     }
 
+    public function onUpdatedPrimaryTable(callable $callback)
+    {
+    }
+
 
     public function getMapperHash()
     {

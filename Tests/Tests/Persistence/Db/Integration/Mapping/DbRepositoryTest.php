@@ -57,6 +57,7 @@ class DbRepositoryTest extends DbIntegrationTest
     public function testEntityType()
     {
         $this->assertSame(EmptyEntity::class, $this->repo->getEntityType());
+        $this->assertSame(EmptyEntity::type(), $this->repo->getElementType());
     }
 
     public function testGetAllEmpty()

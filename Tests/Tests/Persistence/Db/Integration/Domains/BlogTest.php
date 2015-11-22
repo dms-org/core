@@ -127,7 +127,7 @@ class BlogTest extends DbIntegrationTest
                         'users',
                         ['id'],
                         ForeignKeyMode::CASCADE,
-                        ForeignKeyMode::CASCADE
+                        ForeignKeyMode::SET_NULL
                 )
         ], array_values($this->postTable->getStructure()->getForeignKeys()));
 

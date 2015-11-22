@@ -24,10 +24,10 @@ class LoadAllIdsMethodExpression extends LoadIdFromEntitySetMethodExpression
      */
     public function __construct(IType $sourceType, NestedMember $member, IEntitySet $dataSource)
     {
-        parent::__construct($sourceType, self::METHOD_NAME, $member, $dataSource);
+        parent::__construct($sourceType, self::METHOD_NAME, $member, $dataSource, Type::collectionOf($dataSource->getElementType()));
 
         $idCollectionType = $member->getResultingType();
-        if (!($idCollectionType instanceof WithElementsType) || !$idCollectionType->getElementType()->isSubsetOf(Type::int())) {
+        if (!($idCollectionType instanceof WithElementsType) || !$idCollectionType->getElementType()->nonNullable()->isSubsetOf(Type::int())) {
             throw InvalidArgumentException::format(
                     'Invalid call to method \'%s\', argument \'%s\' must result in collection type of int, %s given',
                     self::METHOD_NAME, $member->asString(), $idCollectionType->asTypeString()

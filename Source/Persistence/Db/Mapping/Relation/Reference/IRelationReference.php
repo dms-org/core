@@ -19,9 +19,12 @@ interface IRelationReference
     public function getMapper();
 
     /**
-     * @return Select
+     * @param Select $select
+     * @param string $relatedTableAlias
+     *
+     * @return void
      */
-    public function getSelect();
+    public function addLoadToSelect(Select $select, $relatedTableAlias);
 
     /**
      * @param mixed $childValue

@@ -6,6 +6,7 @@ use Iddigital\Cms\Core\Exception\InvalidArgumentException;
 use Iddigital\Cms\Core\Exception\TypeMismatchException;
 use Iddigital\Cms\Core\Persistence\Db\LoadingContext;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\ParentChildrenMap;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\ParentMapBase;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Reference\IToManyRelationReference;
 use Iddigital\Cms\Core\Persistence\Db\PersistenceContext;
 use Iddigital\Cms\Core\Persistence\Db\Query\Clause\Join;
@@ -74,6 +75,7 @@ class ManyToManyRelation extends ToManyRelationBase
     /**
      * ManyToManyRelation constructor.
      *
+     * @param string                   $idString
      * @param IToManyRelationReference $reference
      * @param string                   $joinTableName
      * @param string                   $parentTableName
@@ -84,6 +86,7 @@ class ManyToManyRelation extends ToManyRelationBase
      * @throws InvalidArgumentException
      */
     public function __construct(
+            $idString,
             IToManyRelationReference $reference,
             $joinTableName,
             $parentTableName,
@@ -114,7 +117,7 @@ class ManyToManyRelation extends ToManyRelationBase
             $joinTable = $this->buildJoinTable($joinTableName);
         }
 
-        parent::__construct($reference, null, self::DEPENDENT_CHILDREN, [
+        parent::__construct($idString, $reference, null, self::DEPENDENT_CHILDREN, [
                 $joinTable
         ]);
 
@@ -241,21 +244,16 @@ class ManyToManyRelation extends ToManyRelationBase
     }
 
     /**
-     * @param LoadingContext    $context
-     * @param ParentChildrenMap $map
-     *
-     * @return mixed
+     * @inheritDoc
      */
-    public function load(LoadingContext $context, ParentChildrenMap $map)
+    public function getRelationSelectFromParentRows(ParentMapBase $map, &$parentIdColumnName = null)
     {
         // SELECT <related>.*, <parent id> FROM <related>
         // INNER JOIN <join table> ON <join table>.<related key> = <related>.<primary key>
         // WHERE <join table>.<parent key> IN <parent ids>
-
         $primaryKey = $map->getPrimaryKeyColumn();
         $select     = $this->select();
-
-        $parentIds = [];
+        $parentIds  = [];
 
         foreach ($map->getAllParents() as $parent) {
             $parentIds[] = Expr::idParam($parent->getColumn($primaryKey));
@@ -270,12 +268,30 @@ class ManyToManyRelation extends ToManyRelationBase
         $select->where(Expr::in($parentIdColumn, Expr::tuple($parentIds)));
         $select->addColumn($this->parentForeignKeyColumn->getName(), $parentIdColumn);
 
+        $parentIdColumnName = $parentIdColumn->getName();
+
+        return $select;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function loadFromSelect(
+            LoadingContext $context,
+            ParentChildrenMap $map,
+            Select $select,
+            $relatedTableAlias,
+            $parentIdColumnName
+    ) {
+        $primaryKey = $map->getPrimaryKeyColumn();
+
+        $this->reference->addLoadToSelect($select, $relatedTableAlias);
+
         $indexedGroups = [];
-        $parentIdName  = $this->parentForeignKeyColumn->getName();
 
         $rows = $context->query($select)->getRows();
         foreach ($rows as $row) {
-            $indexedGroups[$row->getColumn($parentIdName)][] = $row;
+            $indexedGroups[$row->getColumn($parentIdColumnName)][] = $row;
         }
 
         $flattenedResults = [];
@@ -359,9 +375,22 @@ class ManyToManyRelation extends ToManyRelationBase
     /**
      * @inheritDoc
      */
-    public function getRelationSelectTable()
+    public function getRelationSubSelect(Select $outerSelect, $parentTableAlias)
     {
-        return $this->joinTable;
+        $subSelect = $outerSelect->buildSubSelect($this->relatedTable);
+
+        $joinTableAlias = $subSelect->generateUniqueAliasFor($this->joinTable->getName());
+
+        $subSelect->join(Join::inner($this->joinTable, $joinTableAlias, [
+                Expr::equal(
+                        Expr::column($joinTableAlias, $this->relatedForeignKeyColumn),
+                        Expr::column($subSelect->getTableAlias(), $this->relatedPrimaryKey)
+                )
+        ]));
+
+
+        return $subSelect
+                ->where($this->getRelationJoinCondition($parentTableAlias, $joinTableAlias));
     }
 
     /**
@@ -376,6 +405,4 @@ class ManyToManyRelation extends ToManyRelationBase
                 Expr::column($joinTableAlias, $this->parentForeignKeyColumn)
         );
     }
-
-
 }

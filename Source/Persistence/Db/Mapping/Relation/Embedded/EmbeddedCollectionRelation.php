@@ -9,8 +9,8 @@ use Iddigital\Cms\Core\Model\ValueObjectCollection;
 use Iddigital\Cms\Core\Persistence\Db\LoadingContext;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\IEmbeddedObjectMapper;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\ParentChildrenMap;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\ISeparateTableRelation;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\IToManyRelation;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\ParentMapBase;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\ISeparateToManyTableRelation;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Mode\IdentifyingRelationMode;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Reference\IToManyRelationReference;
 use Iddigital\Cms\Core\Persistence\Db\PersistenceContext;
@@ -32,7 +32,7 @@ use Iddigital\Cms\Core\Persistence\Db\Schema\Table;
  *
  * @author Elliot Levin <elliotlevin@hotmail.com>
  */
-class EmbeddedCollectionRelation extends EmbeddedRelation implements IToManyRelation, ISeparateTableRelation
+class EmbeddedCollectionRelation extends EmbeddedRelation implements ISeparateToManyTableRelation
 {
     /**
      * @var IdentifyingRelationMode
@@ -65,6 +65,7 @@ class EmbeddedCollectionRelation extends EmbeddedRelation implements IToManyRela
     private $childrenTable;
 
     /**
+     * @param string                $idString
      * @param IEmbeddedObjectMapper $mapper
      * @param string                $tableName
      * @param string                $parentTableName
@@ -73,6 +74,7 @@ class EmbeddedCollectionRelation extends EmbeddedRelation implements IToManyRela
      * @param Column                $parentPrimaryKey
      */
     public function __construct(
+            $idString,
             IEmbeddedObjectMapper $mapper,
             $parentTableName,
             $tableName,
@@ -88,7 +90,7 @@ class EmbeddedCollectionRelation extends EmbeddedRelation implements IToManyRela
         $this->childrenTable      = $mapper->getDefinition()->getTable();
 
 
-        parent::__construct($mapper, self::DEPENDENT_CHILDREN, [$this->childrenTable], [$parentPrimaryKey->getName()]);
+        parent::__construct($idString, $mapper, self::DEPENDENT_CHILDREN, [$this->childrenTable], [$parentPrimaryKey->getName()]);
 
         // Embedded values objects are always identifying
         // They must have be associated with a parent object
@@ -239,22 +241,17 @@ class EmbeddedCollectionRelation extends EmbeddedRelation implements IToManyRela
     }
 
     /**
-     * @param LoadingContext    $context
-     * @param ParentChildrenMap $map
-     *
-     * @return mixed
+     * @inheritDoc
      */
-    public function load(LoadingContext $context, ParentChildrenMap $map)
+    public function getRelationSelectFromParentRows(ParentMapBase $map, &$parentIdColumnName = null)
     {
-        $primaryKey = $map->getPrimaryKeyColumn();
-        $parentIds  = [];
+        $parentIds = [];
         foreach ($map->getAllParentPrimaryKeys() as $id) {
             $parentIds[] = Expr::idParam($id);
         }
 
         $foreignKeyName = $this->foreignKeyToParent->getName();
         $select         = Select::from($this->childrenTable);
-        $this->mapper->getMapping()->addLoadToSelect($select);
         $select->addRawColumn($foreignKeyName);
         $select->where(Expr::in(
                 Expr::column(
@@ -264,12 +261,44 @@ class EmbeddedCollectionRelation extends EmbeddedRelation implements IToManyRela
                 Expr::tuple($parentIds)
         ));
 
+        $parentIdColumnName = $foreignKeyName;
+
+        return $select;
+    }
+
+    /**
+     * @param LoadingContext    $context
+     * @param ParentChildrenMap $map
+     *
+     * @return mixed
+     */
+    public function load(LoadingContext $context, ParentChildrenMap $map)
+    {
+        $select = $this->getRelationSelectFromParentRows($map, $parentIdColumnName);
+
+        $this->loadFromSelect($context, $map, $select, $select->getTableAlias(), $parentIdColumnName);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function loadFromSelect(
+            LoadingContext $context,
+            ParentChildrenMap $map,
+            Select $select,
+            $relatedTableAlias,
+            $parentIdColumnName
+    ) {
+        $primaryKey = $map->getPrimaryKeyColumn();
+
+        $this->mapper->getMapping()->addLoadToSelect($select, $relatedTableAlias);
+
         $indexedGroups = [];
 
         $rows = $context->query($select)->getRows();
 
         foreach ($rows as $row) {
-            $indexedGroups[$row->getColumn($foreignKeyName)][] = $row;
+            $indexedGroups[$row->getColumn($parentIdColumnName)][] = $row;
         }
 
         $flattenedResults = [];
@@ -296,6 +325,7 @@ class EmbeddedCollectionRelation extends EmbeddedRelation implements IToManyRela
         }
     }
 
+
     /**
      * @inheritDoc
      */
@@ -313,9 +343,12 @@ class EmbeddedCollectionRelation extends EmbeddedRelation implements IToManyRela
     /**
      * @inheritDoc
      */
-    public function getRelationSelectTable()
+    public function getRelationSubSelect(Select $outerSelect, $parentTableAlias)
     {
-        return $this->childrenTable;
+        $subSelect = $outerSelect->buildSubSelect($this->childrenTable);
+
+        return $subSelect
+                ->where($this->getRelationJoinCondition($parentTableAlias, $subSelect->getTableAlias()));
     }
 
     /**

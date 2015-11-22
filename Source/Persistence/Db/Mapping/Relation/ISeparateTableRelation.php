@@ -2,8 +2,10 @@
 
 namespace Iddigital\Cms\Core\Persistence\Db\Mapping\Relation;
 
+use Iddigital\Cms\Core\Persistence\Db\Mapping\ParentMapBase;
 use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Expr;
 use Iddigital\Cms\Core\Persistence\Db\Query\Select;
+use Iddigital\Cms\Core\Persistence\Db\Row;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Table;
 
 /**
@@ -14,12 +16,30 @@ use Iddigital\Cms\Core\Persistence\Db\Schema\Table;
 interface ISeparateTableRelation extends IRelation
 {
     /**
-     * Gets the table which to join-to / select from to load the relation
-     * from a subselect.
+     * Builds a select query to select the related rows for the parent ids.
      *
-     * @return Table
+     * NOTE: The table from which the subselect is from must be the related primary table.
+     *
+     * @param ParentMapBase $map
+     * @param string &$parentIdColumnName This is an out parameter
+     *
+     * @return Select
      */
-    public function getRelationSelectTable();
+    public function getRelationSelectFromParentRows(ParentMapBase $map, &$parentIdColumnName = null);
+
+    /**
+     * Builds a select query to select the related rows as a sub select.
+     *
+     * This should use {@see Select::buildSubSelect} for the new instance.
+     *
+     * NOTE: The table from which the subselect is from must be the related primary table.
+     *
+     * @param Select $outerSelect
+     * @param string $parentTableAlias
+     *
+     * @return Select
+     */
+    public function getRelationSubSelect(Select $outerSelect, $parentTableAlias);
 
     /**
      * Gets the condition to join the related parent table to the child table,

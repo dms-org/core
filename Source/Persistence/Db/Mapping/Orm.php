@@ -3,9 +3,12 @@
 namespace Iddigital\Cms\Core\Persistence\Db\Mapping;
 
 use Iddigital\Cms\Core\Exception\InvalidArgumentException;
+use Iddigital\Cms\Core\Model\IEntitySet;
+use Iddigital\Cms\Core\Persistence\Db\Connection\IConnection;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Orm\OrmDefinition;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Database;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Table;
+use Iddigital\Cms\Core\Persistence\DbRepository;
 use Iddigital\Cms\Core\Util\Debug;
 
 /**
@@ -263,12 +266,40 @@ abstract class Orm implements IOrm
     /**
      * @inheritDoc
      */
-    final  public function getDatabase()
+    final public function getDatabase()
     {
         if (!$this->database) {
             $this->initializeDb();
         }
 
         return $this->database;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function loadRelatedEntityType($entityType, $idPropertyName)
+    {
+        $mapper = $this->getEntityMapper($entityType);
+
+        $propertyRelationMap = $mapper->getDefinition()->getPropertyRelationMap();
+
+        if (!isset($propertyRelationMap[$idPropertyName])) {
+            throw InvalidArgumentException::format(
+                    'Could not load related entity type for property %s::$%s: '
+                    . 'the property must mapped to a relation, expecting one of (%s), \'%s\' given',
+                    $entityType, $idPropertyName, Debug::formatValues(array_keys($propertyRelationMap)), $idPropertyName
+            );
+        }
+
+        return $propertyRelationMap[$idPropertyName]->getMapper()->getObjectType();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getEntityDataSourceProvider(IConnection $connection)
+    {
+        return new EntityRepositoryProvider($this, $connection);
     }
 }

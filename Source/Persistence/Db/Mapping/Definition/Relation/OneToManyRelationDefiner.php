@@ -132,7 +132,7 @@ class OneToManyRelationDefiner extends RelationTypeDefinerBase
      */
     public function withParentIdAs($columnName)
     {
-        call_user_func($this->callback, function (Table $parentTable) use ($columnName) {
+        call_user_func($this->callback, function ($idString, Table $parentTable) use ($columnName) {
             /** @var IEntityMapper $mapper */
             $mapper = call_user_func($this->mapperLoader);
             $mapper->addForeignKey(ForeignKey::createWithNamingConvention(
@@ -148,6 +148,7 @@ class OneToManyRelationDefiner extends RelationTypeDefinerBase
 
             if ($this->orderPersistColumn) {
                 $persistHook = new OrderIndexPropertyLoaderHook(
+                        $mapper->getObjectType(),
                         $mapper->getPrimaryTable(),
                         $this->orderPersistColumn,
                         $columnName,
@@ -155,14 +156,16 @@ class OneToManyRelationDefiner extends RelationTypeDefinerBase
                 );
 
                 $mapper->addPersistHook($persistHook);
+                $persistHookId = $persistHook->getIdString();
             } else {
-                $persistHook = null;
+                $persistHookId = null;
             }
 
             return new ToManyRelation(
+                    $idString,
                     $this->loadIds
                             ? new ToManyRelationIdentityReference($mapper)
-                            : new ToManyRelationObjectReference($mapper, $this->bidirectionalRelationProperty, $persistHook),
+                            : new ToManyRelationObjectReference($mapper, $this->bidirectionalRelationProperty, $persistHookId),
                     $columnName,
                     $this->identifying
                             ? new IdentifyingRelationMode()

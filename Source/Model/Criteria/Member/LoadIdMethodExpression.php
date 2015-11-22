@@ -22,9 +22,9 @@ class LoadIdMethodExpression extends LoadIdFromEntitySetMethodExpression
      */
     public function __construct(IType $sourceType, NestedMember $member, IEntitySet $dataSource)
     {
-        parent::__construct($sourceType, self::METHOD_NAME, $member, $dataSource);
+        parent::__construct($sourceType, self::METHOD_NAME, $member, $dataSource, $dataSource->getElementType()->nullable());
 
-        if (!$member->getResultingType()->isSubsetOf(Type::int())) {
+        if (!$member->getResultingType()->nonNullable()->isSubsetOf(Type::int())) {
             throw InvalidArgumentException::format(
                     'Invalid argument for \'%s\' method, argument \'%s\' must result in type int, %s given',
                     self::METHOD_NAME, $member->asString(), $member->getResultingType()->asTypeString()

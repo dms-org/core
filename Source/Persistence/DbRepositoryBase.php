@@ -9,11 +9,12 @@ use Iddigital\Cms\Core\Model\IEntity;
 use Iddigital\Cms\Core\Model\IObjectSetWithPartialLoadSupport;
 use Iddigital\Cms\Core\Model\IPartialLoadCriteria;
 use Iddigital\Cms\Core\Model\ISpecification;
+use Iddigital\Cms\Core\Model\Type\Builder\Type;
 use Iddigital\Cms\Core\Persistence\Db\Connection\IConnection;
 use Iddigital\Cms\Core\Persistence\Db\Criteria\CriteriaMapper;
+use Iddigital\Cms\Core\Persistence\Db\Criteria\PartialLoadCriteriaMapper;
 use Iddigital\Cms\Core\Persistence\Db\LoadingContext;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\IEntityMapper;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\ReadModel\ArrayReadModelMapper;
 use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Expr;
 use Iddigital\Cms\Core\Persistence\Db\Query\IQuery;
 use Iddigital\Cms\Core\Persistence\Db\Query\Select;
@@ -46,6 +47,11 @@ abstract class DbRepositoryBase implements IObjectSetWithPartialLoadSupport
     protected $criteriaMapper;
 
     /**
+     * @var PartialLoadCriteriaMapper
+     */
+    protected $partialCriteriaMapper;
+
+    /**
      * DbRepositoryBase constructor.
      *
      * @param IConnection   $connection
@@ -56,7 +62,24 @@ abstract class DbRepositoryBase implements IObjectSetWithPartialLoadSupport
         $this->connection     = $connection;
         $this->loadingContext = new LoadingContext($connection);
         $this->criteriaMapper = new CriteriaMapper($mapper);
+        $this->partialCriteriaMapper = new PartialLoadCriteriaMapper($this->criteriaMapper);
         $this->mapper         = $mapper;
+    }
+
+    /**
+     * @return IConnection
+     */
+    final public function getConnection()
+    {
+        return $this->connection;
+    }
+
+    /**
+     * @return IEntityMapper
+     */
+    final public function getMapper()
+    {
+        return $this->mapper;
     }
 
     /**
@@ -64,7 +87,7 @@ abstract class DbRepositoryBase implements IObjectSetWithPartialLoadSupport
      */
     final public function getElementType()
     {
-        return $this->mapper->getObjectType();
+        return Type::object($this->mapper->getObjectType());
     }
 
     /**
@@ -171,17 +194,9 @@ abstract class DbRepositoryBase implements IObjectSetWithPartialLoadSupport
     {
         $criteria->verifyOfClass($this->getObjectType());
 
-        $aliasPropertyNameMap = $criteria->getAliasNestedMemberStringMap();
-        $readModelMapper      = new ArrayReadModelMapper(
-                $this->mapper,
-                $aliasPropertyNameMap
-        );
+        $mappedQuery = $this->partialCriteriaMapper->mapPartialLoadCriteriaToQuery($criteria);
 
-        $criteriaMapper = new CriteriaMapper($readModelMapper);
-        $select         = $criteriaMapper->mapCriteriaToSelect($criteria);
-        $rows           = $this->connection->load($select);
-
-        return $readModelMapper->loadAllAsArray($this->loadingContext, $rows->getRows());
+        return $mappedQuery->load($this->loadingContext);
     }
 
     public function getIterator()

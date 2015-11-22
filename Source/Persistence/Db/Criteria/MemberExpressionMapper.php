@@ -74,16 +74,36 @@ class MemberExpressionMapper
             );
 
             return $this->mapFinalMember($nestedRelations, $member->getLastPart());
-        } catch (BaseException $e) {
-            if ($e instanceof MemberExpressionMappingException) {
-                throw $e;
+        } catch (BaseException $inner) {
+            if ($inner instanceof MemberExpressionMappingException && $inner->getPrevious()) {
+                $inner = $inner->getPrevious();
             }
 
-            throw MemberExpressionMappingException::format(
-                    'Could not map member expression \'%s\' of entity type %s: %s',
-                    $member->asString(), $this->rootEntityMapper->getObjectType(), $e->getMessage()
+            throw new MemberExpressionMappingException(
+                    sprintf(
+                            'Could not map member expression \'%s\' of entity type %s: %s',
+                            $member->asString(), $this->rootEntityMapper->getObjectType(), $inner->getMessage()
+                    ),
+                    null,
+                    $inner
             );
         }
+    }
+
+    /**
+     * @param IEntityMapper $mapper
+     * @param callable      $callback
+     *
+     * @return mixed
+     */
+    protected function withRootEntityMapper(IEntityMapper $mapper, callable $callback)
+    {
+        $oldMapper              = $this->rootEntityMapper;
+        $this->rootEntityMapper = $mapper;
+        $result                 = $callback();
+        $this->rootEntityMapper = $oldMapper;
+
+        return $result;
     }
 
     /**
@@ -101,7 +121,7 @@ class MemberExpressionMapper
 
             case $lastPart instanceof LoadIdFromEntitySetMethodExpression:
                 $relations    = $this->mapLoadExpressionToRelations($this->rootEntityMapper, $lastPart);
-                $lastRelation = array_pop($nestedRelations);
+                $lastRelation = array_pop($relations);
 
                 return $this->mapFinalRelationToMapping(array_merge($nestedRelations, $relations), $lastRelation);
 
@@ -117,7 +137,7 @@ class MemberExpressionMapper
 
             case $lastPart instanceof ObjectSetFlattenMethodExpression:
                 $relations    = $this->mapMemberExpressionsToRelations($this->rootEntityMapper, [$lastPart]);
-                $lastRelation = array_pop($nestedRelations);
+                $lastRelation = array_pop($relations);
 
                 return $this->mapFinalRelationToMapping(array_merge($nestedRelations, $relations), $lastRelation);
         }
@@ -125,29 +145,51 @@ class MemberExpressionMapper
         throw InvalidArgumentException::format('unknown final member expression type %s', Debug::getType($lastPart));
     }
 
+    /**
+     * @param IRelation[] $nestedRelations
+     *
+     * @return IEntityMapper
+     */
+    protected function getFinalEntityMapper(array $nestedRelations)
+    {
+        $entityMapper = null;
+
+        foreach (array_reverse($nestedRelations) as $relation) {
+            if ($relation instanceof EntityRelation) {
+                $entityMapper = $relation->getEntityMapper();
+                break;
+            }
+        }
+
+        return $entityMapper ?: $this->rootEntityMapper;
+    }
+
     protected function mapFinalPropertyToMapping(array $nestedRelations, FinalizedPropertyDefinition $property)
     {
-        $property = $property->getName();
+        $propertyName = $property->getName();
 
         /** @var IRelation $lastRelation */
         $lastRelation = end($nestedRelations);
         $definition   = $lastRelation ? $lastRelation->getMapper()->getDefinition() : $this->rootEntityMapper->getDefinition();
 
-        if (isset($definition->getPropertyColumnMap()[$property])) {
-            $columnName                  = $definition->getPropertyColumnMap()[$property];
+        if (isset($definition->getPropertyColumnMap()[$propertyName])) {
+            $columnName                  = $definition->getPropertyColumnMap()[$propertyName];
             $phpToDbPropertyConverterMap = $definition->getPhpToDbPropertyConverterMap();
 
             return new ColumnMapping(
                     $this->rootEntityMapper,
                     $nestedRelations,
                     $definition->getTable()->getColumn($columnName),
-                    isset($phpToDbPropertyConverterMap[$property]) ? $phpToDbPropertyConverterMap[$property] : null
+                    isset($phpToDbPropertyConverterMap[$propertyName]) ? $phpToDbPropertyConverterMap[$propertyName] : null
             );
-        } elseif ($relation = $definition->getRelationMappedToProperty($property)) {
+        } elseif ($relation = $definition->getRelationMappedToProperty($propertyName)) {
             return $this->mapFinalRelationToMapping($nestedRelations, $relation);
         }
 
-        throw InvalidArgumentException::format('cannot map property \'%s\' of tpe %s, property is not mapped according to mapper definition');
+        throw InvalidArgumentException::format(
+                'cannot map property \'%s\' of type %s, property is not mapped according to mapper definition for type %s',
+                $propertyName, $property->getType()->asTypeString(), $definition->getClassName()
+        );
     }
 
     /**
@@ -207,7 +249,12 @@ class MemberExpressionMapper
                 throw InvalidArgumentException::format('unknown aggregate expression type %s', Debug::getType($lastPart));
         }
 
-        $argumentMapping = $this->mapMemberExpression($lastPart->getAggregatedMember());
+        $argumentMapping = $this->withRootEntityMapper(
+                $this->getFinalEntityMapper(array_merge($nestedRelations, [$lastRelation])),
+                function () use ($lastPart) {
+                    return $this->mapMemberExpression($lastPart->getAggregatedMember());
+                }
+        );
 
         return new ToManyRelationAggregateMapping(
                 $this->rootEntityMapper,

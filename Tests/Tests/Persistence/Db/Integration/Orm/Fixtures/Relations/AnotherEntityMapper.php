@@ -4,7 +4,6 @@ namespace Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Orm\Fixtures\Relat
 
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\MapperDefinition;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\EntityMapper;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\IOrm;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>
@@ -26,11 +25,11 @@ class AnotherEntityMapper extends EntityMapper
         $map->idToPrimaryKey('id');
 
         $map->relation('ones')
-            ->to(OneEntity::class)
-            ->toMany()
-            ->withBidirectionalRelation('others')
-            ->throughJoinTable('one_anothers')
-            ->withParentIdAs('another_id')
-            ->withRelatedIdAs('one_id');
+                ->to(OneEntity::class)
+                ->toMany()
+                ->withBidirectionalRelation('others')
+                ->throughJoinTable('one_anothers')
+                ->withParentIdAs('another_id')
+                ->withRelatedIdAs('one_id');
     }
 }

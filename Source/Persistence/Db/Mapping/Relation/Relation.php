@@ -15,6 +15,11 @@ use Iddigital\Cms\Core\Persistence\Db\Schema\Table;
 abstract class Relation implements IRelation
 {
     /**
+     * @var string
+     */
+    protected $idString;
+
+    /**
      * @var IObjectMapper
      */
     protected $mapper;
@@ -37,17 +42,27 @@ abstract class Relation implements IRelation
     /**
      * Relation constructor.
      *
+     * @param string        $idString
      * @param IObjectMapper $mapper
      * @param string        $dependencyMode
      * @param Table[]       $relationshipTables
      * @param Column[]      $parentColumnsToLoad
      */
-    public function __construct(IObjectMapper $mapper, $dependencyMode, array $relationshipTables, array $parentColumnsToLoad)
+    public function __construct($idString, IObjectMapper $mapper, $dependencyMode, array $relationshipTables, array $parentColumnsToLoad)
     {
+        $this->idString            = $idString;
         $this->mapper              = $mapper;
         $this->dependencyMode      = $dependencyMode;
         $this->relationshipTables  = $relationshipTables;
         $this->parentColumnsToLoad = array_unique($parentColumnsToLoad, SORT_STRING);
+    }
+
+    /**
+     * @return string
+     */
+    public function getIdString()
+    {
+        return $this->idString;
     }
 
     /**

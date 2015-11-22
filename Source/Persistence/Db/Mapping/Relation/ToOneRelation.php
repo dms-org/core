@@ -4,6 +4,7 @@ namespace Iddigital\Cms\Core\Persistence\Db\Mapping\Relation;
 
 use Iddigital\Cms\Core\Persistence\Db\LoadingContext;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\ParentChildMap;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\ParentMapBase;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Mode\IRelationMode;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Reference\IToOneRelationReference;
 use Iddigital\Cms\Core\Persistence\Db\PersistenceContext;
@@ -33,15 +34,16 @@ class ToOneRelation extends ToOneRelationBase
     protected $foreignKeyColumn;
 
     /**
+     * @param string                  $idString
      * @param IToOneRelationReference $reference
      * @param string                  $foreignKeyToParent
      * @param IRelationMode           $mode
      *
      * @throws InvalidRelationException
      */
-    public function __construct(IToOneRelationReference $reference, $foreignKeyToParent, IRelationMode $mode)
+    public function __construct($idString, IToOneRelationReference $reference, $foreignKeyToParent, IRelationMode $mode)
     {
-        parent::__construct($reference, $mode, self::DEPENDENT_CHILDREN);
+        parent::__construct($idString, $reference, $mode, self::DEPENDENT_CHILDREN);
         $this->foreignKeyToParent = $foreignKeyToParent;
         $this->foreignKeyColumn   = $this->mapper->getPrimaryTable()->findColumn($this->foreignKeyToParent);
 
@@ -58,7 +60,7 @@ class ToOneRelation extends ToOneRelationBase
      */
     public function withReference(IToOneRelationReference $reference)
     {
-        return new self($reference, $this->foreignKeyToParent, $this->mode);
+        return new self($this->idString, $reference, $this->foreignKeyToParent, $this->mode);
     }
 
     public function persist(PersistenceContext $context, ParentChildMap $map)
@@ -171,12 +173,9 @@ class ToOneRelation extends ToOneRelationBase
     }
 
     /**
-     * @param LoadingContext $context
-     * @param ParentChildMap $map
-     *
-     * @return void
+     * @inheritDoc
      */
-    public function load(LoadingContext $context, ParentChildMap $map)
+    public function getRelationSelectFromParentRows(ParentMapBase $map, &$parentIdColumnName = null)
     {
         $primaryKey = $map->getPrimaryKeyColumn();
         $parentIds  = [];
@@ -189,11 +188,24 @@ class ToOneRelation extends ToOneRelationBase
         $select->addRawColumn($this->foreignKeyToParent);
         $select->where(Expr::in($this->column($this->foreignKeyColumn), Expr::tuple($parentIds)));
 
+        $parentIdColumnName = $this->foreignKeyToParent;
+
+        return $select;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function loadFromSelect(LoadingContext $context, ParentChildMap $map, Select $select, $relatedTableAlias, $parentIdColumnName)
+    {
+        $primaryKey = $map->getPrimaryKeyColumn();
+        $this->reference->addLoadToSelect($select, $relatedTableAlias);
+
         $indexedResults = [];
 
         $rows = $context->query($select)->getRows();
         foreach ($rows as $row) {
-            $indexedResults[$row->getColumn($this->foreignKeyToParent)] = $row;
+            $indexedResults[$row->getColumn($parentIdColumnName)] = $row;
         }
 
         $values = $this->reference->loadValues($context, $indexedResults);
@@ -216,14 +228,6 @@ class ToOneRelation extends ToOneRelationBase
         ]));
 
         return $relatedTableAlias;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getRelationSelectTable()
-    {
-        return $this->relatedTable;
     }
 
     /**

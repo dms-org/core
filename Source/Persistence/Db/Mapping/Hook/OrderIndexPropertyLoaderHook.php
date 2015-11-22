@@ -24,7 +24,7 @@ use Iddigital\Cms\Core\Persistence\Db\Schema\Table;
  *
  * @author Elliot Levin <elliotlevin@hotmail.com>
  */
-class OrderIndexPropertyLoaderHook implements IPersistHook
+class OrderIndexPropertyLoaderHook extends PersistHook
 {
     /**
      * @var Table
@@ -49,13 +49,16 @@ class OrderIndexPropertyLoaderHook implements IPersistHook
     /**
      * OrderIndexPropertyLoaderHook constructor.
      *
+     * @param string      $idString
      * @param Table       $table
      * @param string      $orderColumn
      * @param string|null $groupingColumn
      * @param string|null $orderPropertyName
      */
-    public function __construct(Table $table, $orderColumn, $groupingColumn = null, $orderPropertyName = null)
+    public function __construct($idString, Table $table, $orderColumn, $groupingColumn = null, $orderPropertyName = null)
     {
+        parent::__construct($idString);
+
         $this->table             = $table;
         $this->orderColumn       = $table->getColumn($orderColumn);
         $this->groupingColumn    = $groupingColumn ? $table->getColumn($groupingColumn) : null;

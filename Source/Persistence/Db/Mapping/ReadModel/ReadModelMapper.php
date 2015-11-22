@@ -66,6 +66,11 @@ class ReadModelMapper extends ObjectMapper implements IEntityMapper, IEmbeddedOb
 
     }
 
+    public function onUpdatedPrimaryTable(callable $callback)
+    {
+
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -120,7 +125,7 @@ class ReadModelMapper extends ObjectMapper implements IEntityMapper, IEmbeddedOb
     public function getSelect()
     {
         $select = Select::from($this->getPrimaryTable());
-        $this->getMapping()->addLoadToSelect($select);
+        $this->getMapping()->addLoadToSelect($select, $select->getTableAlias());
 
         return $select;
     }

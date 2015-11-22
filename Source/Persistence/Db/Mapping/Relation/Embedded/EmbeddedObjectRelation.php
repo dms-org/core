@@ -36,10 +36,11 @@ class EmbeddedObjectRelation extends EmbeddedRelation implements IEmbeddedToOneR
     private $isWithinValueObject;
 
     /**
+     * @param string                $idString
      * @param IEmbeddedObjectMapper $mapper
      * @param string|null           $objectIssetColumnName
      */
-    public function __construct(IEmbeddedObjectMapper $mapper, $objectIssetColumnName = null)
+    public function __construct($idString, IEmbeddedObjectMapper $mapper, $objectIssetColumnName = null)
     {
         $mapper->initializeRelations();
 
@@ -48,7 +49,7 @@ class EmbeddedObjectRelation extends EmbeddedRelation implements IEmbeddedToOneR
             $parentColumnsToLoad[] = $objectIssetColumnName;
         }
 
-        parent::__construct($mapper, self::DEPENDENT_PARENTS, [], $parentColumnsToLoad);
+        parent::__construct($idString, $mapper, self::DEPENDENT_PARENTS, [], $parentColumnsToLoad);
 
         $this->objectIssetColumnName = $objectIssetColumnName;
         if ($objectIssetColumnName) {
@@ -69,14 +70,14 @@ class EmbeddedObjectRelation extends EmbeddedRelation implements IEmbeddedToOneR
             /** @var ReadModelMapper $mapper */
             $mapper = $reference->getMapper();
 
-            return new self($mapper, $this->objectIssetColumnName);
+            return new self($this->idString, $mapper, $this->objectIssetColumnName);
         } else {
             throw NotImplementedException::method(__METHOD__);
         }
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public function getObjectIssetColumnName()
     {
@@ -97,6 +98,7 @@ class EmbeddedObjectRelation extends EmbeddedRelation implements IEmbeddedToOneR
     final public function withEmbeddedColumnsPrefixedBy($prefix)
     {
         return new self(
+                $this->idString,
                 $this->mapper->withColumnsPrefixedBy($prefix),
                 $this->isWithinValueObject ? $prefix . $this->objectIssetColumnName : $this->objectIssetColumnName
         );
@@ -126,7 +128,6 @@ class EmbeddedObjectRelation extends EmbeddedRelation implements IEmbeddedToOneR
 
         $this->mapper->persistAllToRowsBeforeParent($context, $children, $parentRows);
     }
-
 
     /**
      * @param PersistenceContext $context

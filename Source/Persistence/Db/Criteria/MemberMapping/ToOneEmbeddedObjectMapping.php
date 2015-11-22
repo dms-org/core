@@ -7,6 +7,7 @@ use Iddigital\Cms\Core\Exception\NotImplementedException;
 use Iddigital\Cms\Core\Model\Criteria\Condition\ConditionOperator;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Hierarchy\EmbeddedParentObjectMapping;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\IEntityMapper;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\ReadModel\Relation\ToOneMemberRelation;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Embedded\EmbeddedObjectRelation;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\IRelation;
 use Iddigital\Cms\Core\Persistence\Db\PersistenceContext;
@@ -21,7 +22,7 @@ use Iddigital\Cms\Core\Util\Debug;
  *
  * @author Elliot Levin <elliotlevin@hotmail.com>
  */
-class ToOneEmbeddedObjectMapping extends ToOneRelationMapping
+class ToOneEmbeddedObjectMapping extends ToOneRelationMapping implements IFinalRelationMemberMapping
 {
     /**
      * @var EmbeddedObjectRelation
@@ -38,6 +39,14 @@ class ToOneEmbeddedObjectMapping extends ToOneRelationMapping
     public function __construct(IEntityMapper $rootEntityMapper, array $nestedRelations, EmbeddedObjectRelation $relation)
     {
         parent::__construct($rootEntityMapper, $nestedRelations, $relation);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function asMemberRelation()
+    {
+        return new ToOneMemberRelation($this);
     }
 
     /**
@@ -75,7 +84,7 @@ class ToOneEmbeddedObjectMapping extends ToOneRelationMapping
         $isEqualityOperator = in_array($operator, $multiColumnOperators, true);
 
         if (!$isSingleColumn && !$isEqualityOperator) {
-            throw InvalidOperationException::format(
+            throw MemberExpressionMappingException::format(
                     'Cannot compare value object of type %s using the \'%s\' operator, only (%s) are supported in multi-column value objects',
                     $this->getRelatedObjectType(), $operator, Debug::formatValues($multiColumnOperators)
             );

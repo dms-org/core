@@ -5,6 +5,7 @@ namespace Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Reference;
 use Iddigital\Cms\Core\Exception\InvalidArgumentException;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\IEntityMapper;
 use Iddigital\Cms\Core\Persistence\Db\PersistenceContext;
+use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Expr;
 use Iddigital\Cms\Core\Persistence\Db\Query\Select;
 use Iddigital\Cms\Core\Persistence\Db\Row;
 use Iddigital\Cms\Core\Persistence\Db\RowSet;
@@ -37,12 +38,14 @@ abstract class RelationIdentityReference extends RelationReference
     abstract public function asObjectReference();
 
     /**
-     * @return Select
+     * @param Select $select
+     * @param string $relatedTableAlias
+     *
+     * @return void
      */
-    public function getSelect()
+    public function addLoadToSelect(Select $select, $relatedTableAlias)
     {
-        return Select::from($this->mapper->getPrimaryTable())
-                ->addRawColumn($this->primaryKeyColumn->getName());
+        $select->addColumn($this->primaryKeyColumn->getName(), Expr::column($relatedTableAlias, $this->primaryKeyColumn));
     }
 
     /**

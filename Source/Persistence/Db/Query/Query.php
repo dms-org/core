@@ -128,7 +128,7 @@ abstract class Query implements IQuery
      */
     public function generateUniqueAliasFor($tableName)
     {
-        $aliases = array_flip($this->getAliases());
+        $aliases = array_flip($this->getTakenAliases());
         if (!isset($aliases[$tableName])) {
             return $tableName;
         }
@@ -140,6 +140,14 @@ abstract class Query implements IQuery
         } while (in_array($newTableName, $aliases, true));
 
         return $newTableName;
+    }
+
+    /**
+     * @return string[]
+     */
+    protected function getTakenAliases()
+    {
+        return $this->getAliases();
     }
 
     /**

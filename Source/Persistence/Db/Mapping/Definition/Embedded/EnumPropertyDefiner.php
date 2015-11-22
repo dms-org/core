@@ -21,7 +21,7 @@ class EnumPropertyDefiner
 
     public function __construct(callable $callback, $columnName)
     {
-        $this->callback = $callback;
+        $this->callback   = $callback;
         $this->columnName = $columnName;
     }
 

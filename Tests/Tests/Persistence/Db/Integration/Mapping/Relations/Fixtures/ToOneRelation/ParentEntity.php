@@ -34,6 +34,6 @@ class ParentEntity extends Entity
      */
     protected function defineEntity(ClassDefinition $class)
     {
-        $class->property($this->child)->asObject(SubEntity::class);
+        $class->property($this->child)->nullable()->asObject(SubEntity::class);
     }
 }

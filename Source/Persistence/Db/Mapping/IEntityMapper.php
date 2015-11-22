@@ -29,6 +29,15 @@ interface IEntityMapper extends IObjectMapper
     public function initializeRelations();
 
     /**
+     * Defines a callback for when the primary table is updated.
+     *
+     * @param callable $callback
+     *
+     * @return void
+     */
+    public function onUpdatedPrimaryTable(callable $callback);
+
+    /**
      * Gets the table where the primary key of the parent entity is stored.
      *
      * @return Table

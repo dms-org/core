@@ -158,7 +158,10 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
         $this->dbToPhpPropertyConverterMap = $dbToPhpPropertyConverterMap;
         $this->methodColumnNameMap         = $methodColumnNameMap;
         $this->lockingStrategies           = $lockingStrategies;
-        $this->persistHooks                = $persistHooks;
+
+        foreach ($persistHooks as $persistHook) {
+            $this->persistHooks[$persistHook->getIdString()] = $persistHook;
+        }
 
         foreach ($subClassMappings as $mapping) {
             $this->subClassMappings[$mapping->getObjectType()] = $mapping;
@@ -229,7 +232,7 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
      */
     public function addPersistHook(IPersistHook $persistHook)
     {
-        $this->persistHooks[] = $persistHook;
+        $this->persistHooks[$persistHook->getIdString()] = $persistHook;
     }
 
     /**
@@ -478,12 +481,27 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
     }
 
     /**
+     * @return IRelation[]
+     */
+    public function getRelations()
+    {
+        $relations = [];
+
+        foreach ($this->getRelationMappings() as $mapping) {
+            $relations[] = $mapping->getRelation();
+        }
+
+        return $relations;
+    }
+
+    /**
      * @param string $property
      *
      * @return IRelation|null
      */
     public function getRelationMappedToProperty($property)
     {
+        InvalidArgumentException::verify(is_string($property), 'property must be a string');
         $relations = $this->getRelationMappings();
 
         foreach ($relations as $mapping) {
@@ -491,6 +509,7 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
 
             if ($accessor instanceof PropertyAccessor) {
                 if ($accessor->getPropertyName() === $property) {
+                    
                     return $mapping->getRelation();
                 }
             }
@@ -531,6 +550,16 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
     public function getPersistHooks()
     {
         return $this->persistHooks;
+    }
+
+    /**
+     * @param string $idString
+     *
+     * @return IPersistHook|null
+     */
+    public function getPersistHook($idString)
+    {
+        return isset($this->persistHooks[$idString]) ? $this->persistHooks[$idString] : null;
     }
 
     /**

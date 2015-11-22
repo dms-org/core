@@ -63,6 +63,11 @@ class ReadMapperDefinition
      */
     protected $readDefinition;
 
+    /**
+     * @var int
+     */
+    protected $relationCount = 0;
+
     public function __construct(IOrm $orm)
     {
         $this->orm            = $orm;
@@ -83,6 +88,14 @@ class ReadMapperDefinition
     public function getDefinition()
     {
         return $this->definition;
+    }
+
+    /**
+     * @return MapperDefinition
+     */
+    public function getReadDefinition()
+    {
+        return $this->readDefinition;
     }
 
     /**
@@ -150,8 +163,9 @@ class ReadMapperDefinition
      */
     public function entityTo($propertyName)
     {
+        $idString = implode(':', [$this->definition->getClassName(), __CLASS__, $this->relationCount++]);
         $this->readDefinition->relation($propertyName)
-                ->asCustom(new EmbeddedObjectRelation(new EmbeddedMapperProxy($this->mapper)));
+                ->asCustom(new EmbeddedObjectRelation($idString, new EmbeddedMapperProxy($this->mapper)));
     }
 
     /**
@@ -241,7 +255,7 @@ class ReadMapperDefinition
     /**
      * Defines columns to map to to the supplied properties
      *
-     * @param string[] $columnsPropertyMap
+     * @param string[]|callable[] $columnsPropertyMap
      *
      * @throws InvalidArgumentException
      */
@@ -251,6 +265,8 @@ class ReadMapperDefinition
         $this->verifyMapperDefined(__METHOD__);
 
         $table = $this->definition->getTable();
+        $emptyFunction     = function () {
+        };
 
         foreach ($columnsPropertyMap as $column => $property) {
             if (!$table->hasColumn($column)) {
@@ -260,10 +276,17 @@ class ReadMapperDefinition
                 );
             }
 
-            $this->readDefinition
-                    ->property($property)
-                    ->to($column)
-                    ->asType($table->findColumn($column)->getType());
+            if (is_string($property)) {
+                $this->readDefinition
+                        ->property($property)
+                        ->to($column)
+                        ->asType($table->findColumn($column)->getType());
+            } else {
+                $this->readDefinition
+                        ->accessor($emptyFunction, $property)
+                        ->to($column)
+                        ->asType($table->findColumn($column)->getType());
+            }
         }
     }
 
@@ -302,7 +325,8 @@ class ReadMapperDefinition
             if (is_string($alias)) {
                 $relationDefiner = $this->readDefinition->relation($alias);
             } else {
-                $relationDefiner = $this->readDefinition->accessorRelation(function () {}, $alias);
+                $relationDefiner = $this->readDefinition->accessorRelation(function () {
+                }, $alias);
             }
 
             $relationDefiner->asCustom($relation);

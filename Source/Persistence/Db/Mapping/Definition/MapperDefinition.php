@@ -403,8 +403,8 @@ class MapperDefinition extends MapperDefinitionBase
         return new EnumPropertyColumnDefiner(function ($columnName, array $valueMap = null) use ($property, $class, $isNullable) {
             $enumMapper = new EnumMapper($this->orm, $isNullable, $columnName, $class, $valueMap);
 
-            $this->createRelationMappingFactory(new PropertyAccessor($property), function () use ($enumMapper) {
-                return new EmbeddedObjectRelation($enumMapper, $enumMapper->getEnumValueColumn()->getName());
+            $this->createRelationMappingFactory(new PropertyAccessor($property), function ($idString) use ($enumMapper) {
+                return new EmbeddedObjectRelation($idString, $enumMapper, $enumMapper->getEnumValueColumn()->getName());
             });
 
             $this->addColumn($enumMapper->getEnumValueColumn());
@@ -427,11 +427,11 @@ class MapperDefinition extends MapperDefinitionBase
         return new EmbeddedValueObjectDefiner($this->orm, function (callable $mapperLoader, $issetColumnName = null) use ($property) {
 
             $this->createRelationMappingFactory(new PropertyAccessor($property),
-                    function (Table $parentTable, IObjectMapper $parentMapper) use (
+                    function ($idString, Table $parentTable, IObjectMapper $parentMapper) use (
                             $mapperLoader,
                             $issetColumnName
                     ) {
-                        return new EmbeddedObjectRelation($mapperLoader($parentMapper), $issetColumnName);
+                        return new EmbeddedObjectRelation($idString, $mapperLoader($parentMapper), $issetColumnName);
                     });
 
             $this->mappedProperties[$property] = true;
@@ -469,13 +469,14 @@ class MapperDefinition extends MapperDefinitionBase
                         $property
                 ) {
                     $this->createRelationMappingFactory(new PropertyAccessor($property),
-                            function (Table $parentTable, IObjectMapper $parentMapper) use (
+                            function ($idString, Table $parentTable, IObjectMapper $parentMapper) use (
                                     $mapperLoader,
                                     $tableName,
                                     $primaryKeyName,
                                     $foreignKeyName
                             ) {
                                 return new EmbeddedCollectionRelation(
+                                        $idString,
                                         $mapperLoader($parentMapper),
                                         $parentTable->getName(),
                                         $tableName,
@@ -540,8 +541,8 @@ class MapperDefinition extends MapperDefinitionBase
 
     protected function createRelationMappingFactory(IAccessor $accessor, callable $relationFactory)
     {
-        $this->relationFactories[] = function (Table $table, IObjectMapper $parentMapper) use ($accessor, $relationFactory) {
-            $relation = $relationFactory($table, $parentMapper);
+        $this->relationFactories[] = function ($idString, Table $table, IObjectMapper $parentMapper) use ($accessor, $relationFactory) {
+            $relation = $relationFactory($idString, $table, $parentMapper);
 
             if ($relation instanceof IToOneRelation) {
                 return new ToOneRelationMapping($accessor, $relation);
@@ -707,9 +708,13 @@ class MapperDefinition extends MapperDefinitionBase
         $table = new Table($tableName, $this->columns, $this->indexes, $this->foreignKeys);
 
         $relationsFactory = function (Table $table, IObjectMapper $parentMapper) {
+            $objectType  = $parentMapper->getObjectType();
+            $tableName   = $parentMapper->getDefinition()->getTable()->getName();
+
             $relations = [];
-            foreach ($this->relationFactories as $factory) {
-                $relations[] = $factory($table, $parentMapper);
+            foreach ($this->relationFactories as $uniqueKey => $factory) {
+                $relationId  = implode(':', [$objectType, $tableName, $uniqueKey]);
+                $relations[] = $factory($relationId,  $table, $parentMapper);
             }
 
             return $relations;
@@ -726,8 +731,8 @@ class MapperDefinition extends MapperDefinitionBase
         };
 
         $persistHooks = [];
-        foreach ($this->persistHookFactories as $factory) {
-            $persistHooks[] = $factory($table, $this->propertyColumnMap);
+        foreach ($this->persistHookFactories as $uniqueKey => $factory) {
+            $persistHooks[] = $factory($table, $uniqueKey, $this->propertyColumnMap, $this->class->getClassName());
         }
 
         $subClassMappings = [];

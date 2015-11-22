@@ -159,10 +159,9 @@ class JoinedSubClassObjectMapping extends SubClassObjectMapping
     /**
      * {@inheritdoc}
      */
-    protected function addLoadClausesToSelect(Select $select)
+    protected function addLoadClausesToSelect(Select $select, $parentAlias)
     {
-        $parentAlias = $this->parentTable->getName();
-        $joinAlias   = $select->generateUniqueAliasFor($this->classTable->getName());
+        $joinAlias = $select->generateUniqueAliasFor($this->classTable->getName());
 
         $select->join(Join::left(
                 $this->classTable,
@@ -171,6 +170,8 @@ class JoinedSubClassObjectMapping extends SubClassObjectMapping
         ));
 
         $this->addPrefixedColumnsToSelect($select, $joinAlias);
+
+        return $joinAlias;
     }
 
     /**

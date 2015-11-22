@@ -45,6 +45,11 @@ abstract class EntityMapperBase extends ObjectMapper implements IEntityMapper
     private $primaryKey;
 
     /**
+     * @var callable[]
+     */
+    private $onUpdatedPrimaryTableCallbacks = [];
+
+    /**
      * EntityMapperBase constructor.
      *
      * @param FinalizedMapperDefinition $definition
@@ -72,6 +77,10 @@ abstract class EntityMapperBase extends ObjectMapper implements IEntityMapper
 
         foreach ($this->mapping->getMappingTables() as $table) {
             $this->tables[$table->getName()] = $table;
+        }
+
+        foreach ($this->onUpdatedPrimaryTableCallbacks as $callback) {
+            $callback($this->primaryTable);
         }
     }
 
@@ -102,11 +111,19 @@ abstract class EntityMapperBase extends ObjectMapper implements IEntityMapper
     /**
      * @inheritDoc
      */
+    final public function onUpdatedPrimaryTable(callable $callback)
+    {
+        $this->onUpdatedPrimaryTableCallbacks[] = $callback;
+    }
+
+    /**
+     * @inheritDoc
+     */
     final public function getSelect()
     {
         $select = Select::from($this->primaryTable);
 
-        $this->mapping->addLoadToSelect($select);
+        $this->mapping->addLoadToSelect($select, $select->getTableAlias());
 
         return $select;
     }

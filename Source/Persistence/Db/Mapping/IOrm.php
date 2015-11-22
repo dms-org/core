@@ -3,15 +3,17 @@
 namespace Iddigital\Cms\Core\Persistence\Db\Mapping;
 
 use Iddigital\Cms\Core\Exception\InvalidArgumentException;
+use Iddigital\Cms\Core\Model\Criteria\IEntitySetProvider;
+use Iddigital\Cms\Core\Model\Criteria\IRelationPropertyIdTypeProvider;
+use Iddigital\Cms\Core\Persistence\Db\Connection\IConnection;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Database;
-
 
 /**
  * The orm interface.
  *
  * @author Elliot Levin <elliotlevin@hotmail.com>
  */
-interface IOrm
+interface IOrm extends IRelationPropertyIdTypeProvider
 {
     /**
      * Gets all the entity mappers registered in the orm.
@@ -100,4 +102,13 @@ interface IOrm
      * @return Database
      */
     public function getDatabase();
+
+    /**
+     * Loads the entity set provider for the supplied db connection.
+     *
+     * @param IConnection $connection
+     *
+     * @return IEntitySetProvider
+     */
+    public function getEntityDataSourceProvider(IConnection $connection);
 }

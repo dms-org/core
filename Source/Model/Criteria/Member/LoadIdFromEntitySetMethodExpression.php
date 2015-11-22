@@ -28,10 +28,11 @@ abstract class LoadIdFromEntitySetMethodExpression extends MethodExpression
      * @param string       $methodName
      * @param NestedMember $member
      * @param IEntitySet   $dataSource
+     * @param IType        $returnType
      */
-    public function __construct(IType $sourceType, $methodName, NestedMember $member, IEntitySet $dataSource)
+    public function __construct(IType $sourceType, $methodName, NestedMember $member, IEntitySet $dataSource, IType $returnType)
     {
-        parent::__construct($sourceType, $methodName, [$member->asString()], $dataSource->getElementType());
+        parent::__construct($sourceType, $methodName, [$member->asString()], $returnType);
         $this->dataSource = $dataSource;
         $this->member     = $member;
     }

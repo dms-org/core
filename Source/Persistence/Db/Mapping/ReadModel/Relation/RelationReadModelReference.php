@@ -11,7 +11,6 @@ use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Reference\IToManyRelation
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Reference\IToOneRelationReference;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Reference\RelationObjectReference;
 use Iddigital\Cms\Core\Persistence\Db\PersistenceContext;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Column;
 
 /**
  * The relation read model reference base class.

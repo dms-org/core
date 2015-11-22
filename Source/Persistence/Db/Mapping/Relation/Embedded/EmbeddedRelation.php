@@ -22,14 +22,20 @@ abstract class EmbeddedRelation extends Relation implements IRelation
     /**
      * EmbeddedRelation constructor.
      *
+     * @param string $idString
      * @param IEmbeddedObjectMapper $mapper
-     * @param string                $dependencyMode
-     * @param Table[]               $relationshipTables
-     * @param array                 $parentColumnsToLoad
+     * @param string $dependencyMode
+     * @param Table[] $relationshipTables
+     * @param array $parentColumnsToLoad
      */
-    public function __construct(IEmbeddedObjectMapper $mapper, $dependencyMode, array $relationshipTables, array $parentColumnsToLoad)
-    {
-        parent::__construct($mapper, $dependencyMode, $relationshipTables, $parentColumnsToLoad);
+    public function __construct(
+            $idString,
+            IEmbeddedObjectMapper $mapper,
+            $dependencyMode,
+            array $relationshipTables,
+            array $parentColumnsToLoad
+    ) {
+        parent::__construct($idString, $mapper, $dependencyMode, $relationshipTables, $parentColumnsToLoad);
     }
 
     /**

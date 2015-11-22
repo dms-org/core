@@ -40,10 +40,11 @@ class ManyToManyRelatedIdDefiner extends ManyToManyRelationDefinerBase
      */
     public function withRelatedIdAs($column)
     {
-        call_user_func($this->callback, function (Table $parentTable) use ($column) {
+        call_user_func($this->callback, function ($idString, Table $parentTable) use ($column) {
             $mapper = call_user_func($this->mapperLoader);
 
             return new ManyToManyRelation(
+                    $idString,
                     $this->loadIds
                             ? new ToManyRelationIdentityReference($mapper)
                             : new ToManyRelationObjectReference($mapper, $this->bidirectionalRelationProperty),

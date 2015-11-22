@@ -10,13 +10,15 @@ use Iddigital\Cms\Core\Model\Criteria\Condition\MemberCondition;
 use Iddigital\Cms\Core\Model\Criteria\Condition\NotCondition;
 use Iddigital\Cms\Core\Model\Criteria\Condition\OrCondition;
 use Iddigital\Cms\Core\Model\Criteria\Criteria;
+use Iddigital\Cms\Core\Model\Criteria\MemberExpressionParser;
 use Iddigital\Cms\Core\Model\Criteria\MemberOrdering;
 use Iddigital\Cms\Core\Model\Criteria\NestedMember;
 use Iddigital\Cms\Core\Model\ICriteria;
+use Iddigital\Cms\Core\Model\IPartialLoadCriteria;
 use Iddigital\Cms\Core\Model\Object\FinalizedClassDefinition;
+use Iddigital\Cms\Core\Persistence\Db\Connection\IConnection;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\FinalizedMapperDefinition;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\IEntityMapper;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\IObjectMapper;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\ReadModel\ArrayReadModelMapper;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\ISeparateTableRelation;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\IToManyRelation;
@@ -40,6 +42,11 @@ class CriteriaMapper
     private $mapper;
 
     /**
+     * @var IConnection|null
+     */
+    private $connection;
+
+    /**
      * @var FinalizedMapperDefinition
      */
     private $definition;
@@ -57,20 +64,22 @@ class CriteriaMapper
     /**
      * CriteriaMapper constructor.
      *
-     * @param IEntityMapper $mapper
+     * @param IEntityMapper    $mapper
+     * @param IConnection|null $connection
      */
-    public function __construct(IEntityMapper $mapper)
+    public function __construct(IEntityMapper $mapper, IConnection $connection = null)
     {
         $mapper->initializeRelations();
 
         $this->mapper                 = $mapper;
+        $this->connection             = $connection;
         $this->definition             = $this->mapper->getDefinition();
         $this->memberExpressionMapper = new MemberExpressionMapper($mapper);
         $this->primaryTable           = $this->mapper->getDefinition()->getTable();
     }
 
     /**
-     * @return IObjectMapper
+     * @return IEntityMapper
      */
     final public function getMapper()
     {
@@ -94,17 +103,27 @@ class CriteriaMapper
      */
     public function newCriteria()
     {
-        return new Criteria($this->getMappedObjectType());
+        $orm = $this->definition->getOrm();
+
+        $memberExpressionParser = new MemberExpressionParser(
+                $this->connection ? $orm->getEntityDataSourceProvider($this->connection) : null,
+                $orm
+        );
+
+        return new Criteria($this->getMappedObjectType(), $memberExpressionParser);
     }
 
     /**
      * Maps the supplied criteria to a select query for the entity.
      *
-     * @param ICriteria $criteria
+     * @param ICriteria                     $criteria
+     * @param MemberMappingWithTableAlias[] &$memberMappings
+     * @param string[]                      &$joinedRelationTableAliasMap
      *
      * @return Select
+     * @throws InvalidArgumentException
      */
-    public function mapCriteriaToSelect(ICriteria $criteria)
+    public function mapCriteriaToSelect(ICriteria $criteria, array &$memberMappings = null, array &$joinedRelationTableAliasMap = null)
     {
         $criteria->verifyOfClass($this->getMappedObjectType()->getClassName());
 
@@ -125,10 +144,10 @@ class CriteriaMapper
         }
 
         if (!$loaded) {
-            $this->mapper->getMapping()->addLoadToSelect($select);
+            $this->mapper->getMapping()->addLoadToSelect($select, $select->getTableAlias());
         }
 
-        $memberMappings = $this->optimizeOneToOneRelationsAsLeftJoins($select, $memberMappings);
+        $memberMappings = $this->optimizeOneToOneRelationsAsLeftJoins($select, $memberMappings, $joinedRelationTableAliasMap);
 
         if ($condition) {
             $select->where($this->mapCondition($condition, $select, $memberMappings));
@@ -170,6 +189,13 @@ class CriteriaMapper
             $memberExpressions[$member->asString()] = $member;
         }
 
+
+        if ($criteria instanceof IPartialLoadCriteria) {
+            foreach ($criteria->getAliasNestedMemberMap() as $member) {
+                $memberExpressions[$member->asString()] = $member;
+            }
+        }
+
         /** @var MemberMappingWithTableAlias[] $memberMappings */
         $memberMappings = [];
 
@@ -186,12 +212,13 @@ class CriteriaMapper
     /**
      * @param Select                        $select
      * @param MemberMappingWithTableAlias[] $memberMappings
+     * @param string[]                      $joinedRelationTableAliasMap
      *
      * @return MemberMappingWithTableAlias[]
      */
-    private function optimizeOneToOneRelationsAsLeftJoins(Select $select, array $memberMappings)
+    private function optimizeOneToOneRelationsAsLeftJoins(Select $select, array $memberMappings, array &$joinedRelationTableAliasMap = null)
     {
-        $joinedRelationTableAliasMap = new \SplObjectStorage();
+        $joinedRelationTableAliasMap = [];
 
         foreach ($memberMappings as $key => $mappingWithAlias) {
             $mapping = $mappingWithAlias->getMapping();
@@ -202,12 +229,12 @@ class CriteriaMapper
             foreach ($mapping->getNestedRelations() as $relation) {
 
                 if ($relation instanceof IToOneRelation && $relation instanceof ISeparateTableRelation) {
-                    if (isset($joinedRelationTableAliasMap[$relation])) {
-                        $parentTableAlias = $joinedRelationTableAliasMap[$relation];
+                    if (isset($joinedRelationTableAliasMap[$relation->getIdString()])) {
+                        $parentTableAlias = $joinedRelationTableAliasMap[$relation->getIdString()];
                     } else {
                         $parentTableAlias = $relation->joinSelectToRelatedTable($parentTableAlias, Join::LEFT, $select);
 
-                        $joinedRelationTableAliasMap[$relation] = $parentTableAlias;
+                        $joinedRelationTableAliasMap[$relation->getIdString()] = $parentTableAlias;
                     }
                 } elseif ($relation instanceof IToManyRelation) {
                     break;

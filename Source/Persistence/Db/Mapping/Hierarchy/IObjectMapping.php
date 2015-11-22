@@ -41,10 +41,11 @@ interface IObjectMapping
      * instances of this class to the select.
      *
      * @param Select $select
+     * @param string $tableAlias
      *
      * @return void
      */
-    public function addLoadToSelect(Select $select);
+    public function addLoadToSelect(Select $select, $tableAlias);
 
     /**
      * Adds the required clauses to load ONLY the instances of this class

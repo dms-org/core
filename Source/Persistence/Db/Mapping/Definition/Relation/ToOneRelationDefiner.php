@@ -72,7 +72,7 @@ class ToOneRelationDefiner extends RelationTypeDefinerBase
      */
     public function withParentIdAs($columnName)
     {
-        call_user_func($this->callback, function (Table $parentTable) use ($columnName) {
+        call_user_func($this->callback, function ($idString, Table $parentTable) use ($columnName) {
             /** @var IEntityMapper $mapper */
             $mapper = call_user_func($this->mapperLoader);
 
@@ -88,6 +88,7 @@ class ToOneRelationDefiner extends RelationTypeDefinerBase
             ));
 
             return new ToOneRelation(
+                    $idString,
                     $this->loadIds
                             ? new ToOneRelationIdentityReference($mapper)
                             : new ToOneRelationObjectReference($mapper, $this->bidirectionalRelationProperty),

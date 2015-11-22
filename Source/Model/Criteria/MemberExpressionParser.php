@@ -65,7 +65,7 @@ class MemberExpressionParser implements IMemberExpressionParser
 
             return $this->parsePartsIntoExpressionObject(Type::object($rootCollectionType->getClassName()), $parts);
         } catch (BaseException $inner) {
-            if ($inner instanceof InvalidMemberExpressionException) {
+            if ($inner instanceof InvalidMemberExpressionException && $inner->getPrevious()) {
                 $inner = $inner->getPrevious();
             }
 
@@ -117,6 +117,10 @@ class MemberExpressionParser implements IMemberExpressionParser
                     throw BaseException::format('unexpected \'(\', must be following method name');
                 }
 
+                if ($currentParam) {
+                    $currentParam .= '(';
+                }
+
                 $parenthesisCount++;
                 $currentType = self::TYPE_METHOD;
             } //
@@ -133,8 +137,12 @@ class MemberExpressionParser implements IMemberExpressionParser
                     throw BaseException::format('unexpected \')\', does not match opening parenthesis');
                 }
 
-                if ($currentParam) {
-                    $currentParams[] = trim($currentParam);
+                if ($parenthesisCount === 1) {
+                    if ($currentParam) {
+                        $currentParams[] = trim($currentParam);
+                    }
+                } else {
+                    $currentParam .= ')';
                 }
 
                 $parenthesisCount--;
@@ -295,8 +303,8 @@ class MemberExpressionParser implements IMemberExpressionParser
 
         if (!($sourceType instanceof CollectionType) || !$sourceType->getElementType()->nonNullable()->isSubsetOf(TypedObject::type())) {
             throw BaseException::format(
-                    'cannot %s \'%s\', type must be a collection of %s, %s given',
-                    $action, $name, TypedObject::class, $sourceType->asTypeString()
+                    'cannot %s \'%s\' on type %s, source type must be a %s',
+                    $action, $name, $sourceType->asTypeString(), Type::collectionOf(TypedObject::type())->asTypeString()
             );
         }
 
@@ -390,8 +398,9 @@ class MemberExpressionParser implements IMemberExpressionParser
 
         if (!($instanceSourceType instanceof WithElementsType)) {
             throw BaseException::format(
-                    'cannot call method \'%s\', type must be a collection type, %s given',
-                    $methodName, TypedObject::class, $sourceType->asTypeString()
+                    'cannot call method \'%s\' on type %s, source type must be a %s',
+                    $methodName, $sourceType->asTypeString(),
+                    Type::collectionOf(Type::mixed())->union(Type::arrayOf(Type::mixed()))->asTypeString()
             );
         }
 

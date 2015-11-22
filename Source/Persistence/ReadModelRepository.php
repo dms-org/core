@@ -69,14 +69,6 @@ abstract class ReadModelRepository extends DbRepositoryBase implements IReadMode
     }
 
     /**
-     * @return ReadModelMapper
-     */
-    final public function getMapper()
-    {
-        return $this->mapper;
-    }
-
-    /**
      * {@inheritDoc}
      */
     public function count()

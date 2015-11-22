@@ -168,7 +168,7 @@ class EmbeddedSubClassObjectMapping extends SubClassObjectMapping implements IEm
         ));
 
         if ($query instanceof Select) {
-            $this->addLoadToSelect($query);
+            $this->addLoadToSelect($query, $parentAlias);
         }
 
         parent::addSpecificLoadToQuery($query, $objectType);

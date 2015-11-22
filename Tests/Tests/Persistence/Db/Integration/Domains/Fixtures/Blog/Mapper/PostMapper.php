@@ -34,7 +34,7 @@ class PostMapper extends EntityMapper
         $map->relation('authorId')
                 ->to(User::class)
                 ->manyToOneId()
-                ->onDeleteCascade()
+                ->withBidirectionalRelation('postIds')
                 ->withRelatedIdAs('author_id');
 
         $map->relation('comments')

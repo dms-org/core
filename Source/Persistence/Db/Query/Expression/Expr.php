@@ -84,7 +84,7 @@ abstract class Expr
     {
         if (!$table->hasColumn($columnName)) {
             throw InvalidArgumentException::format(
-                    'Invalid table column name for table %s: expecting one of (%s), \'%s\' given',
+                    'Invalid table column name for table \'%s\': expecting one of (%s), \'%s\' given',
                     $table->getName(), Debug::formatValues($table->getColumnNames()), $columnName
             );
         }

@@ -4,7 +4,6 @@ namespace Iddigital\Cms\Core\Persistence\Db\Query\Expression;
 
 use Iddigital\Cms\Core\Exception\InvalidArgumentException;
 use Iddigital\Cms\Core\Persistence\Db\Query\Select;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Column;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Type\Type;
 use Iddigital\Cms\Core\Util\Debug;
 
@@ -54,8 +53,9 @@ class SubSelect extends Expr
      */
     public function getResultingType()
     {
+        $selectedExpressions = $this->select->getAliasColumnMap();
         /** @var Expr $selectExpression */
-        $selectExpression = reset($this->select->getAliasColumnMap());
+        $selectExpression    = reset($selectedExpressions);
 
         return $selectExpression->getResultingType();
     }

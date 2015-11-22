@@ -105,10 +105,11 @@ class ManyToOneRelationDefiner extends RelationTypeDefinerBase
     public function withRelatedIdAs($columnName)
     {
         call_user_func($this->callback,
-                function (Table $parentTable) use ($columnName) {
+                function ($idString, Table $parentTable) use ($columnName) {
                     $mapper = call_user_func($this->mapperLoader);
 
                     return new ManyToOneRelation(
+                            $idString,
                             $this->loadIds
                                     ? new ToOneRelationIdentityReference($mapper)
                                     : new ToOneRelationObjectReference($mapper, $this->bidirectionalRelationProperty),

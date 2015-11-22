@@ -2,9 +2,11 @@
 
 namespace Iddigital\Cms\Core\Persistence\Db\Criteria\MemberMapping;
 
-use Iddigital\Cms\Core\Exception\InvalidOperationException;
 use Iddigital\Cms\Core\Exception\NotImplementedException;
+use Iddigital\Cms\Core\Persistence\Db\Criteria\MemberExpressionMappingException;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\IEntityMapper;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\ReadModel\Relation\MemberRelation;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\ReadModel\Relation\ToManyMemberRelation;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\IRelation;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\IToManyRelation;
 use Iddigital\Cms\Core\Persistence\Db\Query\Select;
@@ -16,7 +18,7 @@ use Iddigital\Cms\Core\Persistence\Db\Query\Select;
  *
  * @author Elliot Levin <elliotlevin@hotmail.com>
  */
-class ToManyRelationMapping extends RelationMapping
+class ToManyRelationMapping extends RelationMapping implements IFinalRelationMemberMapping
 {
     /**
      * @var IToManyRelation
@@ -36,11 +38,27 @@ class ToManyRelationMapping extends RelationMapping
     }
 
     /**
+     * @return IToManyRelation
+     */
+    public function getRelation()
+    {
+        return $this->relation;
+    }
+
+    /**
+     * @return MemberRelation
+     */
+    public function asMemberRelation()
+    {
+        return new ToManyMemberRelation($this);
+    }
+
+    /**
      * @inheritDoc
      */
     public function getWhereConditionExpr(Select $select, $tableAlias, $operator, $value)
     {
-        throw InvalidOperationException::format(
+        throw MemberExpressionMappingException::format(
                 'Cannot perform condition with operator \'%s\' on collection of related %s',
                 $operator, $this->getRelatedObjectType()
         );
@@ -51,7 +69,7 @@ class ToManyRelationMapping extends RelationMapping
      */
     public function addOrderByToSelect(Select $select, $tableAlias, $isAsc)
     {
-        throw InvalidOperationException::format('Cannot order by collection of related %s', $this->getRelatedObjectType());
+        throw MemberExpressionMappingException::format('Cannot order by collection of related %s', $this->getRelatedObjectType());
     }
 
     /**
@@ -59,7 +77,7 @@ class ToManyRelationMapping extends RelationMapping
      */
     public function addSelectColumn(Select $select, $tableAlias, $alias)
     {
-        throw InvalidOperationException::format('Cannot select a collection of related %s as a column', $this->getRelatedObjectType());
+        throw MemberExpressionMappingException::format('Cannot select a collection of related %s as a column', $this->getRelatedObjectType());
     }
 
     /**

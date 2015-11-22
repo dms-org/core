@@ -6,6 +6,7 @@ use Iddigital\Cms\Core\Exception\InvalidArgumentException;
 use Iddigital\Cms\Core\Model\IEntity;
 use Iddigital\Cms\Core\Persistence\Db\LoadingContext;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\ParentChildrenMap;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\ParentMapBase;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Mode\IRelationMode;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Reference\IToManyRelationReference;
 use Iddigital\Cms\Core\Persistence\Db\PersistenceContext;
@@ -52,6 +53,7 @@ class ToManyRelation extends ToManyRelationBase
     protected $orderPersistColumn;
 
     /**
+     * @param string                   $idString
      * @param IToManyRelationReference $reference
      * @param string                   $parentForeignKey
      * @param IRelationMode            $mode
@@ -62,13 +64,14 @@ class ToManyRelation extends ToManyRelationBase
      * @throws InvalidRelationException
      */
     public function __construct(
+            $idString,
             IToManyRelationReference $reference,
             $parentForeignKey,
             IRelationMode $mode,
             $orderByColumnNameDirectionMap = [],
             $orderPersistColumn = null
     ) {
-        parent::__construct($reference, $mode, self::DEPENDENT_CHILDREN);
+        parent::__construct($idString, $reference, $mode, self::DEPENDENT_CHILDREN);
         $this->foreignKeyToParent       = $parentForeignKey;
         $this->foreignKeyToParentColumn = $this->relatedTable->getColumn($this->foreignKeyToParent);
 
@@ -96,6 +99,7 @@ class ToManyRelation extends ToManyRelationBase
     public function withReference(IToManyRelationReference $reference)
     {
         return new self(
+                $this->idString,
                 $reference,
                 $this->foreignKeyToParent,
                 $this->mode,
@@ -248,12 +252,9 @@ class ToManyRelation extends ToManyRelationBase
     }
 
     /**
-     * @param LoadingContext    $context
-     * @param ParentChildrenMap $map
-     *
-     * @return mixed
+     * @inheritDoc
      */
-    public function load(LoadingContext $context, ParentChildrenMap $map)
+    public function getRelationSelectFromParentRows(ParentMapBase $map, &$parentIdColumnName = null)
     {
         $primaryKey = $map->getPrimaryKeyColumn();
         $parentIds  = [];
@@ -268,11 +269,30 @@ class ToManyRelation extends ToManyRelationBase
 
         $this->addOrderByClausesToSelect($select, $this->relatedTable->getName());
 
+        $parentIdColumnName = $this->foreignKeyToParent;
+
+        return $select;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function loadFromSelect(
+            LoadingContext $context,
+            ParentChildrenMap $map,
+            Select $select,
+            $relatedTableAlias,
+            $parentIdColumnName
+    ) {
+        $primaryKey = $map->getPrimaryKeyColumn();
+
+        $this->reference->addLoadToSelect($select, $relatedTableAlias);
+
         $indexedGroups = [];
 
         $rows = $context->query($select)->getRows();
         foreach ($rows as $row) {
-            $indexedGroups[$row->getColumn($this->foreignKeyToParent)][] = $row;
+            $indexedGroups[$row->getColumn($parentIdColumnName)][] = $row;
         }
 
         $flattenedResults = [];
@@ -325,9 +345,15 @@ class ToManyRelation extends ToManyRelationBase
     /**
      * @inheritDoc
      */
-    public function getRelationSelectTable()
+    public function getRelationSubSelect(Select $outerSelect, $parentTableAlias)
     {
-        return $this->relatedTable;
+        $subSelect = $outerSelect->buildSubSelect($this->relatedTable);
+
+        $subSelect->where($this->getRelationJoinCondition($parentTableAlias, $subSelect->getTableAlias()));
+
+        $this->addOrderByClausesToSelect($subSelect, $subSelect->getTableAlias());
+
+        return $subSelect;
     }
 
     /**

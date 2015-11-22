@@ -19,21 +19,11 @@ use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\Inheritance\Fixt
  */
 class CriteriaMapperWithClassTableInheritanceTest extends CriteriaMapperTestBase
 {
-    /**
-     * @var Table[]
-     */
-    protected $tables;
-
     protected function buildMapper()
     {
         $mapper = new TestClassTableInheritanceMapper(CustomOrm::from([
             TestSuperclassEntity::class => TestClassTableInheritanceMapper::class
         ]));
-        $mapper->initializeRelations();
-
-        foreach ($mapper->getTables() as $table) {
-            $this->tables[$table->getName()] = $table;
-        }
 
         return new CriteriaMapper($mapper);
     }

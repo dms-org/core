@@ -45,6 +45,7 @@ class UserMapper extends EntityMapper
         $map->relation('postIds')
                 ->to(Post::class)
                 ->toManyIds()
+                ->withBidirectionalRelation('authorId')
                 ->withParentIdAs('author_id');
 
         $map->relation('friendIds')

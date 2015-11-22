@@ -2,6 +2,8 @@
 
 namespace Iddigital\Cms\Core\Persistence\Db\Mapping\Relation;
 
+use Iddigital\Cms\Core\Persistence\Db\LoadingContext;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\ParentChildrenMap;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Mode\IRelationMode;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Reference\IToManyRelationReference;
 
@@ -10,7 +12,7 @@ use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Reference\IToManyRelation
  *
  * @author Elliot Levin <elliotlevin@hotmail.com>
  */
-abstract class ToManyRelationBase extends EntityRelation implements IToManyRelation
+abstract class ToManyRelationBase extends EntityRelation implements ISeparateToManyTableRelation
 {
     /**
      * @var IToManyRelationReference
@@ -21,13 +23,27 @@ abstract class ToManyRelationBase extends EntityRelation implements IToManyRelat
      * @inheritDoc
      */
     public function __construct(
+            $idString,
             IToManyRelationReference $reference,
             IRelationMode $mode = null,
             $dependencyMode,
             array $relationshipTables = [],
             array $parentColumnsToLoad = []
     ) {
-        parent::__construct($reference, $mode, $dependencyMode, $relationshipTables, $parentColumnsToLoad);
+        parent::__construct($idString, $reference, $mode, $dependencyMode, $relationshipTables, $parentColumnsToLoad);
+    }
+
+    /**
+     * @param LoadingContext    $context
+     * @param ParentChildrenMap $map
+     *
+     * @return mixed
+     */
+    public function load(LoadingContext $context, ParentChildrenMap $map)
+    {
+        $select = $this->getRelationSelectFromParentRows($map, $parentIdColumnName);
+
+        $this->loadFromSelect($context, $map, $select, $select->getTableAlias(), $parentIdColumnName);
     }
 
     /**

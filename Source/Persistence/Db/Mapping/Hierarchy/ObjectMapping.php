@@ -257,12 +257,12 @@ abstract class ObjectMapping implements IObjectMapping
     /**
      * {@inheritdoc}
      */
-    final public function addLoadToSelect(Select $select)
+    final public function addLoadToSelect(Select $select, $tableAlias)
     {
-        $this->addLoadClausesToSelect($select);
+        $tableAlias = $this->addLoadClausesToSelect($select, $tableAlias);
 
         foreach ($this->subClassMappings as $subType) {
-            $subType->addLoadToSelect($select);
+            $subType->addLoadToSelect($select, $tableAlias);
         }
     }
 
@@ -301,14 +301,19 @@ abstract class ObjectMapping implements IObjectMapping
 
     /**
      * @param Select $select
+     * @param string $tableAlias
      *
-     * @return void
+     * @return string
      */
-    protected function addLoadClausesToSelect(Select $select)
+    protected function addLoadClausesToSelect(Select $select, $tableAlias)
     {
+        $table = $select->getTable();
+
         foreach ($this->getAllColumnsToLoad() as $column) {
-            $select->addRawColumn($column);
+            $select->addColumn($column, Expr::column($tableAlias, $table->getColumn($column)));
         }
+
+        return $tableAlias;
     }
 
     /**

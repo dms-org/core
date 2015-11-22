@@ -3,6 +3,7 @@
 namespace Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Hook;
 
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Hook\OrderIndexPropertyLoaderHook;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\IObjectMapper;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Table;
 
 /**
@@ -41,8 +42,9 @@ class HookTypeDefiner
      */
     public function saveOrderIndexTo($columnName, $groupingColumnName = null)
     {
-        call_user_func($this->callback, function (Table $table, array $propertyColumnMap) use ($columnName, $groupingColumnName) {
+        call_user_func($this->callback, function (Table $table, $uniqueKey, array $propertyColumnMap, $objectType) use ($columnName, $groupingColumnName) {
             return new OrderIndexPropertyLoaderHook(
+                    $objectType,
                     $table,
                     $columnName,
                     $groupingColumnName,
