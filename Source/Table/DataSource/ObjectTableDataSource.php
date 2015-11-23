@@ -2,7 +2,8 @@
 
 namespace Iddigital\Cms\Core\Table\DataSource;
 
-use Iddigital\Cms\Core\Model\Criteria\NestedProperty;
+use Iddigital\Cms\Core\Model\Criteria\IMemberExpressionParser;
+use Iddigital\Cms\Core\Model\Criteria\NestedMember;
 use Iddigital\Cms\Core\Model\IObjectSet;
 use Iddigital\Cms\Core\Model\IObjectSetWithLoadCriteriaSupport;
 use Iddigital\Cms\Core\Model\ITypedObject;
@@ -33,6 +34,11 @@ class ObjectTableDataSource extends TableDataSource
     protected $objectSource;
 
     /**
+     * @var IMemberExpressionParser
+     */
+    protected $memberParser;
+
+    /**
      * @var RowCriteriaMapper
      */
     protected $criteriaMapper;
@@ -48,6 +54,7 @@ class ObjectTableDataSource extends TableDataSource
         parent::__construct($definition->getStructure());
 
         $this->objectSource   = $objectSource;
+        $this->memberParser   = $objectSource->criteria()->getMemberExpressionParser();
         $this->criteriaMapper = new RowCriteriaMapper($definition);
         $this->definition     = $definition;
     }
@@ -92,16 +99,14 @@ class ObjectTableDataSource extends TableDataSource
                 $objectProperties[$key] = $object->toArray();
             }
 
-            // Load nested properties from object instances, eg 'some.nested.value'
-            foreach ($this->definition->getPropertyComponentIdMap() as $propertyName => $componentId) {
-                if (strpos($propertyName, '.') !== false) {
-                    $propertyGetter = NestedProperty::parsePropertyName(
-                            $this->definition->getClass(),
-                            $propertyName
-                    )->makePropertyGetterCallable();
+            // Load member expressions from object instances, eg 'some.nested.value'
+            foreach ($this->definition->getPropertyComponentIdMap() as $memberExpression => $componentId) {
+                if (strpos($memberExpression, '.') !== false || strpos($memberExpression, '(') !== null) {
+                    $memberGetter = $this->memberParser->parse($this->definition->getClass(), $memberExpression)->makeArrayGetterCallable();
 
-                    foreach ($objects as $key => $object) {
-                        $objectProperties[$key][$propertyName] = $propertyGetter($object);
+                    $values = $memberGetter($objects);
+                    foreach ($values as $key => $value) {
+                        $objectProperties[$key][$memberExpression] = $value;
                     }
                 }
             }

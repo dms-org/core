@@ -2,7 +2,9 @@
 
 namespace Iddigital\Cms\Core\Table\DataSource\Definition;
 
-use Iddigital\Cms\Core\Model\Criteria\NestedProperty;
+use Iddigital\Cms\Core\Exception\InvalidArgumentException;
+use Iddigital\Cms\Core\Model\Criteria\IMemberExpressionParser;
+use Iddigital\Cms\Core\Model\Criteria\MemberExpressionParser;
 use Iddigital\Cms\Core\Model\Object\FinalizedClassDefinition;
 use Iddigital\Cms\Core\Table\IColumn;
 use Iddigital\Cms\Core\Table\TableStructure;
@@ -18,6 +20,11 @@ class ObjectTableDefinition
      * @var FinalizedClassDefinition
      */
     protected $class;
+
+    /**
+     * @var IMemberExpressionParser
+     */
+    protected $memberParser;
 
     /**
      * @var IColumn[]
@@ -43,31 +50,33 @@ class ObjectTableDefinition
      * ObjectTableDefinition constructor.
      *
      * @param FinalizedClassDefinition $class
+     * @param IMemberExpressionParser  $memberParser
      */
-    public function __construct(FinalizedClassDefinition $class)
+    public function __construct(FinalizedClassDefinition $class, IMemberExpressionParser $memberParser = null)
     {
-        $this->class = $class;
+        $this->class        = $class;
+        $this->memberParser = $memberParser ?: new MemberExpressionParser();
     }
 
     /**
-     * Defines a property to map to a table column component.
+     * Defines a member expression to map to a table column component.
      *
-     * @param string $propertyName
+     * @param string $memberExpression
      *
      * @return ColumnMappingDefiner
-     * @throws \Iddigital\Cms\Core\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
-    public function property($propertyName)
+    public function property($memberExpression)
     {
-        NestedProperty::parsePropertyName($this->class, $propertyName);
+        $this->memberParser->parse($this->class, $memberExpression);
 
         return new ColumnMappingDefiner(
-                function (IColumn $column) use ($propertyName) {
+                function (IColumn $column) use ($memberExpression) {
                     $this->column($column);
-                    $this->propertyComponentIdMap[$propertyName] = $column->getComponentId();
+                    $this->propertyComponentIdMap[$memberExpression] = $column->getComponentId();
                 },
-                function ($componentId) use ($propertyName) {
-                    $this->propertyComponentIdMap[$propertyName] = $componentId;
+                function ($componentId) use ($memberExpression) {
+                    $this->propertyComponentIdMap[$memberExpression] = $componentId;
                 }
         );
     }

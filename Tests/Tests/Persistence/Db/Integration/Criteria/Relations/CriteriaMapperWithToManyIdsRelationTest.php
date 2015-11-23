@@ -135,7 +135,7 @@ class CriteriaMapperWithToManyIdsRelationTest extends CriteriaMapperTestBase
                                         $this->subSelectChildEntities()
                                                 ->addColumn('__single_val', Expr::avg($this->tableColumn('child_entities', 'val')))
                                 ),
-                                Expr::param($this->tableColumnType('child_entities', 'val'), 10)
+                                Expr::param(Expr::avg($this->tableColumn('child_entities', 'val'))->getResultingType(), 10)
                         ))
         );
     }

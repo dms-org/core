@@ -7,10 +7,8 @@ use Iddigital\Cms\Core\Model\Criteria\Criteria;
 use Iddigital\Cms\Core\Model\Criteria\SpecificationDefinition;
 use Iddigital\Cms\Core\Persistence\Db\Criteria\CriteriaMapper;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\CustomOrm;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\ReadModel\ArrayReadModelMapper;
 use Iddigital\Cms\Core\Persistence\Db\Query\Clause\Ordering;
 use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Expr;
-use Iddigital\Cms\Core\Persistence\Db\Query\Select;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Fixtures\MockEntity;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\Fixtures\Types\TypesEntity;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\Fixtures\Types\TypesMapper;
@@ -25,39 +23,12 @@ class CriteriaMapperTest extends CriteriaMapperTestBase
         return new CriteriaMapper(new TypesMapper(CustomOrm::from([])));
     }
 
-    protected function buildArrayReadModelMapper()
-    {
-        return new CriteriaMapper(new ArrayReadModelMapper(new TypesMapper(CustomOrm::from([])), [
-                'id',
-                'null',
-                'string'
-        ]));
-    }
-
     public function testInvalidCriteria()
     {
         $this->setExpectedException(TypeMismatchException::class);
         $criteria = new Criteria(MockEntity::definition());
 
         $this->mapper->mapCriteriaToSelect($criteria);
-    }
-
-    public function testInvalidCriteriaWithArrayReadModelMapper()
-    {
-        $this->setExpectedException(TypeMismatchException::class);
-
-        $mapper = $this->buildArrayReadModelMapper();
-        $criteria = new Criteria(MockEntity::definition());
-
-        $mapper->mapCriteriaToSelect($criteria);
-    }
-
-    public function testEmptyCriteriaWithArrayReadModelMapper()
-    {
-        $mapper   = $this->buildArrayReadModelMapper();
-        $criteria = $mapper->newCriteria();
-
-        $this->assertInstanceOf(Select::class, $mapper->mapCriteriaToSelect($criteria));
     }
 
     public function testEmptyCriteria()

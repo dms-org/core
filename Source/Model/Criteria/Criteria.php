@@ -28,6 +28,7 @@ class Criteria extends SpecificationDefinition implements ICriteria
      */
     private $limitAmount = null;
 
+
     /**
      * {@inheritDoc}
      */

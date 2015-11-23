@@ -24,7 +24,7 @@ class ObjectCriteriaBase
     protected $condition;
 
     /**
-     * @var IMemberExpressionParser|null
+     * @var IMemberExpressionParser
      */
     protected $memberExpressionParser;
 
@@ -46,6 +46,14 @@ class ObjectCriteriaBase
     final public function getClass()
     {
         return $this->class;
+    }
+
+    /**
+     * @return IMemberExpressionParser
+     */
+    final public function getMemberExpressionParser()
+    {
+        return $this->memberExpressionParser;
     }
 
     /**

@@ -14,12 +14,10 @@ use Iddigital\Cms\Core\Model\Criteria\MemberExpressionParser;
 use Iddigital\Cms\Core\Model\Criteria\MemberOrdering;
 use Iddigital\Cms\Core\Model\Criteria\NestedMember;
 use Iddigital\Cms\Core\Model\ICriteria;
-use Iddigital\Cms\Core\Model\ILoadCriteria;
 use Iddigital\Cms\Core\Model\Object\FinalizedClassDefinition;
 use Iddigital\Cms\Core\Persistence\Db\Connection\IConnection;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\FinalizedMapperDefinition;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\IEntityMapper;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\ReadModel\ArrayReadModelMapper;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\ISeparateTableRelation;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\IToManyRelation;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\IToOneRelation;
@@ -114,11 +112,7 @@ class CriteriaMapper
      */
     final public function getMappedObjectType()
     {
-        if ($this->mapper instanceof ArrayReadModelMapper) {
-            return $this->mapper->getParentMapper()->getDefinition()->getClass();
-        } else {
-            return $this->mapper->getDefinition()->getClass();
-        }
+        return $this->mapper->getDefinition()->getClass();
     }
 
     /**

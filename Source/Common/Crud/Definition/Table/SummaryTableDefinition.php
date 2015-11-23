@@ -70,7 +70,7 @@ class SummaryTableDefinition
     public function __construct(ReadModuleDefinition $moduleDefinition, FinalizedClassDefinition $class, IObjectSet $dataSource)
     {
         $this->moduleDefinition      = $moduleDefinition;
-        $this->objectTableDefinition = new ObjectTableDefinition($class);
+        $this->objectTableDefinition = new ObjectTableDefinition($class, $dataSource->criteria()->getMemberExpressionParser());
         $this->dataSource            = $dataSource;
     }
 
@@ -101,15 +101,15 @@ class SummaryTableDefinition
     }
 
     /**
-     * Maps the property from the supplied object to a table column/component.
+     * Maps the member expression from the object data source to a table column/component.
      *
-     * @param string $propertyName
+     * @param string $memberExpression
      *
      * @return ColumnMappingDefiner
      */
-    public function mapProperty($propertyName)
+    public function mapProperty($memberExpression)
     {
-        return $this->map()->property($propertyName);
+        return $this->map()->property($memberExpression);
     }
 
     /**
