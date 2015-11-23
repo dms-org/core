@@ -78,7 +78,7 @@ class ObjectTableDataSource extends TableDataSource
                     $objects = $objectSource->matching($mappedCriteria);
                 } else {
                     /** @var IObjectSetWithLoadCriteriaSupport $objectSource */
-                    $objectProperties = $objectSource->loadPartial($mappedCriteria);
+                    $objectProperties = $objectSource->loadMatching($mappedCriteria);
                 }
             }
         } else {

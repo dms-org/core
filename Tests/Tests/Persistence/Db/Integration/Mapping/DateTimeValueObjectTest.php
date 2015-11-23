@@ -77,7 +77,7 @@ class DateTimeValueObjectTest extends DbIntegrationTest
                                 'datetime' => DateTime::fromString('2000-01-01 10:11:12'),
                         ]
                 ],
-                $this->repo->loadPartial(
+                $this->repo->loadMatching(
                         $this->repo->loadCriteria()
                                 ->load('datetime')
                 )

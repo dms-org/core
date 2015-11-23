@@ -83,7 +83,7 @@ class EntityCollectionTest extends IEntitySetTest
 
     public function testPartialLoadEntities()
     {
-        $data = $this->collection->loadPartial(
+        $data = $this->collection->loadMatching(
                 $this->collection->loadCriteria()
                         ->loadAll(['id', 'object.prop' => 'sub-prop'])
                         ->where('id', '>', 5)
@@ -115,7 +115,7 @@ class EntityCollectionTest extends IEntitySetTest
     {
         $collection = $this->loadNestedTestDataCollection();
 
-        $data = $collection->loadPartial(
+        $data = $collection->loadMatching(
                 $collection->loadCriteria()
                         ->loadAll([
                                 'objects.average(number)' => 'avg'
@@ -133,7 +133,7 @@ class EntityCollectionTest extends IEntitySetTest
     {
         $collection = $this->loadNestedTestDataCollection();
 
-        $data = $collection->loadPartial(
+        $data = $collection->loadMatching(
                 $collection->loadCriteria()
                         ->loadAll([
                                 'objects.sum(number)' => 'sum'
@@ -150,7 +150,7 @@ class EntityCollectionTest extends IEntitySetTest
     {
         $collection = $this->loadNestedTestDataCollection();
 
-        $data = $collection->loadPartial(
+        $data = $collection->loadMatching(
                 $collection->loadCriteria()
                         ->loadAll([
                                 'objects.max(number)' => 'max'
@@ -167,7 +167,7 @@ class EntityCollectionTest extends IEntitySetTest
     {
         $collection = $this->loadNestedTestDataCollection();
 
-        $data = $collection->loadPartial(
+        $data = $collection->loadMatching(
                 $collection->loadCriteria()
                         ->loadAll([
                                 'objects.min(number)' => 'min'
@@ -184,7 +184,7 @@ class EntityCollectionTest extends IEntitySetTest
     {
         $collection = $this->loadNestedTestDataCollection();
 
-        $data = $collection->loadPartial(
+        $data = $collection->loadMatching(
                 $collection->loadCriteria()
                         ->loadAll([
                                 'objects.count()' => 'count'
@@ -201,7 +201,7 @@ class EntityCollectionTest extends IEntitySetTest
     {
         $collection = $this->loadNestedTestDataCollection();
 
-        $data = $collection->loadPartial(
+        $data = $collection->loadMatching(
                 $collection->loadCriteria()
                         ->loadAll([
                                 'objects.flatten(numbers)' => 'flat'
@@ -218,7 +218,7 @@ class EntityCollectionTest extends IEntitySetTest
     {
         $collection = $this->loadNestedTestDataCollection();
 
-        $data = $collection->loadPartial(
+        $data = $collection->loadMatching(
                 $collection->loadCriteria()
                         ->loadAll([
                                 'objects.max(number)'              => 'max-num',

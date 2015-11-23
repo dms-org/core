@@ -351,7 +351,7 @@ class ToManyIdRelationTest extends DbIntegrationTest
                                 'child_ids'  => new EntityIdCollection([10, 11, 12])
                         ],
                 ],
-                $this->repo->loadPartial(
+                $this->repo->loadMatching(
                         $this->repo->loadCriteria()
                                 ->loadAll(['id' => 'parent_id',  'childIds' => 'child_ids'])
                 ));

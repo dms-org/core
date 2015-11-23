@@ -30,5 +30,5 @@ interface IObjectSetWithLoadCriteriaSupport extends IObjectSet
      * @return array[]
      * @throws Exception\TypeMismatchException
      */
-    public function loadPartial(ILoadCriteria $criteria);
+    public function loadMatching(ILoadCriteria $criteria);
 }

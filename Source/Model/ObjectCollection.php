@@ -188,7 +188,7 @@ class ObjectCollection extends TypedCollection implements ITypedObjectCollection
     /**
      * @inheritDoc
      */
-    public function loadPartial(ILoadCriteria $criteria)
+    public function loadMatching(ILoadCriteria $criteria)
     {
         $criteria->verifyOfClass($this->getObjectType());
 

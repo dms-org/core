@@ -74,7 +74,7 @@ class NestedValueObjectTest extends DbIntegrationTest
                                 'one.two.three.val' => 'foobar',
                         ]
                 ],
-                $this->repo->loadPartial(
+                $this->repo->loadMatching(
                         $this->repo->loadCriteria()
                                 ->loadAll(['one', 'one.two', 'one.two.three', 'one.two.three.val'])
                 )

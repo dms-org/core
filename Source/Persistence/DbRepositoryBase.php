@@ -190,7 +190,7 @@ abstract class DbRepositoryBase implements IObjectSetWithLoadCriteriaSupport
     /**
      * @inheritDoc
      */
-    public function loadPartial(ILoadCriteria $criteria)
+    public function loadMatching(ILoadCriteria $criteria)
     {
         $criteria->verifyOfClass($this->getObjectType());
 

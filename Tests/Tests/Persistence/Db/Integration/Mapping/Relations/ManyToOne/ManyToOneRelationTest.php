@@ -314,7 +314,7 @@ class ManyToOneRelationTest extends DbIntegrationTest
                 [
                         ['child' => new SubEntity(10, 100), 'child.val' => 100],
                 ],
-                $this->repo->loadPartial(
+                $this->repo->loadMatching(
                         $this->repo->loadCriteria()
                                 ->loadAll(['child', 'child.val'])
                 ));

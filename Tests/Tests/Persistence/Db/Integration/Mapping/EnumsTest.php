@@ -131,7 +131,7 @@ class EnumsTest extends DbIntegrationTest
                                 'gender'               => GenderEnum::male(),
                         ]
                 ],
-                $this->repo->loadPartial(
+                $this->repo->loadMatching(
                         $this->repo->loadCriteria()
                                 ->loadAll(['status', 'status.value', 'nullableStatus', 'nullableStatus.value', 'gender'])
                 )

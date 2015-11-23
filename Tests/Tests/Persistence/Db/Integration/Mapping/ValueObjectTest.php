@@ -236,7 +236,7 @@ class ValueObjectTest extends DbIntegrationTest
                                 'prefixedMoney'          => new EmbeddedMoneyObject(497, CurrencyEnum::usd()),
                         ]
                 ],
-                $this->repo->loadPartial(
+                $this->repo->loadMatching(
                         $this->repo->loadCriteria()
                                 ->loadAll(['name', 'money.cents', 'nullableMoney.currency', 'prefixedMoney'])
                 )
