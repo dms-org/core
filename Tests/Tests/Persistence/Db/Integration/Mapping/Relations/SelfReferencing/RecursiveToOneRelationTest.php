@@ -382,4 +382,28 @@ class RecursiveToOneRelationTest extends DbIntegrationTest
         ]);
     }
 
+
+    public function testLoadCriteriaWithRecursiveFlatten()
+    {
+        $this->db->setData([
+                'recursive_entities' => [
+                        ['id' => 1, 'parent_id' => 2],
+                        ['id' => 2, 'parent_id' => 1],
+                ],
+        ]);
+
+        $this->assertEquals(
+                [
+                        ['id' => 1, 'parents' => $this->repo->get(2)],
+                        ['id' => 2, 'parents' => $this->repo->get(1)],
+                ],
+                $this->repo->loadMatching(
+                        $this->repo->loadCriteria()
+                                ->loadAll([
+                                        'id',
+                                        'parent.parent.parent' => 'parents',
+                                ])
+                )
+        );
+    }
 }

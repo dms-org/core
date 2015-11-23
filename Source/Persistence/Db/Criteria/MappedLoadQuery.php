@@ -49,6 +49,14 @@ class MappedLoadQuery
     }
 
     /**
+     * @return Select
+     */
+    public function getSelect()
+    {
+        return $this->select;
+    }
+
+    /**
      * @param LoadingContext $context
      *
      * @return array[]

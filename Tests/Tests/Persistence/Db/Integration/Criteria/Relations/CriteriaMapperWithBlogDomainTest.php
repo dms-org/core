@@ -2,6 +2,7 @@
 
 namespace Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Criteria;
 
+use Iddigital\Cms\Core\Model\Criteria\LoadCriteria;
 use Iddigital\Cms\Core\Persistence\Db\Connection\IConnection;
 use Iddigital\Cms\Core\Persistence\Db\Criteria\CriteriaMapper;
 use Iddigital\Cms\Core\Persistence\Db\Query\Clause\Join;
@@ -89,5 +90,26 @@ class CriteriaMapperWithBlogDomainTest extends CriteriaMapperTestBase
                                 Expr::param(Integer::normal(), 1))
                         )
         );
+    }
+
+    public function testIgnoresAnyLoadValuesForLoadCriteria()
+    {
+        $loadCriteria = new LoadCriteria(
+                $this->mapper->getMapper()->getDefinition()->getClass(),
+                $this->mapper->buildMemberExpressionParser()
+        );
+
+        $loadCriteria
+                ->loadAll(['loadAll(postIds)', 'alias', 'password', 'firstName', 'lastName'])
+                ->where('firstName', '=', 'foo');
+
+        $this->assertMappedSelect($loadCriteria,
+                $this->selectAllColumns()
+                        ->where(Expr::equal(
+                                $this->column('first_name'),
+                                Expr::param($this->columnType('first_name'), 'foo'))
+                        )
+        );
+
     }
 }

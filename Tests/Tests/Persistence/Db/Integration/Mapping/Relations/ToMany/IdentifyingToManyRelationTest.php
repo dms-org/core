@@ -160,7 +160,7 @@ class IdentifyingToManyRelationTest extends ToManyRelationTestBase
         ]);
     }
 
-    public function testLoadPartial()
+    public function testLoadCriteria()
     {
         $this->db->setData([
                 'parent_entities' => [
@@ -181,12 +181,19 @@ class IdentifyingToManyRelationTest extends ToManyRelationTestBase
                                         new ChildEntity(10, 100),
                                         new ChildEntity(11, 200),
                                         new ChildEntity(12, 300),
-                                ])
+                                ]),
+                                'count'     => 3,
+                                'avg-val'   => 200,
                         ],
                 ],
                 $this->repo->loadMatching(
                         $this->repo->loadCriteria()
-                                ->loadAll(['id' => 'parent_id',  'children'])
+                                ->loadAll([
+                                        'id'                    => 'parent_id',
+                                        'children',
+                                        'children.count()'      => 'count',
+                                        'children.average(val)' => 'avg-val'
+                                ])
                 ));
     }
 }

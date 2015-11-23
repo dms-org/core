@@ -298,8 +298,7 @@ class ManyToOneRelationTest extends DbIntegrationTest
         ]);
     }
 
-
-    public function testLoadPartial()
+    public function testLoadCriteria()
     {
         $this->db->setData([
                 'parent_entities' => [

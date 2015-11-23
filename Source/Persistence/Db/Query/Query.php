@@ -137,7 +137,7 @@ abstract class Query implements IQuery
         do {
             $newTableName = $tableName . $count;
             $count++;
-        } while (in_array($newTableName, $aliases, true));
+        } while (isset($aliases[$newTableName]));
 
         return $newTableName;
     }
@@ -229,9 +229,20 @@ abstract class Query implements IQuery
      * @param Join $join
      *
      * @return static
+     * @throws InvalidArgumentException
      */
     public function join(Join $join)
     {
+        $takenAliases = $this->getTakenAliases();
+
+        if (in_array($join->getAlias(), $takenAliases, true)) {
+            throw InvalidArgumentException::format(
+                    'Invalid join supplied to %s::%s: alias \'%s\' is already taken, taken aliases are (%s)',
+                    get_class($this), __FUNCTION__, $join->getAlias(), Debug::formatValues($takenAliases)
+            );
+        }
+
+
         $this->joins[] = $join;
 
         return $this;

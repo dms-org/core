@@ -65,7 +65,7 @@ class LoadCriteriaMapperWithBlogDomainTest extends LoadCriteriaMapperTestBase
         ));
     }
 
-    public function testLoadEntity()
+    public function testLoadRelatedEntity()
     {
         $criteria = $this->loadMapper->newCriteria()
                 ->loadAll(['alias']);
@@ -197,6 +197,37 @@ class LoadCriteriaMapperWithBlogDomainTest extends LoadCriteriaMapperTestBase
                                 (new ToManyRelationMapping($objectMapper, [$postRelation->withObjectReference()], $commentRelation))
                         )
                 ]
+        ));
+    }
+
+    public function testMultipleToOneRelationReferencesResultsInASingleJoin()
+    {
+        $criteria = $this->loadMapper->newCriteria()
+                ->loadAll([
+                        'alias.firstName' => 'alias-first-name',
+                        'alias.lastName'  => 'alias-last-name',
+                ])
+                ->whereStringContains('alias.firstName', 'a')
+                ->orderByAsc('alias.firstName')
+                ->orderByAsc('alias.lastName');
+
+        $this->assertMappedLoadQuery($criteria, new MappedLoadQuery(
+                $this->select()
+                        ->addColumn('alias-first-name', $this->tableColumn('aliases', 'first_name'))
+                        ->addColumn('alias-last-name', $this->tableColumn('aliases', 'last_name'))
+                        ->join(Join::left($this->tables['aliases'], 'aliases', [
+                                Expr::equal(
+                                        $this->tableColumn('users', 'id'),
+                                        $this->tableColumn('aliases', 'user_id')
+                                )
+                        ]))
+                        ->where(Expr::strContains(
+                                $this->tableColumn('aliases', 'first_name'),
+                                Expr::param($this->tableColumnType('aliases', 'first_name'), 'a')
+                        ))
+                        ->orderByAsc($this->tableColumn('aliases', 'first_name'))
+                        ->orderByAsc($this->tableColumn('aliases', 'last_name')),
+                ['alias-first-name' => 'alias-first-name', 'alias-last-name' => 'alias-last-name'], []
         ));
     }
 }

@@ -2,7 +2,6 @@
 
 namespace Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\Relations\ToOne;
 
-use Iddigital\Cms\Core\Persistence\Db\Mapping\IEntityMapper;
 use Iddigital\Cms\Core\Persistence\Db\Query\Clause\Join;
 use Iddigital\Cms\Core\Persistence\Db\Query\Delete;
 use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Expr;
@@ -158,7 +157,7 @@ class IdentifyingToOneRelationTest extends ToOneRelationTestBase
         ]);
     }
 
-    public function testLoadPartial()
+    public function testLoadCriteria()
     {
         $this->db->setData([
                 'parent_entities' => [

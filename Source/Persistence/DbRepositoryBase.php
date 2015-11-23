@@ -3,11 +3,10 @@
 namespace Iddigital\Cms\Core\Persistence;
 
 use Iddigital\Cms\Core\Exception;
-use Iddigital\Cms\Core\Model\Criteria\LoadCriteria;
 use Iddigital\Cms\Core\Model\ICriteria;
 use Iddigital\Cms\Core\Model\IEntity;
-use Iddigital\Cms\Core\Model\IObjectSetWithLoadCriteriaSupport;
 use Iddigital\Cms\Core\Model\ILoadCriteria;
+use Iddigital\Cms\Core\Model\IObjectSetWithLoadCriteriaSupport;
 use Iddigital\Cms\Core\Model\ISpecification;
 use Iddigital\Cms\Core\Model\Type\Builder\Type;
 use Iddigital\Cms\Core\Persistence\Db\Connection\IConnection;
@@ -49,7 +48,7 @@ abstract class DbRepositoryBase implements IObjectSetWithLoadCriteriaSupport
     /**
      * @var LoadCriteriaMapper
      */
-    protected $partialCriteriaMapper;
+    protected $loadCriteriaMapper;
 
     /**
      * DbRepositoryBase constructor.
@@ -59,11 +58,11 @@ abstract class DbRepositoryBase implements IObjectSetWithLoadCriteriaSupport
      */
     public function __construct(IConnection $connection, IEntityMapper $mapper)
     {
-        $this->connection     = $connection;
-        $this->loadingContext = new LoadingContext($connection);
-        $this->criteriaMapper = new CriteriaMapper($mapper);
-        $this->partialCriteriaMapper = new LoadCriteriaMapper($this->criteriaMapper);
-        $this->mapper         = $mapper;
+        $this->connection         = $connection;
+        $this->loadingContext     = new LoadingContext($connection);
+        $this->criteriaMapper     = new CriteriaMapper($mapper, $connection);
+        $this->loadCriteriaMapper = new LoadCriteriaMapper($this->criteriaMapper);
+        $this->mapper             = $mapper;
     }
 
     /**
@@ -160,7 +159,7 @@ abstract class DbRepositoryBase implements IObjectSetWithLoadCriteriaSupport
      */
     public function loadCriteria()
     {
-        return new LoadCriteria($this->mapper->getDefinition()->getClass());
+        return $this->loadCriteriaMapper->newCriteria();
     }
 
     /**
@@ -194,7 +193,7 @@ abstract class DbRepositoryBase implements IObjectSetWithLoadCriteriaSupport
     {
         $criteria->verifyOfClass($this->getObjectType());
 
-        $mappedQuery = $this->partialCriteriaMapper->mapLoadCriteriaToQuery($criteria);
+        $mappedQuery = $this->loadCriteriaMapper->mapLoadCriteriaToQuery($criteria);
 
         return $mappedQuery->load($this->loadingContext);
     }

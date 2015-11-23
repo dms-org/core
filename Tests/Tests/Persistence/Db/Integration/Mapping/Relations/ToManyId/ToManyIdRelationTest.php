@@ -3,7 +3,6 @@
 namespace Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\Relations\ToManyId;
 
 use Iddigital\Cms\Core\Model\EntityIdCollection;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\IEntityMapper;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\IOrm;
 use Iddigital\Cms\Core\Persistence\Db\Query\BulkUpdate;
 use Iddigital\Cms\Core\Persistence\Db\Query\Delete;
@@ -14,6 +13,7 @@ use Iddigital\Cms\Core\Persistence\Db\Schema\ForeignKey;
 use Iddigital\Cms\Core\Persistence\Db\Schema\ForeignKeyMode;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Table;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\DbIntegrationTest;
+use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\Relations\Fixtures\ToManyIdRelation\ChildEntity;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\Relations\Fixtures\ToManyIdRelation\ParentEntity;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\Relations\Fixtures\ToManyIdRelation\ParentEntityMapper;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Mock\MockDatabase;
@@ -331,7 +331,7 @@ class ToManyIdRelationTest extends DbIntegrationTest
         ]);
     }
 
-    public function testLoadPartial()
+    public function testLoadCriteria()
     {
         $this->db->setData([
                 'parent_entities' => [
@@ -348,12 +348,51 @@ class ToManyIdRelationTest extends DbIntegrationTest
                 [
                         [
                                 'parent_id' => 1,
-                                'child_ids'  => new EntityIdCollection([10, 11, 12])
+                                'child_ids' => new EntityIdCollection([10, 11, 12])
                         ],
                 ],
                 $this->repo->loadMatching(
                         $this->repo->loadCriteria()
-                                ->loadAll(['id' => 'parent_id',  'childIds' => 'child_ids'])
+                                ->loadAll(['id' => 'parent_id', 'childIds' => 'child_ids'])
+                ));
+    }
+
+    public function testLoadCriteriaWithLoadObjectReference()
+    {
+        $this->db->setData([
+                'parent_entities' => [
+                        ['id' => 1],
+                ],
+                'child_entities'  => [
+                        ['id' => 10, 'parent_id' => 1, 'val' => 100],
+                        ['id' => 11, 'parent_id' => 1, 'val' => 200],
+                        ['id' => 12, 'parent_id' => 1, 'val' => 300],
+                ]
+        ]);
+
+        $this->assertEquals(
+                [
+                        [
+                                'parent_id'    => 1,
+                                'children'     => ChildEntity::collection([
+                                        new ChildEntity(10, 100),
+                                        new ChildEntity(11, 200),
+                                        new ChildEntity(12, 300),
+                                ]),
+                                'count'        => 3,
+                                'count-loaded' => 3,
+                                'avg-val'      => 200,
+                        ],
+                ],
+                $this->repo->loadMatching(
+                        $this->repo->loadCriteria()
+                                ->loadAll([
+                                        'id'                             => 'parent_id',
+                                        'loadAll(childIds)'              => 'children',
+                                        'childIds.count()'               => 'count',
+                                        'loadAll(childIds).count()'      => 'count-loaded',
+                                        'loadAll(childIds).average(val)' => 'avg-val'
+                                ])
                 ));
     }
 }

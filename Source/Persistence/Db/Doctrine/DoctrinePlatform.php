@@ -166,8 +166,10 @@ class DoctrinePlatform extends Platform
             );
         }
 
-        $queryBuilder->from($this->identifier($query->getTableName()),
-                $query->isTableAliased() ? $this->identifier($query->getTableAlias()) : null);
+        $queryBuilder->from(
+                $this->identifier($query->getTableName()),
+                $query->isTableAliased() ? $this->identifier($query->getTableAlias()) : null
+        );
 
         $this->compileJoins($queryBuilder, $query);
         $this->compileWhere($queryBuilder, $query);
@@ -187,8 +189,10 @@ class DoctrinePlatform extends Platform
     {
         $queryBuilder = $this->doctrineConnection->createQueryBuilder();
 
-        $queryBuilder->update($this->identifier($query->getTableName()),
-                $query->isTableAliased() ? $this->identifier($query->getTableAlias()) : null);
+        $queryBuilder->update(
+                $this->identifier($query->getTableName()),
+                $query->isTableAliased() ? $this->identifier($query->getTableAlias()) : null
+        );
 
         foreach ($query->getColumnSetMap() as $columnName => $expression) {
             $queryBuilder->set(
@@ -219,8 +223,10 @@ class DoctrinePlatform extends Platform
     {
         $queryBuilder = $this->doctrineConnection->createQueryBuilder();
 
-        $queryBuilder->delete($this->identifier($query->getTableName()),
-                $query->isTableAliased() ? $this->identifier($query->getTableAlias()) : null);
+        $queryBuilder->delete(
+                $this->identifier($query->getTableName()),
+                $query->isTableAliased() ? $this->identifier($query->getTableAlias()) : null
+        );
 
         if ($query->getJoins() || $query->getOrderings() || $query->hasLimitOrOffset()) {
             $subQuery = $this->compileAsSubSelectPrimaryKey($query);
@@ -323,7 +329,7 @@ class DoctrinePlatform extends Platform
             $queryBuilder->{$method}(
                     $this->identifier($fromAlias),
                     $this->identifier($join->getTableName()),
-                    $join->isTableAliased() ? $this->identifier($join->getAlias()) : null,
+                    $this->identifier($join->getAlias()),
                     $join->getOn() ? $this->compileExpression($queryBuilder, Expr::compoundAnd($join->getOn())) : '1=1'
             );
 

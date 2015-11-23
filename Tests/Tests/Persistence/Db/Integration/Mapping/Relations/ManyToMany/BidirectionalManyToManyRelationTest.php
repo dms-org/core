@@ -2,7 +2,6 @@
 
 namespace Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\Relations\ManyToMany;
 
-use Iddigital\Cms\Core\Persistence\Db\Mapping\IEntityMapper;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\IOrm;
 use Iddigital\Cms\Core\Persistence\Db\Query\Clause\Join;
 use Iddigital\Cms\Core\Persistence\Db\Query\Delete;
@@ -155,7 +154,7 @@ class BidirectionalManyToManyRelationTest extends DbIntegrationTest
 
     public function testPersistWithCyclicAssociation()
     {
-        $entity = new OneEntity();
+        $entity  = new OneEntity();
         $another = new AnotherEntity();
 
         $entity->others[] = $another;
@@ -333,9 +332,9 @@ class BidirectionalManyToManyRelationTest extends DbIntegrationTest
         $this->assertSame($actual[0]->others[0], $actual[1]->others[0]);
 
         $this->assertExecutedQueryTypes([
-                'Load parent entities' => Select::class,
-                'Load child entities'  => Select::class,
-                'Load related entities'  => Select::class,
+                'Load parent entities'  => Select::class,
+                'Load child entities'   => Select::class,
+                'Load related entities' => Select::class,
         ]);
 
         $this->assertExecutedQueryNumber(2, Select::from($this->anotherTable)
@@ -398,5 +397,39 @@ class BidirectionalManyToManyRelationTest extends DbIntegrationTest
                 'Delete one entities'     => Delete::class,
                 'Delete related entities' => Delete::class,
         ]);
+    }
+
+    public function testLoadCriteriaWithRecursiveFlatten()
+    {
+        $this->db->setData([
+                'ones'         => [
+                        ['id' => 1],
+                        ['id' => 2],
+                ],
+                'anothers'     => [
+                        ['id' => 1],
+                        ['id' => 2],
+                ],
+                'one_anothers' => [
+                        ['one_id' => 1, 'another_id' => 1],
+                        ['one_id' => 1, 'another_id' => 2],
+                        ['one_id' => 2, 'another_id' => 1],
+                        ['one_id' => 2, 'another_id' => 2],
+                ],
+        ]);
+
+        $this->assertEquals(
+                [
+                        ['id' => 1, 'count' => pow(2, 5)],
+                        ['id' => 2, 'count' => pow(2, 5)],
+                ],
+                $this->repo->loadMatching(
+                        $this->repo->loadCriteria()
+                                ->loadAll([
+                                        'id',
+                                        'others.flatten(ones).flatten(others).flatten(ones).flatten(others).count()' => 'count',
+                                ])
+                )
+        );
     }
 }

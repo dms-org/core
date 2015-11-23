@@ -280,4 +280,34 @@ class RecursiveManyToManyRelationTest extends DbIntegrationTest
                         ->where(Expr::in(Expr::tableColumn($this->entities, 'id'), Expr::tuple([Expr::idParam(1), Expr::idParam(3), Expr::idParam(4)])))
         );
     }
+
+    public function testLoadCriteriaWithRecursiveFlatten()
+    {
+        $this->db->setData([
+                'recursive_entities' => [
+                        ['id' => 1],
+                        ['id' => 2],
+                ],
+                'parents'            => [
+                        ['parent_id' => 1, 'child_id' => 1],
+                        ['parent_id' => 1, 'child_id' => 2],
+                        ['parent_id' => 2, 'child_id' => 1],
+                        ['parent_id' => 2, 'child_id' => 2],
+                ],
+        ]);
+
+        $this->assertEquals(
+                [
+                        ['id' => 1, 'count' => pow(2, 4)],
+                        ['id' => 2, 'count' => pow(2, 4)],
+                ],
+                $this->repo->loadMatching(
+                        $this->repo->loadCriteria()
+                                ->loadAll([
+                                        'id',
+                                        'parents.flatten(parents).flatten(parents).flatten(parents).count()' => 'count',
+                                ])
+                )
+        );
+    }
 }

@@ -2,6 +2,7 @@
 
 namespace Iddigital\Cms\Core\Tests\Persistence\Db\Mock;
 
+use Iddigital\Cms\Core\Exception\InvalidArgumentException;
 use Iddigital\Cms\Core\Exception\NotImplementedException;
 use Iddigital\Cms\Core\Persistence\Db\Platform\CompiledQueryBuilder;
 use Iddigital\Cms\Core\Persistence\Db\Platform\Platform;
@@ -165,13 +166,33 @@ class MockPlatform extends Platform
                 };
 
             case $expr instanceof SubSelect:
-                $compiled = $this->compileSelect($expr->getSelect())->getCompiled();
-
-                return function ($row) use ($compiled, $database) {
-                    return $compiled($database, $row);
-                };
-
+                return $this->compileSubSelect($database, $expr);
         }
+    }
+
+    private function compileSubSelect(MockDatabase $database, SubSelect $expr)
+    {
+        $compiled = $this->compileSelect($expr->getSelect())->getCompiled();
+
+        return function ($row) use ($compiled, $database) {
+            $result = $compiled($database, $row);
+
+            if (count($result) > 1) {
+                throw InvalidArgumentException::format('Subselect returned value with more than one row, %d returned', count($result));
+            }
+
+            if (count($result) === 0) {
+                return null;
+            }
+
+            $row = reset($result);
+
+            if (count($row) !== 1) {
+                throw InvalidArgumentException::format('Subselect returned row with other than one column, %d returned', count($row));
+            }
+
+            return reset($row);
+        };
     }
 
     private function compileBinOp(MockDatabase $database, BinOp $expr)

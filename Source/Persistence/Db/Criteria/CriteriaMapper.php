@@ -136,18 +136,19 @@ class CriteriaMapper
      *
      * @param ICriteria                     $criteria
      * @param MemberMappingWithTableAlias[] &$memberMappings
-     * @param string[]                      &$joinedRelationTableAliasMap
+     * @param NestedMember[]                $extraRequiredMembers
      *
      * @return Select
      * @throws InvalidArgumentException
      */
-    public function mapCriteriaToSelect(ICriteria $criteria, array &$memberMappings = null, array &$joinedRelationTableAliasMap = null)
+    public function mapCriteriaToSelect(ICriteria $criteria, array &$memberMappings = null, array $extraRequiredMembers = [])
     {
+        InvalidArgumentException::verifyAllInstanceOf(__METHOD__, 'extraRequiredMembers', $extraRequiredMembers, NestedMember::class);
         $criteria->verifyOfClass($this->getMappedObjectType()->getClassName());
 
         $select = Select::from($this->primaryTable);
 
-        $memberMappings = $this->mapAllRequiredMembersFor($criteria, $select->getTableAlias());
+        $memberMappings = $this->mapAllRequiredMembersFor($criteria, $select->getTableAlias(), $extraRequiredMembers);
 
         $condition = null;
         $loaded    = false;
@@ -165,7 +166,7 @@ class CriteriaMapper
             $this->mapper->getMapping()->addLoadToSelect($select, $select->getTableAlias());
         }
 
-        $memberMappings = $this->optimizeOneToOneRelationsAsLeftJoins($select, $memberMappings, $joinedRelationTableAliasMap);
+        $memberMappings = $this->optimizeOneToOneRelationsAsLeftJoins($select, $memberMappings);
 
         if ($condition) {
             $select->where($this->mapCondition($condition, $select, $memberMappings));
@@ -182,13 +183,14 @@ class CriteriaMapper
     }
 
     /**
-     * @param ICriteria $criteria
-     * @param string    $tableAlias
+     * @param ICriteria      $criteria
+     * @param string         $tableAlias
+     * @param NestedMember[] $extraRequiredMembers
      *
      * @return MemberMappingWithTableAlias[]
      * @throws MemberExpressionMappingException
      */
-    private function mapAllRequiredMembersFor(ICriteria $criteria, $tableAlias)
+    private function mapAllRequiredMembersFor(ICriteria $criteria, $tableAlias, array $extraRequiredMembers)
     {
         /** @var NestedMember[] $memberExpressions */
         $memberExpressions = [];
@@ -208,10 +210,8 @@ class CriteriaMapper
         }
 
 
-        if ($criteria instanceof ILoadCriteria) {
-            foreach ($criteria->getAliasNestedMemberMap() as $member) {
-                $memberExpressions[$member->asString()] = $member;
-            }
+        foreach ($extraRequiredMembers as $member) {
+            $memberExpressions[$member->asString()] = $member;
         }
 
         /** @var MemberMappingWithTableAlias[] $memberMappings */
@@ -230,11 +230,10 @@ class CriteriaMapper
     /**
      * @param Select                        $select
      * @param MemberMappingWithTableAlias[] $memberMappings
-     * @param string[]                      $joinedRelationTableAliasMap
      *
      * @return MemberMappingWithTableAlias[]
      */
-    private function optimizeOneToOneRelationsAsLeftJoins(Select $select, array $memberMappings, array &$joinedRelationTableAliasMap = null)
+    private function optimizeOneToOneRelationsAsLeftJoins(Select $select, array $memberMappings)
     {
         $joinedRelationTableAliasMap = [];
 

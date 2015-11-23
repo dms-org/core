@@ -73,9 +73,7 @@ class DateTimeValueObjectTest extends DbIntegrationTest
 
         $this->assertEquals(
                 [
-                        [
-                                'datetime' => DateTime::fromString('2000-01-01 10:11:12'),
-                        ]
+                        ['datetime' => DateTime::fromString('2000-01-01 10:11:12')]
                 ],
                 $this->repo->loadMatching(
                         $this->repo->loadCriteria()

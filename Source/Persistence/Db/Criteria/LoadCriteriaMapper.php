@@ -50,7 +50,7 @@ class LoadCriteriaMapper
      */
     public function mapLoadCriteriaToQuery(ILoadCriteria $criteria)
     {
-        $select = $this->criteriaMapper->mapCriteriaToSelect($criteria, $memberMappings);
+        $select = $this->criteriaMapper->mapCriteriaToSelect($criteria, $memberMappings, $criteria->getAliasNestedMemberMap());
         $select->setColumns([]);
 
         $columnIndexMap = [];

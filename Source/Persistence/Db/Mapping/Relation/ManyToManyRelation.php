@@ -362,7 +362,7 @@ class ManyToManyRelation extends ToManyRelationBase
 
         $relatedTableAlias = $select->generateUniqueAliasFor($this->relatedTable->getName());
 
-        $select->join(new Join($joinType, $this->relatedTable, $relatedTableAlias, [
+        $select->join(new Join(Join::INNER, $this->relatedTable, $relatedTableAlias, [
                 Expr::equal(
                         Expr::column($joinTableAlias, $this->relatedForeignKeyColumn),
                         Expr::column($relatedTableAlias, $this->relatedPrimaryKey)

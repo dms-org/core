@@ -2,6 +2,8 @@
 
 namespace Iddigital\Cms\Core\Persistence\Db\Query\Expression;
 
+use Iddigital\Cms\Core\Persistence\Db\Schema\Type\Decimal;
+use Iddigital\Cms\Core\Persistence\Db\Schema\Type\Integer;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Type\Type;
 
 /**
@@ -69,6 +71,10 @@ class SimpleAggregate extends Aggregate
      */
     public function getResultingType()
     {
+        if ($this->type === self::AVG && $this->argument->getResultingType() instanceof Integer) {
+            return new Decimal(30, 15);
+        }
+
         return $this->argument->getResultingType();
     }
 }

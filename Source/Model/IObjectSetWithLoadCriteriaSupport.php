@@ -14,7 +14,7 @@ interface IObjectSetWithLoadCriteriaSupport extends IObjectSet
 {
     /**
      * Creates a criteria for the object class which can also
-     * define which properties of the objects to load.
+     * define the data from the objects of which to load.
      *
      * @return LoadCriteria
      * @throws Exception\TypeMismatchException

@@ -12,6 +12,7 @@ use Iddigital\Cms\Core\Persistence\Db\Schema\Table;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\DbIntegrationTest;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\Relations\Fixtures\ManyToOneIdRelation\ParentEntity;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\Relations\Fixtures\ManyToOneIdRelation\ParentEntityMapper;
+use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\Relations\Fixtures\ManyToOneIdRelation\SubEntity;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Mock\MockDatabase;
 
 /**
@@ -310,5 +311,30 @@ class ManyToOneIdRelationTest extends DbIntegrationTest
                         ['id' => 12, 'val' => 300],
                 ]
         ]);
+    }
+
+    public function testLoadCriteria()
+    {
+        $this->db->setData([
+                'parent_entities' => [
+                        ['id' => 1, 'child_id' => 10],
+                ],
+                'sub_entities'    => [
+                        ['id' => 10, 'val' => 100],
+                ]
+        ]);
+
+        $this->assertEquals(
+                [
+                        ['childId' => 10, 'child' => new SubEntity(10, 100), 'child-val' => 100],
+                ],
+                $this->repo->loadMatching(
+                        $this->repo->loadCriteria()
+                                ->loadAll([
+                                        'childId',
+                                        'load(childId)' => 'child',
+                                        'load(childId).val' => 'child-val',
+                                ])
+                ));
     }
 }

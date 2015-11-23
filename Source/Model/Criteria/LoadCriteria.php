@@ -6,7 +6,7 @@ use Iddigital\Cms\Core\Exception;
 use Iddigital\Cms\Core\Model\ILoadCriteria;
 
 /**
- * The typed object criteria class with the properties of
+ * The typed object criteria class with the data of
  * the object to load.
  *
  * @author Elliot Levin <elliotlevin@hotmail.com>

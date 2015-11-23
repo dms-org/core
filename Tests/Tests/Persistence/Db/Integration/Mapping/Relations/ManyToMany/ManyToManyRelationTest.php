@@ -2,7 +2,6 @@
 
 namespace Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\Relations\ManyToMany;
 
-use Iddigital\Cms\Core\Persistence\Db\Mapping\IEntityMapper;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\IOrm;
 use Iddigital\Cms\Core\Persistence\Db\Query\Clause\Join;
 use Iddigital\Cms\Core\Persistence\Db\Query\Delete;
@@ -379,5 +378,84 @@ class ManyToManyRelationTest extends DbIntegrationTest
                 'Delete one entities'     => Delete::class,
                 'Delete related entities' => Delete::class,
         ]);
+    }
+
+    public function testLoadCriteria()
+    {
+        $this->db->setData([
+                'ones'         => [
+                        ['id' => 1],
+                        ['id' => 2],
+                        ['id' => 3],
+                ],
+                'anothers'     => [
+                        ['id' => 1, 'val' => 1],
+                        ['id' => 2, 'val' => 2],
+                        ['id' => 3, 'val' => 3],
+                ],
+                'one_anothers' => [
+                        ['one_id' => 1, 'another_id' => 1],
+                        ['one_id' => 1, 'another_id' => 2],
+                        ['one_id' => 1, 'another_id' => 3],
+                        ['one_id' => 2, 'another_id' => 1],
+                        ['one_id' => 2, 'another_id' => 3],
+                        ['one_id' => 3, 'another_id' => 2],
+                        ['one_id' => 3, 'another_id' => 3],
+                ],
+        ]);
+
+        $this->assertEquals(
+                [
+                        [
+                                'id'      => 1,
+                                'others'  => AnotherEntity::collection([
+                                        new AnotherEntity(1, 1),
+                                        new AnotherEntity(2, 2),
+                                        new AnotherEntity(3, 3),
+                                ]),
+                                'count'   => 3,
+                                'sum-val' => 1 + 2 + 3,
+                                'avg-val' => (1 + 2 + 3) / 3,
+                                'min-val' => 1,
+                                'max-val' => 3,
+                        ],
+                        [
+                                'id'      => 2,
+                                'others'  => AnotherEntity::collection([
+                                        new AnotherEntity(1, 1),
+                                        new AnotherEntity(3, 3),
+                                ]),
+                                'count'   => 2,
+                                'sum-val' => 1 + 3,
+                                'avg-val' => (1 + 3) / 2,
+                                'min-val' => 1,
+                                'max-val' => 3,
+                        ],
+                        [
+                                'id'      => 3,
+                                'others'  => AnotherEntity::collection([
+                                        new AnotherEntity(2, 2),
+                                        new AnotherEntity(3, 3),
+                                ]),
+                                'count'   => 2,
+                                'sum-val' => 2 + 3,
+                                'avg-val' => (2 + 3) / 2,
+                                'min-val' => 2,
+                                'max-val' => 3,
+                        ],
+                ],
+                $this->repo->loadMatching(
+                        $this->repo->loadCriteria()
+                                ->loadAll([
+                                        'id',
+                                        'others',
+                                        'others.count()'      => 'count',
+                                        'others.sum(val)'     => 'sum-val',
+                                        'others.average(val)' => 'avg-val',
+                                        'others.min(val)'     => 'min-val',
+                                        'others.max(val)'     => 'max-val',
+                                ])
+                )
+        );
     }
 }
