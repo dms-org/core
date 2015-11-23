@@ -7,25 +7,25 @@ use Iddigital\Cms\Core\Model\Criteria\Member\CollectionCountMethodExpression;
 use Iddigital\Cms\Core\Model\Criteria\Member\MemberPropertyExpression;
 use Iddigital\Cms\Core\Model\Criteria\MemberExpressionNode;
 use Iddigital\Cms\Core\Model\Criteria\NestedMember;
-use Iddigital\Cms\Core\Model\Criteria\PartialLoadCriteria;
+use Iddigital\Cms\Core\Model\Criteria\LoadCriteria;
 use Iddigital\Cms\Core\Tests\Model\Fixtures\SubObject;
 use Iddigital\Cms\Core\Tests\Model\Fixtures\TestEntity;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>
  */
-class PartialLoadCriteriaTest extends CmsTestCase
+class LoadCriteriaTest extends CmsTestCase
 {
     public function testNewCriteria()
     {
-        $criteria = new PartialLoadCriteria(TestEntity::definition());
+        $criteria = new LoadCriteria(TestEntity::definition());
 
         $this->assertSame([], $criteria->getAliasNestedMemberMap());
     }
 
     public function testLoadProperty()
     {
-        $criteria = new PartialLoadCriteria(TestEntity::definition());
+        $criteria = new LoadCriteria(TestEntity::definition());
 
         $criteria->load('prop');
 
@@ -37,7 +37,7 @@ class PartialLoadCriteriaTest extends CmsTestCase
 
     public function testLoadPropertyWithAlias()
     {
-        $criteria = new PartialLoadCriteria(TestEntity::definition());
+        $criteria = new LoadCriteria(TestEntity::definition());
 
         $criteria->load('prop', 'alias');
 
@@ -51,7 +51,7 @@ class PartialLoadCriteriaTest extends CmsTestCase
 
     public function testLoadAllProperties()
     {
-        $criteria = new PartialLoadCriteria(TestEntity::definition());
+        $criteria = new LoadCriteria(TestEntity::definition());
 
         $criteria->loadAll([
                 'prop',
@@ -71,7 +71,7 @@ class PartialLoadCriteriaTest extends CmsTestCase
 
     public function testAliasMemberTree()
     {
-        $criteria = new PartialLoadCriteria(TestEntity::definition());
+        $criteria = new LoadCriteria(TestEntity::definition());
 
         $criteria->loadAll([
                 'prop',

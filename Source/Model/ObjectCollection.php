@@ -4,7 +4,7 @@ namespace Iddigital\Cms\Core\Model;
 
 use Iddigital\Cms\Core\Exception;
 use Iddigital\Cms\Core\Model\Criteria\MemberExpressionNode;
-use Iddigital\Cms\Core\Model\Criteria\PartialLoadCriteria;
+use Iddigital\Cms\Core\Model\Criteria\LoadCriteria;
 use Iddigital\Cms\Core\Model\Object\FinalizedClassDefinition;
 use Iddigital\Cms\Core\Model\Object\TypedObject;
 use Iddigital\Cms\Core\Model\Type\Builder\Type;
@@ -133,9 +133,9 @@ class ObjectCollection extends TypedCollection implements ITypedObjectCollection
     /**
      * @inheritDoc
      */
-    public function partialCriteria()
+    public function loadCriteria()
     {
-        return new PartialLoadCriteria($this->classDefinition);
+        return new LoadCriteria($this->classDefinition);
     }
 
 
@@ -188,7 +188,7 @@ class ObjectCollection extends TypedCollection implements ITypedObjectCollection
     /**
      * @inheritDoc
      */
-    public function loadPartial(IPartialLoadCriteria $criteria)
+    public function loadPartial(ILoadCriteria $criteria)
     {
         $criteria->verifyOfClass($this->getObjectType());
 

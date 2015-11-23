@@ -28,13 +28,13 @@ class ColumnMapping extends MemberMapping
      * ColumnMapping constructor.
      *
      * @param IEntityMapper $rootEntityMapper
-     * @param array         $nestedRelations
+     * @param array         $relationsToSubSelect
      * @param Column        $column
      * @param callable|null $phpToDbValueConverter
      */
-    public function __construct(IEntityMapper $rootEntityMapper, array $nestedRelations, Column $column, callable $phpToDbValueConverter = null)
+    public function __construct(IEntityMapper $rootEntityMapper, array $relationsToSubSelect, Column $column, callable $phpToDbValueConverter = null)
     {
-        parent::__construct($rootEntityMapper, $nestedRelations);
+        parent::__construct($rootEntityMapper, $relationsToSubSelect);
         $this->column                = $column;
         $this->phpToDbValueConverter = $phpToDbValueConverter;
     }

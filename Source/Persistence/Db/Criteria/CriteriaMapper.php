@@ -14,7 +14,7 @@ use Iddigital\Cms\Core\Model\Criteria\MemberExpressionParser;
 use Iddigital\Cms\Core\Model\Criteria\MemberOrdering;
 use Iddigital\Cms\Core\Model\Criteria\NestedMember;
 use Iddigital\Cms\Core\Model\ICriteria;
-use Iddigital\Cms\Core\Model\IPartialLoadCriteria;
+use Iddigital\Cms\Core\Model\ILoadCriteria;
 use Iddigital\Cms\Core\Model\Object\FinalizedClassDefinition;
 use Iddigital\Cms\Core\Persistence\Db\Connection\IConnection;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\FinalizedMapperDefinition;
@@ -87,9 +87,32 @@ class CriteriaMapper
     }
 
     /**
+     * @return IConnection|null
+     */
+    final public function getConnection()
+    {
+        return $this->connection;
+    }
+
+    /**
+     * @return MemberExpressionParser
+     */
+    public function buildMemberExpressionParser()
+    {
+        $orm = $this->definition->getOrm();
+
+        $memberExpressionParser = new MemberExpressionParser(
+                $this->connection ? $orm->getEntityDataSourceProvider($this->connection) : null,
+                $orm
+        );
+
+        return $memberExpressionParser;
+    }
+
+    /**
      * @return FinalizedClassDefinition
      */
-    protected function getMappedObjectType()
+    final public function getMappedObjectType()
     {
         if ($this->mapper instanceof ArrayReadModelMapper) {
             return $this->mapper->getParentMapper()->getDefinition()->getClass();
@@ -103,12 +126,7 @@ class CriteriaMapper
      */
     public function newCriteria()
     {
-        $orm = $this->definition->getOrm();
-
-        $memberExpressionParser = new MemberExpressionParser(
-                $this->connection ? $orm->getEntityDataSourceProvider($this->connection) : null,
-                $orm
-        );
+        $memberExpressionParser = $this->buildMemberExpressionParser();
 
         return new Criteria($this->getMappedObjectType(), $memberExpressionParser);
     }
@@ -190,7 +208,7 @@ class CriteriaMapper
         }
 
 
-        if ($criteria instanceof IPartialLoadCriteria) {
+        if ($criteria instanceof ILoadCriteria) {
             foreach ($criteria->getAliasNestedMemberMap() as $member) {
                 $memberExpressions[$member->asString()] = $member;
             }
@@ -226,7 +244,7 @@ class CriteriaMapper
             $parentTableAlias  = $select->getTableAlias();
             $relationsToRemove = 0;
 
-            foreach ($mapping->getNestedRelations() as $relation) {
+            foreach ($mapping->getRelationsToSubSelect() as $relation) {
 
                 if ($relation instanceof IToOneRelation && $relation instanceof ISeparateTableRelation) {
                     if (isset($joinedRelationTableAliasMap[$relation->getIdString()])) {
@@ -244,7 +262,7 @@ class CriteriaMapper
             }
 
             $memberMappings[$key] = new MemberMappingWithTableAlias(
-                    $mapping->withRelations(array_slice($mapping->getNestedRelations(), $relationsToRemove)),
+                    $mapping->withRelationToSubSelect(array_slice($mapping->getRelationsToSubSelect(), $relationsToRemove)),
                     $parentTableAlias
             );
         }

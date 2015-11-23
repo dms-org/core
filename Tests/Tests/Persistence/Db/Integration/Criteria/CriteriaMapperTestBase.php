@@ -52,13 +52,16 @@ abstract class CriteriaMapperTestBase extends CmsTestCase
         $this->tables = $this->mapper->getMapper()->getDefinition()->getOrm()->getDatabase()->getTables();
     }
 
+    /**
+     * @return CriteriaMapper
+     */
     abstract protected function buildMapper();
 
     protected function assertMappedSelect(ICriteria $criteria, Select $select, CriteriaMapper $mapper = null)
     {
         $mapper = $mapper ?: $this->mapper;
 
-        $this->assertEquals($select, $mapper->mapCriteriaToSelect($criteria)->removeOuterSelectAliases());
+        $this->assertEquals($select, $mapper->mapCriteriaToSelect($criteria));
     }
 
     /**

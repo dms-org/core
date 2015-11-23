@@ -36,19 +36,19 @@ class ToManyRelationAggregateMapping extends RelationMapping
      * ToManyRelationAggregateMapping constructor.
      *
      * @param IEntityMapper   $rootEntityMapper
-     * @param IRelation[]     $nestedRelations
+     * @param IRelation[]     $relationsToSubSelect
      * @param IToManyRelation $relation
      * @param string          $aggregateType
      * @param MemberMapping   $argumentMemberMapping
      */
     public function __construct(
             IEntityMapper $rootEntityMapper,
-            array $nestedRelations,
+            array $relationsToSubSelect,
             IToManyRelation $relation,
             $aggregateType,
             MemberMapping $argumentMemberMapping
     ) {
-        parent::__construct($rootEntityMapper, $nestedRelations, $relation);
+        parent::__construct($rootEntityMapper, $relationsToSubSelect, $relation);
         $this->aggregateType         = $aggregateType;
         $this->argumentMemberMapping = $argumentMemberMapping;
     }

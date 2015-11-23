@@ -236,7 +236,7 @@ class ValueObjectCollectionTest extends DbIntegrationTest
                         ]
                 ],
                 $this->repo->loadPartial(
-                        $this->repo->partialCriteria()
+                        $this->repo->loadCriteria()
                                 ->loadAll(['emails'])
                 )
         );

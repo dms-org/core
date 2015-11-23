@@ -7,12 +7,12 @@ use Iddigital\Cms\Core\Model\Criteria\MemberExpressionNode;
 use Iddigital\Cms\Core\Model\Criteria\NestedMember;
 
 /**
- * The object search criteria that also defines the properties of
- * the object to load.
+ * The object search criteria that also defines the members
+ * of the class to load as an array.
  *
  * @author Elliot Levin <elliot@aanet.com.au>
  */
-interface IPartialLoadCriteria extends ICriteria
+interface ILoadCriteria extends ICriteria
 {
     /**
      * Gets the nested members to load.

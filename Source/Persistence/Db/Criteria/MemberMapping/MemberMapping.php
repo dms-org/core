@@ -31,19 +31,19 @@ abstract class MemberMapping
     /**
      * @var IRelation[]
      */
-    protected $nestedRelations;
+    protected $relationsToSubSelect;
 
     /**
      * MemberMapping constructor.
      *
      * @param IEntityMapper $rootEntityMapper
-     * @param IRelation[]   $nestedRelations
+     * @param IRelation[]   $relationsToSubSelect
      */
-    public function __construct(IEntityMapper $rootEntityMapper, array $nestedRelations)
+    public function __construct(IEntityMapper $rootEntityMapper, array $relationsToSubSelect)
     {
-        InvalidArgumentException::verifyAllInstanceOf(__METHOD__, 'nestedRelations', $nestedRelations, IRelation::class);
-        $this->rootEntityMapper = $rootEntityMapper;
-        $this->nestedRelations  = $nestedRelations;
+        InvalidArgumentException::verifyAllInstanceOf(__METHOD__, 'nestedRelations', $relationsToSubSelect, IRelation::class);
+        $this->rootEntityMapper     = $rootEntityMapper;
+        $this->relationsToSubSelect = $relationsToSubSelect;
     }
 
     /**
@@ -57,9 +57,9 @@ abstract class MemberMapping
     /**
      * @return IRelation[]
      */
-    public function getNestedRelations()
+    public function getRelationsToSubSelect()
     {
-        return $this->nestedRelations;
+        return $this->relationsToSubSelect;
     }
 
     /**
@@ -67,12 +67,12 @@ abstract class MemberMapping
      *
      * @return static
      */
-    public function withRelations(array $nestedRelations)
+    public function withRelationToSubSelect(array $nestedRelations)
     {
         InvalidArgumentException::verifyAllInstanceOf(__METHOD__, 'nestedRelations', $nestedRelations, IRelation::class);
 
-        $clone                  = clone $this;
-        $clone->nestedRelations = $nestedRelations;
+        $clone                       = clone $this;
+        $clone->relationsToSubSelect = $nestedRelations;
 
         return $clone;
     }
@@ -206,7 +206,7 @@ abstract class MemberMapping
     {
         $separateTableRelations = [];
 
-        foreach ($this->nestedRelations as $nestedRelation) {
+        foreach ($this->relationsToSubSelect as $nestedRelation) {
             if ($nestedRelation instanceof ISeparateTableRelation) {
                 $separateTableRelations[] = $nestedRelation;
             }

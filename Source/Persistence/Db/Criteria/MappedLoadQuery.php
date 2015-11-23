@@ -12,11 +12,11 @@ use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\IToOneRelation;
 use Iddigital\Cms\Core\Persistence\Db\Query\Select;
 
 /**
- * The partial load query class.
+ * The mapped load query class.
  *
  * @author Elliot Levin <elliotlevin@hotmail.com>
  */
-class MappedPartialLoadQuery
+class MappedLoadQuery
 {
     /**
      * @var Select
@@ -34,7 +34,7 @@ class MappedPartialLoadQuery
     protected $relationsToLoad;
 
     /**
-     * MappedPartialLoadQuery constructor.
+     * MappedLoadQuery constructor.
      *
      * @param Select           $select
      * @param string[]         $columnIndexMap

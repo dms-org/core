@@ -3,9 +3,9 @@
 namespace Iddigital\Cms\Core\Table\DataSource\Criteria;
 
 use Iddigital\Cms\Core\Model\Criteria\Criteria;
-use Iddigital\Cms\Core\Model\Criteria\PartialLoadCriteria;
+use Iddigital\Cms\Core\Model\Criteria\LoadCriteria;
 use Iddigital\Cms\Core\Model\ICriteria;
-use Iddigital\Cms\Core\Model\IPartialLoadCriteria;
+use Iddigital\Cms\Core\Model\ILoadCriteria;
 use Iddigital\Cms\Core\Table\Criteria\ColumnCriterion;
 use Iddigital\Cms\Core\Table\DataSource\Definition\FinalizedObjectTableDefinition;
 use Iddigital\Cms\Core\Table\IRowCriteria;
@@ -46,11 +46,11 @@ class RowCriteriaMapper
      *
      * @param IRowCriteria $criteria
      *
-     * @return IPartialLoadCriteria
+     * @return ILoadCriteria
      */
     public function mapCriteria(IRowCriteria $criteria)
     {
-        $objectCriteria = new PartialLoadCriteria($this->definition->getClass());
+        $objectCriteria = new LoadCriteria($this->definition->getClass());
 
         foreach ($criteria->getColumnsToLoad() as $column) {
             $objectCriteria->loadAll($this->definition->getPropertiesRequiredFor($column->getName()));

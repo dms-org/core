@@ -29,12 +29,12 @@ class ToManyRelationMapping extends RelationMapping implements IFinalRelationMem
      * ToManyRelationMapping constructor.
      *
      * @param IEntityMapper   $rootEntityMapper
-     * @param IRelation[]     $nestedRelations
+     * @param IRelation[]     $relationsToSubSelect
      * @param IToManyRelation $relation
      */
-    public function __construct(IEntityMapper $rootEntityMapper, array $nestedRelations, IToManyRelation $relation)
+    public function __construct(IEntityMapper $rootEntityMapper, array $relationsToSubSelect, IToManyRelation $relation)
     {
-        parent::__construct($rootEntityMapper, $nestedRelations, $relation);
+        parent::__construct($rootEntityMapper, $relationsToSubSelect, $relation);
     }
 
     /**

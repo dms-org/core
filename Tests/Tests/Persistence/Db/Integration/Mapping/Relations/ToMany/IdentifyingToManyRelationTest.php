@@ -185,7 +185,7 @@ class IdentifyingToManyRelationTest extends ToManyRelationTestBase
                         ],
                 ],
                 $this->repo->loadPartial(
-                        $this->repo->partialCriteria()
+                        $this->repo->loadCriteria()
                                 ->loadAll(['id' => 'parent_id',  'children'])
                 ));
     }

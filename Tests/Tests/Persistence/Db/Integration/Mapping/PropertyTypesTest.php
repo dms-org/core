@@ -55,7 +55,7 @@ class PropertyTypesTest extends DbIntegrationTest
 
 
         $this->assertEquals([['id' => 1, 'val' => 'aBc']], $this->repo->loadPartial(
-                $this->repo->partialCriteria()
+                $this->repo->loadCriteria()
                         ->loadAll(['id', 'value' => 'val'])
         ));
     }

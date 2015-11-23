@@ -174,7 +174,7 @@ class IdentifyingToOneRelationTest extends ToOneRelationTestBase
                         ['child' => new SubEntity(100, 10), 'child.val' => 100],
                 ],
                 $this->repo->loadPartial(
-                        $this->repo->partialCriteria()
+                        $this->repo->loadCriteria()
                                 ->loadAll(['child', 'child.val'])
                 ));
     }

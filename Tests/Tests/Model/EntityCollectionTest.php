@@ -5,7 +5,7 @@ namespace Iddigital\Cms\Core\Tests\Model;
 use Iddigital\Cms\Core\Exception\InvalidArgumentException;
 use Iddigital\Cms\Core\Model\EntityCollection;
 use Iddigital\Cms\Core\Model\IEntity;
-use Iddigital\Cms\Core\Model\IPartialLoadCriteria;
+use Iddigital\Cms\Core\Model\ILoadCriteria;
 use Iddigital\Cms\Core\Model\TypedCollection;
 use Iddigital\Cms\Core\Tests\Model\Fixtures\SubObject;
 use Iddigital\Cms\Core\Tests\Model\Fixtures\TestEntity;
@@ -75,16 +75,16 @@ class EntityCollectionTest extends IEntitySetTest
 
     public function testPartialLoadCriteria()
     {
-        $criteria = $this->collection->partialCriteria();
+        $criteria = $this->collection->loadCriteria();
 
-        $this->assertInstanceOf(IPartialLoadCriteria::class, $criteria);
+        $this->assertInstanceOf(ILoadCriteria::class, $criteria);
         $this->assertSame(TestEntity::class, $criteria->getClass()->getClassName());
     }
 
     public function testPartialLoadEntities()
     {
         $data = $this->collection->loadPartial(
-                $this->collection->partialCriteria()
+                $this->collection->loadCriteria()
                         ->loadAll(['id', 'object.prop' => 'sub-prop'])
                         ->where('id', '>', 5)
         );
@@ -116,7 +116,7 @@ class EntityCollectionTest extends IEntitySetTest
         $collection = $this->loadNestedTestDataCollection();
 
         $data = $collection->loadPartial(
-                $collection->partialCriteria()
+                $collection->loadCriteria()
                         ->loadAll([
                                 'objects.average(number)' => 'avg'
                         ])
@@ -134,7 +134,7 @@ class EntityCollectionTest extends IEntitySetTest
         $collection = $this->loadNestedTestDataCollection();
 
         $data = $collection->loadPartial(
-                $collection->partialCriteria()
+                $collection->loadCriteria()
                         ->loadAll([
                                 'objects.sum(number)' => 'sum'
                         ])
@@ -151,7 +151,7 @@ class EntityCollectionTest extends IEntitySetTest
         $collection = $this->loadNestedTestDataCollection();
 
         $data = $collection->loadPartial(
-                $collection->partialCriteria()
+                $collection->loadCriteria()
                         ->loadAll([
                                 'objects.max(number)' => 'max'
                         ])
@@ -168,7 +168,7 @@ class EntityCollectionTest extends IEntitySetTest
         $collection = $this->loadNestedTestDataCollection();
 
         $data = $collection->loadPartial(
-                $collection->partialCriteria()
+                $collection->loadCriteria()
                         ->loadAll([
                                 'objects.min(number)' => 'min'
                         ])
@@ -185,7 +185,7 @@ class EntityCollectionTest extends IEntitySetTest
         $collection = $this->loadNestedTestDataCollection();
 
         $data = $collection->loadPartial(
-                $collection->partialCriteria()
+                $collection->loadCriteria()
                         ->loadAll([
                                 'objects.count()' => 'count'
                         ])
@@ -202,7 +202,7 @@ class EntityCollectionTest extends IEntitySetTest
         $collection = $this->loadNestedTestDataCollection();
 
         $data = $collection->loadPartial(
-                $collection->partialCriteria()
+                $collection->loadCriteria()
                         ->loadAll([
                                 'objects.flatten(numbers)' => 'flat'
                         ])
@@ -219,7 +219,7 @@ class EntityCollectionTest extends IEntitySetTest
         $collection = $this->loadNestedTestDataCollection();
 
         $data = $collection->loadPartial(
-                $collection->partialCriteria()
+                $collection->loadCriteria()
                         ->loadAll([
                                 'objects.max(number)'              => 'max-num',
                                 'objects.flatten(numbers)'         => 'flat',

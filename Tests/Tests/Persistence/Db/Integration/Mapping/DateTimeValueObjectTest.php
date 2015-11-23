@@ -78,7 +78,7 @@ class DateTimeValueObjectTest extends DbIntegrationTest
                         ]
                 ],
                 $this->repo->loadPartial(
-                        $this->repo->partialCriteria()
+                        $this->repo->loadCriteria()
                                 ->load('datetime')
                 )
         );

@@ -64,7 +64,7 @@ class ReadModelWithToOneRelationTest extends ReadModelRepositoryTest
                         ],
                 ],
                 $this->repo->loadPartial(
-                        $this->repo->partialCriteria()
+                        $this->repo->loadCriteria()
                                 ->loadAll(['subEntity', 'subEntity.val'])
                 ));
     }

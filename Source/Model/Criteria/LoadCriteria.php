@@ -3,7 +3,7 @@
 namespace Iddigital\Cms\Core\Model\Criteria;
 
 use Iddigital\Cms\Core\Exception;
-use Iddigital\Cms\Core\Model\IPartialLoadCriteria;
+use Iddigital\Cms\Core\Model\ILoadCriteria;
 
 /**
  * The typed object criteria class with the properties of
@@ -11,7 +11,7 @@ use Iddigital\Cms\Core\Model\IPartialLoadCriteria;
  *
  * @author Elliot Levin <elliotlevin@hotmail.com>
  */
-class PartialLoadCriteria extends Criteria implements IPartialLoadCriteria
+class LoadCriteria extends Criteria implements ILoadCriteria
 {
     /**
      * @var NestedMember[]

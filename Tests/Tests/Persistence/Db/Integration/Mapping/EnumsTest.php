@@ -132,7 +132,7 @@ class EnumsTest extends DbIntegrationTest
                         ]
                 ],
                 $this->repo->loadPartial(
-                        $this->repo->partialCriteria()
+                        $this->repo->loadCriteria()
                                 ->loadAll(['status', 'status.value', 'nullableStatus', 'nullableStatus.value', 'gender'])
                 )
         );

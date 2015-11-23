@@ -106,7 +106,7 @@ abstract class MemberRelation extends Relation
         $relationSelect->setColumns(['__parent_id__' => $parentIdColumn]);
         $parentIdColumnName = '__parent_id__';
 
-        $allRelations = $this->memberMapping->getNestedRelations();
+        $allRelations = $this->memberMapping->getRelationsToSubSelect();
         $lastRelation = end($allRelations);
 
         if ($lastRelation instanceof ISeparateToOneTableRelation) {

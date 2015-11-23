@@ -70,10 +70,11 @@ class MemberExpressionMapper
         try {
             $nestedRelations = $this->mapMemberExpressionsToRelations(
                     $this->rootEntityMapper,
-                    $member->getPartsExceptLast()
+                    $member->getPartsExceptLast(),
+                    $finalMapper
             );
 
-            return $this->mapFinalMember($nestedRelations, $member->getLastPart());
+            return $this->mapFinalMember($finalMapper, $nestedRelations, $member->getLastPart());
         } catch (BaseException $inner) {
             if ($inner instanceof MemberExpressionMappingException && $inner->getPrevious()) {
                 $inner = $inner->getPrevious();
@@ -107,20 +108,21 @@ class MemberExpressionMapper
     }
 
     /**
+     * @param IObjectMapper     $mapper
      * @param IRelation[]       $nestedRelations
      * @param IMemberExpression $lastPart
      *
      * @return MemberMapping
      * @throws InvalidArgumentException
      */
-    protected function mapFinalMember(array $nestedRelations, IMemberExpression $lastPart)
+    protected function mapFinalMember(IObjectMapper $mapper, array $nestedRelations, IMemberExpression $lastPart)
     {
         switch (true) {
             case $lastPart instanceof MemberPropertyExpression:
                 return $this->mapFinalPropertyToMapping($nestedRelations, $lastPart->getProperty());
 
             case $lastPart instanceof LoadIdFromEntitySetMethodExpression:
-                $relations    = $this->mapLoadExpressionToRelations($this->rootEntityMapper, $lastPart);
+                $relations    = $this->mapLoadExpressionToRelations($mapper, $lastPart);
                 $lastRelation = array_pop($relations);
 
                 return $this->mapFinalRelationToMapping(array_merge($nestedRelations, $relations), $lastRelation);
@@ -128,7 +130,7 @@ class MemberExpressionMapper
             case $lastPart instanceof CollectionCountMethodExpression:
                 $lastRelation = array_pop($nestedRelations);
 
-                return new ToManyRelationCountMapping($this->rootEntityMapper, $nestedRelations, $lastRelation);
+                return new ToManyRelationCountMapping($mapper, $nestedRelations, $lastRelation);
 
             case $lastPart instanceof ObjectSetAggregateMethodExpression:
                 $lastRelation = array_pop($nestedRelations);
@@ -136,7 +138,7 @@ class MemberExpressionMapper
                 return $this->mapFinalAggregateExpression($nestedRelations, $lastRelation, $lastPart);
 
             case $lastPart instanceof ObjectSetFlattenMethodExpression:
-                $relations    = $this->mapMemberExpressionsToRelations($this->rootEntityMapper, [$lastPart]);
+                $relations    = $this->mapMemberExpressionsToRelations($mapper, [$lastPart]);
                 $lastRelation = array_pop($relations);
 
                 return $this->mapFinalRelationToMapping(array_merge($nestedRelations, $relations), $lastRelation);
@@ -268,12 +270,13 @@ class MemberExpressionMapper
     /**
      * @param IObjectMapper       $mapper
      * @param IMemberExpression[] $memberExpressions
+     * @param IObjectMapper|null                $finalMapper
      *
      * @return IRelation[]
      * @throws BaseException
      * @throws InvalidArgumentException
      */
-    protected function mapMemberExpressionsToRelations(IObjectMapper $mapper, array $memberExpressions)
+    protected function mapMemberExpressionsToRelations(IObjectMapper $mapper, array $memberExpressions, &$finalMapper = null)
     {
         $nestedRelations = [];
 
@@ -298,19 +301,22 @@ class MemberExpressionMapper
             $mapper       = $lastRelation->getMapper();
         }
 
+        $finalMapper = $mapper;
         return $nestedRelations;
     }
 
     /**
      * @param IObjectMapper                       $mapper
      * @param LoadIdFromEntitySetMethodExpression $part
+     * @param IObjectMapper|null                                $finalMapper
      *
      * @return IRelation[]
+     * @throws InvalidArgumentException
      */
-    protected function mapLoadExpressionToRelations(IObjectMapper $mapper, LoadIdFromEntitySetMethodExpression $part)
+    protected function mapLoadExpressionToRelations(IObjectMapper $mapper, LoadIdFromEntitySetMethodExpression $part, &$finalMapper = null)
     {
         /** @var EntityRelation $relationToLoadAsObject */
-        $innerRelations         = $this->mapMemberExpressionsToRelations($mapper, $part->getIdMember()->getParts());
+        $innerRelations         = $this->mapMemberExpressionsToRelations($mapper, $part->getIdMember()->getParts(), $finalMapper);
         $relationToLoadAsObject = array_pop($innerRelations);
 
         $relationsToAdd   = $innerRelations;

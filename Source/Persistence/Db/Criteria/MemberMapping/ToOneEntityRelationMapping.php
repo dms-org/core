@@ -36,10 +36,10 @@ class ToOneEntityRelationMapping extends ToOneRelationMapping implements IFinalR
      * ToOneEntityRelationMapping constructor.
      *
      * @param IEntityMapper                                        $rootEntityMapper
-     * @param IRelation[]                                          $nestedRelations
+     * @param IRelation[]                                          $relationsToSubSelect
      * @param ISeparateTableRelation|IToOneRelation|EntityRelation $relation
      */
-    public function __construct(IEntityMapper $rootEntityMapper, array $nestedRelations, IToOneRelation $relation)
+    public function __construct(IEntityMapper $rootEntityMapper, array $relationsToSubSelect, IToOneRelation $relation)
     {
         InvalidArgumentException::verifyInstanceOf(__METHOD__, 'relation', $relation, ISeparateTableRelation::class);
         InvalidArgumentException::verifyInstanceOf(__METHOD__, 'relation', $relation, EntityRelation::class);
@@ -48,7 +48,7 @@ class ToOneEntityRelationMapping extends ToOneRelationMapping implements IFinalR
                 'relation must be an id reference'
         );
 
-        parent::__construct($rootEntityMapper, $nestedRelations, $relation);
+        parent::__construct($rootEntityMapper, $relationsToSubSelect, $relation);
     }
 
     /**

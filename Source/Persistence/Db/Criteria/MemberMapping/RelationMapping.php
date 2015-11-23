@@ -21,12 +21,12 @@ abstract class RelationMapping extends MemberMapping
      * RelationMapping constructor.
      *
      * @param IEntityMapper $rootEntityMapper
-     * @param IRelation[]   $nestedRelations
+     * @param IRelation[]   $relationsToSubSelect
      * @param IRelation     $relation
      */
-    public function __construct(IEntityMapper $rootEntityMapper, array $nestedRelations, IRelation $relation)
+    public function __construct(IEntityMapper $rootEntityMapper, array $relationsToSubSelect, IRelation $relation)
     {
-        parent::__construct($rootEntityMapper, array_merge($nestedRelations, [$relation]));
+        parent::__construct($rootEntityMapper, array_merge($relationsToSubSelect, [$relation]));
         $this->relation = $relation;
     }
 
@@ -43,7 +43,7 @@ abstract class RelationMapping extends MemberMapping
      */
     public function getFirstRelation()
     {
-        return reset($this->nestedRelations) ?: $this->relation;
+        return reset($this->relationsToSubSelect) ?: $this->relation;
     }
 
     /**

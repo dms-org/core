@@ -76,7 +76,7 @@ class ReadModelWithEntityTest extends ReadModelRepositoryTest
                         ],
                 ],
                 $this->repo->loadPartial(
-                        $this->repo->partialCriteria()
+                        $this->repo->loadCriteria()
                                 ->loadAll(['parent', 'parent.childId', 'child', 'child.val'])
                 ));
     }

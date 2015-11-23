@@ -2,8 +2,11 @@
 
 namespace Iddigital\Cms\Core\Persistence\Db\Criteria;
 
-use Iddigital\Cms\Core\Model\IPartialLoadCriteria;
+use Iddigital\Cms\Core\Model\Criteria\MemberExpressionParser;
+use Iddigital\Cms\Core\Model\Criteria\LoadCriteria;
+use Iddigital\Cms\Core\Model\ILoadCriteria;
 use Iddigital\Cms\Core\Persistence\Db\Criteria\MemberMapping\IFinalRelationMemberMapping;
+use Iddigital\Cms\Core\Persistence\Db\Criteria\MemberMapping\ToOneEmbeddedObjectMapping;
 use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Expr;
 
 /**
@@ -11,7 +14,7 @@ use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Expr;
  *
  * @author Elliot Levin <elliotlevin@hotmail.com>
  */
-class PartialLoadCriteriaMapper
+class LoadCriteriaMapper
 {
     /**
      * @var CriteriaMapper
@@ -19,7 +22,7 @@ class PartialLoadCriteriaMapper
     private $criteriaMapper;
 
     /**
-     * PartialLoadCriteriaMapper constructor.
+     * LoadCriteriaMapper constructor.
      *
      * @param CriteriaMapper $criteriaMapper
      */
@@ -29,20 +32,30 @@ class PartialLoadCriteriaMapper
     }
 
     /**
+     * @return LoadCriteria
+     */
+    public function newCriteria()
+    {
+        $memberExpressionParser = $this->criteriaMapper->buildMemberExpressionParser();
+
+        return new LoadCriteria($this->criteriaMapper->getMappedObjectType(), $memberExpressionParser);
+    }
+
+    /**
      * Maps the supplied criteria to a select query.
      *
-     * @param IPartialLoadCriteria $criteria
+     * @param ILoadCriteria $criteria
      *
-     * @return MappedPartialLoadQuery
+     * @return MappedLoadQuery
      */
-    public function mapPartialLoadCriteriaToQuery(IPartialLoadCriteria $criteria)
+    public function mapLoadCriteriaToQuery(ILoadCriteria $criteria)
     {
         $select = $this->criteriaMapper->mapCriteriaToSelect($criteria, $memberMappings);
         $select->setColumns([]);
-        $select->addRawColumn($this->criteriaMapper->getMapper()->getPrimaryTable()->getPrimaryKeyColumnName());
 
         $columnIndexMap = [];
         $relationToLoad = [];
+        $requiresLoadId = false;
 
         foreach ($criteria->getAliasNestedMemberMap() as $alias => $member) {
             /** @var MemberMappingWithTableAlias $memberMapping */
@@ -56,6 +69,10 @@ class PartialLoadCriteriaMapper
                 foreach ($memberRelation->getParentColumnsToLoad() as $column) {
                     $select->addColumn($column, Expr::tableColumn($select->getTable(), $column));
                 }
+
+                if (!($mapping instanceof ToOneEmbeddedObjectMapping)) {
+                    $requiresLoadId = true;
+                }
             } else {
                 $mapping->addSelectColumn($select, $memberMapping->getTableAlias(), $alias);
                 $columnIndexMap[$alias] = $alias;
@@ -67,6 +84,10 @@ class PartialLoadCriteriaMapper
             $memberMappings[$key] = $memberMapping->getMapping();
         }
 
-        return new MappedPartialLoadQuery($select, $columnIndexMap, $relationToLoad);
+        if ($requiresLoadId) {
+            $select->addRawColumn($this->criteriaMapper->getMapper()->getPrimaryTable()->getPrimaryKeyColumnName());
+        }
+
+        return new MappedLoadQuery($select, $columnIndexMap, $relationToLoad);
     }
 }

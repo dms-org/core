@@ -22,11 +22,11 @@ abstract class ToOneRelationMapping extends RelationMapping
      * ToOneRelationMapping constructor.
      *
      * @param IEntityMapper  $rootEntityMapper
-     * @param IRelation[]    $nestedRelations
+     * @param IRelation[]    $relationsToSubSelect
      * @param IToOneRelation $relation
      */
-    public function __construct(IEntityMapper $rootEntityMapper, array $nestedRelations, IToOneRelation $relation)
+    public function __construct(IEntityMapper $rootEntityMapper, array $relationsToSubSelect, IToOneRelation $relation)
     {
-        parent::__construct($rootEntityMapper, $nestedRelations, $relation);
+        parent::__construct($rootEntityMapper, $relationsToSubSelect, $relation);
     }
 }

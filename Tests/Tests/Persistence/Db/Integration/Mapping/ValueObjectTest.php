@@ -237,7 +237,7 @@ class ValueObjectTest extends DbIntegrationTest
                         ]
                 ],
                 $this->repo->loadPartial(
-                        $this->repo->partialCriteria()
+                        $this->repo->loadCriteria()
                                 ->loadAll(['name', 'money.cents', 'nullableMoney.currency', 'prefixedMoney'])
                 )
         );

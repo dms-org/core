@@ -33,12 +33,12 @@ class ToOneEmbeddedObjectMapping extends ToOneRelationMapping implements IFinalR
      * ToOneEmbeddedObjectMapping constructor.
      *
      * @param IEntityMapper          $rootEntityMapper
-     * @param IRelation[]            $nestedRelations
+     * @param IRelation[]            $relationsToSubSelect
      * @param EmbeddedObjectRelation $relation
      */
-    public function __construct(IEntityMapper $rootEntityMapper, array $nestedRelations, EmbeddedObjectRelation $relation)
+    public function __construct(IEntityMapper $rootEntityMapper, array $relationsToSubSelect, EmbeddedObjectRelation $relation)
     {
-        parent::__construct($rootEntityMapper, $nestedRelations, $relation);
+        parent::__construct($rootEntityMapper, $relationsToSubSelect, $relation);
     }
 
     /**

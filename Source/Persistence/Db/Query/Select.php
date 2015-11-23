@@ -128,12 +128,13 @@ class Select extends Query
     /**
      * Adds a column from the FROM table.
      *
+     * @param string $alias
      * @param string $column
      *
      * @return static
      * @throws InvalidArgumentException
      */
-    public function addRawColumn($column)
+    public function addAliasedRawColumn($alias, $column)
     {
         $table = $this->getTable();
 
@@ -144,9 +145,22 @@ class Select extends Query
             );
         }
 
-        $this->aliasColumnMap[$column] = Expr::column($this->getTableAlias(), $table->findColumn($column));
+        $this->aliasColumnMap[$alias] = Expr::column($this->getTableAlias(), $table->findColumn($column));
 
         return $this;
+    }
+
+    /**
+     * Adds a column from the FROM table.
+     *
+     * @param string $column
+     *
+     * @return static
+     * @throws InvalidArgumentException
+     */
+    public function addRawColumn($column)
+    {
+        return $this->addAliasedRawColumn($column, $column);
     }
 
     /**

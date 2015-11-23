@@ -109,7 +109,7 @@ class TypesTest extends DbIntegrationTest
                         ]
                 ],
                 $this->repo->loadPartial(
-                        $this->repo->partialCriteria()
+                        $this->repo->loadCriteria()
                                 ->loadAll(['id', 'null', 'date', 'datetime', 'float'])
                 )
         );

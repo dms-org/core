@@ -4,7 +4,7 @@ namespace Iddigital\Cms\Core\Table\DataSource;
 
 use Iddigital\Cms\Core\Model\Criteria\NestedProperty;
 use Iddigital\Cms\Core\Model\IObjectSet;
-use Iddigital\Cms\Core\Model\IObjectSetWithPartialLoadSupport;
+use Iddigital\Cms\Core\Model\IObjectSetWithLoadCriteriaSupport;
 use Iddigital\Cms\Core\Model\ITypedObject;
 use Iddigital\Cms\Core\Table\Data\TableRow;
 use Iddigital\Cms\Core\Table\DataSource\Criteria\RowCriteriaMapper;
@@ -71,13 +71,13 @@ class ObjectTableDataSource extends TableDataSource
             if ($criteria->getWhetherLoadsAllColumns()) {
                 $objects = $objectSource->matching($mappedCriteria);
             } else {
-                $supportsPartialLoad = $objectSource instanceof IObjectSetWithPartialLoadSupport;
+                $supportsPartialLoad = $objectSource instanceof IObjectSetWithLoadCriteriaSupport;
                 $definition          = $this->definition->forColumns($criteria->getColumnNamesToLoad());
 
                 if ($definition->requiresObjectInstanceForMapping() || !$supportsPartialLoad) {
                     $objects = $objectSource->matching($mappedCriteria);
                 } else {
-                    /** @var IObjectSetWithPartialLoadSupport $objectSource */
+                    /** @var IObjectSetWithLoadCriteriaSupport $objectSource */
                     $objectProperties = $objectSource->loadPartial($mappedCriteria);
                 }
             }

@@ -352,7 +352,7 @@ class ToManyIdRelationTest extends DbIntegrationTest
                         ],
                 ],
                 $this->repo->loadPartial(
-                        $this->repo->partialCriteria()
+                        $this->repo->loadCriteria()
                                 ->loadAll(['id' => 'parent_id',  'childIds' => 'child_ids'])
                 ));
     }

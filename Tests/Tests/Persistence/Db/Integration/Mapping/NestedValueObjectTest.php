@@ -75,7 +75,7 @@ class NestedValueObjectTest extends DbIntegrationTest
                         ]
                 ],
                 $this->repo->loadPartial(
-                        $this->repo->partialCriteria()
+                        $this->repo->loadCriteria()
                                 ->loadAll(['one', 'one.two', 'one.two.three', 'one.two.three.val'])
                 )
         );
