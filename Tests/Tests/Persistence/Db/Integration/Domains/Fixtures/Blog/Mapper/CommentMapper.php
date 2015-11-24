@@ -33,7 +33,7 @@ class CommentMapper extends EntityMapper
         $map->relation('authorId')
                 ->to(User::class)
                 ->manyToOneId()
-                ->onDeleteSetNull()
+                ->withBidirectionalRelation('commentIds')
                 ->withRelatedIdAs('author_id');
     }
 }

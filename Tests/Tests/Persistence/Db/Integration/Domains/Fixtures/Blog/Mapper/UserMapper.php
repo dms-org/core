@@ -5,6 +5,7 @@ namespace Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\B
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\MapperDefinition;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\EntityMapper;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\Alias;
+use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\Comment;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\HashedPassword;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\Post;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\User;
@@ -54,6 +55,11 @@ class UserMapper extends EntityMapper
                 ->throughJoinTable('user_friends')
                 ->withParentIdAs('user_id')
                 ->withRelatedIdAs('friend_id');
+
+        $map->relation('commentIds')
+                ->to(Comment::class)
+                ->toManyIds()
+                ->withParentIdAs('author_id');
 
         $map->relation('alias')
                 ->to(Alias::class)

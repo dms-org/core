@@ -112,4 +112,34 @@ class CriteriaMapperWithBlogDomainTest extends CriteriaMapperTestBase
         );
 
     }
+
+    public function testNestedAggregateMethods()
+    {
+        $criteria = $this->mapper->newCriteria()
+                ->where('loadAll(postIds).sum(comments.count())', '>', 1);
+
+        $this->assertMappedSelect($criteria,
+                $this->selectAllColumns()
+                        ->where(Expr::greaterThan(
+                                Expr::subSelect(
+                                        Select::from($this->tables['posts'])
+                                                ->addColumn('__single_val', Expr::sum(
+                                                        Expr::subSelect(
+                                                                Select::from($this->tables['comments'])
+                                                                        ->addColumn('__single_val', Expr::count())
+                                                                        ->where(Expr::equal(
+                                                                                $this->tableColumn('posts', 'id'),
+                                                                                $this->tableColumn('comments', 'post_id')
+                                                                        ))
+                                                        )
+                                                ))
+                                                ->where(Expr::equal(
+                                                        $this->column('id'),
+                                                        $this->tableColumn('posts', 'author_id')
+                                                ))
+                                ),
+                                Expr::param(Integer::normal(), 1))
+                        )
+        );
+    }
 }

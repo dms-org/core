@@ -133,6 +133,14 @@ class BlogTest extends DbIntegrationTest
 
         $this->assertEquals([
                 new ForeignKey(
+                        'fk_comments_author_id_users',
+                        ['author_id'],
+                        'users',
+                        ['id'],
+                        ForeignKeyMode::CASCADE,
+                        ForeignKeyMode::SET_NULL
+                ),
+                new ForeignKey(
                         'fk_comments_post_id_posts',
                         ['post_id'],
                         'posts',
@@ -140,14 +148,6 @@ class BlogTest extends DbIntegrationTest
                         ForeignKeyMode::CASCADE,
                         ForeignKeyMode::CASCADE
                 ),
-                new ForeignKey(
-                        'fk_comments_author_id_users',
-                        ['author_id'],
-                        'users',
-                        ['id'],
-                        ForeignKeyMode::CASCADE,
-                        ForeignKeyMode::SET_NULL
-                )
         ], array_values($this->commentTable->getStructure()->getForeignKeys()));
 
         $this->assertEquals([
@@ -448,18 +448,18 @@ class BlogTest extends DbIntegrationTest
     public function testPersistExistingUser()
     {
         $this->db->setData([
-                'users'        => [
+                'users' => [
                         $this->dummyUserDbData(1)
                 ]
         ]);
 
         /** @var User $user */
-        $user = $this->repo->get(1);
+        $user            = $this->repo->get(1);
         $user->firstName = 'Garry';
 
         $this->userRepo->save($user);
 
-        $dummyUserDbData = $this->dummyUserDbData(1);
+        $dummyUserDbData               = $this->dummyUserDbData(1);
         $dummyUserDbData['first_name'] = 'Garry';
         $this->assertDatabaseDataSameAs([
                 'aliases'      => [],
@@ -475,10 +475,10 @@ class BlogTest extends DbIntegrationTest
     public function testPersistExistingUserWithAlias()
     {
         $this->db->setData([
-                'aliases'      => [
+                'aliases' => [
                         ['id' => 1, 'user_id' => 1, 'first_name' => 'Curry', 'last_name' => 'Weaver'],
                 ],
-                'users'        => [
+                'users'   => [
                         $this->dummyUserDbData(1),
                 ]
         ]);
@@ -538,16 +538,16 @@ class BlogTest extends DbIntegrationTest
     public function testPersistExistingPost()
     {
         $this->db->setData([
-                'posts'        => [
+                'posts' => [
                         ['id' => 1, 'author_id' => 1, 'content' => 'Hello World!']
                 ],
-                'users'        => [
+                'users' => [
                         $this->dummyUserDbData(1)
                 ]
         ]);
 
         /** @var Post $post */
-        $post = $this->postRepo->get(1);
+        $post          = $this->postRepo->get(1);
         $post->content = 'ABC';
 
         $this->postRepo->save($post);
@@ -568,10 +568,10 @@ class BlogTest extends DbIntegrationTest
     public function testUpdatePostsAuthorThroughUsers()
     {
         $this->db->setData([
-                'posts'        => [
+                'posts' => [
                         ['id' => 1, 'author_id' => 1, 'content' => 'Hello World!']
                 ],
-                'users'        => [
+                'users' => [
                         $this->dummyUserDbData(1),
                         $this->dummyUserDbData(2),
                 ]
@@ -605,17 +605,17 @@ class BlogTest extends DbIntegrationTest
     public function testUpdatePostAuthorThroughAuthorId()
     {
         $this->db->setData([
-                'posts'        => [
+                'posts' => [
                         ['id' => 1, 'author_id' => 1, 'content' => 'Hello World!']
                 ],
-                'users'        => [
+                'users' => [
                         $this->dummyUserDbData(1),
                         $this->dummyUserDbData(2),
                 ]
         ]);
 
         /** @var Post $post */
-        $post = $this->postRepo->get(1);
+        $post           = $this->postRepo->get(1);
         $post->authorId = 2;
 
         $this->postRepo->save($post);
@@ -637,13 +637,13 @@ class BlogTest extends DbIntegrationTest
     public function testPersistExistingPostAndComment()
     {
         $this->db->setData([
-                'posts'        => [
+                'posts'    => [
                         ['id' => 1, 'author_id' => 1, 'content' => 'Hello World!'],
                 ],
-                'comments'     => [
+                'comments' => [
                         ['id' => 1, 'post_id' => 1, 'author_id' => 1, 'content' => 'Hello John!'],
                 ],
-                'users'        => [
+                'users'    => [
                         $this->dummyUserDbData(1),
                         $this->dummyUserDbData(2),
                 ]
@@ -824,5 +824,58 @@ class BlogTest extends DbIntegrationTest
                         $this->dummyUserDbData(1)
                 ]
         ]);
+    }
+
+    public function testLoadCriteriaWithNestedAggregates()
+    {
+        $this->db->setData([
+                'posts'    => [
+                        ['id' => 1, 'author_id' => 1, 'content' => 'Hello World!'],
+                        ['id' => 2, 'author_id' => 1, 'content' => 'Other World!'],
+                        ['id' => 3, 'author_id' => 1, 'content' => 'Another World!'],
+                        //
+                        ['id' => 4, 'author_id' => 2, 'content' => '!!! World!'],
+                        ['id' => 5, 'author_id' => 2, 'content' => '^^^ World!'],
+                ],
+                'comments' => [
+                        ['id' => 1, 'post_id' => 1, 'author_id' => 1, 'content' => 'Hello John!'],
+                        ['id' => 2, 'post_id' => 1, 'author_id' => 2, 'content' => 'Hello John!'],
+                        ['id' => 3, 'post_id' => 2, 'author_id' => 1, 'content' => 'Hello John!'],
+                        ['id' => 4, 'post_id' => 2, 'author_id' => 1, 'content' => 'Hello John!'],
+                        ['id' => 5, 'post_id' => 3, 'author_id' => 1, 'content' => 'Hello John!'],
+                        ['id' => 6, 'post_id' => 3, 'author_id' => 1, 'content' => 'Hello John!'],
+                        //
+                        ['id' => 7, 'post_id' => 4, 'author_id' => 1, 'content' => 'Hello John!'],
+                        ['id' => 8, 'post_id' => 4, 'author_id' => 1, 'content' => 'Hello John!'],
+                        ['id' => 9, 'post_id' => 4, 'author_id' => 1, 'content' => 'Hello John!'],
+                ],
+                'users'    => [
+                        $this->dummyUserDbData(1),
+                        $this->dummyUserDbData(2),
+                ]
+        ]);
+
+        $this->assertEquals(
+                [
+                        [
+                                'author-id'           => 1,
+                                'total-post-replies'  => 6,
+                                'total-comments-made' => 8,
+                        ],
+                        [
+                                'author-id'           => 2,
+                                'total-post-replies'  => 3,
+                                'total-comments-made' => 1,
+                        ],
+                ],
+                $this->repo->loadMatching(
+                        $this->repo->loadCriteria()
+                                ->loadAll([
+                                        'id'                                     => 'author-id',
+                                        'loadAll(postIds).sum(comments.count())' => 'total-post-replies',
+                                        'loadAll(commentIds).count()'            => 'total-comments-made',
+                                ])
+                )
+        );
     }
 }

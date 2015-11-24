@@ -58,6 +58,11 @@ class User extends Entity
     public $friendIds;
 
     /**
+     * @var EntityIdCollection|int[]
+     */
+    public $commentIds;
+
+    /**
      * @var Alias|null
      */
     public $alias;
@@ -78,6 +83,7 @@ class User extends Entity
         $class->property($this->status)->asObject(UserStatus::class);
         $class->property($this->postIds)->asCollectionOf(Type::int());
         $class->property($this->friendIds)->asCollectionOf(Type::int());
+        $class->property($this->commentIds)->asCollectionOf(Type::int());
         $class->property($this->alias)->asObject(Alias::class);
     }
 
@@ -90,6 +96,7 @@ class User extends Entity
 
         $this->postIds   = new EntityIdCollection();
         $this->friendIds = new EntityIdCollection();
+        $this->commentIds = new EntityIdCollection();
     }
 
 

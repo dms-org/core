@@ -23,6 +23,8 @@ use Iddigital\Cms\Core\Persistence\Db\Query\Query;
 use Iddigital\Cms\Core\Persistence\Db\Query\Select;
 use Iddigital\Cms\Core\Persistence\Db\Row;
 use Iddigital\Cms\Core\Persistence\Db\Schema\Table;
+use Iddigital\Cms\Core\Persistence\PersistenceException;
+use Iddigital\Cms\Core\Util\Debug;
 
 /**
  * The object mapping base class.
@@ -680,7 +682,16 @@ abstract class ObjectMapping implements IObjectMapping
                 $map = new ParentChildrenMap($this->primaryKeyColumnName);
 
                 foreach ($objectProperties as $key => $properties) {
-                    $map->add($rows[$key], iterator_to_array($accessor->get($objects[$key], $properties)));
+                    $propertyValue = $accessor->get($objects[$key], $properties);
+
+                    if (!($propertyValue instanceof \Traversable)) {
+                        throw PersistenceException::format(
+                                'Invalid value found for to-many relation to %s on type %s: expecting instance of %s, %s given',
+                                $relation->getMapper()->getObjectType(), $this->objectType, \Traversable::class, Debug::getType($propertyValue)
+                        );
+                    }
+
+                    $map->add($rows[$key], iterator_to_array($propertyValue));
                 }
 
                 $relation->persist($context, $map);
