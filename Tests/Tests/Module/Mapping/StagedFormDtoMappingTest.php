@@ -6,7 +6,6 @@ use Iddigital\Cms\Common\Testing\CmsTestCase;
 use Iddigital\Cms\Core\Form\IStagedForm;
 use Iddigital\Cms\Core\Module\IStagedFormDtoMapping;
 use Iddigital\Cms\Core\Form\IForm;
-use Iddigital\Cms\Core\Model\IDataTransferObject;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>
@@ -61,7 +60,7 @@ abstract class StagedFormDtoMappingTest extends CmsTestCase
     /**
      * @dataProvider mappingTests
      */
-    public function testMappingDataToDto(array $data, IDataTransferObject $expectedDto)
+    public function testMappingDataToDto(array $data, $expectedDto)
     {
         $this->assertEquals($expectedDto, $this->mapping->mapFormSubmissionToDto($data));
     }

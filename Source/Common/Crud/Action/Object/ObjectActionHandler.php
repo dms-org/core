@@ -67,7 +67,7 @@ abstract class ObjectActionHandler extends ParameterizedActionHandlerBase implem
     final protected function runHandler($data)
     {
         /** @var ObjectActionParameter $data */
-        $this->runOnObject($data->getObject(), $data->getData());
+        return $this->runOnObject($data->getObject(), $data->getData());
     }
 
     /**

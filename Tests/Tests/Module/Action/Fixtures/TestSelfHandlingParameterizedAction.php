@@ -4,11 +4,9 @@ namespace Iddigital\Cms\Core\Tests\Module\Action\Fixtures;
 
 use Iddigital\Cms\Core\Auth\IPermission;
 use Iddigital\Cms\Core\Auth\Permission;
-use Iddigital\Cms\Core\Common\Crud\Action\Object\Mapping\ArrayObjectActionFormMapping;
 use Iddigital\Cms\Core\Exception\TypeMismatchException;
 use Iddigital\Cms\Core\Form\Builder\Form;
 use Iddigital\Cms\Core\Form\Field\Builder\Field;
-use Iddigital\Cms\Core\Model\IDataTransferObject;
 use Iddigital\Cms\Core\Model\Object\ArrayDataObject;
 use Iddigital\Cms\Core\Module\Action\SelfHandlingParameterizedAction;
 use Iddigital\Cms\Core\Module\IStagedFormDtoMapping;
@@ -38,7 +36,7 @@ class TestSelfHandlingParameterizedAction extends SelfHandlingParameterizedActio
     protected function permissions()
     {
         return [
-            Permission::named('test-permission')
+                Permission::named('test-permission')
         ];
     }
 
@@ -50,9 +48,9 @@ class TestSelfHandlingParameterizedAction extends SelfHandlingParameterizedActio
     protected function formMapping()
     {
         return new ArrayDataObjectFormMapping(
-            Form::create()->section('Input', [
-                Field::name('string')->label('String')->string()->required()
-            ])->build()->asStagedForm()
+                Form::create()->section('Input', [
+                        Field::name('string')->label('String')->string()->required()
+                ])->build()->asStagedForm()
         );
     }
 

@@ -40,14 +40,16 @@ class WrapperObjectActionFormMapping extends ObjectActionFormMapping
     public function __construct(IForm $objectForm, IStagedFormDtoMapping $dataFormMapping = null)
     {
         if ($dataFormMapping) {
-            $stagedForm  = StagedForm::fromExisting($objectForm->asStagedForm())->embed($dataFormMapping->getStagedForm());
+            $stagedForm  = StagedForm::begin($objectForm)
+                    ->embed($dataFormMapping->getStagedForm())
+                    ->build();
             $dataDtoType = $dataFormMapping->getDtoType();
         } else {
-            $stagedForm  = $objectForm;
+            $stagedForm  = $objectForm->asStagedForm();
             $dataDtoType = null;
         }
 
-        parent::__construct($stagedForm->build(), $dataDtoType);
+        parent::__construct($stagedForm, $dataDtoType);
         $this->dataFormMapping = $dataFormMapping;
         $this->objectForm      = $objectForm;
     }
@@ -86,11 +88,11 @@ class WrapperObjectActionFormMapping extends ObjectActionFormMapping
 
         if ($clone->objectData) {
             $clone->dataFormMapping = $clone->dataFormMapping->withSubmittedFirstStage($firstStageSubmission);
+            $clone->stagedForm = $clone->dataFormMapping->getStagedForm();
         } else {
+            $clone->stagedForm = $clone->stagedForm->withSubmittedFirstStage($firstStageSubmission);
             $clone->objectData = $firstStageSubmission;
         }
-
-        $clone->stagedForm = $clone->dataFormMapping->getStagedForm();
 
         return $clone;
     }

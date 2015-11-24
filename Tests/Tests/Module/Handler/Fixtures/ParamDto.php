@@ -13,11 +13,11 @@ class ParamDto extends DataTransferObject
     /**
      * @var mixed
      */
-    private $value;
+    public $value;
 
     public static function from($value)
     {
-        $self = self::construct();
+        $self = static::construct();
         $self->value = $value;
 
         return $self;

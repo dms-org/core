@@ -37,8 +37,8 @@ abstract class ObjectStagedFormObject extends StagedFormObject
      */
     public function __construct(IEntitySet $dataSource)
     {
-        parent::__construct();
         $this->dataSource = $dataSource;
+        parent::__construct();
     }
 
     /**
@@ -49,17 +49,19 @@ abstract class ObjectStagedFormObject extends StagedFormObject
     final protected function defineClass(ClassDefinition $class)
     {
         $class->property($this->dataSource)->asObject(IObjectSet::class);
+
+        $this->defineClassStructure($class->property($this->object), $class);
     }
 
     /**
      * Defines the structure of this class.
      *
-     * @param ClassDefinition     $class
      * @param PropertyTypeDefiner $object
+     * @param ClassDefinition     $class
      *
      * @return void
      */
-    abstract protected function defineClassStructure(ClassDefinition $class, PropertyTypeDefiner $object);
+    abstract protected function defineClassStructure(PropertyTypeDefiner $object, ClassDefinition $class);
 
     /**
      * Defines the staged form.

@@ -17,7 +17,7 @@ use Iddigital\Cms\Core\Model\Object\ArrayDataObject;
  *
  * @author Elliot Levin <elliotlevin@hotmail.com>
  */
-class ReorderAction extends ObjectAction implements IReorderAction
+class CallbackReorderAction extends ObjectAction implements IReorderAction
 {
     /**
      * @param string        $name

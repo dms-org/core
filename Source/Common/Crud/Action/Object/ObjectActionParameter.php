@@ -32,8 +32,6 @@ class ObjectActionParameter extends DataTransferObject
      */
     public function __construct($object, $data = null)
     {
-        InvalidArgumentException::verify(is_object($object), 'Expecting object, %s given', Debug::getType($object));
-
         parent::__construct();
         $this->object = $object;
         $this->data   = $data;

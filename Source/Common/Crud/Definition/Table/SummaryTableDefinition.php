@@ -3,7 +3,7 @@
 namespace Iddigital\Cms\Core\Common\Crud\Definition\Table;
 
 use Iddigital\Cms\Core\Common\Crud\Action\Table\IReorderAction;
-use Iddigital\Cms\Core\Common\Crud\Action\Table\ReorderAction;
+use Iddigital\Cms\Core\Common\Crud\Action\Table\CallbackReorderAction;
 use Iddigital\Cms\Core\Common\Crud\Definition\ReadModuleDefinition;
 use Iddigital\Cms\Core\Common\Crud\IReadModule;
 use Iddigital\Cms\Core\Common\Crud\Table\ISummaryTable;
@@ -172,7 +172,7 @@ class SummaryTableDefinition
     {
         $reorderActionName = IReadModule::SUMMARY_TABLE . '.' . $viewName . '.reorder';
 
-        $reorderAction = new ReorderAction(
+        $reorderAction = new CallbackReorderAction(
                 $reorderActionName,
                 $this->moduleDefinition->getAuthSystem(),
                 [], // TODO: permissions

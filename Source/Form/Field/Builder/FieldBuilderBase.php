@@ -160,7 +160,7 @@ abstract class FieldBuilderBase
     public function required()
     {
         return $this
-                ->validate(new RequiredValidator($this->getCurrentProcessedType()))
+                ->validate(new RequiredValidator($this->getCurrentProcessedType(__FUNCTION__)))
                 ->attr(FieldType::ATTR_REQUIRED, true);
     }
 
@@ -174,7 +174,7 @@ abstract class FieldBuilderBase
     public function defaultTo($value)
     {
         return $this
-                ->process(new DefaultValueProcessor($this->getCurrentProcessedType(), $this->processDefaultValue($value)))
+                ->process(new DefaultValueProcessor($this->getCurrentProcessedType(__FUNCTION__), $this->processDefaultValue($value)))
                 ->attr(FieldType::ATTR_DEFAULT, $value);
     }
 
@@ -199,7 +199,7 @@ abstract class FieldBuilderBase
     public function uniqueIn(IObjectSet $objects, $propertyName)
     {
         return $this
-                ->validate(new UniquePropertyValidator($this->getCurrentProcessedType(), $objects, $propertyName));
+                ->validate(new UniquePropertyValidator($this->getCurrentProcessedType(__FUNCTION__), $objects, $propertyName));
     }
 
     /**
@@ -213,7 +213,7 @@ abstract class FieldBuilderBase
     public function oneOf(array $valueLabelMap)
     {
         return $this
-                ->process(new OneOfValidator($this->getCurrentProcessedType(), array_keys($valueLabelMap)))
+                ->process(new OneOfValidator($this->getCurrentProcessedType(__FUNCTION__), array_keys($valueLabelMap)))
                 ->attr(FieldType::ATTR_OPTIONS, ArrayFieldOptions::fromAssocArray($valueLabelMap));
     }
 
@@ -228,7 +228,7 @@ abstract class FieldBuilderBase
      */
     public function assert(callable $validation, $messageId = null, array $parameters = [])
     {
-        return $this->validate(new CustomValidator($this->getCurrentProcessedType(), $validation, $messageId, $parameters));
+        return $this->validate(new CustomValidator($this->getCurrentProcessedType(__FUNCTION__), $validation, $messageId, $parameters));
     }
 
     /**
@@ -246,17 +246,25 @@ abstract class FieldBuilderBase
     }
 
     /**
+     * @param string $function
+     *
      * @return IType
+     * @throws InvalidOperationException
      */
-    protected function getCurrentProcessedType()
+    protected function getCurrentProcessedType($function = __FUNCTION__)
     {
         /** @var IFieldProcessor|null $processor */
         $processor = end($this->processors);
 
         if ($processor) {
             return $processor->getProcessedType();
-        } else {
+        } elseif ($this->type) {
             return $this->type->getProcessedPhpType();
+        } else {
+            throw InvalidOperationException::format(
+                    'Invalid call to method \'%s\': field type has not been set on field \'%s\'',
+                    $function, $this->name
+            );
         }
     }
 }

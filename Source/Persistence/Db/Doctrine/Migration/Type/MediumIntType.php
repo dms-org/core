@@ -19,8 +19,6 @@ class MediumIntType extends Type
      * Gets the name of this type.
      *
      * @return string
-     *
-     * @todo Needed?
      */
     public function getName()
     {

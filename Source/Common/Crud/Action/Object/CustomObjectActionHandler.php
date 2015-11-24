@@ -32,6 +32,7 @@ class CustomObjectActionHandler extends ObjectActionHandler
         }
 
         parent::__construct($objectType, $dataParameterType, $returnType);
+        $this->handler = $handler;
     }
 
     protected function loadTypeHintsFromCallable(callable $handler)
@@ -82,6 +83,6 @@ class CustomObjectActionHandler extends ObjectActionHandler
      */
     protected function runObjectHandler($object, $data = null)
     {
-        call_user_func($this->handler, $object, $data);
+        return call_user_func($this->handler, $object, $data);
     }
 }

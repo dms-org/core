@@ -77,9 +77,11 @@ trait ArrayFieldBuilderTrait
     }
 
     /**
+     * @param string $function
+     *
      * @return ArrayType
      */
-    abstract protected function getCurrentProcessedType();
+    abstract protected function getCurrentProcessedType($function = __FUNCTION__);
 
     /**
      * @param $name

@@ -3,7 +3,6 @@
 namespace Iddigital\Cms\Core\Form\Object\Stage;
 
 use Iddigital\Cms\Core\Form\Object\FinalizedFormObjectDefinition;
-use Iddigital\Cms\Core\Form\Object\FormObjectDefinition;
 
 /**
  * The form stage definition callback.

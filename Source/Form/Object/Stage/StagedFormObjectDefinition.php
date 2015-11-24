@@ -82,9 +82,11 @@ class StagedFormObjectDefinition
     protected function defineStage(callable $defineStageCallback, array $fieldNamesWithinStage, array $dependentOnFields = null)
     {
         $this->stageCallbacks[] = new FormStageCallback(function (StagedFormObject $instance) use ($defineStageCallback) {
+            $reflection          = Reflection::fromCallable($defineStageCallback);
             $defineStageCallback = \Closure::bind(
-                    Reflection::fromCallable($defineStageCallback)->getClosure(),
-                    $instance
+                    $reflection->getClosure(),
+                    $instance,
+                    $reflection->getClosureScopeClass()->getName()
             );
 
             $form = new FormObjectDefinition(

@@ -3,10 +3,8 @@
 namespace Iddigital\Cms\Core\Tests\Module\Handler;
 
 use Iddigital\Cms\Common\Testing\CmsTestCase;
-use Iddigital\Cms\Core\Module\IUnparameterizedActionHandler;
-use Iddigital\Cms\Core\Module\IParameterizedActionHandler;
 use Iddigital\Cms\Core\Model\IDataTransferObject;
-use Iddigital\Cms\Core\Model\Object\DataTransferObject;
+use Iddigital\Cms\Core\Module\IParameterizedActionHandler;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>
