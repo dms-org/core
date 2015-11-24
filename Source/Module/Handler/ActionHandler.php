@@ -5,7 +5,6 @@ namespace Iddigital\Cms\Core\Module\Handler;
 use Iddigital\Cms\Core\Exception\InvalidArgumentException;
 use Iddigital\Cms\Core\Exception\TypeMismatchException;
 use Iddigital\Cms\Core\Form;
-use Iddigital\Cms\Core\Model\IDataTransferObject;
 use Iddigital\Cms\Core\Module\IActionHandler;
 use Iddigital\Cms\Core\Util\Debug;
 
@@ -30,10 +29,10 @@ abstract class ActionHandler implements IActionHandler
      */
     public function __construct($returnType)
     {
-        if ($returnType && !is_a($returnType, IDataTransferObject::class, true)) {
+        if ($returnType && !class_exists($returnType, true) && !interface_exists($returnType, true)) {
             throw InvalidArgumentException::format(
-                    'Invalid return type for action handler: must be a subclass of %s, %s given',
-                    IDataTransferObject::class, $returnType
+                    'Invalid return type for action handler: must be a valid class or interface, %s given',
+                    $returnType
             );
         }
 
@@ -41,9 +40,9 @@ abstract class ActionHandler implements IActionHandler
     }
 
     /**
-     * @return string
+     * @inheritdoc
      */
-    final public function getReturnDtoType()
+    final public function getReturnTypeClass()
     {
         return $this->returnType;
     }

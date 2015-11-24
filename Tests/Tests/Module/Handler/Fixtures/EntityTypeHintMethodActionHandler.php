@@ -8,7 +8,7 @@ use Iddigital\Cms\Core\Model\IEntity;
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>
  */
-class InvalidTypeHintMethodActionHandler extends ParameterizedActionHandler
+class EntityTypeHintMethodActionHandler extends ParameterizedActionHandler
 {
     /**
      * Gets the return dto type of the action handler.
@@ -17,7 +17,7 @@ class InvalidTypeHintMethodActionHandler extends ParameterizedActionHandler
      */
     protected function getReturnType()
     {
-        return null;
+        return IEntity::class;
     }
 
     public function handle(IEntity $foo)

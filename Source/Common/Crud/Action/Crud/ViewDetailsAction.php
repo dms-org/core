@@ -15,7 +15,6 @@ use Iddigital\Cms\Core\Common\Crud\Form\ObjectForm;
 use Iddigital\Cms\Core\Common\Crud\IReadModule;
 use Iddigital\Cms\Core\Form\Builder\Form;
 use Iddigital\Cms\Core\Form\IForm;
-use Iddigital\Cms\Core\Model\IDataTransferObject;
 use Iddigital\Cms\Core\Model\IEntity;
 use Iddigital\Cms\Core\Model\IEntitySet;
 
@@ -90,7 +89,7 @@ class ViewDetailsAction extends SelfHandlingObjectAction
      *
      * @return string|null
      */
-    protected function returnDtoType()
+    protected function returnType()
     {
         return IForm::class;
     }
@@ -108,12 +107,12 @@ class ViewDetailsAction extends SelfHandlingObjectAction
     /**
      * Runs the action handler.
      *
-     * @param object                   $object
-     * @param IDataTransferObject|null $data
+     * @param object      $object
+     * @param object|null $data
      *
-     * @return IDataTransferObject|null
+     * @return object|null
      */
-    protected function runHandler($object, IDataTransferObject $data = null)
+    protected function runHandler($object, $data = null)
     {
         /** @var IEntity $object */
 

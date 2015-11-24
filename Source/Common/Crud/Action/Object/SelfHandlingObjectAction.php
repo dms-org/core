@@ -4,7 +4,6 @@ namespace Iddigital\Cms\Core\Common\Crud\Action\Object;
 
 use Iddigital\Cms\Core\Auth\IAuthSystem;
 use Iddigital\Cms\Core\Auth\IPermission;
-use Iddigital\Cms\Core\Model\IDataTransferObject;
 
 /**
  * The self-handling object action class.
@@ -26,10 +25,10 @@ abstract class SelfHandlingObjectAction extends ObjectAction
                 $this->permissions(),
                 $formDtoMapping,
                 new CustomObjectActionHandler(
-                        function ($object, IDataTransferObject $data = null) {
+                        function ($object, $data = null) {
                             return $this->runHandler($object, $data);
                         },
-                        $this->returnDtoType(),
+                        $this->returnType(),
                         $this->objectType(),
                         $formDtoMapping->getDataDtoType()
                 )
@@ -62,7 +61,7 @@ abstract class SelfHandlingObjectAction extends ObjectAction
      *
      * @return string|null
      */
-    abstract protected function returnDtoType();
+    abstract protected function returnType();
 
     /**
      * Gets the object type
@@ -74,10 +73,10 @@ abstract class SelfHandlingObjectAction extends ObjectAction
     /**
      * Runs the action handler.
      *
-     * @param object                   $object
-     * @param IDataTransferObject|null $data
+     * @param object      $object
+     * @param object|null $data
      *
-     * @return IDataTransferObject|null
+     * @return object|null
      */
-    abstract protected function runHandler($object, IDataTransferObject $data = null);
+    abstract protected function runHandler($object, $data = null);
 }

@@ -59,11 +59,12 @@ class CustomMethodActionHandlerTest extends ParameterizedActionHandlerTest
         });
     }
 
-    public function testInvalidTypeHintMethodThrows()
+    public function testNonDtoParameterMethod()
     {
-        $this->setExpectedException(InvalidHandlerClassException::class);
-        new CustomParameterizedActionHandler(function (\DateTime $data) {
+        $action = new CustomParameterizedActionHandler(function (\DateTime $data) {
             return ParamDto::from('foo');
         });
+
+        $this->assertSame(\DateTime::class, $action->getParameterTypeClass());
     }
 }

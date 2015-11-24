@@ -25,14 +25,14 @@ interface IAction
      *
      * @return bool
      */
-    public function hasReturnDtoType();
+    public function hasReturnType();
 
     /**
      * Gets the return type of data transfer object for this handler.
      *
      * @return string|null
      */
-    public function getReturnDtoType();
+    public function getReturnTypeClass();
 
     /**
      * Gets the permissions required to execute the action.

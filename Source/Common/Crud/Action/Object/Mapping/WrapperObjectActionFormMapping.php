@@ -66,7 +66,7 @@ class WrapperObjectActionFormMapping extends ObjectActionFormMapping
                 ? $this->objectData
                 : $this->objectForm->process($submission);
 
-        $dataDto    = $this->dataFormMapping
+        $dataDto = $this->dataFormMapping
                 ? $this->dataFormMapping->mapFormSubmissionToDto($submission)
                 : null;
 

@@ -95,8 +95,8 @@ class ModuleWithActionsTest extends ModuleTestBase
         $this->assertInstanceOf(IUnparameterizedAction::class, $action);
         $this->assertSame('unparameterized-action-no-return', $action->getName());
         $this->assertEquals([Permission::named('permission.name')], $action->getRequiredPermissions());
-        $this->assertEquals(null, $action->getReturnDtoType());
-        $this->assertEquals(false, $action->hasReturnDtoType());
+        $this->assertEquals(null, $action->getReturnTypeClass());
+        $this->assertEquals(false, $action->hasReturnType());
         $this->assertSame(null, $action->run());
     }
 
@@ -107,8 +107,8 @@ class ModuleWithActionsTest extends ModuleTestBase
         $this->assertInstanceOf(IUnparameterizedAction::class, $action);
         $this->assertSame('unparameterized-action-with-return', $action->getName());
         $this->assertEquals([Permission::named('permission.name')], $action->getRequiredPermissions());
-        $this->assertEquals(TestDto::class, $action->getReturnDtoType());
-        $this->assertEquals(true, $action->hasReturnDtoType());
+        $this->assertEquals(TestDto::class, $action->getReturnTypeClass());
+        $this->assertEquals(true, $action->hasReturnType());
         $this->assertEquals(new TestDto(), $action->run());
     }
 
@@ -119,8 +119,8 @@ class ModuleWithActionsTest extends ModuleTestBase
         $this->assertInstanceOf(IParameterizedAction::class, $action);
         $this->assertSame('mapped-form-action', $action->getName());
         $this->assertEquals([Permission::named('permission.one')], $action->getRequiredPermissions());
-        $this->assertEquals(TestDto::class, $action->getReturnDtoType());
-        $this->assertEquals(true, $action->hasReturnDtoType());
+        $this->assertEquals(TestDto::class, $action->getReturnTypeClass());
+        $this->assertEquals(true, $action->hasReturnType());
         $this->assertEquals(new TestDto('input-handled'), $action->run(['data' => 'input']));
     }
 
@@ -131,8 +131,8 @@ class ModuleWithActionsTest extends ModuleTestBase
         $this->assertInstanceOf(IParameterizedAction::class, $action);
         $this->assertSame('array-form-action', $action->getName());
         $this->assertEquals([Permission::named('permission.one')], $action->getRequiredPermissions());
-        $this->assertEquals(TestDto::class, $action->getReturnDtoType());
-        $this->assertEquals(true, $action->hasReturnDtoType());
+        $this->assertEquals(TestDto::class, $action->getReturnTypeClass());
+        $this->assertEquals(true, $action->hasReturnType());
         $this->assertEquals(new TestDto('input-handled'), $action->run(['data' => 'input']));
     }
 
@@ -143,8 +143,8 @@ class ModuleWithActionsTest extends ModuleTestBase
         $this->assertInstanceOf(IParameterizedAction::class, $action);
         $this->assertSame('form-object-action', $action->getName());
         $this->assertEquals([Permission::named('permission.one'), Permission::named('permission.two')], $action->getRequiredPermissions());
-        $this->assertEquals(TestDto::class, $action->getReturnDtoType());
-        $this->assertEquals(true, $action->hasReturnDtoType());
+        $this->assertEquals(TestDto::class, $action->getReturnTypeClass());
+        $this->assertEquals(true, $action->hasReturnType());
         $this->assertEquals(new TestDto('input-handled-object'), $action->run(['data' => 'input']));
     }
 
@@ -155,8 +155,8 @@ class ModuleWithActionsTest extends ModuleTestBase
         $this->assertInstanceOf(IParameterizedAction::class, $action);
         $this->assertSame('staged-form-object-action', $action->getName());
         $this->assertEquals([], $action->getRequiredPermissions());
-        $this->assertEquals(TestDto::class, $action->getReturnDtoType());
-        $this->assertEquals(true, $action->hasReturnDtoType());
+        $this->assertEquals(TestDto::class, $action->getReturnTypeClass());
+        $this->assertEquals(true, $action->hasReturnType());
         $this->assertEquals(new TestDto('some-input-handled-staged'), $action->run(['data' => 'some-input']));
     }
 }

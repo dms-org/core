@@ -42,7 +42,7 @@ abstract class ParameterizedActionHandlerTest extends CmsTestCase
 
     public function testDtoType()
     {
-        $this->assertEquals($this->expectedDtoType(), $this->handler->getDtoType());
+        $this->assertEquals($this->expectedDtoType(), $this->handler->getParameterTypeClass());
     }
 
     public function testReturnType()
@@ -50,9 +50,9 @@ abstract class ParameterizedActionHandlerTest extends CmsTestCase
         $expectedReturnValue = $this->expectedReturnValue();
 
         if ($expectedReturnValue === null) {
-            $this->assertNull($this->handler->getReturnDtoType());
+            $this->assertNull($this->handler->getReturnTypeClass());
         } else {
-            $this->assertSame(get_class($expectedReturnValue), $this->handler->getReturnDtoType());
+            $this->assertSame(get_class($expectedReturnValue), $this->handler->getReturnTypeClass());
         }
     }
 

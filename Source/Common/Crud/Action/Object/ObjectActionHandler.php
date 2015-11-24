@@ -3,7 +3,6 @@
 namespace Iddigital\Cms\Core\Common\Crud\Action\Object;
 
 use Iddigital\Cms\Core\Exception\TypeMismatchException;
-use Iddigital\Cms\Core\Model\IDataTransferObject;
 use Iddigital\Cms\Core\Module\Handler\ParameterizedActionHandlerBase;
 
 /**
@@ -27,15 +26,15 @@ abstract class ObjectActionHandler extends ParameterizedActionHandlerBase implem
      * ObjectActionHandler constructor.
      *
      * @param string      $objectType
-     * @param string|null $dataDtoType
-     * @param string|null $returnDtoType
+     * @param string|null $dataType
+     * @param string|null $returnType
      */
-    public function __construct($objectType, $dataDtoType, $returnDtoType = null)
+    public function __construct($objectType, $dataType, $returnType = null)
     {
-        parent::__construct(ObjectActionParameter::class, $returnDtoType);
+        parent::__construct(ObjectActionParameter::class, $returnType);
 
         $this->objectType  = $objectType;
-        $this->dataDtoType = $dataDtoType;
+        $this->dataDtoType = $dataType;
     }
 
     /**
@@ -65,7 +64,7 @@ abstract class ObjectActionHandler extends ParameterizedActionHandlerBase implem
     /**
      * @inheritDoc
      */
-    final protected function runHandler(IDataTransferObject $data)
+    final protected function runHandler($data)
     {
         /** @var ObjectActionParameter $data */
         $this->runOnObject($data->getObject(), $data->getData());
@@ -74,7 +73,7 @@ abstract class ObjectActionHandler extends ParameterizedActionHandlerBase implem
     /**
      * @inheritDoc
      */
-    final public function runOnObject($object, IDataTransferObject $data = null)
+    final public function runOnObject($object, $data = null)
     {
         if (!($object instanceof $this->objectType)) {
             throw TypeMismatchException::argument(__METHOD__, 'object', $this->objectType, $object);
@@ -90,10 +89,10 @@ abstract class ObjectActionHandler extends ParameterizedActionHandlerBase implem
     /**
      * Runs the handler.
      *
-     * @param object                   $object
-     * @param IDataTransferObject|null $data
+     * @param object      $object
+     * @param object|null $data
      *
-     * @return IDataTransferObject|null
+     * @return object|null
      */
-    abstract protected function runObjectHandler($object, IDataTransferObject $data = null);
+    abstract protected function runObjectHandler($object, $data = null);
 }

@@ -5,11 +5,7 @@ namespace Iddigital\Cms\Core\Module\Action;
 use Iddigital\Cms\Core\Auth\IAuthSystem;
 use Iddigital\Cms\Core\Auth\IPermission;
 use Iddigital\Cms\Core\Form;
-use Iddigital\Cms\Core\Model\IDataTransferObject;
-use Iddigital\Cms\Core\Module\Handler\CustomParameterizedActionHandler;
 use Iddigital\Cms\Core\Module\Handler\CustomUnparameterizedActionHandler;
-use Iddigital\Cms\Core\Module\IParameterizedActionHandler;
-use Iddigital\Cms\Core\Module\IStagedFormDtoMapping;
 use Iddigital\Cms\Core\Module\IUnparameterizedActionHandler;
 
 /**
@@ -33,7 +29,7 @@ abstract class SelfHandlingUnparameterizedAction extends UnparameterizedAction i
                         function () {
                             return $this->runHandler();
                         },
-                        $this->returnDtoType()
+                        $this->returnType()
                 )
         );
     }
@@ -57,12 +53,12 @@ abstract class SelfHandlingUnparameterizedAction extends UnparameterizedAction i
      *
      * @return string|null
      */
-    abstract protected function returnDtoType();
+    abstract protected function returnType();
 
     /**
      * Runs the action handler.
      *
-     * @return IDataTransferObject|null
+     * @return object|null
      */
     abstract protected function runHandler();
 }

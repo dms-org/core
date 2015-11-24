@@ -2,7 +2,6 @@
 
 namespace Iddigital\Cms\Core\Common\Crud\Action\Object;
 
-use Iddigital\Cms\Core\Model\IDataTransferObject;
 use Iddigital\Cms\Core\Module\InvalidHandlerClassException;
 use Iddigital\Cms\Core\Util\Reflection;
 
@@ -20,19 +19,19 @@ class CustomObjectActionHandler extends ObjectActionHandler
 
     /**
      * @param callable    $handler
-     * @param string|null $returnDtoType
+     * @param string|null $returnType
      * @param string|null $objectType
-     * @param string|null $dataDtoType
+     * @param string|null $dataParameterType
      *
      * @throws InvalidHandlerClassException
      */
-    public function __construct(callable $handler, $returnDtoType = null, $objectType = null, $dataDtoType = null)
+    public function __construct(callable $handler, $returnType = null, $objectType = null, $dataParameterType = null)
     {
-        if (!$objectType || !$dataDtoType) {
-            list($objectType, $dataDtoType) = $this->loadTypeHintsFromCallable($handler);
+        if (!$objectType || !$dataParameterType) {
+            list($objectType, $dataParameterType) = $this->loadTypeHintsFromCallable($handler);
         }
 
-        parent::__construct($objectType, $dataDtoType, $returnDtoType);
+        parent::__construct($objectType, $dataParameterType, $returnType);
     }
 
     protected function loadTypeHintsFromCallable(callable $handler)
@@ -58,30 +57,30 @@ class CustomObjectActionHandler extends ObjectActionHandler
         }
 
         if (isset($parameters[1])) {
-            $dtoTypeHint = $parameters[1]->getClass();
+            $dataParameterTypeHint = $parameters[1]->getClass();
 
-            if (!$dtoTypeHint || !$dtoTypeHint->isSubclassOf(IDataTransferObject::class)) {
+            if (!$dataParameterTypeHint) {
                 throw InvalidHandlerClassException::format(
-                        'Invalid handler callback supplied to %s: second parameter must type hint a subclass of %s, %s given',
-                        __CLASS__, $dtoTypeHint ? $dtoTypeHint->getName() : 'none'
+                        'Invalid handler callback supplied to %s: second parameter must type hint a class, %s given',
+                        __CLASS__, $dataParameterTypeHint ? $dataParameterTypeHint->getName() : 'none'
                 );
             }
         } else {
-            $dtoTypeHint = null;
+            $dataParameterTypeHint = null;
         }
 
-        return [$objectTypeHint->getName(), $dtoTypeHint ? $dtoTypeHint->getName() : null];
+        return [$objectTypeHint->getName(), $dataParameterTypeHint ? $dataParameterTypeHint->getName() : null];
     }
 
     /**
      * Runs the handler.
      *
-     * @param object                   $object
-     * @param IDataTransferObject|null $data
+     * @param object      $object
+     * @param object|null $data
      *
-     * @return IDataTransferObject|null
+     * @return object|null
      */
-    protected function runObjectHandler($object, IDataTransferObject $data = null)
+    protected function runObjectHandler($object, $data = null)
     {
         call_user_func($this->handler, $object, $data);
     }

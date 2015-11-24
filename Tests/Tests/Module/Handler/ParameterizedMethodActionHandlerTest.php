@@ -2,11 +2,12 @@
 
 namespace Iddigital\Cms\Core\Tests\Module\Handler;
 
+use Iddigital\Cms\Core\Model\IEntity;
 use Iddigital\Cms\Core\Module\InvalidHandlerClassException;
 use Iddigital\Cms\Core\Module\IParameterizedActionHandler;
 use Iddigital\Cms\Core\Model\IDataTransferObject;
 use Iddigital\Cms\Core\Model\Object\DataTransferObject;
-use Iddigital\Cms\Core\Tests\Module\Handler\Fixtures\InvalidTypeHintMethodActionHandler;
+use Iddigital\Cms\Core\Tests\Module\Handler\Fixtures\EntityTypeHintMethodActionHandler;
 use Iddigital\Cms\Core\Tests\Module\Handler\Fixtures\NoHandleMethodActionHandler;
 use Iddigital\Cms\Core\Tests\Module\Handler\Fixtures\NoParameterMethodActionHandler;
 use Iddigital\Cms\Core\Tests\Module\Handler\Fixtures\NoTypeHintMethodActionHandler;
@@ -70,9 +71,10 @@ class ParameterizedMethodActionHandlerTest extends ParameterizedActionHandlerTes
         new NoTypeHintMethodActionHandler();
     }
 
-    public function testInvalidTypeHintMethodThrows()
+    public function testNonDtoParameterAndReturnType()
     {
-        $this->setExpectedException(InvalidHandlerClassException::class);
-        new InvalidTypeHintMethodActionHandler();
+        $action = new EntityTypeHintMethodActionHandler();
+        $this->assertSame(IEntity::class, $action->getParameterTypeClass());
+        $this->assertSame(IEntity::class, $action->getReturnTypeClass());
     }
 }

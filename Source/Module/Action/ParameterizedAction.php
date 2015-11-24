@@ -39,10 +39,10 @@ class ParameterizedAction extends Action implements IParameterizedAction
     ) {
         parent::__construct($name, $auth, $requiredPermissions, $handler);
 
-        if ($formDtoMapping->getDtoType() !== $handler->getDtoType()) {
+        if ($formDtoMapping->getDtoType() !== $handler->getParameterTypeClass()) {
             throw TypeMismatchException::format(
                     "Cannot construct %s: form dto type %s does not match handler dto type %s",
-                    __METHOD__, $formDtoMapping->getDtoType() ?: 'null', $handler->getDtoType() ?: 'null'
+                    __METHOD__, $formDtoMapping->getDtoType() ?: 'null', $handler->getParameterTypeClass() ?: 'null'
             );
         }
 

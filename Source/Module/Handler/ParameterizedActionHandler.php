@@ -2,9 +2,9 @@
 
 namespace Iddigital\Cms\Core\Module\Handler;
 
-use Iddigital\Cms\Core\Module\InvalidHandlerClassException;
 use Iddigital\Cms\Core\Form;
 use Iddigital\Cms\Core\Model\IDataTransferObject;
+use Iddigital\Cms\Core\Module\InvalidHandlerClassException;
 
 /**
  * The action handler base for handlers with a dto type
@@ -19,7 +19,7 @@ use Iddigital\Cms\Core\Model\IDataTransferObject;
  * to allow subclasses to define the dto type in the signature
  * of the handle method. A trade-off due to PHP lack of generic types.
  *
- * @method IDataTransferObject|null handle(IDataTransferObject $data)
+ * @method object|null handle(object $data)
  *
  * @author Elliot Levin <elliot@aanet.com.au>
  */
@@ -42,7 +42,7 @@ abstract class ParameterizedActionHandler extends ReflectionBasedActionHandler
                 );
             }
 
-            return $this->getDtoTypeFromParameter($reflection, 'method');
+            return $this->getTypeFromParameter($reflection, 'method');
 
         } catch (\ReflectionException $e) {
             throw InvalidHandlerClassException::format(
@@ -53,7 +53,7 @@ abstract class ParameterizedActionHandler extends ReflectionBasedActionHandler
     }
 
     /**
-     * Gets the return dto type of the action handler.
+     * Gets the return type of the action handler.
      *
      * @return string|null
      */
@@ -62,11 +62,11 @@ abstract class ParameterizedActionHandler extends ReflectionBasedActionHandler
     /**
      * Runs the action handler.
      *
-     * @param IDataTransferObject $data
+     * @param object $data
      *
-     * @return IDataTransferObject
+     * @return object
      */
-    protected function runHandler(IDataTransferObject $data)
+    protected function runHandler($data)
     {
         return $this->handle($data);
     }

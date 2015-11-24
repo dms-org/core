@@ -5,7 +5,6 @@ namespace Iddigital\Cms\Core\Module\Action;
 use Iddigital\Cms\Core\Auth\IAuthSystem;
 use Iddigital\Cms\Core\Auth\IPermission;
 use Iddigital\Cms\Core\Form;
-use Iddigital\Cms\Core\Model\IDataTransferObject;
 use Iddigital\Cms\Core\Module\Handler\CustomParameterizedActionHandler;
 use Iddigital\Cms\Core\Module\IParameterizedActionHandler;
 use Iddigital\Cms\Core\Module\IStagedFormDtoMapping;
@@ -31,10 +30,10 @@ abstract class SelfHandlingParameterizedAction extends ParameterizedAction
                 $this->permissions(),
                 $formDtoMapping,
                 new CustomParameterizedActionHandler(
-                        function (IDataTransferObject $data) {
+                        function ($data) {
                             return $this->runHandler($data);
                         },
-                        $this->returnDtoType(),
+                        $this->returnType(),
                         $formDtoMapping->getDtoType()
                 )
         );
@@ -66,25 +65,25 @@ abstract class SelfHandlingParameterizedAction extends ParameterizedAction
      *
      * @return string|null
      */
-    abstract protected function returnDtoType();
+    abstract protected function returnType();
 
     /**
      * @inheritDoc
      */
-    final public function getDtoType()
+    final public function getParameterTypeClass()
     {
         /** @var IParameterizedActionHandler $handler */
         $handler = $this->getHandler();
 
-        return $handler->getDtoType();
+        return $handler->getParameterTypeClass();
     }
 
     /**
      * Runs the action handler.
      *
-     * @param IDataTransferObject $data
+     * @param object $data
      *
-     * @return IDataTransferObject|null
+     * @return object|null
      */
-    abstract protected function runHandler(IDataTransferObject $data);
+    abstract protected function runHandler($data);
 }

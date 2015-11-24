@@ -2,9 +2,8 @@
 
 namespace Iddigital\Cms\Core\Module\Handler;
 
-use Iddigital\Cms\Core\Module\InvalidHandlerClassException;
 use Iddigital\Cms\Core\Form;
-use Iddigital\Cms\Core\Model\IDataTransferObject;
+use Iddigital\Cms\Core\Module\InvalidHandlerClassException;
 
 /**
  * The reflection based action handler.
@@ -15,7 +14,7 @@ use Iddigital\Cms\Core\Model\IDataTransferObject;
  */
 abstract class ReflectionBasedActionHandler extends ParameterizedActionHandlerBase
 {
-    final protected function getDtoTypeFromParameter(
+    final protected function getTypeFromParameter(
             \ReflectionFunctionAbstract $function,
             $functionType
     ) {
@@ -31,15 +30,8 @@ abstract class ReflectionBasedActionHandler extends ParameterizedActionHandlerBa
 
         if (!$typeHint) {
             throw InvalidHandlerClassException::format(
-                    'Invalid handler %s: handle %s parameter does not have a typehint',
+                    'Invalid handler %s: handle %s parameter does not typehint a class',
                     get_class($this), $functionType
-            );
-        } elseif (!$typeHint->isSubclassOf(IDataTransferObject::class)) {
-            throw InvalidHandlerClassException::format(
-                    'Invalid handler %s: handle %s parameter typehint must be a subclass of %s, %s given',
-                    get_class($this), $functionType,
-                    IDataTransferObject::class,
-                    $typeHint->getName()
             );
         }
 

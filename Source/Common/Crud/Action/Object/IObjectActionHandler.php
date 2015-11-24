@@ -3,7 +3,6 @@
 namespace Iddigital\Cms\Core\Common\Crud\Action\Object;
 
 use Iddigital\Cms\Core\Exception\TypeMismatchException;
-use Iddigital\Cms\Core\Model\IDataTransferObject;
 use Iddigital\Cms\Core\Module\IParameterizedActionHandler;
 
 /**
@@ -38,11 +37,11 @@ interface IObjectActionHandler extends IParameterizedActionHandler
     /**
      * Runs the action on the supplied object.
      *
-     * @param object                   $object
-     * @param IDataTransferObject|null $data
+     * @param object      $object
+     * @param object|null $data
      *
-     * @returns IDataTransferObject|null
+     * @returns object|null
      * @throws TypeMismatchException
      */
-    public function runOnObject($object, IDataTransferObject $data = null);
+    public function runOnObject($object, $data = null);
 }

@@ -25,7 +25,7 @@ class UnparameterizedActionTest extends ActionTest
 
         $this->assertSame('name', $action->getName());
         $this->assertSame([], $action->getRequiredPermissions());
-        $this->assertSame(null, $action->getReturnDtoType());
+        $this->assertSame(null, $action->getReturnTypeClass());
         $this->assertSame($handler, $action->getHandler());
     }
 
@@ -58,8 +58,8 @@ class UnparameterizedActionTest extends ActionTest
                 }, ParamDto::class)
         );
 
-        $this->assertTrue($action->hasReturnDtoType());
-        $this->assertSame(ParamDto::class, $action->getReturnDtoType());
+        $this->assertTrue($action->hasReturnType());
+        $this->assertSame(ParamDto::class, $action->getReturnTypeClass());
     }
 
     public function testWithoutReturnDtoTypes()
@@ -73,8 +73,8 @@ class UnparameterizedActionTest extends ActionTest
                 })
         );
 
-        $this->assertFalse($action->hasReturnDtoType());
-        $this->assertNull($action->getReturnDtoType());
+        $this->assertFalse($action->hasReturnType());
+        $this->assertNull($action->getReturnTypeClass());
     }
 
     public function testVerifiesNullReturnDtoType()

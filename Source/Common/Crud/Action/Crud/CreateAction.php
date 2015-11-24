@@ -7,7 +7,6 @@ use Iddigital\Cms\Core\Auth\IPermission;
 use Iddigital\Cms\Core\Auth\Permission;
 use Iddigital\Cms\Core\Common\Crud\Definition\Form\FinalizedCrudFormDefinition;
 use Iddigital\Cms\Core\Common\Crud\ICrudModule;
-use Iddigital\Cms\Core\Model\IDataTransferObject;
 use Iddigital\Cms\Core\Model\Object\ArrayDataObject;
 use Iddigital\Cms\Core\Module\Action\SelfHandlingParameterizedAction;
 use Iddigital\Cms\Core\Module\IStagedFormDtoMapping;
@@ -86,7 +85,7 @@ class CreateAction extends SelfHandlingParameterizedAction
      *
      * @return string|null
      */
-    protected function returnDtoType()
+    protected function returnType()
     {
         return $this->dataSource->getObjectType();
     }
@@ -94,11 +93,11 @@ class CreateAction extends SelfHandlingParameterizedAction
     /**
      * Runs the action handler.
      *
-     * @param IDataTransferObject $data
+     * @param object $data
      *
-     * @return IDataTransferObject|null
+     * @return object|null
      */
-    protected function runHandler(IDataTransferObject $data)
+    protected function runHandler($data)
     {
         /** @var ArrayDataObject $data */
         $input       = $data->getArray();

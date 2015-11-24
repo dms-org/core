@@ -15,7 +15,7 @@ interface IActionHandler
     /**
      * Gets the return type of data transfer object for this handler.
      *
-     * @return string
+     * @return string|null
      */
-    public function getReturnDtoType();
+    public function getReturnTypeClass();
 }

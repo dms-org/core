@@ -3,7 +3,6 @@
 namespace Iddigital\Cms\Core\Tests\Module\Action;
 
 use Iddigital\Cms\Core\Auth\Permission;
-use Iddigital\Cms\Core\Module\Handler\CustomParameterizedActionHandler;
 use Iddigital\Cms\Core\Module\Handler\CustomUnparameterizedActionHandler;
 use Iddigital\Cms\Core\Tests\Module\Action\Fixtures\TestSelfHandlingUnparameterizedAction;
 use Iddigital\Cms\Core\Tests\Module\Fixtures\TestDto;
@@ -19,7 +18,7 @@ class SelfHandlingUnparameterizedActionTest extends ActionTest
 
         $this->assertSame('test-unparameterized-action', $action->getName());
         $this->assertEquals([Permission::named('test-permission')], $action->getRequiredPermissions());
-        $this->assertSame(TestDto::class, $action->getReturnDtoType());
+        $this->assertSame(TestDto::class, $action->getReturnTypeClass());
         $this->assertInstanceOf(CustomUnparameterizedActionHandler::class, $action->getHandler());
     }
 

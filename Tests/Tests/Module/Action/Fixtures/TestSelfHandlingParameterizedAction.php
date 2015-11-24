@@ -61,7 +61,7 @@ class TestSelfHandlingParameterizedAction extends SelfHandlingParameterizedActio
      *
      * @return string|null
      */
-    protected function returnDtoType()
+    protected function returnType()
     {
         return TestDto::class;
     }
@@ -69,12 +69,12 @@ class TestSelfHandlingParameterizedAction extends SelfHandlingParameterizedActio
     /**
      * Runs the action handler.
      *
-     * @param $data
+     * @param object $data
      *
      * @returns TestDto
      * @throws TypeMismatchException
      */
-    public function runHandler(IDataTransferObject $data)
+    public function runHandler($data)
     {
         /** @var ArrayDataObject $data */
         return new TestDto(strtoupper($data['string']));

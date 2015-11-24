@@ -58,7 +58,7 @@ abstract class Action implements IAction
         $this->auth                = $auth;
         $this->requiredPermissions = $requiredPermissions;
         $this->handler             = $handler;
-        $this->returnType          = $handler->getReturnDtoType();
+        $this->returnType          = $handler->getReturnTypeClass();
     }
 
     /**
@@ -96,7 +96,7 @@ abstract class Action implements IAction
     /**
      * {@inheritdoc}
      */
-    final public function hasReturnDtoType()
+    final public function hasReturnType()
     {
         return $this->returnType !== null;
     }
@@ -104,7 +104,7 @@ abstract class Action implements IAction
     /**
      * {@inheritdoc}
      */
-    final public function getReturnDtoType()
+    final public function getReturnTypeClass()
     {
         return $this->returnType;
     }

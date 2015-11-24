@@ -26,7 +26,7 @@ class ObjectAction extends ParameterizedAction implements IObjectAction
         if ($formDtoMapping->getDataDtoType() !== $handler->getDataDtoType()) {
             throw TypeMismatchException::format(
                     'Cannot construct %s: data dto type %s does not match handler data dto type %s',
-                    __METHOD__, $formDtoMapping->getDtoType() ?: 'null', $handler->getDtoType() ?: 'null'
+                    __METHOD__, $formDtoMapping->getDtoType() ?: 'null', $handler->getParameterTypeClass() ?: 'null'
             );
         }
 

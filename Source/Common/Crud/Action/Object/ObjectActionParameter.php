@@ -3,7 +3,6 @@
 namespace Iddigital\Cms\Core\Common\Crud\Action\Object;
 
 use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Model\IDataTransferObject;
 use Iddigital\Cms\Core\Model\Object\ClassDefinition;
 use Iddigital\Cms\Core\Model\Object\DataTransferObject;
 use Iddigital\Cms\Core\Util\Debug;
@@ -21,17 +20,17 @@ class ObjectActionParameter extends DataTransferObject
     protected $object;
 
     /**
-     * @var IDataTransferObject|null
+     * @var object|null
      */
     protected $data;
 
     /**
      * ObjectActionParameter constructor.
      *
-     * @param object                   $object
-     * @param IDataTransferObject|null $data
+     * @param object      $object
+     * @param object|null $data
      */
-    public function __construct($object, IDataTransferObject $data = null)
+    public function __construct($object, $data = null)
     {
         InvalidArgumentException::verify(is_object($object), 'Expecting object, %s given', Debug::getType($object));
 
@@ -50,7 +49,7 @@ class ObjectActionParameter extends DataTransferObject
     {
         $class->property($this->object)->asObject();
 
-        $class->property($this->data)->nullable()->asObject(IDataTransferObject::class);
+        $class->property($this->data)->nullable()->asObject();
     }
 
     /**
@@ -62,7 +61,7 @@ class ObjectActionParameter extends DataTransferObject
     }
 
     /**
-     * @return IDataTransferObject|null
+     * @return object|null
      */
     public function getData()
     {

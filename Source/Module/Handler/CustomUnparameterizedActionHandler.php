@@ -19,22 +19,22 @@ class CustomUnparameterizedActionHandler extends UnparameterizedActionHandler im
     private $handleCallback;
 
     /**
-     * @var null|string
+     * @var string|null
      */
-    private $returnDtoType;
+    private $returnType;
 
     /**
      * CustomActionHandler constructor.
      *
      * @param callable    $handleCallback
-     * @param string|null $returnDtoType
+     * @param string|null $returnType
      *
      * @throws \Iddigital\Cms\Core\Exception\InvalidArgumentException
      */
-    public function __construct(callable $handleCallback, $returnDtoType = null)
+    public function __construct(callable $handleCallback, $returnType = null)
     {
         $this->handleCallback = $handleCallback;
-        $this->returnDtoType = $returnDtoType;
+        $this->returnType     = $returnType;
         parent::__construct();
     }
 
@@ -45,7 +45,7 @@ class CustomUnparameterizedActionHandler extends UnparameterizedActionHandler im
      */
     protected function getReturnType()
     {
-        return $this->returnDtoType;
+        return $this->returnType;
     }
 
     /**

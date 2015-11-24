@@ -40,7 +40,7 @@ class TestSelfHandlingUnparameterizedAction extends SelfHandlingUnparameterizedA
      *
      * @return string|null
      */
-    protected function returnDtoType()
+    protected function returnType()
     {
         return TestDto::class;
     }

@@ -231,7 +231,7 @@ class ActionDefiner
             }
 
             /** @var IStagedFormDtoMapping $mapping */
-            $mapping = call_user_func($this->formDtoMappingCallback, $handler->getDtoType());
+            $mapping = call_user_func($this->formDtoMappingCallback, $handler->getParameterTypeClass());
 
             call_user_func($this->callback, new ParameterizedAction(
                     $this->name,

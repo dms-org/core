@@ -4,7 +4,6 @@ namespace Iddigital\Cms\Core\Module;
 
 use Iddigital\Cms\Core\Exception\TypeMismatchException;
 use Iddigital\Cms\Core\Form;
-use Iddigital\Cms\Core\Model\IDataTransferObject;
 use Iddigital\Cms\Core\Persistence;
 
 /**
@@ -19,15 +18,15 @@ interface IParameterizedActionHandler extends IActionHandler
      *
      * @return string
      */
-    public function getDtoType();
+    public function getParameterTypeClass();
 
     /**
      * Runs the action handler.
      *
-     * @param IDataTransferObject $data
+     * @param object $data
      *
-     * @returns IDataTransferObject|null
+     * @returns object|null
      * @throws TypeMismatchException
      */
-    public function run(IDataTransferObject $data);
+    public function run($data);
 }

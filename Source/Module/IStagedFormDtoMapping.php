@@ -34,7 +34,7 @@ interface IStagedFormDtoMapping
      *
      * @param array $submission
      *
-     * @return IDataTransferObject
+     * @return object
      * @throws InvalidFormSubmissionException
      */
     public function mapFormSubmissionToDto(array $submission);

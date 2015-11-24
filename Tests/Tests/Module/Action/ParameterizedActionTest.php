@@ -34,7 +34,7 @@ class ParameterizedActionTest extends ActionTest
 
         $this->assertSame('name', $action->getName());
         $this->assertSame([], $action->getRequiredPermissions());
-        $this->assertSame(null, $action->getReturnDtoType());
+        $this->assertSame(null, $action->getReturnTypeClass());
         $this->assertSame($mapping, $action->getFormDtoMapping());
         $this->assertSame($handler, $action->getHandler());
     }
@@ -64,8 +64,8 @@ class ParameterizedActionTest extends ActionTest
                 })
         );
 
-        $this->assertFalse($action->hasReturnDtoType());
-        $this->assertSame(null, $action->getReturnDtoType());
+        $this->assertFalse($action->hasReturnType());
+        $this->assertSame(null, $action->getReturnTypeClass());
     }
 
     public function testCorrectReturnDtoTypes()
@@ -80,8 +80,8 @@ class ParameterizedActionTest extends ActionTest
                 }, ParamDto::class)
         );
 
-        $this->assertTrue($action->hasReturnDtoType());
-        $this->assertSame(ParamDto::class, $action->getReturnDtoType());
+        $this->assertTrue($action->hasReturnType());
+        $this->assertSame(ParamDto::class, $action->getReturnTypeClass());
     }
 
     public function testRunningActionsChecksForPermissions()

@@ -10,7 +10,6 @@ use Iddigital\Cms\Core\Common\Crud\Action\Object\Mapping\ArrayObjectActionFormMa
 use Iddigital\Cms\Core\Common\Crud\Action\Object\SelfHandlingObjectAction;
 use Iddigital\Cms\Core\Common\Crud\Definition\Form\FinalizedCrudFormDefinition;
 use Iddigital\Cms\Core\Common\Crud\ICrudModule;
-use Iddigital\Cms\Core\Model\IDataTransferObject;
 use Iddigital\Cms\Core\Model\IEntity;
 use Iddigital\Cms\Core\Model\Object\ArrayDataObject;
 use Iddigital\Cms\Core\Persistence\IRepository;
@@ -87,7 +86,7 @@ class EditAction extends SelfHandlingObjectAction
      *
      * @return string|null
      */
-    protected function returnDtoType()
+    protected function returnType()
     {
         return $this->dataSource->getObjectType();
     }
@@ -105,12 +104,12 @@ class EditAction extends SelfHandlingObjectAction
     /**
      * Runs the action handler.
      *
-     * @param object                   $object
-     * @param IDataTransferObject|null $data
+     * @param object      $object
+     * @param object|null $data
      *
-     * @return IDataTransferObject|null
+     * @return object|null
      */
-    protected function runHandler($object, IDataTransferObject $data = null)
+    protected function runHandler($object, $data = null)
     {
         /** @var IEntity $object */
         /** @var ArrayDataObject $data */

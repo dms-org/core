@@ -21,16 +21,16 @@ class CustomParameterizedActionHandler extends ReflectionBasedActionHandler
 
     /**
      * @param callable    $handlerCallback
-     * @param string|null $returnDtoType
-     * @param string|null $parameterDtoType
+     * @param string|null $returnType
+     * @param string|null $parameterType
      *
      * @throws \Iddigital\Cms\Core\Module\InvalidHandlerClassException
      */
-    public function __construct(callable $handlerCallback, $returnDtoType = null, $parameterDtoType = null)
+    public function __construct(callable $handlerCallback, $returnType = null, $parameterType = null)
     {
         parent::__construct(
-                $parameterDtoType ?: $this->getDtoTypeFromParameter(Reflection::fromCallable($handlerCallback), 'function'),
-                $returnDtoType
+                $parameterType ?: $this->getTypeFromParameter(Reflection::fromCallable($handlerCallback), 'function'),
+                $returnType
         );
         $this->handlerCallback = $handlerCallback;
     }
@@ -38,11 +38,11 @@ class CustomParameterizedActionHandler extends ReflectionBasedActionHandler
     /**
      * Runs the action handler.
      *
-     * @param IDataTransferObject $data
+     * @param object $data
      *
-     * @return IDataTransferObject|null
+     * @return object|null
      */
-    protected function runHandler(IDataTransferObject $data)
+    protected function runHandler($data)
     {
         return call_user_func($this->handlerCallback, $data);
     }

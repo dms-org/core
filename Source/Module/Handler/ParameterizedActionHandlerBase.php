@@ -4,7 +4,6 @@ namespace Iddigital\Cms\Core\Module\Handler;
 
 use Iddigital\Cms\Core\Exception\TypeMismatchException;
 use Iddigital\Cms\Core\Form;
-use Iddigital\Cms\Core\Model\IDataTransferObject;
 use Iddigital\Cms\Core\Module\IParameterizedActionHandler;
 
 /**
@@ -23,18 +22,18 @@ abstract class ParameterizedActionHandlerBase extends ActionHandler implements I
      * ActionHandler constructor.
      *
      * @param string      $dtoType
-     * @param string|null $returnDtoType
+     * @param string|null $returnType
      */
-    public function __construct($dtoType, $returnDtoType = null)
+    public function __construct($dtoType, $returnType = null)
     {
-        parent::__construct($returnDtoType);
+        parent::__construct($returnType);
         $this->dtoType = $dtoType;
     }
 
     /**
      * {@inheritDoc}
      */
-    final public function getDtoType()
+    final public function getParameterTypeClass()
     {
         return $this->dtoType;
     }
@@ -42,7 +41,7 @@ abstract class ParameterizedActionHandlerBase extends ActionHandler implements I
     /**
      * {@inheritDoc}
      */
-    final public function run(IDataTransferObject $data)
+    final public function run($data)
     {
         $dtoType = $this->dtoType;
 
@@ -56,9 +55,9 @@ abstract class ParameterizedActionHandlerBase extends ActionHandler implements I
     /**
      * Runs the action handler.
      *
-     * @param IDataTransferObject $data
+     * @param object $data
      *
-     * @return IDataTransferObject|null
+     * @return object|null
      */
-    abstract protected function runHandler(IDataTransferObject $data);
+    abstract protected function runHandler($data);
 }
