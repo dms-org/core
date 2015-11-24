@@ -54,6 +54,6 @@ class CustomAccessor implements IAccessor
      */
     public function set(ITypedObject $object, array &$properties, $value)
     {
-        return call_user_func($this->setterCallback, $object, $value);
+        call_user_func($this->setterCallback, $object, $value);
     }
 }
