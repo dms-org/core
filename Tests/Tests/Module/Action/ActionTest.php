@@ -38,9 +38,14 @@ abstract class ActionTest extends CmsTestCase
     {
         $auth = $this->mockAuth();
 
+        $indexedPermissions = [];
+        foreach ($permissions as $permission) {
+            $indexedPermissions[$permission->getName()] = $permission;
+        }
+
         $auth->expects($this->once())
                 ->method('verifyAuthorized')
-                ->with($permissions);
+                ->with($indexedPermissions);
 
         return $auth;
     }

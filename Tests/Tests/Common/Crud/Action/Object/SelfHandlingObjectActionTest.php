@@ -26,7 +26,7 @@ class SelfHandlingObjectActionTest extends ActionTest
         $action = new TestSelfHandlingObjectAction($this->mockAuth());
 
         $this->assertSame('test-object-action', $action->getName());
-        $this->assertEquals([Permission::named('test-permission')], $action->getRequiredPermissions());
+        $this->assertEquals([Permission::named('test-permission')], array_values($action->getRequiredPermissions()));
         $this->assertSame(ReturnDto::class, $action->getReturnTypeClass());
         $this->assertInstanceOf(ArrayObjectActionFormMapping::class, $action->getFormDtoMapping());
 

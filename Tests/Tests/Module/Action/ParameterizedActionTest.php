@@ -34,9 +34,14 @@ class ParameterizedActionTest extends ActionTest
 
         $this->assertSame('name', $action->getName());
         $this->assertSame([], $action->getRequiredPermissions());
+        $this->assertSame(false, $action->requiresPermission('abc'));
         $this->assertSame(null, $action->getReturnTypeClass());
         $this->assertSame($mapping, $action->getFormDtoMapping());
         $this->assertSame($handler, $action->getHandler());
+
+        $this->assertThrows(function () use ($action) {
+            $action->getRequiredPermission('non-existent');
+        }, InvalidArgumentException::class);
     }
 
     public function testDtoTypeMismatch()

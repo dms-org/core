@@ -9,6 +9,7 @@ use Iddigital\Cms\Core\Exception\InvalidArgumentException;
 use Iddigital\Cms\Core\Form;
 use Iddigital\Cms\Core\Module\IAction;
 use Iddigital\Cms\Core\Module\IActionHandler;
+use Iddigital\Cms\Core\Util\Debug;
 
 /**
  * The action base class.
@@ -30,7 +31,7 @@ abstract class Action implements IAction
     /**
      * @var IPermission[]
      */
-    private $requiredPermissions;
+    private $requiredPermissions = [];
 
     /**
      * @var IActionHandler
@@ -56,9 +57,12 @@ abstract class Action implements IAction
 
         $this->name                = $name;
         $this->auth                = $auth;
-        $this->requiredPermissions = $requiredPermissions;
         $this->handler             = $handler;
         $this->returnType          = $handler->getReturnTypeClass();
+
+        foreach ($requiredPermissions as $requiredPermission) {
+            $this->requiredPermissions[$requiredPermission->getName()] = $requiredPermission;
+        }
     }
 
     /**
@@ -76,6 +80,30 @@ abstract class Action implements IAction
     {
         return $this->requiredPermissions;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function requiresPermission($name)
+    {
+        return isset($this->requiredPermissions[$name]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getRequiredPermission($name)
+    {
+        if (!isset($this->requiredPermissions[$name])) {
+            throw InvalidArgumentException::format(
+                    'Invalid permission name supplied to %s: expecting one of (%s), \'%s\' given',
+                    __METHOD__, Debug::formatValues(array_keys($this->requiredPermissions)), $name
+            );
+        }
+
+        return $this->requiredPermissions[$name];
+    }
+
 
     /**
      * {@inheritdoc}

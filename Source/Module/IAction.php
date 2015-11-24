@@ -3,6 +3,7 @@
 namespace Iddigital\Cms\Core\Module;
 
 use Iddigital\Cms\Core\Auth\IPermission;
+use Iddigital\Cms\Core\Exception\InvalidArgumentException;
 use Iddigital\Cms\Core\Form;
 use Iddigital\Cms\Core\Persistence;
 
@@ -40,6 +41,25 @@ interface IAction
      * @return IPermission[]
      */
     public function getRequiredPermissions();
+
+    /**
+     * Returns whether the action requires a permission with the supplied name.
+     *
+     * @param string $name
+     *
+     * @return bool
+     */
+    public function requiresPermission($name);
+
+    /**
+     * Gets required permission with the supplied name.
+     *
+     * @param string $name
+     *
+     * @return IPermission
+     * @throws InvalidArgumentException
+     */
+    public function getRequiredPermission($name);
 
     /**
      * Returns whether the currently authenticated user is authorized.
