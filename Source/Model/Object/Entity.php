@@ -5,7 +5,6 @@ namespace Iddigital\Cms\Core\Model\Object;
 use Iddigital\Cms\Core\Exception;
 use Iddigital\Cms\Core\Model\EntityCollection;
 use Iddigital\Cms\Core\Model\IEntity;
-use Iddigital\Cms\Core\Model\IEntityCollection;
 
 /**
  * The entity object base class.

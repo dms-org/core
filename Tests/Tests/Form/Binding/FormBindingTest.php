@@ -99,6 +99,22 @@ class FormBindingTest extends CmsTestCase
         $this->assertSame(true, $object->bool);
     }
 
+    public function testBindProcessedSubmissionToObject()
+    {
+
+        $object = new TestFormBoundClass('foobar', 5, true);
+
+        $this->binding->bindProcessedTo($object, [
+                'string' => 'abc',
+                'int'    => 123,
+                'bool'   => true,
+        ]);
+
+        $this->assertSame('abc', $object->string);
+        $this->assertSame(123, $object->int);
+        $this->assertSame(true, $object->bool);
+    }
+
     public function testInvalidFormSubmission()
     {
         $this->setExpectedException(InvalidFormSubmissionException::class);
@@ -106,6 +122,19 @@ class FormBindingTest extends CmsTestCase
         $object = new TestFormBoundClass('foobar', 5, true);
 
         $this->binding->bindTo($object, [
+                'string' => '1',
+                'int'    => 'invalid-int',
+                'bool'   => '1',
+        ]);
+    }
+
+    public function testInvalidProcessedSubmission()
+    {
+        $this->setExpectedException(InvalidArgumentException::class);
+
+        $object = new TestFormBoundClass('foobar', 5, true);
+
+        $this->binding->bindProcessedTo($object, [
                 'string' => '1',
                 'int'    => 'invalid-int',
                 'bool'   => '1',

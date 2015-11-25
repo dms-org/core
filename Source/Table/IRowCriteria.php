@@ -6,6 +6,7 @@ use Iddigital\Cms\Core\Exception;
 use Iddigital\Cms\Core\Table\Criteria\ColumnCondition;
 use Iddigital\Cms\Core\Table\Criteria\ColumnGrouping;
 use Iddigital\Cms\Core\Table\Criteria\ColumnOrdering;
+use Iddigital\Cms\Core\Table\Criteria\RowCriteria;
 
 /**
  * The row search criteria interface.
@@ -77,4 +78,11 @@ interface IRowCriteria
      * @return int|null
      */
     public function getAmountOfRows();
+
+    /**
+     * Returns a copy of the criteria.
+     *
+     * @return RowCriteria
+     */
+    public function asNewCriteria();
 }

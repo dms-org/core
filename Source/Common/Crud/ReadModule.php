@@ -64,7 +64,7 @@ abstract class ReadModule extends Module implements IReadModule
      */
     final protected function define(ModuleDefinition $module)
     {
-        $definition = new ReadModuleDefinition($this->authSystem, $this->dataSource);
+        $definition = new ReadModuleDefinition($this->dataSource, $this->authSystem);
 
         $overrideDefinition = $this->defineReadModule($definition);
 
@@ -146,7 +146,7 @@ abstract class ReadModule extends Module implements IReadModule
     {
         if (!isset($this->objectActions[$name])) {
             throw InvalidArgumentException::format(
-                    'Invalid name supplied to %s: expecting one of (%s), %s given',
+                    'Invalid name supplied to %s: expecting one of (%s), \'%s\' given',
                     __METHOD__, Debug::formatValues(array_keys($this->objectActions)), $name
             );
         }

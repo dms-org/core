@@ -107,12 +107,12 @@ interface IForm
     public function getInitialValues();
 
     /**
-     * Returns an equivalent form with the supplied initial field values.
+     * Returns an equivalent form with the supplied initial processed field values.
      *
-     * @param array $initialValues
+     * @param array $initialProcessedValues
      *
      * @return IForm
      * @throws InvalidArgumentException
      */
-    public function withInitialValues(array $initialValues);
+    public function withInitialValues(array $initialProcessedValues);
 }

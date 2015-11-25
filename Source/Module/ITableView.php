@@ -2,6 +2,7 @@
 
 namespace Iddigital\Cms\Core\Module;
 
+use Iddigital\Cms\Core\Table\Criteria\RowCriteria;
 use Iddigital\Cms\Core\Table\IRowCriteria;
 
 /**
@@ -45,4 +46,11 @@ interface ITableView
      * @return IRowCriteria|null
      */
     public function getCriteria();
+
+    /**
+     * Gets a copy of the row criteria or null if there is no criteria.
+     *
+     * @return RowCriteria|null
+     */
+    public function getCriteriaCopy();
 }

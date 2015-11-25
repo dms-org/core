@@ -2,7 +2,7 @@
 
 namespace Iddigital\Cms\Core\Form\Field\Processor;
 
-use Iddigital\Cms\Core\Model\Type\ScalarType;
+use Iddigital\Cms\Core\Model\Type\Builder\Type;
 
 /**
  * The field type processor.
@@ -21,7 +21,7 @@ class TypeProcessor extends FieldProcessor
      */
     public function __construct($type)
     {
-        parent::__construct(new ScalarType(strtolower($type)));
+        parent::__construct(Type::scalar(strtolower($type)));
 
         $this->type = $type;
     }

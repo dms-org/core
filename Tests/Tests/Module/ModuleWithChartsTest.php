@@ -21,11 +21,13 @@ class ModuleWithChartsTest extends ModuleTestBase
 {
 
     /**
+     * @param MockAuthSystem $authSystem
+     *
      * @return Module
      */
-    protected function buildModule()
+    protected function buildModule(MockAuthSystem $authSystem)
     {
-        return new ModuleWithCharts(new MockAuthSystem());
+        return new ModuleWithCharts($authSystem);
     }
 
     /**

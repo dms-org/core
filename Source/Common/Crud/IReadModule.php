@@ -20,6 +20,7 @@ use Iddigital\Cms\Core\Module\IUnparameterizedAction;
 interface IReadModule extends IModule
 {
     const SUMMARY_TABLE = 'summary-table';
+    const SUMMARY_TABLE_ID_COLUMN = 'id';
 
     const VIEW_PERMISSION = 'view';
 

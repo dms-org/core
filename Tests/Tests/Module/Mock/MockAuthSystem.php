@@ -15,6 +15,26 @@ use Iddigital\Cms\Core\Auth\UserNotAuthenticatedException;
  */
 class MockAuthSystem implements IAuthSystem
 {
+    /**
+     * @var IUser
+     */
+    protected $mockUser;
+
+    /**
+     * @var bool
+     */
+    protected $authorized = true;
+
+    /**
+     * MockAuthSystem constructor.
+     *
+     * @param IUser $mockUser
+     */
+    public function __construct(IUser $mockUser)
+    {
+        $this->mockUser = $mockUser;
+    }
+
 
     /**
      * Attempts to login with the supplied credentials.
@@ -76,7 +96,7 @@ class MockAuthSystem implements IAuthSystem
      */
     public function getAuthenticatedUser()
     {
-
+        return $this->mockUser;
     }
 
     /**
@@ -89,8 +109,19 @@ class MockAuthSystem implements IAuthSystem
      */
     public function isAuthorized(array $permissions)
     {
-        return true;
+        return $this->authorized;
     }
+
+    /**
+     * @param bool $flag
+     *
+     * @return void
+     */
+    public function setIsAuthorized($flag)
+    {
+        $this->authorized = $flag;
+    }
+
 
     /**
      * Verifies whether the currently authenticated user has the supplied
@@ -105,6 +136,8 @@ class MockAuthSystem implements IAuthSystem
      */
     public function verifyAuthorized(array $permissions)
     {
-
+        if (!$this->isAuthorized($permissions)) {
+            throw new UserForbiddenException($this->mockUser, $permissions);
+        }
     }
 }

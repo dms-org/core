@@ -34,7 +34,7 @@ interface IFormBinding
     public function getForm($object = null);
 
     /**
-     * Binds the submitted form data to the supplied object.
+     * Binds the form data to the supplied object.
      *
      * @param mixed $object
      * @param array $formSubmission
@@ -44,6 +44,18 @@ interface IFormBinding
      * @throws InvalidFormSubmissionException
      */
     public function bindTo($object, array $formSubmission);
+
+    /**
+     * Binds the submitted form data to the supplied object.
+     *
+     * @param mixed $object
+     * @param array $processedSubmission
+     *
+     * @return void
+     * @throws TypeMismatchException
+     * @throws InvalidFormSubmissionException
+     */
+    public function bindProcessedTo($object, array $processedSubmission);
 
     /**
      * Returns whether contains a binding for the supplied form field.

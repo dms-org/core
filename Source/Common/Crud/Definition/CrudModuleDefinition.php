@@ -25,9 +25,9 @@ class CrudModuleDefinition extends ReadModuleDefinition
     /**
      * @inheritDoc
      */
-    public function __construct(IAuthSystem $authSystem, IRepository $dataSource)
+    public function __construct(IRepository $dataSource, IAuthSystem $authSystem)
     {
-        parent::__construct($authSystem, $dataSource);
+        parent::__construct($dataSource, $authSystem);
     }
 
     /**

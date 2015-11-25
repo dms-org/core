@@ -21,11 +21,13 @@ class ModuleWithTablesTest extends ModuleTestBase
 {
 
     /**
+     * @param MockAuthSystem $authSystem
+     *
      * @return Module
      */
-    protected function buildModule()
+    protected function buildModule(MockAuthSystem $authSystem)
     {
-        return new ModuleWithTables(new MockAuthSystem());
+        return new ModuleWithTables($authSystem);
     }
 
     /**

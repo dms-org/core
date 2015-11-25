@@ -34,7 +34,7 @@ class UserForbiddenException extends UserException
 
         parent::__construct(
                 $user,
-                'The currently authenticated user is forbidden from performing the desired action, required permissions: ' . Debug::formatValues($permissionNames)
+                'The currently authenticated user is forbidden from performing the requested action, required permissions: ' . Debug::formatValues($permissionNames)
         );
 
         $this->requiredPermissions = $requiredPermissions;

@@ -297,4 +297,12 @@ class RowCriteria implements IRowCriteria
 
         return $this;
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function asNewCriteria()
+    {
+        return clone $this;
+    }
 }

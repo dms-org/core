@@ -69,15 +69,17 @@ abstract class Module implements IModule
      */
     public function __construct(IAuthSystem $authSystem)
     {
+        $this->authSystem = $authSystem;
+
         $definition         = new ModuleDefinition($authSystem);
         $overrideDefinition = $this->define($definition);
 
         if ($overrideDefinition) {
-            $definition = $overrideDefinition;
-        }
+            $this->definition = $overrideDefinition;
+        } else {
 
-        $this->definition = $definition->finalize();
-        $this->authSystem = $authSystem;
+            $this->definition = $definition->finalize();
+        }
 
         foreach ($this->definition->getPermissions() as $permission) {
             $this->permissions[$permission->getName()] = $permission;

@@ -53,7 +53,7 @@ class ObjectFormObjectMappingTest extends ObjectActionFormMappingTest
                         )
                 ],
                 [
-                        [IObjectAction::OBJECT_FIELD_NAME => 3, 'field' => 123],
+                        [IObjectAction::OBJECT_FIELD_NAME => 3, 'string' => 123],
                         new ObjectActionParameter(
                                 TestEntity::withId(3),
                                 $this->expectedForm()->submit([IObjectAction::OBJECT_FIELD_NAME => 3, 'string' => 123])

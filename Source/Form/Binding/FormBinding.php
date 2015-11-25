@@ -5,6 +5,7 @@ namespace Iddigital\Cms\Core\Form\Binding;
 use Iddigital\Cms\Core\Exception\InvalidArgumentException;
 use Iddigital\Cms\Core\Exception\TypeMismatchException;
 use Iddigital\Cms\Core\Form\IForm;
+use Iddigital\Cms\Core\Form\InvalidFormSubmissionException;
 use Iddigital\Cms\Core\Util\Debug;
 
 /**
@@ -42,8 +43,8 @@ class FormBinding implements IFormBinding
     {
         InvalidArgumentException::verifyAllInstanceOf(__METHOD__, 'fieldBindings', $fieldBindings, IFieldBinding::class);
 
-        $this->form          = $form;
-        $this->objectType    = $objectType;
+        $this->form       = $form;
+        $this->objectType = $objectType;
 
         foreach ($fieldBindings as $fieldBinding) {
             $fieldName = $fieldBinding->getFieldName();
@@ -106,6 +107,18 @@ class FormBinding implements IFormBinding
         }
 
         $processedSubmission = $this->form->process($formSubmission);
+
+        foreach ($this->fieldBindings as $fieldName => $binding) {
+            $binding->bindFieldValueToObject($object, $processedSubmission[$fieldName]);
+        }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function bindProcessedTo($object, array $processedSubmission)
+    {
+        $this->form->validateProcessedValues($processedSubmission);
 
         foreach ($this->fieldBindings as $fieldName => $binding) {
             $binding->bindFieldValueToObject($object, $processedSubmission[$fieldName]);

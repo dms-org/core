@@ -7,8 +7,6 @@ use Iddigital\Cms\Core\Exception\InvalidArgumentException;
 use Iddigital\Cms\Core\Module\Module;
 use Iddigital\Cms\Core\Table\Chart\IChartCriteria;
 use Iddigital\Cms\Core\Table\IRowCriteria;
-use Iddigital\Cms\Core\Table\Widget\DataSource\WidgetTableDataSourceAdapter;
-use Iddigital\Cms\Core\Table\Widget\Structure\WidgetAxis;
 use Iddigital\Cms\Core\Tests\Module\Fixtures\ModuleWithWidgets;
 use Iddigital\Cms\Core\Tests\Module\Mock\MockAuthSystem;
 use Iddigital\Cms\Core\Widget\ChartWidget;
@@ -21,11 +19,13 @@ class ModuleWithWidgetsTest extends ModuleTestBase
 {
 
     /**
+     * @param MockAuthSystem $authSystem
+     *
      * @return Module
      */
-    protected function buildModule()
+    protected function buildModule(MockAuthSystem $authSystem)
     {
-        return new ModuleWithWidgets(new MockAuthSystem());
+        return new ModuleWithWidgets($authSystem);
     }
 
     /**

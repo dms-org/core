@@ -38,7 +38,7 @@ abstract class CrudModule extends ReadModule implements ICrudModule
      */
     final protected function defineReadModule(ReadModuleDefinition $module)
     {
-        $definition = new CrudModuleDefinition($this->authSystem, $this->dataSource);
+        $definition = new CrudModuleDefinition($this->dataSource, $this->authSystem);
 
         $this->defineCrudModule($definition);
 

@@ -3,6 +3,7 @@
 namespace Iddigital\Cms\Core\Module;
 
 use Iddigital\Cms\Core\Exception\InvalidArgumentException;
+use Iddigital\Cms\Core\Table\IDataTable;
 use Iddigital\Cms\Core\Table\ITableDataSource;
 
 /**
@@ -58,4 +59,16 @@ interface ITableDisplay
      * @throws InvalidArgumentException
      */
     public function getView($name);
+
+    /**
+     * Loads the data the view with the supplied name.
+     *
+     * @param string|null $name null if default
+     *
+     * @param int    $skipRows
+     * @param int|null   $limitRows
+     *
+     * @return IDataTable
+     */
+    public function loadView($name = null, $skipRows = 0, $limitRows = null);
 }

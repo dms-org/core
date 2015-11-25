@@ -2,8 +2,7 @@
 
 namespace Iddigital\Cms\Core\Form\Field\Processor;
 
-use Iddigital\Cms\Core\Model\Type\ScalarType;
-use Pinq\Analysis\IType;
+use Iddigital\Cms\Core\Model\Type\Builder\Type;
 
 /**
  * The trim processor.
@@ -19,7 +18,7 @@ class TrimProcessor extends FieldProcessor
 
     public function __construct($characters = null)
     {
-        parent::__construct(new ScalarType(ScalarType::STRING));
+        parent::__construct(Type::string());
         $this->characters = $characters;
     }
 

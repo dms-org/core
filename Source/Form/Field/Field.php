@@ -82,7 +82,7 @@ class Field implements IField
             return;
         }
 
-        $processedPhpType = $this->type->getProcessedPhpType();
+        $processedPhpType = $this->getProcessedType();
 
         if (!$processedPhpType->isOfType($initialValue)) {
             throw InvalidArgumentException::format(

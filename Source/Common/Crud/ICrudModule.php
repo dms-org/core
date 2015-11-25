@@ -3,6 +3,7 @@
 namespace Iddigital\Cms\Core\Common\Crud;
 
 use Iddigital\Cms\Core\Common\Crud\Action\Object\IObjectAction;
+use Iddigital\Cms\Core\Module\IParameterizedAction;
 
 /**
  * The interface for a CRUD module.
@@ -32,7 +33,7 @@ interface ICrudModule extends IReadModule
     /**
      * Gets the create object action.
      *
-     * @return IObjectAction
+     * @return IParameterizedAction
      * @throws UnsupportedActionException
      */
     public function getCreateAction();

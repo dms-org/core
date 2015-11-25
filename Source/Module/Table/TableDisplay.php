@@ -5,6 +5,7 @@ namespace Iddigital\Cms\Core\Module\Table;
 use Iddigital\Cms\Core\Exception\InvalidArgumentException;
 use Iddigital\Cms\Core\Module\ITableDisplay;
 use Iddigital\Cms\Core\Module\ITableView;
+use Iddigital\Cms\Core\Table\IDataTable;
 use Iddigital\Cms\Core\Table\ITableDataSource;
 use Iddigital\Cms\Core\Util\Debug;
 
@@ -113,5 +114,28 @@ class TableDisplay implements ITableDisplay
                 'Invalid call to %s: invalid view name, expecting one of (%s), \'%s\' given',
                 __METHOD__, Debug::formatValues(array_keys($this->views)), $name
         );
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function loadView($name = null, $skipRows = 0, $limitRows = null)
+    {
+        $view = $name ? $this->getView($name) : $this->getDefaultView();
+
+        $criteria = $view->getCriteriaCopy() ?: $this->dataSource->criteria()->loadAll();
+        $criteria->skipRows($criteria->getRowsToSkip() + $skipRows);
+
+        $unlimited = null;
+
+        if ($limitRows !== $unlimited) {
+            if ($criteria->getAmountOfRows() === $unlimited) {
+                $criteria->maxRows($limitRows);
+            } else {
+                $criteria->maxRows(min($limitRows, $criteria->getAmountOfRows()));
+            }
+        }
+
+        return $this->dataSource->load($criteria);
     }
 }

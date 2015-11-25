@@ -3,6 +3,7 @@
 namespace Iddigital\Cms\Core\Common\Crud\Definition\Form;
 
 use Iddigital\Cms\Core\Common\Crud\Form\FormWithBinding;
+use Iddigital\Cms\Core\Exception\InvalidArgumentException;
 use Iddigital\Cms\Core\Form\IStagedForm;
 use Iddigital\Cms\Core\Model\ITypedObject;
 
@@ -24,7 +25,7 @@ class FinalizedCrudFormDefinition
     protected $stagedForm;
 
     /**
-     * @var callable
+     * @var callable|null
      */
     protected $createObjectCallback;
 
@@ -41,19 +42,23 @@ class FinalizedCrudFormDefinition
     /**
      * FinalizedCrudFormDefinition constructor.
      *
-     * @param string      $mode
-     * @param IStagedForm $stagedForm
-     * @param callable    $createObjectCallback
-     * @param callable[]  $onSubmitCallbacks
-     * @param callable[]  $onSaveCallbacks
+     * @param string        $mode
+     * @param IStagedForm   $stagedForm
+     * @param callable|null $createObjectCallback
+     * @param callable[]    $onSubmitCallbacks
+     * @param callable[]    $onSaveCallbacks
      */
     public function __construct(
             $mode,
             IStagedForm $stagedForm,
-            callable $createObjectCallback,
+            callable $createObjectCallback = null,
             array $onSubmitCallbacks,
             array $onSaveCallbacks
     ) {
+        InvalidArgumentException::verify(
+                $createObjectCallback || $mode !== CrudFormDefinition::MODE_CREATE,
+                'create callback cannot be null for create form'
+        );
         $this->mode                 = $mode;
         $this->stagedForm           = $stagedForm;
         $this->createObjectCallback = $createObjectCallback;
@@ -78,7 +83,7 @@ class FinalizedCrudFormDefinition
     }
 
     /**
-     * @return callable
+     * @return callable|null
      */
     public function getCreateObjectCallback()
     {
@@ -105,17 +110,18 @@ class FinalizedCrudFormDefinition
      * Binds the supplied form data to the supplied object instance.
      *
      * @param ITypedObject $object
-     * @param array        $input
+     * @param array        $processedInput
      *
      * @return void
      */
-    public function bindToObject(ITypedObject $object, array $input)
+    public function bindToObject(ITypedObject $object, array $processedInput)
     {
         foreach ($this->stagedForm->getAllStages() as $stage) {
-            $form = $stage->loadForm($input);
+            $form = $stage->loadForm($processedInput);
 
             if ($form instanceof FormWithBinding) {
-                $form->getBinding()->bindTo($object, $input);
+                $applicableInput = array_intersect_key($processedInput, $form->getFields());
+                $form->getBinding()->bindProcessedTo($object, $applicableInput);
             }
         }
     }

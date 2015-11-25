@@ -48,16 +48,23 @@ class ClassDefinition
         $this->class      = $reflection->getName();
         $this->instance   = $definitionInstance;
 
-        while ($reflection->getName() !== $baseObjectClass) {
-            $properties = $reflection->getProperties();
+        // Loads the class properties in the order of parent-most class to subclass
+        $classes = [];
+
+        do {
+            $classes[]  = $reflection;
+            $reflection = $reflection->getParentClass();
+        } while ($reflection->getName() !== $baseObjectClass);
+
+        foreach (array_reverse($classes) as $class) {
+            /** @var \ReflectionClass $class */
+            $properties = $class->getProperties();
 
             foreach ($properties as $property) {
-                if (!$property->isStatic() && $property->getDeclaringClass() == $reflection) {
+                if (!$property->isStatic() && $property->getDeclaringClass() == $class) {
                     $this->loadPropertyDefinition($definitionInstance, $property);
                 }
             }
-
-            $reflection = $reflection->getParentClass();
         }
     }
 

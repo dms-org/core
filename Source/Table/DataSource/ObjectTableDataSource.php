@@ -60,6 +60,22 @@ class ObjectTableDataSource extends TableDataSource
     }
 
     /**
+     * @return IObjectSet
+     */
+    final public function getObjectDataSource()
+    {
+        return $this->objectSource;
+    }
+
+    /**
+     * @return FinalizedObjectTableDefinition
+     */
+    final public function getDefinition()
+    {
+        return $this->definition;
+    }
+
+    /**
      * @param IRowCriteria|null $criteria
      *
      * @return ITableSection[]

@@ -3,6 +3,7 @@
 namespace Iddigital\Cms\Core\Module\Table;
 
 use Iddigital\Cms\Core\Module\ITableView;
+use Iddigital\Cms\Core\Table\Criteria\RowCriteria;
 use Iddigital\Cms\Core\Table\IRowCriteria;
 
 /**
@@ -94,5 +95,13 @@ class TableView implements ITableView
     public function getCriteria()
     {
         return $this->criteria;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getCriteriaCopy()
+    {
+        return $this->criteria ? $this->criteria->asNewCriteria() : null;
     }
 }

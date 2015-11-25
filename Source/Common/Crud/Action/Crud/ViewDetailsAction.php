@@ -116,20 +116,20 @@ class ViewDetailsAction extends SelfHandlingObjectAction
     {
         /** @var IEntity $object */
 
-        $stages = $this->form->getStagedForm()->withSubmittedFirstStage([
-                IObjectAction::OBJECT_FIELD_NAME => $object
-        ]);
+        $stagedForm = $this->form->getStagedForm();
+        $knownData = [IObjectAction::OBJECT_FIELD_NAME => $object];
+        $stages    = $stagedForm->withSubmittedFirstStage($knownData);
 
-        $form         = Form::create();
-        $previousData = [];
+        $form = Form::create();
+        $form->embed($stagedForm->getFirstForm()->withInitialValues($knownData));
 
         foreach ($stages->getAllStages() as $stage) {
             /** @var FormWithBinding $currentStageForm */
-            $currentStageForm = $stage->loadForm($previousData);
+            $currentStageForm = $stage->loadForm($knownData);
             $currentStageForm = $currentStageForm->getBinding()->getForm($object);
 
             $form->embed($currentStageForm);
-            $previousData += $currentStageForm->getInitialValues();
+            $knownData += $currentStageForm->getInitialValues();
         }
 
         return $form->build();

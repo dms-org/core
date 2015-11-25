@@ -20,11 +20,13 @@ class ModuleWithActionsTest extends ModuleTestBase
 {
 
     /**
+     * @param MockAuthSystem $authSystem
+     *
      * @return Module
      */
-    protected function buildModule()
+    protected function buildModule(MockAuthSystem $authSystem)
     {
-        return new ModuleWithActions(new MockAuthSystem());
+        return new ModuleWithActions($authSystem);
     }
 
     /**

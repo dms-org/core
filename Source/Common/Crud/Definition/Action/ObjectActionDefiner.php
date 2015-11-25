@@ -40,6 +40,16 @@ class ObjectActionDefiner extends ActionDefiner
     protected $objectFormStage;
 
     /**
+     * @var string|null
+     */
+    protected $currentObjectType;
+
+    /**
+     * @var string|null
+     */
+    protected $currentDataDtoType;
+
+    /**
      * @inheritDoc
      */
     public function __construct(IEntitySet $dataSource, IAuthSystem $authSystem, $name, callable $callback)
@@ -150,13 +160,13 @@ class ObjectActionDefiner extends ActionDefiner
     public function handler($handler)
     {
         if (!($handler instanceof IObjectActionHandler)) {
-            $handler = new CustomObjectActionHandler($handler, $this->returnDtoType);
+            $handler = new CustomObjectActionHandler($handler, $this->returnDtoType, $this->currentObjectType, $this->currentDataDtoType);
         }
 
         if (!$this->formDtoMappingCallback) {
             $formMapping = new WrapperObjectActionFormMapping($this->objectFormStage);
         } else {
-            $formMapping = call_user_func($this->formDtoMappingCallback, $handler->getDtoType());
+            $formMapping = call_user_func($this->formDtoMappingCallback, $handler->getParameterTypeClass());
         }
         /** @var IObjectActionFormMapping $formMapping */
 

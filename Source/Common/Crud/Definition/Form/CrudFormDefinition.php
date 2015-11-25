@@ -120,9 +120,11 @@ class CrudFormDefinition
             $this->stages[] = new IndependentFormStage(ObjectForm::build($dataSource));
         }
 
-        $this->createObjectCallback = function () use ($class) {
-            return $class->newCleanInstance();
-        };
+        if (!$class->isAbstract()) {
+            $this->createObjectCallback = function () use ($class) {
+                return $class->newCleanInstance();
+            };
+        }
     }
 
     /**
@@ -267,12 +269,14 @@ class CrudFormDefinition
 
         $this->stages[] = new DependentFormStage(function (array $previousData) use ($dependentStageDefineCallback) {
             $this->isDependent = true;
+            $objectInstance    = isset($previousData[IObjectAction::OBJECT_FIELD_NAME])
+                    ? $previousData[IObjectAction::OBJECT_FIELD_NAME]
+                    : null;
+
             $dependentStageDefineCallback(
                     $this,
                     $previousData,
-                    isset($previousData[IObjectAction::OBJECT_FIELD_NAME])
-                            ? $previousData[IObjectAction::OBJECT_FIELD_NAME]
-                            : null
+                    $objectInstance
             );
             $this->isDependent = false;
 
@@ -280,7 +284,7 @@ class CrudFormDefinition
             $this->exitStage();
 
             return $form;
-        }, null, array_unique($previousFieldNames));
+        }, [], array_unique($previousFieldNames));
     }
 
     /**
@@ -342,52 +346,59 @@ class CrudFormDefinition
     }
 
     /**
+     * Defines that the form should map to an instance of the supplied type.
+     *
+     * @param string $classType
+     *
+     * @return void
+     * @throws InvalidArgumentException
+     */
+    public function mapToSubClass($classType)
+    {
+        if (!is_a($classType, $this->class->getClassName(), true)) {
+            throw InvalidArgumentException::format(
+                    'Invalid class type supplied to %s: expecting subclass of %s, %s given',
+                    __METHOD__, $this->class->getClassName(), $classType
+            );
+        }
+
+        /** @var string|TypedObject $classType */
+        $this->class = $classType::definition();
+        $this->createObjectType()->asClass($classType);
+    }
+
+    /**
      * Defines a callback to create new instances of the object.
      * The callback can either return an instance or the class
      * name of the object of which to construct.
      *
-     * This is only called when a create form is submitted.
-     *
-     * Example:
-     * <code>
-     * $form->createObject(function (array $input) {
-     *      if ($input['type'] === 'new') {
-     *          return NewObject::class;
-     *          // Or
-     *          return new NewObject(...);
-     *      }
-     *
-     *      return DefaultObject::class;
-     * });
-     * </code>
-     *
-     * @param callable $callback
-     *
-     * @return void
+     * @return ObjectConstructorCallbackDefiner
      */
-    public function createObject(callable $callback)
+    public function createObjectType()
     {
-        $this->createObjectCallback = function (array $input) use ($callback) {
-            $className = $this->class->getClassName();
+        return new ObjectConstructorCallbackDefiner($this->class, function (callable $typeCallback) {
+            $this->createObjectCallback = function (array $input) use ($typeCallback) {
+                $className = $this->class->getClassName();
 
-            /** @var TypedObject|string $instance */
-            $instance = $callback($input);
+                /** @var TypedObject|string $instanceOrType */
+                $instanceOrType = $typeCallback($input);
 
-            if (is_string($instance)) {
-                if (class_exists($instance) && is_a($instance, $className, true)) {
-                    $instance = $instance::definition()->newCleanInstance();
+                if (is_string($instanceOrType)) {
+                    if (class_exists($instanceOrType) && is_a($instanceOrType, $className, true)) {
+                        $instanceOrType = $instanceOrType::definition()->newCleanInstance();
+                    }
                 }
-            }
 
-            if (!($instance instanceof $className)) {
-                throw InvalidReturnValueException::format(
-                        'Invalid create object callback return value: expecting class compatible with %s, %s given',
-                        $className, is_string($instance) ? $instance : Debug::getType($instance)
-                );
-            }
+                if (!($instanceOrType instanceof $className)) {
+                    throw InvalidReturnValueException::format(
+                            'Invalid create object callback return value: expecting class compatible with %s, %s given',
+                            $className, is_string($instanceOrType) ? $instanceOrType : Debug::getType($instanceOrType)
+                    );
+                }
 
-            return $instance;
-        };
+                return $instanceOrType;
+            };
+        });
     }
 
     /**
@@ -440,9 +451,17 @@ class CrudFormDefinition
 
     /**
      * @return FinalizedCrudFormDefinition
+     * @throws InvalidArgumentException
      */
     public function finalize()
     {
+        if ($this->isCreateForm() && !$this->createObjectCallback) {
+            throw InvalidArgumentException::format(
+                    'Cannot finalize crud form definition for class %s in mode \'%s\': object constructor has not been defined, use ->%s()',
+                    $this->class->getClassName(), $this->mode, 'createObjectType'
+            );
+        }
+
         $this->finishCurrentStage();
 
         $stages     = $this->stages;

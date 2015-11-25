@@ -165,9 +165,9 @@ abstract class FormObject extends TypedObject implements IDataTransferObject, IF
     /**
      * @inheritDoc
      */
-    final public function withInitialValues(array $initialValues)
+    final public function withInitialValues(array $initialProcessedValues)
     {
-        return $this->form->withInitialValues($initialValues);
+        return $this->form->withInitialValues($initialProcessedValues);
     }
 
     /**

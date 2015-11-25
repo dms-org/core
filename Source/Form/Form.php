@@ -235,11 +235,11 @@ class Form implements IForm
     /**
      * @inheritDoc
      */
-    public function withInitialValues(array $initialValues)
+    public function withInitialValues(array $initialProcessedValues)
     {
         $newFields = [];
 
-        foreach ($initialValues as $fieldName => $initialValue) {
+        foreach ($initialProcessedValues as $fieldName => $initialValue) {
             $field = $this->getField($fieldName);
 
             $newFields[$field->getName()] = $field->withInitialValue($initialValue);

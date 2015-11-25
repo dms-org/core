@@ -141,7 +141,7 @@ class Type
      *
      * @return ScalarType
      */
-    protected static function scalar($scalarType)
+    public static function scalar($scalarType)
     {
         if (!isset(self::$scalars[$scalarType])) {
             self::$scalars[$scalarType] = new ScalarType($scalarType);

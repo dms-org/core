@@ -58,6 +58,8 @@ class RowCriteriaTest extends CmsTestCase
         $this->assertSame([], $this->criteria->getGroupings());
         $this->assertSame(null, $this->criteria->getAmountOfRows());
         $this->assertSame(0, $this->criteria->getRowsToSkip());
+        $this->assertNotSame($this->criteria, $this->criteria->asNewCriteria());
+        $this->assertEquals($this->criteria, $this->criteria->asNewCriteria());
     }
 
     public function testLoadAllWithoutParameter()

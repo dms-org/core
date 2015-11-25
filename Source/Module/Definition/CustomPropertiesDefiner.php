@@ -37,9 +37,9 @@ class CustomPropertiesDefiner
      */
     public function __construct(array &$actions, array &$tables, array &$charts)
     {
-        $this->actions = $actions;
-        $this->tables  = $tables;
-        $this->charts  = $charts;
+        $this->actions =& $actions;
+        $this->tables  =& $tables;
+        $this->charts  =& $charts;
     }
 
 

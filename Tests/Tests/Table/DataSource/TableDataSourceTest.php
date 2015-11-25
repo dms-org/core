@@ -6,6 +6,7 @@ use Iddigital\Cms\Common\Testing\CmsTestCase;
 use Iddigital\Cms\Core\Exception\InvalidArgumentException;
 use Iddigital\Cms\Core\Table\Builder\Table;
 use Iddigital\Cms\Core\Table\Criteria\RowCriteria;
+use Iddigital\Cms\Core\Table\IDataTable;
 use Iddigital\Cms\Core\Table\IRowCriteria;
 use Iddigital\Cms\Core\Table\ITableDataSource;
 use Iddigital\Cms\Core\Table\ITableStructure;
@@ -81,24 +82,12 @@ abstract class TableDataSourceTest extends CmsTestCase
     protected function assertLoadsSections(array $expectedSections, IRowCriteria $criteria = null)
     {
         $table          = $this->dataSource->load($criteria);
-        $actualSections = [];
 
         foreach ($table->getSections() as $section) {
             $this->assertSame($this->structure, $section->getStructure());
-
-            $arraySection = [];
-
-            if ($section->hasGroupData()) {
-                $arraySection['group_data'] = $section->getGroupData()->getData();
-            }
-
-            $rows = $section->getRows();
-            foreach ($rows as $row) {
-                $arraySection[] = $row->getData();
-            }
-
-            $actualSections[] = $arraySection;
         }
+
+        $actualSections = DataTableHelper::covertDataTableToNormalizedArray($table);
 
         $this->assertSame($this->structure, $table->getStructure());
         $this->assertEquals($expectedSections, $actualSections);

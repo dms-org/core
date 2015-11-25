@@ -27,7 +27,7 @@ class CustomObjectActionHandler extends ObjectActionHandler
      */
     public function __construct(callable $handler, $returnType = null, $objectType = null, $dataParameterType = null)
     {
-        if (!$objectType || !$dataParameterType) {
+        if (!$objectType) {
             list($objectType, $dataParameterType) = $this->loadTypeHintsFromCallable($handler);
         }
 

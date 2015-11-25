@@ -11,6 +11,8 @@ use Iddigital\Cms\Core\Exception;
  */
 interface IEntity extends ITypedObject
 {
+    const ID = 'id';
+
     /**
      * Returns the entity's unique identifier.
      *

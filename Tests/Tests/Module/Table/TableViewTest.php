@@ -15,6 +15,9 @@ class TableViewTest extends CmsTestCase
     {
         $criteria = $this->getMockForAbstractClass(IRowCriteria::class);
 
+        $criteria->method('asNewCriteria')
+                ->willReturn(clone $criteria);
+
         $view = new TableView('name', 'Label', false, $criteria);
 
         $this->assertSame('name', $view->getName());
@@ -22,6 +25,8 @@ class TableViewTest extends CmsTestCase
         $this->assertSame(false, $view->isDefault());
         $this->assertSame(true, $view->hasCriteria());
         $this->assertSame($criteria, $view->getCriteria());
+        $this->assertNotSame($criteria, $view->getCriteriaCopy());
+        $this->assertEquals($criteria, $view->getCriteriaCopy());
     }
 
     public function testWithoutCriteria()
@@ -33,6 +38,7 @@ class TableViewTest extends CmsTestCase
         $this->assertSame(true, $view->isDefault());
         $this->assertSame(false, $view->hasCriteria());
         $this->assertSame(null, $view->getCriteria());
+        $this->assertSame(null, $view->getCriteriaCopy());
     }
 
     public function testCreateDefault()
@@ -44,5 +50,6 @@ class TableViewTest extends CmsTestCase
         $this->assertSame(true, $view->isDefault());
         $this->assertSame(false, $view->hasCriteria());
         $this->assertSame(null, $view->getCriteria());
+        $this->assertSame(null, $view->getCriteriaCopy());
     }
 }

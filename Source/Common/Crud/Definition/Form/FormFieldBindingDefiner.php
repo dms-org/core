@@ -2,6 +2,8 @@
 
 namespace Iddigital\Cms\Core\Common\Crud\Definition\Form;
 
+use Iddigital\Cms\Core\Exception\InvalidArgumentException;
+use Iddigital\Cms\Core\Exception\TypeMismatchException;
 use Iddigital\Cms\Core\Form\Binding\Field\CustomFieldBinding;
 use Iddigital\Cms\Core\Form\Binding\Field\FieldPropertyBinding;
 use Iddigital\Cms\Core\Form\Binding\Field\GetterSetterMethodBinding;
@@ -56,9 +58,19 @@ class FormFieldBindingDefiner
      * @param string $name
      *
      * @return FormFieldBindingDefinition
+     * @throws TypeMismatchException
+     * @throws InvalidArgumentException
      */
     public function bindToProperty($name)
     {
+        if (!$this->field->getProcessedType()->isSubsetOf($this->class->getProperty($name)->getType())) {
+            throw TypeMismatchException::format(
+                    'Cannot bind property %s::$%s to field \'%s\': field type must be compatible with property type %s, %s given',
+                    $this->class->getClassName(), $name, $this->field->getName(),
+                    $this->class->getProperty($name)->getType()->asTypeString(), $this->field->getProcessedType()->asTypeString()
+            );
+        }
+
         return $this->bindTo(new FieldPropertyBinding($this->field->getName(), $this->class, $name));
     }
 

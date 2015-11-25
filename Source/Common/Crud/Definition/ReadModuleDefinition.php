@@ -13,6 +13,8 @@ use Iddigital\Cms\Core\Common\Crud\Table\ISummaryTable;
 use Iddigital\Cms\Core\Common\Crud\UnsupportedActionException;
 use Iddigital\Cms\Core\Exception\InvalidArgumentException;
 use Iddigital\Cms\Core\Exception\InvalidOperationException;
+use Iddigital\Cms\Core\Form\Field\Builder\Field;
+use Iddigital\Cms\Core\Model\IEntity;
 use Iddigital\Cms\Core\Model\IEntitySet;
 use Iddigital\Cms\Core\Model\Object\FinalizedClassDefinition;
 use Iddigital\Cms\Core\Model\Object\TypedObject;
@@ -58,12 +60,12 @@ class ReadModuleDefinition extends ModuleDefinition
     /**
      * ReadModuleDefinition constructor.
      *
-     * @param IAuthSystem $authSystem
      * @param IEntitySet  $dataSource
+     * @param IAuthSystem $authSystem
      *
      * @throws InvalidArgumentException
      */
-    public function __construct(IAuthSystem $authSystem, IEntitySet $dataSource)
+    public function __construct(IEntitySet $dataSource, IAuthSystem $authSystem)
     {
         parent::__construct($authSystem);
         $this->dataSource = $dataSource;
@@ -218,6 +220,8 @@ class ReadModuleDefinition extends ModuleDefinition
     public function summaryTable(callable $summaryTableDefinitionCallback)
     {
         $definition = new SummaryTableDefinition($this, $this->class, $this->dataSource);
+        $definition->mapProperty(IEntity::ID)
+                ->to(Field::name(IReadModule::SUMMARY_TABLE_ID_COLUMN)->label('Id')->int()->required());
         $summaryTableDefinitionCallback($definition);
 
         $this->summaryTable = $definition->finalize();
