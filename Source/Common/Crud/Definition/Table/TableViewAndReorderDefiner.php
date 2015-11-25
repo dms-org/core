@@ -2,6 +2,7 @@
 
 namespace Iddigital\Cms\Core\Common\Crud\Definition\Table;
 
+use Iddigital\Cms\Core\Auth\IPermission;
 use Iddigital\Cms\Core\Module\Definition\Table\TableViewDefiner;
 use Iddigital\Cms\Core\Table\ITableDataSource;
 
@@ -31,6 +32,12 @@ class TableViewAndReorderDefiner extends TableViewDefiner
      * rows can be reordered within their sections. The supplied callback
      * will be run when a row is reordered.
      *
+     * Extra permissions to perform this reorder can be passed as the second
+     * parameter. The {@see IReadModule::VIEW_PERMISSION} and {@see ICrudModule::EDIT_PERMISSION}
+     * will be automatically applied to this action.
+     *
+     * The action name will default to the format "summary-table.{view-name}.reorder".
+     *
      * Example:
      * <code>
      * ->withReorder(function (Person $person, $newIndex) {
@@ -38,13 +45,15 @@ class TableViewAndReorderDefiner extends TableViewDefiner
      * });
      * </code>
      *
-     * @param callable $callback
+     * @param callable      $callback
+     * @param IPermission[] $permissions
+     * @param string|null   $actionName
      *
      * @return static
      */
-    public function withReorder(callable $callback)
+    public function withReorder(callable $callback, array $permissions = [], $actionName = null)
     {
-        call_user_func($this->reorderActionCallback, $callback);
+        call_user_func($this->reorderActionCallback, $callback, $permissions, $actionName);
 
         return $this;
     }

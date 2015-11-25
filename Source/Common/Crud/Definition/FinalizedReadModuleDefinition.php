@@ -18,11 +18,6 @@ class FinalizedReadModuleDefinition extends FinalizedModuleDefinition
     private $labelObjectCallback;
 
     /**
-     * @var ISummaryTable
-     */
-    private $summaryTable;
-
-    /**
      * @inheritDoc
      */
     public function __construct(
@@ -34,8 +29,15 @@ class FinalizedReadModuleDefinition extends FinalizedModuleDefinition
             array $charts,
             array $widgets
     ) {
-        parent::__construct($name, $actions, $tables, $charts, $widgets);
+        parent::__construct($name, $actions, array_merge($tables, [$summaryTable]), $charts, $widgets);
         $this->labelObjectCallback = $labelObjectCallback;
-        $this->summaryTable = $summaryTable;
+    }
+
+    /**
+     * @return callable
+     */
+    public function getLabelObjectCallback()
+    {
+        return $this->labelObjectCallback;
     }
 }

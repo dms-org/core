@@ -2,16 +2,13 @@
 
 namespace Iddigital\Cms\Core\Common\Crud\Form;
 
-use Iddigital\Cms\Core\Common\Crud\Action\Object\IObjectAction;
-use Iddigital\Cms\Core\Form\Field\Builder\Field;
-use Iddigital\Cms\Core\Form\Field\Builder\FieldNameBuilder;
+use Iddigital\Cms\Core\Exception\TypeMismatchException;
 use Iddigital\Cms\Core\Form\Object\FormObjectDefinition;
 use Iddigital\Cms\Core\Form\Object\Stage\StagedFormObject;
 use Iddigital\Cms\Core\Form\Object\Stage\StagedFormObjectDefinition;
 use Iddigital\Cms\Core\Model\IEntitySet;
 use Iddigital\Cms\Core\Model\IObjectSet;
 use Iddigital\Cms\Core\Model\Object\ClassDefinition;
-use Iddigital\Cms\Core\Model\Object\PropertyTypeDefiner;
 
 /**
  * The staged form object for a object action.
@@ -34,11 +31,21 @@ abstract class ObjectStagedFormObject extends StagedFormObject
      * ObjectStagedFormObject constructor.
      *
      * @param IEntitySet $dataSource
+     *
+     * @throws TypeMismatchException
      */
     public function __construct(IEntitySet $dataSource)
     {
+        $objectType       = $this->getObjectType();
         $this->dataSource = $dataSource;
         parent::__construct();
+
+        if (!(is_a($dataSource->getObjectType(), $objectType, true))) {
+            throw TypeMismatchException::format(
+                    'Invalid data source supplied to %s: entity type must be compatible with %s, %s given',
+                    get_class($this), $objectType, $dataSource->getObjectType()
+            );
+        }
     }
 
     /**
@@ -48,20 +55,27 @@ abstract class ObjectStagedFormObject extends StagedFormObject
      */
     final protected function defineClass(ClassDefinition $class)
     {
+        $class->property($this->object)->asObject($this->getObjectType());
         $class->property($this->dataSource)->asObject(IObjectSet::class);
 
-        $this->defineClassStructure($class->property($this->object), $class);
+        $this->defineClassStructure($class);
     }
+
+    /**
+     * Gets the expected type of object from the data source.
+     *
+     * @return string
+     */
+    abstract public function getObjectType();
 
     /**
      * Defines the structure of this class.
      *
-     * @param PropertyTypeDefiner $object
-     * @param ClassDefinition     $class
+     * @param ClassDefinition $class
      *
      * @return void
      */
-    abstract protected function defineClassStructure(PropertyTypeDefiner $object, ClassDefinition $class);
+    abstract protected function defineClassStructure(ClassDefinition $class);
 
     /**
      * Defines the staged form.

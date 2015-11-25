@@ -41,6 +41,7 @@ class ObjectForm
         return $fieldBuilder
                 ->name(IObjectAction::OBJECT_FIELD_NAME)
                 ->label('Object')
-                ->entityFrom($dataSource);
+                ->entityFrom($dataSource)
+                ->required();
     }
 }

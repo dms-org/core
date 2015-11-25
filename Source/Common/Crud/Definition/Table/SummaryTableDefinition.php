@@ -2,9 +2,11 @@
 
 namespace Iddigital\Cms\Core\Common\Crud\Definition\Table;
 
-use Iddigital\Cms\Core\Common\Crud\Action\Table\IReorderAction;
+use Iddigital\Cms\Core\Auth\Permission;
 use Iddigital\Cms\Core\Common\Crud\Action\Table\CallbackReorderAction;
+use Iddigital\Cms\Core\Common\Crud\Action\Table\IReorderAction;
 use Iddigital\Cms\Core\Common\Crud\Definition\ReadModuleDefinition;
+use Iddigital\Cms\Core\Common\Crud\ICrudModule;
 use Iddigital\Cms\Core\Common\Crud\IReadModule;
 use Iddigital\Cms\Core\Common\Crud\Table\ISummaryTable;
 use Iddigital\Cms\Core\Common\Crud\Table\SummaryTable;
@@ -159,23 +161,39 @@ class SummaryTableDefinition
     public function view($name, $label)
     {
         $dataSource  = $this->finalizeTableStructure();
-        $viewDefiner = new TableViewAndReorderDefiner($dataSource, $name, $label, function (callable $reorderCallback) use ($name) {
-            $this->definerReorderAction($name, $reorderCallback);
-        });
+        $viewDefiner = new TableViewAndReorderDefiner(
+                $dataSource,
+                $name,
+                $label,
+                function (callable $reorderCallback, array $permissions = [], $actionName = null) use ($name) {
+                    $this->definerReorderAction($name, $reorderCallback, $permissions, $actionName);
+                }
+        );
 
         $this->viewDefiners[] = $viewDefiner;
 
         return $viewDefiner;
     }
 
-    private function definerReorderAction($viewName, callable $reorderCallback)
+    private function definerReorderAction($viewName, callable $reorderCallback, array $permissions = [], $actionName = null)
     {
-        $reorderActionName = IReadModule::SUMMARY_TABLE . '.' . $viewName . '.reorder';
+        $reorderActionName = $actionName ?: IReadModule::SUMMARY_TABLE . '.' . $viewName . '.reorder';
+
+        $viewPermission = Permission::named(IReadModule::VIEW_PERMISSION);
+        $editPermission = Permission::named(ICrudModule::EDIT_PERMISSION);
+
+        if (!in_array($viewPermission, $permissions)) {
+            $permissions[] = $viewPermission;
+        }
+
+        if (!in_array($editPermission, $permissions)) {
+            $permissions[] = $editPermission;
+        }
 
         $reorderAction = new CallbackReorderAction(
                 $reorderActionName,
                 $this->moduleDefinition->getAuthSystem(),
-                [], // TODO: permissions
+                $permissions,
                 $reorderCallback
         );
 

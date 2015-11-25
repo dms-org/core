@@ -75,4 +75,23 @@ class CrudModuleDefinition extends ReadModuleDefinition
         });
     }
 
+    /**
+     * @inheritDoc
+     */
+    public function finalize()
+    {
+        $this->verifyCanBeFinalized();
+
+        return new FinalizedCrudModuleDefinition(
+                $this->name,
+                $this->labelObjectCallback,
+                $this->summaryTable,
+                $this->actions,
+                $this->tables,
+                $this->charts,
+                $this->widgets
+        );
+    }
+
+
 }

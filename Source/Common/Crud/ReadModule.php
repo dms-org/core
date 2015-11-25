@@ -7,7 +7,9 @@ use Iddigital\Cms\Core\Common\Crud\Action\Object\IObjectAction;
 use Iddigital\Cms\Core\Common\Crud\Definition\FinalizedReadModuleDefinition;
 use Iddigital\Cms\Core\Common\Crud\Definition\ReadModuleDefinition;
 use Iddigital\Cms\Core\Exception\InvalidArgumentException;
+use Iddigital\Cms\Core\Exception\TypeMismatchException;
 use Iddigital\Cms\Core\Model\IEntitySet;
+use Iddigital\Cms\Core\Model\ITypedObject;
 use Iddigital\Cms\Core\Module\Definition\ModuleDefinition;
 use Iddigital\Cms\Core\Module\Module;
 use Iddigital\Cms\Core\Util\Debug;
@@ -30,6 +32,11 @@ abstract class ReadModule extends Module implements IReadModule
     protected $dataSource;
 
     /**
+     * @var callable
+     */
+    protected $labelCallback;
+
+    /**
      * @var IObjectAction[]
      */
     private $objectActions = [];
@@ -47,6 +54,8 @@ abstract class ReadModule extends Module implements IReadModule
                 $this->objectActions[$name] = $action;
             }
         }
+
+        $this->labelCallback = $this->definition->getLabelObjectCallback();
     }
 
 
@@ -87,6 +96,23 @@ abstract class ReadModule extends Module implements IReadModule
     final public function getObjectSource()
     {
         return $this->dataSource;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    final public function getLabelFor(ITypedObject $object)
+    {
+        $objectType = $this->dataSource->getObjectType();
+
+        if (!($object instanceof $objectType)) {
+            throw TypeMismatchException::format(
+                    'Invalid object supplied to %s: expecting type %s, %s given',
+                    __METHOD__, $objectType, Debug::getType($object)
+            );
+        }
+
+        return call_user_func($this->labelCallback, $object);
     }
 
     /**

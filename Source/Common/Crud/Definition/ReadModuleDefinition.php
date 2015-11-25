@@ -8,15 +8,11 @@ use Iddigital\Cms\Core\Common\Crud\Action\Object\IObjectAction;
 use Iddigital\Cms\Core\Common\Crud\Definition\Action\ObjectActionDefiner;
 use Iddigital\Cms\Core\Common\Crud\Definition\Form\CrudFormDefinition;
 use Iddigital\Cms\Core\Common\Crud\Definition\Table\SummaryTableDefinition;
-use Iddigital\Cms\Core\Common\Crud\Form\FormWithBinding;
 use Iddigital\Cms\Core\Common\Crud\IReadModule;
 use Iddigital\Cms\Core\Common\Crud\Table\ISummaryTable;
 use Iddigital\Cms\Core\Common\Crud\UnsupportedActionException;
 use Iddigital\Cms\Core\Exception\InvalidArgumentException;
 use Iddigital\Cms\Core\Exception\InvalidOperationException;
-use Iddigital\Cms\Core\Form\Builder\Form;
-use Iddigital\Cms\Core\Form\IForm;
-use Iddigital\Cms\Core\Model\IEntity;
 use Iddigital\Cms\Core\Model\IEntitySet;
 use Iddigital\Cms\Core\Model\Object\FinalizedClassDefinition;
 use Iddigital\Cms\Core\Model\Object\TypedObject;
@@ -137,6 +133,20 @@ class ReadModuleDefinition extends ModuleDefinition
      * });
      * </code>
      *
+     * If the form mode is not supported {@see CrudFormDefinition::isEditForm},
+     * {@see CrudFormDefinition::isCreateForm}, {@see CrudFormDefinition::isDetailsForm},
+     * throw an exception of type {@see UnsupportedActionException}.
+     *
+     * Example:
+     * <code>
+     * $module->crudForm(function (CrudFormDefinition $form) {
+     *      if ($form->isEditForm()) {
+     *          throw new UnsupportedActionException();
+     *      }
+     *      // ...
+     * });
+     * </code>
+     *
      * @param callable $formDefinitionCallback
      *
      * @return void
@@ -184,18 +194,19 @@ class ReadModuleDefinition extends ModuleDefinition
      *      $table->mapProperty('firstName')->toComponent('name.first_name');
      *      $table->mapProperty('lastName')->toComponent('name.last_name');
      *      $table->mapProperty('age')->to(Field::name('age')->label('Age')->int());
+     *      $table->mapProperty('ageSortIndex')->to(Field::name('age_sort_index')->label('Age')->int());
      *
      *      $table->view('default', 'Default')
      *              ->asDefault()
      *              ->loadAll()
-     *              ->orderByAsc(['product_name']);
+     *              ->orderByAsc(['name.first_name', 'name.last_name']);
      *
      *      $table->view('category', 'Category')
      *              ->loadAll()
-     *              ->groupBy('category.id')
-     *              ->orderByAsc(['category.name', 'category_sort_order'])
+     *              ->groupBy('age')
+     *              ->orderByAsc(['age', 'age_sort_index'])
      *              ->withReorder(function (Person $entity, $newOrderIndex) {
-     *                  $this->repository->reorderPersonInCategory($entity, $newOrderIndex);
+     *                  $this->repository->reorderPersonInAgeGroup($entity, $newOrderIndex);
      *              });
      * });
      * </code>
@@ -246,11 +257,17 @@ class ReadModuleDefinition extends ModuleDefinition
         parent::verifyCanBeFinalized();
 
         if (!$this->labelObjectCallback) {
-            throw InvalidOperationException::format('Cannot finalize module definition: label objects callback has not been defined');
+            throw InvalidOperationException::format(
+                    'Cannot finalize definition for module \'%s\': label objects callback has not been defined',
+                    $this->name
+            );
         }
 
         if (!$this->summaryTable) {
-            throw InvalidOperationException::format('Cannot finalize module definition: summary table has not been defined');
+            throw InvalidOperationException::format(
+                    'Cannot finalize definition for module \'%s\': summary table has not been defined',
+                    $this->name
+            );
         }
     }
 }
