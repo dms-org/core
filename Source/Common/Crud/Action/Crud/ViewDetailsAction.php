@@ -110,7 +110,7 @@ class ViewDetailsAction extends SelfHandlingObjectAction
      * @param object      $object
      * @param object|null $data
      *
-     * @return object|null
+     * @return IForm
      */
     protected function runHandler($object, $data = null)
     {
