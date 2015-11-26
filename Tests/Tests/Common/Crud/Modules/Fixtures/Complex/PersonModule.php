@@ -38,12 +38,23 @@ class PersonModule extends CrudModule
                             ->bindToProperty(Person::FIRST_NAME),
                     $form->field(Field::name('last_name')->label('Last Name')->string()->required())
                             ->bindToProperty(Person::LAST_NAME),
-                    $form->field(Field::name('age')->label('Age')->int()->required())
-                            ->bindToProperty(Person::AGE),
             ]);
 
+            $form->dependentOnObject(function (CrudFormDefinition $form, Person $object = null) {
+                $form->section('Age', [
+                        $form->field(
+                                Field::name('age')
+                                        ->label('Age')
+                                        ->int()
+                                        ->required()
+                                        ->min($object instanceof Adult ? Person::COMING_OF_AGE : 0)
+                                        ->lessThan($object instanceof Child ? Person::COMING_OF_AGE : PHP_INT_MAX)
+                        )->bindToProperty(Person::AGE),
+                ]);
+            }, ['age']);
+
             $form->dependentOn(['age'], function (CrudFormDefinition $form, array $input, Person $object = null) {
-                if ($input['age'] < Person::COMING_OF_AGE) {
+                if ($input['age'] < Person::COMING_OF_AGE || $object instanceof Child) {
                     $form->mapToSubClass(Child::class);
                     $form->section('Kid Details', [
                             $form->field(
@@ -64,15 +75,6 @@ class PersonModule extends CrudModule
                             $form->field(Field::name('profession')->label('Profession')->string()->required())
                                     ->bindToProperty(Adult::PROFESSION),
                     ]);
-                }
-            });
-
-            // TODO: remove duplication
-            $form->createObjectType()->fromCallback(function (array $input) {
-                if ($input['age'] < Person::COMING_OF_AGE) {
-                    return Child::class;
-                } else {
-                    return Adult::class;
                 }
             });
         });

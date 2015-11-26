@@ -94,6 +94,11 @@ class CrudFormDefinition
     protected $onSaveCallbacks = [];
 
     /**
+     * @var string|null
+     */
+    protected $currentEditedObjectType;
+
+    /**
      * CrudFormDefinition constructor.
      *
      * @param IEntitySet               $dataSource
@@ -120,11 +125,19 @@ class CrudFormDefinition
             $this->stages[] = new IndependentFormStage(ObjectForm::build($dataSource));
         }
 
-        if (!$class->isAbstract()) {
-            $this->createObjectCallback = function () use ($class) {
-                return $class->newCleanInstance();
-            };
-        }
+        // Throw exception inside callback as the class definition may have
+        // changed via self::mapToSubClass() or this is an edit form and the
+        // class will be updated automatically.
+        $this->createObjectCallback = function () {
+            if ($this->class->isAbstract()) {
+                throw InvalidOperationException::format(
+                        'Cannot instantiate object of type %s in crud form mode \'%s\': the class is abstract, did you forget to specify a subclass via %s?',
+                        $this->class->getClassName(), $this->mode, '->createObjectType() or ->mapToSubClass()'
+                );
+            }
+
+            return $this->class->newCleanInstance();
+        };
     }
 
     /**
@@ -246,11 +259,12 @@ class CrudFormDefinition
      *
      * @param string[] $previousFieldNames
      * @param callable $dependentStageDefineCallback
+     * @param string[] $fieldNamesDefinedInStage
      *
      * @return void
      * @throws InvalidOperationException
      */
-    public function dependentOn(array $previousFieldNames, callable $dependentStageDefineCallback)
+    public function dependentOn(array $previousFieldNames, callable $dependentStageDefineCallback, array $fieldNamesDefinedInStage = [])
     {
         if ($this->isDependent) {
             throw InvalidOperationException::format(
@@ -273,6 +287,12 @@ class CrudFormDefinition
                     ? $previousData[IObjectAction::OBJECT_FIELD_NAME]
                     : null;
 
+            if ($objectInstance) {
+                /** @var TypedObject $objectInstance */
+                $this->class                   = $objectInstance::definition();
+                $this->currentEditedObjectType = get_class($objectInstance);
+            }
+
             $dependentStageDefineCallback(
                     $this,
                     $previousData,
@@ -284,7 +304,7 @@ class CrudFormDefinition
             $this->exitStage();
 
             return $form;
-        }, [], array_unique($previousFieldNames));
+        }, $fieldNamesDefinedInStage, array_unique($previousFieldNames));
     }
 
     /**
@@ -292,12 +312,16 @@ class CrudFormDefinition
      *
      * The supplied callback will be passed the object instance as the second parameter.
      *
-     * NOTE: This will ignore the fields defined in this section if it is a create form.
+     * NOTE: This will ignore the fields defined in this section if it is a create form and
+     * the object field is a required parameter, if you want to support this in create forms,
+     * default the object parameter to null and handle this case.
      *
      * Example:
      * <code>
-     * $form->dependentOnObject(function (CrudFormDefinition $form, Person $person) {
-     *      if ($person->isAdmin()) {
+     * $form->dependentOnObject(function (CrudFormDefinition $form, Person $person = null) {
+     *      if ($person === null) { // Equivalent to $form->isCreateForm()
+     *          // ...
+     *      } elseif ($person->isAdmin()) {
      *          // ...
      *      } else {
      *          // ...
@@ -306,19 +330,26 @@ class CrudFormDefinition
      * </code>
      *
      * @param callable $dependentStageDefineCallback
+     * @param string[] $fieldNamesDefinedInStage
      *
      * @return void
      * @throws InvalidOperationException
      */
-    public function dependentOnObject(callable $dependentStageDefineCallback)
+    public function dependentOnObject(callable $dependentStageDefineCallback, array $fieldNamesDefinedInStage = [])
     {
+        $requiredParameters = Reflection::fromCallable($dependentStageDefineCallback)->getNumberOfRequiredParameters();
+
         if ($this->isCreateForm()) {
+            if ($requiredParameters === 1) {
+                $dependentStageDefineCallback($this);
+            }
+
             return;
         }
 
         $this->dependentOn([], function (CrudFormDefinition $definition, array $previousData, $object) use ($dependentStageDefineCallback) {
             $dependentStageDefineCallback($definition, $object);
-        });
+        }, $fieldNamesDefinedInStage);
     }
 
     protected function finishCurrentStage()
@@ -355,6 +386,15 @@ class CrudFormDefinition
      */
     public function mapToSubClass($classType)
     {
+        if ($this->isEditForm() && $this->currentEditedObjectType) {
+            if ($this->currentEditedObjectType !== $classType) {
+                throw InvalidArgumentException::format(
+                        'Invalid class type supplied to %s: cannot map to subclass %s, as the current object being edited is of type %s',
+                        __METHOD__, $classType, $this->currentEditedObjectType
+                );
+            }
+        }
+
         if (!is_a($classType, $this->class->getClassName(), true)) {
             throw InvalidArgumentException::format(
                     'Invalid class type supplied to %s: expecting subclass of %s, %s given',

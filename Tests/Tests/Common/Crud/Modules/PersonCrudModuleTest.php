@@ -7,6 +7,7 @@ use Iddigital\Cms\Core\Auth\Permission;
 use Iddigital\Cms\Core\Common\Crud\Action\Object\IObjectAction;
 use Iddigital\Cms\Core\Common\Crud\ICrudModule;
 use Iddigital\Cms\Core\Common\Crud\IReadModule;
+use Iddigital\Cms\Core\Form\InvalidFormSubmissionException;
 use Iddigital\Cms\Core\Module\IParameterizedAction;
 use Iddigital\Cms\Core\Persistence\ArrayRepository;
 use Iddigital\Cms\Core\Persistence\IRepository;
@@ -79,6 +80,26 @@ class PersonCrudModuleTest extends CrudModuleTest
                         [$id => 2, 'type' => 'child', 'name' => ['first' => 'Samantha', 'last' => 'Williams'], 'age' => 12],
                         [$id => 3, 'type' => 'child', 'name' => ['first' => 'Casey', 'last' => 'Low'], 'age' => 15],
                         //
+                        [$id => 4, 'type' => 'adult', 'name' => ['first' => 'Joe', 'last' => 'Quarter'], 'age' => 25],
+                        [$id => 5, 'type' => 'adult', 'name' => ['first' => 'Kate', 'last' => 'Costa'], 'age' => 28],
+                ],
+        ], $data);
+    }
+
+    public function testSummaryTableDataInGroups()
+    {
+        $data = $this->module->getSummaryTable()->loadView('grouped-by-type');
+        $id   = IReadModule::SUMMARY_TABLE_ID_COLUMN;
+
+        $this->assertDataTableEquals([
+                [
+                        'group_data' => ['type' => 'child'],
+                        [$id => 1, 'type' => 'child', 'name' => ['first' => 'Jack', 'last' => 'Baz'], 'age' => 15],
+                        [$id => 2, 'type' => 'child', 'name' => ['first' => 'Samantha', 'last' => 'Williams'], 'age' => 12],
+                        [$id => 3, 'type' => 'child', 'name' => ['first' => 'Casey', 'last' => 'Low'], 'age' => 15],
+                ],
+                [
+                        'group_data' => ['type' => 'adult'],
                         [$id => 4, 'type' => 'adult', 'name' => ['first' => 'Joe', 'last' => 'Quarter'], 'age' => 25],
                         [$id => 5, 'type' => 'adult', 'name' => ['first' => 'Kate', 'last' => 'Costa'], 'age' => 28],
                 ],
@@ -180,6 +201,32 @@ class PersonCrudModuleTest extends CrudModuleTest
                 [Adult::ID => 5, Adult::FIRST_NAME => 'Kate', Adult::LAST_NAME => 'Costa', Adult::AGE => 29, Adult::PROFESSION => 'Nurse'],
                 $this->dataSource->get(5)->toArray()
         );
+    }
+
+    public function testEditingChildToBeAnAdultsAgeThrowsInvalidForm()
+    {
+        $this->setExpectedException(InvalidFormSubmissionException::class);
+
+        $this->module->getEditAction()->run([
+                IObjectAction::OBJECT_FIELD_NAME => 1,
+                'first_name'                     => 'Jack',
+                'last_name'                      => 'Baz',
+                'age'                            => '30',
+                'favourite_colour'               => 'blue',
+        ]);
+    }
+
+    public function testEditingAdultToBeChildThrowsInvalidForm()
+    {
+        $this->setExpectedException(InvalidFormSubmissionException::class);
+
+        $this->module->getEditAction()->run([
+                IObjectAction::OBJECT_FIELD_NAME => 5,
+                'first_name'                     => 'Kate',
+                'last_name'                      => 'Costa',
+                'age'                            => '14',
+                'profession'                     => 'Lawyer',
+        ]);
     }
 
     public function testRemoveAction()
