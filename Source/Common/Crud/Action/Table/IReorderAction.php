@@ -13,7 +13,7 @@ use Iddigital\Cms\Core\Form\InvalidFormSubmissionException;
  */
 interface IReorderAction extends IObjectAction
 {
-    const INDEX_FIELD_NAME = 'index';
+    const NEW_INDEX_FIELD_NAME = 'index';
 
     /**
      * Runs the action on the supplied object.

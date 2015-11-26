@@ -43,6 +43,14 @@ class ArrayRepository implements IRepository
     }
 
     /**
+     * @return EntityCollection
+     */
+    final public function getCollection()
+    {
+        return $this->collection;
+    }
+
+    /**
      * {@inheritDoc}
      */
     public function getElementType()

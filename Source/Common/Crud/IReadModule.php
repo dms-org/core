@@ -35,11 +35,11 @@ interface IReadModule extends IModule
     public function getObjectType();
 
     /**
-     * Gets the underlying object source.
+     * Gets the underlying object data source.
      *
      * @return IObjectSet
      */
-    public function getObjectSource();
+    public function getDataSource();
 
     /**
      * Gets a label string for the supplied typed object.

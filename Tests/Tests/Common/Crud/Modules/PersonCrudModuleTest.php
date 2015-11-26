@@ -5,6 +5,7 @@ namespace Iddigital\Cms\Core\Tests\Common\Crud\Modules;
 use Iddigital\Cms\Core\Auth\IPermission;
 use Iddigital\Cms\Core\Auth\Permission;
 use Iddigital\Cms\Core\Common\Crud\Action\Object\IObjectAction;
+use Iddigital\Cms\Core\Common\Crud\Action\Table\IReorderAction;
 use Iddigital\Cms\Core\Common\Crud\ICrudModule;
 use Iddigital\Cms\Core\Common\Crud\IReadModule;
 use Iddigital\Cms\Core\Form\InvalidFormSubmissionException;
@@ -23,6 +24,11 @@ use Iddigital\Cms\Core\Tests\Module\Mock\MockAuthSystem;
  */
 class PersonCrudModuleTest extends CrudModuleTest
 {
+    /**
+     * @var ArrayRepository
+     */
+    protected $dataSource;
+
     /**
      * @return string
      */
@@ -104,6 +110,46 @@ class PersonCrudModuleTest extends CrudModuleTest
                         [$id => 5, 'type' => 'adult', 'name' => ['first' => 'Kate', 'last' => 'Costa'], 'age' => 28],
                 ],
         ], $data);
+    }
+
+    public function testReorderAction()
+    {
+        $this->assertTrue($this->module->getSummaryTable()->hasReorderAction('default'));
+        $this->assertTrue($this->module->hasObjectAction('summary-table.default.reorder'));
+
+        /** @var IReorderAction $reorderAction */
+        $reorderAction = $this->module->getSummaryTable()->getReorderAction('default');
+
+        $this->assertInstanceOf(IReorderAction::class, $reorderAction);
+        $this->assertEquals([
+                Permission::named(IReadModule::VIEW_PERMISSION),
+                Permission::named(ICrudModule::EDIT_PERMISSION),
+        ], array_values($reorderAction->getRequiredPermissions()));
+
+        $reorderAction->run([
+                IObjectAction::OBJECT_FIELD_NAME     => 1,
+                IReorderAction::NEW_INDEX_FIELD_NAME => 2,
+        ]);
+
+        $this->assertSame(
+                [2, 1, 3, 4, 5],
+                $this->dataSource->getCollection()
+                        ->select(function (Person $person) {
+                            return $person->getId();
+                        })
+                        ->asArray()
+        );
+
+        $reorderAction->runReorder($this->dataSource->get(1), 4);
+
+        $this->assertSame(
+                [2, 3, 4, 1, 5],
+                $this->dataSource->getCollection()
+                        ->select(function (Person $person) {
+                            return $person->getId();
+                        })
+                        ->asArray()
+        );
     }
 
     public function testCreateChild()

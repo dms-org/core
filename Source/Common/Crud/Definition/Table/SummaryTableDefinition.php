@@ -11,6 +11,7 @@ use Iddigital\Cms\Core\Common\Crud\IReadModule;
 use Iddigital\Cms\Core\Common\Crud\Table\ISummaryTable;
 use Iddigital\Cms\Core\Common\Crud\Table\SummaryTable;
 use Iddigital\Cms\Core\Exception\InvalidOperationException;
+use Iddigital\Cms\Core\Model\IEntitySet;
 use Iddigital\Cms\Core\Model\IObjectSet;
 use Iddigital\Cms\Core\Model\Object\FinalizedClassDefinition;
 use Iddigital\Cms\Core\Module\Definition\Table\TableViewDefiner;
@@ -177,6 +178,12 @@ class SummaryTableDefinition
 
     private function definerReorderAction($viewName, callable $reorderCallback, array $permissions = [], $actionName = null)
     {
+        if (!($this->dataSource instanceof IEntitySet)) {
+            throw InvalidOperationException::format(
+                    'Cannot define reorder action on non entity set'
+            );
+        }
+
         $reorderActionName = $actionName ?: IReadModule::SUMMARY_TABLE . '.' . $viewName . '.reorder';
 
         $viewPermission = Permission::named(IReadModule::VIEW_PERMISSION);
@@ -191,6 +198,7 @@ class SummaryTableDefinition
         }
 
         $reorderAction = new CallbackReorderAction(
+                $this->dataSource,
                 $reorderActionName,
                 $this->moduleDefinition->getAuthSystem(),
                 $permissions,

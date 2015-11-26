@@ -29,9 +29,9 @@ abstract class ObjectActionFormMapping extends StagedFormDtoMapping implements I
     {
         $objectFormFirstStage = $stagedForm->getFirstStage()->loadForm();
 
-        if (!$objectFormFirstStage->hasField(IObjectAction::OBJECT_FIELD_NAME)) {
+        if ($objectFormFirstStage->getFieldNames() !== [IObjectAction::OBJECT_FIELD_NAME]) {
             throw InvalidArgumentException::format(
-                    'Invalid object form: must contain form field \'%s\', (%s) given',
+                    'Invalid object form: must contain only the \'%s\' form field , (%s) given',
                     IObjectAction::OBJECT_FIELD_NAME, Debug::formatValues($objectFormFirstStage->getFieldNames())
             );
         }

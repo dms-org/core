@@ -18,7 +18,6 @@ use Iddigital\Cms\Core\Tests\Common\Crud\Modules\Fixtures\Complex\Domain\Person;
  */
 class PersonModule extends CrudModule
 {
-
     /**
      * Defines the structure of this module.
      *
@@ -98,7 +97,16 @@ class PersonModule extends CrudModule
 
             $table->view('default', 'Default')
                     ->loadAll()
-                    ->asDefault();
+                    ->asDefault()
+                    ->withReorder(function (Person $person, $newIndex) {
+                        $elements  = $this->dataSource->getAll();
+                        $personKey = array_search($person, $elements);
+                        unset($elements[$personKey]);
+                        array_splice($elements, $newIndex - 1, 0, [$person]);
+
+                        $this->dataSource->clear();
+                        $this->dataSource->saveAll($elements);
+                    });
 
             $table->view('grouped-by-type', 'In Age Groups')
                     ->loadAll()

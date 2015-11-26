@@ -93,7 +93,7 @@ abstract class ReadModule extends Module implements IReadModule
     /**
      * @inheritDoc
      */
-    final public function getObjectSource()
+    final public function getDataSource()
     {
         return $this->dataSource;
     }
