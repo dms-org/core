@@ -4,6 +4,8 @@ namespace Iddigital\Cms\Core\Persistence\Db\Criteria\MemberMapping;
 
 use Iddigital\Cms\Core\Persistence\Db\Mapping\IEntityMapper;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\IRelation;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\IToManyRelation;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\IToOneRelation;
 
 /**
  * The relation mapping base class.
@@ -31,7 +33,7 @@ abstract class RelationMapping extends MemberMapping
     }
 
     /**
-     * @return IRelation
+     * @return IToOneRelation|IToManyRelation
      */
     public function getRelation()
     {

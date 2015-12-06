@@ -5,6 +5,7 @@ namespace Iddigital\Cms\Core\Persistence\Db\Criteria\MemberMapping;
 use Iddigital\Cms\Core\Exception\InvalidArgumentException;
 use Iddigital\Cms\Core\Exception\InvalidOperationException;
 use Iddigital\Cms\Core\Model\Criteria\Condition\ConditionOperator;
+use Iddigital\Cms\Core\Persistence\Db\Criteria\MemberExpressionMapper;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\IEntityMapper;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\IRelation;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\ISeparateTableRelation;
@@ -31,7 +32,7 @@ abstract class MemberMapping
     /**
      * @var IRelation[]
      */
-    protected $relationsToSubSelect;
+    protected $relationsToSubSelect = [];
 
     /**
      * MemberMapping constructor.
@@ -43,7 +44,12 @@ abstract class MemberMapping
     {
         InvalidArgumentException::verifyAllInstanceOf(__METHOD__, 'nestedRelations', $relationsToSubSelect, IRelation::class);
         $this->rootEntityMapper     = $rootEntityMapper;
-        $this->relationsToSubSelect = $relationsToSubSelect;
+
+        foreach ($relationsToSubSelect as $relation) {
+            if ($relation->getIdString() !== MemberExpressionMapper::SELF_RELATION_ID) {
+                $this->relationsToSubSelect[] = $relation;
+            }
+        }
     }
 
     /**
@@ -204,6 +210,7 @@ abstract class MemberMapping
      */
     public function getSeperateTableRelations()
     {
+        /** @var ISeparateTableRelation[] $separateTableRelations */
         $separateTableRelations = [];
 
         foreach ($this->relationsToSubSelect as $nestedRelation) {

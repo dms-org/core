@@ -15,8 +15,10 @@ use Iddigital\Cms\Core\Model\Criteria\Member\ObjectSetFlattenMethodExpression;
 use Iddigital\Cms\Core\Model\Criteria\Member\ObjectSetMaximumMethodExpression;
 use Iddigital\Cms\Core\Model\Criteria\Member\ObjectSetMinimumMethodExpression;
 use Iddigital\Cms\Core\Model\Criteria\Member\ObjectSetSumMethodExpression;
+use Iddigital\Cms\Core\Model\Criteria\Member\SelfExpression;
 use Iddigital\Cms\Core\Model\Criteria\MemberExpressionParser;
 use Iddigital\Cms\Core\Model\Criteria\NestedMember;
+use Iddigital\Cms\Core\Model\Type\Builder\Type;
 use Iddigital\Cms\Core\Tests\Model\Criteria\Fixtures\ParentEntity;
 use Iddigital\Cms\Core\Tests\Model\Criteria\Fixtures\RelatedEntity;
 
@@ -76,6 +78,20 @@ class MemberExpressionParserTest extends CmsTestCase
         $related = RelatedEntity::definition();
 
         return [
+            // Self
+            [
+                    'this',
+                    [
+                            new SelfExpression(Type::object($parent->getClassName()))
+                    ]
+            ],
+            [
+                    // Should remove useless self expression
+                    'this.this.this',
+                    [
+                            new SelfExpression(Type::object($parent->getClassName()))
+                    ]
+            ],
             // Properties
             [
                     'data',
@@ -85,6 +101,14 @@ class MemberExpressionParserTest extends CmsTestCase
             ],
             [
                     'relatedEntity.prop',
+                    [
+                            new MemberPropertyExpression($parent->getProperty('relatedEntity'), false),
+                            new MemberPropertyExpression($related->getProperty('prop'), true),
+                    ]
+            ],
+            [
+                    // Should remove useless self expression
+                    'relatedEntity.this.prop',
                     [
                             new MemberPropertyExpression($parent->getProperty('relatedEntity'), false),
                             new MemberPropertyExpression($related->getProperty('prop'), true),
@@ -174,7 +198,7 @@ class MemberExpressionParserTest extends CmsTestCase
 
         $results = $parser->parse($this->getTestRootDefinition(), $string);
 
-        $this->assertSame(str_replace(', ', ',', $string), $results->asString());
+        $this->assertSame(strtr($string, [', ' => ',', '.this' => '']), $results->asString());
         $this->assertEquals($expectedMemberParts, $results->getParts());
     }
 

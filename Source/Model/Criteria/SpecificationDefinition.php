@@ -9,10 +9,12 @@ use Iddigital\Cms\Core\Model\Criteria\Condition\AndCondition;
 use Iddigital\Cms\Core\Model\Criteria\Condition\Condition;
 use Iddigital\Cms\Core\Model\Criteria\Condition\ConditionOperator;
 use Iddigital\Cms\Core\Model\Criteria\Condition\InstanceOfCondition;
+use Iddigital\Cms\Core\Model\Criteria\Condition\MemberCondition;
 use Iddigital\Cms\Core\Model\Criteria\Condition\NotCondition;
 use Iddigital\Cms\Core\Model\Criteria\Condition\OrCondition;
-use Iddigital\Cms\Core\Model\Criteria\Condition\MemberCondition;
+use Iddigital\Cms\Core\Model\Criteria\Condition\SelfCondition;
 use Iddigital\Cms\Core\Model\ISpecification;
+use Iddigital\Cms\Core\Model\Type\Builder\Type;
 
 /**
  * The typed object specification definition class.
@@ -21,6 +23,8 @@ use Iddigital\Cms\Core\Model\ISpecification;
  */
 class SpecificationDefinition extends ObjectCriteriaBase
 {
+    const THIS_EXPRESSION = 'this';
+
     /**
      * @var bool
      */
@@ -51,6 +55,8 @@ class SpecificationDefinition extends ObjectCriteriaBase
      * ->where('some.friends.average(income)', '<=', 50000)
      * //
      * ->where('load(relatedId).name', '=', 'Joe')
+     * //
+     * ->where('this', '=', $someObject)
      * </code>
      *
      * @param string $memberExpression
@@ -90,7 +96,7 @@ class SpecificationDefinition extends ObjectCriteriaBase
      */
     final public function whereAny(callable $conditionCallback)
     {
-        $definition = new SpecificationDefinition($this->class);
+        $definition           = new SpecificationDefinition($this->class);
         $definition->isOrMode = true;
         $conditionCallback($definition);
         $this->append($definition->getCondition());

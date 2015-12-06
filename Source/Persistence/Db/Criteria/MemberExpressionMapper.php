@@ -14,6 +14,7 @@ use Iddigital\Cms\Core\Model\Criteria\Member\ObjectSetFlattenMethodExpression;
 use Iddigital\Cms\Core\Model\Criteria\Member\ObjectSetMaximumMethodExpression;
 use Iddigital\Cms\Core\Model\Criteria\Member\ObjectSetMinimumMethodExpression;
 use Iddigital\Cms\Core\Model\Criteria\Member\ObjectSetSumMethodExpression;
+use Iddigital\Cms\Core\Model\Criteria\Member\SelfExpression;
 use Iddigital\Cms\Core\Model\Criteria\NestedMember;
 use Iddigital\Cms\Core\Model\Object\FinalizedPropertyDefinition;
 use Iddigital\Cms\Core\Persistence\Db\Criteria\MemberMapping\ColumnMapping;
@@ -30,7 +31,10 @@ use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Embedded\EmbeddedObjectRe
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\EntityRelation;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\IRelation;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\IToManyRelation;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Mode\NonIdentifyingRelationMode;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Reference\RelationObjectReference;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Reference\ToOneRelationObjectReference;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\ToOneRelation;
 use Iddigital\Cms\Core\Persistence\Db\Query;
 use Iddigital\Cms\Core\Persistence\Db\Query\Expression\SimpleAggregate;
 use Iddigital\Cms\Core\Util\Debug;
@@ -42,6 +46,8 @@ use Iddigital\Cms\Core\Util\Debug;
  */
 class MemberExpressionMapper
 {
+    const SELF_RELATION_ID = 'self-relation';
+
     /**
      * @var IEntityMapper
      */
@@ -118,6 +124,10 @@ class MemberExpressionMapper
     protected function mapFinalMember(IObjectMapper $mapper, array $nestedRelations, IMemberExpression $lastPart)
     {
         switch (true) {
+            case $lastPart instanceof SelfExpression:
+                /** @var IEntityMapper $mapper */
+                return $this->mapFinalSelfRelation($mapper);
+
             case $lastPart instanceof MemberPropertyExpression:
                 return $this->mapFinalPropertyToMapping($nestedRelations, $lastPart->getProperty());
 
@@ -270,7 +280,7 @@ class MemberExpressionMapper
     /**
      * @param IObjectMapper       $mapper
      * @param IMemberExpression[] $memberExpressions
-     * @param IObjectMapper|null                $finalMapper
+     * @param IObjectMapper|null  $finalMapper
      *
      * @return IRelation[]
      * @throws BaseException
@@ -302,13 +312,14 @@ class MemberExpressionMapper
         }
 
         $finalMapper = $mapper;
+
         return $nestedRelations;
     }
 
     /**
      * @param IObjectMapper                       $mapper
      * @param LoadIdFromEntitySetMethodExpression $part
-     * @param IObjectMapper|null                                $finalMapper
+     * @param IObjectMapper|null                  $finalMapper
      *
      * @return IRelation[]
      * @throws InvalidArgumentException
@@ -348,5 +359,23 @@ class MemberExpressionMapper
         }
 
         return $relation;
+    }
+
+    /**
+     * @param IEntityMapper $mapper
+     *
+     * @return MemberMapping
+     */
+    protected function mapFinalSelfRelation(IEntityMapper $mapper)
+    {
+        return $this->mapFinalRelationToMapping(
+                [],
+                new ToOneRelation(
+                        self::SELF_RELATION_ID,
+                        new ToOneRelationObjectReference($mapper),
+                        $mapper->getDefinition()->getTable()->getPrimaryKeyColumnName(),
+                        new NonIdentifyingRelationMode()
+                )
+        );
     }
 }

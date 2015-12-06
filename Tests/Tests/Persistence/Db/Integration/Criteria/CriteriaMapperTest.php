@@ -105,6 +105,31 @@ class CriteriaMapperTest extends CriteriaMapperTestBase
         );
     }
 
+    public function testWhereSelfEqualsUsesIdComparison()
+    {
+        $criteria = $this->mapper->newCriteria()
+                ->where('this', '=', new TypesEntity(3));
+
+        $this->assertMappedSelect($criteria,
+                $this->selectAllColumns()
+                        ->where(Expr::equal($this->column('id'), Expr::param($this->columnType('id'), 3)))
+        );
+    }
+
+    public function testWhereSelfInUsesIdComparison()
+    {
+        $criteria = $this->mapper->newCriteria()
+                ->whereIn('this', [new TypesEntity(3), new TypesEntity(4)]);
+
+        $this->assertMappedSelect($criteria,
+                $this->selectAllColumns()
+                        ->where(Expr::or_(
+                                Expr::equal($this->column('id'), Expr::param($this->columnType('id'), 3)),
+                                Expr::equal($this->column('id'), Expr::param($this->columnType('id'), 4))
+                        ))
+        );
+    }
+
     public function testInstanceOfSameEntityDoesNothing()
     {
         $criteria = $this->mapper->newCriteria()

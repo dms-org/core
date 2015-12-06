@@ -12,6 +12,7 @@ use Iddigital\Cms\Core\Model\Criteria\Member\ObjectSetFlattenMethodExpression;
 use Iddigital\Cms\Core\Model\Criteria\Member\ObjectSetMaximumMethodExpression;
 use Iddigital\Cms\Core\Model\Criteria\Member\ObjectSetMinimumMethodExpression;
 use Iddigital\Cms\Core\Model\Criteria\Member\ObjectSetSumMethodExpression;
+use Iddigital\Cms\Core\Model\Criteria\Member\SelfExpression;
 use Iddigital\Cms\Core\Model\IEntity;
 use Iddigital\Cms\Core\Model\Object\FinalizedClassDefinition;
 use Iddigital\Cms\Core\Model\Object\TypedObject;
@@ -202,12 +203,22 @@ class MemberExpressionParser implements IMemberExpressionParser
             $expressions[] = $expression;
         }
 
-        return new NestedMember($expressions);
+        foreach ($expressions as $key => $expression) {
+            if ($expression instanceof SelfExpression && count ($expressions) > 1) {
+                unset($expressions[$key]);
+            }
+        }
+
+        return new NestedMember(array_values($expressions));
     }
 
     private function parsePropertyExpression(IType $sourceType, $propertyName)
     {
         $definition = $this->assertSourceIsTypedObject('get property', $propertyName, $sourceType);
+
+        if ($propertyName === SelfExpression::IDENTIFIER) {
+            return new SelfExpression($sourceType);
+        }
 
         return new MemberPropertyExpression(
                 $definition->getProperty($propertyName),

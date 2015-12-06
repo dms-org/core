@@ -878,4 +878,45 @@ class BlogTest extends DbIntegrationTest
                 )
         );
     }
+
+    public function testLoadThisLoadsObjectInstances()
+    {
+        $this->db->setData([
+                'users'    => [
+                        $this->dummyUserDbData(1),
+                        $this->dummyUserDbData(2),
+                ]
+        ]);
+
+        $this->assertEquals(
+                [
+                        ['id' => 1, 'this' => $this->dummyUserWithId(1)],
+                        ['id' => 2, 'this' => $this->dummyUserWithId(2)],
+                ],
+                $this->repo->loadMatching(
+                        $this->repo->loadCriteria()
+                                ->loadAll(['id', 'this'])
+                )
+        );
+    }
+
+    public function testFilterByThisExpression()
+    {
+        $this->db->setData([
+                'users'    => [
+                        $this->dummyUserDbData(1),
+                        $this->dummyUserDbData(2),
+                ]
+        ]);
+
+        $this->assertEquals(
+                [
+                        $this->dummyUserWithId(2),
+                ],
+                $this->repo->matching(
+                        $this->repo->criteria()
+                                ->where('this', '=' , $this->dummyUserWithId(2))
+                )
+        );
+    }
 }

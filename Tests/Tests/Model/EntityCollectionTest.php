@@ -34,7 +34,7 @@ class EntityCollectionTest extends IEntitySetTest
     public function testInvalidEntityType()
     {
         $this->setExpectedException(InvalidArgumentException::class);
-        new  EntityCollection(\stdClass::class);
+        new EntityCollection(\stdClass::class);
     }
 
     public function testCollectionUpdatesWhenItIsMutated()
@@ -231,5 +231,23 @@ class EntityCollectionTest extends IEntitySetTest
                 ['max-num' => 15, 'flat' => [1, 2, 3, 4, 5, 6, 7, 8, 9], 'flat-count' => 9],
                 ['max-num' => 20, 'flat' => [1, 2, 4, 5], 'flat-count' => 4],
         ], $data);
+    }
+
+    public function testSelfCondition()
+    {
+        $data = $this->collection->matching(
+                $this->collection->criteria()->where('this', '=', $this->entityMock(1))
+        );
+
+        $this->assertEquals([$this->entityMock(1)], $data);
+    }
+
+    public function testSelfConditionWithWhereIn()
+    {
+        $data = $this->collection->matching(
+                $this->collection->criteria()->whereIn('this', [$this->entityMock(1), $this->entityMock(10)])
+        );
+
+        $this->assertEquals([$this->entityMock(1), $this->entityMock(10)], $data);
     }
 }

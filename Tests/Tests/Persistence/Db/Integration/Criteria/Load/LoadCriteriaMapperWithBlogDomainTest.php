@@ -5,12 +5,16 @@ namespace Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Criteria\Load;
 use Iddigital\Cms\Core\Persistence\Db\Connection\IConnection;
 use Iddigital\Cms\Core\Persistence\Db\Criteria\CriteriaMapper;
 use Iddigital\Cms\Core\Persistence\Db\Criteria\MappedLoadQuery;
+use Iddigital\Cms\Core\Persistence\Db\Criteria\MemberExpressionMapper;
 use Iddigital\Cms\Core\Persistence\Db\Criteria\MemberMapping\ToManyRelationMapping;
 use Iddigital\Cms\Core\Persistence\Db\Criteria\MemberMapping\ToOneEmbeddedObjectMapping;
 use Iddigital\Cms\Core\Persistence\Db\Criteria\MemberMapping\ToOneEntityRelationMapping;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\ReadModel\Relation\ToManyMemberRelation;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\ReadModel\Relation\ToOneMemberRelation;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Mode\NonIdentifyingRelationMode;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Reference\ToOneRelationObjectReference;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\ToManyRelation;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\ToOneRelation;
 use Iddigital\Cms\Core\Persistence\Db\Query\Clause\Join;
 use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Expr;
 use Iddigital\Cms\Core\Persistence\Db\Query\Select;
@@ -41,6 +45,27 @@ class LoadCriteriaMapperWithBlogDomainTest extends LoadCriteriaMapperTestBase
                         ->addAliasedRawColumn('firstName', 'first_name')
                         ->addAliasedRawColumn('lastName', 'last_name'),
                 ['email' => 'email', 'firstName' => 'firstName', 'lastName' => 'lastName'], []
+        ));
+    }
+
+    public function testLoadThisLoadsObjectInstanceViaRelation()
+    {
+        $criteria = $this->loadMapper->newCriteria()
+                ->loadAll(['this']);
+
+        $objectMapper = $this->mapper->getMapper();
+        $this->assertMappedLoadQuery($criteria, new MappedLoadQuery(
+                $this->select()->addRawColumn('id'),
+                [], [
+                        'this' => new ToOneMemberRelation(
+                                new ToOneEntityRelationMapping($objectMapper, [], new ToOneRelation(
+                                        MemberExpressionMapper::SELF_RELATION_ID,
+                                        new ToOneRelationObjectReference($objectMapper),
+                                        $objectMapper->getPrimaryTable()->getPrimaryKeyColumnName(),
+                                        new NonIdentifyingRelationMode()
+                                ))
+                        )
+                ]
         ));
     }
 

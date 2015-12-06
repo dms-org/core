@@ -11,7 +11,7 @@ use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Reference\IToOneRelationR
 use Iddigital\Cms\Core\Persistence\Db\PersistenceContext;
 
 /**
- * The to-one member relation base class.
+ * The to-one member relation class.
  *
  * @author Elliot Levin <elliotlevin@hotmail.com>
  */

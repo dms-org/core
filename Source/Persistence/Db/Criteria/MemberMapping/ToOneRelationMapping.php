@@ -29,4 +29,12 @@ abstract class ToOneRelationMapping extends RelationMapping
     {
         parent::__construct($rootEntityMapper, $relationsToSubSelect, $relation);
     }
+
+    /**
+     * @return IToOneRelation
+     */
+    public function getRelation()
+    {
+        return $this->relation;
+    }
 }
