@@ -8,6 +8,8 @@ use Iddigital\Cms\Core\Util\Debug;
 /**
  * The type asserts trait.
  *
+ * @method static verify($condition, $message, $_ = null)
+ *
  * @author Elliot Levin <elliotlevin@hotmail.com>
  */
 trait TypeAsserts
