@@ -20,17 +20,17 @@ class RemoveActionDefiner extends ObjectActionDefiner
     /**
      * @var IEntitySet
      */
-    private $dataSource;
+    protected $dataSource;
 
     /**
      * @var callable[]
      */
-    private $beforeRemoveCallbacks = [];
+    protected $beforeRemoveCallbacks = [];
 
     /**
      * @var callable[]
      */
-    private $afterRemoveCallbacks = [];
+    protected $afterRemoveCallbacks = [];
 
     /**
      * @inheritDoc

@@ -6,6 +6,7 @@ use Iddigital\Cms\Core\Common\Crud\Action\Object\IObjectAction;
 use Iddigital\Cms\Core\Common\Crud\Action\Object\IObjectActionFormMapping;
 use Iddigital\Cms\Core\Common\Crud\Action\Object\ObjectActionParameter;
 use Iddigital\Cms\Core\Exception\InvalidArgumentException;
+use Iddigital\Cms\Core\Form\IForm;
 use Iddigital\Cms\Core\Form\IStagedForm;
 use Iddigital\Cms\Core\Module\Mapping\StagedFormDtoMapping;
 use Iddigital\Cms\Core\Util\Debug;
@@ -38,6 +39,14 @@ abstract class ObjectActionFormMapping extends StagedFormDtoMapping implements I
 
         parent::__construct($stagedForm, ObjectActionParameter::class);
         $this->dataDtoType = $dataDtoType;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getObjectForm()
+    {
+        return $this->stagedForm->getFirstForm();
     }
 
     /**

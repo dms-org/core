@@ -220,6 +220,22 @@ abstract class FieldBuilderBase
     /**
      * Validates the input according to the supplied callback.
      *
+     * Example with message id:
+     * <code>
+     * ->assert(function ($input) {
+     *      return strlen($input) < 2;
+     * }, 'some.message-id')
+     * </code>
+     *
+     * Example with custom message ids:
+     * <code>
+     * ->assert(function ($input, array &$messages) {
+     *      if (strlen($input) >= 2) {
+     *          $messages[] = 'some.message-id';
+     *      }
+     * })
+     * </code>
+     *
      * @param callable    $validation
      * @param string|null $messageId
      * @param array       $parameters
@@ -233,6 +249,13 @@ abstract class FieldBuilderBase
 
     /**
      * Maps the inputted value according to the supplied callback.
+     *
+     * Example:
+     * <code>
+     * ->map(function ($input) {
+     *      return $input . '-abc';
+     * })
+     * </code>
      *
      * @param callable $mapper
      * @param callable $reverseMapper

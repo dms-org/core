@@ -4,13 +4,9 @@ namespace Iddigital\Cms\Core\Tests\Common\Crud\Modules;
 
 use Iddigital\Cms\Core\Auth\IPermission;
 use Iddigital\Cms\Core\Auth\Permission;
-use Iddigital\Cms\Core\Auth\UserForbiddenException;
-use Iddigital\Cms\Core\Common\Crud\Action\Crud\ViewDetailsAction;
 use Iddigital\Cms\Core\Common\Crud\Action\Object\IObjectAction;
 use Iddigital\Cms\Core\Common\Crud\ICrudModule;
 use Iddigital\Cms\Core\Common\Crud\IReadModule;
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Form\IForm;
 use Iddigital\Cms\Core\Form\InvalidFormSubmissionException;
 use Iddigital\Cms\Core\Module\IParameterizedAction;
 use Iddigital\Cms\Core\Persistence\ArrayRepository;
@@ -114,8 +110,8 @@ class SimpleCrudModuleTest extends CrudModuleTest
         $this->assertInstanceOf(IObjectAction::class, $action);
 
         $action->run([
-            IObjectAction::OBJECT_FIELD_NAME => 2,
-            'data' => 'edited!!'
+                IObjectAction::OBJECT_FIELD_NAME => 2,
+                'data'                           => 'edited!!'
         ]);
 
         $this->assertSame(['id' => 2, 'data' => 'edited!!'], $this->dataSource->get(2)->toArray());
@@ -130,7 +126,7 @@ class SimpleCrudModuleTest extends CrudModuleTest
             $invalidId = 5;
             $action->run([
                     IObjectAction::OBJECT_FIELD_NAME => $invalidId,
-                    'data' => 'aa'
+                    'data'                           => 'aa'
             ]);
         }, InvalidFormSubmissionException::class);
     }
@@ -155,5 +151,22 @@ class SimpleCrudModuleTest extends CrudModuleTest
         $this->assertThrows(function () use ($action) {
             $action->run([IObjectAction::OBJECT_FIELD_NAME => 2]);
         }, InvalidFormSubmissionException::class);
+    }
+
+    public function testCustomObjectAction()
+    {
+        $this->assertSame(true, $this->module->hasObjectAction('duplicate-data'));
+
+        $action = $this->module->getObjectAction('duplicate-data');
+
+        $this->assertSame('duplicate-data', $action->getName());
+        $this->assertSame(SimpleEntity::class, $action->getObjectType());
+        $this->assertSame(null, $action->getReturnTypeClass());
+        $this->assertEquals([Permission::named(ICrudModule::EDIT_PERMISSION)], array_values($action->getRequiredPermissions()));
+        $this->assertEquals($this->dataSource->getAll(), $action->getSupportedObjects($this->dataSource->getAll()));
+
+        $action->run([IObjectAction::OBJECT_FIELD_NAME => 1]);
+        $this->assertSame('abcabc', $this->dataSource->get(1)->data);
+        $this->assertSame('123', $this->dataSource->get(2)->data);
     }
 }

@@ -28,12 +28,12 @@ class ViewDetailsAction extends SelfHandlingObjectAction
     /**
      * @var IEntitySet
      */
-    private $dataSource;
+    protected $dataSource;
 
     /**
      * @var FinalizedCrudFormDefinition
      */
-    private $form;
+    protected $form;
 
     /**
      * @inheritDoc

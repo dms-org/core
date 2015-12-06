@@ -16,15 +16,18 @@ use Iddigital\Cms\Core\Model\IEntitySet;
  */
 class ObjectForm
 {
+    const INVALID_OBJECT_MESSAGE = 'validation.invalid-object';
+
     /**
      * @param IEntitySet $dataSource
+     * @param callable|null $objectValidationCallback
      *
      * @return IForm
      */
-    public static function build(IEntitySet $dataSource)
+    public static function build(IEntitySet $dataSource, callable $objectValidationCallback = null)
     {
         return Form::create()->section('Object', [
-                self::objectField(Field::create(), $dataSource)
+                self::objectField(Field::create(), $dataSource, $objectValidationCallback)
         ])->build();
     }
 
@@ -33,15 +36,25 @@ class ObjectForm
      *
      * @param FieldNameBuilder $fieldBuilder
      * @param IEntitySet       $dataSource
+     * @param callable|null    $objectValidationCallback
      *
      * @return Field
      */
-    final public static function objectField(FieldNameBuilder $fieldBuilder, IEntitySet $dataSource)
-    {
-        return $fieldBuilder
+    final public static function objectField(
+            FieldNameBuilder $fieldBuilder,
+            IEntitySet $dataSource,
+            callable $objectValidationCallback = null
+    ) {
+        $field = $fieldBuilder
                 ->name(IObjectAction::OBJECT_FIELD_NAME)
                 ->label('Object')
                 ->entityFrom($dataSource)
                 ->required();
+
+        if ($objectValidationCallback) {
+            $field->assert($objectValidationCallback, self::INVALID_OBJECT_MESSAGE);
+        }
+
+        return $field;
     }
 }

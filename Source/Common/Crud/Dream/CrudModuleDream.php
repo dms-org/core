@@ -8,6 +8,7 @@ use Iddigital\Cms\Core\Common\Crud\Definition\CrudModuleDefinition;
 use Iddigital\Cms\Core\Common\Crud\Definition\Form\CrudFormDefinition;
 use Iddigital\Cms\Core\Common\Crud\Definition\Table\SummaryTableDefinition;
 use Iddigital\Cms\Core\Form\Field\Builder\Field;
+use Iddigital\Cms\Core\Persistence\IRepository;
 use Iddigital\Cms\Core\Table\Builder\Column;
 
 /**
@@ -16,7 +17,7 @@ use Iddigital\Cms\Core\Table\Builder\Column;
 class CrudModuleDream extends CrudModule
 {
     /**
-     * @var IPeopleRepository
+     * @var IPeopleRepository|IRepository
      */
     protected $repository;
 
@@ -43,6 +44,9 @@ class CrudModuleDream extends CrudModule
 
         $module->objectAction('clone')
                 ->authorize(self::EDIT_PERMISSION)
+                ->where(function (Person $person) {
+                    return $person->isCloneable();
+                })
                 ->handler(function (Person $person) {
                     $person->setId(null);
                     $this->repository->save($person);
@@ -101,10 +105,10 @@ class CrudModuleDream extends CrudModule
         });
 
         $module->removeAction()
-            ->afterRemove(function (Person $person) {
-                $this->deletePhotosOf($person);
-            })
-            ->deleteFromRepository();
+                ->afterRemove(function (Person $person) {
+                    $this->deletePhotosOf($person);
+                })
+                ->deleteFromRepository();
 
         $module->summaryTable(function (SummaryTableDefinition $table) {
             $table->column(Column::name('name')->label('Name')->components([

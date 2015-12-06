@@ -4,6 +4,8 @@ namespace Iddigital\Cms\Core\Common\Crud\Action\Object;
 
 use Iddigital\Cms\Core\Auth\IAuthSystem;
 use Iddigital\Cms\Core\Exception\TypeMismatchException;
+use Iddigital\Cms\Core\Form\Field\Processor\FieldValidator;
+use Iddigital\Cms\Core\Model\Type\Builder\Type;
 use Iddigital\Cms\Core\Module\Action\ParameterizedAction;
 
 /**
@@ -13,6 +15,16 @@ use Iddigital\Cms\Core\Module\Action\ParameterizedAction;
  */
 class ObjectAction extends ParameterizedAction implements IObjectAction
 {
+    /**
+     * @var IObjectActionHandler
+     */
+    protected $handler;
+
+    /**
+     * @var IObjectActionFormMapping
+     */
+    protected $formDtoMapping;
+
     /**
      * @inheritDoc
      */
@@ -31,6 +43,69 @@ class ObjectAction extends ParameterizedAction implements IObjectAction
         }
 
         parent::__construct($name, $auth, $requiredPermissions, $formDtoMapping, $handler);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getObjectForm()
+    {
+        return $this->formDtoMapping->getObjectForm();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getObjectType()
+    {
+        return $this->handler->getObjectType();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getSupportedObjects(array $objects)
+    {
+        TypeMismatchException::verifyAllInstanceOf(__METHOD__, 'objects', $objects, $this->handler->getObjectType());
+        $objectType = Type::object($this->handler->getObjectType());
+
+        $processors = $this->formDtoMapping
+                ->getObjectForm()
+                ->getField(IObjectAction::OBJECT_FIELD_NAME)
+                ->getProcessors();
+
+        /** @var FieldValidator[] $objectValidators */
+        $objectValidators = [];
+
+        foreach ($processors as $processor) {
+            if ($processor instanceof FieldValidator && $processor->getInputType()->isCompatibleWith($objectType)) {
+                $objectValidators[] = $processor;
+            }
+        }
+
+        $validObjects = [];
+        foreach ($objects as $key => $object) {
+            $messages = [];
+
+            foreach ($objectValidators as $validator) {
+                $validator->process($object, $messages);
+            }
+
+            if (empty($messages)) {
+                $validObjects[$key] = $object;
+            }
+        }
+
+
+        return $validObjects;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function isSupported($object)
+    {
+        return $this->getSupportedObjects([$object]) === [$object];
     }
 
     /**

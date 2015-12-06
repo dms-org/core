@@ -24,12 +24,12 @@ class EditAction extends SelfHandlingObjectAction
     /**
      * @var IRepository
      */
-    private $dataSource;
+    protected $dataSource;
 
     /**
      * @var FinalizedCrudFormDefinition
      */
-    private $form;
+    protected $form;
 
     /**
      * @inheritDoc

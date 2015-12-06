@@ -68,6 +68,14 @@ abstract class BaseType implements IType
     }
 
     /**
+     * @inheritDoc
+     */
+    final public function isCompatibleWith(IType $type)
+    {
+        return $this->isSubsetOf($type);
+    }
+
+    /**
      * @param IType $type
      *
      * @return bool

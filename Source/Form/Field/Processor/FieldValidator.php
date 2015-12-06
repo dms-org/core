@@ -36,6 +36,14 @@ abstract class FieldValidator implements IFieldProcessor
     }
 
     /**
+     * @return IType
+     */
+    public function getInputType()
+    {
+        return $this->inputType;
+    }
+
+    /**
      * {@inheritDoc}
      */
     public function getProcessedType()

@@ -6,7 +6,6 @@ use Iddigital\Cms\Core\File\IFile;
 use Iddigital\Cms\Core\File\IImage;
 use Iddigital\Cms\Core\File\IUploadedFile;
 use Iddigital\Cms\Core\Model\Type\Builder\Type;
-use Iddigital\Cms\Core\Model\Type\IType;
 
 /**
  * The file mover processor processor.

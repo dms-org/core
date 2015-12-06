@@ -25,6 +25,13 @@ class SimpleCrudModule extends CrudModule
 
         $module->labelObjects()->fromProperty('data');
 
+        $module->objectAction('duplicate-data')
+                ->authorize(self::EDIT_PERMISSION)
+                ->handler(function (SimpleEntity $entity) {
+                    $entity->data .= $entity->data;
+                    $this->dataSource->save($entity);
+                });
+
         $module->crudForm(function (CrudFormDefinition $form) {
             $form->section('Details', [
                     $form->field(Field::name('data')->label('Data')->string()->required())

@@ -32,12 +32,14 @@ use Iddigital\Cms\Core\Module\IStagedFormDtoMapping;
 class ObjectActionDefiner extends ActionDefiner
 {
     /**
-     * The first stage of the form wherein the object
-     * from the data source is loaded.
-     *
-     * @var IForm
+     * @var IEntitySet
      */
-    protected $objectFormStage;
+    protected $dataSource;
+
+    /**
+     * @var callable[]
+     */
+    protected $objectValidationCallbacks = [];
 
     /**
      * @var string|null
@@ -56,7 +58,55 @@ class ObjectActionDefiner extends ActionDefiner
     {
         parent::__construct($authSystem, $name, $callback);
 
-        $this->objectFormStage = ObjectForm::build($dataSource);
+        $this->dataSource = $dataSource;
+    }
+
+    /**
+     * Defines a callback to validate whether an object is supported in this object action.
+     *
+     * This MUST be called before the ->form(...) method.
+     *
+     * Example:
+     * <code>
+     * ->where(function (Person $person) {
+     *      return $person->getAge() >= 60;
+     * });
+     * </code>
+     *
+     * @param callable $objectValidationCallback
+     *
+     * @return static
+     */
+    public function where(callable $objectValidationCallback)
+    {
+        $this->objectValidationCallbacks[] = $objectValidationCallback;
+        return $this;
+    }
+
+    /**
+     * Gets the first stage of the form wherein the object
+     * from the data source is loaded.
+     *
+     * @return IForm
+     */
+    protected function getObjectFormStage()
+    {
+        $objectValidationCallbacks = $this->objectValidationCallbacks;
+
+        if ($objectValidationCallbacks) {
+            /** @var callable $validationCallback */
+            $validationCallback = array_shift($objectValidationCallbacks);
+
+            foreach ($objectValidationCallbacks as $otherCallback) {
+                $validationCallback = function ($object) use ($validationCallback, $otherCallback) {
+                    return $validationCallback($object) && $otherCallback($object);
+                };
+            }
+        } else {
+            $validationCallback = null;
+        }
+
+        return ObjectForm::build($this->dataSource, $validationCallback);
     }
 
 
@@ -107,7 +157,7 @@ class ObjectActionDefiner extends ActionDefiner
     public function form($form, $submissionToDtoMapping = null)
     {
         if (is_callable($form)) {
-            $stagedForm = StagedForm::begin($this->objectFormStage);
+            $stagedForm = StagedForm::begin($this->getObjectFormStage());
             $form($stagedForm);
             $stagedForm = $stagedForm->build();
 
@@ -126,13 +176,12 @@ class ObjectActionDefiner extends ActionDefiner
                 /** @var IStagedFormDtoMapping $innerMapping */
                 $innerMapping = $innerCallback($handlerParameterType);
 
-                return new WrapperObjectActionFormMapping($this->objectFormStage, $innerMapping);
+                return new WrapperObjectActionFormMapping($this->getObjectFormStage(), $innerMapping);
             };
         }
 
         return $this;
     }
-
 
     /**
      * Defines the action handler. This will be executed when the action is run.
@@ -164,7 +213,7 @@ class ObjectActionDefiner extends ActionDefiner
         }
 
         if (!$this->formDtoMappingCallback) {
-            $formMapping = new WrapperObjectActionFormMapping($this->objectFormStage);
+            $formMapping = new WrapperObjectActionFormMapping($this->getObjectFormStage());
         } else {
             $formMapping = call_user_func($this->formDtoMappingCallback, $handler->getParameterTypeClass());
         }

@@ -38,6 +38,23 @@ class SelfHandlingObjectActionTest extends ActionTest
         $this->assertSame(ArrayDataObject::class, $handler->getDataDtoType());
     }
 
+    public function testSupportedObjects()
+    {
+        $action = new TestSelfHandlingObjectAction($this->mockAuth());
+
+        $this->assertSame([], $action->getSupportedObjects([]));
+        $this->assertEquals(TestEntity::getTestCollection()->asArray(), $action->getSupportedObjects(TestEntity::getTestCollection()->asArray()));
+        $this->assertEquals(true, $action->isSupported(TestEntity::withId(2)));
+
+        foreach (TestEntity::getTestCollection() as $entity) {
+            $this->assertSame(true, $action->isSupported($entity));
+        }
+
+        $this->assertThrows(function () use ($action) {
+            $action->getSupportedObjects([new \stdClass()]);
+        }, TypeMismatchException::class);
+    }
+
     public function testRun()
     {
         $action = new TestSelfHandlingObjectAction(

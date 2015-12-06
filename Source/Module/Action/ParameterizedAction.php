@@ -20,12 +20,12 @@ class ParameterizedAction extends Action implements IParameterizedAction
     /**
      * @var IStagedForm
      */
-    private $stagedForm;
+    protected $stagedForm;
 
     /**
      * @var IStagedFormDtoMapping
      */
-    private $formDtoMapping;
+    protected $formDtoMapping;
 
     /**
      * {@inheritDoc}

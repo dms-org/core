@@ -6,7 +6,10 @@ use Iddigital\Cms\Core\Common\Crud\CrudModule;
 use Iddigital\Cms\Core\Common\Crud\Definition\CrudModuleDefinition;
 use Iddigital\Cms\Core\Common\Crud\Definition\Form\CrudFormDefinition;
 use Iddigital\Cms\Core\Common\Crud\Definition\Table\SummaryTableDefinition;
+use Iddigital\Cms\Core\Common\Crud\Form\ObjectForm;
+use Iddigital\Cms\Core\Form\Builder\Form;
 use Iddigital\Cms\Core\Form\Field\Builder\Field;
+use Iddigital\Cms\Core\Model\Object\ArrayDataObject;
 use Iddigital\Cms\Core\Table\Builder\Column;
 use Iddigital\Cms\Core\Tests\Common\Crud\Modules\Fixtures\Complex\Domain\Adult;
 use Iddigital\Cms\Core\Tests\Common\Crud\Modules\Fixtures\Complex\Domain\Child;
@@ -30,6 +33,28 @@ class PersonModule extends CrudModule
         $module->labelObjects()->fromCallback(function (Person $person) {
             return $person->getFullName();
         });
+
+        $module->objectAction('swap-names')
+            ->authorize(self::EDIT_PERMISSION)
+            ->where(function (Person $person) {
+                return $person instanceof Adult;
+            })
+            ->form(Form::create()->section('Details', [
+                Field::name('swap_with')->label('Swap With')->entityFrom($this->dataSource)->required()
+            ]))
+            ->handler(function (Person $person, ArrayDataObject $input) {
+                /** @var Person $otherPerson */
+                $otherPerson = $input['swap_with'];
+
+                $tempFirstName = $otherPerson->firstName;
+                $tempLastName = $otherPerson->lastName;
+                $otherPerson->firstName = $person->firstName;
+                $otherPerson->lastName = $person->lastName;
+                $person->firstName = $tempFirstName;
+                $person->lastName = $tempLastName;
+
+                $this->dataSource->saveAll([$person, $otherPerson]);
+            });
 
         $module->crudForm(function (CrudFormDefinition $form) {
             $form->section('Person Details', [

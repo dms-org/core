@@ -289,4 +289,39 @@ class PersonCrudModuleTest extends CrudModuleTest
         $action->run([IObjectAction::OBJECT_FIELD_NAME => 5]);
         $this->assertCount(3, $this->dataSource);
     }
+
+    public function testCustomObjectActionWithFilter()
+    {
+        $this->assertSame(true, $this->module->hasObjectAction('swap-names'));
+
+        $action = $this->module->getObjectAction('swap-names');
+
+        $this->assertSame('swap-names', $action->getName());
+        $this->assertSame(Person::class, $action->getObjectType());
+        $this->assertSame(null, $action->getReturnTypeClass());
+        $this->assertEquals([Permission::named(ICrudModule::EDIT_PERMISSION)], array_values($action->getRequiredPermissions()));
+        $this->assertEquals(
+                $this->dataSource->matching(
+                        $this->dataSource->criteria()->whereInstanceOf(Adult::class)
+                ),
+                array_values($action->getSupportedObjects($this->dataSource->getAll()))
+        );
+
+        $action->run([
+                IObjectAction::OBJECT_FIELD_NAME => 4,
+                'swap_with'                      => 5,
+        ]);
+
+        $this->assertSame('Kate Costa', $this->dataSource->get(4)->getFullName());
+        $this->assertSame('Joe Quarter', $this->dataSource->get(5)->getFullName());
+
+
+        $this->assertThrows(function () use ($action) {
+
+            $action->run([
+                    IObjectAction::OBJECT_FIELD_NAME => 1,
+                    'swap_with'                      => 5,
+            ]);
+        }, InvalidFormSubmissionException::class);
+    }
 }
