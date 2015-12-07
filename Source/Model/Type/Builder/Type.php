@@ -191,19 +191,20 @@ class Type
      *
      * @see ITypedCollection
      *
-     * @param IType $elementType
+     * @param IType  $elementType
+     * @param string $collectionClass
      *
      * @return CollectionType
      */
-    public static function collectionOf(IType $elementType)
+    public static function collectionOf(IType $elementType, $collectionClass = ITypedCollection::class)
     {
         $elementTypeString = $elementType->asTypeString();
 
-        if (!isset(self::$collections[$elementTypeString])) {
-            self::$collections[$elementTypeString] = new CollectionType($elementType);
+        if (!isset(self::$collections[$collectionClass][$elementTypeString])) {
+            self::$collections[$collectionClass][$elementTypeString] = new CollectionType($elementType, $collectionClass);
         }
 
-        return self::$collections[$elementTypeString];
+        return self::$collections[$collectionClass][$elementTypeString];
     }
 
     /**
@@ -240,7 +241,7 @@ class Type
                 return self::arrayOf($types ? UnionType::create($types) : self::mixed());
             case 'object':
                 if ($default instanceof ITypedCollection) {
-                    return self::collectionOf($default->getElementType());
+                    return self::collectionOf($default->getElementType(), get_class($default));
                 } else {
                     return self::object(get_class($default));
                 }

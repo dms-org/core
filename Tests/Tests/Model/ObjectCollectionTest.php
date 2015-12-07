@@ -5,6 +5,7 @@ namespace Iddigital\Cms\Core\Tests\Model;
 use Iddigital\Cms\Common\Testing\CmsTestCase;
 use Iddigital\Cms\Core\Exception\TypeMismatchException;
 use Iddigital\Cms\Core\Model\ObjectCollection;
+use Iddigital\Cms\Core\Model\Type\Builder\Type;
 use Iddigital\Cms\Core\Tests\Form\Field\Processor\Validator\Fixtures\TestEntity;
 use Iddigital\Cms\Core\Tests\Model\Object\Fixtures\BlankTypedObject;
 
@@ -21,6 +22,11 @@ class ObjectCollectionTest extends CmsTestCase
     public function setUp()
     {
         $this->collection = BlankTypedObject::collection();
+    }
+
+    public function testCollectionType()
+    {
+        $this->assertEquals(Type::collectionOf(BlankTypedObject::type(), ObjectCollection::class), BlankTypedObject::collectionType());
     }
 
     public function testContains()

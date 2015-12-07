@@ -5,6 +5,8 @@ namespace Iddigital\Cms\Core\Model\Object;
 use Iddigital\Cms\Core\Exception;
 use Iddigital\Cms\Core\Model\EntityCollection;
 use Iddigital\Cms\Core\Model\IEntity;
+use Iddigital\Cms\Core\Model\Type\Builder\Type;
+use Iddigital\Cms\Core\Model\Type\IType;
 
 /**
  * The entity object base class.
@@ -40,6 +42,16 @@ abstract class Entity extends TypedObject implements IEntity
     final public static function collection(array $entities = [])
     {
         return new EntityCollection(get_called_class(), $entities);
+    }
+
+    /**
+     * Returns the type of the collection for this typed object.
+     *
+     * @return IType
+     */
+    final public static function collectionType()
+    {
+        return Type::collectionOf(Type::object(get_called_class()), EntityCollection::class);
     }
 
     /**

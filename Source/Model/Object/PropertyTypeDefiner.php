@@ -3,6 +3,7 @@
 namespace Iddigital\Cms\Core\Model\Object;
 
 use Iddigital\Cms\Core\Exception;
+use Iddigital\Cms\Core\Model\ITypedCollection;
 use Iddigital\Cms\Core\Model\Type\Builder\Type;
 use Iddigital\Cms\Core\Model\Type\IType;
 
@@ -133,6 +134,7 @@ class PropertyTypeDefiner
 
     /**
      * @param string|null $class
+     *
      * @return void
      */
     public function asObject($class = null)
@@ -142,6 +144,7 @@ class PropertyTypeDefiner
 
     /**
      * @param IType $elementType
+     *
      * @return void
      */
     public function asArrayOf(IType $elementType)
@@ -150,12 +153,14 @@ class PropertyTypeDefiner
     }
 
     /**
-     * @param IType $elementType
+     * @param IType  $elementType
+     * @param string $collectionClass
+     *
      * @return void
      */
-    public function asCollectionOf(IType $elementType)
+    public function asCollectionOf(IType $elementType, $collectionClass = ITypedCollection::class)
     {
-        $this->defineType(Type::collectionOf($elementType));
+        $this->defineType(Type::collectionOf($elementType, $collectionClass));
     }
 
     /**

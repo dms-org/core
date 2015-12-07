@@ -5,6 +5,7 @@ namespace Iddigital\Cms\Core\Tests\Model;
 use Iddigital\Cms\Common\Testing\CmsTestCase;
 use Iddigital\Cms\Core\Model\Criteria\Condition\ConditionOperator;
 use Iddigital\Cms\Core\Model\Criteria\Condition\ConditionOperatorType;
+use Iddigital\Cms\Core\Model\EntityCollection;
 use Iddigital\Cms\Core\Model\IEntity;
 use Iddigital\Cms\Core\Model\ITypedCollection;
 use Iddigital\Cms\Core\Model\Type\ArrayType;
@@ -18,6 +19,7 @@ use Iddigital\Cms\Core\Model\Type\NullType;
 use Iddigital\Cms\Core\Model\Type\ObjectType;
 use Iddigital\Cms\Core\Model\Type\ScalarType;
 use Iddigital\Cms\Core\Model\Type\UnionType;
+use Iddigital\Cms\Core\Model\TypedCollection;
 use Iddigital\Cms\Core\Tests\Helpers\Comparators\IgnorePropertyComparator;
 use SebastianBergmann\Comparator\Factory;
 
@@ -103,6 +105,12 @@ class TypeTest extends CmsTestCase
 
         $this->assertSame($collectionOfInts, $collection->intersect($collectionOfInts));
         $this->assertSame(null, $collectionOfStrings->intersect($collectionOfInts));
+
+
+        $concreteCollection  = new CollectionType(new MixedType(), TypedCollection::class);
+        $interfaceCollection = new CollectionType(new MixedType(), ITypedCollection::class);
+
+        $this->assertSame($concreteCollection, $concreteCollection->intersect($interfaceCollection));
     }
 
     public function testIntersectWithUnions()
@@ -410,6 +418,7 @@ class TypeTest extends CmsTestCase
     {
         $type = new CollectionType(new ObjectType(IEntity::class));
 
+        $this->assertSame(ITypedCollection::class, $type->getCollectionClass());
         $this->assertSame(ITypedCollection::class . '<' . IEntity::class . '>', $type->asTypeString());
 
         $collectionMock = $this->getMockForAbstractClass(ITypedCollection::class);
@@ -417,6 +426,28 @@ class TypeTest extends CmsTestCase
 
         $collectionMock2 = $this->getMockForAbstractClass(ITypedCollection::class);
         $collectionMock2->method('getElementType')->willReturn(new ObjectType(\stdClass::class));
+
+        $this->assertTrue($type->isOfType($collectionMock));
+
+        $this->assertFalse($type->isOfType($collectionMock2));
+        $this->assertFalse($type->isOfType([]));
+        $this->assertFalse($type->isOfType(123));
+        $this->assertFalse($type->isOfType(null));
+        $this->assertFalse($type->isOfType(new \stdClass()));
+        $this->assertEquals($this->commonConditionTypes($type), $type->getConditionOperatorTypes());
+    }
+
+    public function testCollectionTypeWithCustomCollectionClass()
+    {
+        $type = new CollectionType(new ObjectType(IEntity::class), EntityCollection::class);
+
+        $this->assertSame(EntityCollection::class, $type->getCollectionClass());
+        $this->assertSame(EntityCollection::class . '<' . IEntity::class . '>', $type->asTypeString());
+
+        $collectionMock = new EntityCollection(IEntity::class);
+
+        $collectionMock2 = $this->getMockForAbstractClass(ITypedCollection::class);
+        $collectionMock2->method('getElementType')->willReturn(new ObjectType(IEntity::class));
 
         $this->assertTrue($type->isOfType($collectionMock));
 

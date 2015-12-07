@@ -4,6 +4,8 @@ namespace Iddigital\Cms\Core\Model\Object;
 
 use Iddigital\Cms\Core\Exception;
 use Iddigital\Cms\Core\Model\IValueObject;
+use Iddigital\Cms\Core\Model\Type\Builder\Type;
+use Iddigital\Cms\Core\Model\Type\IType;
 use Iddigital\Cms\Core\Model\ValueObjectCollection;
 
 /**
@@ -24,5 +26,15 @@ abstract class ValueObject extends TypedObject implements IValueObject
     final public static function collection(array $objects = [])
     {
         return new ValueObjectCollection(get_called_class(), $objects);
+    }
+
+    /**
+     * Returns the type of the collection for this typed object.
+     *
+     * @return IType
+     */
+    final public static function collectionType()
+    {
+        return Type::collectionOf(Type::object(get_called_class()), ValueObjectCollection::class);
     }
 }

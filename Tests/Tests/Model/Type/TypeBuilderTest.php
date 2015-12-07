@@ -3,6 +3,9 @@
 namespace Iddigital\Cms\Core\Tests\Model;
 
 use Iddigital\Cms\Common\Testing\CmsTestCase;
+use Iddigital\Cms\Core\Exception\InvalidArgumentException;
+use Iddigital\Cms\Core\Model\ITypedCollection;
+use Iddigital\Cms\Core\Model\ObjectCollection;
 use Iddigital\Cms\Core\Model\Type\ArrayType;
 use Iddigital\Cms\Core\Model\Type\Builder\Type;
 use Iddigital\Cms\Core\Model\Type\CollectionType;
@@ -12,6 +15,7 @@ use Iddigital\Cms\Core\Model\Type\ObjectType;
 use Iddigital\Cms\Core\Model\Type\ScalarType;
 use Iddigital\Cms\Core\Model\Type\UnionType;
 use Iddigital\Cms\Core\Model\TypedCollection;
+use Iddigital\Cms\Core\Tests\Model\Fixtures\TestEntity;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>
@@ -93,8 +97,26 @@ class TypeBuilderTest extends CmsTestCase
         /** @var CollectionType $type */
         $type = Type::collectionOf(Type::object(\DateTime::class));
 
+        $this->assertSame(ITypedCollection::class, $type->getCollectionClass());
         $this->assertInstanceOf(CollectionType::class, $type);
         $this->assertEquals(Type::object(\DateTime::class), $type->getElementType());
+    }
+
+    public function testCollectionOfTypeWithCustomCollectionClass()
+    {
+        /** @var CollectionType $type */
+        $type = Type::collectionOf(Type::object(\DateTime::class), ObjectCollection::class);
+
+        $this->assertSame(ObjectCollection::class, $type->getCollectionClass());
+        $this->assertInstanceOf(CollectionType::class, $type);
+        $this->assertEquals(Type::object(\DateTime::class), $type->getElementType());
+    }
+
+    public function testInvalidCollectionClass()
+    {
+        $this->setExpectedException(InvalidArgumentException::class);
+
+        Type::collectionOf(Type::mixed(), \stdClass::class);
     }
 
     public function testArray()
@@ -127,7 +149,8 @@ class TypeBuilderTest extends CmsTestCase
         $this->assertEquals(Type::arrayOf(Type::int()), Type::from([1, 2, 3]));
         $this->assertEquals(Type::arrayOf(Type::number()), Type::from([1, 2.0, 3]));
         $this->assertEquals(Type::object(\stdClass::class), Type::from(new \stdClass()));
-        $this->assertEquals(Type::collectionOf(Type::int()), Type::from(new TypedCollection(Type::int())));
+        $this->assertEquals(Type::collectionOf(Type::int(), TypedCollection::class), Type::from(new TypedCollection(Type::int())));
+        $this->assertEquals(Type::collectionOf(TestEntity::type(), ObjectCollection::class), Type::from(new ObjectCollection(TestEntity::class)));
 
         // Will ignore array element type if too many elements
         $this->assertEquals(Type::arrayOf(Type::mixed()), Type::from(range(1, 100)));

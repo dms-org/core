@@ -7,6 +7,7 @@ use Iddigital\Cms\Core\Model\Criteria\Criteria;
 use Iddigital\Cms\Core\Model\ITypedObject;
 use Iddigital\Cms\Core\Model\ObjectCollection;
 use Iddigital\Cms\Core\Model\Type\Builder\Type;
+use Iddigital\Cms\Core\Model\Type\IType;
 use Iddigital\Cms\Core\Model\Type\ObjectType;
 
 /**
@@ -110,6 +111,16 @@ abstract class TypedObject implements ITypedObject, \Serializable
     public static function collection(array $objects = [])
     {
         return new ObjectCollection(get_called_class(), $objects);
+    }
+
+    /**
+     * Returns the type of the collection for this typed object.
+     *
+     * @return IType
+     */
+    public static function collectionType()
+    {
+        return Type::collectionOf(Type::object(get_called_class()), ObjectCollection::class);
     }
 
     /**
