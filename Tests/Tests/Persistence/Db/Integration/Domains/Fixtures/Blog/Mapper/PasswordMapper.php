@@ -7,7 +7,6 @@ use Iddigital\Cms\Core\Persistence\Db\Mapping\ValueObjectMapper;
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\HashedPassword;
 
 /**
- *
  * @author Elliot Levin <elliotlevin@hotmail.com>
  */
 class PasswordMapper extends ValueObjectMapper

@@ -11,8 +11,6 @@ use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\Po
 use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\User;
 
 /**
- * The typed object mapper base class.
- *
  * @author Elliot Levin <elliotlevin@hotmail.com>
  */
 class UserMapper extends EntityMapper

@@ -12,9 +12,7 @@ use Iddigital\Cms\Core\Model\Criteria\Condition\InstanceOfCondition;
 use Iddigital\Cms\Core\Model\Criteria\Condition\MemberCondition;
 use Iddigital\Cms\Core\Model\Criteria\Condition\NotCondition;
 use Iddigital\Cms\Core\Model\Criteria\Condition\OrCondition;
-use Iddigital\Cms\Core\Model\Criteria\Condition\SelfCondition;
 use Iddigital\Cms\Core\Model\ISpecification;
-use Iddigital\Cms\Core\Model\Type\Builder\Type;
 
 /**
  * The typed object specification definition class.
@@ -23,8 +21,6 @@ use Iddigital\Cms\Core\Model\Type\Builder\Type;
  */
 class SpecificationDefinition extends ObjectCriteriaBase
 {
-    const THIS_EXPRESSION = 'this';
-
     /**
      * @var bool
      */

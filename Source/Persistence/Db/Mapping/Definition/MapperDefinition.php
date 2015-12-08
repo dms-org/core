@@ -3,6 +3,7 @@
 namespace Iddigital\Cms\Core\Persistence\Db\Mapping\Definition;
 
 use Iddigital\Cms\Core\Exception\InvalidArgumentException;
+use Iddigital\Cms\Core\Model\IEntity;
 use Iddigital\Cms\Core\Model\Object\TypedObject;
 use Iddigital\Cms\Core\Model\Type\ObjectType;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Column\ColumnTypeDefiner;
@@ -200,9 +201,9 @@ class MapperDefinition extends MapperDefinitionBase
      */
     public function idToPrimaryKey($columnName)
     {
-        $this->verifyProperty(__METHOD__, 'id');
-        $this->propertyColumnMap['id'] = $columnName;
-        $this->mappedProperties['id']  = true;
+        $this->verifyProperty(__METHOD__, IEntity::ID);
+        $this->propertyColumnMap[IEntity::ID] = $columnName;
+        $this->mappedProperties[IEntity::ID]  = true;
         $this->primaryKey($columnName);
     }
 

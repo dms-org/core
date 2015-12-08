@@ -180,22 +180,19 @@ class StagedFormBuilderTest extends FormBuilderTestBase
     public function testCreateStagedFormFromGenerator()
     {
         $form = StagedForm::generator(3, function () {
-            $data = (yield
-            Form::create()
+            $data = (yield Form::create()
                     ->section('First Stage', [
                             Field::name('length')->label('Length')->int()->required()->min(1)
                     ])
             );
 
-            $data = (yield
-            Form::create()
+            $data = (yield Form::create()
                     ->section('Second Stage', [
                             Field::name('name')->label('Name')->string()->required()->maxLength($data['length'])
                     ])
             );
 
-            $data = (yield
-            Form::create()
+            $data = (yield Form::create()
                     ->section('Third Stage', [
                             Field::name('field')->label($data['name'] . ':' . $data['length'])->string()->required()
                     ])

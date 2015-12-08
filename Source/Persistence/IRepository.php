@@ -42,6 +42,11 @@ interface IRepository extends IEntitySet
      * {@inheritDoc}
      */
     public function get($id);
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getAllById(array $ids);
     
     /**
      * {@inheritDoc}

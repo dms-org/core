@@ -5,6 +5,33 @@ namespace Iddigital\Cms\Core\Tests\Model\Criteria\Condition;
 use Iddigital\Cms\Common\Testing\CmsTestCase;
 use Iddigital\Cms\Core\Exception\InvalidArgumentException;
 use Iddigital\Cms\Core\Model\Criteria\Condition\ConditionOperator;
+use Iddigital\Cms\Core\Model\Criteria\Specification;
+use Iddigital\Cms\Core\Model\Criteria\SpecificationDefinition;
+
+class PersonIsOldSpecification extends Specification
+{
+    /**
+     * Returns the class name for the object to which the specification applies.
+     *
+     * @return string
+     */
+    protected function type()
+    {
+        return Person::class;
+    }
+
+    /**
+     * Defines the criteria for the specification.
+     *
+     * @param SpecificationDefinition $match
+     *
+     * @return void
+     */
+    protected function define(SpecificationDefinition $match)
+    {
+        $match->where(Person::AGE, '>=', 50);
+    }
+}
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

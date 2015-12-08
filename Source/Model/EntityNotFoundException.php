@@ -11,9 +11,9 @@ use Iddigital\Cms\Core\Exception\BaseException;
  */
 class EntityNotFoundException extends BaseException
 {
-    public function __construct($entityType, $id)
+    public function __construct($entityType, $id, $idProperty = IEntity::ID)
     {
-        parent::__construct("Could not find an entity of type {$entityType} with id {$id}");
+        parent::__construct("Could not find an entity of type {$entityType} with property \'{$idProperty}\' = {$id}");
     }
 
 }
