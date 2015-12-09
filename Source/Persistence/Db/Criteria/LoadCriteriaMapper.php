@@ -2,7 +2,6 @@
 
 namespace Iddigital\Cms\Core\Persistence\Db\Criteria;
 
-use Iddigital\Cms\Core\Model\Criteria\MemberExpressionParser;
 use Iddigital\Cms\Core\Model\Criteria\LoadCriteria;
 use Iddigital\Cms\Core\Model\ILoadCriteria;
 use Iddigital\Cms\Core\Persistence\Db\Criteria\MemberMapping\IFinalRelationMemberMapping;
@@ -53,9 +52,9 @@ class LoadCriteriaMapper
         $select = $this->criteriaMapper->mapCriteriaToSelect($criteria, $memberMappings, $criteria->getAliasNestedMemberMap());
         $select->setColumns([]);
 
-        $columnIndexMap = [];
-        $relationToLoad = [];
-        $requiresLoadId = false;
+        $columnIndexMap  = [];
+        $relationsToLoad = [];
+        $requiresLoadId  = false;
 
         foreach ($criteria->getAliasNestedMemberMap() as $alias => $member) {
             /** @var MemberMappingWithTableAlias $memberMapping */
@@ -63,8 +62,8 @@ class LoadCriteriaMapper
             $mapping       = $memberMapping->getMapping();
 
             if ($mapping instanceof IFinalRelationMemberMapping) {
-                $memberRelation         = $mapping->asMemberRelation();
-                $relationToLoad[$alias] = $memberRelation;
+                $memberRelation          = $mapping->asMemberRelation();
+                $relationsToLoad[$alias] = $memberRelation;
 
                 foreach ($memberRelation->getParentColumnsToLoad() as $column) {
                     $select->addColumn($column, Expr::tableColumn($select->getTable(), $column));
@@ -88,6 +87,6 @@ class LoadCriteriaMapper
             $select->addRawColumn($this->criteriaMapper->getMapper()->getPrimaryTable()->getPrimaryKeyColumnName());
         }
 
-        return new MappedLoadQuery($select, $columnIndexMap, $relationToLoad);
+        return new MappedLoadQuery($select, $columnIndexMap, $relationsToLoad);
     }
 }
