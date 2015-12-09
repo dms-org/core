@@ -2,18 +2,16 @@
 
 namespace Iddigital\Cms\Core\Module;
 
+use Iddigital\Cms\Core\Auth\IPermission;
 use Iddigital\Cms\Core\Exception\InvalidArgumentException;
 use Iddigital\Cms\Core\Form;
-use Iddigital\Cms\Core\Auth\IPermission;
-use Iddigital\Cms\Core\Table\Chart\IChartDataSource;
-use Iddigital\Cms\Core\Table\ITableDataSource;
 use Iddigital\Cms\Core\Widget\IWidget;
 
 /**
  * The API for a module.
  *
  * A module represents a collection of actions, permissions, tables, charts, widgets etc.
- * 
+ *
  * @author Elliot Levin <elliot@aanet.com.au>
  */
 interface IModule
