@@ -73,6 +73,14 @@ class PropertyAccessibility
     }
 
     /**
+     * @return bool
+     */
+    public function isPrivate()
+    {
+        return $this->accessibility === self::ACCESS_PRIVATE;
+    }
+
+    /**
      * @return string
      */
     public function getDeclaredClass()

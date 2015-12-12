@@ -22,6 +22,7 @@ class PropertyAccessibilityTest extends CmsTestCase
         $this->assertSame(PropertyAccessibility::ACCESS_PUBLIC, $accessibility->getAccessibility());
         $this->assertSame(__CLASS__, $accessibility->getDeclaredClass());
         $this->assertTrue($accessibility->isPublic());
+        $this->assertFalse($accessibility->isPrivate());
     }
 
     public function testFromReflectionProtected()
@@ -31,6 +32,7 @@ class PropertyAccessibilityTest extends CmsTestCase
         $this->assertSame(PropertyAccessibility::ACCESS_PROTECTED, $accessibility->getAccessibility());
         $this->assertSame(__CLASS__, $accessibility->getDeclaredClass());
         $this->assertFalse($accessibility->isPublic());
+        $this->assertFalse($accessibility->isPrivate());
     }
 
     public function testFromReflectionPrivate()
@@ -40,6 +42,7 @@ class PropertyAccessibilityTest extends CmsTestCase
         $this->assertSame(PropertyAccessibility::ACCESS_PRIVATE, $accessibility->getAccessibility());
         $this->assertSame(__CLASS__, $accessibility->getDeclaredClass());
         $this->assertFalse($accessibility->isPublic());
+        $this->assertTrue($accessibility->isPrivate());
     }
 
     public function testIsAccessiblePublic()

@@ -90,7 +90,8 @@ class ClassDefinition
     {
         $name  = $property->getName();
         $class = $property->getDeclaringClass()->getName();
-        if (isset($this->properties[$name])) {
+
+        if (isset($this->properties[$name]) && $this->properties[$name]->getAccessibility()->isPrivate()) {
             throw new ConflictingPropertyNameException(
                     get_class($object),
                     $this->properties[$name]->getClass(),
