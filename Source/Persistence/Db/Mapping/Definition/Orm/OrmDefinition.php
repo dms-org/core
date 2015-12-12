@@ -2,6 +2,7 @@
 
 namespace Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Orm;
 
+use Iddigital\Cms\Core\Exception\InvalidArgumentException;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\IOrm;
 
 /**
@@ -41,6 +42,27 @@ class OrmDefinition
     }
 
     /**
+     * Registers an array of entity mappers.
+     *
+     * Example:
+     * <code>
+     * $orm->entities([
+     *      SomeEntity::class => SomeEntityMapper::class,
+     * ]);
+     * </code>
+     *
+     * @param string[]|callable[] $entityClassMapperClassMap
+     *
+     * @return void
+     */
+    public function entities($entityClassMapperClassMap)
+    {
+        foreach ($entityClassMapperClassMap as $entity => $mapper) {
+            $this->entity($entity)->from($mapper);
+        }
+    }
+
+    /**
      * Registers a mapper for the supplied value object class.
      *
      * @param string $valueObjectClass
@@ -55,6 +77,27 @@ class OrmDefinition
     }
 
     /**
+     * Registers an array of value object mappers.
+     *
+     * Example:
+     * <code>
+     * $orm->valueObjects([
+     *      SomeValueObject::class => SomeValueObjectMapper::class,
+     * ]);
+     * </code>
+     *
+     * @param string[]|callable[] $valueObjectClassMapperClassMap
+     *
+     * @return void
+     */
+    public function valueObjects($valueObjectClassMapperClassMap)
+    {
+        foreach ($valueObjectClassMapperClassMap as $valueObject => $mapper) {
+            $this->valueObject($valueObject)->from($mapper);
+        }
+    }
+
+    /**
      * Registers another orm instance to include the entity
      * and value object mappers from.
      *
@@ -65,6 +108,21 @@ class OrmDefinition
     public function encompass(IOrm $orm)
     {
         $this->includedOrms[] = $orm;
+    }
+
+    /**
+     * Registers an array of other orm instances to include the entity
+     * and value object mappers from.
+     *
+     * @param IOrm[] $orms
+     *
+     * @return void
+     */
+    public function encompassAll(array $orms)
+    {
+        InvalidArgumentException::verifyAllInstanceOf(__METHOD__, 'orms', $orms, IOrm::class);
+
+        $this->includedOrms = array_merge($this->includedOrms, $orms);
     }
 
     /**

@@ -48,17 +48,9 @@ class CustomOrm extends Orm
     public static function from(array $entityMappersMap, array $valueObjectMapperMap = [], array $includedOrms = [])
     {
         return new self(function (OrmDefinition $orm) use ($entityMappersMap, $valueObjectMapperMap, $includedOrms) {
-            foreach ($entityMappersMap as $entity => $mapper) {
-                $orm->entity($entity)->from($mapper);
-            }
-
-            foreach ($valueObjectMapperMap as $valueObject => $mapper) {
-                $orm->valueObject($valueObject)->from($mapper);
-            }
-
-            foreach ($includedOrms as $includedOrm) {
-                $orm->encompass($includedOrm);
-            }
+            $orm->entities($entityMappersMap);
+            $orm->valueObjects($valueObjectMapperMap);
+            $orm->encompassAll($includedOrms);
         });
     }
 
