@@ -6,7 +6,6 @@ use Iddigital\Cms\Core\Common\Crud\CrudModule;
 use Iddigital\Cms\Core\Common\Crud\Definition\CrudModuleDefinition;
 use Iddigital\Cms\Core\Common\Crud\Definition\Form\CrudFormDefinition;
 use Iddigital\Cms\Core\Common\Crud\Definition\Table\SummaryTableDefinition;
-use Iddigital\Cms\Core\Common\Crud\Form\ObjectForm;
 use Iddigital\Cms\Core\Form\Builder\Form;
 use Iddigital\Cms\Core\Form\Field\Builder\Field;
 use Iddigital\Cms\Core\Model\Object\ArrayDataObject;

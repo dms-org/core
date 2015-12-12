@@ -3,16 +3,12 @@
 namespace Iddigital\Cms\Core\Tests\Module;
 
 use Iddigital\Cms\Core\Auth\IPermission;
-use Iddigital\Cms\Core\Auth\Permission;
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
 use Iddigital\Cms\Core\Module\IAction;
 use Iddigital\Cms\Core\Module\IChartDisplay;
 use Iddigital\Cms\Core\Module\IParameterizedAction;
 use Iddigital\Cms\Core\Module\ITableDisplay;
-use Iddigital\Cms\Core\Module\IUnparameterizedAction;
 use Iddigital\Cms\Core\Module\Module;
 use Iddigital\Cms\Core\Tests\Module\Fixtures\ModuleWithCustom;
-use Iddigital\Cms\Core\Tests\Module\Fixtures\TestDto;
 use Iddigital\Cms\Core\Tests\Module\Mock\MockAuthSystem;
 
 /**

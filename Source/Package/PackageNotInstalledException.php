@@ -1,6 +1,6 @@
 <?php
 
-namespace Iddigital\Cms\Core;
+namespace Iddigital\Cms\Core\Package;
 
 use Iddigital\Cms\Core\Exception\BaseException;
 

@@ -2,21 +2,33 @@
 
 namespace Iddigital\Cms\Core;
 
+use Iddigital\Cms\Core\Auth\IAuthSystem;
+use Iddigital\Cms\Core\Auth\IPermission;
+use Iddigital\Cms\Core\Language\ILanguageProvider;
+use Iddigital\Cms\Core\Package\IPackage;
+use Iddigital\Cms\Core\Package\PackageNotInstalledException;
 use Interop\Container\ContainerInterface;
 
 /**
- * The API for a CMS.
+ * The interface for a CMS.
  * 
  * @author Elliot Levin <elliot@aanet.com.au>
  */
 interface ICms
 {
     /**
-     * Get the loaded packages.
+     * Get the names of the installed packages within this cms.
+     *
+     * @return string[]
+     */
+    public function getPackageNames();
+
+    /**
+     * Loads the installed packages.
      *
      * @return IPackage[]
      */
-    public function getPackages();
+    public function loadPackages();
     
     /**
      * Returns whether a package with the supplied name is installed.
@@ -27,34 +39,42 @@ interface ICms
     public function hasPackage($name);
     
     /**
-     * Gets the package with the supplied name.
+     * Loads the package with the supplied name.
      * 
      * @param string $name
      *
      * @return IPackage
      * @throws PackageNotInstalledException If the package is not installed
      */
-    public function getPackage($name);
+    public function loadPackage($name);
 
     /**
      * Gets the authentication system for the cms.
      *
-     * @return Auth\IAuthSystem
+     * @return IAuthSystem
      */
     public function getAuth();
 
     /**
      * Gets the language provider for the cms.
      *
-     * @return Language\ILanguageProvider
+     * @return ILanguageProvider
      */
     public function getLang();
 
     /**
-     * Gets the inversion of control container used within
-     * this cms instance.
+     * Gets the inversion of control container used within this cms instance.
      *
      * @return ContainerInterface
      */
     public function getIocContainer();
+
+    /**
+     * Loads the namespaced permissions.
+     *
+     * NOTE: this will load all the packages and all the modules.
+     *
+     * @return IPermission[]
+     */
+    public function loadPermissions();
 }

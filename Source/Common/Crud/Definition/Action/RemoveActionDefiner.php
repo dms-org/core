@@ -111,6 +111,7 @@ class RemoveActionDefiner extends ObjectActionDefiner
 
         $this->currentObjectType = $this->dataSource->getObjectType();
         $this->currentDataDtoType = $handler->getDataDtoType();
+        
         parent::handler(function (IEntity $object, $input = null) use ($handler) {
 
             foreach ($this->beforeRemoveCallbacks as $callback) {
