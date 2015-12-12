@@ -3,12 +3,12 @@
 namespace Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\Fixtures\NestedValueObject;
 
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\MapperDefinition;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\SimpleValueObjectMapper;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\IndependentValueObjectMapper;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>
  */
-class LevelOneMapper extends SimpleValueObjectMapper
+class LevelOneMapper extends IndependentValueObjectMapper
 {
 
     /**
