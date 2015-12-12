@@ -1,9 +1,6 @@
 <?php
 
-namespace Iddigital\Cms\Core\Persistence\Db\Mapper;
-
-use Iddigital\Cms\Core\Persistence\Db\Mapping\CustomOrm;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\ValueObjectMapper;
+namespace Iddigital\Cms\Core\Persistence\Db\Mapping;
 
 /**
  * The simple value object mapper base class.
