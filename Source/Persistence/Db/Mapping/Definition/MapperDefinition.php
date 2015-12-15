@@ -181,10 +181,11 @@ class MapperDefinition extends MapperDefinitionBase
      */
     public function type($classType)
     {
-        if (!is_subclass_of($classType, TypedObject::class, true)) {
+        $baseType = $this->class ? $this->class->getClassName() : TypedObject::class;
+        if (!is_a($classType, $baseType, true)) {
             throw InvalidArgumentException::format(
-                    'Cannot map type %s: must be an subclass of %s',
-                    $classType, TypedObject::class
+                    'Invalid call to %s: class type must be an subclass of %s, %s given',
+                    __METHOD__, $baseType, $classType
             );
         }
 
