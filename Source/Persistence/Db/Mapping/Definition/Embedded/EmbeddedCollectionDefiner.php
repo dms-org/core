@@ -61,6 +61,8 @@ class EmbeddedCollectionDefiner extends EmbeddedRelationDefiner
      * Sets the foreign key column name to map the children
      * to the parent id.
      *
+     * This defines an integer foreign key column on the table.
+     *
      * @param string $foreignKeyName
      *
      * @return static
