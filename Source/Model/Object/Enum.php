@@ -71,6 +71,22 @@ abstract class Enum extends TypedObject
     }
 
     /**
+     * Gets all the possible enums as an array
+     *
+     * @return static[]
+     */
+    final public static function getAll()
+    {
+        $enums = [];
+
+        foreach (static::getOptions() as $option) {
+            $enums[] = new static($option);
+        }
+
+        return $enums;
+    }
+
+    /**
      * Returns whether the supplied enum is a valid option
      * for the called enum class.
      *

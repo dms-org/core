@@ -65,6 +65,15 @@ class EnumTest extends CmsTestCase
         $this->assertSame('one', (new TestSubclassEnum(TestSubclassEnum::ONE))->getValue());
     }
 
+    public function testGetAll()
+    {
+        $this->assertEquals([
+                new TestEnum(TestEnum::ONE),
+                new TestEnum(TestEnum::TWO),
+                new TestEnum(TestEnum::THREE),
+        ], TestEnum::getAll());
+    }
+
     public function testIs()
     {
         $enum = new TestEnum(TestEnum::ONE);
