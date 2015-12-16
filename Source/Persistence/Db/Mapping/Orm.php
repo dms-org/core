@@ -96,12 +96,15 @@ abstract class Orm implements IOrm
         $this->database = new Database($uniqueTables);
     }
 
-    private function loadMapperTables(IEntityMapper $mapper)
+
+    private function loadMapperTables(IObjectMapper $mapper)
     {
         $tables = [];
 
-        foreach ($mapper->getTables() as $table) {
-            $tables[] = $table;
+        if ($mapper instanceof IEntityMapper) {
+            foreach ($mapper->getTables() as $table) {
+                $tables[] = $table;
+            }
         }
 
         foreach ($mapper->getNestedMappers() as $innerMapper) {
@@ -110,15 +113,26 @@ abstract class Orm implements IOrm
                     $tables[] = $table;
                 }
             }
+
+            $this->loadTablesFromMapperRelations($tables, $innerMapper);
         }
 
+        $this->loadTablesFromMapperRelations($tables, $mapper);
+
+        return $tables;
+    }
+
+    /**
+     * @param Table[]       $tables
+     * @param IObjectMapper $mapper
+     */
+    private function loadTablesFromMapperRelations(array &$tables, IObjectMapper $mapper)
+    {
         foreach ($mapper->getDefinition()->getRelationMappings() as $relationMapping) {
             foreach ($relationMapping->getRelation()->getRelationshipTables() as $table) {
                 $tables[] = $table;
             }
         }
-
-        return $tables;
     }
 
     /**
