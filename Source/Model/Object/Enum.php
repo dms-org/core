@@ -71,7 +71,7 @@ abstract class Enum extends TypedObject
     }
 
     /**
-     * Gets all the possible enums as an array
+     * Gets all the possible enums as an array.
      *
      * @return static[]
      */

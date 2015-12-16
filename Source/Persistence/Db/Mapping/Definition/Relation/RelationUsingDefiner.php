@@ -2,6 +2,7 @@
 
 namespace Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Relation;
 
+use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\MapperDefinition;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\IEntityMapper;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\IOrm;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\IRelation;
@@ -14,9 +15,19 @@ use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\IRelation;
 class RelationUsingDefiner
 {
     /**
+     * @var MapperDefinition
+     */
+    private $definition;
+
+    /**
      * @var IOrm
      */
     private $orm;
+
+    /**
+     * @var IAccessor
+     */
+    private $accessor;
 
     /**
      * @var callable
@@ -24,15 +35,19 @@ class RelationUsingDefiner
     private $callback;
 
     /**
-     * TypeTableDefiner constructor.
+     * RelationUsingDefiner constructor.
      *
-     * @param IOrm     $orm
-     * @param callable $callback
+     * @param MapperDefinition $definition
+     * @param IOrm             $orm
+     * @param IAccessor        $accessor
+     * @param callable         $callback
      */
-    public function __construct(IOrm $orm, callable $callback)
+    public function __construct(MapperDefinition $definition, IOrm $orm, IAccessor $accessor, callable $callback)
     {
-        $this->orm      = $orm;
-        $this->callback = $callback;
+        $this->definition = $definition;
+        $this->orm        = $orm;
+        $this->callback   = $callback;
+        $this->accessor   = $accessor;
     }
 
     /**
@@ -80,5 +95,15 @@ class RelationUsingDefiner
         call_user_func($this->callback, function () use ($relation) {
             return $relation;
         });
+    }
+
+    /**
+     * Defines the relation as an embedded (value object) relation.
+     *
+     * @return EmbeddedRelationTypeDefiner
+     */
+    public function asEmbedded()
+    {
+        return new EmbeddedRelationTypeDefiner($this->definition, $this->orm, $this->accessor, $this->callback);
     }
 }
