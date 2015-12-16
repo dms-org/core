@@ -32,6 +32,39 @@ abstract class Enum extends TypedObject
         $this->value = $value;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    final protected function define(ClassDefinition $class)
+    {
+        $this->defineEnumValues($class->property($this->value));
+    }
+
+    /**
+     * Defines the type of the options contained within the enum.
+     *
+     * @param PropertyTypeDefiner $values
+     *
+     * @return void
+     */
+    protected abstract function defineEnumValues(PropertyTypeDefiner $values);
+
+    /**
+     * @inheritDoc
+     */
+    protected function dataToSerialize()
+    {
+        return $this->value;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function hydrateFromSerializedData($deserializedData)
+    {
+        $this->value = $deserializedData;
+    }
+
     private static function loadEnumConstants()
     {
         $class = get_called_class();
@@ -124,21 +157,4 @@ abstract class Enum extends TypedObject
     {
         return $this == $value || $this->value === $value;
     }
-
-    /**
-     * {@inheritDoc}
-     */
-    final protected function define(ClassDefinition $class)
-    {
-        $this->defineEnumValues($class->property($this->value));
-    }
-
-    /**
-     * Defines the type of the options contained within the enum.
-     *
-     * @param PropertyTypeDefiner $values
-     *
-     * @return void
-     */
-    protected abstract function defineEnumValues(PropertyTypeDefiner $values);
 }

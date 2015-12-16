@@ -63,7 +63,7 @@ abstract class TypedObject implements ITypedObject, \Serializable
                 $definitionInstance = $reflection->newInstanceWithoutConstructor();
             }
 
-            $definition = new ClassDefinition($definitionInstance, $reflection, __CLASS__);
+            $definition         = new ClassDefinition($definitionInstance, $reflection, __CLASS__);
             $overrideDefinition = $definitionInstance->define($definition);
 
             if ($overrideDefinition instanceof ClassDefinition) {
@@ -188,18 +188,40 @@ abstract class TypedObject implements ITypedObject, \Serializable
     /**
      * @inheritDoc
      */
-    public function serialize()
+    final public function serialize()
     {
-        return serialize($this->properties);
+        return serialize($this->dataToSerialize());
+    }
+
+    /**
+     * Gets the data to be serialized when the class is serialized.
+     *
+     * @return mixed
+     */
+    protected function dataToSerialize()
+    {
+        return $this->properties;
     }
 
     /**
      * @inheritDoc
      */
-    public function unserialize($serialized)
+    final public function unserialize($serialized)
     {
         $this->loadFinalizedClassDefinition(static::definition());
-        $this->properties = unserialize($serialized);
+        $this->hydrateFromSerializedData(unserialize($serialized));
+    }
+
+    /**
+     * Gets the data to be serialized when the class is serialized.
+     *
+     * @param $deserializedData
+     *
+     * @return void
+     */
+    protected function hydrateFromSerializedData($deserializedData)
+    {
+        $this->properties = $deserializedData;
     }
 
     private function validateProperty($name)

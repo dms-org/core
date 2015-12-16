@@ -101,4 +101,15 @@ class EnumTest extends CmsTestCase
         $this->setExpectedException(InvalidEnumValueException::class);
         new TestEnum('four');
     }
+
+    public function testSerialization()
+    {
+        $enum = new TestEnum(TestEnum::ONE);
+
+        $this->assertEquals($enum, unserialize(serialize($enum)));
+
+        $enum = new TestEnum(TestEnum::THREE);
+
+        $this->assertEquals($enum, unserialize(serialize($enum)));
+    }
 }
