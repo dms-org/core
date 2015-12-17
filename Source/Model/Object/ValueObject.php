@@ -7,13 +7,14 @@ use Iddigital\Cms\Core\Model\IValueObject;
 use Iddigital\Cms\Core\Model\Type\Builder\Type;
 use Iddigital\Cms\Core\Model\Type\IType;
 use Iddigital\Cms\Core\Model\ValueObjectCollection;
+use Iddigital\Cms\Core\Util\Hashing\IHashable;
 
 /**
  * The value object base class.
  *
  * @author Elliot Levin <elliotlevin@hotmail.com>
  */
-abstract class ValueObject extends TypedObject implements IValueObject
+abstract class ValueObject extends TypedObject implements IValueObject, IHashable
 {
     /**
      * Returns a value object collection with the element type
@@ -36,5 +37,13 @@ abstract class ValueObject extends TypedObject implements IValueObject
     final public static function collectionType()
     {
         return Type::collectionOf(Type::object(get_called_class()), ValueObjectCollection::class);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    final public function getObjectHash()
+    {
+        return serialize($this->toArray());
     }
 }

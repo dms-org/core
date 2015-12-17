@@ -4,13 +4,14 @@ namespace Iddigital\Cms\Core\Model\Object;
 
 use Iddigital\Cms\Core\Exception;
 use Iddigital\Cms\Core\Model\Type\IType;
+use Iddigital\Cms\Core\Util\Hashing\IHashable;
 
 /**
  * The enum object base class.
  *
  * @author Elliot Levin <elliotlevin@hotmail.com>
  */
-abstract class Enum extends TypedObject
+abstract class Enum extends TypedObject implements IHashable
 {
     /**
      * @var array
@@ -63,6 +64,16 @@ abstract class Enum extends TypedObject
     protected function hydrateFromSerializedData($deserializedData)
     {
         $this->value = $deserializedData;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    final public function getObjectHash()
+    {
+        return is_scalar($this->value)
+                ? (string)$this->value
+                : serialize($this->value);
     }
 
     private static function loadEnumConstants()

@@ -41,4 +41,20 @@ class ValueObjectTest extends CmsTestCase
 
         $object->one = '123';
     }
+
+    public function testObjectHash()
+    {
+        $object1 = new TestValueObject();
+        $object1->one = 'abc';
+        $object2 = new TestValueObject();
+        $object2->one = 'def';
+        $object3 = new TestValueObject();
+        $object3->one = 'abc';
+
+        $this->assertSame($object1->getObjectHash(), $object1->getObjectHash());
+        $this->assertSame($object1->getObjectHash(), $object3->getObjectHash());
+
+        $this->assertNotEquals($object1->getObjectHash(), $object2->getObjectHash());
+        $this->assertNotEquals($object3->getObjectHash(), $object2->getObjectHash());
+    }
 }

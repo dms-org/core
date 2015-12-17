@@ -112,4 +112,19 @@ class EnumTest extends CmsTestCase
 
         $this->assertEquals($enum, unserialize(serialize($enum)));
     }
+
+    public function testObjectHash()
+    {
+        $one = new TestEnum(TestEnum::ONE);
+        $two = new TestEnum(TestEnum::TWO);
+        $three = new TestEnum(TestEnum::THREE);
+
+        $this->assertSame($one->getObjectHash(), $one->getObjectHash());
+        $this->assertSame($two->getObjectHash(), $two->getObjectHash());
+        $this->assertSame($three->getObjectHash(), $three->getObjectHash());
+
+        $this->assertNotEquals($one->getObjectHash(), $two->getObjectHash());
+        $this->assertNotEquals($one->getObjectHash(), $three->getObjectHash());
+        $this->assertNotEquals($two->getObjectHash(), $three->getObjectHash());
+    }
 }

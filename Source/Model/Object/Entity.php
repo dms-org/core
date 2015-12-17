@@ -7,13 +7,14 @@ use Iddigital\Cms\Core\Model\EntityCollection;
 use Iddigital\Cms\Core\Model\IEntity;
 use Iddigital\Cms\Core\Model\Type\Builder\Type;
 use Iddigital\Cms\Core\Model\Type\IType;
+use Iddigital\Cms\Core\Util\Hashing\IHashable;
 
 /**
  * The entity object base class.
  *
  * @author Elliot Levin <elliotlevin@hotmail.com>
  */
-abstract class Entity extends TypedObject implements IEntity
+abstract class Entity extends TypedObject implements IEntity, IHashable
 {
     /**
      * @var int
@@ -101,5 +102,15 @@ abstract class Entity extends TypedObject implements IEntity
         Exception\InvalidArgumentException::verifyNotNull(__METHOD__, 'id', $id);
 
         $this->id = $id;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    final public function getObjectHash()
+    {
+        return $this->id === null
+                ? serialize($this->toArray())
+                : (string)$this->id;
     }
 }

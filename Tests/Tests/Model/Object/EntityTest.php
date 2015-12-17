@@ -5,7 +5,6 @@ namespace Iddigital\Cms\Core\Tests\Model\Object;
 use Iddigital\Cms\Core\Exception\InvalidArgumentException;
 use Iddigital\Cms\Core\Exception\InvalidOperationException;
 use Iddigital\Cms\Core\Model\EntityCollection;
-use Iddigital\Cms\Core\Model\IEntityCollection;
 use Iddigital\Cms\Core\Model\Type\Builder\Type;
 use Iddigital\Cms\Core\Tests\Model\Object\Fixtures\BlankEntity;
 
@@ -94,5 +93,21 @@ class EntityTest extends TypedObjectTest
         $this->assertTrue(BlankEntity::collectionType()->isOfType(BlankEntity::collection()));
 
         $this->assertEquals(Type::collectionOf(BlankEntity::type(), EntityCollection::class), BlankEntity::collectionType());
+    }
+
+    public function testObjectHash()
+    {
+        $entity = new BlankEntity();
+        $anotherEntity = new BlankEntity();
+        $entityWithId = new BlankEntity(1);
+        $entityWithAnotherId = new BlankEntity(2);
+
+        $this->assertSame($entity->getObjectHash(), $anotherEntity->getObjectHash());
+        $this->assertSame($entityWithId->getObjectHash(), $entityWithId->getObjectHash());
+        $this->assertSame($entityWithAnotherId->getObjectHash(), $entityWithAnotherId->getObjectHash());
+
+        $this->assertNotEquals($entity->getObjectHash(), $entityWithId->getObjectHash());
+        $this->assertNotEquals($entityWithId->getObjectHash(), $entityWithAnotherId->getObjectHash());
+        $this->assertNotEquals($entity->getObjectHash(), $entityWithAnotherId->getObjectHash());
     }
 }
