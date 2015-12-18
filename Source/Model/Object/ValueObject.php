@@ -24,7 +24,7 @@ abstract class ValueObject extends TypedObject implements IValueObject, IHashabl
      *
      * @return ValueObjectCollection|static[]
      */
-    final public static function collection(array $objects = [])
+    public static function collection(array $objects = [])
     {
         return new ValueObjectCollection(get_called_class(), $objects);
     }
@@ -34,7 +34,7 @@ abstract class ValueObject extends TypedObject implements IValueObject, IHashabl
      *
      * @return IType
      */
-    final public static function collectionType()
+    public static function collectionType()
     {
         return Type::collectionOf(Type::object(get_called_class()), ValueObjectCollection::class);
     }
@@ -42,7 +42,7 @@ abstract class ValueObject extends TypedObject implements IValueObject, IHashabl
     /**
      * @inheritDoc
      */
-    final public function getObjectHash()
+    public function getObjectHash()
     {
         return serialize($this->toArray());
     }

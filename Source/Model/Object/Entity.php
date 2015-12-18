@@ -40,7 +40,7 @@ abstract class Entity extends TypedObject implements IEntity, IHashable
      *
      * @return EntityCollection|static[]
      */
-    final public static function collection(array $entities = [])
+    public static function collection(array $entities = [])
     {
         return new EntityCollection(get_called_class(), $entities);
     }
@@ -50,7 +50,7 @@ abstract class Entity extends TypedObject implements IEntity, IHashable
      *
      * @return IType
      */
-    final public static function collectionType()
+    public static function collectionType()
     {
         return Type::collectionOf(Type::object(get_called_class()), EntityCollection::class);
     }
@@ -107,7 +107,7 @@ abstract class Entity extends TypedObject implements IEntity, IHashable
     /**
      * @inheritDoc
      */
-    final public function getObjectHash()
+    public function getObjectHash()
     {
         return $this->id === null
                 ? serialize($this->toArray())
