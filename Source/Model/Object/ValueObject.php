@@ -44,6 +44,6 @@ abstract class ValueObject extends TypedObject implements IValueObject, IHashabl
      */
     public function getObjectHash()
     {
-        return serialize($this->toArray());
+        return serialize($this->dataToSerialize());
     }
 }
