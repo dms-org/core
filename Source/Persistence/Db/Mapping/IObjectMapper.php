@@ -3,7 +3,9 @@
 namespace Iddigital\Cms\Core\Persistence\Db\Mapping;
 
 use Iddigital\Cms\Core\Exception\InvalidArgumentException;
+use Iddigital\Cms\Core\Model\ITypedCollection;
 use Iddigital\Cms\Core\Model\ITypedObject;
+use Iddigital\Cms\Core\Model\TypedCollection;
 use Iddigital\Cms\Core\Persistence\Db\LoadingContext;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\FinalizedMapperDefinition;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Hierarchy\ParentObjectMapping;
@@ -88,4 +90,13 @@ interface IObjectMapper
      * @return void
      */
     public function deleteFromQuery(PersistenceContext $context, Delete $deleteQuery);
+
+    /**
+     * Builds a type-specific collection.
+     *
+     * @param object[] $objects
+     *
+     * @return ITypedCollection
+     */
+    public function buildCollection(array $objects);
 }

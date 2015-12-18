@@ -4,6 +4,7 @@ namespace Iddigital\Cms\Core\Persistence\Db\Mapping\ReadModel;
 
 use Iddigital\Cms\Core\Exception\NotImplementedException;
 use Iddigital\Cms\Core\Model\IEntity;
+use Iddigital\Cms\Core\Model\ITypedCollection;
 use Iddigital\Cms\Core\Model\ITypedObject;
 use Iddigital\Cms\Core\Persistence\Db\LoadingContext;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\IEmbeddedObjectMapper;
@@ -120,6 +121,14 @@ class EmbeddedMapperProxy implements IEmbeddedObjectMapper
     public function loadAll(LoadingContext $context, array $rows)
     {
         return $this->mapper->loadAll($context, $rows);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function buildCollection(array $objects)
+    {
+        return $this->mapper->buildCollection($objects);
     }
 
     // NOT REQUIRED

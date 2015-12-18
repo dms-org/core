@@ -4,7 +4,9 @@ namespace Iddigital\Cms\Core\Persistence\Db\Mapping;
 
 use Iddigital\Cms\Core\Exception\InvalidArgumentException;
 use Iddigital\Cms\Core\Exception\InvalidOperationException;
+use Iddigital\Cms\Core\Model\ITypedCollection;
 use Iddigital\Cms\Core\Model\ITypedObject;
+use Iddigital\Cms\Core\Model\Object\TypedObject;
 use Iddigital\Cms\Core\Persistence\Db\LoadingContext;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\FinalizedMapperDefinition;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Hierarchy\ParentObjectMapping;
@@ -90,6 +92,17 @@ abstract class ObjectMapper implements IObjectMapper
     final public function getObjectType()
     {
         return $this->objectType;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function buildCollection(array $objects)
+    {
+        /** @var string|TypedObject $objectType */
+        $objectType = $this->objectType;
+
+        return $objectType::collection($objects);
     }
 
     /**

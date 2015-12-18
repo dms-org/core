@@ -4,6 +4,7 @@ namespace Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\ReadModel\
 
 use Iddigital\Cms\Core\Model\Object\ClassDefinition;
 use Iddigital\Cms\Core\Model\Object\ReadModel;
+use Iddigital\Cms\Core\Model\ObjectCollection;
 use Iddigital\Cms\Core\Model\Type\Builder\Type;
 use Iddigital\Cms\Core\Model\TypedCollection;
 
@@ -13,7 +14,7 @@ use Iddigital\Cms\Core\Model\TypedCollection;
 class ReadModelWithChildReadModels extends ReadModel
 {
     /**
-     * @var TypedCollection|ChildEntityReadModel[]
+     * @var ObjectCollection|ChildEntityReadModel[]
      */
     public $children;
 
@@ -25,7 +26,7 @@ class ReadModelWithChildReadModels extends ReadModel
     public function __construct(array $children = [])
     {
         parent::__construct();
-        $this->children = new TypedCollection(Type::object(ChildEntityReadModel::class), $children);
+        $this->children = new ObjectCollection(ChildEntityReadModel::class, $children);
     }
 
     /**
@@ -35,6 +36,6 @@ class ReadModelWithChildReadModels extends ReadModel
      */
     protected function define(ClassDefinition $class)
     {
-        $class->property($this->children)->asCollectionOf(Type::object(ChildEntityReadModel::class));
+        $class->property($this->children)->asType(ChildEntityReadModel::collectionType());
     }
 }

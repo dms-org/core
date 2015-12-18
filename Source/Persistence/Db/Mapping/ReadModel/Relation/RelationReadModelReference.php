@@ -43,7 +43,7 @@ class RelationReadModelReference extends RelationObjectReference implements IToO
      */
     public function buildNewCollection(array $children)
     {
-        return new TypedCollection(Type::object($this->mapper->getObjectType()), $children);
+        return $this->mapper->buildCollection($children);
     }
 
     /**

@@ -3,6 +3,7 @@
 namespace Iddigital\Cms\Core\Persistence\Db\Mapping;
 
 use Iddigital\Cms\Core\Model\IEntity;
+use Iddigital\Cms\Core\Model\ITypedCollection;
 use Iddigital\Cms\Core\Persistence\Db\LoadingContext;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\Hook\IPersistHook;
 use Iddigital\Cms\Core\Persistence\Db\PersistenceContext;
@@ -110,6 +111,11 @@ class NullObjectMapper implements IEntityMapper
     }
 
     public function deleteAll(PersistenceContext $context, array $ids)
+    {
+
+    }
+
+    public function buildCollection(array $objects)
     {
 
     }

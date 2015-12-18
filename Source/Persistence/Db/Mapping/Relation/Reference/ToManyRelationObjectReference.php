@@ -23,7 +23,7 @@ class ToManyRelationObjectReference extends RelationObjectReference implements I
      */
     public function buildNewCollection(array $children)
     {
-        return new EntityCollection($this->mapper->getObjectType(), $children);
+        return $this->mapper->buildCollection($children);
     }
 
     /**

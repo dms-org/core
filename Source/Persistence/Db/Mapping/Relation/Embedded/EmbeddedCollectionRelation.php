@@ -132,7 +132,7 @@ class EmbeddedCollectionRelation extends EmbeddedRelation implements ISeparateTo
      */
     public function buildCollection(array $children)
     {
-        return new ValueObjectCollection($this->mapper->getObjectType(), $children);
+        return $this->mapper->buildCollection($children);
     }
 
     /**
