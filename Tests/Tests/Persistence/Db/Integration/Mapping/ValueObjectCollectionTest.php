@@ -241,4 +241,32 @@ class ValueObjectCollectionTest extends DbIntegrationTest
                 )
         );
     }
+
+    public function testCriteriaWithCountAggregate()
+    {
+        $this->db->setData([
+                'entities' => [
+                        ['id' => 1],
+                        ['id' => 2],
+                ],
+                'emails'   => [
+                        ['id' => 1, 'entity_id' => 1, 'email' => 'test@foo.com'],
+                        ['id' => 2, 'entity_id' => 1, 'email' => 'gmail@foo.com'],
+                        ['id' => 3, 'entity_id' => 2, 'email' => 'aaa@foo.com'],
+                ]
+        ]);
+
+        $this->assertEquals(
+                [
+                        new EntityWithEmails(
+                                1,
+                                [new EmbeddedEmailAddress('test@foo.com'), new EmbeddedEmailAddress('gmail@foo.com'),]
+                        ),
+                ],
+                $this->repo->matching(
+                        $this->repo->criteria()
+                                ->where('emails.count()', '>=', 2)
+                )
+        );
+    }
 }

@@ -140,7 +140,7 @@ class MemberExpressionMapper
             case $lastPart instanceof CollectionCountMethodExpression:
                 $lastRelation = array_pop($nestedRelations);
 
-                return new ToManyRelationCountMapping($mapper, $nestedRelations, $lastRelation);
+                return new ToManyRelationCountMapping($this->rootEntityMapper, $nestedRelations, $lastRelation);
 
             case $lastPart instanceof ObjectSetAggregateMethodExpression:
                 $lastRelation = array_pop($nestedRelations);

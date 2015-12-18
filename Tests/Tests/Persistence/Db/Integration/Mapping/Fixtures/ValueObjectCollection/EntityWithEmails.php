@@ -22,11 +22,11 @@ class EntityWithEmails extends Entity
     /**
      * @inheritDoc
      */
-    public function __construct($id = null)
+    public function __construct($id = null, array $emails = [])
     {
         parent::__construct($id);
 
-        $this->emails = new ValueObjectCollection(EmbeddedEmailAddress::class);
+        $this->emails = new ValueObjectCollection(EmbeddedEmailAddress::class, $emails);
     }
 
     /**
