@@ -37,23 +37,19 @@ class FileMoverProcessor extends FieldProcessor
         $this->fileNameCallback = $fileNameCallback;
     }
 
-    public static function getClientFileName(IUploadedFile $file)
-    {
-        return $file->getClientFileName();
-    }
-
     public static function withClientFileName($isImage, $path)
     {
         return new self($isImage, $path, function (IUploadedFile $file) {
-            return $file->getClientFileName();
+            return $file->getClientFileName() ?: $file->getName();
         });
     }
 
     public static function withRandomFileName($isImage, $path, $fileNameLength = 16)
     {
         return new self($isImage, $path, function (IUploadedFile $file) use ($fileNameLength) {
-            return substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0,
-                    $fileNameLength) . '.' . $file->getExtension();
+            $alphaNumeric = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+            return substr(str_shuffle($alphaNumeric), 0, $fileNameLength) . '.' . $file->getExtension();
         });
     }
 

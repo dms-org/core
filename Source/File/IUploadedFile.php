@@ -28,14 +28,14 @@ interface IUploadedFile extends IFile
     /**
      * Gets the client's file name including the extension.
      *
-     * @return string
+     * @return string|null
      */
     public function getClientFileName();
 
     /**
      * Gets the client's file mime type
      *
-     * @return string
+     * @return string|null
      */
     public function getClientMimeType();
 
