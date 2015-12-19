@@ -2,6 +2,8 @@
 
 namespace Iddigital\Cms\Core\File;
 
+use Iddigital\Cms\Core\Exception\InvalidOperationException;
+
 /**
  * The file interface.
  * 
@@ -34,6 +36,7 @@ interface IFile
      * Gets the file size in bytes.
      *
      * @return int
+     * @throws InvalidOperationException if the file does not exist
      */
     public function getSize();
 

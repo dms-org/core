@@ -3,6 +3,8 @@
 namespace Iddigital\Cms\Core\Form\Field\Type;
 
 use Iddigital\Cms\Core\File\IUploadedImage;
+use Iddigital\Cms\Core\Form\Field\Processor\Validator\UploadedFileValidator;
+use Iddigital\Cms\Core\Form\Field\Processor\Validator\UploadedImageValidator;
 use Iddigital\Cms\Core\Model\Type\Builder\Type;
 
 /**
@@ -25,4 +27,17 @@ class ImageType extends FileType
     {
         return Type::object(IUploadedImage::class);
     }
+
+    /**
+     * @inheritDoc
+     */
+    protected function buildProcessors()
+    {
+        return [
+                new UploadedFileValidator($this->inputType),
+                new UploadedImageValidator($this->inputType),
+        ];
+    }
+
+
 }

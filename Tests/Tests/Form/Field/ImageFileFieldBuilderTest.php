@@ -11,6 +11,7 @@ use Iddigital\Cms\Core\Form\Field\Processor\Validator\ImageDimensionsValidator;
 use Iddigital\Cms\Core\Form\Field\Processor\Validator\ImageValidator;
 use Iddigital\Cms\Core\Form\Field\Processor\Validator\TypeValidator;
 use Iddigital\Cms\Core\Form\Field\Processor\Validator\UploadedFileValidator;
+use Iddigital\Cms\Core\Form\Field\Processor\Validator\UploadedImageValidator;
 use Iddigital\Cms\Core\Form\Field\Type\ImageType;
 use Iddigital\Cms\Core\Language\Message;
 use Iddigital\Cms\Core\Model\Type\Builder\Type;
@@ -35,6 +36,10 @@ class ImageFileFieldBuilderTest extends FileFieldBuilderTest
     protected function mockUploadedImage($width, $height, $size = 100, $extension = 'png')
     {
         $file = $this->getMockForAbstractClass(IUploadedImage::class);
+
+        $file->expects($this->any())
+                ->method('isValidImage')
+                ->willReturn(true);
 
         $file->expects($this->any())
                 ->method('getWidth')
@@ -73,6 +78,7 @@ class ImageFileFieldBuilderTest extends FileFieldBuilderTest
         $this->assertEquals([
                 new TypeValidator(Type::object(IUploadedImage::class)->nullable()),
                 new UploadedFileValidator(Type::object(IUploadedImage::class)->nullable()),
+                new UploadedImageValidator(Type::object(IUploadedImage::class)->nullable()),
                 new ImageDimensionsValidator(Type::object(IUploadedImage::class)->nullable(), 100),
                 new ImageDimensionsValidator(Type::object(IUploadedImage::class)->nullable(), null, 500),
                 new ImageDimensionsValidator(Type::object(IUploadedImage::class)->nullable(), null, null, 200),

@@ -2,6 +2,8 @@
 
 namespace Iddigital\Cms\Core\File;
 
+use Iddigital\Cms\Core\Exception\InvalidOperationException;
+
 /**
  * The image interface.
  * 
@@ -10,9 +12,17 @@ namespace Iddigital\Cms\Core\File;
 interface IImage extends IFile
 {
     /**
+     * Returns whether the file is a valid image
+     *
+     * @return bool
+     */
+    public function isValidImage();
+
+    /**
      * Gets the image width in pixels.
      * 
      * @return int
+     * @throws InvalidOperationException if the file is not a valid image
      */
     public function getWidth();
 
@@ -20,6 +30,7 @@ interface IImage extends IFile
      * Gets the image height in pixels.
      *
      * @return int
+     * @throws InvalidOperationException if the file is not a valid image
      */
     public function getHeight();
 }
