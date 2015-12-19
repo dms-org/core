@@ -212,4 +212,36 @@ class InvalidFormSubmissionException extends BaseException
 
         return $messages;
     }
+
+    /**
+     * @return Message[]
+     */
+    public function getAllMessages()
+    {
+        $messages = [];
+
+        foreach ($this->invalidInputExceptions as $inputException) {
+            $messages = array_merge($messages, $inputException->getMessages());
+        }
+
+        $messages = array_merge($messages, $this->getAllConstraintMessages());
+
+        foreach ($this->invalidInnerFormSubmissionExceptions as $e) {
+            $innerFormMessages = [];
+
+            foreach ($e->getAllMessages() as $message) {
+                $parameters = $message->getParameters();
+
+                if (isset($parameters['field'])) {
+                    $parameters['field'] = $e->getField()->getLabel() . ' > ' . $parameters['field'];
+                }
+
+                $innerFormMessages[] = $message->withParameters($parameters);
+            }
+
+            $messages = array_merge($messages, $innerFormMessages);
+        }
+
+        return $messages;
+    }
 }
