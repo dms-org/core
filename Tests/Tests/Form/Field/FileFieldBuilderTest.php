@@ -5,10 +5,10 @@ namespace Iddigital\Cms\Core\Tests\Form\Field;
 use Iddigital\Cms\Core\File\IUploadedFile;
 use Iddigital\Cms\Core\Form\Field\Builder\Field as Field;
 use Iddigital\Cms\Core\Form\Field\Builder\FileFieldBuilder;
-use Iddigital\Cms\Core\Form\Field\Processor\FileMoverProcessor;
 use Iddigital\Cms\Core\Form\Field\Processor\Validator\FileExtensionValidator;
 use Iddigital\Cms\Core\Form\Field\Processor\Validator\FileSizeValidator;
 use Iddigital\Cms\Core\Form\Field\Processor\Validator\TypeValidator;
+use Iddigital\Cms\Core\Form\Field\Processor\Validator\UploadedFileValidator;
 use Iddigital\Cms\Core\Form\Field\Type\FileType;
 use Iddigital\Cms\Core\Language\Message;
 use Iddigital\Cms\Core\Model\Type\Builder\Type;
@@ -41,6 +41,14 @@ class FileFieldBuilderTest extends FieldBuilderTestBase
                 ->method('getExtension')
                 ->willReturn($extension);
 
+        $file->expects($this->any())
+                ->method('hasUploadedSuccessfully')
+                ->willReturn(true);
+
+        $file->expects($this->any())
+                ->method('getUploadError')
+                ->willReturn(UPLOAD_ERR_OK);
+
         return $file;
     }
 
@@ -54,6 +62,7 @@ class FileFieldBuilderTest extends FieldBuilderTestBase
 
         $this->assertEquals([
                 new TypeValidator(Type::object(IUploadedFile::class)->nullable()),
+                new UploadedFileValidator(Type::object(IUploadedFile::class)->nullable()),
                 new FileSizeValidator(Type::object(IUploadedFile::class)->nullable(), 100, null),
                 new FileSizeValidator(Type::object(IUploadedFile::class)->nullable(), null, 2000),
                 new FileExtensionValidator(Type::object(IUploadedFile::class)->nullable(), ['pdf'])

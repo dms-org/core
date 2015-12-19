@@ -38,6 +38,13 @@ interface IFile
     public function getSize();
 
     /**
+     * Gets whether the file exists.
+     *
+     * @return bool
+     */
+    public function exists();
+
+    /**
      * Get the file info
      *
      * @return \SplFileInfo

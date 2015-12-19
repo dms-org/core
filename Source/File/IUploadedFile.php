@@ -10,11 +10,20 @@ namespace Iddigital\Cms\Core\File;
 interface IUploadedFile extends IFile
 {
     /**
-     * Whether the upload was a success
-     * 
+     * Returns whether file uploaded successfully.
+     *
      * @return bool
      */
-    public function isValid();
+    public function hasUploadedSuccessfully();
+
+    /**
+     * Gets the status of the upload.
+     *
+     * This returns one of the UPLOAD_ERR_* constants.
+     *
+     * @return int
+     */
+    public function getUploadError();
 
     /**
      * Gets the client's file name including the extension.

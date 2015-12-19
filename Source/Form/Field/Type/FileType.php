@@ -3,6 +3,7 @@
 namespace Iddigital\Cms\Core\Form\Field\Type;
 
 use Iddigital\Cms\Core\File\IUploadedFile;
+use Iddigital\Cms\Core\Form\Field\Processor\Validator\UploadedFileValidator;
 use Iddigital\Cms\Core\Form\IFieldProcessor;
 use Iddigital\Cms\Core\Model\Type\Builder\Type;
 
@@ -30,6 +31,8 @@ class FileType extends FieldType
      */
     protected function buildProcessors()
     {
-        return [];
+        return [
+            new UploadedFileValidator($this->inputType)
+        ];
     }
 }
