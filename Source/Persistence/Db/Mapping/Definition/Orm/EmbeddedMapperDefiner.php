@@ -4,6 +4,7 @@ namespace Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Orm;
 
 use Iddigital\Cms\Core\Exception\InvalidArgumentException;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\IEmbeddedObjectMapper;
+use Iddigital\Cms\Core\Persistence\Db\Mapping\IndependentValueObjectMapper;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\IObjectMapper;
 use Iddigital\Cms\Core\Persistence\Db\Mapping\IOrm;
 
@@ -42,6 +43,10 @@ class EmbeddedMapperDefiner
     {
         if (is_callable($embeddedObjectMapperTypeOrFactory)) {
             call_user_func($this->callback, $embeddedObjectMapperTypeOrFactory);
+        } elseif (is_a($embeddedObjectMapperTypeOrFactory, IndependentValueObjectMapper::class, true)) {
+            call_user_func($this->callback, function () use ($embeddedObjectMapperTypeOrFactory) {
+                return new $embeddedObjectMapperTypeOrFactory();
+            });
         } elseif (is_a($embeddedObjectMapperTypeOrFactory, IEmbeddedObjectMapper::class, true)) {
             call_user_func($this->callback, function (IOrm $orm, IObjectMapper $parentMapper) use ($embeddedObjectMapperTypeOrFactory) {
                 return new $embeddedObjectMapperTypeOrFactory($orm, $parentMapper);
