@@ -15,7 +15,7 @@ use Iddigital\Cms\Core\Form\Field\Type\FloatType;
 use Iddigital\Cms\Core\Form\Field\Type\ImageType;
 use Iddigital\Cms\Core\Form\Field\Type\IntType;
 use Iddigital\Cms\Core\Form\Field\Type\StringType;
-use Iddigital\Cms\Core\Form\Field\Type\TimeType;
+use Iddigital\Cms\Core\Form\Field\Type\TimeOfDayType;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>
@@ -73,7 +73,7 @@ class TypesTest extends CmsTestCase
 
     public function testTime()
     {
-        $type = new TimeType('H:i');
+        $type = new TimeOfDayType('H:i');
 
         $this->assertSame("string|null", $type->getPhpTypeOfInput()->asTypeString());
     }

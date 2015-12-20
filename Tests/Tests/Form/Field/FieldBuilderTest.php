@@ -36,7 +36,7 @@ use Iddigital\Cms\Core\Form\Field\Type\ImageType;
 use Iddigital\Cms\Core\Form\Field\Type\InnerFormType;
 use Iddigital\Cms\Core\Form\Field\Type\ScalarType;
 use Iddigital\Cms\Core\Form\Field\Type\StringType;
-use Iddigital\Cms\Core\Form\Field\Type\TimeType;
+use Iddigital\Cms\Core\Form\Field\Type\TimeOfDayType;
 use Iddigital\Cms\Core\Form\IForm;
 use Iddigital\Cms\Core\Model\EntityCollection;
 use Iddigital\Cms\Core\Model\IEntity;
@@ -242,10 +242,10 @@ class FieldBuilderTest extends FieldBuilderTestBase
     {
         $field = $this->field()->time('H:i:s', new \DateTimeZone('UTC'))->build();
 
-        /** @var TimeType $type */
+        /** @var TimeOfDayType $type */
         $type = $field->getType();
-        $this->assertInstanceOf(TimeType::class, $type);
-        $this->assertSame('H:i:s', $type->get(TimeType::ATTR_FORMAT));
+        $this->assertInstanceOf(TimeOfDayType::class, $type);
+        $this->assertSame('H:i:s', $type->get(TimeOfDayType::ATTR_FORMAT));
         $this->assertHasProcessor(new DateFormatValidator(PhpType::string()->nullable(), 'H:i:s'), $field);
         $this->assertHasProcessor(new DateTimeProcessor('H:i:s', new \DateTimeZone('UTC'), DateTimeProcessor::MODE_ZERO_DATE), $field);
         $this->assertEquals(PhpType::object(\DateTimeImmutable::class)->nullable(), $field->getProcessedType());

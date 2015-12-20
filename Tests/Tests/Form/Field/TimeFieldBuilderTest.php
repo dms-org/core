@@ -11,7 +11,7 @@ use Iddigital\Cms\Core\Form\Field\Processor\Validator\GreaterThanOrEqualValidato
 use Iddigital\Cms\Core\Form\Field\Processor\Validator\LessThanOrEqualValidator;
 use Iddigital\Cms\Core\Form\Field\Processor\Validator\LessThanValidator;
 use Iddigital\Cms\Core\Form\Field\Processor\Validator\TypeValidator;
-use Iddigital\Cms\Core\Form\Field\Type\TimeType;
+use Iddigital\Cms\Core\Form\Field\Type\TimeOfDayType;
 use Iddigital\Cms\Core\Language\Message;
 use Iddigital\Cms\Core\Model\Type\Builder\Type;
 use Iddigital\Cms\Core\Model\Type\ObjectType;
@@ -38,9 +38,9 @@ class TimeFieldBuilderTest extends FieldBuilderTestBase
         $field = $this->field()->max($max)->build();
 
         $this->assertAttributes([
-                TimeType::ATTR_FORMAT   => 'H:i:s',
-                TimeType::ATTR_MAX      => new \DateTime('0000-01-01 12:00:00'),
-                TimeType::ATTR_TIMEZONE => null,
+                TimeOfDayType::ATTR_FORMAT   => 'H:i:s',
+                TimeOfDayType::ATTR_MAX      => new \DateTime('0000-01-01 12:00:00'),
+                TimeOfDayType::ATTR_TIMEZONE => null,
         ], $field);
 
         $this->assertEquals($this->buildTime('06:12:34'), $field->process('06:12:34'));
@@ -70,8 +70,8 @@ class TimeFieldBuilderTest extends FieldBuilderTestBase
                 new DefaultValueProcessor(Type::object(\DateTimeImmutable::class)->nullable(), $this->buildTime('12:00:00')),
         ], $field->getProcessors());
 
-        $this->assertEquals($this->buildTime('01:30:00'), $field->getType()->get(TimeType::ATTR_MIN));
-        $this->assertEquals($this->buildTime('15:44:59'), $field->getType()->get(TimeType::ATTR_MAX));
+        $this->assertEquals($this->buildTime('01:30:00'), $field->getType()->get(TimeOfDayType::ATTR_MIN));
+        $this->assertEquals($this->buildTime('15:44:59'), $field->getType()->get(TimeOfDayType::ATTR_MAX));
         $this->assertEquals($this->buildTime('14:12:12'), $field->process('14:12:12'));
         $this->assertFieldThrows($field, '12:00 PM', [
                 new Message(DateFormatValidator::MESSAGE, [

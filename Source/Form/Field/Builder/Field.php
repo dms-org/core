@@ -21,7 +21,7 @@ use Iddigital\Cms\Core\Form\Field\Type\ImageType;
 use Iddigital\Cms\Core\Form\Field\Type\InnerFormType;
 use Iddigital\Cms\Core\Form\Field\Type\IntType;
 use Iddigital\Cms\Core\Form\Field\Type\StringType;
-use Iddigital\Cms\Core\Form\Field\Type\TimeType;
+use Iddigital\Cms\Core\Form\Field\Type\TimeOfDayType;
 use Iddigital\Cms\Core\Form\IField;
 use Iddigital\Cms\Core\Form\IFieldProcessor;
 use Iddigital\Cms\Core\Form\IForm;
@@ -176,7 +176,7 @@ class Field extends FieldBuilderBase
      */
     public function time($format, \DateTimeZone $timeZone = null)
     {
-        return $this->dateTypeBuilder(new TimeType($format, $timeZone));
+        return $this->dateTypeBuilder(new TimeOfDayType($format, $timeZone));
     }
 
     /**
