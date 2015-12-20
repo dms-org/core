@@ -1,9 +1,9 @@
 <?php
 
-namespace Iddigital\Cms\Core\Table\Chart\DataSource\Definition;
+namespace Dms\Core\Table\Chart\DataSource\Definition;
 
-use Iddigital\Cms\Core\Table\Chart\IChartStructure;
-use Iddigital\Cms\Core\Table\ITableDataSource;
+use Dms\Core\Table\Chart\IChartStructure;
+use Dms\Core\Table\ITableDataSource;
 
 /**
  * The finalized chart table mapping definition.

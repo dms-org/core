@@ -1,18 +1,18 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Persistence\Db\Doctrine\Resequence;
+namespace Dms\Core\Tests\Persistence\Db\Doctrine\Resequence;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Platforms\MySqlPlatform;
 use Doctrine\DBAL\Platforms\SqlitePlatform;
-use Iddigital\Cms\Core\Persistence\Db\Doctrine\DoctrinePlatform;
-use Iddigital\Cms\Core\Persistence\Db\Doctrine\IResequenceCompiler;
-use Iddigital\Cms\Core\Persistence\Db\Doctrine\Resequence\DefaultResequenceCompiler;
-use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Expr;
-use Iddigital\Cms\Core\Persistence\Db\Query\ResequenceOrderIndexColumn;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Column;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Table;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Type\Integer;
+use Dms\Core\Persistence\Db\Doctrine\DoctrinePlatform;
+use Dms\Core\Persistence\Db\Doctrine\IResequenceCompiler;
+use Dms\Core\Persistence\Db\Doctrine\Resequence\DefaultResequenceCompiler;
+use Dms\Core\Persistence\Db\Query\Expression\Expr;
+use Dms\Core\Persistence\Db\Query\ResequenceOrderIndexColumn;
+use Dms\Core\Persistence\Db\Schema\Column;
+use Dms\Core\Persistence\Db\Schema\Table;
+use Dms\Core\Persistence\Db\Schema\Type\Integer;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

@@ -1,11 +1,11 @@
 <?php
 
-namespace Iddigital\Cms\Core\Module\Definition\Table;
+namespace Dms\Core\Module\Definition\Table;
 
-use Iddigital\Cms\Core\Table\Builder\Table;
-use Iddigital\Cms\Core\Table\DataSource\ArrayTableDataSource;
-use Iddigital\Cms\Core\Table\IColumn;
-use Iddigital\Cms\Core\Table\ITableStructure;
+use Dms\Core\Table\Builder\Table;
+use Dms\Core\Table\DataSource\ArrayTableDataSource;
+use Dms\Core\Table\IColumn;
+use Dms\Core\Table\ITableStructure;
 
 /**
  * The array table definer class.

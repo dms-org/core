@@ -1,8 +1,8 @@
 <?php
 
-namespace Iddigital\Cms\Core\Module;
+namespace Dms\Core\Module;
 
-use Iddigital\Cms\Core\Table\Chart\IChartCriteria;
+use Dms\Core\Table\Chart\IChartCriteria;
 
 /**
  * The chart view interface.

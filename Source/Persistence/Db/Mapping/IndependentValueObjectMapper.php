@@ -1,6 +1,6 @@
 <?php
 
-namespace Iddigital\Cms\Core\Persistence\Db\Mapping;
+namespace Dms\Core\Persistence\Db\Mapping;
 
 /**
  * The simple value object mapper base class.

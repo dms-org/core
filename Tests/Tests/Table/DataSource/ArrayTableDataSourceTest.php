@@ -1,13 +1,13 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Table\DataSource;
+namespace Dms\Core\Tests\Table\DataSource;
 
-use Iddigital\Cms\Core\Form\Field\Builder\Field;
-use Iddigital\Cms\Core\Table\Builder\Column;
-use Iddigital\Cms\Core\Table\Builder\Table;
-use Iddigital\Cms\Core\Table\DataSource\ArrayTableDataSource;
-use Iddigital\Cms\Core\Table\ITableDataSource;
-use Iddigital\Cms\Core\Table\ITableStructure;
+use Dms\Core\Form\Field\Builder\Field;
+use Dms\Core\Table\Builder\Column;
+use Dms\Core\Table\Builder\Table;
+use Dms\Core\Table\DataSource\ArrayTableDataSource;
+use Dms\Core\Table\ITableDataSource;
+use Dms\Core\Table\ITableStructure;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

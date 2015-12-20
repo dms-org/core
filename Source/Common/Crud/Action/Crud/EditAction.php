@@ -1,18 +1,18 @@
 <?php
 
-namespace Iddigital\Cms\Core\Common\Crud\Action\Crud;
+namespace Dms\Core\Common\Crud\Action\Crud;
 
-use Iddigital\Cms\Core\Auth\IAuthSystem;
-use Iddigital\Cms\Core\Auth\IPermission;
-use Iddigital\Cms\Core\Auth\Permission;
-use Iddigital\Cms\Core\Common\Crud\Action\Object\IObjectActionFormMapping;
-use Iddigital\Cms\Core\Common\Crud\Action\Object\Mapping\ArrayObjectActionFormMapping;
-use Iddigital\Cms\Core\Common\Crud\Action\Object\SelfHandlingObjectAction;
-use Iddigital\Cms\Core\Common\Crud\Definition\Form\FinalizedCrudFormDefinition;
-use Iddigital\Cms\Core\Common\Crud\ICrudModule;
-use Iddigital\Cms\Core\Model\IEntity;
-use Iddigital\Cms\Core\Model\Object\ArrayDataObject;
-use Iddigital\Cms\Core\Persistence\IRepository;
+use Dms\Core\Auth\IAuthSystem;
+use Dms\Core\Auth\IPermission;
+use Dms\Core\Auth\Permission;
+use Dms\Core\Common\Crud\Action\Object\IObjectActionFormMapping;
+use Dms\Core\Common\Crud\Action\Object\Mapping\ArrayObjectActionFormMapping;
+use Dms\Core\Common\Crud\Action\Object\SelfHandlingObjectAction;
+use Dms\Core\Common\Crud\Definition\Form\FinalizedCrudFormDefinition;
+use Dms\Core\Common\Crud\ICrudModule;
+use Dms\Core\Model\IEntity;
+use Dms\Core\Model\Object\ArrayDataObject;
+use Dms\Core\Persistence\IRepository;
 
 /**
  * The edit object action

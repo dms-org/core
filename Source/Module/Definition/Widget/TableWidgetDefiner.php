@@ -1,9 +1,9 @@
 <?php
 
-namespace Iddigital\Cms\Core\Module\Definition\Widget;
+namespace Dms\Core\Module\Definition\Widget;
 
-use Iddigital\Cms\Core\Table\ITableDataSource;
-use Iddigital\Cms\Core\Widget\TableWidget;
+use Dms\Core\Table\ITableDataSource;
+use Dms\Core\Widget\TableWidget;
 
 /**
  * The table widget definer class.

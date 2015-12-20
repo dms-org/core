@@ -1,11 +1,11 @@
 <?php
 
-namespace Iddigital\Cms\Core\Form\Field\Processor;
+namespace Dms\Core\Form\Field\Processor;
 
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Form\IFieldProcessor;
-use Iddigital\Cms\Core\Language\Message;
-use Iddigital\Cms\Core\Model\Type\ArrayType;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Form\IFieldProcessor;
+use Dms\Core\Language\Message;
+use Dms\Core\Model\Type\ArrayType;
 
 /**
  * The array processor.

@@ -1,10 +1,10 @@
 <?php
 
-namespace Iddigital\Cms\Core\Form\Binding\Field;
+namespace Dms\Core\Form\Binding\Field;
 
-use Iddigital\Cms\Core\Form\Binding\IFieldBinding;
-use Iddigital\Cms\Core\Exception\TypeMismatchException;
-use Iddigital\Cms\Core\Form\IField;
+use Dms\Core\Form\Binding\IFieldBinding;
+use Dms\Core\Exception\TypeMismatchException;
+use Dms\Core\Form\IField;
 
 /**
  * The field binding base class.

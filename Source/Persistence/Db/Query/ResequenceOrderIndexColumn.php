@@ -1,11 +1,11 @@
 <?php
 
-namespace Iddigital\Cms\Core\Persistence\Db\Query;
+namespace Dms\Core\Persistence\Db\Query;
 
-use Iddigital\Cms\Core\Persistence\Db\Connection\IConnection;
-use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Expr;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Column;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Table;
+use Dms\Core\Persistence\Db\Connection\IConnection;
+use Dms\Core\Persistence\Db\Query\Expression\Expr;
+use Dms\Core\Persistence\Db\Schema\Column;
+use Dms\Core\Persistence\Db\Schema\Table;
 
 /**
  * The db resequence column query class.
@@ -47,7 +47,7 @@ class ResequenceOrderIndexColumn implements IQuery
      * @param string|null $groupingColumnName
      * @param Expr|null   $whereCondition
      *
-     * @throws \Iddigital\Cms\Core\Exception\InvalidArgumentException
+     * @throws \Dms\Core\Exception\InvalidArgumentException
      */
     public function __construct(Table $table, $columnName, $groupingColumnName = null, Expr $whereCondition = null)
     {

@@ -1,14 +1,14 @@
 <?php
 
-namespace Iddigital\Cms\Core\Persistence\Db\Mapping;
+namespace Dms\Core\Persistence\Db\Mapping;
 
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Model\Object\Enum;
-use Iddigital\Cms\Core\Model\Object\FinalizedClassDefinition;
-use Iddigital\Cms\Core\Module\InvalidHandlerClassException;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\MapperDefinition;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Column;
-use Iddigital\Cms\Core\Util\Debug;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Model\Object\Enum;
+use Dms\Core\Model\Object\FinalizedClassDefinition;
+use Dms\Core\Module\InvalidHandlerClassException;
+use Dms\Core\Persistence\Db\Mapping\Definition\MapperDefinition;
+use Dms\Core\Persistence\Db\Schema\Column;
+use Dms\Core\Util\Debug;
 
 /**
  * The enum mapper class.

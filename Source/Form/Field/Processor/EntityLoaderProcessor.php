@@ -1,9 +1,9 @@
 <?php
 
-namespace Iddigital\Cms\Core\Form\Field\Processor;
+namespace Dms\Core\Form\Field\Processor;
 
-use Iddigital\Cms\Core\Model\IEntity;
-use Iddigital\Cms\Core\Model\IEntitySet;
+use Dms\Core\Model\IEntity;
+use Dms\Core\Model\IEntitySet;
 
 /**
  * The entity loader validator.

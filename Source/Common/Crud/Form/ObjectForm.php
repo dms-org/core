@@ -1,13 +1,13 @@
 <?php
 
-namespace Iddigital\Cms\Core\Common\Crud\Form;
+namespace Dms\Core\Common\Crud\Form;
 
-use Iddigital\Cms\Core\Common\Crud\Action\Object\IObjectAction;
-use Iddigital\Cms\Core\Form\Builder\Form;
-use Iddigital\Cms\Core\Form\Field\Builder\Field;
-use Iddigital\Cms\Core\Form\Field\Builder\FieldNameBuilder;
-use Iddigital\Cms\Core\Form\IForm;
-use Iddigital\Cms\Core\Model\IEntitySet;
+use Dms\Core\Common\Crud\Action\Object\IObjectAction;
+use Dms\Core\Form\Builder\Form;
+use Dms\Core\Form\Field\Builder\Field;
+use Dms\Core\Form\Field\Builder\FieldNameBuilder;
+use Dms\Core\Form\IForm;
+use Dms\Core\Model\IEntitySet;
 
 /**
  * The object form static factory class.

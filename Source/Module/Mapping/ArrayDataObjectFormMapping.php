@@ -1,11 +1,11 @@
 <?php
 
-namespace Iddigital\Cms\Core\Module\Mapping;
+namespace Dms\Core\Module\Mapping;
 
-use Iddigital\Cms\Core\Form;
-use Iddigital\Cms\Core\Form\IStagedForm;
-use Iddigital\Cms\Core\Form\Object\Stage\StagedFormObject;
-use Iddigital\Cms\Core\Model\Object\ArrayDataObject;
+use Dms\Core\Form;
+use Dms\Core\Form\IStagedForm;
+use Dms\Core\Form\Object\Stage\StagedFormObject;
+use Dms\Core\Model\Object\ArrayDataObject;
 
 /**
  * The array data object form mapping.

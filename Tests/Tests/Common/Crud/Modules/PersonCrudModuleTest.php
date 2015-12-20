@@ -1,23 +1,23 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Common\Crud\Modules;
+namespace Dms\Core\Tests\Common\Crud\Modules;
 
-use Iddigital\Cms\Core\Auth\IPermission;
-use Iddigital\Cms\Core\Auth\Permission;
-use Iddigital\Cms\Core\Common\Crud\Action\Object\IObjectAction;
-use Iddigital\Cms\Core\Common\Crud\Action\Table\IReorderAction;
-use Iddigital\Cms\Core\Common\Crud\ICrudModule;
-use Iddigital\Cms\Core\Common\Crud\IReadModule;
-use Iddigital\Cms\Core\Form\InvalidFormSubmissionException;
-use Iddigital\Cms\Core\Module\IParameterizedAction;
-use Iddigital\Cms\Core\Persistence\ArrayRepository;
-use Iddigital\Cms\Core\Persistence\IRepository;
-use Iddigital\Cms\Core\Tests\Common\Crud\Modules\Fixtures\Complex\Domain\Adult;
-use Iddigital\Cms\Core\Tests\Common\Crud\Modules\Fixtures\Complex\Domain\Child;
-use Iddigital\Cms\Core\Tests\Common\Crud\Modules\Fixtures\Complex\Domain\Colour;
-use Iddigital\Cms\Core\Tests\Common\Crud\Modules\Fixtures\Complex\Domain\Person;
-use Iddigital\Cms\Core\Tests\Common\Crud\Modules\Fixtures\Complex\PersonModule;
-use Iddigital\Cms\Core\Tests\Module\Mock\MockAuthSystem;
+use Dms\Core\Auth\IPermission;
+use Dms\Core\Auth\Permission;
+use Dms\Core\Common\Crud\Action\Object\IObjectAction;
+use Dms\Core\Common\Crud\Action\Table\IReorderAction;
+use Dms\Core\Common\Crud\ICrudModule;
+use Dms\Core\Common\Crud\IReadModule;
+use Dms\Core\Form\InvalidFormSubmissionException;
+use Dms\Core\Module\IParameterizedAction;
+use Dms\Core\Persistence\ArrayRepository;
+use Dms\Core\Persistence\IRepository;
+use Dms\Core\Tests\Common\Crud\Modules\Fixtures\Complex\Domain\Adult;
+use Dms\Core\Tests\Common\Crud\Modules\Fixtures\Complex\Domain\Child;
+use Dms\Core\Tests\Common\Crud\Modules\Fixtures\Complex\Domain\Colour;
+use Dms\Core\Tests\Common\Crud\Modules\Fixtures\Complex\Domain\Person;
+use Dms\Core\Tests\Common\Crud\Modules\Fixtures\Complex\PersonModule;
+use Dms\Core\Tests\Module\Mock\MockAuthSystem;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

@@ -1,10 +1,10 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Module\Table;
+namespace Dms\Core\Tests\Module\Table;
 
-use Iddigital\Cms\Common\Testing\CmsTestCase;
-use Iddigital\Cms\Core\Module\Table\TableView;
-use Iddigital\Cms\Core\Table\IRowCriteria;
+use Dms\Common\Testing\CmsTestCase;
+use Dms\Core\Module\Table\TableView;
+use Dms\Core\Table\IRowCriteria;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

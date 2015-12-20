@@ -1,11 +1,11 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Form\Object;
+namespace Dms\Core\Tests\Form\Object;
 
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Model\IEntity;
-use Iddigital\Cms\Core\Tests\Form\Object\Fixtures\PageEntity;
-use Iddigital\Cms\Core\Tests\Form\Object\Fixtures\PageEntityForm;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Model\IEntity;
+use Dms\Core\Tests\Form\Object\Fixtures\PageEntity;
+use Dms\Core\Tests\Form\Object\Fixtures\PageEntityForm;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

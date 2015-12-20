@@ -1,14 +1,14 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\ReadModel\Fixtures\Properties;
+namespace Dms\Core\Tests\Persistence\Db\Integration\Mapping\ReadModel\Fixtures\Properties;
 
-use Iddigital\Cms\Core\Persistence\Db\Connection\IConnection;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\CustomOrm;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\IOrm;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\ReadModel\Definition\ReadMapperDefinition;
-use Iddigital\Cms\Core\Persistence\ReadModelRepository;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\Fixtures\Types\TypesEntity;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\Fixtures\Types\TypesMapper;
+use Dms\Core\Persistence\Db\Connection\IConnection;
+use Dms\Core\Persistence\Db\Mapping\CustomOrm;
+use Dms\Core\Persistence\Db\Mapping\IOrm;
+use Dms\Core\Persistence\Db\Mapping\ReadModel\Definition\ReadMapperDefinition;
+use Dms\Core\Persistence\ReadModelRepository;
+use Dms\Core\Tests\Persistence\Db\Integration\Mapping\Fixtures\Types\TypesEntity;
+use Dms\Core\Tests\Persistence\Db\Integration\Mapping\Fixtures\Types\TypesMapper;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

@@ -1,17 +1,17 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Form\Field;
+namespace Dms\Core\Tests\Form\Field;
 
-use Iddigital\Cms\Core\File\IUploadedFile;
-use Iddigital\Cms\Core\Form\Field\Builder\Field as Field;
-use Iddigital\Cms\Core\Form\Field\Builder\FileFieldBuilder;
-use Iddigital\Cms\Core\Form\Field\Processor\Validator\FileExtensionValidator;
-use Iddigital\Cms\Core\Form\Field\Processor\Validator\FileSizeValidator;
-use Iddigital\Cms\Core\Form\Field\Processor\Validator\TypeValidator;
-use Iddigital\Cms\Core\Form\Field\Processor\Validator\UploadedFileValidator;
-use Iddigital\Cms\Core\Form\Field\Type\FileType;
-use Iddigital\Cms\Core\Language\Message;
-use Iddigital\Cms\Core\Model\Type\Builder\Type;
+use Dms\Core\File\IUploadedFile;
+use Dms\Core\Form\Field\Builder\Field as Field;
+use Dms\Core\Form\Field\Builder\FileFieldBuilder;
+use Dms\Core\Form\Field\Processor\Validator\FileExtensionValidator;
+use Dms\Core\Form\Field\Processor\Validator\FileSizeValidator;
+use Dms\Core\Form\Field\Processor\Validator\TypeValidator;
+use Dms\Core\Form\Field\Processor\Validator\UploadedFileValidator;
+use Dms\Core\Form\Field\Type\FileType;
+use Dms\Core\Language\Message;
+use Dms\Core\Model\Type\Builder\Type;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

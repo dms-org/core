@@ -1,9 +1,9 @@
 <?php
 
-namespace Iddigital\Cms\Core\Model\Object;
+namespace Dms\Core\Model\Object;
 
-use Iddigital\Cms\Core\Exception;
-use Iddigital\Cms\Core\Model\IReadModel;
+use Dms\Core\Exception;
+use Dms\Core\Model\IReadModel;
 
 /**
  * The read model base class.

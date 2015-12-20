@@ -1,10 +1,10 @@
 <?php
 
-namespace Iddigital\Cms\Core\Form\Field\Type;
+namespace Dms\Core\Form\Field\Type;
 
-use Iddigital\Cms\Core\Form\IFieldProcessor;
-use Iddigital\Cms\Core\Model\Type\Builder\Type;
-use Iddigital\Cms\Core\Model\Type\IType;
+use Dms\Core\Form\IFieldProcessor;
+use Dms\Core\Model\Type\Builder\Type;
+use Dms\Core\Model\Type\IType;
 
 /**
  * The custom type class.

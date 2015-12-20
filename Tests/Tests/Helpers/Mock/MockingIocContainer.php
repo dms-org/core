@@ -1,6 +1,6 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Helpers\Mock;
+namespace Dms\Core\Tests\Helpers\Mock;
 
 use Interop\Container\ContainerInterface;
 

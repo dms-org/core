@@ -1,11 +1,11 @@
 <?php
 
-namespace Iddigital\Cms\Core\Table\Chart\DataSource;
+namespace Dms\Core\Table\Chart\DataSource;
 
-use Iddigital\Cms\Core\Table\Chart\DataSource\Criteria\ChartTableCriteriaMapper;
-use Iddigital\Cms\Core\Table\Chart\DataSource\Definition\FinalizedChartTableMapperDefinition;
-use Iddigital\Cms\Core\Table\Chart\IChartCriteria;
-use Iddigital\Cms\Core\Table\ITableDataSource;
+use Dms\Core\Table\Chart\DataSource\Criteria\ChartTableCriteriaMapper;
+use Dms\Core\Table\Chart\DataSource\Definition\FinalizedChartTableMapperDefinition;
+use Dms\Core\Table\Chart\IChartCriteria;
+use Dms\Core\Table\ITableDataSource;
 
 /**
  * The table data source adapter class.

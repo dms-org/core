@@ -1,12 +1,12 @@
 <?php
 
-namespace Iddigital\Cms\Core\Common\Crud\Dream\Simple;
+namespace Dms\Core\Common\Crud\Dream\Simple;
 
-use Iddigital\Cms\Core\Form\Builder\Form;
-use Iddigital\Cms\Core\Form\Field\Builder\Field;
-use Iddigital\Cms\Core\Form\IForm;
-use Iddigital\Cms\Core\Persistence\Db\Connection\IConnection;
-use Iddigital\Cms\Core\Table\Builder\Table;
+use Dms\Core\Form\Builder\Form;
+use Dms\Core\Form\Field\Builder\Field;
+use Dms\Core\Form\IForm;
+use Dms\Core\Persistence\Db\Connection\IConnection;
+use Dms\Core\Table\Builder\Table;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

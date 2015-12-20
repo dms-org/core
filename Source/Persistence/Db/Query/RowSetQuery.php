@@ -1,9 +1,9 @@
 <?php
 
-namespace Iddigital\Cms\Core\Persistence\Db\Query;
+namespace Dms\Core\Persistence\Db\Query;
 
-use Iddigital\Cms\Core\Persistence\Db\RowSet;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Table;
+use Dms\Core\Persistence\Db\RowSet;
+use Dms\Core\Persistence\Db\Schema\Table;
 
 /**
  * The row set query base class

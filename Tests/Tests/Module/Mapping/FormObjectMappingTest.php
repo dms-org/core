@@ -1,11 +1,11 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Module\Mapping;
+namespace Dms\Core\Tests\Module\Mapping;
 
-use Iddigital\Cms\Core\Module\IStagedFormDtoMapping;
-use Iddigital\Cms\Core\Module\Mapping\FormObjectMapping;
-use Iddigital\Cms\Core\Form\IForm;
-use Iddigital\Cms\Core\Tests\Form\Object\Fixtures\ArrayOfInts;
+use Dms\Core\Module\IStagedFormDtoMapping;
+use Dms\Core\Module\Mapping\FormObjectMapping;
+use Dms\Core\Form\IForm;
+use Dms\Core\Tests\Form\Object\Fixtures\ArrayOfInts;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

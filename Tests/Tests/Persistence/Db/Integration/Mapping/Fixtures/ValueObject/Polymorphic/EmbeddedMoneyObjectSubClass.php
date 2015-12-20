@@ -1,11 +1,11 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\Fixtures\ValueObject\Polymorphic;
+namespace Dms\Core\Tests\Persistence\Db\Integration\Mapping\Fixtures\ValueObject\Polymorphic;
 
-use Iddigital\Cms\Core\Model\Object\ClassDefinition;
-use Iddigital\Cms\Core\Model\Object\ValueObject;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\Fixtures\ValueObject\CurrencyEnum;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\Fixtures\ValueObject\EmbeddedMoneyObject;
+use Dms\Core\Model\Object\ClassDefinition;
+use Dms\Core\Model\Object\ValueObject;
+use Dms\Core\Tests\Persistence\Db\Integration\Mapping\Fixtures\ValueObject\CurrencyEnum;
+use Dms\Core\Tests\Persistence\Db\Integration\Mapping\Fixtures\ValueObject\EmbeddedMoneyObject;
 
 
 /**

@@ -1,16 +1,16 @@
 <?php
 
-namespace Iddigital\Cms\Core\Model\Criteria\Member;
+namespace Dms\Core\Model\Criteria\Member;
 
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Model\Criteria\NestedMember;
-use Iddigital\Cms\Core\Model\IObjectSet;
-use Iddigital\Cms\Core\Model\ObjectCollection;
-use Iddigital\Cms\Core\Model\Type\ArrayType;
-use Iddigital\Cms\Core\Model\Type\IType;
-use Iddigital\Cms\Core\Model\Type\ObjectType;
-use Iddigital\Cms\Core\Model\Type\WithElementsType;
-use Iddigital\Cms\Core\Model\TypedCollection;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Model\Criteria\NestedMember;
+use Dms\Core\Model\IObjectSet;
+use Dms\Core\Model\ObjectCollection;
+use Dms\Core\Model\Type\ArrayType;
+use Dms\Core\Model\Type\IType;
+use Dms\Core\Model\Type\ObjectType;
+use Dms\Core\Model\Type\WithElementsType;
+use Dms\Core\Model\TypedCollection;
 
 /**
  * The object set flatten method expression base class.

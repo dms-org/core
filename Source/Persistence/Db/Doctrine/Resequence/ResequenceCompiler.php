@@ -1,11 +1,11 @@
 <?php
 
-namespace Iddigital\Cms\Core\Persistence\Db\Doctrine\Resequence;
+namespace Dms\Core\Persistence\Db\Doctrine\Resequence;
 
 use Doctrine\DBAL\Query\QueryBuilder;
-use Iddigital\Cms\Core\Persistence\Db\Doctrine\DoctrineExpressionCompiler;
-use Iddigital\Cms\Core\Persistence\Db\Doctrine\IResequenceCompiler;
-use Iddigital\Cms\Core\Persistence\Db\Query\ResequenceOrderIndexColumn;
+use Dms\Core\Persistence\Db\Doctrine\DoctrineExpressionCompiler;
+use Dms\Core\Persistence\Db\Doctrine\IResequenceCompiler;
+use Dms\Core\Persistence\Db\Query\ResequenceOrderIndexColumn;
 
 /**
  * The resequence compiler base class.

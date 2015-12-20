@@ -1,12 +1,12 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Table\Column\Component\Type;
+namespace Dms\Core\Tests\Table\Column\Component\Type;
 
-use Iddigital\Cms\Common\Testing\CmsTestCase;
-use Iddigital\Cms\Core\Form\Field\Builder\Field;
-use Iddigital\Cms\Core\Model\Criteria\Condition\ConditionOperator;
-use Iddigital\Cms\Core\Table\Column\Component\Type\ColumnComponentOperator;
-use Iddigital\Cms\Core\Table\Column\Component\Type\StandardConditions;
+use Dms\Common\Testing\CmsTestCase;
+use Dms\Core\Form\Field\Builder\Field;
+use Dms\Core\Model\Criteria\Condition\ConditionOperator;
+use Dms\Core\Table\Column\Component\Type\ColumnComponentOperator;
+use Dms\Core\Table\Column\Component\Type\StandardConditions;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

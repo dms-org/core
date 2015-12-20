@@ -1,9 +1,9 @@
 <?php
 
-namespace Iddigital\Cms\Core\Form\Object;
+namespace Dms\Core\Form\Object;
 
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Model\ITypedObject;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Model\ITypedObject;
 
 /**
  * The typed object form object base class.

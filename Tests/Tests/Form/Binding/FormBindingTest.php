@@ -1,19 +1,19 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Form\Binding;
+namespace Dms\Core\Tests\Form\Binding;
 
-use Iddigital\Cms\Common\Testing\CmsTestCase;
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Form\Binding\Field\FieldPropertyBinding;
-use Iddigital\Cms\Core\Form\Binding\Field\GetterSetterMethodBinding;
-use Iddigital\Cms\Core\Form\Binding\FormBinding;
-use Iddigital\Cms\Core\Form\Binding\IFieldBinding;
-use Iddigital\Cms\Core\Form\Binding\IFormBinding;
-use Iddigital\Cms\Core\Form\Builder\Form;
-use Iddigital\Cms\Core\Form\Field\Builder\Field;
-use Iddigital\Cms\Core\Form\IForm;
-use Iddigital\Cms\Core\Form\InvalidFormSubmissionException;
-use Iddigital\Cms\Core\Tests\Form\Binding\Fixtures\TestFormBoundClass;
+use Dms\Common\Testing\CmsTestCase;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Form\Binding\Field\FieldPropertyBinding;
+use Dms\Core\Form\Binding\Field\GetterSetterMethodBinding;
+use Dms\Core\Form\Binding\FormBinding;
+use Dms\Core\Form\Binding\IFieldBinding;
+use Dms\Core\Form\Binding\IFormBinding;
+use Dms\Core\Form\Builder\Form;
+use Dms\Core\Form\Field\Builder\Field;
+use Dms\Core\Form\IForm;
+use Dms\Core\Form\InvalidFormSubmissionException;
+use Dms\Core\Tests\Form\Binding\Fixtures\TestFormBoundClass;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

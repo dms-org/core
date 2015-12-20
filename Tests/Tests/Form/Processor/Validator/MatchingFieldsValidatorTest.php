@@ -1,12 +1,12 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Form\Processor\Validator;
+namespace Dms\Core\Tests\Form\Processor\Validator;
 
-use Iddigital\Cms\Core\Form\Field\Field;
-use Iddigital\Cms\Core\Form\Field\Type\StringType;
-use Iddigital\Cms\Core\Form\Processor\FormValidator;
-use Iddigital\Cms\Core\Form\Processor\Validator\MatchingFieldsValidator;
-use Iddigital\Cms\Core\Language\Message;
+use Dms\Core\Form\Field\Field;
+use Dms\Core\Form\Field\Type\StringType;
+use Dms\Core\Form\Processor\FormValidator;
+use Dms\Core\Form\Processor\Validator\MatchingFieldsValidator;
+use Dms\Core\Language\Message;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

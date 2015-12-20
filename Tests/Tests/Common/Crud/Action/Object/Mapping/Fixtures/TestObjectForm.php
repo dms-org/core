@@ -1,11 +1,11 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Common\Crud\Action\Object\Mapping\Fixtures;
+namespace Dms\Core\Tests\Common\Crud\Action\Object\Mapping\Fixtures;
 
-use Iddigital\Cms\Core\Common\Crud\Form\ObjectStagedFormObject;
-use Iddigital\Cms\Core\Form\Object\FormObjectDefinition;
-use Iddigital\Cms\Core\Form\Object\Stage\StagedFormObjectDefinition;
-use Iddigital\Cms\Core\Model\Object\ClassDefinition;
+use Dms\Core\Common\Crud\Form\ObjectStagedFormObject;
+use Dms\Core\Form\Object\FormObjectDefinition;
+use Dms\Core\Form\Object\Stage\StagedFormObjectDefinition;
+use Dms\Core\Model\Object\ClassDefinition;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

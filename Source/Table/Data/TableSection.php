@@ -1,12 +1,12 @@
 <?php
 
-namespace Iddigital\Cms\Core\Table\Data;
+namespace Dms\Core\Table\Data;
 
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Module\IParameterizedAction;
-use Iddigital\Cms\Core\Table\ITableRow;
-use Iddigital\Cms\Core\Table\ITableSection;
-use Iddigital\Cms\Core\Table\ITableStructure;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Module\IParameterizedAction;
+use Dms\Core\Table\ITableRow;
+use Dms\Core\Table\ITableSection;
+use Dms\Core\Table\ITableStructure;
 
 /**
  * The table section class

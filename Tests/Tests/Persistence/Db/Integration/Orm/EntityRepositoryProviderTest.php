@@ -1,14 +1,14 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Orm;
+namespace Dms\Core\Tests\Persistence\Db\Integration\Orm;
 
-use Iddigital\Cms\Common\Testing\CmsTestCase;
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Persistence\Db\Connection\IConnection;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\EntityRepositoryProvider;
-use Iddigital\Cms\Core\Persistence\DbRepository;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Orm\Fixtures\Relations\AnotherEntity;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Orm\Fixtures\Relations\ManyToManyOrm;
+use Dms\Common\Testing\CmsTestCase;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Persistence\Db\Connection\IConnection;
+use Dms\Core\Persistence\Db\Mapping\EntityRepositoryProvider;
+use Dms\Core\Persistence\DbRepository;
+use Dms\Core\Tests\Persistence\Db\Integration\Orm\Fixtures\Relations\AnotherEntity;
+use Dms\Core\Tests\Persistence\Db\Integration\Orm\Fixtures\Relations\ManyToManyOrm;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

@@ -1,14 +1,14 @@
 <?php
 
-namespace Iddigital\Cms\Core\Common\Crud\Definition\Action;
+namespace Dms\Core\Common\Crud\Definition\Action;
 
-use Iddigital\Cms\Core\Auth\IAuthSystem;
-use Iddigital\Cms\Core\Common\Crud\Action\Object\CustomObjectActionHandler;
-use Iddigital\Cms\Core\Common\Crud\Action\Object\IObjectActionHandler;
-use Iddigital\Cms\Core\Common\Crud\ICrudModule;
-use Iddigital\Cms\Core\Model\IEntity;
-use Iddigital\Cms\Core\Model\IEntitySet;
-use Iddigital\Cms\Core\Persistence\IRepository;
+use Dms\Core\Auth\IAuthSystem;
+use Dms\Core\Common\Crud\Action\Object\CustomObjectActionHandler;
+use Dms\Core\Common\Crud\Action\Object\IObjectActionHandler;
+use Dms\Core\Common\Crud\ICrudModule;
+use Dms\Core\Model\IEntity;
+use Dms\Core\Model\IEntitySet;
+use Dms\Core\Persistence\IRepository;
 
 /**
  * The remove object action definer class.

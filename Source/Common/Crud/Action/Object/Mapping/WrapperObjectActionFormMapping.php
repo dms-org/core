@@ -1,15 +1,15 @@
 <?php
 
-namespace Iddigital\Cms\Core\Common\Crud\Action\Object\Mapping;
+namespace Dms\Core\Common\Crud\Action\Object\Mapping;
 
-use Iddigital\Cms\Core\Common\Crud\Action\Object\IObjectAction;
-use Iddigital\Cms\Core\Common\Crud\Action\Object\ObjectActionParameter;
-use Iddigital\Cms\Core\Form\Builder\StagedForm;
-use Iddigital\Cms\Core\Form\IForm;
-use Iddigital\Cms\Core\Form\InvalidFormSubmissionException;
-use Iddigital\Cms\Core\Form\IStagedForm;
-use Iddigital\Cms\Core\Model\IDataTransferObject;
-use Iddigital\Cms\Core\Module\IStagedFormDtoMapping;
+use Dms\Core\Common\Crud\Action\Object\IObjectAction;
+use Dms\Core\Common\Crud\Action\Object\ObjectActionParameter;
+use Dms\Core\Form\Builder\StagedForm;
+use Dms\Core\Form\IForm;
+use Dms\Core\Form\InvalidFormSubmissionException;
+use Dms\Core\Form\IStagedForm;
+use Dms\Core\Model\IDataTransferObject;
+use Dms\Core\Module\IStagedFormDtoMapping;
 
 /**
  * The wrapper object action form mapping that wraps another form

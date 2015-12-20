@@ -1,25 +1,25 @@
 <?php
 
-namespace Iddigital\Cms\Core\Common\Crud\Definition\Table;
+namespace Dms\Core\Common\Crud\Definition\Table;
 
-use Iddigital\Cms\Core\Auth\Permission;
-use Iddigital\Cms\Core\Common\Crud\Action\Table\CallbackReorderAction;
-use Iddigital\Cms\Core\Common\Crud\Action\Table\IReorderAction;
-use Iddigital\Cms\Core\Common\Crud\Definition\ReadModuleDefinition;
-use Iddigital\Cms\Core\Common\Crud\ICrudModule;
-use Iddigital\Cms\Core\Common\Crud\IReadModule;
-use Iddigital\Cms\Core\Common\Crud\Table\ISummaryTable;
-use Iddigital\Cms\Core\Common\Crud\Table\SummaryTable;
-use Iddigital\Cms\Core\Exception\InvalidOperationException;
-use Iddigital\Cms\Core\Model\IEntitySet;
-use Iddigital\Cms\Core\Model\IObjectSet;
-use Iddigital\Cms\Core\Model\Object\FinalizedClassDefinition;
-use Iddigital\Cms\Core\Module\Definition\Table\TableViewDefiner;
-use Iddigital\Cms\Core\Table\DataSource\Definition\ColumnMappingDefiner;
-use Iddigital\Cms\Core\Table\DataSource\Definition\ObjectTableDefinition;
-use Iddigital\Cms\Core\Table\DataSource\ObjectTableDataSource;
-use Iddigital\Cms\Core\Table\IColumn;
-use Iddigital\Cms\Core\Table\ITableDataSource;
+use Dms\Core\Auth\Permission;
+use Dms\Core\Common\Crud\Action\Table\CallbackReorderAction;
+use Dms\Core\Common\Crud\Action\Table\IReorderAction;
+use Dms\Core\Common\Crud\Definition\ReadModuleDefinition;
+use Dms\Core\Common\Crud\ICrudModule;
+use Dms\Core\Common\Crud\IReadModule;
+use Dms\Core\Common\Crud\Table\ISummaryTable;
+use Dms\Core\Common\Crud\Table\SummaryTable;
+use Dms\Core\Exception\InvalidOperationException;
+use Dms\Core\Model\IEntitySet;
+use Dms\Core\Model\IObjectSet;
+use Dms\Core\Model\Object\FinalizedClassDefinition;
+use Dms\Core\Module\Definition\Table\TableViewDefiner;
+use Dms\Core\Table\DataSource\Definition\ColumnMappingDefiner;
+use Dms\Core\Table\DataSource\Definition\ObjectTableDefinition;
+use Dms\Core\Table\DataSource\ObjectTableDataSource;
+use Dms\Core\Table\IColumn;
+use Dms\Core\Table\ITableDataSource;
 
 /**
  * The summary table definition class.

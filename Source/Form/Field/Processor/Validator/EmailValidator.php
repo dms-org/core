@@ -1,8 +1,8 @@
 <?php
 
-namespace Iddigital\Cms\Core\Form\Field\Processor\Validator;
+namespace Dms\Core\Form\Field\Processor\Validator;
 
-use Iddigital\Cms\Core\Model\Type\IType;
+use Dms\Core\Model\Type\IType;
 
 /**
  * The email filter validator.

@@ -1,11 +1,11 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Table\Column\Component;
+namespace Dms\Core\Tests\Table\Column\Component;
 
-use Iddigital\Cms\Common\Testing\CmsTestCase;
-use Iddigital\Cms\Core\Form\Field\Builder\Field;
-use Iddigital\Cms\Core\Table\Column\Component\ColumnComponent;
-use Iddigital\Cms\Core\Table\Column\Component\Type\ColumnComponentType;
+use Dms\Common\Testing\CmsTestCase;
+use Dms\Core\Form\Field\Builder\Field;
+use Dms\Core\Table\Column\Component\ColumnComponent;
+use Dms\Core\Table\Column\Component\Type\ColumnComponentType;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

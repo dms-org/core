@@ -1,9 +1,9 @@
 <?php
 
-namespace Iddigital\Cms\Core\Form\Field\Processor;
+namespace Dms\Core\Form\Field\Processor;
 
-use Iddigital\Cms\Core\Language\Message;
-use Iddigital\Cms\Core\Model\Type\Builder\Type;
+use Dms\Core\Language\Message;
+use Dms\Core\Model\Type\Builder\Type;
 
 /**
  * The field type processor.

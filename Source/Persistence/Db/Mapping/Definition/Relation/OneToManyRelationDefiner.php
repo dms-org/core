@@ -1,18 +1,18 @@
 <?php
 
-namespace Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Relation;
+namespace Dms\Core\Persistence\Db\Mapping\Definition\Relation;
 
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Hook\OrderIndexPropertyLoaderHook;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\IEntityMapper;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Mode\IdentifyingRelationMode;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Mode\NonIdentifyingRelationMode;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Reference\ToManyRelationIdentityReference;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Reference\ToManyRelationObjectReference;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\ToManyRelation;
-use Iddigital\Cms\Core\Persistence\Db\Query\Clause\Ordering;
-use Iddigital\Cms\Core\Persistence\Db\Schema\ForeignKey;
-use Iddigital\Cms\Core\Persistence\Db\Schema\ForeignKeyMode;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Table;
+use Dms\Core\Persistence\Db\Mapping\Hook\OrderIndexPropertyLoaderHook;
+use Dms\Core\Persistence\Db\Mapping\IEntityMapper;
+use Dms\Core\Persistence\Db\Mapping\Relation\Mode\IdentifyingRelationMode;
+use Dms\Core\Persistence\Db\Mapping\Relation\Mode\NonIdentifyingRelationMode;
+use Dms\Core\Persistence\Db\Mapping\Relation\Reference\ToManyRelationIdentityReference;
+use Dms\Core\Persistence\Db\Mapping\Relation\Reference\ToManyRelationObjectReference;
+use Dms\Core\Persistence\Db\Mapping\Relation\ToManyRelation;
+use Dms\Core\Persistence\Db\Query\Clause\Ordering;
+use Dms\Core\Persistence\Db\Schema\ForeignKey;
+use Dms\Core\Persistence\Db\Schema\ForeignKeyMode;
+use Dms\Core\Persistence\Db\Schema\Table;
 
 /**
  * The one-to-many relation definer class.

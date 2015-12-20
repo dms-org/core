@@ -1,16 +1,16 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Module;
+namespace Dms\Core\Tests\Module;
 
-use Iddigital\Cms\Core\Auth\IPermission;
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Module\Module;
-use Iddigital\Cms\Core\Table\Chart\IChartCriteria;
-use Iddigital\Cms\Core\Table\IRowCriteria;
-use Iddigital\Cms\Core\Tests\Module\Fixtures\ModuleWithWidgets;
-use Iddigital\Cms\Core\Tests\Module\Mock\MockAuthSystem;
-use Iddigital\Cms\Core\Widget\ChartWidget;
-use Iddigital\Cms\Core\Widget\TableWidget;
+use Dms\Core\Auth\IPermission;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Module\Module;
+use Dms\Core\Table\Chart\IChartCriteria;
+use Dms\Core\Table\IRowCriteria;
+use Dms\Core\Tests\Module\Fixtures\ModuleWithWidgets;
+use Dms\Core\Tests\Module\Mock\MockAuthSystem;
+use Dms\Core\Widget\ChartWidget;
+use Dms\Core\Widget\TableWidget;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

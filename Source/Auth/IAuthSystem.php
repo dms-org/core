@@ -1,8 +1,8 @@
 <?php
 
-namespace Iddigital\Cms\Core\Auth;
+namespace Dms\Core\Auth;
 
-use Iddigital\Cms\Core\Exception;
+use Dms\Core\Exception;
 
 /**
  * The authentication system interface.

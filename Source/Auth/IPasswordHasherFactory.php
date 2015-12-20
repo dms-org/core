@@ -1,9 +1,9 @@
 <?php
 
-namespace Iddigital\Cms\Core\Auth;
+namespace Dms\Core\Auth;
 
-use Iddigital\Cms\Core\Exception;
-use Iddigital\Cms\Core\IPackage;
+use Dms\Core\Exception;
+use Dms\Core\IPackage;
 
 interface IPasswordHasherFactory extends IPackage
 {

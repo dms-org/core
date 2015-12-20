@@ -1,12 +1,12 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Module\Chart;
+namespace Dms\Core\Tests\Module\Chart;
 
-use Iddigital\Cms\Common\Testing\CmsTestCase;
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Module\Chart\ChartDisplay;
-use Iddigital\Cms\Core\Module\Chart\ChartView;
-use Iddigital\Cms\Core\Table\Chart\IChartDataSource;
+use Dms\Common\Testing\CmsTestCase;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Module\Chart\ChartDisplay;
+use Dms\Core\Module\Chart\ChartView;
+use Dms\Core\Table\Chart\IChartDataSource;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

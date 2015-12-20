@@ -1,10 +1,10 @@
 <?php
 
-namespace Iddigital\Cms\Core\Common\Crud\Definition\Form;
+namespace Dms\Core\Common\Crud\Definition\Form;
 
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Form\Binding\IFieldBinding;
-use Iddigital\Cms\Core\Form\IField;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Form\Binding\IFieldBinding;
+use Dms\Core\Form\IField;
 
 /**
  * The field binding definition class..

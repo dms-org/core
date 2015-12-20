@@ -1,9 +1,9 @@
 <?php
 
-namespace Iddigital\Cms\Core\Common\Crud\Dream\Simple;
+namespace Dms\Core\Common\Crud\Dream\Simple;
 
-use Iddigital\Cms\Core\Persistence\Db\Connection\IConnection;
-use Iddigital\Cms\Core\Persistence\DbRepository;
+use Dms\Core\Persistence\Db\Connection\IConnection;
+use Dms\Core\Persistence\DbRepository;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

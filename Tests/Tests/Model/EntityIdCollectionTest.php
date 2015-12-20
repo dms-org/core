@@ -1,13 +1,13 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Model;
+namespace Dms\Core\Tests\Model;
 
-use Iddigital\Cms\Common\Testing\CmsTestCase;
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Model\EntityCollection;
-use Iddigital\Cms\Core\Model\EntityIdCollection;
-use Iddigital\Cms\Core\Model\Type\Builder\Type;
-use Iddigital\Cms\Core\Model\TypedCollection;
+use Dms\Common\Testing\CmsTestCase;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Model\EntityCollection;
+use Dms\Core\Model\EntityIdCollection;
+use Dms\Core\Model\Type\Builder\Type;
+use Dms\Core\Model\TypedCollection;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

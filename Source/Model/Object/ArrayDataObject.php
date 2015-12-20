@@ -1,12 +1,12 @@
 <?php
 
-namespace Iddigital\Cms\Core\Model\Object;
+namespace Dms\Core\Model\Object;
 
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Exception\NotImplementedException;
-use Iddigital\Cms\Core\Model\IDataTransferObject;
-use Iddigital\Cms\Core\Model\Type\Builder\Type;
-use Iddigital\Cms\Core\Util\Debug;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Exception\NotImplementedException;
+use Dms\Core\Model\IDataTransferObject;
+use Dms\Core\Model\Type\Builder\Type;
+use Dms\Core\Util\Debug;
 
 /**
  * The array data transfer object class.

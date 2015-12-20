@@ -1,9 +1,9 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\Relations\Fixtures\ManyToManyRelation\Polymorphic;
+namespace Dms\Core\Tests\Persistence\Db\Integration\Mapping\Relations\Fixtures\ManyToManyRelation\Polymorphic;
 
-use Iddigital\Cms\Core\Model\Object\ClassDefinition;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\Relations\Fixtures\ManyToManyRelation\AnotherEntity;
+use Dms\Core\Model\Object\ClassDefinition;
+use Dms\Core\Tests\Persistence\Db\Integration\Mapping\Relations\Fixtures\ManyToManyRelation\AnotherEntity;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

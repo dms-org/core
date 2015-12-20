@@ -1,13 +1,13 @@
 <?php
 
-namespace Iddigital\Cms\Core\Common\Crud\Action\Object\Mapping;
+namespace Dms\Core\Common\Crud\Action\Object\Mapping;
 
-use Iddigital\Cms\Core\Common\Crud\Action\Object\IObjectAction;
-use Iddigital\Cms\Core\Common\Crud\Action\Object\ObjectActionParameter;
-use Iddigital\Cms\Core\Form\InvalidFormSubmissionException;
-use Iddigital\Cms\Core\Form\IStagedForm;
-use Iddigital\Cms\Core\Model\IDataTransferObject;
-use Iddigital\Cms\Core\Model\Object\ArrayDataObject;
+use Dms\Core\Common\Crud\Action\Object\IObjectAction;
+use Dms\Core\Common\Crud\Action\Object\ObjectActionParameter;
+use Dms\Core\Form\InvalidFormSubmissionException;
+use Dms\Core\Form\IStagedForm;
+use Dms\Core\Model\IDataTransferObject;
+use Dms\Core\Model\Object\ArrayDataObject;
 
 /**
  * The array object action form mapping maps a single staged form

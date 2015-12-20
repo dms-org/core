@@ -1,9 +1,9 @@
 <?php
 
-namespace Iddigital\Cms\Core\Persistence\Db\Mapping\Relation;
+namespace Dms\Core\Persistence\Db\Mapping\Relation;
 
-use Iddigital\Cms\Core\Persistence\Db\PersistenceContext;
-use Iddigital\Cms\Core\Persistence\Db\Query\Delete;
+use Dms\Core\Persistence\Db\PersistenceContext;
+use Dms\Core\Persistence\Db\Query\Delete;
 
 /**
  * The embedded relation interface.

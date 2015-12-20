@@ -1,11 +1,11 @@
 <?php
 
-namespace Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Subclass;
+namespace Dms\Core\Persistence\Db\Mapping\Definition\Subclass;
 
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\MapperDefinition;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Hierarchy\EmbeddedSubClassObjectMapping;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Hierarchy\JoinedSubClassObjectMapping;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Table;
+use Dms\Core\Persistence\Db\Mapping\Definition\MapperDefinition;
+use Dms\Core\Persistence\Db\Mapping\Hierarchy\EmbeddedSubClassObjectMapping;
+use Dms\Core\Persistence\Db\Mapping\Hierarchy\JoinedSubClassObjectMapping;
+use Dms\Core\Persistence\Db\Schema\Table;
 
 /**
  * The subclass definition definer.

@@ -1,12 +1,12 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\ReadModel\Fixtures\ValueObjectCollection;
+namespace Dms\Core\Tests\Persistence\Db\Integration\Mapping\ReadModel\Fixtures\ValueObjectCollection;
 
-use Iddigital\Cms\Core\Model\Object\ClassDefinition;
-use Iddigital\Cms\Core\Model\Object\ReadModel;
-use Iddigital\Cms\Core\Model\Type\Builder\Type;
-use Iddigital\Cms\Core\Model\ValueObjectCollection;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\Fixtures\ValueObjectCollection\EmbeddedEmailAddress;
+use Dms\Core\Model\Object\ClassDefinition;
+use Dms\Core\Model\Object\ReadModel;
+use Dms\Core\Model\Type\Builder\Type;
+use Dms\Core\Model\ValueObjectCollection;
+use Dms\Core\Tests\Persistence\Db\Integration\Mapping\Fixtures\ValueObjectCollection\EmbeddedEmailAddress;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

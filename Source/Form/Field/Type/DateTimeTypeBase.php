@@ -1,10 +1,10 @@
 <?php
 
-namespace Iddigital\Cms\Core\Form\Field\Type;
+namespace Dms\Core\Form\Field\Type;
 
-use Iddigital\Cms\Core\Form\Field\Processor\DateTimeProcessor;
-use Iddigital\Cms\Core\Form\Field\Processor\Validator\DateFormatValidator;
-use Iddigital\Cms\Core\Model\Type\Builder\Type as PhpType;
+use Dms\Core\Form\Field\Processor\DateTimeProcessor;
+use Dms\Core\Form\Field\Processor\Validator\DateFormatValidator;
+use Dms\Core\Model\Type\Builder\Type as PhpType;
 
 /**
  * The date time type base class.

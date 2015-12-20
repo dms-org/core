@@ -1,13 +1,13 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Package;
+namespace Dms\Core\Tests\Package;
 
-use Iddigital\Cms\Common\Testing\CmsTestCase;
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Tests\Cms\Fixtures\InvalidPackageCms;
-use Iddigital\Cms\Core\Tests\Helpers\Mock\MockingIocContainer;
-use Iddigital\Cms\Core\Tests\Module\Fixtures\TestDto;
-use Iddigital\Cms\Core\Tests\Package\Fixtures\InvalidModuleClassPackage;
+use Dms\Common\Testing\CmsTestCase;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Tests\Cms\Fixtures\InvalidPackageCms;
+use Dms\Core\Tests\Helpers\Mock\MockingIocContainer;
+use Dms\Core\Tests\Module\Fixtures\TestDto;
+use Dms\Core\Tests\Package\Fixtures\InvalidModuleClassPackage;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

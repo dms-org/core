@@ -1,12 +1,12 @@
 <?php
 
-namespace Iddigital\Cms\Core\Form\Field\Processor\Validator;
+namespace Dms\Core\Form\Field\Processor\Validator;
 
-use Iddigital\Cms\Core\File\IUploadedFile;
-use Iddigital\Cms\Core\Form\Field\Processor\FieldValidator;
-use Iddigital\Cms\Core\Language\Message;
-use Iddigital\Cms\Core\Model\Type\Builder\Type;
-use Iddigital\Cms\Core\Model\Type\IType;
+use Dms\Core\File\IUploadedFile;
+use Dms\Core\Form\Field\Processor\FieldValidator;
+use Dms\Core\Language\Message;
+use Dms\Core\Model\Type\Builder\Type;
+use Dms\Core\Model\Type\IType;
 
 /**
  * The file size validator.

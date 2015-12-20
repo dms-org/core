@@ -1,13 +1,13 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Persistence\Db;
+namespace Dms\Core\Tests\Persistence\Db;
 
-use Iddigital\Cms\Common\Testing\CmsTestCase;
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Exception\TypeMismatchException;
-use Iddigital\Cms\Core\Model\IEntity;
-use Iddigital\Cms\Core\Persistence\Db\IdentityMap;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Fixtures\MockEntity;
+use Dms\Common\Testing\CmsTestCase;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Exception\TypeMismatchException;
+use Dms\Core\Model\IEntity;
+use Dms\Core\Persistence\Db\IdentityMap;
+use Dms\Core\Tests\Persistence\Db\Fixtures\MockEntity;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

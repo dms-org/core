@@ -1,11 +1,11 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\Fixtures\ValueObjectWithToManyRelation;
+namespace Dms\Core\Tests\Persistence\Db\Integration\Mapping\Fixtures\ValueObjectWithToManyRelation;
 
-use Iddigital\Cms\Core\Persistence\Db\Mapping\CustomOrm;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\MapperDefinition;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\EntityMapper;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\Fixtures\ToManyIdRelation\ChildEntity;
+use Dms\Core\Persistence\Db\Mapping\CustomOrm;
+use Dms\Core\Persistence\Db\Mapping\Definition\MapperDefinition;
+use Dms\Core\Persistence\Db\Mapping\EntityMapper;
+use Dms\Core\Tests\Persistence\Db\Integration\Mapping\Fixtures\ToManyIdRelation\ChildEntity;
 
 
 /**

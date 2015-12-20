@@ -1,12 +1,12 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Table\Column\Component\Type;
+namespace Dms\Core\Tests\Table\Column\Component\Type;
 
-use Iddigital\Cms\Common\Testing\CmsTestCase;
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Form\Field\Builder\Field;
-use Iddigital\Cms\Core\Form\IField;
-use Iddigital\Cms\Core\Table\Column\Component\Type\ColumnComponentOperator;
+use Dms\Common\Testing\CmsTestCase;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Form\Field\Builder\Field;
+use Dms\Core\Form\IField;
+use Dms\Core\Table\Column\Component\Type\ColumnComponentOperator;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

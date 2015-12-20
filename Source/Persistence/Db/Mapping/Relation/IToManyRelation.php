@@ -1,14 +1,14 @@
 <?php
 
-namespace Iddigital\Cms\Core\Persistence\Db\Mapping\Relation;
+namespace Dms\Core\Persistence\Db\Mapping\Relation;
 
-use Iddigital\Cms\Core\Exception\TypeMismatchException;
-use Iddigital\Cms\Core\Model\ITypedCollection;
-use Iddigital\Cms\Core\Persistence\Db\LoadingContext;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\ParentChildrenMap;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Reference\IToManyRelationReference;
-use Iddigital\Cms\Core\Persistence\Db\PersistenceContext;
-use Iddigital\Cms\Core\Persistence\Db\Query\Select;
+use Dms\Core\Exception\TypeMismatchException;
+use Dms\Core\Model\ITypedCollection;
+use Dms\Core\Persistence\Db\LoadingContext;
+use Dms\Core\Persistence\Db\Mapping\ParentChildrenMap;
+use Dms\Core\Persistence\Db\Mapping\Relation\Reference\IToManyRelationReference;
+use Dms\Core\Persistence\Db\PersistenceContext;
+use Dms\Core\Persistence\Db\Query\Select;
 
 /**
  * The to many relation interface.

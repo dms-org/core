@@ -1,9 +1,9 @@
 <?php
 
-namespace Iddigital\Cms\Core\Model\Criteria;
+namespace Dms\Core\Model\Criteria;
 
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Model\IEntitySet;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Model\IEntitySet;
 
 /**
  * The relation property type provider

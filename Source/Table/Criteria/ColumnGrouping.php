@@ -1,8 +1,8 @@
 <?php
 
-namespace Iddigital\Cms\Core\Table\Criteria;
+namespace Dms\Core\Table\Criteria;
 
-use Iddigital\Cms\Core\Exception;
+use Dms\Core\Exception;
 
 /**
  * The column grouping class

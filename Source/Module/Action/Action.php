@@ -1,15 +1,15 @@
 <?php
 
-namespace Iddigital\Cms\Core\Module\Action;
+namespace Dms\Core\Module\Action;
 
-use Iddigital\Cms\Core\Auth\IAuthSystem;
-use Iddigital\Cms\Core\Auth\IPermission;
-use Iddigital\Cms\Core\Auth\UserForbiddenException;
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Form;
-use Iddigital\Cms\Core\Module\IAction;
-use Iddigital\Cms\Core\Module\IActionHandler;
-use Iddigital\Cms\Core\Util\Debug;
+use Dms\Core\Auth\IAuthSystem;
+use Dms\Core\Auth\IPermission;
+use Dms\Core\Auth\UserForbiddenException;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Form;
+use Dms\Core\Module\IAction;
+use Dms\Core\Module\IActionHandler;
+use Dms\Core\Util\Debug;
 
 /**
  * The action base class.

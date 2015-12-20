@@ -1,20 +1,20 @@
 <?php
 
-namespace Iddigital\Cms\Core\Table\DataSource;
+namespace Dms\Core\Table\DataSource;
 
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Model\Collection;
-use Iddigital\Cms\Core\Table\Chart\DataSource\ChartTableDataSourceAdapter;
-use Iddigital\Cms\Core\Table\Chart\DataSource\Definition\ChartTableMapperDefinition;
-use Iddigital\Cms\Core\Table\Criteria\RowCriteria;
-use Iddigital\Cms\Core\Table\Data\DataTable;
-use Iddigital\Cms\Core\Table\Data\TableRow;
-use Iddigital\Cms\Core\Table\Data\TableSection;
-use Iddigital\Cms\Core\Table\IRowCriteria;
-use Iddigital\Cms\Core\Table\ITableDataSource;
-use Iddigital\Cms\Core\Table\ITableRow;
-use Iddigital\Cms\Core\Table\ITableSection;
-use Iddigital\Cms\Core\Table\ITableStructure;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Model\Collection;
+use Dms\Core\Table\Chart\DataSource\ChartTableDataSourceAdapter;
+use Dms\Core\Table\Chart\DataSource\Definition\ChartTableMapperDefinition;
+use Dms\Core\Table\Criteria\RowCriteria;
+use Dms\Core\Table\Data\DataTable;
+use Dms\Core\Table\Data\TableRow;
+use Dms\Core\Table\Data\TableSection;
+use Dms\Core\Table\IRowCriteria;
+use Dms\Core\Table\ITableDataSource;
+use Dms\Core\Table\ITableRow;
+use Dms\Core\Table\ITableSection;
+use Dms\Core\Table\ITableStructure;
 use Pinq\ITraversable;
 
 /**

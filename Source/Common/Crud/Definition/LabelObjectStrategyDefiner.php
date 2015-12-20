@@ -1,9 +1,9 @@
 <?php
 
-namespace Iddigital\Cms\Core\Common\Crud\Definition;
+namespace Dms\Core\Common\Crud\Definition;
 
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Model\ITypedObject;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Model\ITypedObject;
 
 /**
  * The label object strategy definer class.

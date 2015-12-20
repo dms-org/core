@@ -1,10 +1,10 @@
 <?php
 
-namespace Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Hook;
+namespace Dms\Core\Persistence\Db\Mapping\Definition\Hook;
 
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Hook\OrderIndexPropertyLoaderHook;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\IObjectMapper;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Table;
+use Dms\Core\Persistence\Db\Mapping\Hook\OrderIndexPropertyLoaderHook;
+use Dms\Core\Persistence\Db\Mapping\IObjectMapper;
+use Dms\Core\Persistence\Db\Schema\Table;
 
 /**
  * The hook type definer class.

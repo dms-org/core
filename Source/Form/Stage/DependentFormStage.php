@@ -1,8 +1,8 @@
 <?php
 
-namespace Iddigital\Cms\Core\Form\Stage;
+namespace Dms\Core\Form\Stage;
 
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Exception\InvalidArgumentException;
 
 /**
  * The dependent form stage base class

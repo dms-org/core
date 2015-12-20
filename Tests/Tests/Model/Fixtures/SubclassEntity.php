@@ -1,6 +1,6 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Model\Fixtures;
+namespace Dms\Core\Tests\Model\Fixtures;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

@@ -1,16 +1,16 @@
 <?php
 
-namespace Iddigital\Cms\Core\Module;
+namespace Dms\Core\Module;
 
-use Iddigital\Cms\Core\Auth\IAuthSystem;
-use Iddigital\Cms\Core\Auth\IPermission;
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Exception\InvalidOperationException;
-use Iddigital\Cms\Core\Form;
-use Iddigital\Cms\Core\Module\Definition\FinalizedModuleDefinition;
-use Iddigital\Cms\Core\Module\Definition\ModuleDefinition;
-use Iddigital\Cms\Core\Util\Debug;
-use Iddigital\Cms\Core\Widget\IWidget;
+use Dms\Core\Auth\IAuthSystem;
+use Dms\Core\Auth\IPermission;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Exception\InvalidOperationException;
+use Dms\Core\Form;
+use Dms\Core\Module\Definition\FinalizedModuleDefinition;
+use Dms\Core\Module\Definition\ModuleDefinition;
+use Dms\Core\Util\Debug;
+use Dms\Core\Widget\IWidget;
 
 /**
  * The module base class.

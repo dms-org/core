@@ -1,8 +1,8 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Persistence\Db\Mock;
+namespace Dms\Core\Tests\Persistence\Db\Mock;
 
-use Iddigital\Cms\Core\Persistence\Db\Connection\Query;
+use Dms\Core\Persistence\Db\Connection\Query;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

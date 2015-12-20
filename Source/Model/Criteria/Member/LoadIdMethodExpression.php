@@ -1,12 +1,12 @@
 <?php
 
-namespace Iddigital\Cms\Core\Model\Criteria\Member;
+namespace Dms\Core\Model\Criteria\Member;
 
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Model\Criteria\NestedMember;
-use Iddigital\Cms\Core\Model\IEntitySet;
-use Iddigital\Cms\Core\Model\Type\Builder\Type;
-use Iddigital\Cms\Core\Model\Type\IType;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Model\Criteria\NestedMember;
+use Dms\Core\Model\IEntitySet;
+use Dms\Core\Model\Type\Builder\Type;
+use Dms\Core\Model\Type\IType;
 
 /**
  * The load id method expression class.

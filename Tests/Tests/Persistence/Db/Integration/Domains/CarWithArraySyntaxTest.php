@@ -1,9 +1,9 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Domains;
+namespace Dms\Core\Tests\Persistence\Db\Integration\Domains;
 
-use Iddigital\Cms\Core\Persistence\Db\Mapping\IOrm;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Cars\Mapper\CarMapperWithArraySyntax;
+use Dms\Core\Persistence\Db\Mapping\IOrm;
+use Dms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Cars\Mapper\CarMapperWithArraySyntax;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

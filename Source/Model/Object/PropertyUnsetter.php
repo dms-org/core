@@ -1,6 +1,6 @@
 <?php
 
-namespace Iddigital\Cms\Core\Model\Object;
+namespace Dms\Core\Model\Object;
 
 /**
  * The property unsetter class.

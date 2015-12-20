@@ -1,8 +1,8 @@
 <?php
 
-namespace Iddigital\Cms\Core\Model\Criteria;
+namespace Dms\Core\Model\Criteria;
 
-use Iddigital\Cms\Core\Exception\BaseException;
+use Dms\Core\Exception\BaseException;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

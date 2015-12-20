@@ -1,14 +1,14 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Module\Mock;
+namespace Dms\Core\Tests\Module\Mock;
 
-use Iddigital\Cms\Core\Auth\IAuthSystem;
-use Iddigital\Cms\Core\Auth\InvalidCredentialsException;
-use Iddigital\Cms\Core\Auth\IPermission;
-use Iddigital\Cms\Core\Auth\IUser;
-use Iddigital\Cms\Core\Auth\UserBannedException;
-use Iddigital\Cms\Core\Auth\UserForbiddenException;
-use Iddigital\Cms\Core\Auth\UserNotAuthenticatedException;
+use Dms\Core\Auth\IAuthSystem;
+use Dms\Core\Auth\InvalidCredentialsException;
+use Dms\Core\Auth\IPermission;
+use Dms\Core\Auth\IUser;
+use Dms\Core\Auth\UserBannedException;
+use Dms\Core\Auth\UserForbiddenException;
+use Dms\Core\Auth\UserNotAuthenticatedException;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

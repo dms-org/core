@@ -1,22 +1,22 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Form\Field;
+namespace Dms\Core\Tests\Form\Field;
 
-use Iddigital\Cms\Core\Form\Field\Builder\ArrayOfFieldBuilder;
-use Iddigital\Cms\Core\Form\Field\Builder\Field as Field;
-use Iddigital\Cms\Core\Form\Field\Processor\ArrayAllProcessor;
-use Iddigital\Cms\Core\Form\Field\Processor\TypeProcessor;
-use Iddigital\Cms\Core\Form\Field\Processor\Validator\AllUniquePropertyValidator;
-use Iddigital\Cms\Core\Form\Field\Processor\Validator\ExactArrayLengthValidator;
-use Iddigital\Cms\Core\Form\Field\Processor\Validator\IntValidator;
-use Iddigital\Cms\Core\Form\Field\Processor\Validator\MaxArrayLengthValidator;
-use Iddigital\Cms\Core\Form\Field\Processor\Validator\MinArrayLengthValidator;
-use Iddigital\Cms\Core\Form\Field\Processor\Validator\TypeValidator;
-use Iddigital\Cms\Core\Form\Field\Type\ArrayOfType;
-use Iddigital\Cms\Core\Language\Message;
-use Iddigital\Cms\Core\Model\EntityCollection;
-use Iddigital\Cms\Core\Model\Type\Builder\Type;
-use Iddigital\Cms\Core\Tests\Model\Fixtures\TestEntity;
+use Dms\Core\Form\Field\Builder\ArrayOfFieldBuilder;
+use Dms\Core\Form\Field\Builder\Field as Field;
+use Dms\Core\Form\Field\Processor\ArrayAllProcessor;
+use Dms\Core\Form\Field\Processor\TypeProcessor;
+use Dms\Core\Form\Field\Processor\Validator\AllUniquePropertyValidator;
+use Dms\Core\Form\Field\Processor\Validator\ExactArrayLengthValidator;
+use Dms\Core\Form\Field\Processor\Validator\IntValidator;
+use Dms\Core\Form\Field\Processor\Validator\MaxArrayLengthValidator;
+use Dms\Core\Form\Field\Processor\Validator\MinArrayLengthValidator;
+use Dms\Core\Form\Field\Processor\Validator\TypeValidator;
+use Dms\Core\Form\Field\Type\ArrayOfType;
+use Dms\Core\Language\Message;
+use Dms\Core\Model\EntityCollection;
+use Dms\Core\Model\Type\Builder\Type;
+use Dms\Core\Tests\Model\Fixtures\TestEntity;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

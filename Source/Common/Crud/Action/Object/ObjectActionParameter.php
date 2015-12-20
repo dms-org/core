@@ -1,11 +1,11 @@
 <?php
 
-namespace Iddigital\Cms\Core\Common\Crud\Action\Object;
+namespace Dms\Core\Common\Crud\Action\Object;
 
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Model\Object\ClassDefinition;
-use Iddigital\Cms\Core\Model\Object\DataTransferObject;
-use Iddigital\Cms\Core\Util\Debug;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Model\Object\ClassDefinition;
+use Dms\Core\Model\Object\DataTransferObject;
+use Dms\Core\Util\Debug;
 
 /**
  * The object action dto class.

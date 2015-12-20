@@ -1,14 +1,14 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Widget;
+namespace Dms\Core\Tests\Widget;
 
-use Iddigital\Cms\Common\Testing\CmsTestCase;
-use Iddigital\Cms\Core\Table\Chart\IChartCriteria;
-use Iddigital\Cms\Core\Table\Chart\IChartDataSource;
-use Iddigital\Cms\Core\Table\IRowCriteria;
-use Iddigital\Cms\Core\Table\ITableDataSource;
-use Iddigital\Cms\Core\Widget\ChartWidget;
-use Iddigital\Cms\Core\Widget\TableWidget;
+use Dms\Common\Testing\CmsTestCase;
+use Dms\Core\Table\Chart\IChartCriteria;
+use Dms\Core\Table\Chart\IChartDataSource;
+use Dms\Core\Table\IRowCriteria;
+use Dms\Core\Table\ITableDataSource;
+use Dms\Core\Widget\ChartWidget;
+use Dms\Core\Widget\TableWidget;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

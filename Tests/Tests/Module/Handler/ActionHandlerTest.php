@@ -1,9 +1,9 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Module\Handler;
+namespace Dms\Core\Tests\Module\Handler;
 
-use Iddigital\Cms\Common\Testing\CmsTestCase;
-use Iddigital\Cms\Core\Module\IUnparameterizedActionHandler;
+use Dms\Common\Testing\CmsTestCase;
+use Dms\Core\Module\IUnparameterizedActionHandler;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

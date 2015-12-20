@@ -1,19 +1,19 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping;
+namespace Dms\Core\Tests\Persistence\Db\Integration\Mapping;
 
-use Iddigital\Cms\Core\Persistence\Db\Query\Delete;
-use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Expr;
-use Iddigital\Cms\Core\Persistence\Db\Query\Upsert;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Column;
-use Iddigital\Cms\Core\Persistence\Db\Schema\ForeignKey;
-use Iddigital\Cms\Core\Persistence\Db\Schema\ForeignKeyMode;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Table;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Type\Integer;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Type\Varchar;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\Fixtures\ValueObjectCollection\EmbeddedEmailAddress;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\Fixtures\ValueObjectCollection\EntityWithEmails;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\Fixtures\ValueObjectCollection\EntityWithEmailsMapper;
+use Dms\Core\Persistence\Db\Query\Delete;
+use Dms\Core\Persistence\Db\Query\Expression\Expr;
+use Dms\Core\Persistence\Db\Query\Upsert;
+use Dms\Core\Persistence\Db\Schema\Column;
+use Dms\Core\Persistence\Db\Schema\ForeignKey;
+use Dms\Core\Persistence\Db\Schema\ForeignKeyMode;
+use Dms\Core\Persistence\Db\Schema\Table;
+use Dms\Core\Persistence\Db\Schema\Type\Integer;
+use Dms\Core\Persistence\Db\Schema\Type\Varchar;
+use Dms\Core\Tests\Persistence\Db\Integration\Mapping\Fixtures\ValueObjectCollection\EmbeddedEmailAddress;
+use Dms\Core\Tests\Persistence\Db\Integration\Mapping\Fixtures\ValueObjectCollection\EntityWithEmails;
+use Dms\Core\Tests\Persistence\Db\Integration\Mapping\Fixtures\ValueObjectCollection\EntityWithEmailsMapper;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

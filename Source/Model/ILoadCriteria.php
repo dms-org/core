@@ -1,10 +1,10 @@
 <?php
 
-namespace Iddigital\Cms\Core\Model;
+namespace Dms\Core\Model;
 
-use Iddigital\Cms\Core\Exception;
-use Iddigital\Cms\Core\Model\Criteria\MemberExpressionNode;
-use Iddigital\Cms\Core\Model\Criteria\NestedMember;
+use Dms\Core\Exception;
+use Dms\Core\Model\Criteria\MemberExpressionNode;
+use Dms\Core\Model\Criteria\NestedMember;
 
 /**
  * The object search criteria that also defines the members

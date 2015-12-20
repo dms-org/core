@@ -1,15 +1,15 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Common\Crud\Form;
+namespace Dms\Core\Tests\Common\Crud\Form;
 
-use Iddigital\Cms\Common\Testing\CmsTestCase;
-use Iddigital\Cms\Core\Common\Crud\Action\Object\IObjectAction;
-use Iddigital\Cms\Core\Common\Crud\Form\ObjectForm;
-use Iddigital\Cms\Core\Form\Field\Type\EntityIdType;
-use Iddigital\Cms\Core\Form\IForm;
-use Iddigital\Cms\Core\Form\InvalidFormSubmissionException;
-use Iddigital\Cms\Core\Model\Type\Builder\Type;
-use Iddigital\Cms\Core\Tests\Common\Crud\Action\Object\Mapping\Fixtures\TestEntity;
+use Dms\Common\Testing\CmsTestCase;
+use Dms\Core\Common\Crud\Action\Object\IObjectAction;
+use Dms\Core\Common\Crud\Form\ObjectForm;
+use Dms\Core\Form\Field\Type\EntityIdType;
+use Dms\Core\Form\IForm;
+use Dms\Core\Form\InvalidFormSubmissionException;
+use Dms\Core\Model\Type\Builder\Type;
+use Dms\Core\Tests\Common\Crud\Action\Object\Mapping\Fixtures\TestEntity;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

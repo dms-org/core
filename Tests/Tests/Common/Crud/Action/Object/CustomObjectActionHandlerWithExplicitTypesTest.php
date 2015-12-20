@@ -1,15 +1,15 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Common\Crud\Action\Object;
+namespace Dms\Core\Tests\Common\Crud\Action\Object;
 
-use Iddigital\Cms\Core\Common\Crud\Action\Object\CustomObjectActionHandler;
-use Iddigital\Cms\Core\Common\Crud\Action\Object\ObjectActionParameter;
-use Iddigital\Cms\Core\Exception\TypeMismatchException;
-use Iddigital\Cms\Core\Model\IDataTransferObject;
-use Iddigital\Cms\Core\Module\IParameterizedActionHandler;
-use Iddigital\Cms\Core\Tests\Common\Crud\Action\Object\Fixtures\ParamDto;
-use Iddigital\Cms\Core\Tests\Common\Crud\Action\Object\Fixtures\ReturnDto;
-use Iddigital\Cms\Core\Tests\Common\Crud\Action\Object\Mapping\Fixtures\TestEntity;
+use Dms\Core\Common\Crud\Action\Object\CustomObjectActionHandler;
+use Dms\Core\Common\Crud\Action\Object\ObjectActionParameter;
+use Dms\Core\Exception\TypeMismatchException;
+use Dms\Core\Model\IDataTransferObject;
+use Dms\Core\Module\IParameterizedActionHandler;
+use Dms\Core\Tests\Common\Crud\Action\Object\Fixtures\ParamDto;
+use Dms\Core\Tests\Common\Crud\Action\Object\Fixtures\ReturnDto;
+use Dms\Core\Tests\Common\Crud\Action\Object\Mapping\Fixtures\TestEntity;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

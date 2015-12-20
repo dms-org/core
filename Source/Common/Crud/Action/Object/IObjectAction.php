@@ -1,13 +1,13 @@
 <?php
 
-namespace Iddigital\Cms\Core\Common\Crud\Action\Object;
+namespace Dms\Core\Common\Crud\Action\Object;
 
-use Iddigital\Cms\Core\Auth\UserForbiddenException;
-use Iddigital\Cms\Core\Exception\TypeMismatchException;
-use Iddigital\Cms\Core\Form\IForm;
-use Iddigital\Cms\Core\Form\InvalidFormSubmissionException;
-use Iddigital\Cms\Core\Model\IDataTransferObject;
-use Iddigital\Cms\Core\Module\IParameterizedAction;
+use Dms\Core\Auth\UserForbiddenException;
+use Dms\Core\Exception\TypeMismatchException;
+use Dms\Core\Form\IForm;
+use Dms\Core\Form\InvalidFormSubmissionException;
+use Dms\Core\Model\IDataTransferObject;
+use Dms\Core\Module\IParameterizedAction;
 
 /**
  * The object action is a parameterized action that

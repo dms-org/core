@@ -1,12 +1,12 @@
 <?php
 
-namespace Iddigital\Cms\Core\Form\Stage;
+namespace Dms\Core\Form\Stage;
 
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Form\Builder\Form;
-use Iddigital\Cms\Core\Form\IForm;
-use Iddigital\Cms\Core\Form\IFormStage;
-use Iddigital\Cms\Core\Util\Debug;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Form\Builder\Form;
+use Dms\Core\Form\IForm;
+use Dms\Core\Form\IFormStage;
+use Dms\Core\Util\Debug;
 
 /**
  * The form stage base class

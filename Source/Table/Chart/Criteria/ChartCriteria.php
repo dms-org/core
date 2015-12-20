@@ -1,11 +1,11 @@
 <?php
 
-namespace Iddigital\Cms\Core\Table\Chart\Criteria;
+namespace Dms\Core\Table\Chart\Criteria;
 
-use Iddigital\Cms\Core\Exception;
-use Iddigital\Cms\Core\Model\Criteria\OrderingDirection;
-use Iddigital\Cms\Core\Table\Chart\IChartCriteria;
-use Iddigital\Cms\Core\Table\Chart\IChartStructure;
+use Dms\Core\Exception;
+use Dms\Core\Model\Criteria\OrderingDirection;
+use Dms\Core\Table\Chart\IChartCriteria;
+use Dms\Core\Table\Chart\IChartStructure;
 
 /**
  * The chart data criteria interface.

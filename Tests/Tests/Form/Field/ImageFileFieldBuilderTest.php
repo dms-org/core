@@ -1,21 +1,21 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Form\Field;
+namespace Dms\Core\Tests\Form\Field;
 
-use Iddigital\Cms\Core\File\IUploadedFile;
-use Iddigital\Cms\Core\File\IUploadedImage;
-use Iddigital\Cms\Core\Form\Field\Builder\Field as Field;
-use Iddigital\Cms\Core\Form\Field\Builder\ImageFieldBuilder;
-use Iddigital\Cms\Core\Form\Field\Processor\FileMoverProcessor;
-use Iddigital\Cms\Core\Form\Field\Processor\Validator\ImageDimensionsValidator;
-use Iddigital\Cms\Core\Form\Field\Processor\Validator\ImageValidator;
-use Iddigital\Cms\Core\Form\Field\Processor\Validator\TypeValidator;
-use Iddigital\Cms\Core\Form\Field\Processor\Validator\UploadedFileValidator;
-use Iddigital\Cms\Core\Form\Field\Processor\Validator\UploadedImageValidator;
-use Iddigital\Cms\Core\Form\Field\Type\ImageType;
-use Iddigital\Cms\Core\Language\Message;
-use Iddigital\Cms\Core\Model\Type\Builder\Type;
-use Iddigital\Cms\Core\Model\Type\ObjectType;
+use Dms\Core\File\IUploadedFile;
+use Dms\Core\File\IUploadedImage;
+use Dms\Core\Form\Field\Builder\Field as Field;
+use Dms\Core\Form\Field\Builder\ImageFieldBuilder;
+use Dms\Core\Form\Field\Processor\FileMoverProcessor;
+use Dms\Core\Form\Field\Processor\Validator\ImageDimensionsValidator;
+use Dms\Core\Form\Field\Processor\Validator\ImageValidator;
+use Dms\Core\Form\Field\Processor\Validator\TypeValidator;
+use Dms\Core\Form\Field\Processor\Validator\UploadedFileValidator;
+use Dms\Core\Form\Field\Processor\Validator\UploadedImageValidator;
+use Dms\Core\Form\Field\Type\ImageType;
+use Dms\Core\Language\Message;
+use Dms\Core\Model\Type\Builder\Type;
+use Dms\Core\Model\Type\ObjectType;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

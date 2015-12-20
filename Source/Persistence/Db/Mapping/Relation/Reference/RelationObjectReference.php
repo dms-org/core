@@ -1,14 +1,14 @@
 <?php
 
-namespace Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Reference;
+namespace Dms\Core\Persistence\Db\Mapping\Relation\Reference;
 
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Model\IEntity;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Hook\IPersistHook;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\IEntityMapper;
-use Iddigital\Cms\Core\Persistence\Db\PersistenceContext;
-use Iddigital\Cms\Core\Persistence\Db\Query\Select;
-use Iddigital\Cms\Core\Persistence\Db\Row;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Model\IEntity;
+use Dms\Core\Persistence\Db\Mapping\Hook\IPersistHook;
+use Dms\Core\Persistence\Db\Mapping\IEntityMapper;
+use Dms\Core\Persistence\Db\PersistenceContext;
+use Dms\Core\Persistence\Db\Query\Select;
+use Dms\Core\Persistence\Db\Row;
 
 /**
  * The relation object reference base class

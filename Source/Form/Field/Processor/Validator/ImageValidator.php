@@ -1,10 +1,10 @@
 <?php
 
-namespace Iddigital\Cms\Core\Form\Field\Processor\Validator;
+namespace Dms\Core\Form\Field\Processor\Validator;
 
-use Iddigital\Cms\Core\File\IUploadedImage;
-use Iddigital\Cms\Core\Form\Field\Processor\FieldValidator;
-use Iddigital\Cms\Core\Language\Message;
+use Dms\Core\File\IUploadedImage;
+use Dms\Core\Form\Field\Processor\FieldValidator;
+use Dms\Core\Language\Message;
 
 /**
  * The image validator.

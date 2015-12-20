@@ -6,7 +6,7 @@ interacting and performing operations on a list of values. The collections used 
 this project are extensions of the [PINQ collection library][pinq] which provide a
 comprehensive set of methods to aggregate or manipulate in-memory collections.
 
-Additionally collections used within domain modelling implement the `Iddigital\Cms\Core\Model\ITypedCollection`
+Additionally collections used within domain modelling implement the `Dms\Core\Model\ITypedCollection`
 interface and are strongly typed, that is, they can only contain values of a type
 which is specified upon construction.
 
@@ -20,8 +20,8 @@ For instance a simple typed collection can be constructed as follows:
 
 namespace Some\Name\Space;
 
-use Iddigital\Cms\Core\Model\TypedCollection;
-use Iddigital\Cms\Core\Model\Type\Builder\Type;
+use Dms\Core\Model\TypedCollection;
+use Dms\Core\Model\Type\Builder\Type;
 
 $numbers = new TypedCollection(Type::int(), [
     1, 2, 3, 4
@@ -76,7 +76,7 @@ Object Sets
 
 Object sets are a narrower api that attempt to provide an abstraction between
 in-memory collections and external data-stores. The minimal object set api is
-described by the `Iddigital\Cms\Core\Model\IObjectSet` interface. This can be
+described by the `Dms\Core\Model\IObjectSet` interface. This can be
 queried with [criteria](./criteria.md), a common dsl that can be translated into
 the commands necessary to retrieve the data.
 
@@ -92,7 +92,7 @@ Entity Sets
 ===========
 
 Entity sets are object sets that are specific to containing only entity objects.
-They are described by the `Iddigital\Cms\Core\Model\IEntitySet` interface and
+They are described by the `Dms\Core\Model\IEntitySet` interface and
 provide methods for loading entities by the `id` property.
 
 This interface is implemented by the `EntityCollection` class.

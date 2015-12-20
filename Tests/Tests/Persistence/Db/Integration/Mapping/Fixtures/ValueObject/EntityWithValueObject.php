@@ -1,10 +1,10 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\Fixtures\ValueObject;
+namespace Dms\Core\Tests\Persistence\Db\Integration\Mapping\Fixtures\ValueObject;
 
-use Iddigital\Cms\Core\Model\Object\ClassDefinition;
-use Iddigital\Cms\Core\Model\Object\Entity;
-use Iddigital\Cms\Core\Model\Object\ValueObject;
+use Dms\Core\Model\Object\ClassDefinition;
+use Dms\Core\Model\Object\Entity;
+use Dms\Core\Model\Object\ValueObject;
 
 
 /**

@@ -1,20 +1,20 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Table\Chart\DataSource\Criteria;
+namespace Dms\Core\Tests\Table\Chart\DataSource\Criteria;
 
-use Iddigital\Cms\Common\Testing\CmsTestCase;
-use Iddigital\Cms\Core\Form\Field\Builder\Field;
-use Iddigital\Cms\Core\Model\Criteria\OrderingDirection;
-use Iddigital\Cms\Core\Table\Builder\Column;
-use Iddigital\Cms\Core\Table\Builder\Table;
-use Iddigital\Cms\Core\Table\Chart\Criteria\ChartCriteria;
-use Iddigital\Cms\Core\Table\Chart\DataSource\Criteria\ChartTableCriteriaMapper;
-use Iddigital\Cms\Core\Table\Chart\DataSource\Criteria\CriteriaMappingException;
-use Iddigital\Cms\Core\Table\Chart\DataSource\Definition\ChartTableMapperDefinition;
-use Iddigital\Cms\Core\Table\Chart\IChartStructure;
-use Iddigital\Cms\Core\Table\Chart\Structure\LineChart;
-use Iddigital\Cms\Core\Table\DataSource\ArrayTableDataSource;
-use Iddigital\Cms\Core\Table\ITableDataSource;
+use Dms\Common\Testing\CmsTestCase;
+use Dms\Core\Form\Field\Builder\Field;
+use Dms\Core\Model\Criteria\OrderingDirection;
+use Dms\Core\Table\Builder\Column;
+use Dms\Core\Table\Builder\Table;
+use Dms\Core\Table\Chart\Criteria\ChartCriteria;
+use Dms\Core\Table\Chart\DataSource\Criteria\ChartTableCriteriaMapper;
+use Dms\Core\Table\Chart\DataSource\Criteria\CriteriaMappingException;
+use Dms\Core\Table\Chart\DataSource\Definition\ChartTableMapperDefinition;
+use Dms\Core\Table\Chart\IChartStructure;
+use Dms\Core\Table\Chart\Structure\LineChart;
+use Dms\Core\Table\DataSource\ArrayTableDataSource;
+use Dms\Core\Table\ITableDataSource;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

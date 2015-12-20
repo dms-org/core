@@ -1,20 +1,20 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Common\Crud\Modules;
+namespace Dms\Core\Tests\Common\Crud\Modules;
 
-use Iddigital\Cms\Core\Auth\IPermission;
-use Iddigital\Cms\Core\Auth\UserForbiddenException;
-use Iddigital\Cms\Core\Common\Crud\Action\Crud\ViewDetailsAction;
-use Iddigital\Cms\Core\Common\Crud\Action\Object\IObjectAction;
-use Iddigital\Cms\Core\Common\Crud\IReadModule;
-use Iddigital\Cms\Core\Common\Crud\ReadModule;
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Form\IForm;
-use Iddigital\Cms\Core\Form\InvalidFormSubmissionException;
-use Iddigital\Cms\Core\Model\IEntitySet;
-use Iddigital\Cms\Core\Tests\Common\Crud\Modules\Fixtures\Simple\SimpleEntity;
-use Iddigital\Cms\Core\Tests\Common\Crud\Modules\Fixtures\Simple\SimpleReadModule;
-use Iddigital\Cms\Core\Tests\Module\Mock\MockAuthSystem;
+use Dms\Core\Auth\IPermission;
+use Dms\Core\Auth\UserForbiddenException;
+use Dms\Core\Common\Crud\Action\Crud\ViewDetailsAction;
+use Dms\Core\Common\Crud\Action\Object\IObjectAction;
+use Dms\Core\Common\Crud\IReadModule;
+use Dms\Core\Common\Crud\ReadModule;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Form\IForm;
+use Dms\Core\Form\InvalidFormSubmissionException;
+use Dms\Core\Model\IEntitySet;
+use Dms\Core\Tests\Common\Crud\Modules\Fixtures\Simple\SimpleEntity;
+use Dms\Core\Tests\Common\Crud\Modules\Fixtures\Simple\SimpleReadModule;
+use Dms\Core\Tests\Module\Mock\MockAuthSystem;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

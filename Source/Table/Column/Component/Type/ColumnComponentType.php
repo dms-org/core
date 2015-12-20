@@ -1,13 +1,13 @@
 <?php
 
-namespace Iddigital\Cms\Core\Table\Column\Component\Type;
+namespace Dms\Core\Table\Column\Component\Type;
 
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Form\IField;
-use Iddigital\Cms\Core\Model\Type\IType;
-use Iddigital\Cms\Core\Table\IColumnComponentOperator;
-use Iddigital\Cms\Core\Table\IColumnComponentType;
-use Iddigital\Cms\Core\Util\Debug;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Form\IField;
+use Dms\Core\Model\Type\IType;
+use Dms\Core\Table\IColumnComponentOperator;
+use Dms\Core\Table\IColumnComponentType;
+use Dms\Core\Util\Debug;
 
 /**
  * The column component type base class

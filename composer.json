@@ -1,6 +1,6 @@
 {
-    "name": "iddigital/cms.core",
-    "description": "The core library for the cms",
+    "name": "dms/core",
+    "description": "The core library for the dms",
     "authors": [
         {
             "name": "Elliot Levin",
@@ -13,8 +13,8 @@
     ],
     "autoload": {
         "psr-4": {
-            "Iddigital\\Cms\\Core\\": "Source/",
-            "Iddigital\\Cms\\Core\\Tests\\": "Tests/Tests"
+            "Dms\\Core\\": "Source/",
+            "Dms\\Core\\Tests\\": "Tests/Tests"
         }
     },
     "require": {
@@ -23,6 +23,6 @@
         "container-interop/container-interop": "~1.1"
     },
     "require-dev": {
-        "iddigital/cms.common.testing": "dev-master"
+        "dms/common.testing": "dev-master"
     }
 }

@@ -1,9 +1,9 @@
 <?php
 
-namespace Iddigital\Cms\Core\Module\Mapping;
+namespace Dms\Core\Module\Mapping;
 
-use Iddigital\Cms\Core\Form;
-use Iddigital\Cms\Core\Form\Object\FormObject;
+use Dms\Core\Form;
+use Dms\Core\Form\Object\FormObject;
 
 /**
  * A form dto mapping that makes use of form objects

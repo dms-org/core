@@ -1,9 +1,9 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\Relations\Fixtures\ManyToOneIdRelation;
+namespace Dms\Core\Tests\Persistence\Db\Integration\Mapping\Relations\Fixtures\ManyToOneIdRelation;
 
-use Iddigital\Cms\Core\Model\Object\ClassDefinition;
-use Iddigital\Cms\Core\Model\Object\Entity;
+use Dms\Core\Model\Object\ClassDefinition;
+use Dms\Core\Model\Object\Entity;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

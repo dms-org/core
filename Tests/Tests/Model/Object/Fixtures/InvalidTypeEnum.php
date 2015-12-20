@@ -1,9 +1,9 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Model\Object\Fixtures;
+namespace Dms\Core\Tests\Model\Object\Fixtures;
 
-use Iddigital\Cms\Core\Model\Object\Enum;
-use Iddigital\Cms\Core\Model\Object\PropertyTypeDefiner;
+use Dms\Core\Model\Object\Enum;
+use Dms\Core\Model\Object\PropertyTypeDefiner;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

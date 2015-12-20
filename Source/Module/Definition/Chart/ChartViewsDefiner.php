@@ -1,9 +1,9 @@
 <?php
 
-namespace Iddigital\Cms\Core\Module\Definition\Chart;
+namespace Dms\Core\Module\Definition\Chart;
 
-use Iddigital\Cms\Core\Module\Chart\ChartDisplay;
-use Iddigital\Cms\Core\Table\Chart\IChartDataSource;
+use Dms\Core\Module\Chart\ChartDisplay;
+use Dms\Core\Table\Chart\IChartDataSource;
 
 /**
  * The table views definer class.

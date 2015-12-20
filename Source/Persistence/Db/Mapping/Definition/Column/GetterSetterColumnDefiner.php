@@ -1,8 +1,8 @@
 <?php
 
-namespace Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Column;
+namespace Dms\Core\Persistence\Db\Mapping\Definition\Column;
 
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\MapperDefinition;
+use Dms\Core\Persistence\Db\Mapping\Definition\MapperDefinition;
 
 /**
  * The getter setter column mapping definer class.

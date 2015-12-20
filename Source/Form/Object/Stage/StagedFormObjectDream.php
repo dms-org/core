@@ -1,9 +1,9 @@
 <?php
 
-namespace Iddigital\Cms\Core\Form\Object\Stage;
+namespace Dms\Core\Form\Object\Stage;
 
-use Iddigital\Cms\Core\Form\Object\FormObjectDefinition;
-use Iddigital\Cms\Core\Model\Object\ClassDefinition;
+use Dms\Core\Form\Object\FormObjectDefinition;
+use Dms\Core\Model\Object\ClassDefinition;
 
 /**
  *

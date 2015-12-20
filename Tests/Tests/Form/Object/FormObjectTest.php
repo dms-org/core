@@ -1,8 +1,8 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Form\Object;
+namespace Dms\Core\Tests\Form\Object;
 
-use Iddigital\Cms\Common\Testing\CmsTestCase;
+use Dms\Common\Testing\CmsTestCase;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

@@ -1,10 +1,10 @@
 <?php
 
-namespace Iddigital\Cms\Core\Persistence\Db\Schema;
+namespace Dms\Core\Persistence\Db\Schema;
 
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Type\IType;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Type\Type;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Persistence\Db\Schema\Type\IType;
+use Dms\Core\Persistence\Db\Schema\Type\Type;
 
 /**
  * The column class

@@ -1,23 +1,23 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Model\Criteria;
+namespace Dms\Core\Tests\Model\Criteria;
 
-use Iddigital\Cms\Common\Testing\CmsTestCase;
-use Iddigital\Cms\Core\Exception\InvalidOperationException;
-use Iddigital\Cms\Core\Exception\TypeMismatchException;
-use Iddigital\Cms\Core\Model\Criteria\Condition\AndCondition;
-use Iddigital\Cms\Core\Model\Criteria\Condition\InstanceOfCondition;
-use Iddigital\Cms\Core\Model\Criteria\Condition\MemberCondition;
-use Iddigital\Cms\Core\Model\Criteria\Condition\NotCondition;
-use Iddigital\Cms\Core\Model\Criteria\Condition\OrCondition;
-use Iddigital\Cms\Core\Model\Criteria\InvalidMemberExpressionException;
-use Iddigital\Cms\Core\Model\Criteria\Member\MemberPropertyExpression;
-use Iddigital\Cms\Core\Model\Criteria\NestedMember;
-use Iddigital\Cms\Core\Model\Criteria\SpecificationDefinition;
-use Iddigital\Cms\Core\Tests\Model\Criteria\Fixtures\MockSpecification;
-use Iddigital\Cms\Core\Tests\Model\Fixtures\SubclassEntity;
-use Iddigital\Cms\Core\Tests\Model\Fixtures\SubObject;
-use Iddigital\Cms\Core\Tests\Model\Fixtures\TestEntity;
+use Dms\Common\Testing\CmsTestCase;
+use Dms\Core\Exception\InvalidOperationException;
+use Dms\Core\Exception\TypeMismatchException;
+use Dms\Core\Model\Criteria\Condition\AndCondition;
+use Dms\Core\Model\Criteria\Condition\InstanceOfCondition;
+use Dms\Core\Model\Criteria\Condition\MemberCondition;
+use Dms\Core\Model\Criteria\Condition\NotCondition;
+use Dms\Core\Model\Criteria\Condition\OrCondition;
+use Dms\Core\Model\Criteria\InvalidMemberExpressionException;
+use Dms\Core\Model\Criteria\Member\MemberPropertyExpression;
+use Dms\Core\Model\Criteria\NestedMember;
+use Dms\Core\Model\Criteria\SpecificationDefinition;
+use Dms\Core\Tests\Model\Criteria\Fixtures\MockSpecification;
+use Dms\Core\Tests\Model\Fixtures\SubclassEntity;
+use Dms\Core\Tests\Model\Fixtures\SubObject;
+use Dms\Core\Tests\Model\Fixtures\TestEntity;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

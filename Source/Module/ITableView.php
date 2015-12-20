@@ -1,9 +1,9 @@
 <?php
 
-namespace Iddigital\Cms\Core\Module;
+namespace Dms\Core\Module;
 
-use Iddigital\Cms\Core\Table\Criteria\RowCriteria;
-use Iddigital\Cms\Core\Table\IRowCriteria;
+use Dms\Core\Table\Criteria\RowCriteria;
+use Dms\Core\Table\IRowCriteria;
 
 /**
  * The table view interface.

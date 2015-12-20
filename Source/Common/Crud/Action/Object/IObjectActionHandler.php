@@ -1,9 +1,9 @@
 <?php
 
-namespace Iddigital\Cms\Core\Common\Crud\Action\Object;
+namespace Dms\Core\Common\Crud\Action\Object;
 
-use Iddigital\Cms\Core\Exception\TypeMismatchException;
-use Iddigital\Cms\Core\Module\IParameterizedActionHandler;
+use Dms\Core\Exception\TypeMismatchException;
+use Dms\Core\Module\IParameterizedActionHandler;
 
 /**
  * The object action is a parameterized action that

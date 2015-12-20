@@ -1,22 +1,22 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Persistence\Db\Doctrine;
+namespace Dms\Core\Tests\Persistence\Db\Doctrine;
 
 use Doctrine\DBAL\Platforms\MySqlPlatform;
 use Doctrine\DBAL\Query\QueryBuilder;
-use Iddigital\Cms\Core\Persistence\Db\Doctrine\DoctrineExpressionCompiler;
-use Iddigital\Cms\Core\Persistence\Db\Doctrine\DoctrinePlatform;
-use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Expr;
-use Iddigital\Cms\Core\Persistence\Db\Query\Select;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Column;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Table;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Type\Date;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Type\DateTime;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Type\Integer;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Type\Text;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Type\Time;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Doctrine\Mocks\ConnectionMock;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Doctrine\Mocks\DriverMock;
+use Dms\Core\Persistence\Db\Doctrine\DoctrineExpressionCompiler;
+use Dms\Core\Persistence\Db\Doctrine\DoctrinePlatform;
+use Dms\Core\Persistence\Db\Query\Expression\Expr;
+use Dms\Core\Persistence\Db\Query\Select;
+use Dms\Core\Persistence\Db\Schema\Column;
+use Dms\Core\Persistence\Db\Schema\Table;
+use Dms\Core\Persistence\Db\Schema\Type\Date;
+use Dms\Core\Persistence\Db\Schema\Type\DateTime;
+use Dms\Core\Persistence\Db\Schema\Type\Integer;
+use Dms\Core\Persistence\Db\Schema\Type\Text;
+use Dms\Core\Persistence\Db\Schema\Type\Time;
+use Dms\Core\Tests\Persistence\Db\Doctrine\Mocks\ConnectionMock;
+use Dms\Core\Tests\Persistence\Db\Doctrine\Mocks\DriverMock;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

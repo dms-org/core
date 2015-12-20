@@ -1,12 +1,12 @@
 <?php
 
-namespace Iddigital\Cms\Core\Table\Criteria;
+namespace Dms\Core\Table\Criteria;
 
-use Iddigital\Cms\Core\Exception;
-use Iddigital\Cms\Core\Model\Criteria\Condition\ConditionOperator;
-use Iddigital\Cms\Core\Table\IColumn;
-use Iddigital\Cms\Core\Table\IColumnComponent;
-use Iddigital\Cms\Core\Table\IColumnComponentOperator;
+use Dms\Core\Exception;
+use Dms\Core\Model\Criteria\Condition\ConditionOperator;
+use Dms\Core\Table\IColumn;
+use Dms\Core\Table\IColumnComponent;
+use Dms\Core\Table\IColumnComponentOperator;
 
 /**
  * The column condition class

@@ -1,9 +1,9 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Form\Processor;
+namespace Dms\Core\Tests\Form\Processor;
 
-use Iddigital\Cms\Core\Form\IFormProcessor;
-use Iddigital\Cms\Core\Form\Processor\CustomFormProcessor;
+use Dms\Core\Form\IFormProcessor;
+use Dms\Core\Form\Processor\CustomFormProcessor;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

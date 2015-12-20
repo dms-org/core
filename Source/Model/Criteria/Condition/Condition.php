@@ -1,9 +1,9 @@
 <?php
 
-namespace Iddigital\Cms\Core\Model\Criteria\Condition;
+namespace Dms\Core\Model\Criteria\Condition;
 
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Model\ITypedObject;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Model\ITypedObject;
 
 /**
  * The condition base class

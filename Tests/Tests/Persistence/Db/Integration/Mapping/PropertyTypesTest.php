@@ -1,11 +1,11 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping;
+namespace Dms\Core\Tests\Persistence\Db\Integration\Mapping;
 
-use Iddigital\Cms\Core\Persistence\Db\Mapping\CustomOrm;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\IEntityMapper;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\Fixtures\PropertyTypes\PropertyTypesEntity;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\Fixtures\PropertyTypes\PropertyTypesMapper;
+use Dms\Core\Persistence\Db\Mapping\CustomOrm;
+use Dms\Core\Persistence\Db\Mapping\IEntityMapper;
+use Dms\Core\Tests\Persistence\Db\Integration\Mapping\Fixtures\PropertyTypes\PropertyTypesEntity;
+use Dms\Core\Tests\Persistence\Db\Integration\Mapping\Fixtures\PropertyTypes\PropertyTypesMapper;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

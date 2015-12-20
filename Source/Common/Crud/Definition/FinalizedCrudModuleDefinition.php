@@ -1,6 +1,6 @@
 <?php
 
-namespace Iddigital\Cms\Core\Common\Crud\Definition;
+namespace Dms\Core\Common\Crud\Definition;
 
 /**
  * The finalized read module definition class.

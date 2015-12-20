@@ -1,8 +1,8 @@
 <?php
 
-namespace Iddigital\Cms\Core\Form\Object;
+namespace Dms\Core\Form\Object;
 
-use Iddigital\Cms\Core\Model\Object\PropertyTypeDefiner;
+use Dms\Core\Model\Object\PropertyTypeDefiner;
 
 /**
  * The fluent property form binding class.

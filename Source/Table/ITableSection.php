@@ -1,8 +1,8 @@
 <?php
 
-namespace Iddigital\Cms\Core\Table;
+namespace Dms\Core\Table;
 
-use Iddigital\Cms\Core\Module\IParameterizedAction;
+use Dms\Core\Module\IParameterizedAction;
 
 /**
  * The data table section interface.

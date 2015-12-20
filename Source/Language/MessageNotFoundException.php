@@ -1,8 +1,8 @@
 <?php
 
-namespace Iddigital\Cms\Core\Language;
+namespace Dms\Core\Language;
 
-use Iddigital\Cms\Core\Exception\BaseException;
+use Dms\Core\Exception\BaseException;
 
 /**
  * Exception for an invalid message id.

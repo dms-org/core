@@ -1,14 +1,14 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Common\Crud\Table;
+namespace Dms\Core\Tests\Common\Crud\Table;
 
-use Iddigital\Cms\Common\Testing\CmsTestCase;
-use Iddigital\Cms\Core\Common\Crud\Action\Object\IObjectAction;
-use Iddigital\Cms\Core\Common\Crud\Action\Table\IReorderAction;
-use Iddigital\Cms\Core\Common\Crud\Table\SummaryTable;
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Module\Table\TableView;
-use Iddigital\Cms\Core\Table\ITableDataSource;
+use Dms\Common\Testing\CmsTestCase;
+use Dms\Core\Common\Crud\Action\Object\IObjectAction;
+use Dms\Core\Common\Crud\Action\Table\IReorderAction;
+use Dms\Core\Common\Crud\Table\SummaryTable;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Module\Table\TableView;
+use Dms\Core\Table\ITableDataSource;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

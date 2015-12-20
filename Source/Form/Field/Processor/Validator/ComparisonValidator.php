@@ -1,9 +1,9 @@
 <?php
 
-namespace Iddigital\Cms\Core\Form\Field\Processor\Validator;
+namespace Dms\Core\Form\Field\Processor\Validator;
 
-use Iddigital\Cms\Core\Form\Field\Processor\FieldValidator;
-use Iddigital\Cms\Core\Model\Type\IType;
+use Dms\Core\Form\Field\Processor\FieldValidator;
+use Dms\Core\Model\Type\IType;
 
 /**
  * The comparison validator.

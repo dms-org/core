@@ -1,15 +1,15 @@
 <?php
 
-namespace Iddigital\Cms\Core\Form\Field;
+namespace Dms\Core\Form\Field;
 
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Form\IField;
-use Iddigital\Cms\Core\Form\IFieldProcessor;
-use Iddigital\Cms\Core\Form\IFieldType;
-use Iddigital\Cms\Core\Form\InvalidInputException;
-use Iddigital\Cms\Core\Language\Message;
-use Iddigital\Cms\Core\Model\Type\IType;
-use Iddigital\Cms\Core\Util\Debug;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Form\IField;
+use Dms\Core\Form\IFieldProcessor;
+use Dms\Core\Form\IFieldType;
+use Dms\Core\Form\InvalidInputException;
+use Dms\Core\Language\Message;
+use Dms\Core\Model\Type\IType;
+use Dms\Core\Util\Debug;
 
 /**
  * The field class.

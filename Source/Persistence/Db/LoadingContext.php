@@ -1,9 +1,9 @@
 <?php
 
-namespace Iddigital\Cms\Core\Persistence\Db;
+namespace Dms\Core\Persistence\Db;
 
-use Iddigital\Cms\Core\Persistence\Db\Connection\IConnection;
-use Iddigital\Cms\Core\Persistence\Db\Query\Select;
+use Dms\Core\Persistence\Db\Connection\IConnection;
+use Dms\Core\Persistence\Db\Query\Select;
 
 /**
  * The loading context class

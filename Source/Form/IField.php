@@ -1,8 +1,8 @@
 <?php
 
-namespace Iddigital\Cms\Core\Form;
+namespace Dms\Core\Form;
 
-use Iddigital\Cms\Core\Model\Type\IType;
+use Dms\Core\Model\Type\IType;
 
 /**
  * The field interface.

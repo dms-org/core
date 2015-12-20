@@ -1,12 +1,12 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping;
+namespace Dms\Core\Tests\Persistence\Db\Integration\Mapping;
 
-use Iddigital\Cms\Core\Persistence\Db\Mapping\CustomOrm;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\IEntityMapper;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Index;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\Fixtures\InlineConstraints\ConstrainedEntity;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\Fixtures\InlineConstraints\InlineConstraintsEntityMapper;
+use Dms\Core\Persistence\Db\Mapping\CustomOrm;
+use Dms\Core\Persistence\Db\Mapping\IEntityMapper;
+use Dms\Core\Persistence\Db\Schema\Index;
+use Dms\Core\Tests\Persistence\Db\Integration\Mapping\Fixtures\InlineConstraints\ConstrainedEntity;
+use Dms\Core\Tests\Persistence\Db\Integration\Mapping\Fixtures\InlineConstraints\InlineConstraintsEntityMapper;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

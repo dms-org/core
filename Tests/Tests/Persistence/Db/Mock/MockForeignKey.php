@@ -1,9 +1,9 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Persistence\Db\Mock;
+namespace Dms\Core\Tests\Persistence\Db\Mock;
 
-use Iddigital\Cms\Core\Persistence\Db\Schema\Column;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Table;
+use Dms\Core\Persistence\Db\Schema\Column;
+use Dms\Core\Persistence\Db\Schema\Table;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

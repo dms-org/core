@@ -1,10 +1,10 @@
 <?php
 
-namespace Iddigital\Cms\Core\Form\Object;
+namespace Dms\Core\Form\Object;
 
-use Iddigital\Cms\Core\Form\IForm;
-use Iddigital\Cms\Core\Form\InvalidFormSubmissionException;
-use Iddigital\Cms\Core\Model\Object\ClassDefinition;
+use Dms\Core\Form\IForm;
+use Dms\Core\Form\InvalidFormSubmissionException;
+use Dms\Core\Model\Object\ClassDefinition;
 
 /**
  * The independent form object base class.

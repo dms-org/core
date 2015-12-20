@@ -1,10 +1,10 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Common\Crud\Action\Object;
+namespace Dms\Core\Tests\Common\Crud\Action\Object;
 
-use Iddigital\Cms\Core\Common\Crud\Action\Object\ObjectActionHandler;
-use Iddigital\Cms\Core\Common\Crud\Action\Object\ObjectActionParameter;
-use Iddigital\Cms\Core\Tests\Module\Handler\ParameterizedActionHandlerTest;
+use Dms\Core\Common\Crud\Action\Object\ObjectActionHandler;
+use Dms\Core\Common\Crud\Action\Object\ObjectActionParameter;
+use Dms\Core\Tests\Module\Handler\ParameterizedActionHandlerTest;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

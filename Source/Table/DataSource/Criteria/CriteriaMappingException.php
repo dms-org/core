@@ -2,7 +2,7 @@
 
 namespace Table\DataSource\Criteria;
 
-use Iddigital\Cms\Core\Exception\BaseException;
+use Dms\Core\Exception\BaseException;
 
 /**
  * The exception class for invalid criteria mappings.

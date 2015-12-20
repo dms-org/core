@@ -1,9 +1,9 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Persistence\Db;
+namespace Dms\Core\Tests\Persistence\Db;
 
-use Iddigital\Cms\Common\Testing\CmsTestCase;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Mock\MockDatabase;
+use Dms\Common\Testing\CmsTestCase;
+use Dms\Core\Tests\Persistence\Db\Mock\MockDatabase;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

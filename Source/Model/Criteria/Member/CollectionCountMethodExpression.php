@@ -1,11 +1,11 @@
 <?php
 
-namespace Iddigital\Cms\Core\Model\Criteria\Member;
+namespace Dms\Core\Model\Criteria\Member;
 
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Model\Type\Builder\Type;
-use Iddigital\Cms\Core\Model\Type\IType;
-use Iddigital\Cms\Core\Model\Type\WithElementsType;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Model\Type\Builder\Type;
+use Dms\Core\Model\Type\IType;
+use Dms\Core\Model\Type\WithElementsType;
 
 /**
  * The object set count method expression class.

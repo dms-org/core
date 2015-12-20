@@ -1,17 +1,17 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Common\Crud\Modules;
+namespace Dms\Core\Tests\Common\Crud\Modules;
 
-use Iddigital\Cms\Core\Auth\IPermission;
-use Iddigital\Cms\Core\Auth\Permission;
-use Iddigital\Cms\Core\Auth\UserForbiddenException;
-use Iddigital\Cms\Core\Common\Crud\Action\Crud\ViewDetailsAction;
-use Iddigital\Cms\Core\Common\Crud\IReadModule;
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Model\IEntitySet;
-use Iddigital\Cms\Core\Table\DataSource\ObjectTableDataSource;
-use Iddigital\Cms\Core\Tests\Module\Mock\MockAuthSystem;
-use Iddigital\Cms\Core\Tests\Module\ModuleTestBase;
+use Dms\Core\Auth\IPermission;
+use Dms\Core\Auth\Permission;
+use Dms\Core\Auth\UserForbiddenException;
+use Dms\Core\Common\Crud\Action\Crud\ViewDetailsAction;
+use Dms\Core\Common\Crud\IReadModule;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Model\IEntitySet;
+use Dms\Core\Table\DataSource\ObjectTableDataSource;
+use Dms\Core\Tests\Module\Mock\MockAuthSystem;
+use Dms\Core\Tests\Module\ModuleTestBase;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

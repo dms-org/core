@@ -1,8 +1,8 @@
 <?php
 
-namespace Iddigital\Cms\Core\Model\Criteria;
+namespace Dms\Core\Model\Criteria;
 
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Exception\InvalidArgumentException;
 
 /**
  * The member expression tree node.

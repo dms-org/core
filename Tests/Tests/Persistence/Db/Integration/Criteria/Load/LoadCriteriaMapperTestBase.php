@@ -1,11 +1,11 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Criteria\Load;
+namespace Dms\Core\Tests\Persistence\Db\Integration\Criteria\Load;
 
-use Iddigital\Cms\Core\Model\ILoadCriteria;
-use Iddigital\Cms\Core\Persistence\Db\Criteria\MappedLoadQuery;
-use Iddigital\Cms\Core\Persistence\Db\Criteria\LoadCriteriaMapper;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Criteria\CriteriaMapperTestBase;
+use Dms\Core\Model\ILoadCriteria;
+use Dms\Core\Persistence\Db\Criteria\MappedLoadQuery;
+use Dms\Core\Persistence\Db\Criteria\LoadCriteriaMapper;
+use Dms\Core\Tests\Persistence\Db\Integration\Criteria\CriteriaMapperTestBase;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

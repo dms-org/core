@@ -1,18 +1,18 @@
 <?php
 
-namespace Iddigital\Cms\Core\Persistence\Db\Mapping;
+namespace Dms\Core\Persistence\Db\Mapping;
 
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Exception\InvalidOperationException;
-use Iddigital\Cms\Core\Model\ITypedCollection;
-use Iddigital\Cms\Core\Model\ITypedObject;
-use Iddigital\Cms\Core\Model\Object\TypedObject;
-use Iddigital\Cms\Core\Persistence\Db\LoadingContext;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\FinalizedMapperDefinition;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Hierarchy\ParentObjectMapping;
-use Iddigital\Cms\Core\Persistence\Db\PersistenceContext;
-use Iddigital\Cms\Core\Persistence\Db\Query\Delete;
-use Iddigital\Cms\Core\Persistence\Db\Row;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Exception\InvalidOperationException;
+use Dms\Core\Model\ITypedCollection;
+use Dms\Core\Model\ITypedObject;
+use Dms\Core\Model\Object\TypedObject;
+use Dms\Core\Persistence\Db\LoadingContext;
+use Dms\Core\Persistence\Db\Mapping\Definition\FinalizedMapperDefinition;
+use Dms\Core\Persistence\Db\Mapping\Hierarchy\ParentObjectMapping;
+use Dms\Core\Persistence\Db\PersistenceContext;
+use Dms\Core\Persistence\Db\Query\Delete;
+use Dms\Core\Persistence\Db\Row;
 
 /**
  * The object mapper base class.
@@ -41,7 +41,7 @@ abstract class ObjectMapper implements IObjectMapper
      *
      * @param FinalizedMapperDefinition $definition
      *
-     * @throws \Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\IncompleteMapperDefinitionException
+     * @throws \Dms\Core\Persistence\Db\Mapping\Definition\IncompleteMapperDefinitionException
      */
     public function __construct(FinalizedMapperDefinition $definition)
     {

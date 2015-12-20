@@ -1,24 +1,24 @@
 <?php
 
-namespace Iddigital\Cms\Core\Persistence\Db\Doctrine;
+namespace Dms\Core\Persistence\Db\Doctrine;
 
 use Doctrine\DBAL\Connection as DbalConnection;
 use Doctrine\DBAL\Platforms\AbstractPlatform as DoctrineAbstractPlatform;
 use Doctrine\DBAL\Query\QueryBuilder;
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Persistence\Db\Doctrine\Resequence\ResequenceCompilerFactory;
-use Iddigital\Cms\Core\Persistence\Db\Platform\CompiledQuery;
-use Iddigital\Cms\Core\Persistence\Db\Platform\CompiledQueryBuilder;
-use Iddigital\Cms\Core\Persistence\Db\Platform\Platform;
-use Iddigital\Cms\Core\Persistence\Db\Query\Clause\Join;
-use Iddigital\Cms\Core\Persistence\Db\Query\Delete;
-use Iddigital\Cms\Core\Persistence\Db\Query\Expression;
-use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Expr;
-use Iddigital\Cms\Core\Persistence\Db\Query\Query;
-use Iddigital\Cms\Core\Persistence\Db\Query\ResequenceOrderIndexColumn;
-use Iddigital\Cms\Core\Persistence\Db\Query\Select;
-use Iddigital\Cms\Core\Persistence\Db\Query\Update;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Table;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Persistence\Db\Doctrine\Resequence\ResequenceCompilerFactory;
+use Dms\Core\Persistence\Db\Platform\CompiledQuery;
+use Dms\Core\Persistence\Db\Platform\CompiledQueryBuilder;
+use Dms\Core\Persistence\Db\Platform\Platform;
+use Dms\Core\Persistence\Db\Query\Clause\Join;
+use Dms\Core\Persistence\Db\Query\Delete;
+use Dms\Core\Persistence\Db\Query\Expression;
+use Dms\Core\Persistence\Db\Query\Expression\Expr;
+use Dms\Core\Persistence\Db\Query\Query;
+use Dms\Core\Persistence\Db\Query\ResequenceOrderIndexColumn;
+use Dms\Core\Persistence\Db\Query\Select;
+use Dms\Core\Persistence\Db\Query\Update;
+use Dms\Core\Persistence\Db\Schema\Table;
 
 /**
  * The doctrine platform.

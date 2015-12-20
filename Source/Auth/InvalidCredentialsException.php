@@ -1,8 +1,8 @@
 <?php
 
-namespace Iddigital\Cms\Core\Auth;
+namespace Dms\Core\Auth;
 
-use Iddigital\Cms\Core\Exception\BaseException;
+use Dms\Core\Exception\BaseException;
 
 /**
  * Exception for invalid login credentials.

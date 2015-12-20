@@ -1,15 +1,15 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Module;
+namespace Dms\Core\Tests\Module;
 
-use Iddigital\Cms\Core\Auth\IPermission;
-use Iddigital\Cms\Core\Module\IAction;
-use Iddigital\Cms\Core\Module\IChartDisplay;
-use Iddigital\Cms\Core\Module\IParameterizedAction;
-use Iddigital\Cms\Core\Module\ITableDisplay;
-use Iddigital\Cms\Core\Module\Module;
-use Iddigital\Cms\Core\Tests\Module\Fixtures\ModuleWithCustom;
-use Iddigital\Cms\Core\Tests\Module\Mock\MockAuthSystem;
+use Dms\Core\Auth\IPermission;
+use Dms\Core\Module\IAction;
+use Dms\Core\Module\IChartDisplay;
+use Dms\Core\Module\IParameterizedAction;
+use Dms\Core\Module\ITableDisplay;
+use Dms\Core\Module\Module;
+use Dms\Core\Tests\Module\Fixtures\ModuleWithCustom;
+use Dms\Core\Tests\Module\Mock\MockAuthSystem;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

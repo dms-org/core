@@ -1,13 +1,13 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\ReadModel;
+namespace Dms\Core\Tests\Persistence\Db\Integration\Mapping\ReadModel;
 
-use Iddigital\Cms\Core\Persistence\Db\Connection\IConnection;
-use Iddigital\Cms\Core\Persistence\Db\Query\Select;
-use Iddigital\Cms\Core\Persistence\ReadModelRepository;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\ReadModel\Fixtures\Embedded\GenericLabelReadModel;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\ReadModel\Fixtures\Embedded\ReadModelWithLabel;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\ReadModel\Fixtures\Embedded\ReadModelWithLabelRepository;
+use Dms\Core\Persistence\Db\Connection\IConnection;
+use Dms\Core\Persistence\Db\Query\Select;
+use Dms\Core\Persistence\ReadModelRepository;
+use Dms\Core\Tests\Persistence\Db\Integration\Mapping\ReadModel\Fixtures\Embedded\GenericLabelReadModel;
+use Dms\Core\Tests\Persistence\Db\Integration\Mapping\ReadModel\Fixtures\Embedded\ReadModelWithLabel;
+use Dms\Core\Tests\Persistence\Db\Integration\Mapping\ReadModel\Fixtures\Embedded\ReadModelWithLabelRepository;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

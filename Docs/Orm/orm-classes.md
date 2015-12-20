@@ -10,13 +10,13 @@ A simple example can be found in the test fixtures:
 
 namespace Some\Name\Space;
 
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Orm\OrmDefinition;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Orm;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\Alias;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\Comment;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\HashedPassword;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\Post;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\User;
+use Dms\Core\Persistence\Db\Mapping\Definition\Orm\OrmDefinition;
+use Dms\Core\Persistence\Db\Mapping\Orm;
+use Dms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\Alias;
+use Dms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\Comment;
+use Dms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\HashedPassword;
+use Dms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\Post;
+use Dms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\User;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

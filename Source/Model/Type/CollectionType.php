@@ -1,10 +1,10 @@
 <?php
 
-namespace Iddigital\Cms\Core\Model\Type;
+namespace Dms\Core\Model\Type;
 
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Model\ITypedCollection;
-use Iddigital\Cms\Core\Model\Type\Builder\Type;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Model\ITypedCollection;
+use Dms\Core\Model\Type\Builder\Type;
 
 /**
  * The collection type class.

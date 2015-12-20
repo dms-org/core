@@ -1,6 +1,6 @@
 <?php
 
-namespace Iddigital\Cms\Core\Form\Field\Builder;
+namespace Dms\Core\Form\Field\Builder;
 
 /**
  * The inner form field builder class.

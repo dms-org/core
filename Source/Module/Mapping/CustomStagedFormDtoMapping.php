@@ -1,10 +1,10 @@
 <?php
 
-namespace Iddigital\Cms\Core\Module\Mapping;
+namespace Dms\Core\Module\Mapping;
 
-use Iddigital\Cms\Core\Form;
-use Iddigital\Cms\Core\Form\IForm;
-use Iddigital\Cms\Core\Form\IStagedForm;
+use Dms\Core\Form;
+use Dms\Core\Form\IForm;
+use Dms\Core\Form\IStagedForm;
 
 /**
  * The custom form dto mapping base class.

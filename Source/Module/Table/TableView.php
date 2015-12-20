@@ -1,10 +1,10 @@
 <?php
 
-namespace Iddigital\Cms\Core\Module\Table;
+namespace Dms\Core\Module\Table;
 
-use Iddigital\Cms\Core\Module\ITableView;
-use Iddigital\Cms\Core\Table\Criteria\RowCriteria;
-use Iddigital\Cms\Core\Table\IRowCriteria;
+use Dms\Core\Module\ITableView;
+use Dms\Core\Table\Criteria\RowCriteria;
+use Dms\Core\Table\IRowCriteria;
 
 /**
  * The table view class.

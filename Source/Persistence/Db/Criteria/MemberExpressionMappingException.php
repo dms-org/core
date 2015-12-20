@@ -1,8 +1,8 @@
 <?php
 
-namespace Iddigital\Cms\Core\Persistence\Db\Criteria;
+namespace Dms\Core\Persistence\Db\Criteria;
 
-use Iddigital\Cms\Core\Exception\BaseException;
+use Dms\Core\Exception\BaseException;
 
 /**
  * The member expression mapping exception class.

@@ -1,10 +1,10 @@
 <?php
 
-namespace Iddigital\Cms\Core\Form\Field\Type;
+namespace Dms\Core\Form\Field\Type;
 
-use Iddigital\Cms\Core\Form\Field\Processor\TypeProcessor;
-use Iddigital\Cms\Core\Form\Field\Processor\Validator\IntValidator;
-use Iddigital\Cms\Core\Form\IFieldProcessor;
+use Dms\Core\Form\Field\Processor\TypeProcessor;
+use Dms\Core\Form\Field\Processor\Validator\IntValidator;
+use Dms\Core\Form\IFieldProcessor;
 
 /**
  * The integer type class.

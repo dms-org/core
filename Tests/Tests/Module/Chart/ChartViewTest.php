@@ -1,10 +1,10 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Module\Chart;
+namespace Dms\Core\Tests\Module\Chart;
 
-use Iddigital\Cms\Common\Testing\CmsTestCase;
-use Iddigital\Cms\Core\Module\Chart\ChartView;
-use Iddigital\Cms\Core\Table\Chart\IChartCriteria;
+use Dms\Common\Testing\CmsTestCase;
+use Dms\Core\Module\Chart\ChartView;
+use Dms\Core\Table\Chart\IChartCriteria;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

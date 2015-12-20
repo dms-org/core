@@ -1,7 +1,7 @@
-iddigital.cms.core
-==================
+dms.core
+========
 
-The core package for the iddigital CMS system.
+The core package for the DMS system.
 
 Links
 =====

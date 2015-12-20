@@ -1,10 +1,10 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Module\Action;
+namespace Dms\Core\Tests\Module\Action;
 
-use Iddigital\Cms\Common\Testing\CmsTestCase;
-use Iddigital\Cms\Core\Auth\IAuthSystem;
-use Iddigital\Cms\Core\Auth\IPermission;
+use Dms\Common\Testing\CmsTestCase;
+use Dms\Core\Auth\IAuthSystem;
+use Dms\Core\Auth\IPermission;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

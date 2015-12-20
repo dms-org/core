@@ -1,36 +1,36 @@
 <?php
 
-namespace Iddigital\Cms\Core\Form\Field\Builder;
+namespace Dms\Core\Form\Field\Builder;
 
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Form\Field\Processor\EntityArrayLoaderProcessor;
-use Iddigital\Cms\Core\Form\Field\Processor\EntityLoaderProcessor;
-use Iddigital\Cms\Core\Form\Field\Processor\EnumProcessor;
-use Iddigital\Cms\Core\Form\Field\Processor\TypeProcessor;
-use Iddigital\Cms\Core\Form\Field\Type\ArrayOfEntityIdsType;
-use Iddigital\Cms\Core\Form\Field\Type\ArrayOfType;
-use Iddigital\Cms\Core\Form\Field\Type\BoolType;
-use Iddigital\Cms\Core\Form\Field\Type\CustomType;
-use Iddigital\Cms\Core\Form\Field\Type\DateTimeType;
-use Iddigital\Cms\Core\Form\Field\Type\DateTimeTypeBase;
-use Iddigital\Cms\Core\Form\Field\Type\DateType;
-use Iddigital\Cms\Core\Form\Field\Type\EntityIdType;
-use Iddigital\Cms\Core\Form\Field\Type\FileType;
-use Iddigital\Cms\Core\Form\Field\Type\FloatType;
-use Iddigital\Cms\Core\Form\Field\Type\ImageType;
-use Iddigital\Cms\Core\Form\Field\Type\InnerFormType;
-use Iddigital\Cms\Core\Form\Field\Type\IntType;
-use Iddigital\Cms\Core\Form\Field\Type\StringType;
-use Iddigital\Cms\Core\Form\Field\Type\TimeOfDayType;
-use Iddigital\Cms\Core\Form\IField;
-use Iddigital\Cms\Core\Form\IFieldProcessor;
-use Iddigital\Cms\Core\Form\IForm;
-use Iddigital\Cms\Core\Form\Object\FormObject;
-use Iddigital\Cms\Core\Form\Object\InnerFormObjectFieldBuilder;
-use Iddigital\Cms\Core\Form\Object\Type\InnerFormObjectType;
-use Iddigital\Cms\Core\Model\IEntitySet;
-use Iddigital\Cms\Core\Model\Object\Enum;
-use Iddigital\Cms\Core\Model\Type\IType;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Form\Field\Processor\EntityArrayLoaderProcessor;
+use Dms\Core\Form\Field\Processor\EntityLoaderProcessor;
+use Dms\Core\Form\Field\Processor\EnumProcessor;
+use Dms\Core\Form\Field\Processor\TypeProcessor;
+use Dms\Core\Form\Field\Type\ArrayOfEntityIdsType;
+use Dms\Core\Form\Field\Type\ArrayOfType;
+use Dms\Core\Form\Field\Type\BoolType;
+use Dms\Core\Form\Field\Type\CustomType;
+use Dms\Core\Form\Field\Type\DateTimeType;
+use Dms\Core\Form\Field\Type\DateTimeTypeBase;
+use Dms\Core\Form\Field\Type\DateType;
+use Dms\Core\Form\Field\Type\EntityIdType;
+use Dms\Core\Form\Field\Type\FileType;
+use Dms\Core\Form\Field\Type\FloatType;
+use Dms\Core\Form\Field\Type\ImageType;
+use Dms\Core\Form\Field\Type\InnerFormType;
+use Dms\Core\Form\Field\Type\IntType;
+use Dms\Core\Form\Field\Type\StringType;
+use Dms\Core\Form\Field\Type\TimeOfDayType;
+use Dms\Core\Form\IField;
+use Dms\Core\Form\IFieldProcessor;
+use Dms\Core\Form\IForm;
+use Dms\Core\Form\Object\FormObject;
+use Dms\Core\Form\Object\InnerFormObjectFieldBuilder;
+use Dms\Core\Form\Object\Type\InnerFormObjectType;
+use Dms\Core\Model\IEntitySet;
+use Dms\Core\Model\Object\Enum;
+use Dms\Core\Model\Type\IType;
 
 /**
  * The field builder class.

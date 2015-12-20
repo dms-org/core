@@ -1,8 +1,8 @@
 <?php
 
-namespace Iddigital\Cms\Core\Form\Processor;
+namespace Dms\Core\Form\Processor;
 
-use Iddigital\Cms\Core\Language\Message;
+use Dms\Core\Language\Message;
 
 /**
  * The custom form processor class.

@@ -1,9 +1,9 @@
 <?php
 
-namespace Iddigital\Cms\Core\Table\Chart;
+namespace Dms\Core\Table\Chart;
 
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Table\ITableDataSource;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Table\ITableDataSource;
 
 /**
  * The chart structure interface.

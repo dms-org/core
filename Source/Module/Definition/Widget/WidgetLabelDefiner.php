@@ -1,6 +1,6 @@
 <?php
 
-namespace Iddigital\Cms\Core\Module\Definition\Widget;
+namespace Dms\Core\Module\Definition\Widget;
 
 /**
  * The widget definer class

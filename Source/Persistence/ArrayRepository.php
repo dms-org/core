@@ -1,13 +1,13 @@
 <?php
 
-namespace Iddigital\Cms\Core\Persistence;
+namespace Dms\Core\Persistence;
 
-use Iddigital\Cms\Core\Exception;
-use Iddigital\Cms\Core\Model\EntityCollection;
-use Iddigital\Cms\Core\Model\EntityNotFoundException;
-use Iddigital\Cms\Core\Model\ICriteria;
-use Iddigital\Cms\Core\Model\IEntity;
-use Iddigital\Cms\Core\Model\ISpecification;
+use Dms\Core\Exception;
+use Dms\Core\Model\EntityCollection;
+use Dms\Core\Model\EntityNotFoundException;
+use Dms\Core\Model\ICriteria;
+use Dms\Core\Model\IEntity;
+use Dms\Core\Model\ISpecification;
 
 /**
  * An implementation of the repository using an in-memory store.

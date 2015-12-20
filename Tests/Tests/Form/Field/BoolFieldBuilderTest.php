@@ -1,13 +1,13 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Form\Field;
+namespace Dms\Core\Tests\Form\Field;
 
-use Iddigital\Cms\Core\Form\Field\Builder\BoolFieldBuilder;
-use Iddigital\Cms\Core\Form\Field\Builder\Field as Field;
-use Iddigital\Cms\Core\Form\Field\Processor\Validator\RequiredValidator;
-use Iddigital\Cms\Core\Form\Field\Type\FieldType;
-use Iddigital\Cms\Core\Language\Message;
-use Iddigital\Cms\Core\Model\Type\Builder\Type as PhpType;
+use Dms\Core\Form\Field\Builder\BoolFieldBuilder;
+use Dms\Core\Form\Field\Builder\Field as Field;
+use Dms\Core\Form\Field\Processor\Validator\RequiredValidator;
+use Dms\Core\Form\Field\Type\FieldType;
+use Dms\Core\Language\Message;
+use Dms\Core\Model\Type\Builder\Type as PhpType;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

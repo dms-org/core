@@ -1,15 +1,15 @@
 <?php
 
-namespace Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Reference;
+namespace Dms\Core\Persistence\Db\Mapping\Relation\Reference;
 
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\IEntityMapper;
-use Iddigital\Cms\Core\Persistence\Db\PersistenceContext;
-use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Expr;
-use Iddigital\Cms\Core\Persistence\Db\Query\Select;
-use Iddigital\Cms\Core\Persistence\Db\Row;
-use Iddigital\Cms\Core\Persistence\Db\RowSet;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Column;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Persistence\Db\Mapping\IEntityMapper;
+use Dms\Core\Persistence\Db\PersistenceContext;
+use Dms\Core\Persistence\Db\Query\Expression\Expr;
+use Dms\Core\Persistence\Db\Query\Select;
+use Dms\Core\Persistence\Db\Row;
+use Dms\Core\Persistence\Db\RowSet;
+use Dms\Core\Persistence\Db\Schema\Column;
 
 /**
  * The relation identity reference base class

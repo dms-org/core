@@ -1,10 +1,10 @@
 <?php
 
-namespace Iddigital\Cms\Core\Model\Criteria\Member;
+namespace Dms\Core\Model\Criteria\Member;
 
-use Iddigital\Cms\Core\Model\Criteria\NestedMember;
-use Iddigital\Cms\Core\Model\Type\Builder\Type;
-use Iddigital\Cms\Core\Model\Type\IType;
+use Dms\Core\Model\Criteria\NestedMember;
+use Dms\Core\Model\Type\Builder\Type;
+use Dms\Core\Model\Type\IType;
 
 /**
  * The object set average method expression class.

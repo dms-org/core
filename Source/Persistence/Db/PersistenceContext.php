@@ -1,16 +1,16 @@
 <?php
 
-namespace Iddigital\Cms\Core\Persistence\Db;
+namespace Dms\Core\Persistence\Db;
 
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Model\IEntity;
-use Iddigital\Cms\Core\Persistence\Db\Connection\IConnection;
-use Iddigital\Cms\Core\Persistence\Db\Connection\Dummy\DummyConnection;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Hook\IPersistHook;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\IRelation;
-use Iddigital\Cms\Core\Persistence\Db\Query\BulkUpdate;
-use Iddigital\Cms\Core\Persistence\Db\Query\IQuery;
-use Iddigital\Cms\Core\Persistence\Db\Query\Upsert;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Model\IEntity;
+use Dms\Core\Persistence\Db\Connection\IConnection;
+use Dms\Core\Persistence\Db\Connection\Dummy\DummyConnection;
+use Dms\Core\Persistence\Db\Mapping\Hook\IPersistHook;
+use Dms\Core\Persistence\Db\Mapping\Relation\IRelation;
+use Dms\Core\Persistence\Db\Query\BulkUpdate;
+use Dms\Core\Persistence\Db\Query\IQuery;
+use Dms\Core\Persistence\Db\Query\Upsert;
 
 /**
  * The persistence context class

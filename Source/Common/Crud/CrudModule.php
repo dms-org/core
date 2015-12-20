@@ -1,12 +1,12 @@
 <?php
 
-namespace Iddigital\Cms\Core\Common\Crud;
+namespace Dms\Core\Common\Crud;
 
-use Iddigital\Cms\Core\Auth\IAuthSystem;
-use Iddigital\Cms\Core\Common\Crud\Definition\CrudModuleDefinition;
-use Iddigital\Cms\Core\Common\Crud\Definition\FinalizedCrudModuleDefinition;
-use Iddigital\Cms\Core\Common\Crud\Definition\ReadModuleDefinition;
-use Iddigital\Cms\Core\Persistence\IRepository;
+use Dms\Core\Auth\IAuthSystem;
+use Dms\Core\Common\Crud\Definition\CrudModuleDefinition;
+use Dms\Core\Common\Crud\Definition\FinalizedCrudModuleDefinition;
+use Dms\Core\Common\Crud\Definition\ReadModuleDefinition;
+use Dms\Core\Persistence\IRepository;
 
 /**
  * The crud module base class.

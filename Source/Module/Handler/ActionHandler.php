@@ -1,12 +1,12 @@
 <?php
 
-namespace Iddigital\Cms\Core\Module\Handler;
+namespace Dms\Core\Module\Handler;
 
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Exception\TypeMismatchException;
-use Iddigital\Cms\Core\Form;
-use Iddigital\Cms\Core\Module\IActionHandler;
-use Iddigital\Cms\Core\Util\Debug;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Exception\TypeMismatchException;
+use Dms\Core\Form;
+use Dms\Core\Module\IActionHandler;
+use Dms\Core\Util\Debug;
 
 /**
  * The action handler base class.

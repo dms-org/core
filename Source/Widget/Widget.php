@@ -1,6 +1,6 @@
 <?php
 
-namespace Iddigital\Cms\Core\Widget;
+namespace Dms\Core\Widget;
 
 /**
  * The widget base class.

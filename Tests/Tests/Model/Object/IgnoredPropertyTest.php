@@ -1,10 +1,10 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Model\Object;
+namespace Dms\Core\Tests\Model\Object;
 
-use Iddigital\Cms\Common\Testing\CmsTestCase;
-use Iddigital\Cms\Core\Model\Type\Builder\Type;
-use Iddigital\Cms\Core\Tests\Model\Object\Fixtures\IgnoredProperty;
+use Dms\Common\Testing\CmsTestCase;
+use Dms\Core\Model\Type\Builder\Type;
+use Dms\Core\Tests\Model\Object\Fixtures\IgnoredProperty;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

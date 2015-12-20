@@ -1,29 +1,29 @@
 <?php
 
-namespace Iddigital\Cms\Core\Common\Crud\Definition\Form;
+namespace Dms\Core\Common\Crud\Definition\Form;
 
-use Iddigital\Cms\Core\Common\Crud\Action\Object\IObjectAction;
-use Iddigital\Cms\Core\Common\Crud\Form\FormWithBinding;
-use Iddigital\Cms\Core\Common\Crud\Form\ObjectForm;
-use Iddigital\Cms\Core\Common\Crud\ICrudModule;
-use Iddigital\Cms\Core\Common\Crud\IReadModule;
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Exception\InvalidOperationException;
-use Iddigital\Cms\Core\Exception\InvalidReturnValueException;
-use Iddigital\Cms\Core\Form\Binding\IFieldBinding;
-use Iddigital\Cms\Core\Form\Field\Builder\FieldBuilderBase;
-use Iddigital\Cms\Core\Form\FormSection;
-use Iddigital\Cms\Core\Form\IField;
-use Iddigital\Cms\Core\Form\IFormSection;
-use Iddigital\Cms\Core\Form\IFormStage;
-use Iddigital\Cms\Core\Form\Stage\DependentFormStage;
-use Iddigital\Cms\Core\Form\Stage\IndependentFormStage;
-use Iddigital\Cms\Core\Form\StagedForm;
-use Iddigital\Cms\Core\Model\IEntitySet;
-use Iddigital\Cms\Core\Model\Object\FinalizedClassDefinition;
-use Iddigital\Cms\Core\Model\Object\TypedObject;
-use Iddigital\Cms\Core\Util\Debug;
-use Iddigital\Cms\Core\Util\Reflection;
+use Dms\Core\Common\Crud\Action\Object\IObjectAction;
+use Dms\Core\Common\Crud\Form\FormWithBinding;
+use Dms\Core\Common\Crud\Form\ObjectForm;
+use Dms\Core\Common\Crud\ICrudModule;
+use Dms\Core\Common\Crud\IReadModule;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Exception\InvalidOperationException;
+use Dms\Core\Exception\InvalidReturnValueException;
+use Dms\Core\Form\Binding\IFieldBinding;
+use Dms\Core\Form\Field\Builder\FieldBuilderBase;
+use Dms\Core\Form\FormSection;
+use Dms\Core\Form\IField;
+use Dms\Core\Form\IFormSection;
+use Dms\Core\Form\IFormStage;
+use Dms\Core\Form\Stage\DependentFormStage;
+use Dms\Core\Form\Stage\IndependentFormStage;
+use Dms\Core\Form\StagedForm;
+use Dms\Core\Model\IEntitySet;
+use Dms\Core\Model\Object\FinalizedClassDefinition;
+use Dms\Core\Model\Object\TypedObject;
+use Dms\Core\Util\Debug;
+use Dms\Core\Util\Reflection;
 
 /**
  * The CRUD form definition class.

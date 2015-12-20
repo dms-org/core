@@ -1,31 +1,31 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Persistence\Db\Doctrine\Migration;
+namespace Dms\Core\Tests\Persistence\Db\Doctrine\Migration;
 
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Types\Type;
-use Iddigital\Cms\Common\Testing\CmsTestCase;
-use Iddigital\Cms\Core\Persistence\Db\Doctrine\Migration\CustomEnumTypeGenerator;
-use Iddigital\Cms\Core\Persistence\Db\Doctrine\Migration\DoctrineSchemaConverter;
-use Iddigital\Cms\Core\Persistence\Db\Doctrine\Migration\Type\DoctrineTypes;
-use Iddigital\Cms\Core\Persistence\Db\Doctrine\Migration\Type\MediumIntType;
-use Iddigital\Cms\Core\Persistence\Db\Doctrine\Migration\Type\TinyIntType;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Column;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Database;
-use Iddigital\Cms\Core\Persistence\Db\Schema\ForeignKey;
-use Iddigital\Cms\Core\Persistence\Db\Schema\ForeignKeyMode;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Index;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Table;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Type\Blob;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Type\Boolean;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Type\Date;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Type\DateTime;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Type\Decimal;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Type\Enum;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Type\Integer;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Type\Text;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Type\Time;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Type\Varchar;
+use Dms\Common\Testing\CmsTestCase;
+use Dms\Core\Persistence\Db\Doctrine\Migration\CustomEnumTypeGenerator;
+use Dms\Core\Persistence\Db\Doctrine\Migration\DoctrineSchemaConverter;
+use Dms\Core\Persistence\Db\Doctrine\Migration\Type\DoctrineTypes;
+use Dms\Core\Persistence\Db\Doctrine\Migration\Type\MediumIntType;
+use Dms\Core\Persistence\Db\Doctrine\Migration\Type\TinyIntType;
+use Dms\Core\Persistence\Db\Schema\Column;
+use Dms\Core\Persistence\Db\Schema\Database;
+use Dms\Core\Persistence\Db\Schema\ForeignKey;
+use Dms\Core\Persistence\Db\Schema\ForeignKeyMode;
+use Dms\Core\Persistence\Db\Schema\Index;
+use Dms\Core\Persistence\Db\Schema\Table;
+use Dms\Core\Persistence\Db\Schema\Type\Blob;
+use Dms\Core\Persistence\Db\Schema\Type\Boolean;
+use Dms\Core\Persistence\Db\Schema\Type\Date;
+use Dms\Core\Persistence\Db\Schema\Type\DateTime;
+use Dms\Core\Persistence\Db\Schema\Type\Decimal;
+use Dms\Core\Persistence\Db\Schema\Type\Enum;
+use Dms\Core\Persistence\Db\Schema\Type\Integer;
+use Dms\Core\Persistence\Db\Schema\Type\Text;
+use Dms\Core\Persistence\Db\Schema\Type\Time;
+use Dms\Core\Persistence\Db\Schema\Type\Varchar;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

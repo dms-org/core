@@ -1,14 +1,14 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Form\Field\Processor\Validator;
+namespace Dms\Core\Tests\Form\Field\Processor\Validator;
 
-use Iddigital\Cms\Core\Form\Field\Processor\FieldValidator;
-use Iddigital\Cms\Core\Form\Field\Processor\Validator\AllUniquePropertyValidator;
-use Iddigital\Cms\Core\Language\Message;
-use Iddigital\Cms\Core\Model\EntityCollection;
-use Iddigital\Cms\Core\Model\Type\ArrayType;
-use Iddigital\Cms\Core\Model\Type\Builder\Type;
-use Iddigital\Cms\Core\Tests\Form\Field\Processor\Validator\Fixtures\TestEntity;
+use Dms\Core\Form\Field\Processor\FieldValidator;
+use Dms\Core\Form\Field\Processor\Validator\AllUniquePropertyValidator;
+use Dms\Core\Language\Message;
+use Dms\Core\Model\EntityCollection;
+use Dms\Core\Model\Type\ArrayType;
+use Dms\Core\Model\Type\Builder\Type;
+use Dms\Core\Tests\Form\Field\Processor\Validator\Fixtures\TestEntity;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

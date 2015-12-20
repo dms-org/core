@@ -1,11 +1,11 @@
 <?php
 
-namespace Iddigital\Cms\Core\Form\Field\Type;
+namespace Dms\Core\Form\Field\Type;
 
-use Iddigital\Cms\Core\File\IUploadedFile;
-use Iddigital\Cms\Core\Form\Field\Processor\Validator\UploadedFileValidator;
-use Iddigital\Cms\Core\Form\IFieldProcessor;
-use Iddigital\Cms\Core\Model\Type\Builder\Type;
+use Dms\Core\File\IUploadedFile;
+use Dms\Core\Form\Field\Processor\Validator\UploadedFileValidator;
+use Dms\Core\Form\IFieldProcessor;
+use Dms\Core\Model\Type\Builder\Type;
 
 /**
  * The file type class.

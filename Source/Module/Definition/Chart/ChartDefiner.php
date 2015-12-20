@@ -1,10 +1,10 @@
 <?php
 
-namespace Iddigital\Cms\Core\Module\Definition\Chart;
+namespace Dms\Core\Module\Definition\Chart;
 
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Module\ITableDisplay;
-use Iddigital\Cms\Core\Util\Debug;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Module\ITableDisplay;
+use Dms\Core\Util\Debug;
 
 /**
  * The chart definer class.

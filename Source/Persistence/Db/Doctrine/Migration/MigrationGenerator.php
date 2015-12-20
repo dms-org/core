@@ -1,12 +1,12 @@
 <?php
 
-namespace Iddigital\Cms\Core\Persistence\Db\Doctrine\Migration;
+namespace Dms\Core\Persistence\Db\Doctrine\Migration;
 
 use Doctrine\DBAL\Schema\Comparator;
 use Doctrine\DBAL\Schema\SchemaDiff;
-use Iddigital\Cms\Core\Persistence\Db\Doctrine\DoctrineConnection;
-use Iddigital\Cms\Core\Persistence\Db\Doctrine\Migration\Type\DoctrineTypes;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\IOrm;
+use Dms\Core\Persistence\Db\Doctrine\DoctrineConnection;
+use Dms\Core\Persistence\Db\Doctrine\Migration\Type\DoctrineTypes;
+use Dms\Core\Persistence\Db\Mapping\IOrm;
 
 /**
  * The migration generator base class.

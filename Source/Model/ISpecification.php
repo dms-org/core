@@ -1,10 +1,10 @@
 <?php
 
-namespace Iddigital\Cms\Core\Model;
+namespace Dms\Core\Model;
 
-use Iddigital\Cms\Core\Exception;
-use Iddigital\Cms\Core\Model\Criteria\Condition\Condition;
-use Iddigital\Cms\Core\Model\Object\FinalizedClassDefinition;
+use Dms\Core\Exception;
+use Dms\Core\Model\Criteria\Condition\Condition;
+use Dms\Core\Model\Object\FinalizedClassDefinition;
 
 /**
  * The object specification interface.

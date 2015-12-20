@@ -1,10 +1,10 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Model\Object;
+namespace Dms\Core\Tests\Model\Object;
 
-use Iddigital\Cms\Common\Testing\CmsTestCase;
-use Iddigital\Cms\Core\Model\Object\ImmutablePropertyException;
-use Iddigital\Cms\Core\Tests\Model\Object\Fixtures\ImmutableProperty;
+use Dms\Common\Testing\CmsTestCase;
+use Dms\Core\Model\Object\ImmutablePropertyException;
+use Dms\Core\Tests\Model\Object\Fixtures\ImmutableProperty;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

@@ -1,10 +1,10 @@
 <?php
 
-namespace Iddigital\Cms\Core\Table\Chart\Criteria;
+namespace Dms\Core\Table\Chart\Criteria;
 
-use Iddigital\Cms\Core\Exception;
-use Iddigital\Cms\Core\Table\Chart\IChartAxis;
-use Iddigital\Cms\Core\Table\IColumnComponent;
+use Dms\Core\Exception;
+use Dms\Core\Table\Chart\IChartAxis;
+use Dms\Core\Table\IColumnComponent;
 
 /**
  * The axis criterion base class

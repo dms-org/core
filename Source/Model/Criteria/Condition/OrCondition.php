@@ -1,6 +1,6 @@
 <?php
 
-namespace Iddigital\Cms\Core\Model\Criteria\Condition;
+namespace Dms\Core\Model\Criteria\Condition;
 
 /**
  * The logical or condition class.

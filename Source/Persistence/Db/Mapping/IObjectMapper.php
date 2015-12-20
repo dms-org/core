@@ -1,17 +1,17 @@
 <?php
 
-namespace Iddigital\Cms\Core\Persistence\Db\Mapping;
+namespace Dms\Core\Persistence\Db\Mapping;
 
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Model\ITypedCollection;
-use Iddigital\Cms\Core\Model\ITypedObject;
-use Iddigital\Cms\Core\Model\TypedCollection;
-use Iddigital\Cms\Core\Persistence\Db\LoadingContext;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\FinalizedMapperDefinition;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Hierarchy\ParentObjectMapping;
-use Iddigital\Cms\Core\Persistence\Db\PersistenceContext;
-use Iddigital\Cms\Core\Persistence\Db\Query\Delete;
-use Iddigital\Cms\Core\Persistence\Db\Row;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Model\ITypedCollection;
+use Dms\Core\Model\ITypedObject;
+use Dms\Core\Model\TypedCollection;
+use Dms\Core\Persistence\Db\LoadingContext;
+use Dms\Core\Persistence\Db\Mapping\Definition\FinalizedMapperDefinition;
+use Dms\Core\Persistence\Db\Mapping\Hierarchy\ParentObjectMapping;
+use Dms\Core\Persistence\Db\PersistenceContext;
+use Dms\Core\Persistence\Db\Query\Delete;
+use Dms\Core\Persistence\Db\Row;
 
 /**
  * The object mapper interface.

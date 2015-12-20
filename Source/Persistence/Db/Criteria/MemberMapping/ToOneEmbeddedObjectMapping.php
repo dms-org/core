@@ -1,21 +1,21 @@
 <?php
 
-namespace Iddigital\Cms\Core\Persistence\Db\Criteria\MemberMapping;
+namespace Dms\Core\Persistence\Db\Criteria\MemberMapping;
 
-use Iddigital\Cms\Core\Exception\InvalidOperationException;
-use Iddigital\Cms\Core\Exception\NotImplementedException;
-use Iddigital\Cms\Core\Model\Criteria\Condition\ConditionOperator;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Hierarchy\EmbeddedParentObjectMapping;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\IEntityMapper;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\ReadModel\Relation\ToOneMemberRelation;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Embedded\EmbeddedObjectRelation;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\IRelation;
-use Iddigital\Cms\Core\Persistence\Db\PersistenceContext;
-use Iddigital\Cms\Core\Persistence\Db\Query\Expression\BinOp;
-use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Expr;
-use Iddigital\Cms\Core\Persistence\Db\Query\Select;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Column;
-use Iddigital\Cms\Core\Util\Debug;
+use Dms\Core\Exception\InvalidOperationException;
+use Dms\Core\Exception\NotImplementedException;
+use Dms\Core\Model\Criteria\Condition\ConditionOperator;
+use Dms\Core\Persistence\Db\Mapping\Hierarchy\EmbeddedParentObjectMapping;
+use Dms\Core\Persistence\Db\Mapping\IEntityMapper;
+use Dms\Core\Persistence\Db\Mapping\ReadModel\Relation\ToOneMemberRelation;
+use Dms\Core\Persistence\Db\Mapping\Relation\Embedded\EmbeddedObjectRelation;
+use Dms\Core\Persistence\Db\Mapping\Relation\IRelation;
+use Dms\Core\Persistence\Db\PersistenceContext;
+use Dms\Core\Persistence\Db\Query\Expression\BinOp;
+use Dms\Core\Persistence\Db\Query\Expression\Expr;
+use Dms\Core\Persistence\Db\Query\Select;
+use Dms\Core\Persistence\Db\Schema\Column;
+use Dms\Core\Util\Debug;
 
 /**
  * The to-one embedded object relation mapping class.

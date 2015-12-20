@@ -1,16 +1,16 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\ReadModel;
+namespace Dms\Core\Tests\Persistence\Db\Integration\Mapping\ReadModel;
 
-use Iddigital\Cms\Core\Persistence\Db\Connection\IConnection;
-use Iddigital\Cms\Core\Persistence\Db\Query\Select;
-use Iddigital\Cms\Core\Persistence\ReadModelRepository;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\Fixtures\ValueObject\CurrencyEnum;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\Fixtures\ValueObject\EmbeddedMoneyObject;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\ReadModel\Fixtures\Properties\TypesReadModel;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\ReadModel\Fixtures\Properties\TypesReadModelRepository;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\ReadModel\Fixtures\ValueObject\ReadModelWithValueObject;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\ReadModel\Fixtures\ValueObject\ReadModelWithValueObjectRepository;
+use Dms\Core\Persistence\Db\Connection\IConnection;
+use Dms\Core\Persistence\Db\Query\Select;
+use Dms\Core\Persistence\ReadModelRepository;
+use Dms\Core\Tests\Persistence\Db\Integration\Mapping\Fixtures\ValueObject\CurrencyEnum;
+use Dms\Core\Tests\Persistence\Db\Integration\Mapping\Fixtures\ValueObject\EmbeddedMoneyObject;
+use Dms\Core\Tests\Persistence\Db\Integration\Mapping\ReadModel\Fixtures\Properties\TypesReadModel;
+use Dms\Core\Tests\Persistence\Db\Integration\Mapping\ReadModel\Fixtures\Properties\TypesReadModelRepository;
+use Dms\Core\Tests\Persistence\Db\Integration\Mapping\ReadModel\Fixtures\ValueObject\ReadModelWithValueObject;
+use Dms\Core\Tests\Persistence\Db\Integration\Mapping\ReadModel\Fixtures\ValueObject\ReadModelWithValueObjectRepository;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

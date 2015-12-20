@@ -1,11 +1,11 @@
 <?php
 
-namespace Iddigital\Cms\Core\Persistence\Db\Mapping\Relation;
+namespace Dms\Core\Persistence\Db\Mapping\Relation;
 
-use Iddigital\Cms\Core\Persistence\Db\Mapping\IObjectMapper;
-use Iddigital\Cms\Core\Persistence\Db\PersistenceContext;
-use Iddigital\Cms\Core\Persistence\Db\Query\Delete;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Table;
+use Dms\Core\Persistence\Db\Mapping\IObjectMapper;
+use Dms\Core\Persistence\Db\PersistenceContext;
+use Dms\Core\Persistence\Db\Query\Delete;
+use Dms\Core\Persistence\Db\Schema\Table;
 
 /**
  * The relation interface.

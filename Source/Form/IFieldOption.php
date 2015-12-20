@@ -1,5 +1,5 @@
 <?php
-namespace Iddigital\Cms\Core\Form;
+namespace Dms\Core\Form;
 
 /**
  * The field option interface.

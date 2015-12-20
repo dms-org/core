@@ -1,10 +1,10 @@
 <?php
 
-namespace Iddigital\Cms\Core\Model\Criteria\Member;
+namespace Dms\Core\Model\Criteria\Member;
 
-use Iddigital\Cms\Core\Model\Criteria\NestedMember;
-use Iddigital\Cms\Core\Model\Type\CollectionType;
-use Iddigital\Cms\Core\Model\Type\IType;
+use Dms\Core\Model\Criteria\NestedMember;
+use Dms\Core\Model\Type\CollectionType;
+use Dms\Core\Model\Type\IType;
 
 /**
  * The object set minimum method expression class.

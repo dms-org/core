@@ -1,14 +1,14 @@
 <?php
 
-namespace Iddigital\Cms\Core\Module;
+namespace Dms\Core\Module;
 
-use Iddigital\Cms\Core\Auth\UserForbiddenException;
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Exception\InvalidOperationException;
-use Iddigital\Cms\Core\Form\InvalidFormSubmissionException;
-use Iddigital\Cms\Core\Form\IStagedForm;
-use Iddigital\Cms\Core\Model\IDataTransferObject;
-use Iddigital\Cms\Core\Persistence;
+use Dms\Core\Auth\UserForbiddenException;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Exception\InvalidOperationException;
+use Dms\Core\Form\InvalidFormSubmissionException;
+use Dms\Core\Form\IStagedForm;
+use Dms\Core\Model\IDataTransferObject;
+use Dms\Core\Persistence;
 
 /**
  * The parameterized action interface.

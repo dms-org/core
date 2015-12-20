@@ -1,6 +1,6 @@
 <?php
 
-namespace Iddigital\Cms\Core\Form\Binding\Field;
+namespace Dms\Core\Form\Binding\Field;
 
 /**
  * The custom property binding class.

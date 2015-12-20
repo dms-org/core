@@ -1,9 +1,9 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Form\Object\Fixtures;
+namespace Dms\Core\Tests\Form\Object\Fixtures;
 
-use Iddigital\Cms\Core\Model\Object\ClassDefinition;
-use Iddigital\Cms\Core\Model\Object\Entity;
+use Dms\Core\Model\Object\ClassDefinition;
+use Dms\Core\Model\Object\Entity;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

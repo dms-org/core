@@ -1,8 +1,8 @@
 <?php
 
-namespace Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Subclass;
+namespace Dms\Core\Persistence\Db\Mapping\Definition\Subclass;
 
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\MapperDefinition;
+use Dms\Core\Persistence\Db\Mapping\Definition\MapperDefinition;
 
 /**
  * The subclass definition definer.

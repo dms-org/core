@@ -1,12 +1,12 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Persistence\Db\Doctrine\Migration;
+namespace Dms\Core\Tests\Persistence\Db\Doctrine\Migration;
 
 use Doctrine\DBAL\Platforms\MySqlPlatform;
 use Doctrine\DBAL\Types\Type;
-use Iddigital\Cms\Common\Testing\CmsTestCase;
-use Iddigital\Cms\Core\Persistence\Db\Doctrine\Migration\CustomEnumTypeGenerator;
-use Iddigital\Cms\Core\Persistence\Db\Doctrine\Migration\Type\BaseEnumType;
+use Dms\Common\Testing\CmsTestCase;
+use Dms\Core\Persistence\Db\Doctrine\Migration\CustomEnumTypeGenerator;
+use Dms\Core\Persistence\Db\Doctrine\Migration\Type\BaseEnumType;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

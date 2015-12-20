@@ -1,9 +1,9 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Table\DataSource;
+namespace Dms\Core\Tests\Table\DataSource;
 
-use Iddigital\Cms\Core\Model\Criteria\Condition\ConditionOperator;
-use Iddigital\Cms\Core\Model\Criteria\OrderingDirection;
+use Dms\Core\Model\Criteria\Condition\ConditionOperator;
+use Dms\Core\Model\Criteria\OrderingDirection;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

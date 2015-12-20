@@ -1,9 +1,9 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Orm\Fixtures\Relations;
+namespace Dms\Core\Tests\Persistence\Db\Integration\Orm\Fixtures\Relations;
 
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Orm\OrmDefinition;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Orm;
+use Dms\Core\Persistence\Db\Mapping\Definition\Orm\OrmDefinition;
+use Dms\Core\Persistence\Db\Mapping\Orm;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

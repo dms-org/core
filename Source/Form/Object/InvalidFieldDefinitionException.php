@@ -1,8 +1,8 @@
 <?php
 
-namespace Iddigital\Cms\Core\Form\Object;
+namespace Dms\Core\Form\Object;
 
-use Iddigital\Cms\Core\Exception\BaseException;
+use Dms\Core\Exception\BaseException;
 
 /**
  * The invalid field definition exception.

@@ -1,8 +1,8 @@
 <?php
 
-namespace Iddigital\Cms\Core\Table\Chart;
+namespace Dms\Core\Table\Chart;
 
-use Iddigital\Cms\Core\Table\Chart\Criteria\ChartCriteria;
+use Dms\Core\Table\Chart\Criteria\ChartCriteria;
 
 /**
  * The chart data source interface

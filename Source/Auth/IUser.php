@@ -1,9 +1,9 @@
 <?php
 
-namespace Iddigital\Cms\Core\Auth;
+namespace Dms\Core\Auth;
 
-use Iddigital\Cms\Core\Model\EntityIdCollection;
-use Iddigital\Cms\Core\Model\IEntity;
+use Dms\Core\Model\EntityIdCollection;
+use Dms\Core\Model\IEntity;
 
 interface IUser extends IEntity
 {

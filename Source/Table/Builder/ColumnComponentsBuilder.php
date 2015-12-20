@@ -1,14 +1,14 @@
 <?php
 
-namespace Iddigital\Cms\Core\Table\Builder;
+namespace Dms\Core\Table\Builder;
 
-use Iddigital\Cms\Core\Exception\TypeMismatchException;
-use Iddigital\Cms\Core\Form\Field\Builder\FieldBuilderBase;
-use Iddigital\Cms\Core\Form\IField;
-use Iddigital\Cms\Core\Table\Column\Component\ColumnComponent;
-use Iddigital\Cms\Core\Table\IColumn;
-use Iddigital\Cms\Core\Table\IColumnComponent;
-use Iddigital\Cms\Core\Util\Debug;
+use Dms\Core\Exception\TypeMismatchException;
+use Dms\Core\Form\Field\Builder\FieldBuilderBase;
+use Dms\Core\Form\IField;
+use Dms\Core\Table\Column\Component\ColumnComponent;
+use Dms\Core\Table\IColumn;
+use Dms\Core\Table\IColumnComponent;
+use Dms\Core\Util\Debug;
 
 /**
  * The column component builder class.

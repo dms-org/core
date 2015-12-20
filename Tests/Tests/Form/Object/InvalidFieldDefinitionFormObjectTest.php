@@ -1,10 +1,10 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Form\Object;
+namespace Dms\Core\Tests\Form\Object;
 
-use Iddigital\Cms\Common\Testing\CmsTestCase;
-use Iddigital\Cms\Core\Form\Object\InvalidFieldDefinitionException;
-use Iddigital\Cms\Core\Tests\Form\Object\Fixtures\InvalidFieldDefinition;
+use Dms\Common\Testing\CmsTestCase;
+use Dms\Core\Form\Object\InvalidFieldDefinitionException;
+use Dms\Core\Tests\Form\Object\Fixtures\InvalidFieldDefinition;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

@@ -1,11 +1,11 @@
 <?php
 
-namespace Iddigital\Cms\Core\Module;
+namespace Dms\Core\Module;
 
-use Iddigital\Cms\Core\Auth\IPermission;
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Form;
-use Iddigital\Cms\Core\Persistence;
+use Dms\Core\Auth\IPermission;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Form;
+use Dms\Core\Persistence;
 
 /**
  * The action interface.

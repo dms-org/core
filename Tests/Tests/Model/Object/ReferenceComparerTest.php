@@ -1,9 +1,9 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Model;
+namespace Dms\Core\Tests\Model;
 
-use Iddigital\Cms\Common\Testing\CmsTestCase;
-use Iddigital\Cms\Core\Model\Object\ReferenceComparer;
+use Dms\Common\Testing\CmsTestCase;
+use Dms\Core\Model\Object\ReferenceComparer;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

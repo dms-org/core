@@ -1,12 +1,12 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\ReadModel\Fixtures\LoadToManyIdRelation;
+namespace Dms\Core\Tests\Persistence\Db\Integration\Mapping\ReadModel\Fixtures\LoadToManyIdRelation;
 
-use Iddigital\Cms\Core\Model\Object\ClassDefinition;
-use Iddigital\Cms\Core\Model\Object\ReadModel;
-use Iddigital\Cms\Core\Model\ObjectCollection;
-use Iddigital\Cms\Core\Model\Type\Builder\Type;
-use Iddigital\Cms\Core\Model\TypedCollection;
+use Dms\Core\Model\Object\ClassDefinition;
+use Dms\Core\Model\Object\ReadModel;
+use Dms\Core\Model\ObjectCollection;
+use Dms\Core\Model\Type\Builder\Type;
+use Dms\Core\Model\TypedCollection;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

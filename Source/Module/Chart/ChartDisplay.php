@@ -1,12 +1,12 @@
 <?php
 
-namespace Iddigital\Cms\Core\Module\Chart;
+namespace Dms\Core\Module\Chart;
 
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Module\IChartDisplay;
-use Iddigital\Cms\Core\Module\IChartView;
-use Iddigital\Cms\Core\Table\Chart\IChartDataSource;
-use Iddigital\Cms\Core\Util\Debug;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Module\IChartDisplay;
+use Dms\Core\Module\IChartView;
+use Dms\Core\Table\Chart\IChartDataSource;
+use Dms\Core\Util\Debug;
 
 /**
  * The chart display class.

@@ -1,12 +1,12 @@
 <?php
 
-namespace Iddigital\Cms\Core\Form\Field\Builder;
+namespace Dms\Core\Form\Field\Builder;
 
-use Iddigital\Cms\Core\Form\Field\Processor\Validator\GreaterThanOrEqualValidator;
-use Iddigital\Cms\Core\Form\Field\Processor\Validator\GreaterThanValidator;
-use Iddigital\Cms\Core\Form\Field\Processor\Validator\LessThanOrEqualValidator;
-use Iddigital\Cms\Core\Form\Field\Processor\Validator\LessThanValidator;
-use Iddigital\Cms\Core\Form\Field\Type\IntType;
+use Dms\Core\Form\Field\Processor\Validator\GreaterThanOrEqualValidator;
+use Dms\Core\Form\Field\Processor\Validator\GreaterThanValidator;
+use Dms\Core\Form\Field\Processor\Validator\LessThanOrEqualValidator;
+use Dms\Core\Form\Field\Processor\Validator\LessThanValidator;
+use Dms\Core\Form\Field\Type\IntType;
 
 /**
  * The integer field builder class.

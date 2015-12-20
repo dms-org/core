@@ -1,11 +1,11 @@
 <?php
 
-namespace Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Mode;
+namespace Dms\Core\Persistence\Db\Mapping\Relation\Mode;
 
-use Iddigital\Cms\Core\Persistence\Db\Query\Clause\Join;
-use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Expr;
-use Iddigital\Cms\Core\Persistence\Db\Query\Query;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Column;
+use Dms\Core\Persistence\Db\Query\Clause\Join;
+use Dms\Core\Persistence\Db\Query\Expression\Expr;
+use Dms\Core\Persistence\Db\Query\Query;
+use Dms\Core\Persistence\Db\Schema\Column;
 
 /**
  * The relation mode base class.

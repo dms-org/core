@@ -1,6 +1,6 @@
 <?php
 
-namespace Iddigital\Cms\Core\Form\Field\Type;
+namespace Dms\Core\Form\Field\Type;
 
 /**
  * The date time type class.

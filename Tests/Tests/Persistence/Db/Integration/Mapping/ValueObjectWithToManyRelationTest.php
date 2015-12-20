@@ -1,17 +1,17 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping;
+namespace Dms\Core\Tests\Persistence\Db\Integration\Mapping;
 
-use Iddigital\Cms\Core\Persistence\Db\Mapping\IOrm;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Column;
-use Iddigital\Cms\Core\Persistence\Db\Schema\ForeignKey;
-use Iddigital\Cms\Core\Persistence\Db\Schema\ForeignKeyMode;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Type\Integer;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\Fixtures\ValueObjectWithToManyRelation\ChildEntity;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\Fixtures\ValueObjectWithToManyRelation\EmbeddedObject;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\Fixtures\ValueObjectWithToManyRelation\EntityWithValueObject;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\Fixtures\ValueObjectWithToManyRelation\EntityWithValueObjectMapper;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Mock\MockDatabase;
+use Dms\Core\Persistence\Db\Mapping\IOrm;
+use Dms\Core\Persistence\Db\Schema\Column;
+use Dms\Core\Persistence\Db\Schema\ForeignKey;
+use Dms\Core\Persistence\Db\Schema\ForeignKeyMode;
+use Dms\Core\Persistence\Db\Schema\Type\Integer;
+use Dms\Core\Tests\Persistence\Db\Integration\Mapping\Fixtures\ValueObjectWithToManyRelation\ChildEntity;
+use Dms\Core\Tests\Persistence\Db\Integration\Mapping\Fixtures\ValueObjectWithToManyRelation\EmbeddedObject;
+use Dms\Core\Tests\Persistence\Db\Integration\Mapping\Fixtures\ValueObjectWithToManyRelation\EntityWithValueObject;
+use Dms\Core\Tests\Persistence\Db\Integration\Mapping\Fixtures\ValueObjectWithToManyRelation\EntityWithValueObjectMapper;
+use Dms\Core\Tests\Persistence\Db\Mock\MockDatabase;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

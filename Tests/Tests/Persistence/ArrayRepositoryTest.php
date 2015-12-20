@@ -1,9 +1,9 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Model;
+namespace Dms\Core\Tests\Model;
 
-use Iddigital\Cms\Core\Persistence\ArrayRepository;
-use Iddigital\Cms\Core\Tests\Model\Fixtures\TestEntity;
+use Dms\Core\Persistence\ArrayRepository;
+use Dms\Core\Tests\Model\Fixtures\TestEntity;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

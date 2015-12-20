@@ -1,10 +1,10 @@
 <?php
 
-namespace Iddigital\Cms\Core\Persistence;
+namespace Dms\Core\Persistence;
 
-use Iddigital\Cms\Core\Model\IEntity;
-use Iddigital\Cms\Core\Model\IEntitySet;
-use Iddigital\Cms\Core\Exception;
+use Dms\Core\Model\IEntity;
+use Dms\Core\Model\IEntitySet;
+use Dms\Core\Exception;
 
 /**
  * The API for a repository.

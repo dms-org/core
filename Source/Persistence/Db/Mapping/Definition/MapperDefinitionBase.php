@@ -1,8 +1,8 @@
 <?php
 
-namespace Iddigital\Cms\Core\Persistence\Db\Mapping\Definition;
+namespace Dms\Core\Persistence\Db\Mapping\Definition;
 
-use Iddigital\Cms\Core\Model\Object\FinalizedClassDefinition;
+use Dms\Core\Model\Object\FinalizedClassDefinition;
 
 /**
  * The mapper definition base class.

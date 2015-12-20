@@ -1,8 +1,8 @@
 <?php
 
-namespace Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Embedded;
+namespace Dms\Core\Persistence\Db\Mapping\Definition\Embedded;
 
-use Iddigital\Cms\Core\Persistence\Db\Mapping\IOrm;
+use Dms\Core\Persistence\Db\Mapping\IOrm;
 
 /**
  * The embedded relation definer

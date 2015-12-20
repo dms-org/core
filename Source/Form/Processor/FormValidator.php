@@ -1,9 +1,9 @@
 <?php
 
-namespace Iddigital\Cms\Core\Form\Processor;
+namespace Dms\Core\Form\Processor;
 
-use Iddigital\Cms\Core\Form\IFormProcessor;
-use Iddigital\Cms\Core\Language\Message;
+use Dms\Core\Form\IFormProcessor;
+use Dms\Core\Language\Message;
 
 /**
  * The form validator base class.

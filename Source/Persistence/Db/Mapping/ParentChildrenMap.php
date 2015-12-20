@@ -1,8 +1,8 @@
 <?php
 
-namespace Iddigital\Cms\Core\Persistence\Db\Mapping;
+namespace Dms\Core\Persistence\Db\Mapping;
 
-use Iddigital\Cms\Core\Persistence\Db\Row;
+use Dms\Core\Persistence\Db\Row;
 
 /**
  * A map class implementing a mapping from parent rows to a set of child entities.

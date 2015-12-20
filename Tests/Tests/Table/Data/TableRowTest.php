@@ -1,13 +1,13 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Table\Data;
+namespace Dms\Core\Tests\Table\Data;
 
-use Iddigital\Cms\Common\Testing\CmsTestCase;
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Exception\NotImplementedException;
-use Iddigital\Cms\Core\Table\Data\TableRow;
-use Iddigital\Cms\Core\Table\IColumn;
-use Iddigital\Cms\Core\Table\IColumnComponent;
+use Dms\Common\Testing\CmsTestCase;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Exception\NotImplementedException;
+use Dms\Core\Table\Data\TableRow;
+use Dms\Core\Table\IColumn;
+use Dms\Core\Table\IColumnComponent;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

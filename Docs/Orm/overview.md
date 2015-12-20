@@ -1,7 +1,7 @@
 Overview
 ========
 
-#### `Iddigital\Cms\Core\Persistence\Db\*`
+#### `Dms\Core\Persistence\Db\*`
 
 The core cms package comes with a dedicated ORM component to aide in the development of creating
 domain models which can be normalized in an underlying relational database.
@@ -16,7 +16,7 @@ in your domain model, you would create a `PersonMapper` class in your persistenc
 configured to store the `Person` class in a database table.
 
 After implementing the required mapper classes, you define all them in an orm class extending
-the `Iddigital\Cms\Core\Persistence\Db\Mapping\Orm` class which will act as a factory setting
+the `Dms\Core\Persistence\Db\Mapping\Orm` class which will act as a factory setting
 up all the relationships where necessary.
 
 Some complete and tested examples can be found in the [test fixtures][orm-fixtures].

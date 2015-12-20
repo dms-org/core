@@ -1,9 +1,9 @@
 <?php
 
-namespace Iddigital\Cms\Core\Common\Crud\Action\Object;
+namespace Dms\Core\Common\Crud\Action\Object;
 
-use Iddigital\Cms\Core\Form\IForm;
-use Iddigital\Cms\Core\Module\IStagedFormDtoMapping;
+use Dms\Core\Form\IForm;
+use Dms\Core\Module\IStagedFormDtoMapping;
 
 /**
  * The object action form mapping interface.

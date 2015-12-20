@@ -1,13 +1,13 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Table\Data;
+namespace Dms\Core\Tests\Table\Data;
 
-use Iddigital\Cms\Common\Testing\CmsTestCase;
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Module\IParameterizedAction;
-use Iddigital\Cms\Core\Table\Data\TableSection;
-use Iddigital\Cms\Core\Table\ITableRow;
-use Iddigital\Cms\Core\Table\ITableStructure;
+use Dms\Common\Testing\CmsTestCase;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Module\IParameterizedAction;
+use Dms\Core\Table\Data\TableSection;
+use Dms\Core\Table\ITableRow;
+use Dms\Core\Table\ITableStructure;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

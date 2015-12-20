@@ -1,15 +1,15 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Persistence\Db\Mock;
+namespace Dms\Core\Tests\Persistence\Db\Mock;
 
-use Iddigital\Cms\Core\Exception\NotImplementedException;
-use Iddigital\Cms\Core\Persistence\Db\Connection\Connection;
-use Iddigital\Cms\Core\Persistence\Db\Query\BulkUpdate;
-use Iddigital\Cms\Core\Persistence\Db\Query\Delete;
-use Iddigital\Cms\Core\Persistence\Db\Query\ResequenceOrderIndexColumn;
-use Iddigital\Cms\Core\Persistence\Db\Query\Select;
-use Iddigital\Cms\Core\Persistence\Db\Query\Update;
-use Iddigital\Cms\Core\Persistence\Db\Query\Upsert;
+use Dms\Core\Exception\NotImplementedException;
+use Dms\Core\Persistence\Db\Connection\Connection;
+use Dms\Core\Persistence\Db\Query\BulkUpdate;
+use Dms\Core\Persistence\Db\Query\Delete;
+use Dms\Core\Persistence\Db\Query\ResequenceOrderIndexColumn;
+use Dms\Core\Persistence\Db\Query\Select;
+use Dms\Core\Persistence\Db\Query\Update;
+use Dms\Core\Persistence\Db\Query\Upsert;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

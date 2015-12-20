@@ -1,10 +1,10 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Table\Chart\Data;
+namespace Dms\Core\Tests\Table\Chart\Data;
 
-use Iddigital\Cms\Common\Testing\CmsTestCase;
-use Iddigital\Cms\Core\Table\Chart\Data\ChartDataTable;
-use Iddigital\Cms\Core\Table\Chart\IChartStructure;
+use Dms\Common\Testing\CmsTestCase;
+use Dms\Core\Table\Chart\Data\ChartDataTable;
+use Dms\Core\Table\Chart\IChartStructure;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

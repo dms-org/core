@@ -1,8 +1,8 @@
 <?php
 
-namespace Iddigital\Cms\Core\Persistence\Db\Query\Clause;
+namespace Dms\Core\Persistence\Db\Query\Clause;
 
-use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Expr;
+use Dms\Core\Persistence\Db\Query\Expression\Expr;
 
 /**
  * The ordering clause class.

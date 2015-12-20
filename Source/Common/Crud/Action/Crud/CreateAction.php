@@ -1,17 +1,17 @@
 <?php
 
-namespace Iddigital\Cms\Core\Common\Crud\Action\Crud;
+namespace Dms\Core\Common\Crud\Action\Crud;
 
-use Iddigital\Cms\Core\Auth\IAuthSystem;
-use Iddigital\Cms\Core\Auth\IPermission;
-use Iddigital\Cms\Core\Auth\Permission;
-use Iddigital\Cms\Core\Common\Crud\Definition\Form\FinalizedCrudFormDefinition;
-use Iddigital\Cms\Core\Common\Crud\ICrudModule;
-use Iddigital\Cms\Core\Model\Object\ArrayDataObject;
-use Iddigital\Cms\Core\Module\Action\SelfHandlingParameterizedAction;
-use Iddigital\Cms\Core\Module\IStagedFormDtoMapping;
-use Iddigital\Cms\Core\Module\Mapping\ArrayDataObjectFormMapping;
-use Iddigital\Cms\Core\Persistence\IRepository;
+use Dms\Core\Auth\IAuthSystem;
+use Dms\Core\Auth\IPermission;
+use Dms\Core\Auth\Permission;
+use Dms\Core\Common\Crud\Definition\Form\FinalizedCrudFormDefinition;
+use Dms\Core\Common\Crud\ICrudModule;
+use Dms\Core\Model\Object\ArrayDataObject;
+use Dms\Core\Module\Action\SelfHandlingParameterizedAction;
+use Dms\Core\Module\IStagedFormDtoMapping;
+use Dms\Core\Module\Mapping\ArrayDataObjectFormMapping;
+use Dms\Core\Persistence\IRepository;
 
 /**
  * The create object action

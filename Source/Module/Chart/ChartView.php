@@ -1,10 +1,10 @@
 <?php
 
-namespace Iddigital\Cms\Core\Module\Chart;
+namespace Dms\Core\Module\Chart;
 
-use Iddigital\Cms\Core\Module\IChartView;
-use Iddigital\Cms\Core\Table\Chart\IChartCriteria;
-use Iddigital\Cms\Core\Table\IRowCriteria;
+use Dms\Core\Module\IChartView;
+use Dms\Core\Table\Chart\IChartCriteria;
+use Dms\Core\Table\IRowCriteria;
 
 /**
  * The chart view class.

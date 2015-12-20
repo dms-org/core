@@ -1,28 +1,28 @@
 <?php
 
-namespace Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Embedded;
+namespace Dms\Core\Persistence\Db\Mapping\Relation\Embedded;
 
-use Iddigital\Cms\Core\Exception\NotImplementedException;
-use Iddigital\Cms\Core\Exception\TypeMismatchException;
-use Iddigital\Cms\Core\Model\ITypedCollection;
-use Iddigital\Cms\Core\Model\ValueObjectCollection;
-use Iddigital\Cms\Core\Persistence\Db\LoadingContext;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\IEmbeddedObjectMapper;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\ParentChildrenMap;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\ParentMapBase;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\ISeparateToManyTableRelation;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Mode\IdentifyingRelationMode;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Reference\IToManyRelationReference;
-use Iddigital\Cms\Core\Persistence\Db\PersistenceContext;
-use Iddigital\Cms\Core\Persistence\Db\Query\Clause\Join;
-use Iddigital\Cms\Core\Persistence\Db\Query\Delete;
-use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Expr;
-use Iddigital\Cms\Core\Persistence\Db\Query\Select;
-use Iddigital\Cms\Core\Persistence\Db\Row;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Column;
-use Iddigital\Cms\Core\Persistence\Db\Schema\ForeignKey;
-use Iddigital\Cms\Core\Persistence\Db\Schema\ForeignKeyMode;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Table;
+use Dms\Core\Exception\NotImplementedException;
+use Dms\Core\Exception\TypeMismatchException;
+use Dms\Core\Model\ITypedCollection;
+use Dms\Core\Model\ValueObjectCollection;
+use Dms\Core\Persistence\Db\LoadingContext;
+use Dms\Core\Persistence\Db\Mapping\IEmbeddedObjectMapper;
+use Dms\Core\Persistence\Db\Mapping\ParentChildrenMap;
+use Dms\Core\Persistence\Db\Mapping\ParentMapBase;
+use Dms\Core\Persistence\Db\Mapping\Relation\ISeparateToManyTableRelation;
+use Dms\Core\Persistence\Db\Mapping\Relation\Mode\IdentifyingRelationMode;
+use Dms\Core\Persistence\Db\Mapping\Relation\Reference\IToManyRelationReference;
+use Dms\Core\Persistence\Db\PersistenceContext;
+use Dms\Core\Persistence\Db\Query\Clause\Join;
+use Dms\Core\Persistence\Db\Query\Delete;
+use Dms\Core\Persistence\Db\Query\Expression\Expr;
+use Dms\Core\Persistence\Db\Query\Select;
+use Dms\Core\Persistence\Db\Row;
+use Dms\Core\Persistence\Db\Schema\Column;
+use Dms\Core\Persistence\Db\Schema\ForeignKey;
+use Dms\Core\Persistence\Db\Schema\ForeignKeyMode;
+use Dms\Core\Persistence\Db\Schema\Table;
 
 /**
  * The embedded collection relation class.

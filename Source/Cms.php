@@ -1,14 +1,14 @@
 <?php
 
-namespace Iddigital\Cms\Core;
+namespace Dms\Core;
 
-use Iddigital\Cms\Core\Auth\IAuthSystem;
-use Iddigital\Cms\Core\Auth\IPermission;
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Language\ILanguageProvider;
-use Iddigital\Cms\Core\Package\IPackage;
-use Iddigital\Cms\Core\Package\PackageNotInstalledException;
-use Iddigital\Cms\Core\Util\Debug;
+use Dms\Core\Auth\IAuthSystem;
+use Dms\Core\Auth\IPermission;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Language\ILanguageProvider;
+use Dms\Core\Package\IPackage;
+use Dms\Core\Package\PackageNotInstalledException;
+use Dms\Core\Util\Debug;
 use Interop\Container\ContainerInterface;
 
 /**

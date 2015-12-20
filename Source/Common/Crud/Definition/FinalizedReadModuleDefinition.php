@@ -1,9 +1,9 @@
 <?php
 
-namespace Iddigital\Cms\Core\Common\Crud\Definition;
+namespace Dms\Core\Common\Crud\Definition;
 
-use Iddigital\Cms\Core\Common\Crud\Table\ISummaryTable;
-use Iddigital\Cms\Core\Module\Definition\FinalizedModuleDefinition;
+use Dms\Core\Common\Crud\Table\ISummaryTable;
+use Dms\Core\Module\Definition\FinalizedModuleDefinition;
 
 /**
  * The finalized read module definition class.

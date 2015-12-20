@@ -1,16 +1,16 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Criteria;
+namespace Dms\Core\Tests\Persistence\Db\Integration\Criteria;
 
-use Iddigital\Cms\Core\Model\Criteria\LoadCriteria;
-use Iddigital\Cms\Core\Persistence\Db\Connection\IConnection;
-use Iddigital\Cms\Core\Persistence\Db\Criteria\CriteriaMapper;
-use Iddigital\Cms\Core\Persistence\Db\Query\Clause\Join;
-use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Expr;
-use Iddigital\Cms\Core\Persistence\Db\Query\Select;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Type\Integer;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\Mapper\BlogOrm;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\User;
+use Dms\Core\Model\Criteria\LoadCriteria;
+use Dms\Core\Persistence\Db\Connection\IConnection;
+use Dms\Core\Persistence\Db\Criteria\CriteriaMapper;
+use Dms\Core\Persistence\Db\Query\Clause\Join;
+use Dms\Core\Persistence\Db\Query\Expression\Expr;
+use Dms\Core\Persistence\Db\Query\Select;
+use Dms\Core\Persistence\Db\Schema\Type\Integer;
+use Dms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\Mapper\BlogOrm;
+use Dms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\User;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

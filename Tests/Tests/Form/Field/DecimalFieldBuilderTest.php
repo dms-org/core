@@ -1,21 +1,21 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Form\Field;
+namespace Dms\Core\Tests\Form\Field;
 
-use Iddigital\Cms\Core\Form\Field\Builder\Field as Field;
-use Iddigital\Cms\Core\Form\Field\Builder\DecimalFieldBuilder;
-use Iddigital\Cms\Core\Form\Field\Processor\DefaultValueProcessor;
-use Iddigital\Cms\Core\Form\Field\Processor\TypeProcessor;
-use Iddigital\Cms\Core\Form\Field\Processor\Validator\DecimalPointsValidator;
-use Iddigital\Cms\Core\Form\Field\Processor\Validator\FloatValidator;
-use Iddigital\Cms\Core\Form\Field\Processor\Validator\GreaterThanOrEqualValidator;
-use Iddigital\Cms\Core\Form\Field\Processor\Validator\LessThanOrEqualValidator;
-use Iddigital\Cms\Core\Form\Field\Processor\Validator\LessThanValidator;
-use Iddigital\Cms\Core\Form\Field\Processor\Validator\RequiredValidator;
-use Iddigital\Cms\Core\Form\Field\Type\FloatType;
-use Iddigital\Cms\Core\Form\Field\Type\IntType;
-use Iddigital\Cms\Core\Language\Message;
-use Iddigital\Cms\Core\Model\Type\Builder\Type;
+use Dms\Core\Form\Field\Builder\Field as Field;
+use Dms\Core\Form\Field\Builder\DecimalFieldBuilder;
+use Dms\Core\Form\Field\Processor\DefaultValueProcessor;
+use Dms\Core\Form\Field\Processor\TypeProcessor;
+use Dms\Core\Form\Field\Processor\Validator\DecimalPointsValidator;
+use Dms\Core\Form\Field\Processor\Validator\FloatValidator;
+use Dms\Core\Form\Field\Processor\Validator\GreaterThanOrEqualValidator;
+use Dms\Core\Form\Field\Processor\Validator\LessThanOrEqualValidator;
+use Dms\Core\Form\Field\Processor\Validator\LessThanValidator;
+use Dms\Core\Form\Field\Processor\Validator\RequiredValidator;
+use Dms\Core\Form\Field\Type\FloatType;
+use Dms\Core\Form\Field\Type\IntType;
+use Dms\Core\Language\Message;
+use Dms\Core\Model\Type\Builder\Type;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

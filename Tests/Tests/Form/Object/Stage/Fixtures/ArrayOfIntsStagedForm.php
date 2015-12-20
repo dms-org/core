@@ -1,13 +1,13 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Form\Object\Stage\Fixtures;
+namespace Dms\Core\Tests\Form\Object\Stage\Fixtures;
 
-use Iddigital\Cms\Core\Form\Field\Builder\Field;
-use Iddigital\Cms\Core\Form\Object\FormObjectDefinition;
-use Iddigital\Cms\Core\Form\Object\Stage\StagedFormObject;
-use Iddigital\Cms\Core\Form\Object\Stage\StagedFormObjectDefinition;
-use Iddigital\Cms\Core\Model\Object\ClassDefinition;
-use Iddigital\Cms\Core\Model\Type\Builder\Type;
+use Dms\Core\Form\Field\Builder\Field;
+use Dms\Core\Form\Object\FormObjectDefinition;
+use Dms\Core\Form\Object\Stage\StagedFormObject;
+use Dms\Core\Form\Object\Stage\StagedFormObjectDefinition;
+use Dms\Core\Model\Object\ClassDefinition;
+use Dms\Core\Model\Type\Builder\Type;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

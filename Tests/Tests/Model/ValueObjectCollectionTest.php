@@ -1,15 +1,15 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Model;
+namespace Dms\Core\Tests\Model;
 
-use Iddigital\Cms\Common\Testing\CmsTestCase;
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Exception\TypeMismatchException;
-use Iddigital\Cms\Core\Model\IValueObject;
-use Iddigital\Cms\Core\Model\TypedCollection;
-use Iddigital\Cms\Core\Model\ValueObjectCollection;
-use Iddigital\Cms\Core\Tests\Model\Fixtures\SubObject;
-use Iddigital\Cms\Core\Tests\Model\Fixtures\TestEntity;
+use Dms\Common\Testing\CmsTestCase;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Exception\TypeMismatchException;
+use Dms\Core\Model\IValueObject;
+use Dms\Core\Model\TypedCollection;
+use Dms\Core\Model\ValueObjectCollection;
+use Dms\Core\Tests\Model\Fixtures\SubObject;
+use Dms\Core\Tests\Model\Fixtures\TestEntity;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

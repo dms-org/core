@@ -1,9 +1,9 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\Fixtures\ValueObject;
+namespace Dms\Core\Tests\Persistence\Db\Integration\Mapping\Fixtures\ValueObject;
 
-use Iddigital\Cms\Core\Model\Object\Enum;
-use Iddigital\Cms\Core\Model\Object\PropertyTypeDefiner;
+use Dms\Core\Model\Object\Enum;
+use Dms\Core\Model\Object\PropertyTypeDefiner;
 
 
 /**

@@ -1,9 +1,9 @@
 <?php
 
-namespace Iddigital\Cms\Core\Table\DataSource;
+namespace Dms\Core\Table\DataSource;
 
-use Iddigital\Cms\Core\Form\Field\Builder\Field;
-use Iddigital\Cms\Core\Table\DataSource\Definition\ObjectTableDefinition;
+use Dms\Core\Form\Field\Builder\Field;
+use Dms\Core\Table\DataSource\Definition\ObjectTableDefinition;
 
 /**
  * The typed object table data source.

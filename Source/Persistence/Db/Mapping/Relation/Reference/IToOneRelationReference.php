@@ -1,11 +1,11 @@
 <?php
 
-namespace Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Reference;
+namespace Dms\Core\Persistence\Db\Mapping\Relation\Reference;
 
-use Iddigital\Cms\Core\Persistence\Db\LoadingContext;
-use Iddigital\Cms\Core\Persistence\Db\PersistenceContext;
-use Iddigital\Cms\Core\Persistence\Db\Row;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Column;
+use Dms\Core\Persistence\Db\LoadingContext;
+use Dms\Core\Persistence\Db\PersistenceContext;
+use Dms\Core\Persistence\Db\Row;
+use Dms\Core\Persistence\Db\Schema\Column;
 
 /**
  * The to-one relation reference type interface.

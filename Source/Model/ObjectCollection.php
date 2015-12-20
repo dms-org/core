@@ -1,14 +1,14 @@
 <?php
 
-namespace Iddigital\Cms\Core\Model;
+namespace Dms\Core\Model;
 
-use Iddigital\Cms\Core\Exception;
-use Iddigital\Cms\Core\Model\Criteria\MemberExpressionNode;
-use Iddigital\Cms\Core\Model\Criteria\LoadCriteria;
-use Iddigital\Cms\Core\Model\Object\FinalizedClassDefinition;
-use Iddigital\Cms\Core\Model\Object\TypedObject;
-use Iddigital\Cms\Core\Model\Type\Builder\Type;
-use Iddigital\Cms\Core\Model\Type\ObjectType;
+use Dms\Core\Exception;
+use Dms\Core\Model\Criteria\MemberExpressionNode;
+use Dms\Core\Model\Criteria\LoadCriteria;
+use Dms\Core\Model\Object\FinalizedClassDefinition;
+use Dms\Core\Model\Object\TypedObject;
+use Dms\Core\Model\Type\Builder\Type;
+use Dms\Core\Model\Type\ObjectType;
 use Pinq\Iterators\IIteratorScheme;
 
 /**

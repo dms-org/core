@@ -1,13 +1,13 @@
 <?php
 
-namespace Iddigital\Cms\Core\Table\Chart\DataSource;
+namespace Dms\Core\Table\Chart\DataSource;
 
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Table\Chart\Criteria\ChartCriteria;
-use Iddigital\Cms\Core\Table\Chart\Data\ChartDataTable;
-use Iddigital\Cms\Core\Table\Chart\IChartCriteria;
-use Iddigital\Cms\Core\Table\Chart\IChartDataSource;
-use Iddigital\Cms\Core\Table\Chart\IChartStructure;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Table\Chart\Criteria\ChartCriteria;
+use Dms\Core\Table\Chart\Data\ChartDataTable;
+use Dms\Core\Table\Chart\IChartCriteria;
+use Dms\Core\Table\Chart\IChartDataSource;
+use Dms\Core\Table\Chart\IChartStructure;
 
 /**
  * The chart data source base class.

@@ -1,10 +1,10 @@
 <?php
 
-namespace Iddigital\Cms\Core\Persistence\Db\Mapping\Locking;
+namespace Dms\Core\Persistence\Db\Mapping\Locking;
 
-use Iddigital\Cms\Core\Model\ITypedObject;
-use Iddigital\Cms\Core\Persistence\Db\PersistenceContext;
-use Iddigital\Cms\Core\Persistence\Db\Row;
+use Dms\Core\Model\ITypedObject;
+use Dms\Core\Persistence\Db\PersistenceContext;
+use Dms\Core\Persistence\Db\Row;
 
 /**
  * The optimistic locking strategy interface.

@@ -1,9 +1,9 @@
 <?php
 
-namespace Iddigital\Cms\Core\Module\Definition\Table;
+namespace Dms\Core\Module\Definition\Table;
 
-use Iddigital\Cms\Core\Module\ITableView;
-use Iddigital\Cms\Core\Table\ITableDataSource;
+use Dms\Core\Module\ITableView;
+use Dms\Core\Table\ITableDataSource;
 
 /**
  * The table views definition class.

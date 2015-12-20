@@ -1,8 +1,8 @@
 <?php
 
-namespace Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Relation;
+namespace Dms\Core\Persistence\Db\Mapping\Definition\Relation;
 
-use Iddigital\Cms\Core\Model\ITypedObject;
+use Dms\Core\Model\ITypedObject;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

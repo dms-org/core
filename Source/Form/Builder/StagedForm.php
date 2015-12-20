@@ -1,16 +1,16 @@
 <?php
 
-namespace Iddigital\Cms\Core\Form\Builder;
+namespace Dms\Core\Form\Builder;
 
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Form\IForm;
-use Iddigital\Cms\Core\Form\IFormStage;
-use Iddigital\Cms\Core\Form\IStagedForm;
-use Iddigital\Cms\Core\Form\Stage\DependentFormStage;
-use Iddigital\Cms\Core\Form\Stage\IndependentFormStage;
-use Iddigital\Cms\Core\Form\StagedForm as ActualStagedForm;
-use Iddigital\Cms\Core\Util\Debug;
-use Iddigital\Cms\Core\Util\Reflection;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Form\IForm;
+use Dms\Core\Form\IFormStage;
+use Dms\Core\Form\IStagedForm;
+use Dms\Core\Form\Stage\DependentFormStage;
+use Dms\Core\Form\Stage\IndependentFormStage;
+use Dms\Core\Form\StagedForm as ActualStagedForm;
+use Dms\Core\Util\Debug;
+use Dms\Core\Util\Reflection;
 
 /**
  * The staged form builder class.

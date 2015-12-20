@@ -1,18 +1,18 @@
 <?php
 
-namespace Iddigital\Cms\Core\Model\Criteria;
+namespace Dms\Core\Model\Criteria;
 
-use Iddigital\Cms\Core\Exception;
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Exception\TypeMismatchException;
-use Iddigital\Cms\Core\Model\Criteria\Condition\AndCondition;
-use Iddigital\Cms\Core\Model\Criteria\Condition\Condition;
-use Iddigital\Cms\Core\Model\Criteria\Condition\ConditionOperator;
-use Iddigital\Cms\Core\Model\Criteria\Condition\InstanceOfCondition;
-use Iddigital\Cms\Core\Model\Criteria\Condition\MemberCondition;
-use Iddigital\Cms\Core\Model\Criteria\Condition\NotCondition;
-use Iddigital\Cms\Core\Model\Criteria\Condition\OrCondition;
-use Iddigital\Cms\Core\Model\ISpecification;
+use Dms\Core\Exception;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Exception\TypeMismatchException;
+use Dms\Core\Model\Criteria\Condition\AndCondition;
+use Dms\Core\Model\Criteria\Condition\Condition;
+use Dms\Core\Model\Criteria\Condition\ConditionOperator;
+use Dms\Core\Model\Criteria\Condition\InstanceOfCondition;
+use Dms\Core\Model\Criteria\Condition\MemberCondition;
+use Dms\Core\Model\Criteria\Condition\NotCondition;
+use Dms\Core\Model\Criteria\Condition\OrCondition;
+use Dms\Core\Model\ISpecification;
 
 /**
  * The typed object specification definition class.

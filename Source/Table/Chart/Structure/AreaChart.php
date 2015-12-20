@@ -1,6 +1,6 @@
 <?php
 
-namespace Iddigital\Cms\Core\Table\Chart\Structure;
+namespace Dms\Core\Table\Chart\Structure;
 
 /**
  * The area chart structure class.

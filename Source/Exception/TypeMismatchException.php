@@ -1,8 +1,8 @@
 <?php
 
-namespace Iddigital\Cms\Core\Exception;
+namespace Dms\Core\Exception;
 
-use Iddigital\Cms\Core\Model\Type\Builder\Type;
+use Dms\Core\Model\Type\Builder\Type;
 
 /**
  * Exception for a type mismatch.

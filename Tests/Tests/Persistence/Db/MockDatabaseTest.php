@@ -1,19 +1,19 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Persistence\Db;
+namespace Dms\Core\Tests\Persistence\Db;
 
-use Iddigital\Cms\Common\Testing\CmsTestCase;
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Column;
-use Iddigital\Cms\Core\Persistence\Db\Schema\ForeignKey;
-use Iddigital\Cms\Core\Persistence\Db\Schema\ForeignKeyMode;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Table;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Type\Integer;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Type\Varchar;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Mock\DuplicateKeyException;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Mock\ForeignKeyConstraintException;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Mock\MockDatabase;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Mock\MockForeignKey;
+use Dms\Common\Testing\CmsTestCase;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Persistence\Db\Schema\Column;
+use Dms\Core\Persistence\Db\Schema\ForeignKey;
+use Dms\Core\Persistence\Db\Schema\ForeignKeyMode;
+use Dms\Core\Persistence\Db\Schema\Table;
+use Dms\Core\Persistence\Db\Schema\Type\Integer;
+use Dms\Core\Persistence\Db\Schema\Type\Varchar;
+use Dms\Core\Tests\Persistence\Db\Mock\DuplicateKeyException;
+use Dms\Core\Tests\Persistence\Db\Mock\ForeignKeyConstraintException;
+use Dms\Core\Tests\Persistence\Db\Mock\MockDatabase;
+use Dms\Core\Tests\Persistence\Db\Mock\MockForeignKey;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

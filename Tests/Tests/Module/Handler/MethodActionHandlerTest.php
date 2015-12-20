@@ -1,10 +1,10 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Module\Handler;
+namespace Dms\Core\Tests\Module\Handler;
 
-use Iddigital\Cms\Core\Module\IUnparameterizedActionHandler;
-use Iddigital\Cms\Core\Tests\Module\Handler\Fixtures\MethodActionHandler;
-use Iddigital\Cms\Core\Tests\Module\Mapping\Fixtures\TestDto;
+use Dms\Core\Module\IUnparameterizedActionHandler;
+use Dms\Core\Tests\Module\Handler\Fixtures\MethodActionHandler;
+use Dms\Core\Tests\Module\Mapping\Fixtures\TestDto;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

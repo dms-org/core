@@ -1,14 +1,14 @@
 <?php
 
-namespace Iddigital\Cms\Core\Persistence;
+namespace Dms\Core\Persistence;
 
-use Iddigital\Cms\Core\Exception;
-use Iddigital\Cms\Core\Exception\NotImplementedException;
-use Iddigital\Cms\Core\Persistence\Db\Connection\IConnection;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\IObjectMapper;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\IOrm;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\ReadModel\Definition\ReadMapperDefinition;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\ReadModel\ReadModelMapper;
+use Dms\Core\Exception;
+use Dms\Core\Exception\NotImplementedException;
+use Dms\Core\Persistence\Db\Connection\IConnection;
+use Dms\Core\Persistence\Db\Mapping\IObjectMapper;
+use Dms\Core\Persistence\Db\Mapping\IOrm;
+use Dms\Core\Persistence\Db\Mapping\ReadModel\Definition\ReadMapperDefinition;
+use Dms\Core\Persistence\Db\Mapping\ReadModel\ReadModelMapper;
 
 /**
  * An implementation of the read model repository

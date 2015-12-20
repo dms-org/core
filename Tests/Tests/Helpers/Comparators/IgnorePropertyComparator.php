@@ -1,6 +1,6 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Helpers\Comparators;
+namespace Dms\Core\Tests\Helpers\Comparators;
 
 use SebastianBergmann\Comparator\ObjectComparator;
 

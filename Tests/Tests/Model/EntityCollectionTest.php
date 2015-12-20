@@ -1,14 +1,14 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Model;
+namespace Dms\Core\Tests\Model;
 
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Model\EntityCollection;
-use Iddigital\Cms\Core\Model\IEntity;
-use Iddigital\Cms\Core\Model\ILoadCriteria;
-use Iddigital\Cms\Core\Model\TypedCollection;
-use Iddigital\Cms\Core\Tests\Model\Fixtures\SubObject;
-use Iddigital\Cms\Core\Tests\Model\Fixtures\TestEntity;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Model\EntityCollection;
+use Dms\Core\Model\IEntity;
+use Dms\Core\Model\ILoadCriteria;
+use Dms\Core\Model\TypedCollection;
+use Dms\Core\Tests\Model\Fixtures\SubObject;
+use Dms\Core\Tests\Model\Fixtures\TestEntity;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

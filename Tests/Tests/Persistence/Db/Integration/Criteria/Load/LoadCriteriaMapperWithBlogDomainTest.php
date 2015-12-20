@@ -1,25 +1,25 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Criteria\Load;
+namespace Dms\Core\Tests\Persistence\Db\Integration\Criteria\Load;
 
-use Iddigital\Cms\Core\Persistence\Db\Connection\IConnection;
-use Iddigital\Cms\Core\Persistence\Db\Criteria\CriteriaMapper;
-use Iddigital\Cms\Core\Persistence\Db\Criteria\MappedLoadQuery;
-use Iddigital\Cms\Core\Persistence\Db\Criteria\MemberExpressionMapper;
-use Iddigital\Cms\Core\Persistence\Db\Criteria\MemberMapping\ToManyRelationMapping;
-use Iddigital\Cms\Core\Persistence\Db\Criteria\MemberMapping\ToOneEmbeddedObjectMapping;
-use Iddigital\Cms\Core\Persistence\Db\Criteria\MemberMapping\ToOneEntityRelationMapping;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\ReadModel\Relation\ToManyMemberRelation;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\ReadModel\Relation\ToOneMemberRelation;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Mode\NonIdentifyingRelationMode;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Reference\ToOneRelationObjectReference;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\ToManyRelation;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\ToOneRelation;
-use Iddigital\Cms\Core\Persistence\Db\Query\Clause\Join;
-use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Expr;
-use Iddigital\Cms\Core\Persistence\Db\Query\Select;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\Mapper\BlogOrm;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\User;
+use Dms\Core\Persistence\Db\Connection\IConnection;
+use Dms\Core\Persistence\Db\Criteria\CriteriaMapper;
+use Dms\Core\Persistence\Db\Criteria\MappedLoadQuery;
+use Dms\Core\Persistence\Db\Criteria\MemberExpressionMapper;
+use Dms\Core\Persistence\Db\Criteria\MemberMapping\ToManyRelationMapping;
+use Dms\Core\Persistence\Db\Criteria\MemberMapping\ToOneEmbeddedObjectMapping;
+use Dms\Core\Persistence\Db\Criteria\MemberMapping\ToOneEntityRelationMapping;
+use Dms\Core\Persistence\Db\Mapping\ReadModel\Relation\ToManyMemberRelation;
+use Dms\Core\Persistence\Db\Mapping\ReadModel\Relation\ToOneMemberRelation;
+use Dms\Core\Persistence\Db\Mapping\Relation\Mode\NonIdentifyingRelationMode;
+use Dms\Core\Persistence\Db\Mapping\Relation\Reference\ToOneRelationObjectReference;
+use Dms\Core\Persistence\Db\Mapping\Relation\ToManyRelation;
+use Dms\Core\Persistence\Db\Mapping\Relation\ToOneRelation;
+use Dms\Core\Persistence\Db\Query\Clause\Join;
+use Dms\Core\Persistence\Db\Query\Expression\Expr;
+use Dms\Core\Persistence\Db\Query\Select;
+use Dms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\Mapper\BlogOrm;
+use Dms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\User;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

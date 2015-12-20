@@ -1,15 +1,15 @@
 <?php
 
-namespace Iddigital\Cms\Core\Module\Definition;
+namespace Dms\Core\Module\Definition;
 
-use Iddigital\Cms\Core\Auth\IPermission;
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Module\IAction;
-use Iddigital\Cms\Core\Module\IChartDisplay;
-use Iddigital\Cms\Core\Module\ITableDisplay;
-use Iddigital\Cms\Core\Table\Chart\IChartDataSource;
-use Iddigital\Cms\Core\Table\ITableDataSource;
-use Iddigital\Cms\Core\Widget\IWidget;
+use Dms\Core\Auth\IPermission;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Module\IAction;
+use Dms\Core\Module\IChartDisplay;
+use Dms\Core\Module\ITableDisplay;
+use Dms\Core\Table\Chart\IChartDataSource;
+use Dms\Core\Table\ITableDataSource;
+use Dms\Core\Widget\IWidget;
 
 /**
  * The finalized module definition.

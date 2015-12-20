@@ -1,6 +1,6 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests;
+namespace Dms\Core\Tests;
 
 use Composer\Autoload\ClassLoader;
 

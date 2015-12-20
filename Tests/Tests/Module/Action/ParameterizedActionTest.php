@@ -1,21 +1,21 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Module\Action;
+namespace Dms\Core\Tests\Module\Action;
 
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Form\InvalidFormSubmissionException;
-use Iddigital\Cms\Core\Model\Object\ArrayDataObject;
-use Iddigital\Cms\Core\Module\Action\ParameterizedAction;
-use Iddigital\Cms\Core\Module\Handler\CustomParameterizedActionHandler;
-use Iddigital\Cms\Core\Module\Mapping\ArrayDataObjectFormMapping;
-use Iddigital\Cms\Core\Module\Mapping\FormObjectMapping;
-use Iddigital\Cms\Core\Exception\TypeMismatchException;
-use Iddigital\Cms\Core\Module\Mapping\StagedFormObjectMapping;
-use Iddigital\Cms\Core\Tests\Form\Object\Fixtures\ArrayOfInts;
-use Iddigital\Cms\Core\Tests\Form\Object\Fixtures\CreatePageForm;
-use Iddigital\Cms\Core\Tests\Form\Object\Fixtures\SeoForm;
-use Iddigital\Cms\Core\Tests\Form\Object\Stage\Fixtures\ArrayOfIntsStagedForm;
-use Iddigital\Cms\Core\Tests\Module\Handler\Fixtures\ParamDto;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Form\InvalidFormSubmissionException;
+use Dms\Core\Model\Object\ArrayDataObject;
+use Dms\Core\Module\Action\ParameterizedAction;
+use Dms\Core\Module\Handler\CustomParameterizedActionHandler;
+use Dms\Core\Module\Mapping\ArrayDataObjectFormMapping;
+use Dms\Core\Module\Mapping\FormObjectMapping;
+use Dms\Core\Exception\TypeMismatchException;
+use Dms\Core\Module\Mapping\StagedFormObjectMapping;
+use Dms\Core\Tests\Form\Object\Fixtures\ArrayOfInts;
+use Dms\Core\Tests\Form\Object\Fixtures\CreatePageForm;
+use Dms\Core\Tests\Form\Object\Fixtures\SeoForm;
+use Dms\Core\Tests\Form\Object\Stage\Fixtures\ArrayOfIntsStagedForm;
+use Dms\Core\Tests\Module\Handler\Fixtures\ParamDto;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

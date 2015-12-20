@@ -1,8 +1,8 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Common\Crud\Modules\Fixtures\Complex\Domain;
+namespace Dms\Core\Tests\Common\Crud\Modules\Fixtures\Complex\Domain;
 
-use Iddigital\Cms\Core\Model\Object\ClassDefinition;
+use Dms\Core\Model\Object\ClassDefinition;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

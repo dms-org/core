@@ -1,11 +1,11 @@
 <?php
 
-namespace Iddigital\Cms\Core\Table\Column\Component;
+namespace Dms\Core\Table\Column\Component;
 
-use Iddigital\Cms\Core\Form\IField;
-use Iddigital\Cms\Core\Table\Column\Component\Type\ColumnComponentType;
-use Iddigital\Cms\Core\Table\IColumnComponent;
-use Iddigital\Cms\Core\Table\IColumnComponentType;
+use Dms\Core\Form\IField;
+use Dms\Core\Table\Column\Component\Type\ColumnComponentType;
+use Dms\Core\Table\IColumnComponent;
+use Dms\Core\Table\IColumnComponentType;
 
 /**
  * The column component base class

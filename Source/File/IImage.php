@@ -1,8 +1,8 @@
 <?php
 
-namespace Iddigital\Cms\Core\File;
+namespace Dms\Core\File;
 
-use Iddigital\Cms\Core\Exception\InvalidOperationException;
+use Dms\Core\Exception\InvalidOperationException;
 
 /**
  * The image interface.

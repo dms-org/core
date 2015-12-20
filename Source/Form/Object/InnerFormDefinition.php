@@ -1,6 +1,6 @@
 <?php
 
-namespace Iddigital\Cms\Core\Form\Object;
+namespace Dms\Core\Form\Object;
 
 /**
  * The inner form definition class.

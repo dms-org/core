@@ -1,9 +1,9 @@
 <?php
 
-namespace Iddigital\Cms\Core\Module;
+namespace Dms\Core\Module;
 
-use Iddigital\Cms\Core\Form;
-use Iddigital\Cms\Core\Persistence;
+use Dms\Core\Form;
+use Dms\Core\Persistence;
 
 /**
  * The action handler interface.

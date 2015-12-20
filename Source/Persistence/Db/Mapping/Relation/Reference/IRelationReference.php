@@ -1,10 +1,10 @@
 <?php
 
-namespace Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Reference;
+namespace Dms\Core\Persistence\Db\Mapping\Relation\Reference;
 
-use Iddigital\Cms\Core\Persistence\Db\Mapping\IEntityMapper;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\IRelation;
-use Iddigital\Cms\Core\Persistence\Db\Query\Select;
+use Dms\Core\Persistence\Db\Mapping\IEntityMapper;
+use Dms\Core\Persistence\Db\Mapping\Relation\IRelation;
+use Dms\Core\Persistence\Db\Query\Select;
 
 /**
  * The relation reference type interface.

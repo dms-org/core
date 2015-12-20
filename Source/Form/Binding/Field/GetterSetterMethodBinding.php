@@ -1,9 +1,9 @@
 <?php
 
-namespace Iddigital\Cms\Core\Form\Binding\Field;
+namespace Dms\Core\Form\Binding\Field;
 
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Form\IField;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Form\IField;
 
 /**
  * The getter and setter method property binding class.

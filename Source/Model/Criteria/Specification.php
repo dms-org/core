@@ -1,14 +1,14 @@
 <?php
 
-namespace Iddigital\Cms\Core\Model\Criteria;
+namespace Dms\Core\Model\Criteria;
 
-use Iddigital\Cms\Core\Exception;
-use Iddigital\Cms\Core\Model\Criteria\Condition\AndCondition;
-use Iddigital\Cms\Core\Model\Criteria\Condition\NotCondition;
-use Iddigital\Cms\Core\Model\Criteria\Condition\OrCondition;
-use Iddigital\Cms\Core\Model\ISpecification;
-use Iddigital\Cms\Core\Model\ITypedObject;
-use Iddigital\Cms\Core\Model\Object\TypedObject;
+use Dms\Core\Exception;
+use Dms\Core\Model\Criteria\Condition\AndCondition;
+use Dms\Core\Model\Criteria\Condition\NotCondition;
+use Dms\Core\Model\Criteria\Condition\OrCondition;
+use Dms\Core\Model\ISpecification;
+use Dms\Core\Model\ITypedObject;
+use Dms\Core\Model\Object\TypedObject;
 
 /**
  * The typed object specification class.

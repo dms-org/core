@@ -1,10 +1,10 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Persistence\Db\Schema;
+namespace Dms\Core\Tests\Persistence\Db\Schema;
 
-use Iddigital\Cms\Common\Testing\CmsTestCase;
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Index;
+use Dms\Common\Testing\CmsTestCase;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Persistence\Db\Schema\Index;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

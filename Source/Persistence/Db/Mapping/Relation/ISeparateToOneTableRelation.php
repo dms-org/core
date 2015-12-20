@@ -1,10 +1,10 @@
 <?php
 
-namespace Iddigital\Cms\Core\Persistence\Db\Mapping\Relation;
+namespace Dms\Core\Persistence\Db\Mapping\Relation;
 
-use Iddigital\Cms\Core\Persistence\Db\LoadingContext;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\ParentChildMap;
-use Iddigital\Cms\Core\Persistence\Db\Query\Select;
+use Dms\Core\Persistence\Db\LoadingContext;
+use Dms\Core\Persistence\Db\Mapping\ParentChildMap;
+use Dms\Core\Persistence\Db\Query\Select;
 
 /**
  * The relation interface for relations that map to objects stored in another table.

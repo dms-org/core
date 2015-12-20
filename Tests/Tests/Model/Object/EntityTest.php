@@ -1,12 +1,12 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Model\Object;
+namespace Dms\Core\Tests\Model\Object;
 
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Exception\InvalidOperationException;
-use Iddigital\Cms\Core\Model\EntityCollection;
-use Iddigital\Cms\Core\Model\Type\Builder\Type;
-use Iddigital\Cms\Core\Tests\Model\Object\Fixtures\BlankEntity;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Exception\InvalidOperationException;
+use Dms\Core\Model\EntityCollection;
+use Dms\Core\Model\Type\Builder\Type;
+use Dms\Core\Tests\Model\Object\Fixtures\BlankEntity;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

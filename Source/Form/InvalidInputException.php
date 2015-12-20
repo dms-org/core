@@ -1,10 +1,10 @@
 <?php
 
-namespace Iddigital\Cms\Core\Form;
+namespace Dms\Core\Form;
 
-use Iddigital\Cms\Core\Exception\BaseException;
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Language\Message;
+use Dms\Core\Exception\BaseException;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Language\Message;
 
 /**
  * Exception for invalid input.

@@ -1,6 +1,6 @@
 <?php
 
-namespace Iddigital\Cms\Core\Package;
+namespace Dms\Core\Package;
 
 /**
  * The finalized package definition class.

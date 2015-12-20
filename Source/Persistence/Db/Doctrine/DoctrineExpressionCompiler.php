@@ -1,12 +1,12 @@
 <?php
 
-namespace Iddigital\Cms\Core\Persistence\Db\Doctrine;
+namespace Dms\Core\Persistence\Db\Doctrine;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Query\QueryBuilder;
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Persistence\Db\Query\Expression;
-use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Expr;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Persistence\Db\Query\Expression;
+use Dms\Core\Persistence\Db\Query\Expression\Expr;
 
 /**
  * The doctrine expression compiler class

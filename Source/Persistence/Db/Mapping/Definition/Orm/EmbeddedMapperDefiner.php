@@ -1,12 +1,12 @@
 <?php
 
-namespace Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Orm;
+namespace Dms\Core\Persistence\Db\Mapping\Definition\Orm;
 
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\IEmbeddedObjectMapper;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\IndependentValueObjectMapper;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\IObjectMapper;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\IOrm;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Persistence\Db\Mapping\IEmbeddedObjectMapper;
+use Dms\Core\Persistence\Db\Mapping\IndependentValueObjectMapper;
+use Dms\Core\Persistence\Db\Mapping\IObjectMapper;
+use Dms\Core\Persistence\Db\Mapping\IOrm;
 
 /**
  * The embedded mapper definer class.

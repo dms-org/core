@@ -1,6 +1,6 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Model\Object\Proxy\Fixtures;
+namespace Dms\Core\Tests\Model\Object\Proxy\Fixtures;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

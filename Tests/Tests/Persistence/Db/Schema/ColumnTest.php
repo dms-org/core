@@ -1,10 +1,10 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Persistence\Db\Schema;
+namespace Dms\Core\Tests\Persistence\Db\Schema;
 
-use Iddigital\Cms\Common\Testing\CmsTestCase;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Column;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Type\Varchar;
+use Dms\Common\Testing\CmsTestCase;
+use Dms\Core\Persistence\Db\Schema\Column;
+use Dms\Core\Persistence\Db\Schema\Type\Varchar;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

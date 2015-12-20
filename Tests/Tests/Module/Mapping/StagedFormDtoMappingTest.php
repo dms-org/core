@@ -1,11 +1,11 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Module\Mapping;
+namespace Dms\Core\Tests\Module\Mapping;
 
-use Iddigital\Cms\Common\Testing\CmsTestCase;
-use Iddigital\Cms\Core\Form\IStagedForm;
-use Iddigital\Cms\Core\Module\IStagedFormDtoMapping;
-use Iddigital\Cms\Core\Form\IForm;
+use Dms\Common\Testing\CmsTestCase;
+use Dms\Core\Form\IStagedForm;
+use Dms\Core\Module\IStagedFormDtoMapping;
+use Dms\Core\Form\IForm;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

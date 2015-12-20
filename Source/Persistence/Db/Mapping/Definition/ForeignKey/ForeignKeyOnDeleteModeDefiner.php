@@ -1,8 +1,8 @@
 <?php
 
-namespace Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\ForeignKey;
+namespace Dms\Core\Persistence\Db\Mapping\Definition\ForeignKey;
 
-use Iddigital\Cms\Core\Persistence\Db\Schema\ForeignKeyMode;
+use Dms\Core\Persistence\Db\Schema\ForeignKeyMode;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

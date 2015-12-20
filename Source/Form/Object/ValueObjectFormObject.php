@@ -1,9 +1,9 @@
 <?php
 
-namespace Iddigital\Cms\Core\Form\Object;
+namespace Dms\Core\Form\Object;
 
-use Iddigital\Cms\Core\Model\IValueObject;
-use Iddigital\Cms\Core\Model\ITypedObject;
+use Dms\Core\Model\IValueObject;
+use Dms\Core\Model\ITypedObject;
 
 /**
  * The value object form object base class.

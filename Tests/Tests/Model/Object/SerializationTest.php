@@ -1,9 +1,9 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Model\Object;
+namespace Dms\Core\Tests\Model\Object;
 
-use Iddigital\Cms\Common\Testing\CmsTestCase;
-use Iddigital\Cms\Core\Tests\Model\Object\Fixtures\Person;
+use Dms\Common\Testing\CmsTestCase;
+use Dms\Core\Tests\Model\Object\Fixtures\Person;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

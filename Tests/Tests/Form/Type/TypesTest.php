@@ -1,21 +1,21 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Form\Type;
+namespace Dms\Core\Tests\Form\Type;
 
-use Iddigital\Cms\Common\Testing\CmsTestCase;
-use Iddigital\Cms\Core\File\IUploadedFile;
-use Iddigital\Cms\Core\File\IUploadedImage;
-use Iddigital\Cms\Core\Form\Field\Builder\Field;
-use Iddigital\Cms\Core\Form\Field\Type\ArrayOfType;
-use Iddigital\Cms\Core\Form\Field\Type\BoolType;
-use Iddigital\Cms\Core\Form\Field\Type\DateTimeType;
-use Iddigital\Cms\Core\Form\Field\Type\DateType;
-use Iddigital\Cms\Core\Form\Field\Type\FileType;
-use Iddigital\Cms\Core\Form\Field\Type\FloatType;
-use Iddigital\Cms\Core\Form\Field\Type\ImageType;
-use Iddigital\Cms\Core\Form\Field\Type\IntType;
-use Iddigital\Cms\Core\Form\Field\Type\StringType;
-use Iddigital\Cms\Core\Form\Field\Type\TimeOfDayType;
+use Dms\Common\Testing\CmsTestCase;
+use Dms\Core\File\IUploadedFile;
+use Dms\Core\File\IUploadedImage;
+use Dms\Core\Form\Field\Builder\Field;
+use Dms\Core\Form\Field\Type\ArrayOfType;
+use Dms\Core\Form\Field\Type\BoolType;
+use Dms\Core\Form\Field\Type\DateTimeType;
+use Dms\Core\Form\Field\Type\DateType;
+use Dms\Core\Form\Field\Type\FileType;
+use Dms\Core\Form\Field\Type\FloatType;
+use Dms\Core\Form\Field\Type\ImageType;
+use Dms\Core\Form\Field\Type\IntType;
+use Dms\Core\Form\Field\Type\StringType;
+use Dms\Core\Form\Field\Type\TimeOfDayType;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

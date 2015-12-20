@@ -1,9 +1,9 @@
 <?php
 
-namespace Iddigital\Cms\Core\Auth;
+namespace Dms\Core\Auth;
 
-use Iddigital\Cms\Core\Model\IEntity;
-use Iddigital\Cms\Core\Model\ValueObjectCollection;
+use Dms\Core\Model\IEntity;
+use Dms\Core\Model\ValueObjectCollection;
 
 interface IRole extends IEntity
 {

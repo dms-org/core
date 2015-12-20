@@ -1,15 +1,15 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Common\Crud\Form;
+namespace Dms\Core\Tests\Common\Crud\Form;
 
-use Iddigital\Cms\Common\Testing\CmsTestCase;
-use Iddigital\Cms\Core\Common\Crud\Form\FormWithBinding;
-use Iddigital\Cms\Core\Form\Binding\Field\FieldPropertyBinding;
-use Iddigital\Cms\Core\Form\Binding\Field\GetterSetterMethodBinding;
-use Iddigital\Cms\Core\Form\Binding\IFormBinding;
-use Iddigital\Cms\Core\Form\Builder\Form;
-use Iddigital\Cms\Core\Form\Field\Builder\Field;
-use Iddigital\Cms\Core\Tests\Form\Binding\Fixtures\TestFormBoundClass;
+use Dms\Common\Testing\CmsTestCase;
+use Dms\Core\Common\Crud\Form\FormWithBinding;
+use Dms\Core\Form\Binding\Field\FieldPropertyBinding;
+use Dms\Core\Form\Binding\Field\GetterSetterMethodBinding;
+use Dms\Core\Form\Binding\IFormBinding;
+use Dms\Core\Form\Builder\Form;
+use Dms\Core\Form\Field\Builder\Field;
+use Dms\Core\Tests\Form\Binding\Fixtures\TestFormBoundClass;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

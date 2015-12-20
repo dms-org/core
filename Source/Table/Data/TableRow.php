@@ -1,13 +1,13 @@
 <?php
 
-namespace Iddigital\Cms\Core\Table\Data;
+namespace Dms\Core\Table\Data;
 
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Exception\NotImplementedException;
-use Iddigital\Cms\Core\Table\IColumn;
-use Iddigital\Cms\Core\Table\IColumnComponent;
-use Iddigital\Cms\Core\Table\ITableRow;
-use Iddigital\Cms\Core\Util\Debug;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Exception\NotImplementedException;
+use Dms\Core\Table\IColumn;
+use Dms\Core\Table\IColumnComponent;
+use Dms\Core\Table\ITableRow;
+use Dms\Core\Util\Debug;
 
 /**
  * The table row class.

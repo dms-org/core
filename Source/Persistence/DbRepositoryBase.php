@@ -1,22 +1,22 @@
 <?php
 
-namespace Iddigital\Cms\Core\Persistence;
+namespace Dms\Core\Persistence;
 
-use Iddigital\Cms\Core\Exception;
-use Iddigital\Cms\Core\Model\ICriteria;
-use Iddigital\Cms\Core\Model\IEntity;
-use Iddigital\Cms\Core\Model\ILoadCriteria;
-use Iddigital\Cms\Core\Model\IObjectSetWithLoadCriteriaSupport;
-use Iddigital\Cms\Core\Model\ISpecification;
-use Iddigital\Cms\Core\Model\Type\Builder\Type;
-use Iddigital\Cms\Core\Persistence\Db\Connection\IConnection;
-use Iddigital\Cms\Core\Persistence\Db\Criteria\CriteriaMapper;
-use Iddigital\Cms\Core\Persistence\Db\Criteria\LoadCriteriaMapper;
-use Iddigital\Cms\Core\Persistence\Db\LoadingContext;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\IEntityMapper;
-use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Expr;
-use Iddigital\Cms\Core\Persistence\Db\Query\IQuery;
-use Iddigital\Cms\Core\Persistence\Db\Query\Select;
+use Dms\Core\Exception;
+use Dms\Core\Model\ICriteria;
+use Dms\Core\Model\IEntity;
+use Dms\Core\Model\ILoadCriteria;
+use Dms\Core\Model\IObjectSetWithLoadCriteriaSupport;
+use Dms\Core\Model\ISpecification;
+use Dms\Core\Model\Type\Builder\Type;
+use Dms\Core\Persistence\Db\Connection\IConnection;
+use Dms\Core\Persistence\Db\Criteria\CriteriaMapper;
+use Dms\Core\Persistence\Db\Criteria\LoadCriteriaMapper;
+use Dms\Core\Persistence\Db\LoadingContext;
+use Dms\Core\Persistence\Db\Mapping\IEntityMapper;
+use Dms\Core\Persistence\Db\Query\Expression\Expr;
+use Dms\Core\Persistence\Db\Query\IQuery;
+use Dms\Core\Persistence\Db\Query\Select;
 
 /**
  * An base class of the db repository.

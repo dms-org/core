@@ -1,14 +1,14 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\ReadModel;
+namespace Dms\Core\Tests\Persistence\Db\Integration\Mapping\ReadModel;
 
-use Iddigital\Cms\Core\Persistence\Db\Connection\IConnection;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\IOrm;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\ReadModel\ReadModelMapper;
-use Iddigital\Cms\Core\Persistence\ReadModelRepository;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\DbIntegrationTest;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Mock\MockConnection;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Mock\MockDatabase;
+use Dms\Core\Persistence\Db\Connection\IConnection;
+use Dms\Core\Persistence\Db\Mapping\IOrm;
+use Dms\Core\Persistence\Db\Mapping\ReadModel\ReadModelMapper;
+use Dms\Core\Persistence\ReadModelRepository;
+use Dms\Core\Tests\Persistence\Db\Integration\Mapping\DbIntegrationTest;
+use Dms\Core\Tests\Persistence\Db\Mock\MockConnection;
+use Dms\Core\Tests\Persistence\Db\Mock\MockDatabase;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

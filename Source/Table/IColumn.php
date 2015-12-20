@@ -1,9 +1,9 @@
 <?php
 
-namespace Iddigital\Cms\Core\Table;
+namespace Dms\Core\Table;
 
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Model\Type\IType;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Model\Type\IType;
 
 /**
  * The table column interface.

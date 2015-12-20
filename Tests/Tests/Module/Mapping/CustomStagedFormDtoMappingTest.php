@@ -1,14 +1,14 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Module\Mapping;
+namespace Dms\Core\Tests\Module\Mapping;
 
-use Iddigital\Cms\Core\Form\Builder\Form;
-use Iddigital\Cms\Core\Form\Builder\StagedForm;
-use Iddigital\Cms\Core\Form\Field\Builder\Field;
-use Iddigital\Cms\Core\Form\IStagedForm;
-use Iddigital\Cms\Core\Module\IStagedFormDtoMapping;
-use Iddigital\Cms\Core\Module\Mapping\CustomStagedFormDtoMapping;
-use Iddigital\Cms\Core\Tests\Module\Mapping\Fixtures\TestDto;
+use Dms\Core\Form\Builder\Form;
+use Dms\Core\Form\Builder\StagedForm;
+use Dms\Core\Form\Field\Builder\Field;
+use Dms\Core\Form\IStagedForm;
+use Dms\Core\Module\IStagedFormDtoMapping;
+use Dms\Core\Module\Mapping\CustomStagedFormDtoMapping;
+use Dms\Core\Tests\Module\Mapping\Fixtures\TestDto;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

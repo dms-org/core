@@ -1,6 +1,6 @@
 <?php
 
-namespace Iddigital\Cms\Core\Util\Hashing;
+namespace Dms\Core\Util\Hashing;
 
 use Pinq\Iterators\Common\Identity;
 

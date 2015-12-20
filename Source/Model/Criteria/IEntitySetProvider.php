@@ -1,8 +1,8 @@
 <?php
 
-namespace Iddigital\Cms\Core\Model\Criteria;
+namespace Dms\Core\Model\Criteria;
 
-use Iddigital\Cms\Core\Model\IEntitySet;
+use Dms\Core\Model\IEntitySet;
 
 /**
  * The entity set provider interface.

@@ -1,17 +1,17 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Module\Action\Fixtures;
+namespace Dms\Core\Tests\Module\Action\Fixtures;
 
-use Iddigital\Cms\Core\Auth\IPermission;
-use Iddigital\Cms\Core\Auth\Permission;
-use Iddigital\Cms\Core\Exception\TypeMismatchException;
-use Iddigital\Cms\Core\Form\Builder\Form;
-use Iddigital\Cms\Core\Form\Field\Builder\Field;
-use Iddigital\Cms\Core\Model\Object\ArrayDataObject;
-use Iddigital\Cms\Core\Module\Action\SelfHandlingParameterizedAction;
-use Iddigital\Cms\Core\Module\IStagedFormDtoMapping;
-use Iddigital\Cms\Core\Module\Mapping\ArrayDataObjectFormMapping;
-use Iddigital\Cms\Core\Tests\Module\Fixtures\TestDto;
+use Dms\Core\Auth\IPermission;
+use Dms\Core\Auth\Permission;
+use Dms\Core\Exception\TypeMismatchException;
+use Dms\Core\Form\Builder\Form;
+use Dms\Core\Form\Field\Builder\Field;
+use Dms\Core\Model\Object\ArrayDataObject;
+use Dms\Core\Module\Action\SelfHandlingParameterizedAction;
+use Dms\Core\Module\IStagedFormDtoMapping;
+use Dms\Core\Module\Mapping\ArrayDataObjectFormMapping;
+use Dms\Core\Tests\Module\Fixtures\TestDto;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

@@ -1,10 +1,10 @@
 <?php
 
-namespace Iddigital\Cms\Core\Package;
+namespace Dms\Core\Package;
 
-use Iddigital\Cms\Core\Auth\IPermission;
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Module\IModule;
+use Dms\Core\Auth\IPermission;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Module\IModule;
 use Interop\Container\ContainerInterface;
 
 /**

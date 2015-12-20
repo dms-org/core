@@ -1,16 +1,16 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Table\DataSource;
+namespace Dms\Core\Tests\Table\DataSource;
 
-use Iddigital\Cms\Core\Form\Field\Builder\Field;
-use Iddigital\Cms\Core\Model\ObjectCollection;
-use Iddigital\Cms\Core\Table\Builder\Column;
-use Iddigital\Cms\Core\Table\DataSource\Definition\FinalizedObjectTableDefinition;
-use Iddigital\Cms\Core\Table\DataSource\Definition\ObjectTableDefinition;
-use Iddigital\Cms\Core\Table\DataSource\ObjectTableDataSource;
-use Iddigital\Cms\Core\Table\ITableDataSource;
-use Iddigital\Cms\Core\Table\ITableStructure;
-use Iddigital\Cms\Core\Tests\Table\DataSource\Fixtures\TestPerson;
+use Dms\Core\Form\Field\Builder\Field;
+use Dms\Core\Model\ObjectCollection;
+use Dms\Core\Table\Builder\Column;
+use Dms\Core\Table\DataSource\Definition\FinalizedObjectTableDefinition;
+use Dms\Core\Table\DataSource\Definition\ObjectTableDefinition;
+use Dms\Core\Table\DataSource\ObjectTableDataSource;
+use Dms\Core\Table\ITableDataSource;
+use Dms\Core\Table\ITableStructure;
+use Dms\Core\Tests\Table\DataSource\Fixtures\TestPerson;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

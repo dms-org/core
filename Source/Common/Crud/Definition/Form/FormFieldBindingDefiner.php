@@ -1,15 +1,15 @@
 <?php
 
-namespace Iddigital\Cms\Core\Common\Crud\Definition\Form;
+namespace Dms\Core\Common\Crud\Definition\Form;
 
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Exception\TypeMismatchException;
-use Iddigital\Cms\Core\Form\Binding\Field\CustomFieldBinding;
-use Iddigital\Cms\Core\Form\Binding\Field\FieldPropertyBinding;
-use Iddigital\Cms\Core\Form\Binding\Field\GetterSetterMethodBinding;
-use Iddigital\Cms\Core\Form\Binding\IFieldBinding;
-use Iddigital\Cms\Core\Form\IField;
-use Iddigital\Cms\Core\Model\Object\FinalizedClassDefinition;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Exception\TypeMismatchException;
+use Dms\Core\Form\Binding\Field\CustomFieldBinding;
+use Dms\Core\Form\Binding\Field\FieldPropertyBinding;
+use Dms\Core\Form\Binding\Field\GetterSetterMethodBinding;
+use Dms\Core\Form\Binding\IFieldBinding;
+use Dms\Core\Form\IField;
+use Dms\Core\Model\Object\FinalizedClassDefinition;
 
 /**
  * The field binding definer.

@@ -1,9 +1,9 @@
 <?php
 
-namespace Iddigital\Cms\Core\Form;
+namespace Dms\Core\Form;
 
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Form\Stage\IndependentFormStage;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Form\Stage\IndependentFormStage;
 
 /**
  * The staged form interface.

@@ -1,8 +1,8 @@
 <?php
 
-namespace Iddigital\Cms\Core\Form\Field\Type;
+namespace Dms\Core\Form\Field\Type;
 
-use Iddigital\Cms\Core\Form\Field\Processor\DateTimeProcessor;
+use Dms\Core\Form\Field\Processor\DateTimeProcessor;
 
 /**
  * The date type class.

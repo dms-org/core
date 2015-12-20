@@ -1,9 +1,9 @@
 <?php
 
-namespace Iddigital\Cms\Core\Module\Mapping;
+namespace Dms\Core\Module\Mapping;
 
-use Iddigital\Cms\Core\Form;
-use Iddigital\Cms\Core\Form\Object\Stage\StagedFormObject;
+use Dms\Core\Form;
+use Dms\Core\Form\Object\Stage\StagedFormObject;
 
 /**
  * The staged form dto mapping that makes use of form objects

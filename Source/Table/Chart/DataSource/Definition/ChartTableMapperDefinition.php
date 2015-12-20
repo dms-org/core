@@ -1,12 +1,12 @@
 <?php
 
-namespace Iddigital\Cms\Core\Table\Chart\DataSource\Definition;
+namespace Dms\Core\Table\Chart\DataSource\Definition;
 
-use Iddigital\Cms\Core\Exception\InvalidOperationException;
-use Iddigital\Cms\Core\Table\Chart\IChartStructure;
-use Iddigital\Cms\Core\Table\IColumn;
-use Iddigital\Cms\Core\Table\IColumnComponent;
-use Iddigital\Cms\Core\Table\ITableDataSource;
+use Dms\Core\Exception\InvalidOperationException;
+use Dms\Core\Table\Chart\IChartStructure;
+use Dms\Core\Table\IColumn;
+use Dms\Core\Table\IColumnComponent;
+use Dms\Core\Table\ITableDataSource;
 
 /**
  * The chart table mapping definition.

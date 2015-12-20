@@ -1,12 +1,12 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Form\Field\Processor\Validator;
+namespace Dms\Core\Tests\Form\Field\Processor\Validator;
 
-use Iddigital\Cms\Core\File\IUploadedImage;
-use Iddigital\Cms\Core\Form\Field\Processor\FieldValidator;
-use Iddigital\Cms\Core\Form\Field\Processor\Validator\ImageDimensionsValidator;
-use Iddigital\Cms\Core\Language\Message;
-use Iddigital\Cms\Core\Model\Type\Builder\Type;
+use Dms\Core\File\IUploadedImage;
+use Dms\Core\Form\Field\Processor\FieldValidator;
+use Dms\Core\Form\Field\Processor\Validator\ImageDimensionsValidator;
+use Dms\Core\Language\Message;
+use Dms\Core\Model\Type\Builder\Type;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

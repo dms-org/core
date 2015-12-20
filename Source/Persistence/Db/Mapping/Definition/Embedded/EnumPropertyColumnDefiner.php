@@ -1,6 +1,6 @@
 <?php
 
-namespace Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Embedded;
+namespace Dms\Core\Persistence\Db\Mapping\Definition\Embedded;
 
 /**
  * The enum property column definer class.

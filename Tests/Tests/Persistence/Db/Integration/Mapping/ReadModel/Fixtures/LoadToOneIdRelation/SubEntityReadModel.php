@@ -1,9 +1,9 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\ReadModel\Fixtures\LoadToOneIdRelation;
+namespace Dms\Core\Tests\Persistence\Db\Integration\Mapping\ReadModel\Fixtures\LoadToOneIdRelation;
 
-use Iddigital\Cms\Core\Model\Object\ClassDefinition;
-use Iddigital\Cms\Core\Model\Object\ReadModel;
+use Dms\Core\Model\Object\ClassDefinition;
+use Dms\Core\Model\Object\ReadModel;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

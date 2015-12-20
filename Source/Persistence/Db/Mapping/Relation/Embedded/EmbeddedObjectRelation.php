@@ -1,20 +1,20 @@
 <?php
 
-namespace Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Embedded;
+namespace Dms\Core\Persistence\Db\Mapping\Relation\Embedded;
 
-use Iddigital\Cms\Core\Exception\NotImplementedException;
-use Iddigital\Cms\Core\Exception\TypeMismatchException;
-use Iddigital\Cms\Core\Persistence\Db\LoadingContext;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\IEmbeddedObjectMapper;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\ParentChildItem;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\ParentChildMap;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\ReadModel\ReadModelMapper;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\ReadModel\Relation\RelationReadModelReference;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\IEmbeddedToOneRelation;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Reference\IToOneRelationReference;
-use Iddigital\Cms\Core\Persistence\Db\PersistenceContext;
-use Iddigital\Cms\Core\Persistence\Db\Query\Delete;
-use Iddigital\Cms\Core\Persistence\Db\Row;
+use Dms\Core\Exception\NotImplementedException;
+use Dms\Core\Exception\TypeMismatchException;
+use Dms\Core\Persistence\Db\LoadingContext;
+use Dms\Core\Persistence\Db\Mapping\IEmbeddedObjectMapper;
+use Dms\Core\Persistence\Db\Mapping\ParentChildItem;
+use Dms\Core\Persistence\Db\Mapping\ParentChildMap;
+use Dms\Core\Persistence\Db\Mapping\ReadModel\ReadModelMapper;
+use Dms\Core\Persistence\Db\Mapping\ReadModel\Relation\RelationReadModelReference;
+use Dms\Core\Persistence\Db\Mapping\Relation\IEmbeddedToOneRelation;
+use Dms\Core\Persistence\Db\Mapping\Relation\Reference\IToOneRelationReference;
+use Dms\Core\Persistence\Db\PersistenceContext;
+use Dms\Core\Persistence\Db\Query\Delete;
+use Dms\Core\Persistence\Db\Row;
 
 /**
  * The embedded object relation class.

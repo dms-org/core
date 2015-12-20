@@ -1,30 +1,30 @@
 <?php
 
-namespace Iddigital\Cms\Core\Persistence\Db\Mapping\Hierarchy;
+namespace Dms\Core\Persistence\Db\Mapping\Hierarchy;
 
-use Iddigital\Cms\Core\Model\ITypedObject;
-use Iddigital\Cms\Core\Persistence\Db\Exception\InvalidRowException;
-use Iddigital\Cms\Core\Persistence\Db\LoadingContext;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\FinalizedMapperDefinition;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Relation\IAccessor;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Relation\RelationMapping;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\IObjectMapper;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\ParentChildMap;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\ParentChildrenMap;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\EntityRelation;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\IEmbeddedToOneRelation;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\IRelation;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\IToManyRelation;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\IToOneRelation;
-use Iddigital\Cms\Core\Persistence\Db\PersistenceContext;
-use Iddigital\Cms\Core\Persistence\Db\Query\Delete;
-use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Expr;
-use Iddigital\Cms\Core\Persistence\Db\Query\Query;
-use Iddigital\Cms\Core\Persistence\Db\Query\Select;
-use Iddigital\Cms\Core\Persistence\Db\Row;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Table;
-use Iddigital\Cms\Core\Persistence\PersistenceException;
-use Iddigital\Cms\Core\Util\Debug;
+use Dms\Core\Model\ITypedObject;
+use Dms\Core\Persistence\Db\Exception\InvalidRowException;
+use Dms\Core\Persistence\Db\LoadingContext;
+use Dms\Core\Persistence\Db\Mapping\Definition\FinalizedMapperDefinition;
+use Dms\Core\Persistence\Db\Mapping\Definition\Relation\IAccessor;
+use Dms\Core\Persistence\Db\Mapping\Definition\Relation\RelationMapping;
+use Dms\Core\Persistence\Db\Mapping\IObjectMapper;
+use Dms\Core\Persistence\Db\Mapping\ParentChildMap;
+use Dms\Core\Persistence\Db\Mapping\ParentChildrenMap;
+use Dms\Core\Persistence\Db\Mapping\Relation\EntityRelation;
+use Dms\Core\Persistence\Db\Mapping\Relation\IEmbeddedToOneRelation;
+use Dms\Core\Persistence\Db\Mapping\Relation\IRelation;
+use Dms\Core\Persistence\Db\Mapping\Relation\IToManyRelation;
+use Dms\Core\Persistence\Db\Mapping\Relation\IToOneRelation;
+use Dms\Core\Persistence\Db\PersistenceContext;
+use Dms\Core\Persistence\Db\Query\Delete;
+use Dms\Core\Persistence\Db\Query\Expression\Expr;
+use Dms\Core\Persistence\Db\Query\Query;
+use Dms\Core\Persistence\Db\Query\Select;
+use Dms\Core\Persistence\Db\Row;
+use Dms\Core\Persistence\Db\Schema\Table;
+use Dms\Core\Persistence\PersistenceException;
+use Dms\Core\Util\Debug;
 
 /**
  * The object mapping base class.

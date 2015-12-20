@@ -1,6 +1,6 @@
 <?php
 
-namespace Iddigital\Cms\Core\Persistence\Db\Mapping\Hook;
+namespace Dms\Core\Persistence\Db\Mapping\Hook;
 
 /**
  * The persist hook base class

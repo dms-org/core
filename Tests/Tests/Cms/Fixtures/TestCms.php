@@ -1,10 +1,10 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Cms\Fixtures;
+namespace Dms\Core\Tests\Cms\Fixtures;
 
-use Iddigital\Cms\Core\Cms;
-use Iddigital\Cms\Core\CmsDefinition;
-use Iddigital\Cms\Core\Tests\Package\Fixtures\TestPackage;
+use Dms\Core\Cms;
+use Dms\Core\CmsDefinition;
+use Dms\Core\Tests\Package\Fixtures\TestPackage;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

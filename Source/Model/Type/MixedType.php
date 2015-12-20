@@ -1,8 +1,8 @@
 <?php
 
-namespace Iddigital\Cms\Core\Model\Type;
+namespace Dms\Core\Model\Type;
 
-use Iddigital\Cms\Core\Model\Type\Builder\Type;
+use Dms\Core\Model\Type\Builder\Type;
 
 /**
  * The mixed type class

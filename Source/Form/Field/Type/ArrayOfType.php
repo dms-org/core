@@ -1,12 +1,12 @@
 <?php
 
-namespace Iddigital\Cms\Core\Form\Field\Type;
+namespace Dms\Core\Form\Field\Type;
 
-use Iddigital\Cms\Core\Form\Field\Processor\ArrayAllProcessor;
-use Iddigital\Cms\Core\Form\IField;
-use Iddigital\Cms\Core\Form\IFieldProcessor;
-use Iddigital\Cms\Core\Form\IFieldType;
-use Iddigital\Cms\Core\Model\Type\Builder\Type;
+use Dms\Core\Form\Field\Processor\ArrayAllProcessor;
+use Dms\Core\Form\IField;
+use Dms\Core\Form\IFieldProcessor;
+use Dms\Core\Form\IFieldType;
+use Dms\Core\Model\Type\Builder\Type;
 
 /**
  * The array type class.

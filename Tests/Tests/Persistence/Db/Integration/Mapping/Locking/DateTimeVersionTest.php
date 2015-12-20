@@ -1,14 +1,14 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\Locking;
+namespace Dms\Core\Tests\Persistence\Db\Integration\Mapping\Locking;
 
-use Iddigital\Cms\Core\Persistence\Db\Mapping\EntityOutOfSyncException;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\IOrm;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Locking\DateTimeVersionLockingStrategy;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\DbIntegrationTest;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\Locking\Fixtures\DateTimeVersion\DateTimeVersionedEntity;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\Locking\Fixtures\DateTimeVersion\DateTimeVersionedEntityMapper;
-use Iddigital\Cms\Core\Util\IClock;
+use Dms\Core\Persistence\Db\Mapping\EntityOutOfSyncException;
+use Dms\Core\Persistence\Db\Mapping\IOrm;
+use Dms\Core\Persistence\Db\Mapping\Locking\DateTimeVersionLockingStrategy;
+use Dms\Core\Tests\Persistence\Db\Integration\Mapping\DbIntegrationTest;
+use Dms\Core\Tests\Persistence\Db\Integration\Mapping\Locking\Fixtures\DateTimeVersion\DateTimeVersionedEntity;
+use Dms\Core\Tests\Persistence\Db\Integration\Mapping\Locking\Fixtures\DateTimeVersion\DateTimeVersionedEntityMapper;
+use Dms\Core\Util\IClock;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

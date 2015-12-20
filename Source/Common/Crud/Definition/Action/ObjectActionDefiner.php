@@ -1,28 +1,28 @@
 <?php
 
-namespace Iddigital\Cms\Core\Common\Crud\Definition\Action;
+namespace Dms\Core\Common\Crud\Definition\Action;
 
-use Iddigital\Cms\Core\Auth\IAuthSystem;
-use Iddigital\Cms\Core\Common\Crud\Action\Object\CustomObjectActionHandler;
-use Iddigital\Cms\Core\Common\Crud\Action\Object\IObjectActionFormMapping;
-use Iddigital\Cms\Core\Common\Crud\Action\Object\IObjectActionHandler;
-use Iddigital\Cms\Core\Common\Crud\Action\Object\Mapping\ArrayObjectActionFormMapping;
-use Iddigital\Cms\Core\Common\Crud\Action\Object\Mapping\ObjectFormObjectMapping;
-use Iddigital\Cms\Core\Common\Crud\Action\Object\Mapping\WrapperObjectActionFormMapping;
-use Iddigital\Cms\Core\Common\Crud\Action\Object\ObjectAction;
-use Iddigital\Cms\Core\Common\Crud\Form\ObjectForm;
-use Iddigital\Cms\Core\Common\Crud\Form\ObjectStagedFormObject;
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Form\Builder\Form as FormBuilder;
-use Iddigital\Cms\Core\Form\Builder\StagedForm as StagedFormBuilder;
-use Iddigital\Cms\Core\Form\Builder\StagedForm;
-use Iddigital\Cms\Core\Form\IForm;
-use Iddigital\Cms\Core\Form\IStagedForm;
-use Iddigital\Cms\Core\Form\Object\FormObject;
-use Iddigital\Cms\Core\Form\Object\Stage\StagedFormObject;
-use Iddigital\Cms\Core\Model\IEntitySet;
-use Iddigital\Cms\Core\Module\Definition\ActionDefiner;
-use Iddigital\Cms\Core\Module\IStagedFormDtoMapping;
+use Dms\Core\Auth\IAuthSystem;
+use Dms\Core\Common\Crud\Action\Object\CustomObjectActionHandler;
+use Dms\Core\Common\Crud\Action\Object\IObjectActionFormMapping;
+use Dms\Core\Common\Crud\Action\Object\IObjectActionHandler;
+use Dms\Core\Common\Crud\Action\Object\Mapping\ArrayObjectActionFormMapping;
+use Dms\Core\Common\Crud\Action\Object\Mapping\ObjectFormObjectMapping;
+use Dms\Core\Common\Crud\Action\Object\Mapping\WrapperObjectActionFormMapping;
+use Dms\Core\Common\Crud\Action\Object\ObjectAction;
+use Dms\Core\Common\Crud\Form\ObjectForm;
+use Dms\Core\Common\Crud\Form\ObjectStagedFormObject;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Form\Builder\Form as FormBuilder;
+use Dms\Core\Form\Builder\StagedForm as StagedFormBuilder;
+use Dms\Core\Form\Builder\StagedForm;
+use Dms\Core\Form\IForm;
+use Dms\Core\Form\IStagedForm;
+use Dms\Core\Form\Object\FormObject;
+use Dms\Core\Form\Object\Stage\StagedFormObject;
+use Dms\Core\Model\IEntitySet;
+use Dms\Core\Module\Definition\ActionDefiner;
+use Dms\Core\Module\IStagedFormDtoMapping;
 
 /**
  * The object action definer class.

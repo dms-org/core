@@ -1,8 +1,8 @@
 <?php
 
-namespace Iddigital\Cms\Core\Model\Criteria\Member;
+namespace Dms\Core\Model\Criteria\Member;
 
-use Iddigital\Cms\Core\Model\Type\IType;
+use Dms\Core\Model\Type\IType;
 
 /**
  * The self expression class.

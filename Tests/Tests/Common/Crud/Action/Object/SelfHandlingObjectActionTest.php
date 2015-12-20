@@ -1,19 +1,19 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Common\Crud\Action\Object;
+namespace Dms\Core\Tests\Common\Crud\Action\Object;
 
-use Iddigital\Cms\Core\Auth\Permission;
-use Iddigital\Cms\Core\Common\Crud\Action\Object\IObjectAction;
-use Iddigital\Cms\Core\Common\Crud\Action\Object\IObjectActionHandler;
-use Iddigital\Cms\Core\Common\Crud\Action\Object\Mapping\ArrayObjectActionFormMapping;
-use Iddigital\Cms\Core\Common\Crud\Action\Object\ObjectActionParameter;
-use Iddigital\Cms\Core\Exception\TypeMismatchException;
-use Iddigital\Cms\Core\Form\InvalidFormSubmissionException;
-use Iddigital\Cms\Core\Model\Object\ArrayDataObject;
-use Iddigital\Cms\Core\Tests\Common\Crud\Action\Object\Fixtures\ReturnDto;
-use Iddigital\Cms\Core\Tests\Common\Crud\Action\Object\Fixtures\TestSelfHandlingObjectAction;
-use Iddigital\Cms\Core\Tests\Common\Crud\Action\Object\Mapping\Fixtures\TestEntity;
-use Iddigital\Cms\Core\Tests\Module\Action\ActionTest;
+use Dms\Core\Auth\Permission;
+use Dms\Core\Common\Crud\Action\Object\IObjectAction;
+use Dms\Core\Common\Crud\Action\Object\IObjectActionHandler;
+use Dms\Core\Common\Crud\Action\Object\Mapping\ArrayObjectActionFormMapping;
+use Dms\Core\Common\Crud\Action\Object\ObjectActionParameter;
+use Dms\Core\Exception\TypeMismatchException;
+use Dms\Core\Form\InvalidFormSubmissionException;
+use Dms\Core\Model\Object\ArrayDataObject;
+use Dms\Core\Tests\Common\Crud\Action\Object\Fixtures\ReturnDto;
+use Dms\Core\Tests\Common\Crud\Action\Object\Fixtures\TestSelfHandlingObjectAction;
+use Dms\Core\Tests\Common\Crud\Action\Object\Mapping\Fixtures\TestEntity;
+use Dms\Core\Tests\Module\Action\ActionTest;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

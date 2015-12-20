@@ -1,11 +1,11 @@
 <?php
 
-namespace Iddigital\Cms\Core\Persistence\Db\Mapping\Hierarchy;
+namespace Dms\Core\Persistence\Db\Mapping\Hierarchy;
 
-use Iddigital\Cms\Core\Model\ITypedObject;
-use Iddigital\Cms\Core\Persistence\Db\PersistenceContext;
-use Iddigital\Cms\Core\Persistence\Db\Query\Delete;
-use Iddigital\Cms\Core\Persistence\Db\Row;
+use Dms\Core\Model\ITypedObject;
+use Dms\Core\Persistence\Db\PersistenceContext;
+use Dms\Core\Persistence\Db\Query\Delete;
+use Dms\Core\Persistence\Db\Row;
 
 /**
  * The embedded class mapping interface.

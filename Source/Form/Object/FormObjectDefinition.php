@@ -1,13 +1,13 @@
 <?php
 
-namespace Iddigital\Cms\Core\Form\Object;
+namespace Dms\Core\Form\Object;
 
-use Iddigital\Cms\Core\Form\Builder\Form as FormBuilder;
-use Iddigital\Cms\Core\Form\IField;
-use Iddigital\Cms\Core\Model\Object\ClassDefinition;
-use Iddigital\Cms\Core\Model\Object\FinalizedClassDefinition;
-use Iddigital\Cms\Core\Model\Object\InvalidPropertyDefinitionException;
-use Iddigital\Cms\Core\Model\Object\PropertyTypeDefiner;
+use Dms\Core\Form\Builder\Form as FormBuilder;
+use Dms\Core\Form\IField;
+use Dms\Core\Model\Object\ClassDefinition;
+use Dms\Core\Model\Object\FinalizedClassDefinition;
+use Dms\Core\Model\Object\InvalidPropertyDefinitionException;
+use Dms\Core\Model\Object\PropertyTypeDefiner;
 
 /**
  * The form object definition class.
@@ -180,7 +180,7 @@ class FormObjectDefinition extends FormBuilder
      * @param FinalizedClassDefinition $class
      *
      * @return FinalizedFormObjectDefinition
-     * @throws \Iddigital\Cms\Core\Model\Object\IncompleteClassDefinitionException
+     * @throws \Dms\Core\Model\Object\IncompleteClassDefinitionException
      */
     public function finalize(FinalizedClassDefinition $class = null)
     {

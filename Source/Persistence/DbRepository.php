@@ -1,21 +1,21 @@
 <?php
 
-namespace Iddigital\Cms\Core\Persistence;
+namespace Dms\Core\Persistence;
 
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Exception\TypeMismatchException;
-use Iddigital\Cms\Core\Model\EntityNotFoundException;
-use Iddigital\Cms\Core\Model\IEntity;
-use Iddigital\Cms\Core\Persistence\Db\Connection\DbOutOfSyncException;
-use Iddigital\Cms\Core\Persistence\Db\Connection\IConnection;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\EntityOutOfSyncException;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\IEntityMapper;
-use Iddigital\Cms\Core\Persistence\Db\PersistenceContext;
-use Iddigital\Cms\Core\Persistence\Db\Query\Delete;
-use Iddigital\Cms\Core\Persistence\Db\Query\Expression\ColumnExpr;
-use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Expr;
-use Iddigital\Cms\Core\Persistence\Db\Query\Reorder;
-use Iddigital\Cms\Core\Persistence\Db\Query\Select;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Exception\TypeMismatchException;
+use Dms\Core\Model\EntityNotFoundException;
+use Dms\Core\Model\IEntity;
+use Dms\Core\Persistence\Db\Connection\DbOutOfSyncException;
+use Dms\Core\Persistence\Db\Connection\IConnection;
+use Dms\Core\Persistence\Db\Mapping\EntityOutOfSyncException;
+use Dms\Core\Persistence\Db\Mapping\IEntityMapper;
+use Dms\Core\Persistence\Db\PersistenceContext;
+use Dms\Core\Persistence\Db\Query\Delete;
+use Dms\Core\Persistence\Db\Query\Expression\ColumnExpr;
+use Dms\Core\Persistence\Db\Query\Expression\Expr;
+use Dms\Core\Persistence\Db\Query\Reorder;
+use Dms\Core\Persistence\Db\Query\Select;
 
 /**
  * An implementation of the repository using the db orm implementation.

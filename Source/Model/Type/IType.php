@@ -1,8 +1,8 @@
 <?php
 
-namespace Iddigital\Cms\Core\Model\Type;
+namespace Dms\Core\Model\Type;
 
-use Iddigital\Cms\Core\Model\Criteria\Condition\ConditionOperatorType;
+use Dms\Core\Model\Criteria\Condition\ConditionOperatorType;
 
 /**
  * The type interface.

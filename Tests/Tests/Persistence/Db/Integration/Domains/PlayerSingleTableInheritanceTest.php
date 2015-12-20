@@ -1,20 +1,20 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Domains;
+namespace Dms\Core\Tests\Persistence\Db\Integration\Domains;
 
-use Iddigital\Cms\Core\Persistence\Db\Mapping\IOrm;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Column;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Type\Enum;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Type\Integer;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Type\Varchar;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Sport\Bowler;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Sport\Cricketer;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Sport\Footballer;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Sport\Mapper\SingleTableInheritancePlayerMapper;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Sport\Player;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\DbIntegrationTest;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Mock\MockDatabase;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Mock\MockTable;
+use Dms\Core\Persistence\Db\Mapping\IOrm;
+use Dms\Core\Persistence\Db\Schema\Column;
+use Dms\Core\Persistence\Db\Schema\Type\Enum;
+use Dms\Core\Persistence\Db\Schema\Type\Integer;
+use Dms\Core\Persistence\Db\Schema\Type\Varchar;
+use Dms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Sport\Bowler;
+use Dms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Sport\Cricketer;
+use Dms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Sport\Footballer;
+use Dms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Sport\Mapper\SingleTableInheritancePlayerMapper;
+use Dms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Sport\Player;
+use Dms\Core\Tests\Persistence\Db\Integration\Mapping\DbIntegrationTest;
+use Dms\Core\Tests\Persistence\Db\Mock\MockDatabase;
+use Dms\Core\Tests\Persistence\Db\Mock\MockTable;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

@@ -1,8 +1,8 @@
 <?php
 
-namespace Iddigital\Cms\Core\Form\Field\Processor;
+namespace Dms\Core\Form\Field\Processor;
 
-use Iddigital\Cms\Core\Model\Type\Builder\Type;
+use Dms\Core\Model\Type\Builder\Type;
 
 /**
  * The trim processor.

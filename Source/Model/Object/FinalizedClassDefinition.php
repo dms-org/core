@@ -1,10 +1,10 @@
 <?php
 
-namespace Iddigital\Cms\Core\Model\Object;
+namespace Dms\Core\Model\Object;
 
-use Iddigital\Cms\Core\Exception;
-use Iddigital\Cms\Core\Model\Type\IType;
-use Iddigital\Cms\Core\Util\Debug;
+use Dms\Core\Exception;
+use Dms\Core\Model\Type\IType;
+use Dms\Core\Util\Debug;
 
 /**
  * The finalized class definition class.

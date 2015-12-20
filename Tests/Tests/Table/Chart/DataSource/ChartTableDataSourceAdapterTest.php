@@ -1,16 +1,16 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Table\Chart\DataSource;
+namespace Dms\Core\Tests\Table\Chart\DataSource;
 
-use Iddigital\Cms\Common\Testing\CmsTestCase;
-use Iddigital\Cms\Core\Form\Field\Builder\Field;
-use Iddigital\Cms\Core\Model\Criteria\OrderingDirection;
-use Iddigital\Cms\Core\Table\Builder\Column;
-use Iddigital\Cms\Core\Table\Builder\Table;
-use Iddigital\Cms\Core\Table\Chart\DataSource\Definition\ChartTableMapperDefinition;
-use Iddigital\Cms\Core\Table\Chart\Structure\ChartAxis;
-use Iddigital\Cms\Core\Table\Chart\Structure\LineChart;
-use Iddigital\Cms\Core\Table\DataSource\ArrayTableDataSource;
+use Dms\Common\Testing\CmsTestCase;
+use Dms\Core\Form\Field\Builder\Field;
+use Dms\Core\Model\Criteria\OrderingDirection;
+use Dms\Core\Table\Builder\Column;
+use Dms\Core\Table\Builder\Table;
+use Dms\Core\Table\Chart\DataSource\Definition\ChartTableMapperDefinition;
+use Dms\Core\Table\Chart\Structure\ChartAxis;
+use Dms\Core\Table\Chart\Structure\LineChart;
+use Dms\Core\Table\DataSource\ArrayTableDataSource;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

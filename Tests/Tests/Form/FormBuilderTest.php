@@ -1,10 +1,10 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Form;
+namespace Dms\Core\Tests\Form;
 
-use Iddigital\Cms\Core\Form\Builder\Form;
-use Iddigital\Cms\Core\Form\ConflictingFieldNameException;
-use Iddigital\Cms\Core\Form\Field\Builder\Field;
+use Dms\Core\Form\Builder\Form;
+use Dms\Core\Form\ConflictingFieldNameException;
+use Dms\Core\Form\Field\Builder\Field;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

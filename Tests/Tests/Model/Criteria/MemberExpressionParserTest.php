@@ -1,26 +1,26 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Model\Criteria;
+namespace Dms\Core\Tests\Model\Criteria;
 
-use Iddigital\Cms\Common\Testing\CmsTestCase;
-use Iddigital\Cms\Core\Model\Criteria\IEntitySetProvider;
-use Iddigital\Cms\Core\Model\Criteria\InvalidMemberExpressionException;
-use Iddigital\Cms\Core\Model\Criteria\IRelationPropertyIdTypeProvider;
-use Iddigital\Cms\Core\Model\Criteria\Member\CollectionCountMethodExpression;
-use Iddigital\Cms\Core\Model\Criteria\Member\LoadAllIdsMethodExpression;
-use Iddigital\Cms\Core\Model\Criteria\Member\LoadIdMethodExpression;
-use Iddigital\Cms\Core\Model\Criteria\Member\MemberPropertyExpression;
-use Iddigital\Cms\Core\Model\Criteria\Member\ObjectSetAverageMethodExpression;
-use Iddigital\Cms\Core\Model\Criteria\Member\ObjectSetFlattenMethodExpression;
-use Iddigital\Cms\Core\Model\Criteria\Member\ObjectSetMaximumMethodExpression;
-use Iddigital\Cms\Core\Model\Criteria\Member\ObjectSetMinimumMethodExpression;
-use Iddigital\Cms\Core\Model\Criteria\Member\ObjectSetSumMethodExpression;
-use Iddigital\Cms\Core\Model\Criteria\Member\SelfExpression;
-use Iddigital\Cms\Core\Model\Criteria\MemberExpressionParser;
-use Iddigital\Cms\Core\Model\Criteria\NestedMember;
-use Iddigital\Cms\Core\Model\Type\Builder\Type;
-use Iddigital\Cms\Core\Tests\Model\Criteria\Fixtures\ParentEntity;
-use Iddigital\Cms\Core\Tests\Model\Criteria\Fixtures\RelatedEntity;
+use Dms\Common\Testing\CmsTestCase;
+use Dms\Core\Model\Criteria\IEntitySetProvider;
+use Dms\Core\Model\Criteria\InvalidMemberExpressionException;
+use Dms\Core\Model\Criteria\IRelationPropertyIdTypeProvider;
+use Dms\Core\Model\Criteria\Member\CollectionCountMethodExpression;
+use Dms\Core\Model\Criteria\Member\LoadAllIdsMethodExpression;
+use Dms\Core\Model\Criteria\Member\LoadIdMethodExpression;
+use Dms\Core\Model\Criteria\Member\MemberPropertyExpression;
+use Dms\Core\Model\Criteria\Member\ObjectSetAverageMethodExpression;
+use Dms\Core\Model\Criteria\Member\ObjectSetFlattenMethodExpression;
+use Dms\Core\Model\Criteria\Member\ObjectSetMaximumMethodExpression;
+use Dms\Core\Model\Criteria\Member\ObjectSetMinimumMethodExpression;
+use Dms\Core\Model\Criteria\Member\ObjectSetSumMethodExpression;
+use Dms\Core\Model\Criteria\Member\SelfExpression;
+use Dms\Core\Model\Criteria\MemberExpressionParser;
+use Dms\Core\Model\Criteria\NestedMember;
+use Dms\Core\Model\Type\Builder\Type;
+use Dms\Core\Tests\Model\Criteria\Fixtures\ParentEntity;
+use Dms\Core\Tests\Model\Criteria\Fixtures\RelatedEntity;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

@@ -1,17 +1,17 @@
 <?php
 
-namespace Iddigital\Cms\Core\Persistence\Db\Mapping\Hierarchy;
+namespace Dms\Core\Persistence\Db\Mapping\Hierarchy;
 
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\FinalizedMapperDefinition;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\IRelation;
-use Iddigital\Cms\Core\Persistence\Db\PersistenceContext;
-use Iddigital\Cms\Core\Persistence\Db\Query\Delete;
-use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Expr;
-use Iddigital\Cms\Core\Persistence\Db\Query\Query;
-use Iddigital\Cms\Core\Persistence\Db\Query\Select;
-use Iddigital\Cms\Core\Persistence\Db\Row;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Table;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Persistence\Db\Mapping\Definition\FinalizedMapperDefinition;
+use Dms\Core\Persistence\Db\Mapping\Relation\IRelation;
+use Dms\Core\Persistence\Db\PersistenceContext;
+use Dms\Core\Persistence\Db\Query\Delete;
+use Dms\Core\Persistence\Db\Query\Expression\Expr;
+use Dms\Core\Persistence\Db\Query\Query;
+use Dms\Core\Persistence\Db\Query\Select;
+use Dms\Core\Persistence\Db\Row;
+use Dms\Core\Persistence\Db\Schema\Table;
 
 /**
  * The embedded object mapping class.

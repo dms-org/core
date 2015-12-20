@@ -1,8 +1,8 @@
 <?php
 
-namespace Iddigital\Cms\Core\Module\Definition\Table;
+namespace Dms\Core\Module\Definition\Table;
 
-use Iddigital\Cms\Core\Model\IObjectSet;
+use Dms\Core\Model\IObjectSet;
 
 /**
  * The table definer class

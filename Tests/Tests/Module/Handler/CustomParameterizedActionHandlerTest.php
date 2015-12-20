@@ -1,12 +1,12 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Module\Handler;
+namespace Dms\Core\Tests\Module\Handler;
 
-use Iddigital\Cms\Core\Model\IDataTransferObject;
-use Iddigital\Cms\Core\Module\Handler\CustomParameterizedActionHandler;
-use Iddigital\Cms\Core\Module\InvalidHandlerClassException;
-use Iddigital\Cms\Core\Module\IParameterizedActionHandler;
-use Iddigital\Cms\Core\Tests\Module\Handler\Fixtures\ParamDto;
+use Dms\Core\Model\IDataTransferObject;
+use Dms\Core\Module\Handler\CustomParameterizedActionHandler;
+use Dms\Core\Module\InvalidHandlerClassException;
+use Dms\Core\Module\IParameterizedActionHandler;
+use Dms\Core\Tests\Module\Handler\Fixtures\ParamDto;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

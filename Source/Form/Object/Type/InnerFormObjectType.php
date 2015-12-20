@@ -1,13 +1,13 @@
 <?php
 
-namespace Iddigital\Cms\Core\Form\Object\Type;
+namespace Dms\Core\Form\Object\Type;
 
-use Iddigital\Cms\Core\Form\Field\Type\InnerFormType;
-use Iddigital\Cms\Core\Form\Object\FormObject;
-use Iddigital\Cms\Core\Form\Object\Processor\InnerFormObjectProcessor;
-use Iddigital\Cms\Core\Model\Type\ArrayType;
-use Iddigital\Cms\Core\Model\Type\IType as IPhpType;
-use Iddigital\Cms\Core\Model\Type\MixedType;
+use Dms\Core\Form\Field\Type\InnerFormType;
+use Dms\Core\Form\Object\FormObject;
+use Dms\Core\Form\Object\Processor\InnerFormObjectProcessor;
+use Dms\Core\Model\Type\ArrayType;
+use Dms\Core\Model\Type\IType as IPhpType;
+use Dms\Core\Model\Type\MixedType;
 
 /**
  * The inner form object type class.

@@ -1,9 +1,9 @@
 <?php
 
-namespace Iddigital\Cms\Core\Persistence\Db\Connection;
+namespace Dms\Core\Persistence\Db\Connection;
 
-use Iddigital\Cms\Core\Exception\InvalidOperationException;
-use Iddigital\Cms\Core\Persistence\Db\Platform\IPlatform;
+use Dms\Core\Exception\InvalidOperationException;
+use Dms\Core\Persistence\Db\Platform\IPlatform;
 
 /**
  * The query base class.

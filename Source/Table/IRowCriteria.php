@@ -1,12 +1,12 @@
 <?php
 
-namespace Iddigital\Cms\Core\Table;
+namespace Dms\Core\Table;
 
-use Iddigital\Cms\Core\Exception;
-use Iddigital\Cms\Core\Table\Criteria\ColumnCondition;
-use Iddigital\Cms\Core\Table\Criteria\ColumnGrouping;
-use Iddigital\Cms\Core\Table\Criteria\ColumnOrdering;
-use Iddigital\Cms\Core\Table\Criteria\RowCriteria;
+use Dms\Core\Exception;
+use Dms\Core\Table\Criteria\ColumnCondition;
+use Dms\Core\Table\Criteria\ColumnGrouping;
+use Dms\Core\Table\Criteria\ColumnOrdering;
+use Dms\Core\Table\Criteria\RowCriteria;
 
 /**
  * The row search criteria interface.

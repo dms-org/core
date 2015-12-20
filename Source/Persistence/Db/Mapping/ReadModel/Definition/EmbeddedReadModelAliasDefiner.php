@@ -1,6 +1,6 @@
 <?php
 
-namespace Iddigital\Cms\Core\Persistence\Db\Mapping\ReadModel\Definition;
+namespace Dms\Core\Persistence\Db\Mapping\ReadModel\Definition;
 
 /**
  * The embedded read model property name alias definer.

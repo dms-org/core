@@ -1,10 +1,10 @@
 <?php
 
-namespace Iddigital\Cms\Core\Common\Crud\Action\Table;
+namespace Dms\Core\Common\Crud\Action\Table;
 
-use Iddigital\Cms\Core\Auth\UserForbiddenException;
-use Iddigital\Cms\Core\Common\Crud\Action\Object\IObjectAction;
-use Iddigital\Cms\Core\Form\InvalidFormSubmissionException;
+use Dms\Core\Auth\UserForbiddenException;
+use Dms\Core\Common\Crud\Action\Object\IObjectAction;
+use Dms\Core\Form\InvalidFormSubmissionException;
 
 /**
  * The reorder object action interface.

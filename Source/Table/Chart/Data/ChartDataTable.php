@@ -1,9 +1,9 @@
 <?php
 
-namespace Iddigital\Cms\Core\Table\Chart\Data;
+namespace Dms\Core\Table\Chart\Data;
 
-use Iddigital\Cms\Core\Table\Chart\IChartDataTable;
-use Iddigital\Cms\Core\Table\Chart\IChartStructure;
+use Dms\Core\Table\Chart\IChartDataTable;
+use Dms\Core\Table\Chart\IChartStructure;
 
 /**
  * The chart data table class.

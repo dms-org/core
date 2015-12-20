@@ -1,17 +1,17 @@
 <?php
 
-namespace Iddigital\Cms\Core\Persistence\Db\Connection;
+namespace Dms\Core\Persistence\Db\Connection;
 
-use Iddigital\Cms\Core\Persistence\Db\Platform\CompiledQuery;
-use Iddigital\Cms\Core\Persistence\Db\Platform\IPlatform;
-use Iddigital\Cms\Core\Persistence\Db\Query\BulkUpdate;
-use Iddigital\Cms\Core\Persistence\Db\Query\Delete;
-use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Expr;
-use Iddigital\Cms\Core\Persistence\Db\Query\ResequenceOrderIndexColumn;
-use Iddigital\Cms\Core\Persistence\Db\Query\Select;
-use Iddigital\Cms\Core\Persistence\Db\Query\Update;
-use Iddigital\Cms\Core\Persistence\Db\Query\Upsert;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Table;
+use Dms\Core\Persistence\Db\Platform\CompiledQuery;
+use Dms\Core\Persistence\Db\Platform\IPlatform;
+use Dms\Core\Persistence\Db\Query\BulkUpdate;
+use Dms\Core\Persistence\Db\Query\Delete;
+use Dms\Core\Persistence\Db\Query\Expression\Expr;
+use Dms\Core\Persistence\Db\Query\ResequenceOrderIndexColumn;
+use Dms\Core\Persistence\Db\Query\Select;
+use Dms\Core\Persistence\Db\Query\Update;
+use Dms\Core\Persistence\Db\Query\Upsert;
+use Dms\Core\Persistence\Db\Schema\Table;
 
 /**
  * The connection base class.

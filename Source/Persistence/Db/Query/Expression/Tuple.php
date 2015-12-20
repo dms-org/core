@@ -1,10 +1,10 @@
 <?php
 
-namespace Iddigital\Cms\Core\Persistence\Db\Query\Expression;
+namespace Dms\Core\Persistence\Db\Query\Expression;
 
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Exception\InvalidOperationException;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Type\Type;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Exception\InvalidOperationException;
+use Dms\Core\Persistence\Db\Schema\Type\Type;
 
 /**
  * The where condition class.

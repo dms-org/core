@@ -1,15 +1,15 @@
 <?php
 
-namespace Iddigital\Cms\Core\Persistence\Db\Connection;
+namespace Dms\Core\Persistence\Db\Connection;
 
-use Iddigital\Cms\Core\Persistence\Db\Platform\IPlatform;
-use Iddigital\Cms\Core\Persistence\Db\Query\BulkUpdate;
-use Iddigital\Cms\Core\Persistence\Db\Query\Delete;
-use Iddigital\Cms\Core\Persistence\Db\Query\ResequenceOrderIndexColumn;
-use Iddigital\Cms\Core\Persistence\Db\Query\Select;
-use Iddigital\Cms\Core\Persistence\Db\Query\Update;
-use Iddigital\Cms\Core\Persistence\Db\Query\Upsert;
-use Iddigital\Cms\Core\Persistence\Db\RowSet;
+use Dms\Core\Persistence\Db\Platform\IPlatform;
+use Dms\Core\Persistence\Db\Query\BulkUpdate;
+use Dms\Core\Persistence\Db\Query\Delete;
+use Dms\Core\Persistence\Db\Query\ResequenceOrderIndexColumn;
+use Dms\Core\Persistence\Db\Query\Select;
+use Dms\Core\Persistence\Db\Query\Update;
+use Dms\Core\Persistence\Db\Query\Upsert;
+use Dms\Core\Persistence\Db\RowSet;
 
 /**
  * The db connection interface.

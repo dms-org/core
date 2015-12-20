@@ -1,10 +1,10 @@
 <?php
 
-namespace Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Reference;
+namespace Dms\Core\Persistence\Db\Mapping\Relation\Reference;
 
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\IEntityMapper;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\IRelation;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Persistence\Db\Mapping\IEntityMapper;
+use Dms\Core\Persistence\Db\Mapping\Relation\IRelation;
 
 /**
  * The relation reference base class

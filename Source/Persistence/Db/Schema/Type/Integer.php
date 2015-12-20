@@ -1,6 +1,6 @@
 <?php
 
-namespace Iddigital\Cms\Core\Persistence\Db\Schema\Type;
+namespace Dms\Core\Persistence\Db\Schema\Type;
 
 /**
  * The db integer type

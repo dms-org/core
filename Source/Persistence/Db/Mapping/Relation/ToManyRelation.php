@@ -1,23 +1,23 @@
 <?php
 
-namespace Iddigital\Cms\Core\Persistence\Db\Mapping\Relation;
+namespace Dms\Core\Persistence\Db\Mapping\Relation;
 
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Model\IEntity;
-use Iddigital\Cms\Core\Persistence\Db\LoadingContext;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\ParentChildrenMap;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\ParentMapBase;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Mode\IRelationMode;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Reference\IToManyRelationReference;
-use Iddigital\Cms\Core\Persistence\Db\PersistenceContext;
-use Iddigital\Cms\Core\Persistence\Db\Query\Clause\Join;
-use Iddigital\Cms\Core\Persistence\Db\Query\Clause\Ordering;
-use Iddigital\Cms\Core\Persistence\Db\Query\Delete;
-use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Expr;
-use Iddigital\Cms\Core\Persistence\Db\Query\Select;
-use Iddigital\Cms\Core\Persistence\Db\Row;
-use Iddigital\Cms\Core\Persistence\Db\RowSet;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Column;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Model\IEntity;
+use Dms\Core\Persistence\Db\LoadingContext;
+use Dms\Core\Persistence\Db\Mapping\ParentChildrenMap;
+use Dms\Core\Persistence\Db\Mapping\ParentMapBase;
+use Dms\Core\Persistence\Db\Mapping\Relation\Mode\IRelationMode;
+use Dms\Core\Persistence\Db\Mapping\Relation\Reference\IToManyRelationReference;
+use Dms\Core\Persistence\Db\PersistenceContext;
+use Dms\Core\Persistence\Db\Query\Clause\Join;
+use Dms\Core\Persistence\Db\Query\Clause\Ordering;
+use Dms\Core\Persistence\Db\Query\Delete;
+use Dms\Core\Persistence\Db\Query\Expression\Expr;
+use Dms\Core\Persistence\Db\Query\Select;
+use Dms\Core\Persistence\Db\Row;
+use Dms\Core\Persistence\Db\RowSet;
+use Dms\Core\Persistence\Db\Schema\Column;
 
 /**
  * The to many relation class.

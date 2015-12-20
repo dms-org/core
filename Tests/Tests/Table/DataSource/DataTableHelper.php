@@ -1,8 +1,8 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Table\DataSource;
+namespace Dms\Core\Tests\Table\DataSource;
 
-use Iddigital\Cms\Core\Table\IDataTable;
+use Dms\Core\Table\IDataTable;
 
 /**
  *

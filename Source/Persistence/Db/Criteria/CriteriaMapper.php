@@ -1,31 +1,31 @@
 <?php
 
-namespace Iddigital\Cms\Core\Persistence\Db\Criteria;
+namespace Dms\Core\Persistence\Db\Criteria;
 
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Model\Criteria\Condition\AndCondition;
-use Iddigital\Cms\Core\Model\Criteria\Condition\Condition;
-use Iddigital\Cms\Core\Model\Criteria\Condition\InstanceOfCondition;
-use Iddigital\Cms\Core\Model\Criteria\Condition\MemberCondition;
-use Iddigital\Cms\Core\Model\Criteria\Condition\NotCondition;
-use Iddigital\Cms\Core\Model\Criteria\Condition\OrCondition;
-use Iddigital\Cms\Core\Model\Criteria\Criteria;
-use Iddigital\Cms\Core\Model\Criteria\MemberExpressionParser;
-use Iddigital\Cms\Core\Model\Criteria\MemberOrdering;
-use Iddigital\Cms\Core\Model\Criteria\NestedMember;
-use Iddigital\Cms\Core\Model\ICriteria;
-use Iddigital\Cms\Core\Model\Object\FinalizedClassDefinition;
-use Iddigital\Cms\Core\Persistence\Db\Connection\IConnection;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\FinalizedMapperDefinition;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\IEntityMapper;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\ISeparateTableRelation;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\IToManyRelation;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\IToOneRelation;
-use Iddigital\Cms\Core\Persistence\Db\Query;
-use Iddigital\Cms\Core\Persistence\Db\Query\Clause\Join;
-use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Expr;
-use Iddigital\Cms\Core\Persistence\Db\Query\Select;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Table;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Model\Criteria\Condition\AndCondition;
+use Dms\Core\Model\Criteria\Condition\Condition;
+use Dms\Core\Model\Criteria\Condition\InstanceOfCondition;
+use Dms\Core\Model\Criteria\Condition\MemberCondition;
+use Dms\Core\Model\Criteria\Condition\NotCondition;
+use Dms\Core\Model\Criteria\Condition\OrCondition;
+use Dms\Core\Model\Criteria\Criteria;
+use Dms\Core\Model\Criteria\MemberExpressionParser;
+use Dms\Core\Model\Criteria\MemberOrdering;
+use Dms\Core\Model\Criteria\NestedMember;
+use Dms\Core\Model\ICriteria;
+use Dms\Core\Model\Object\FinalizedClassDefinition;
+use Dms\Core\Persistence\Db\Connection\IConnection;
+use Dms\Core\Persistence\Db\Mapping\Definition\FinalizedMapperDefinition;
+use Dms\Core\Persistence\Db\Mapping\IEntityMapper;
+use Dms\Core\Persistence\Db\Mapping\Relation\ISeparateTableRelation;
+use Dms\Core\Persistence\Db\Mapping\Relation\IToManyRelation;
+use Dms\Core\Persistence\Db\Mapping\Relation\IToOneRelation;
+use Dms\Core\Persistence\Db\Query;
+use Dms\Core\Persistence\Db\Query\Clause\Join;
+use Dms\Core\Persistence\Db\Query\Expression\Expr;
+use Dms\Core\Persistence\Db\Query\Select;
+use Dms\Core\Persistence\Db\Schema\Table;
 
 /**
  * The criteria mapper class

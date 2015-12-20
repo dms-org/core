@@ -1,8 +1,8 @@
 <?php
 
-namespace Iddigital\Cms\Core\Persistence\Db\Mapping;
+namespace Dms\Core\Persistence\Db\Mapping;
 
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Orm\OrmDefinition;
+use Dms\Core\Persistence\Db\Mapping\Definition\Orm\OrmDefinition;
 
 /**
  * The custom orm class.

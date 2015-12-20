@@ -1,10 +1,10 @@
 <?php
 
-namespace Iddigital\Cms\Core\Persistence\Db\Doctrine\Resequence;
+namespace Dms\Core\Persistence\Db\Doctrine\Resequence;
 
 use Doctrine\DBAL\Query\QueryBuilder;
-use Iddigital\Cms\Core\Persistence\Db\Platform\CompiledQuery;
-use Iddigital\Cms\Core\Persistence\Db\Query\ResequenceOrderIndexColumn;
+use Dms\Core\Persistence\Db\Platform\CompiledQuery;
+use Dms\Core\Persistence\Db\Query\ResequenceOrderIndexColumn;
 
 /**
  * The default implementation for the column resequence compiler.

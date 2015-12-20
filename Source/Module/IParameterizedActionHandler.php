@@ -1,10 +1,10 @@
 <?php
 
-namespace Iddigital\Cms\Core\Module;
+namespace Dms\Core\Module;
 
-use Iddigital\Cms\Core\Exception\TypeMismatchException;
-use Iddigital\Cms\Core\Form;
-use Iddigital\Cms\Core\Persistence;
+use Dms\Core\Exception\TypeMismatchException;
+use Dms\Core\Form;
+use Dms\Core\Persistence;
 
 /**
  * The parameterized action handler interface.

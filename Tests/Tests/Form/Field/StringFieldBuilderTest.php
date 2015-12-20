@@ -1,18 +1,18 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Form\Field;
+namespace Dms\Core\Tests\Form\Field;
 
-use Iddigital\Cms\Core\Form\Field\Builder\Field as Field;
-use Iddigital\Cms\Core\Form\Field\Processor\TrimProcessor;
-use Iddigital\Cms\Core\Form\Field\Processor\TypeProcessor;
-use Iddigital\Cms\Core\Form\Field\Processor\Validator\MaxLengthValidator;
-use Iddigital\Cms\Core\Form\Field\Processor\Validator\MinLengthValidator;
-use Iddigital\Cms\Core\Form\Field\Processor\Validator\RequiredValidator;
-use Iddigital\Cms\Core\Form\Field\Builder\StringFieldBuilder;
-use Iddigital\Cms\Core\Form\Field\Type\StringType;
-use Iddigital\Cms\Core\Language\Message;
-use Iddigital\Cms\Core\Model\Type\Builder\Type;
-use Iddigital\Cms\Core\Model\Type\ScalarType;
+use Dms\Core\Form\Field\Builder\Field as Field;
+use Dms\Core\Form\Field\Processor\TrimProcessor;
+use Dms\Core\Form\Field\Processor\TypeProcessor;
+use Dms\Core\Form\Field\Processor\Validator\MaxLengthValidator;
+use Dms\Core\Form\Field\Processor\Validator\MinLengthValidator;
+use Dms\Core\Form\Field\Processor\Validator\RequiredValidator;
+use Dms\Core\Form\Field\Builder\StringFieldBuilder;
+use Dms\Core\Form\Field\Type\StringType;
+use Dms\Core\Language\Message;
+use Dms\Core\Model\Type\Builder\Type;
+use Dms\Core\Model\Type\ScalarType;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

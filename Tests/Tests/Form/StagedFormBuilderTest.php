@@ -1,14 +1,14 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Form;
+namespace Dms\Core\Tests\Form;
 
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Form\Builder\Form;
-use Iddigital\Cms\Core\Form\Builder\StagedForm;
-use Iddigital\Cms\Core\Form\Field\Builder\Field;
-use Iddigital\Cms\Core\Form\Field\Type\StringType;
-use Iddigital\Cms\Core\Form\Stage\DependentFormStage;
-use Iddigital\Cms\Core\Form\Stage\IndependentFormStage;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Form\Builder\Form;
+use Dms\Core\Form\Builder\StagedForm;
+use Dms\Core\Form\Field\Builder\Field;
+use Dms\Core\Form\Field\Type\StringType;
+use Dms\Core\Form\Stage\DependentFormStage;
+use Dms\Core\Form\Stage\IndependentFormStage;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

@@ -1,13 +1,13 @@
 <?php
 
-namespace Iddigital\Cms\Core\Module\Action;
+namespace Dms\Core\Module\Action;
 
-use Iddigital\Cms\Core\Auth\IAuthSystem;
-use Iddigital\Cms\Core\Auth\IPermission;
-use Iddigital\Cms\Core\Form;
-use Iddigital\Cms\Core\Module\Handler\CustomParameterizedActionHandler;
-use Iddigital\Cms\Core\Module\IParameterizedActionHandler;
-use Iddigital\Cms\Core\Module\IStagedFormDtoMapping;
+use Dms\Core\Auth\IAuthSystem;
+use Dms\Core\Auth\IPermission;
+use Dms\Core\Form;
+use Dms\Core\Module\Handler\CustomParameterizedActionHandler;
+use Dms\Core\Module\IParameterizedActionHandler;
+use Dms\Core\Module\IStagedFormDtoMapping;
 
 /**
  * The self-handling parameterized action class.

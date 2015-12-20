@@ -4,16 +4,16 @@ Form Objects
 Form objects allow you to reuse a particular form by encapsulating its fields as a class.
 Additionally the class acts as a strongly-typed DTO for the submitted form as an extra benefit.
 
-Simple form objects can be defined using the `Iddigital\Cms\Core\Form\Object\IndependentFormObject` base class.
+Simple form objects can be defined using the `Dms\Core\Form\Object\IndependentFormObject` base class.
 
 ```php
 <?php
 
 namespace Some\Name\Space;
 
-use Iddigital\Cms\Core\Form\Object\IndependentFormObject;
-use Iddigital\Cms\Core\Form\Object\FormObjectDefinition;
-use Iddigital\Cms\Core\Form\InvalidFormSubmissionException;
+use Dms\Core\Form\Object\IndependentFormObject;
+use Dms\Core\Form\Object\FormObjectDefinition;
+use Dms\Core\Form\InvalidFormSubmissionException;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>
@@ -90,13 +90,13 @@ A basic staged form object can be defined as follows:
 
 namespace Some\Name\Space;
 
-use Iddigital\Cms\Core\Model\Object\ClassDefinition;
-use Iddigital\Cms\Core\Form\Object\Stage\StagedFormObject;
-use Iddigital\Cms\Core\Form\Object\Stage\StagedFormObjectDefinition;
-use Iddigital\Cms\Core\Form\Object\FormObjectDefinition;
-use Iddigital\Cms\Core\Form\InvalidFormSubmissionException;
-use Iddigital\Cms\Core\Model\Type\Builder\Type;
-use Iddigital\Cms\Core\Form\Field\Builder\Field;
+use Dms\Core\Model\Object\ClassDefinition;
+use Dms\Core\Form\Object\Stage\StagedFormObject;
+use Dms\Core\Form\Object\Stage\StagedFormObjectDefinition;
+use Dms\Core\Form\Object\FormObjectDefinition;
+use Dms\Core\Form\InvalidFormSubmissionException;
+use Dms\Core\Model\Type\Builder\Type;
+use Dms\Core\Form\Field\Builder\Field;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

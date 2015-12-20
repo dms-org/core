@@ -1,12 +1,12 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Form;
+namespace Dms\Core\Tests\Form;
 
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Form\Builder\Form;
-use Iddigital\Cms\Core\Form\Field\Builder\Field;
-use Iddigital\Cms\Core\Form\IField;
-use Iddigital\Cms\Core\Form\IStagedForm;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Form\Builder\Form;
+use Dms\Core\Form\Field\Builder\Field;
+use Dms\Core\Form\IField;
+use Dms\Core\Form\IStagedForm;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

@@ -1,14 +1,14 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Package;
+namespace Dms\Core\Tests\Package;
 
-use Iddigital\Cms\Common\Testing\CmsTestCase;
-use Iddigital\Cms\Core\Auth\Permission;
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Tests\Helpers\Mock\MockingIocContainer;
-use Iddigital\Cms\Core\Tests\Module\Fixtures\ModuleWithActions;
-use Iddigital\Cms\Core\Tests\Module\Fixtures\ModuleWithCharts;
-use Iddigital\Cms\Core\Tests\Package\Fixtures\TestPackage;
+use Dms\Common\Testing\CmsTestCase;
+use Dms\Core\Auth\Permission;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Tests\Helpers\Mock\MockingIocContainer;
+use Dms\Core\Tests\Module\Fixtures\ModuleWithActions;
+use Dms\Core\Tests\Module\Fixtures\ModuleWithCharts;
+use Dms\Core\Tests\Package\Fixtures\TestPackage;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

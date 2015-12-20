@@ -1,15 +1,15 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Model\Criteria;
+namespace Dms\Core\Tests\Model\Criteria;
 
-use Iddigital\Cms\Common\Testing\CmsTestCase;
-use Iddigital\Cms\Core\Model\Criteria\Member\CollectionCountMethodExpression;
-use Iddigital\Cms\Core\Model\Criteria\Member\MemberPropertyExpression;
-use Iddigital\Cms\Core\Model\Criteria\MemberExpressionNode;
-use Iddigital\Cms\Core\Model\Criteria\NestedMember;
-use Iddigital\Cms\Core\Model\Criteria\LoadCriteria;
-use Iddigital\Cms\Core\Tests\Model\Fixtures\SubObject;
-use Iddigital\Cms\Core\Tests\Model\Fixtures\TestEntity;
+use Dms\Common\Testing\CmsTestCase;
+use Dms\Core\Model\Criteria\Member\CollectionCountMethodExpression;
+use Dms\Core\Model\Criteria\Member\MemberPropertyExpression;
+use Dms\Core\Model\Criteria\MemberExpressionNode;
+use Dms\Core\Model\Criteria\NestedMember;
+use Dms\Core\Model\Criteria\LoadCriteria;
+use Dms\Core\Tests\Model\Fixtures\SubObject;
+use Dms\Core\Tests\Model\Fixtures\TestEntity;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

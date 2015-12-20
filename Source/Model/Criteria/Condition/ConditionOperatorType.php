@@ -1,8 +1,8 @@
 <?php
 
-namespace Iddigital\Cms\Core\Model\Criteria\Condition;
+namespace Dms\Core\Model\Criteria\Condition;
 
-use Iddigital\Cms\Core\Model\Type\IType;
+use Dms\Core\Model\Type\IType;
 
 /**
  * The property condition operator type.

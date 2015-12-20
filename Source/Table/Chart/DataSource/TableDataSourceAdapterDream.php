@@ -1,13 +1,13 @@
 <?php
 
-namespace Iddigital\Cms\Core\Table\Chart\DataSource;
+namespace Dms\Core\Table\Chart\DataSource;
 
-use Iddigital\Cms\Core\Form\Field\Builder\Field;
-use Iddigital\Cms\Core\Table\Chart\DataSource\Definition\ChartTableMapperDefinition;
-use Iddigital\Cms\Core\Table\Chart\Structure\ChartAxis;
-use Iddigital\Cms\Core\Table\Chart\Structure\LineChart;
-use Iddigital\Cms\Core\Table\Chart\Structure\PieChart;
-use Iddigital\Cms\Core\Table\Data\TableRow;
+use Dms\Core\Form\Field\Builder\Field;
+use Dms\Core\Table\Chart\DataSource\Definition\ChartTableMapperDefinition;
+use Dms\Core\Table\Chart\Structure\ChartAxis;
+use Dms\Core\Table\Chart\Structure\LineChart;
+use Dms\Core\Table\Chart\Structure\PieChart;
+use Dms\Core\Table\Data\TableRow;
 
 /**
  * The table data source adapter class.

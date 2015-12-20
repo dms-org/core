@@ -1,11 +1,11 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Model\Object;
+namespace Dms\Core\Tests\Model\Object;
 
-use Iddigital\Cms\Core\Model\Object\InvalidPropertyValueException;
-use Iddigital\Cms\Core\Model\Object\TypedObject;
-use Iddigital\Cms\Core\Model\Object\UndefinedPropertyException;
-use Iddigital\Cms\Core\Tests\Model\Object\Fixtures\Person;
+use Dms\Core\Model\Object\InvalidPropertyValueException;
+use Dms\Core\Model\Object\TypedObject;
+use Dms\Core\Model\Object\UndefinedPropertyException;
+use Dms\Core\Tests\Model\Object\Fixtures\Person;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

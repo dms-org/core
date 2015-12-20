@@ -1,6 +1,6 @@
 <?php
 
-namespace Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\ForeignKey;
+namespace Dms\Core\Persistence\Db\Mapping\Definition\ForeignKey;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

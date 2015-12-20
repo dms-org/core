@@ -1,13 +1,13 @@
 <?php
 
-namespace Iddigital\Cms\Core\Common\Crud\Table;
+namespace Dms\Core\Common\Crud\Table;
 
-use Iddigital\Cms\Core\Common\Crud\Action\Table\IReorderAction;
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Module\ITableView;
-use Iddigital\Cms\Core\Module\Table\TableDisplay;
-use Iddigital\Cms\Core\Table\ITableDataSource;
-use Iddigital\Cms\Core\Util\Debug;
+use Dms\Core\Common\Crud\Action\Table\IReorderAction;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Module\ITableView;
+use Dms\Core\Module\Table\TableDisplay;
+use Dms\Core\Table\ITableDataSource;
+use Dms\Core\Util\Debug;
 
 /**
  * The summary table class.

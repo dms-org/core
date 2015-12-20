@@ -1,9 +1,9 @@
 <?php
 
-namespace Iddigital\Cms\Core\Auth;
+namespace Dms\Core\Auth;
 
-use Iddigital\Cms\Core\Model\Object\ClassDefinition;
-use Iddigital\Cms\Core\Model\Object\ValueObject;
+use Dms\Core\Model\Object\ClassDefinition;
+use Dms\Core\Model\Object\ValueObject;
 
 class Permission extends ValueObject implements IPermission
 {

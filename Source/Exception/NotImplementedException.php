@@ -1,6 +1,6 @@
 <?php
 
-namespace Iddigital\Cms\Core\Exception;
+namespace Dms\Core\Exception;
 
 /**
  * Exception for unimplemented method.

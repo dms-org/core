@@ -1,14 +1,14 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Module;
+namespace Dms\Core\Tests\Module;
 
-use Iddigital\Cms\Common\Testing\CmsTestCase;
-use Iddigital\Cms\Core\Auth\IPermission;
-use Iddigital\Cms\Core\Auth\IUser;
-use Iddigital\Cms\Core\Module\Module;
-use Iddigital\Cms\Core\Table\IDataTable;
-use Iddigital\Cms\Core\Tests\Module\Mock\MockAuthSystem;
-use Iddigital\Cms\Core\Tests\Table\DataSource\DataTableHelper;
+use Dms\Common\Testing\CmsTestCase;
+use Dms\Core\Auth\IPermission;
+use Dms\Core\Auth\IUser;
+use Dms\Core\Module\Module;
+use Dms\Core\Table\IDataTable;
+use Dms\Core\Tests\Module\Mock\MockAuthSystem;
+use Dms\Core\Tests\Table\DataSource\DataTableHelper;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

@@ -1,9 +1,9 @@
 <?php
 
-namespace Iddigital\Cms\Core\Common\Crud\Action\Object;
+namespace Dms\Core\Common\Crud\Action\Object;
 
-use Iddigital\Cms\Core\Auth\IAuthSystem;
-use Iddigital\Cms\Core\Auth\IPermission;
+use Dms\Core\Auth\IAuthSystem;
+use Dms\Core\Auth\IPermission;
 
 /**
  * The self-handling object action class.

@@ -1,11 +1,11 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Util\Hashing;
+namespace Dms\Core\Tests\Util\Hashing;
 
-use Iddigital\Cms\Common\Testing\CmsTestCase;
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Util\Hashing\IHashable;
-use Iddigital\Cms\Core\Util\Hashing\ValueHasher;
+use Dms\Common\Testing\CmsTestCase;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Util\Hashing\IHashable;
+use Dms\Core\Util\Hashing\ValueHasher;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

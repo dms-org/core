@@ -1,24 +1,24 @@
 <?php
 
-namespace Iddigital\Cms\Core\Persistence\Db\Mapping\Definition;
+namespace Dms\Core\Persistence\Db\Mapping\Definition;
 
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Model\Object\FinalizedClassDefinition;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Relation\Accessor\PropertyAccessor;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Relation\RelationMapping;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Relation\ToManyRelationMapping;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Relation\ToOneRelationMapping;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Hierarchy\IObjectMapping;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Hook\IPersistHook;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\IEmbeddedObjectMapper;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\IObjectMapper;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\IOrm;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Locking\IOptimisticLockingStrategy;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\NullObjectMapper;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\IRelation;
-use Iddigital\Cms\Core\Persistence\Db\Schema\ForeignKey;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Table;
-use Iddigital\Cms\Core\Util\Debug;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Model\Object\FinalizedClassDefinition;
+use Dms\Core\Persistence\Db\Mapping\Definition\Relation\Accessor\PropertyAccessor;
+use Dms\Core\Persistence\Db\Mapping\Definition\Relation\RelationMapping;
+use Dms\Core\Persistence\Db\Mapping\Definition\Relation\ToManyRelationMapping;
+use Dms\Core\Persistence\Db\Mapping\Definition\Relation\ToOneRelationMapping;
+use Dms\Core\Persistence\Db\Mapping\Hierarchy\IObjectMapping;
+use Dms\Core\Persistence\Db\Mapping\Hook\IPersistHook;
+use Dms\Core\Persistence\Db\Mapping\IEmbeddedObjectMapper;
+use Dms\Core\Persistence\Db\Mapping\IObjectMapper;
+use Dms\Core\Persistence\Db\Mapping\IOrm;
+use Dms\Core\Persistence\Db\Mapping\Locking\IOptimisticLockingStrategy;
+use Dms\Core\Persistence\Db\Mapping\NullObjectMapper;
+use Dms\Core\Persistence\Db\Mapping\Relation\IRelation;
+use Dms\Core\Persistence\Db\Schema\ForeignKey;
+use Dms\Core\Persistence\Db\Schema\Table;
+use Dms\Core\Util\Debug;
 
 /**
  * The finalized mapper definition class.

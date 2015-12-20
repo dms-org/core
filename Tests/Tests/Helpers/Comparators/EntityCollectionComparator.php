@@ -1,8 +1,8 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Helpers\Comparators;
+namespace Dms\Core\Tests\Helpers\Comparators;
 
-use Iddigital\Cms\Core\Model\EntityCollection;
+use Dms\Core\Model\EntityCollection;
 use SebastianBergmann\Comparator\ArrayComparator;
 use SebastianBergmann\Comparator\ComparisonFailure;
 use SebastianBergmann\Comparator\ObjectComparator;

@@ -1,14 +1,14 @@
 <?php
 
-namespace Iddigital\Cms\Core\Table\Chart\Structure;
+namespace Dms\Core\Table\Chart\Structure;
 
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Form\IField;
-use Iddigital\Cms\Core\Table\Chart\IChartAxis;
-use Iddigital\Cms\Core\Table\Column\Column;
-use Iddigital\Cms\Core\Table\Column\Component\ColumnComponent;
-use Iddigital\Cms\Core\Table\IColumnComponent;
-use Iddigital\Cms\Core\Table\IColumnComponentType;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Form\IField;
+use Dms\Core\Table\Chart\IChartAxis;
+use Dms\Core\Table\Column\Column;
+use Dms\Core\Table\Column\Component\ColumnComponent;
+use Dms\Core\Table\IColumnComponent;
+use Dms\Core\Table\IColumnComponentType;
 
 /**
  * The chart axis class.

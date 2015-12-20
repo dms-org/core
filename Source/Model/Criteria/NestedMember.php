@@ -1,10 +1,10 @@
 <?php
 
-namespace Iddigital\Cms\Core\Model\Criteria;
+namespace Dms\Core\Model\Criteria;
 
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Model\Object\FinalizedPropertyDefinition;
-use Iddigital\Cms\Core\Model\Type\IType;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Model\Object\FinalizedPropertyDefinition;
+use Dms\Core\Model\Type\IType;
 
 /**
  * The nested member expression class.

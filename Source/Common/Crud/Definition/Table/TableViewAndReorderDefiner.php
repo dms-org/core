@@ -1,10 +1,10 @@
 <?php
 
-namespace Iddigital\Cms\Core\Common\Crud\Definition\Table;
+namespace Dms\Core\Common\Crud\Definition\Table;
 
-use Iddigital\Cms\Core\Auth\IPermission;
-use Iddigital\Cms\Core\Module\Definition\Table\TableViewDefiner;
-use Iddigital\Cms\Core\Table\ITableDataSource;
+use Dms\Core\Auth\IPermission;
+use Dms\Core\Module\Definition\Table\TableViewDefiner;
+use Dms\Core\Table\ITableDataSource;
 
 /**
  * The table view and reorder action definer class.

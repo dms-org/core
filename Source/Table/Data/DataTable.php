@@ -1,11 +1,11 @@
 <?php
 
-namespace Iddigital\Cms\Core\Table\Data;
+namespace Dms\Core\Table\Data;
 
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Table\IDataTable;
-use Iddigital\Cms\Core\Table\ITableSection;
-use Iddigital\Cms\Core\Table\ITableStructure;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Table\IDataTable;
+use Dms\Core\Table\ITableSection;
+use Dms\Core\Table\ITableStructure;
 
 /**
  * The table class

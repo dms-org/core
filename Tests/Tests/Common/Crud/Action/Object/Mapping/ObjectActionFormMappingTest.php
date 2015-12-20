@@ -1,10 +1,10 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Common\Crud\Action\Object\Mapping;
+namespace Dms\Core\Tests\Common\Crud\Action\Object\Mapping;
 
-use Iddigital\Cms\Core\Common\Crud\Action\Object\Mapping\ObjectActionFormMapping;
-use Iddigital\Cms\Core\Common\Crud\Action\Object\ObjectActionParameter;
-use Iddigital\Cms\Core\Tests\Module\Mapping\StagedFormDtoMappingTest;
+use Dms\Core\Common\Crud\Action\Object\Mapping\ObjectActionFormMapping;
+use Dms\Core\Common\Crud\Action\Object\ObjectActionParameter;
+use Dms\Core\Tests\Module\Mapping\StagedFormDtoMappingTest;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

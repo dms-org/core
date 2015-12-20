@@ -1,12 +1,12 @@
 <?php
 
-namespace Iddigital\Cms\Core\Model\Criteria\Condition;
+namespace Dms\Core\Model\Criteria\Condition;
 
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Exception\TypeMismatchException;
-use Iddigital\Cms\Core\Model\Criteria\NestedMember;
-use Iddigital\Cms\Core\Model\Type\Builder\Type;
-use Iddigital\Cms\Core\Util\Debug;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Exception\TypeMismatchException;
+use Dms\Core\Model\Criteria\NestedMember;
+use Dms\Core\Model\Type\Builder\Type;
+use Dms\Core\Util\Debug;
 
 /**
  * The member condition class.

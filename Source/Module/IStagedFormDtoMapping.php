@@ -1,12 +1,12 @@
 <?php
 
-namespace Iddigital\Cms\Core\Module;
+namespace Dms\Core\Module;
 
-use Iddigital\Cms\Core\Form;
-use Iddigital\Cms\Core\Form\InvalidFormSubmissionException;
-use Iddigital\Cms\Core\Form\IStagedForm;
-use Iddigital\Cms\Core\Model\IDataTransferObject;
-use Iddigital\Cms\Core\Persistence;
+use Dms\Core\Form;
+use Dms\Core\Form\InvalidFormSubmissionException;
+use Dms\Core\Form\IStagedForm;
+use Dms\Core\Model\IDataTransferObject;
+use Dms\Core\Persistence;
 
 /**
  * The form to dto mapping interface.

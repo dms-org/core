@@ -1,22 +1,22 @@
 <?php
 
-namespace Iddigital\Cms\Core\Common\Crud\Action\Crud;
+namespace Dms\Core\Common\Crud\Action\Crud;
 
-use Iddigital\Cms\Core\Auth\IAuthSystem;
-use Iddigital\Cms\Core\Auth\IPermission;
-use Iddigital\Cms\Core\Auth\Permission;
-use Iddigital\Cms\Core\Common\Crud\Action\Object\IObjectAction;
-use Iddigital\Cms\Core\Common\Crud\Action\Object\IObjectActionFormMapping;
-use Iddigital\Cms\Core\Common\Crud\Action\Object\Mapping\WrapperObjectActionFormMapping;
-use Iddigital\Cms\Core\Common\Crud\Action\Object\SelfHandlingObjectAction;
-use Iddigital\Cms\Core\Common\Crud\Definition\Form\FinalizedCrudFormDefinition;
-use Iddigital\Cms\Core\Common\Crud\Form\FormWithBinding;
-use Iddigital\Cms\Core\Common\Crud\Form\ObjectForm;
-use Iddigital\Cms\Core\Common\Crud\IReadModule;
-use Iddigital\Cms\Core\Form\Builder\Form;
-use Iddigital\Cms\Core\Form\IForm;
-use Iddigital\Cms\Core\Model\IEntity;
-use Iddigital\Cms\Core\Model\IEntitySet;
+use Dms\Core\Auth\IAuthSystem;
+use Dms\Core\Auth\IPermission;
+use Dms\Core\Auth\Permission;
+use Dms\Core\Common\Crud\Action\Object\IObjectAction;
+use Dms\Core\Common\Crud\Action\Object\IObjectActionFormMapping;
+use Dms\Core\Common\Crud\Action\Object\Mapping\WrapperObjectActionFormMapping;
+use Dms\Core\Common\Crud\Action\Object\SelfHandlingObjectAction;
+use Dms\Core\Common\Crud\Definition\Form\FinalizedCrudFormDefinition;
+use Dms\Core\Common\Crud\Form\FormWithBinding;
+use Dms\Core\Common\Crud\Form\ObjectForm;
+use Dms\Core\Common\Crud\IReadModule;
+use Dms\Core\Form\Builder\Form;
+use Dms\Core\Form\IForm;
+use Dms\Core\Model\IEntity;
+use Dms\Core\Model\IEntitySet;
 
 /**
  * The view details object action

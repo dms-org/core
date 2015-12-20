@@ -1,8 +1,8 @@
 <?php
 
-namespace Iddigital\Cms\Core\Table;
+namespace Dms\Core\Table;
 
-use Iddigital\Cms\Core\Form\IField;
+use Dms\Core\Form\IField;
 
 /**
  * The column condition operator interface

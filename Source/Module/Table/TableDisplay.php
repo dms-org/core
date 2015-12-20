@@ -1,13 +1,13 @@
 <?php
 
-namespace Iddigital\Cms\Core\Module\Table;
+namespace Dms\Core\Module\Table;
 
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Module\ITableDisplay;
-use Iddigital\Cms\Core\Module\ITableView;
-use Iddigital\Cms\Core\Table\IDataTable;
-use Iddigital\Cms\Core\Table\ITableDataSource;
-use Iddigital\Cms\Core\Util\Debug;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Module\ITableDisplay;
+use Dms\Core\Module\ITableView;
+use Dms\Core\Table\IDataTable;
+use Dms\Core\Table\ITableDataSource;
+use Dms\Core\Util\Debug;
 
 /**
  * The table display class.

@@ -1,21 +1,21 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Domains;
+namespace Dms\Core\Tests\Persistence\Db\Integration\Domains;
 
-use Iddigital\Cms\Core\Persistence\Db\Mapping\IOrm;
-use Iddigital\Cms\Core\Persistence\Db\Schema\ForeignKey;
-use Iddigital\Cms\Core\Persistence\Db\Schema\ForeignKeyMode;
-use Iddigital\Cms\Core\Persistence\DbRepository;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\HashedPassword;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\Mapper\BlogOrm;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\Mapper\PostMapper;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\Mapper\UserMapper;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\Post;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\User;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\UserGender;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\DbIntegrationTest;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Mock\MockDatabase;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Mock\MockTable;
+use Dms\Core\Persistence\Db\Mapping\IOrm;
+use Dms\Core\Persistence\Db\Schema\ForeignKey;
+use Dms\Core\Persistence\Db\Schema\ForeignKeyMode;
+use Dms\Core\Persistence\DbRepository;
+use Dms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\HashedPassword;
+use Dms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\Mapper\BlogOrm;
+use Dms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\Mapper\PostMapper;
+use Dms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\Mapper\UserMapper;
+use Dms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\Post;
+use Dms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\User;
+use Dms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\UserGender;
+use Dms\Core\Tests\Persistence\Db\Integration\Mapping\DbIntegrationTest;
+use Dms\Core\Tests\Persistence\Db\Mock\MockDatabase;
+use Dms\Core\Tests\Persistence\Db\Mock\MockTable;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

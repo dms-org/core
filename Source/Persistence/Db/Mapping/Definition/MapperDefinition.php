@@ -1,44 +1,44 @@
 <?php
 
-namespace Iddigital\Cms\Core\Persistence\Db\Mapping\Definition;
+namespace Dms\Core\Persistence\Db\Mapping\Definition;
 
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Model\IEntity;
-use Iddigital\Cms\Core\Model\Object\TypedObject;
-use Iddigital\Cms\Core\Model\Type\ObjectType;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Column\ColumnTypeDefiner;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Column\GetterSetterColumnDefiner;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Column\PropertyColumnDefiner;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Embedded\EmbeddedCollectionDefiner;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Embedded\EmbeddedValueObjectDefiner;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Embedded\EnumPropertyColumnDefiner;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\ForeignKey\ForeignKeyLocalColumnsDefiner;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Hook\HookTypeDefiner;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Index\IndexColumnsDefiner;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Relation\Accessor\CustomAccessor;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Relation\Accessor\PropertyAccessor;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Relation\IAccessor;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Relation\RelationUsingDefiner;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Relation\ToManyRelationMapping;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Relation\ToOneRelationMapping;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Subclass\SubClassMappingDefiner;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\EnumMapper;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\IEmbeddedObjectMapper;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\IObjectMapper;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\IOrm;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Locking\IOptimisticLockingStrategy;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\NullObjectMapper;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Embedded\EmbeddedCollectionRelation;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Embedded\EmbeddedObjectRelation;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\IToManyRelation;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\IToOneRelation;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Column;
-use Iddigital\Cms\Core\Persistence\Db\Schema\ForeignKey;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Index;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Table;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Type\Boolean;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Type\Integer;
-use Iddigital\Cms\Core\Util\Debug;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Model\IEntity;
+use Dms\Core\Model\Object\TypedObject;
+use Dms\Core\Model\Type\ObjectType;
+use Dms\Core\Persistence\Db\Mapping\Definition\Column\ColumnTypeDefiner;
+use Dms\Core\Persistence\Db\Mapping\Definition\Column\GetterSetterColumnDefiner;
+use Dms\Core\Persistence\Db\Mapping\Definition\Column\PropertyColumnDefiner;
+use Dms\Core\Persistence\Db\Mapping\Definition\Embedded\EmbeddedCollectionDefiner;
+use Dms\Core\Persistence\Db\Mapping\Definition\Embedded\EmbeddedValueObjectDefiner;
+use Dms\Core\Persistence\Db\Mapping\Definition\Embedded\EnumPropertyColumnDefiner;
+use Dms\Core\Persistence\Db\Mapping\Definition\ForeignKey\ForeignKeyLocalColumnsDefiner;
+use Dms\Core\Persistence\Db\Mapping\Definition\Hook\HookTypeDefiner;
+use Dms\Core\Persistence\Db\Mapping\Definition\Index\IndexColumnsDefiner;
+use Dms\Core\Persistence\Db\Mapping\Definition\Relation\Accessor\CustomAccessor;
+use Dms\Core\Persistence\Db\Mapping\Definition\Relation\Accessor\PropertyAccessor;
+use Dms\Core\Persistence\Db\Mapping\Definition\Relation\IAccessor;
+use Dms\Core\Persistence\Db\Mapping\Definition\Relation\RelationUsingDefiner;
+use Dms\Core\Persistence\Db\Mapping\Definition\Relation\ToManyRelationMapping;
+use Dms\Core\Persistence\Db\Mapping\Definition\Relation\ToOneRelationMapping;
+use Dms\Core\Persistence\Db\Mapping\Definition\Subclass\SubClassMappingDefiner;
+use Dms\Core\Persistence\Db\Mapping\EnumMapper;
+use Dms\Core\Persistence\Db\Mapping\IEmbeddedObjectMapper;
+use Dms\Core\Persistence\Db\Mapping\IObjectMapper;
+use Dms\Core\Persistence\Db\Mapping\IOrm;
+use Dms\Core\Persistence\Db\Mapping\Locking\IOptimisticLockingStrategy;
+use Dms\Core\Persistence\Db\Mapping\NullObjectMapper;
+use Dms\Core\Persistence\Db\Mapping\Relation\Embedded\EmbeddedCollectionRelation;
+use Dms\Core\Persistence\Db\Mapping\Relation\Embedded\EmbeddedObjectRelation;
+use Dms\Core\Persistence\Db\Mapping\Relation\IToManyRelation;
+use Dms\Core\Persistence\Db\Mapping\Relation\IToOneRelation;
+use Dms\Core\Persistence\Db\Schema\Column;
+use Dms\Core\Persistence\Db\Schema\ForeignKey;
+use Dms\Core\Persistence\Db\Schema\Index;
+use Dms\Core\Persistence\Db\Schema\Table;
+use Dms\Core\Persistence\Db\Schema\Type\Boolean;
+use Dms\Core\Persistence\Db\Schema\Type\Integer;
+use Dms\Core\Util\Debug;
 
 /**
  * The mapper definition class.
@@ -379,7 +379,7 @@ class MapperDefinition extends MapperDefinitionBase
     /**
      * Defines a property containing an enum class.
      *
-     * @see \Iddigital\Cms\Core\Model\Object\Enum
+     * @see \Dms\Core\Model\Object\Enum
      *
      * @param string $property
      *

@@ -1,15 +1,15 @@
 <?php
 
-namespace Iddigital\Cms\Core\Common\Crud\Dream;
+namespace Dms\Core\Common\Crud\Dream;
 
-use Iddigital\Cms\Core\Auth\IAuthSystem;
-use Iddigital\Cms\Core\Common\Crud\CrudModule;
-use Iddigital\Cms\Core\Common\Crud\Definition\CrudModuleDefinition;
-use Iddigital\Cms\Core\Common\Crud\Definition\Form\CrudFormDefinition;
-use Iddigital\Cms\Core\Common\Crud\Definition\Table\SummaryTableDefinition;
-use Iddigital\Cms\Core\Form\Field\Builder\Field;
-use Iddigital\Cms\Core\Persistence\IRepository;
-use Iddigital\Cms\Core\Table\Builder\Column;
+use Dms\Core\Auth\IAuthSystem;
+use Dms\Core\Common\Crud\CrudModule;
+use Dms\Core\Common\Crud\Definition\CrudModuleDefinition;
+use Dms\Core\Common\Crud\Definition\Form\CrudFormDefinition;
+use Dms\Core\Common\Crud\Definition\Table\SummaryTableDefinition;
+use Dms\Core\Form\Field\Builder\Field;
+use Dms\Core\Persistence\IRepository;
+use Dms\Core\Table\Builder\Column;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

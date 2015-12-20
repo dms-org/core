@@ -1,12 +1,12 @@
 <?php
 
-namespace Iddigital\Cms\Core\Form;
+namespace Dms\Core\Form;
 
-use Iddigital\Cms\Core\Form\Builder\Form;
-use Iddigital\Cms\Core\Form\Builder\StagedForm;
-use Iddigital\Cms\Core\Form\Field\Builder\Field;
-use Iddigital\Cms\Core\Model\EntityCollection;
-use Iddigital\Cms\Core\Persistence\IRepository;
+use Dms\Core\Form\Builder\Form;
+use Dms\Core\Form\Builder\StagedForm;
+use Dms\Core\Form\Field\Builder\Field;
+use Dms\Core\Model\EntityCollection;
+use Dms\Core\Persistence\IRepository;
 
 /** @var IRepository $someRepo */
 $form = StagedForm::begin(

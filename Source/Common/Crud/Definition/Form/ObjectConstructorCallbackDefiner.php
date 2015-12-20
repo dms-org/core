@@ -1,9 +1,9 @@
 <?php
 
-namespace Iddigital\Cms\Core\Common\Crud\Definition\Form;
+namespace Dms\Core\Common\Crud\Definition\Form;
 
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Model\Object\FinalizedClassDefinition;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Model\Object\FinalizedClassDefinition;
 
 /**
  * The object constructor callback definer.

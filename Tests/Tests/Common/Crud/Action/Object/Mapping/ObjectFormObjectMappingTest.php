@@ -1,13 +1,13 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Common\Crud\Action\Object\Mapping;
+namespace Dms\Core\Tests\Common\Crud\Action\Object\Mapping;
 
-use Iddigital\Cms\Core\Common\Crud\Action\Object\IObjectAction;
-use Iddigital\Cms\Core\Common\Crud\Action\Object\Mapping\ObjectActionFormMapping;
-use Iddigital\Cms\Core\Common\Crud\Action\Object\Mapping\ObjectFormObjectMapping;
-use Iddigital\Cms\Core\Common\Crud\Action\Object\ObjectActionParameter;
-use Iddigital\Cms\Core\Tests\Common\Crud\Action\Object\Mapping\Fixtures\TestEntity;
-use Iddigital\Cms\Core\Tests\Common\Crud\Action\Object\Mapping\Fixtures\TestObjectForm;
+use Dms\Core\Common\Crud\Action\Object\IObjectAction;
+use Dms\Core\Common\Crud\Action\Object\Mapping\ObjectActionFormMapping;
+use Dms\Core\Common\Crud\Action\Object\Mapping\ObjectFormObjectMapping;
+use Dms\Core\Common\Crud\Action\Object\ObjectActionParameter;
+use Dms\Core\Tests\Common\Crud\Action\Object\Mapping\Fixtures\TestEntity;
+use Dms\Core\Tests\Common\Crud\Action\Object\Mapping\Fixtures\TestObjectForm;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

@@ -1,20 +1,20 @@
 <?php
 
-namespace Iddigital\Cms\Core\Persistence\Db\Doctrine\Migration;
+namespace Dms\Core\Persistence\Db\Doctrine\Migration;
 
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Schema\Table as DoctrineTable;
 use Doctrine\DBAL\Types\Type as DoctrineType;
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Persistence\Db\Doctrine\Migration\Type\MediumIntType;
-use Iddigital\Cms\Core\Persistence\Db\Doctrine\Migration\Type\TinyIntType;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Column;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Database;
-use Iddigital\Cms\Core\Persistence\Db\Schema\ForeignKey;
-use Iddigital\Cms\Core\Persistence\Db\Schema\ForeignKeyMode;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Index;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Table;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Type;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Persistence\Db\Doctrine\Migration\Type\MediumIntType;
+use Dms\Core\Persistence\Db\Doctrine\Migration\Type\TinyIntType;
+use Dms\Core\Persistence\Db\Schema\Column;
+use Dms\Core\Persistence\Db\Schema\Database;
+use Dms\Core\Persistence\Db\Schema\ForeignKey;
+use Dms\Core\Persistence\Db\Schema\ForeignKeyMode;
+use Dms\Core\Persistence\Db\Schema\Index;
+use Dms\Core\Persistence\Db\Schema\Table;
+use Dms\Core\Persistence\Db\Schema\Type;
 
 /**
  * The doctrine schema converter maps the built in

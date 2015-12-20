@@ -1,9 +1,9 @@
 <?php
 
-namespace Iddigital\Cms\Core\Common\Crud\Action\Object;
+namespace Dms\Core\Common\Crud\Action\Object;
 
-use Iddigital\Cms\Core\Module\InvalidHandlerClassException;
-use Iddigital\Cms\Core\Util\Reflection;
+use Dms\Core\Module\InvalidHandlerClassException;
+use Dms\Core\Util\Reflection;
 
 /**
  * The custom object action handler class, delegates to a callback.

@@ -1,9 +1,9 @@
 <?php
 
-namespace Iddigital\Cms\Core\Table\DataSource\Definition;
+namespace Dms\Core\Table\DataSource\Definition;
 
-use Iddigital\Cms\Core\Model\Object\FinalizedClassDefinition;
-use Iddigital\Cms\Core\Table\ITableStructure;
+use Dms\Core\Model\Object\FinalizedClassDefinition;
+use Dms\Core\Table\ITableStructure;
 
 /**
  * The finalized object table definition class.

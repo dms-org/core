@@ -1,12 +1,12 @@
 <?php
 
-namespace Iddigital\Cms\Core;
+namespace Dms\Core;
 
-use Iddigital\Cms\Core\Auth\IAuthSystem;
-use Iddigital\Cms\Core\Auth\IPermission;
-use Iddigital\Cms\Core\Language\ILanguageProvider;
-use Iddigital\Cms\Core\Package\IPackage;
-use Iddigital\Cms\Core\Package\PackageNotInstalledException;
+use Dms\Core\Auth\IAuthSystem;
+use Dms\Core\Auth\IPermission;
+use Dms\Core\Language\ILanguageProvider;
+use Dms\Core\Package\IPackage;
+use Dms\Core\Package\PackageNotInstalledException;
 use Interop\Container\ContainerInterface;
 
 /**

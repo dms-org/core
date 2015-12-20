@@ -1,19 +1,19 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Cms;
+namespace Dms\Core\Tests\Cms;
 
-use Iddigital\Cms\Common\Testing\CmsTestCase;
-use Iddigital\Cms\Core\Auth\IAuthSystem;
-use Iddigital\Cms\Core\Auth\Permission;
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Language\ILanguageProvider;
-use Iddigital\Cms\Core\Package\PackageNotInstalledException;
-use Iddigital\Cms\Core\Tests\Cms\Fixtures\TestCms;
-use Iddigital\Cms\Core\Tests\Helpers\Mock\MockingIocContainer;
-use Iddigital\Cms\Core\Tests\Package\Fixtures\InvalidModuleClassPackage;
-use Iddigital\Cms\Core\Tests\Package\Fixtures\PackageWithActions;
-use Iddigital\Cms\Core\Tests\Package\Fixtures\PackageWithCharts;
-use Iddigital\Cms\Core\Tests\Package\Fixtures\TestPackage;
+use Dms\Common\Testing\CmsTestCase;
+use Dms\Core\Auth\IAuthSystem;
+use Dms\Core\Auth\Permission;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Language\ILanguageProvider;
+use Dms\Core\Package\PackageNotInstalledException;
+use Dms\Core\Tests\Cms\Fixtures\TestCms;
+use Dms\Core\Tests\Helpers\Mock\MockingIocContainer;
+use Dms\Core\Tests\Package\Fixtures\InvalidModuleClassPackage;
+use Dms\Core\Tests\Package\Fixtures\PackageWithActions;
+use Dms\Core\Tests\Package\Fixtures\PackageWithCharts;
+use Dms\Core\Tests\Package\Fixtures\TestPackage;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

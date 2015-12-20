@@ -1,9 +1,9 @@
 <?php
 
-namespace Iddigital\Cms\Core\Module\Handler;
+namespace Dms\Core\Module\Handler;
 
-use Iddigital\Cms\Core\Form;
-use Iddigital\Cms\Core\Module\InvalidHandlerClassException;
+use Dms\Core\Form;
+use Dms\Core\Module\InvalidHandlerClassException;
 
 /**
  * The reflection based action handler.

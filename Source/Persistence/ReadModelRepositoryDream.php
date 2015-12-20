@@ -1,9 +1,9 @@
 <?php
 
-namespace Iddigital\Cms\Core\Persistence;
+namespace Dms\Core\Persistence;
 
-use Iddigital\Cms\Core\Exception;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\ReadModel\Definition\ReadMapperDefinition;
+use Dms\Core\Exception;
+use Dms\Core\Persistence\Db\Mapping\ReadModel\Definition\ReadMapperDefinition;
 
 /**
  * An implementation of the read model repository

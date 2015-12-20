@@ -1,10 +1,10 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Common\Crud\Action\Object\Mapping\Fixtures;
+namespace Dms\Core\Tests\Common\Crud\Action\Object\Mapping\Fixtures;
 
-use Iddigital\Cms\Core\Model\EntityCollection;
-use Iddigital\Cms\Core\Model\Object\ClassDefinition;
-use Iddigital\Cms\Core\Model\Object\Entity;
+use Dms\Core\Model\EntityCollection;
+use Dms\Core\Model\Object\ClassDefinition;
+use Dms\Core\Model\Object\Entity;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

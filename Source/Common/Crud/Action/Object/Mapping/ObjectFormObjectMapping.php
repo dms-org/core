@@ -1,11 +1,11 @@
 <?php
 
-namespace Iddigital\Cms\Core\Common\Crud\Action\Object\Mapping;
+namespace Dms\Core\Common\Crud\Action\Object\Mapping;
 
-use Iddigital\Cms\Core\Common\Crud\Action\Object\ObjectActionParameter;
-use Iddigital\Cms\Core\Common\Crud\Form\ObjectStagedFormObject;
-use Iddigital\Cms\Core\Form\InvalidFormSubmissionException;
-use Iddigital\Cms\Core\Model\IDataTransferObject;
+use Dms\Core\Common\Crud\Action\Object\ObjectActionParameter;
+use Dms\Core\Common\Crud\Form\ObjectStagedFormObject;
+use Dms\Core\Form\InvalidFormSubmissionException;
+use Dms\Core\Model\IDataTransferObject;
 
 /**
  * The object action form mapping maps an instance of:

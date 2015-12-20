@@ -1,16 +1,16 @@
 <?php
 
-namespace Iddigital\Cms\Core\Form\Object\Stage;
+namespace Dms\Core\Form\Object\Stage;
 
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Form\IForm;
-use Iddigital\Cms\Core\Form\IFormStage;
-use Iddigital\Cms\Core\Form\InvalidFormSubmissionException;
-use Iddigital\Cms\Core\Form\IStagedForm;
-use Iddigital\Cms\Core\Form\Stage\IndependentFormStage;
-use Iddigital\Cms\Core\Model\IDataTransferObject;
-use Iddigital\Cms\Core\Model\Object\ClassDefinition;
-use Iddigital\Cms\Core\Model\Object\TypedObject;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Form\IForm;
+use Dms\Core\Form\IFormStage;
+use Dms\Core\Form\InvalidFormSubmissionException;
+use Dms\Core\Form\IStagedForm;
+use Dms\Core\Form\Stage\IndependentFormStage;
+use Dms\Core\Model\IDataTransferObject;
+use Dms\Core\Model\Object\ClassDefinition;
+use Dms\Core\Model\Object\TypedObject;
 
 /**
  * The staged form object base class.

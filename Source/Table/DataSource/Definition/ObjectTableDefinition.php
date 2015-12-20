@@ -1,13 +1,13 @@
 <?php
 
-namespace Iddigital\Cms\Core\Table\DataSource\Definition;
+namespace Dms\Core\Table\DataSource\Definition;
 
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Model\Criteria\IMemberExpressionParser;
-use Iddigital\Cms\Core\Model\Criteria\MemberExpressionParser;
-use Iddigital\Cms\Core\Model\Object\FinalizedClassDefinition;
-use Iddigital\Cms\Core\Table\IColumn;
-use Iddigital\Cms\Core\Table\TableStructure;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Model\Criteria\IMemberExpressionParser;
+use Dms\Core\Model\Criteria\MemberExpressionParser;
+use Dms\Core\Model\Object\FinalizedClassDefinition;
+use Dms\Core\Table\IColumn;
+use Dms\Core\Table\TableStructure;
 
 /**
  * The object table definition class.

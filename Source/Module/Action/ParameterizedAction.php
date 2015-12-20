@@ -1,14 +1,14 @@
 <?php
 
-namespace Iddigital\Cms\Core\Module\Action;
+namespace Dms\Core\Module\Action;
 
-use Iddigital\Cms\Core\Auth\IAuthSystem;
-use Iddigital\Cms\Core\Exception\TypeMismatchException;
-use Iddigital\Cms\Core\Form;
-use Iddigital\Cms\Core\Form\IStagedForm;
-use Iddigital\Cms\Core\Module\IParameterizedAction;
-use Iddigital\Cms\Core\Module\IParameterizedActionHandler;
-use Iddigital\Cms\Core\Module\IStagedFormDtoMapping;
+use Dms\Core\Auth\IAuthSystem;
+use Dms\Core\Exception\TypeMismatchException;
+use Dms\Core\Form;
+use Dms\Core\Form\IStagedForm;
+use Dms\Core\Module\IParameterizedAction;
+use Dms\Core\Module\IParameterizedActionHandler;
+use Dms\Core\Module\IStagedFormDtoMapping;
 
 /**
  * The parameterized action class.

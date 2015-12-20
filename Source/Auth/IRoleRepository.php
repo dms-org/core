@@ -1,10 +1,10 @@
 <?php
 
-namespace Iddigital\Cms\Core\Auth;
+namespace Dms\Core\Auth;
 
-use Iddigital\Cms\Core\Model\EntityNotFoundException;
-use Iddigital\Cms\Core\Persistence\IRepository;
-use Iddigital\Cms\Core\Exception;
+use Dms\Core\Model\EntityNotFoundException;
+use Dms\Core\Persistence\IRepository;
+use Dms\Core\Exception;
 
 interface IRoleRepository extends IRepository
 {

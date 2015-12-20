@@ -1,18 +1,18 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Module;
+namespace Dms\Core\Tests\Module;
 
-use Iddigital\Cms\Core\Auth\IPermission;
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Form\Field\Builder\Field;
-use Iddigital\Cms\Core\Module\Module;
-use Iddigital\Cms\Core\Module\Table\TableDisplay;
-use Iddigital\Cms\Core\Module\Table\TableView;
-use Iddigital\Cms\Core\Table\Builder\Column;
-use Iddigital\Cms\Core\Table\DataSource\ArrayTableDataSource;
-use Iddigital\Cms\Core\Table\DataSource\ObjectTableDataSource;
-use Iddigital\Cms\Core\Tests\Module\Fixtures\ModuleWithTables;
-use Iddigital\Cms\Core\Tests\Module\Mock\MockAuthSystem;
+use Dms\Core\Auth\IPermission;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Form\Field\Builder\Field;
+use Dms\Core\Module\Module;
+use Dms\Core\Module\Table\TableDisplay;
+use Dms\Core\Module\Table\TableView;
+use Dms\Core\Table\Builder\Column;
+use Dms\Core\Table\DataSource\ArrayTableDataSource;
+use Dms\Core\Table\DataSource\ObjectTableDataSource;
+use Dms\Core\Tests\Module\Fixtures\ModuleWithTables;
+use Dms\Core\Tests\Module\Mock\MockAuthSystem;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

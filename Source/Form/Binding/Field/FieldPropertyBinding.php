@@ -1,11 +1,11 @@
 <?php
 
-namespace Iddigital\Cms\Core\Form\Binding\Field;
+namespace Dms\Core\Form\Binding\Field;
 
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Exception\TypeMismatchException;
-use Iddigital\Cms\Core\Model\Object\FinalizedClassDefinition;
-use Iddigital\Cms\Core\Model\Object\FinalizedPropertyDefinition;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Exception\TypeMismatchException;
+use Dms\Core\Model\Object\FinalizedClassDefinition;
+use Dms\Core\Model\Object\FinalizedPropertyDefinition;
 
 /**
  * The field to property binding class.

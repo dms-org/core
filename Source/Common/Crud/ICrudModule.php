@@ -1,9 +1,9 @@
 <?php
 
-namespace Iddigital\Cms\Core\Common\Crud;
+namespace Dms\Core\Common\Crud;
 
-use Iddigital\Cms\Core\Common\Crud\Action\Object\IObjectAction;
-use Iddigital\Cms\Core\Module\IParameterizedAction;
+use Dms\Core\Common\Crud\Action\Object\IObjectAction;
+use Dms\Core\Module\IParameterizedAction;
 
 /**
  * The interface for a CRUD module.

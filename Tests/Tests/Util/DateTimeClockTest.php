@@ -1,9 +1,9 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Util;
+namespace Dms\Core\Tests\Util;
 
-use Iddigital\Cms\Common\Testing\CmsTestCase;
-use Iddigital\Cms\Core\Util\DateTimeClock;
+use Dms\Common\Testing\CmsTestCase;
+use Dms\Core\Util\DateTimeClock;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

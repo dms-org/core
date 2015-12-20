@@ -1,10 +1,10 @@
 <?php
 
-namespace Iddigital\Cms\Core\Widget;
+namespace Dms\Core\Widget;
 
-use Iddigital\Cms\Core\Table\Chart\IChartCriteria;
-use Iddigital\Cms\Core\Table\Chart\IChartDataSource;
-use Iddigital\Cms\Core\Table\Chart\IChartDataTable;
+use Dms\Core\Table\Chart\IChartCriteria;
+use Dms\Core\Table\Chart\IChartDataSource;
+use Dms\Core\Table\Chart\IChartDataTable;
 
 /**
  * The chart widget class.

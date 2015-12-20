@@ -1,9 +1,9 @@
 <?php
 
-namespace Iddigital\Cms\Core\Persistence\Db;
+namespace Dms\Core\Persistence\Db;
 
-use Iddigital\Cms\Core\Exception\InvalidOperationException;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Table;
+use Dms\Core\Exception\InvalidOperationException;
+use Dms\Core\Persistence\Db\Schema\Table;
 
 /**
  * The row class

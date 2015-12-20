@@ -1,13 +1,13 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Table\Builder;
+namespace Dms\Core\Tests\Table\Builder;
 
-use Iddigital\Cms\Common\Testing\CmsTestCase;
-use Iddigital\Cms\Core\Exception\TypeMismatchException;
-use Iddigital\Cms\Core\Form\Field\Builder\Field;
-use Iddigital\Cms\Core\Table\Builder\Column;
-use Iddigital\Cms\Core\Table\Column\Column as TableColumn;
-use Iddigital\Cms\Core\Table\Column\Component\ColumnComponent;
+use Dms\Common\Testing\CmsTestCase;
+use Dms\Core\Exception\TypeMismatchException;
+use Dms\Core\Form\Field\Builder\Field;
+use Dms\Core\Table\Builder\Column;
+use Dms\Core\Table\Column\Column as TableColumn;
+use Dms\Core\Table\Column\Component\ColumnComponent;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

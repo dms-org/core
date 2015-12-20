@@ -1,8 +1,8 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Persistence\Db\Mock;
+namespace Dms\Core\Tests\Persistence\Db\Mock;
 
-use Iddigital\Cms\Core\Exception\BaseException;
+use Dms\Core\Exception\BaseException;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

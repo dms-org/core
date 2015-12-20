@@ -1,9 +1,9 @@
 <?php
 
-namespace Iddigital\Cms\Core\Form\Processor\Validator;
+namespace Dms\Core\Form\Processor\Validator;
 
-use Iddigital\Cms\Core\Form\Processor\FormValidator;
-use Iddigital\Cms\Core\Language\Message;
+use Dms\Core\Form\Processor\FormValidator;
+use Dms\Core\Language\Message;
 
 /**
  * The custom form validator.

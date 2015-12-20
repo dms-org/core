@@ -1,9 +1,9 @@
 <?php
 
-namespace Iddigital\Cms\Core\Form\Object;
+namespace Dms\Core\Form\Object;
 
-use Iddigital\Cms\Core\Form\IForm;
-use Iddigital\Cms\Core\Model\Object\FinalizedClassDefinition;
+use Dms\Core\Form\IForm;
+use Dms\Core\Model\Object\FinalizedClassDefinition;
 
 /**
  * The finalized form object definition class.

@@ -1,26 +1,26 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Model;
+namespace Dms\Core\Tests\Model;
 
-use Iddigital\Cms\Common\Testing\CmsTestCase;
-use Iddigital\Cms\Core\Model\Criteria\Condition\ConditionOperator;
-use Iddigital\Cms\Core\Model\Criteria\Condition\ConditionOperatorType;
-use Iddigital\Cms\Core\Model\EntityCollection;
-use Iddigital\Cms\Core\Model\IEntity;
-use Iddigital\Cms\Core\Model\ITypedCollection;
-use Iddigital\Cms\Core\Model\Type\ArrayType;
-use Iddigital\Cms\Core\Model\Type\BaseType;
-use Iddigital\Cms\Core\Model\Type\Builder\Type;
-use Iddigital\Cms\Core\Model\Type\CollectionType;
-use Iddigital\Cms\Core\Model\Type\IType;
-use Iddigital\Cms\Core\Model\Type\MixedType;
-use Iddigital\Cms\Core\Model\Type\NotType;
-use Iddigital\Cms\Core\Model\Type\NullType;
-use Iddigital\Cms\Core\Model\Type\ObjectType;
-use Iddigital\Cms\Core\Model\Type\ScalarType;
-use Iddigital\Cms\Core\Model\Type\UnionType;
-use Iddigital\Cms\Core\Model\TypedCollection;
-use Iddigital\Cms\Core\Tests\Helpers\Comparators\IgnorePropertyComparator;
+use Dms\Common\Testing\CmsTestCase;
+use Dms\Core\Model\Criteria\Condition\ConditionOperator;
+use Dms\Core\Model\Criteria\Condition\ConditionOperatorType;
+use Dms\Core\Model\EntityCollection;
+use Dms\Core\Model\IEntity;
+use Dms\Core\Model\ITypedCollection;
+use Dms\Core\Model\Type\ArrayType;
+use Dms\Core\Model\Type\BaseType;
+use Dms\Core\Model\Type\Builder\Type;
+use Dms\Core\Model\Type\CollectionType;
+use Dms\Core\Model\Type\IType;
+use Dms\Core\Model\Type\MixedType;
+use Dms\Core\Model\Type\NotType;
+use Dms\Core\Model\Type\NullType;
+use Dms\Core\Model\Type\ObjectType;
+use Dms\Core\Model\Type\ScalarType;
+use Dms\Core\Model\Type\UnionType;
+use Dms\Core\Model\TypedCollection;
+use Dms\Core\Tests\Helpers\Comparators\IgnorePropertyComparator;
 use SebastianBergmann\Comparator\Factory;
 
 /**

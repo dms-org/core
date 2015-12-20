@@ -1,6 +1,6 @@
 <?php
 
-namespace Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Relation;
+namespace Dms\Core\Persistence\Db\Mapping\Definition\Relation;
 
 /**
  * The many-to-many relation definer class.

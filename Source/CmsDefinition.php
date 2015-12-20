@@ -1,6 +1,6 @@
 <?php
 
-namespace Iddigital\Cms\Core;
+namespace Dms\Core;
 
 /**
  * The cms definition class.

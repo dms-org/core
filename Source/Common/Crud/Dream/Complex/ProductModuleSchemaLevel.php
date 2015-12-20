@@ -1,9 +1,9 @@
 <?php
 
-namespace Iddigital\Cms\Core\Common\Crud\Dream\Complex;
+namespace Dms\Core\Common\Crud\Dream\Complex;
 
-use Iddigital\Cms\Core\Form\Field\Builder\Field;
-use Iddigital\Cms\Core\Persistence\Db\Connection\IConnection;
+use Dms\Core\Form\Field\Builder\Field;
+use Dms\Core\Persistence\Db\Connection\IConnection;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

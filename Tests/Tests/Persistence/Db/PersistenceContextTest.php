@@ -1,15 +1,15 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Persistence\Db;
+namespace Dms\Core\Tests\Persistence\Db;
 
-use Iddigital\Cms\Common\Testing\CmsTestCase;
-use Iddigital\Cms\Core\Persistence\Db\Connection\IConnection;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Hook\IPersistHook;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\IRelation;
-use Iddigital\Cms\Core\Persistence\Db\PersistenceContext;
-use Iddigital\Cms\Core\Persistence\Db\Query\IQuery;
-use Iddigital\Cms\Core\Persistence\Db\Row;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Fixtures\MockEntity;
+use Dms\Common\Testing\CmsTestCase;
+use Dms\Core\Persistence\Db\Connection\IConnection;
+use Dms\Core\Persistence\Db\Mapping\Hook\IPersistHook;
+use Dms\Core\Persistence\Db\Mapping\Relation\IRelation;
+use Dms\Core\Persistence\Db\PersistenceContext;
+use Dms\Core\Persistence\Db\Query\IQuery;
+use Dms\Core\Persistence\Db\Row;
+use Dms\Core\Tests\Persistence\Db\Fixtures\MockEntity;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

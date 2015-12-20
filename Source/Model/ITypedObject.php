@@ -1,8 +1,8 @@
 <?php
 
-namespace Iddigital\Cms\Core\Model;
+namespace Dms\Core\Model;
 
-use Iddigital\Cms\Core\Exception;
+use Dms\Core\Exception;
 
 /**
  * The typed object interface.

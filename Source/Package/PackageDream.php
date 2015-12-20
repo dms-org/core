@@ -1,6 +1,6 @@
 <?php
 
-namespace Iddigital\Cms\Core\Package;
+namespace Dms\Core\Package;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

@@ -1,9 +1,9 @@
 <?php
 
-namespace Iddigital\Cms\Core\Module;
+namespace Dms\Core\Module;
 
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Table\Chart\IChartDataSource;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Table\Chart\IChartDataSource;
 
 /**
  * The chart display interface.

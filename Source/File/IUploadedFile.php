@@ -1,6 +1,6 @@
 <?php
 
-namespace Iddigital\Cms\Core\File;
+namespace Dms\Core\File;
 
 /**
  * The uploaded file interface.

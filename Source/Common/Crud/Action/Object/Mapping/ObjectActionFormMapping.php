@@ -1,15 +1,15 @@
 <?php
 
-namespace Iddigital\Cms\Core\Common\Crud\Action\Object\Mapping;
+namespace Dms\Core\Common\Crud\Action\Object\Mapping;
 
-use Iddigital\Cms\Core\Common\Crud\Action\Object\IObjectAction;
-use Iddigital\Cms\Core\Common\Crud\Action\Object\IObjectActionFormMapping;
-use Iddigital\Cms\Core\Common\Crud\Action\Object\ObjectActionParameter;
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Form\IForm;
-use Iddigital\Cms\Core\Form\IStagedForm;
-use Iddigital\Cms\Core\Module\Mapping\StagedFormDtoMapping;
-use Iddigital\Cms\Core\Util\Debug;
+use Dms\Core\Common\Crud\Action\Object\IObjectAction;
+use Dms\Core\Common\Crud\Action\Object\IObjectActionFormMapping;
+use Dms\Core\Common\Crud\Action\Object\ObjectActionParameter;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Form\IForm;
+use Dms\Core\Form\IStagedForm;
+use Dms\Core\Module\Mapping\StagedFormDtoMapping;
+use Dms\Core\Util\Debug;
 
 /**
  * The object action form mapping base class

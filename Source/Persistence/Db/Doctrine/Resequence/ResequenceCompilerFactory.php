@@ -1,10 +1,10 @@
 <?php
 
-namespace Iddigital\Cms\Core\Persistence\Db\Doctrine\Resequence;
+namespace Dms\Core\Persistence\Db\Doctrine\Resequence;
 
 use Doctrine\DBAL\Platforms\MySqlPlatform;
-use Iddigital\Cms\Core\Persistence\Db\Doctrine\DoctrinePlatform;
-use Iddigital\Cms\Core\Persistence\Db\Doctrine\IResequenceCompiler;
+use Dms\Core\Persistence\Db\Doctrine\DoctrinePlatform;
+use Dms\Core\Persistence\Db\Doctrine\IResequenceCompiler;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

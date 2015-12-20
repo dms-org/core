@@ -1,8 +1,8 @@
 <?php
 
-namespace Iddigital\Cms\Core\Persistence\Db\Query\Expression;
+namespace Dms\Core\Persistence\Db\Query\Expression;
 
-use Iddigital\Cms\Core\Persistence\Db\Schema\Type\Type;
+use Dms\Core\Persistence\Db\Schema\Type\Type;
 
 /**
  * The parameter class.

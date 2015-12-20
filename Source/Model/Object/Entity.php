@@ -1,13 +1,13 @@
 <?php
 
-namespace Iddigital\Cms\Core\Model\Object;
+namespace Dms\Core\Model\Object;
 
-use Iddigital\Cms\Core\Exception;
-use Iddigital\Cms\Core\Model\EntityCollection;
-use Iddigital\Cms\Core\Model\IEntity;
-use Iddigital\Cms\Core\Model\Type\Builder\Type;
-use Iddigital\Cms\Core\Model\Type\IType;
-use Iddigital\Cms\Core\Util\Hashing\IHashable;
+use Dms\Core\Exception;
+use Dms\Core\Model\EntityCollection;
+use Dms\Core\Model\IEntity;
+use Dms\Core\Model\Type\Builder\Type;
+use Dms\Core\Model\Type\IType;
+use Dms\Core\Util\Hashing\IHashable;
 
 /**
  * The entity object base class.

@@ -1,12 +1,12 @@
 <?php
 
-namespace Iddigital\Cms\Core\Form;
+namespace Dms\Core\Form;
 
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Form\Stage\IndependentFormStage;
-use Iddigital\Cms\Core\Language\Message;
-use Iddigital\Cms\Core\Model\Type\Builder\Type;
-use Iddigital\Cms\Core\Util\Debug;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Form\Stage\IndependentFormStage;
+use Dms\Core\Language\Message;
+use Dms\Core\Model\Type\Builder\Type;
+use Dms\Core\Util\Debug;
 
 /**
  * The form class.

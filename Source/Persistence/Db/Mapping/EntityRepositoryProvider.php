@@ -1,11 +1,11 @@
 <?php
 
-namespace Iddigital\Cms\Core\Persistence\Db\Mapping;
+namespace Dms\Core\Persistence\Db\Mapping;
 
-use Iddigital\Cms\Core\Model\Criteria\IEntitySetProvider;
-use Iddigital\Cms\Core\Model\IEntitySet;
-use Iddigital\Cms\Core\Persistence\Db\Connection\IConnection;
-use Iddigital\Cms\Core\Persistence\DbRepository;
+use Dms\Core\Model\Criteria\IEntitySetProvider;
+use Dms\Core\Model\IEntitySet;
+use Dms\Core\Persistence\Db\Connection\IConnection;
+use Dms\Core\Persistence\DbRepository;
 
 /**
  * The entity repository provider interface.

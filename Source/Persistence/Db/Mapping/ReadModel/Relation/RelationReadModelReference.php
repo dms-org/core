@@ -1,16 +1,16 @@
 <?php
 
-namespace Iddigital\Cms\Core\Persistence\Db\Mapping\ReadModel\Relation;
+namespace Dms\Core\Persistence\Db\Mapping\ReadModel\Relation;
 
-use Iddigital\Cms\Core\Exception\NotImplementedException;
-use Iddigital\Cms\Core\Model\Type\Builder\Type;
-use Iddigital\Cms\Core\Model\TypedCollection;
-use Iddigital\Cms\Core\Persistence\Db\LoadingContext;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\ReadModel\ReadModelMapper;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Reference\IToManyRelationReference;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Reference\IToOneRelationReference;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Reference\RelationObjectReference;
-use Iddigital\Cms\Core\Persistence\Db\PersistenceContext;
+use Dms\Core\Exception\NotImplementedException;
+use Dms\Core\Model\Type\Builder\Type;
+use Dms\Core\Model\TypedCollection;
+use Dms\Core\Persistence\Db\LoadingContext;
+use Dms\Core\Persistence\Db\Mapping\ReadModel\ReadModelMapper;
+use Dms\Core\Persistence\Db\Mapping\Relation\Reference\IToManyRelationReference;
+use Dms\Core\Persistence\Db\Mapping\Relation\Reference\IToOneRelationReference;
+use Dms\Core\Persistence\Db\Mapping\Relation\Reference\RelationObjectReference;
+use Dms\Core\Persistence\Db\PersistenceContext;
 
 /**
  * The relation read model reference base class.

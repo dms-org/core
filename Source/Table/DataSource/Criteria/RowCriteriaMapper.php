@@ -1,14 +1,14 @@
 <?php
 
-namespace Iddigital\Cms\Core\Table\DataSource\Criteria;
+namespace Dms\Core\Table\DataSource\Criteria;
 
-use Iddigital\Cms\Core\Model\Criteria\Criteria;
-use Iddigital\Cms\Core\Model\Criteria\LoadCriteria;
-use Iddigital\Cms\Core\Model\ICriteria;
-use Iddigital\Cms\Core\Model\ILoadCriteria;
-use Iddigital\Cms\Core\Table\Criteria\ColumnCriterion;
-use Iddigital\Cms\Core\Table\DataSource\Definition\FinalizedObjectTableDefinition;
-use Iddigital\Cms\Core\Table\IRowCriteria;
+use Dms\Core\Model\Criteria\Criteria;
+use Dms\Core\Model\Criteria\LoadCriteria;
+use Dms\Core\Model\ICriteria;
+use Dms\Core\Model\ILoadCriteria;
+use Dms\Core\Table\Criteria\ColumnCriterion;
+use Dms\Core\Table\DataSource\Definition\FinalizedObjectTableDefinition;
+use Dms\Core\Table\IRowCriteria;
 use Table\DataSource\Criteria\CriteriaMappingException;
 
 /**

@@ -1,9 +1,9 @@
 <?php
 
 
-namespace Iddigital\Cms\Core\Exception;
+namespace Dms\Core\Exception;
 
-use Iddigital\Cms\Core\Util\Debug;
+use Dms\Core\Util\Debug;
 
 /**
  * The type asserts trait.

@@ -1,8 +1,8 @@
 <?php
 
-namespace Iddigital\Cms\Core\Package;
+namespace Dms\Core\Package;
 
-use Iddigital\Cms\Core\Exception\InvalidOperationException;
+use Dms\Core\Exception\InvalidOperationException;
 
 /**
  * The package definition class.

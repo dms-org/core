@@ -1,11 +1,11 @@
 <?php
 
-namespace Iddigital\Cms\Core\Table\Chart\Structure;
+namespace Dms\Core\Table\Chart\Structure;
 
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Table\Chart\IChartAxis;
-use Iddigital\Cms\Core\Table\Chart\IChartStructure;
-use Iddigital\Cms\Core\Util\Debug;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Table\Chart\IChartAxis;
+use Dms\Core\Table\Chart\IChartStructure;
+use Dms\Core\Util\Debug;
 
 /**
  * The chart structure base class.

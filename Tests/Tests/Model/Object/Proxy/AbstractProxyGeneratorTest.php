@@ -1,10 +1,10 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Model\Object\Proxy;
+namespace Dms\Core\Tests\Model\Object\Proxy;
 
-use Iddigital\Cms\Common\Testing\CmsTestCase;
-use Iddigital\Cms\Core\Model\Object\AbstractProxyGenerator;
-use Iddigital\Cms\Core\Tests\Model\Object\Proxy\Fixtures\AbstractMethods;
+use Dms\Common\Testing\CmsTestCase;
+use Dms\Core\Model\Object\AbstractProxyGenerator;
+use Dms\Core\Tests\Model\Object\Proxy\Fixtures\AbstractMethods;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

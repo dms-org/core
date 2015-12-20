@@ -1,18 +1,18 @@
 <?php
 
-namespace Iddigital\Cms\Core\Common\Crud;
+namespace Dms\Core\Common\Crud;
 
-use Iddigital\Cms\Core\Auth\IAuthSystem;
-use Iddigital\Cms\Core\Common\Crud\Action\Object\IObjectAction;
-use Iddigital\Cms\Core\Common\Crud\Definition\FinalizedReadModuleDefinition;
-use Iddigital\Cms\Core\Common\Crud\Definition\ReadModuleDefinition;
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Exception\TypeMismatchException;
-use Iddigital\Cms\Core\Model\IEntitySet;
-use Iddigital\Cms\Core\Model\ITypedObject;
-use Iddigital\Cms\Core\Module\Definition\ModuleDefinition;
-use Iddigital\Cms\Core\Module\Module;
-use Iddigital\Cms\Core\Util\Debug;
+use Dms\Core\Auth\IAuthSystem;
+use Dms\Core\Common\Crud\Action\Object\IObjectAction;
+use Dms\Core\Common\Crud\Definition\FinalizedReadModuleDefinition;
+use Dms\Core\Common\Crud\Definition\ReadModuleDefinition;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Exception\TypeMismatchException;
+use Dms\Core\Model\IEntitySet;
+use Dms\Core\Model\ITypedObject;
+use Dms\Core\Module\Definition\ModuleDefinition;
+use Dms\Core\Module\Module;
+use Dms\Core\Util\Debug;
 
 /**
  * The read module base class.

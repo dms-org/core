@@ -1,10 +1,10 @@
 <?php
 
-namespace Iddigital\Cms\Core\Common\Crud\Table;
+namespace Dms\Core\Common\Crud\Table;
 
-use Iddigital\Cms\Core\Common\Crud\Action\Table\IReorderAction;
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Module\ITableDisplay;
+use Dms\Core\Common\Crud\Action\Table\IReorderAction;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Module\ITableDisplay;
 
 /**
  * The summary table interface.

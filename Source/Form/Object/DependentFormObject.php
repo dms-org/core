@@ -1,8 +1,8 @@
 <?php
 
-namespace Iddigital\Cms\Core\Form\Object;
+namespace Dms\Core\Form\Object;
 
-use Iddigital\Cms\Core\Model\Object\ClassDefinition;
+use Dms\Core\Model\Object\ClassDefinition;
 
 /**
  * The dependent form object base class.

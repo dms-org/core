@@ -1,14 +1,14 @@
 <?php
 
-namespace Iddigital\Cms\Core\Form\Field\Builder;
+namespace Dms\Core\Form\Field\Builder;
 
-use Iddigital\Cms\Core\Form\Field\Processor\TrimProcessor;
-use Iddigital\Cms\Core\Form\Field\Processor\Validator\EmailValidator;
-use Iddigital\Cms\Core\Form\Field\Processor\Validator\ExactLengthValidator;
-use Iddigital\Cms\Core\Form\Field\Processor\Validator\MaxLengthValidator;
-use Iddigital\Cms\Core\Form\Field\Processor\Validator\MinLengthValidator;
-use Iddigital\Cms\Core\Form\Field\Processor\Validator\UrlValidator;
-use Iddigital\Cms\Core\Form\Field\Type\StringType;
+use Dms\Core\Form\Field\Processor\TrimProcessor;
+use Dms\Core\Form\Field\Processor\Validator\EmailValidator;
+use Dms\Core\Form\Field\Processor\Validator\ExactLengthValidator;
+use Dms\Core\Form\Field\Processor\Validator\MaxLengthValidator;
+use Dms\Core\Form\Field\Processor\Validator\MinLengthValidator;
+use Dms\Core\Form\Field\Processor\Validator\UrlValidator;
+use Dms\Core\Form\Field\Type\StringType;
 
 /**
  * The string field builder class.

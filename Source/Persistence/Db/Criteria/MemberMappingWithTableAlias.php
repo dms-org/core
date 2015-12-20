@@ -1,8 +1,8 @@
 <?php
 
-namespace Iddigital\Cms\Core\Persistence\Db\Criteria;
+namespace Dms\Core\Persistence\Db\Criteria;
 
-use Iddigital\Cms\Core\Persistence\Db\Criteria\MemberMapping\MemberMapping;
+use Dms\Core\Persistence\Db\Criteria\MemberMapping\MemberMapping;
 
 /**
  * Contains a member mapping instance and its associated table alias

@@ -1,8 +1,8 @@
 <?php
 
-namespace Iddigital\Cms\Core\Auth;
+namespace Dms\Core\Auth;
 
-use Iddigital\Cms\Core\Model\IValueObject;
+use Dms\Core\Model\IValueObject;
 
 interface IPermission extends IValueObject
 {

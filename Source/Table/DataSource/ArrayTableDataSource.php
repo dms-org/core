@@ -1,16 +1,16 @@
 <?php
 
-namespace Iddigital\Cms\Core\Table\DataSource;
+namespace Dms\Core\Table\DataSource;
 
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Model\Traversable;
-use Iddigital\Cms\Core\Table\Criteria\ColumnOrdering;
-use Iddigital\Cms\Core\Table\Data\TableRow;
-use Iddigital\Cms\Core\Table\IRowCriteria;
-use Iddigital\Cms\Core\Table\ITableRow;
-use Iddigital\Cms\Core\Table\ITableSection;
-use Iddigital\Cms\Core\Table\ITableStructure;
-use Iddigital\Cms\Core\Util\Debug;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Model\Traversable;
+use Dms\Core\Table\Criteria\ColumnOrdering;
+use Dms\Core\Table\Data\TableRow;
+use Dms\Core\Table\IRowCriteria;
+use Dms\Core\Table\ITableRow;
+use Dms\Core\Table\ITableSection;
+use Dms\Core\Table\ITableStructure;
+use Dms\Core\Util\Debug;
 use Pinq\Direction;
 
 /**

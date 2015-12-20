@@ -1,6 +1,6 @@
 <?php
 
-namespace Iddigital\Cms\Core\Model\Object;
+namespace Dms\Core\Model\Object;
 
 /**
  * This class contains a configuration option on whether to perform

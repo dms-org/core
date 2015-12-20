@@ -1,10 +1,10 @@
 <?php
 
-namespace Iddigital\Cms\Core\Module\Handler;
+namespace Dms\Core\Module\Handler;
 
-use Iddigital\Cms\Core\Form;
-use Iddigital\Cms\Core\Model\IDataTransferObject;
-use Iddigital\Cms\Core\Util\Reflection;
+use Dms\Core\Form;
+use Dms\Core\Model\IDataTransferObject;
+use Dms\Core\Util\Reflection;
 
 /**
  * The action handler base for handlers with a dto type
@@ -24,7 +24,7 @@ class CustomParameterizedActionHandler extends ReflectionBasedActionHandler
      * @param string|null $returnType
      * @param string|null $parameterType
      *
-     * @throws \Iddigital\Cms\Core\Module\InvalidHandlerClassException
+     * @throws \Dms\Core\Module\InvalidHandlerClassException
      */
     public function __construct(callable $handlerCallback, $returnType = null, $parameterType = null)
     {

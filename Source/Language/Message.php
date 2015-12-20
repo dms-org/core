@@ -1,6 +1,6 @@
 <?php
 
-namespace Iddigital\Cms\Core\Language;
+namespace Dms\Core\Language;
 
 /**
  * The message class.

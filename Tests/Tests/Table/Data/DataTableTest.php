@@ -1,15 +1,15 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Table\Data;
+namespace Dms\Core\Tests\Table\Data;
 
-use Iddigital\Cms\Common\Testing\CmsTestCase;
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Form\Field\Builder\Field;
-use Iddigital\Cms\Core\Table\Builder\Column;
-use Iddigital\Cms\Core\Table\Data\DataTable;
-use Iddigital\Cms\Core\Table\Data\TableRow;
-use Iddigital\Cms\Core\Table\Data\TableSection;
-use Iddigital\Cms\Core\Table\TableStructure;
+use Dms\Common\Testing\CmsTestCase;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Form\Field\Builder\Field;
+use Dms\Core\Table\Builder\Column;
+use Dms\Core\Table\Data\DataTable;
+use Dms\Core\Table\Data\TableRow;
+use Dms\Core\Table\Data\TableSection;
+use Dms\Core\Table\TableStructure;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

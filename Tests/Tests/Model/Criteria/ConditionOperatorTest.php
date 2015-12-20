@@ -1,10 +1,10 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Model\Criteria;
+namespace Dms\Core\Tests\Model\Criteria;
 
-use Iddigital\Cms\Common\Testing\CmsTestCase;
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Model\Criteria\Condition\ConditionOperator;
+use Dms\Common\Testing\CmsTestCase;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Model\Criteria\Condition\ConditionOperator;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

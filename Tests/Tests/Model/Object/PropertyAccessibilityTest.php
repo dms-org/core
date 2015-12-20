@@ -1,10 +1,10 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Model;
+namespace Dms\Core\Tests\Model;
 
-use Iddigital\Cms\Common\Testing\CmsTestCase;
-use Iddigital\Cms\Core\Model\Object\PropertyAccessibility;
-use Iddigital\Cms\Core\Tests\Model\Object\TypedObjectTest;
+use Dms\Common\Testing\CmsTestCase;
+use Dms\Core\Model\Object\PropertyAccessibility;
+use Dms\Core\Tests\Model\Object\TypedObjectTest;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

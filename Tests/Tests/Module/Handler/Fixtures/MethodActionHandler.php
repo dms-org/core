@@ -1,9 +1,9 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Module\Handler\Fixtures;
+namespace Dms\Core\Tests\Module\Handler\Fixtures;
 
-use Iddigital\Cms\Core\Module\Handler\UnparameterizedActionHandler;
-use Iddigital\Cms\Core\Model\Object\DataTransferObject;
+use Dms\Core\Module\Handler\UnparameterizedActionHandler;
+use Dms\Core\Model\Object\DataTransferObject;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

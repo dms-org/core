@@ -1,14 +1,14 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Table\Column\Component\Type;
+namespace Dms\Core\Tests\Table\Column\Component\Type;
 
-use Iddigital\Cms\Common\Testing\CmsTestCase;
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Form\Field\Builder\Field;
-use Iddigital\Cms\Core\Model\Criteria\Condition\ConditionOperator;
-use Iddigital\Cms\Core\Model\Type\Builder\Type;
-use Iddigital\Cms\Core\Table\Column\Component\Type\ColumnComponentOperator;
-use Iddigital\Cms\Core\Table\Column\Component\Type\ColumnComponentType;
+use Dms\Common\Testing\CmsTestCase;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Form\Field\Builder\Field;
+use Dms\Core\Model\Criteria\Condition\ConditionOperator;
+use Dms\Core\Model\Type\Builder\Type;
+use Dms\Core\Table\Column\Component\Type\ColumnComponentOperator;
+use Dms\Core\Table\Column\Component\Type\ColumnComponentType;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

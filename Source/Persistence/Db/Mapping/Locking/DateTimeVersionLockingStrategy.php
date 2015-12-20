@@ -1,12 +1,12 @@
 <?php
 
-namespace Iddigital\Cms\Core\Persistence\Db\Mapping\Locking;
+namespace Dms\Core\Persistence\Db\Mapping\Locking;
 
-use Iddigital\Cms\Core\Model\ITypedObject;
-use Iddigital\Cms\Core\Persistence\Db\PersistenceContext;
-use Iddigital\Cms\Core\Persistence\Db\Row;
-use Iddigital\Cms\Core\Util\DateTimeClock;
-use Iddigital\Cms\Core\Util\IClock;
+use Dms\Core\Model\ITypedObject;
+use Dms\Core\Persistence\Db\PersistenceContext;
+use Dms\Core\Persistence\Db\Row;
+use Dms\Core\Util\DateTimeClock;
+use Dms\Core\Util\IClock;
 
 /**
  * Implements optimistic locking via a version property that

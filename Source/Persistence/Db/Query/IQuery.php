@@ -1,8 +1,8 @@
 <?php
 
-namespace Iddigital\Cms\Core\Persistence\Db\Query;
+namespace Dms\Core\Persistence\Db\Query;
 
-use Iddigital\Cms\Core\Persistence\Db\Connection\IConnection;
+use Dms\Core\Persistence\Db\Connection\IConnection;
 
 /**
  * The db query interface

@@ -1,9 +1,9 @@
 <?php
 
-namespace Iddigital\Cms\Core\Persistence\Db;
+namespace Dms\Core\Persistence\Db;
 
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Table;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Persistence\Db\Schema\Table;
 
 /**
  * The row set class

@@ -1,6 +1,6 @@
 <?php
 
-namespace Iddigital\Cms\Core\Model\Type;
+namespace Dms\Core\Model\Type;
 
 /**
  * The bot type class

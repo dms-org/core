@@ -1,9 +1,9 @@
 <?php
 
-namespace Iddigital\Cms\Core\Form\Field\Options;
+namespace Dms\Core\Form\Field\Options;
 
-use Iddigital\Cms\Core\Form\IFieldOptions;
-use Iddigital\Cms\Core\Model\IEntitySet;
+use Dms\Core\Form\IFieldOptions;
+use Dms\Core\Model\IEntitySet;
 
 /**
  * The entity options class

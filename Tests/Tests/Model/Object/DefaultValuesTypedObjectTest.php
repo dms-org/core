@@ -1,8 +1,8 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Model\Object;
+namespace Dms\Core\Tests\Model\Object;
 
-use Iddigital\Cms\Core\Tests\Model\Object\Fixtures\DefaultPropertyValues;
+use Dms\Core\Tests\Model\Object\Fixtures\DefaultPropertyValues;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

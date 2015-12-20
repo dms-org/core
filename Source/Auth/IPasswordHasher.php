@@ -1,8 +1,8 @@
 <?php
 
-namespace Iddigital\Cms\Core\Auth;
+namespace Dms\Core\Auth;
 
-use Iddigital\Cms\Core\IPackage;
+use Dms\Core\IPackage;
 
 interface IPasswordHasher extends IPackage
 {

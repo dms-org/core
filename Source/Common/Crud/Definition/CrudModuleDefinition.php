@@ -1,14 +1,14 @@
 <?php
 
-namespace Iddigital\Cms\Core\Common\Crud\Definition;
+namespace Dms\Core\Common\Crud\Definition;
 
-use Iddigital\Cms\Core\Auth\IAuthSystem;
-use Iddigital\Cms\Core\Common\Crud\Action\Crud\CreateAction;
-use Iddigital\Cms\Core\Common\Crud\Action\Crud\EditAction;
-use Iddigital\Cms\Core\Common\Crud\Action\Object\IObjectAction;
-use Iddigital\Cms\Core\Common\Crud\Definition\Action\RemoveActionDefiner;
-use Iddigital\Cms\Core\Common\Crud\Definition\Form\CrudFormDefinition;
-use Iddigital\Cms\Core\Persistence\IRepository;
+use Dms\Core\Auth\IAuthSystem;
+use Dms\Core\Common\Crud\Action\Crud\CreateAction;
+use Dms\Core\Common\Crud\Action\Crud\EditAction;
+use Dms\Core\Common\Crud\Action\Object\IObjectAction;
+use Dms\Core\Common\Crud\Definition\Action\RemoveActionDefiner;
+use Dms\Core\Common\Crud\Definition\Form\CrudFormDefinition;
+use Dms\Core\Persistence\IRepository;
 
 /**
  * The crud module definition class.

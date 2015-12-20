@@ -1,13 +1,13 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Persistence\Db\Doctrine\Resequence;
+namespace Dms\Core\Tests\Persistence\Db\Doctrine\Resequence;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
-use Iddigital\Cms\Core\Persistence\Db\Doctrine\DoctrinePlatform;
-use Iddigital\Cms\Core\Persistence\Db\Doctrine\IResequenceCompiler;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Doctrine\DoctrineTestBase;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Doctrine\Mocks\ConnectionMock;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Doctrine\Mocks\DriverMock;
+use Dms\Core\Persistence\Db\Doctrine\DoctrinePlatform;
+use Dms\Core\Persistence\Db\Doctrine\IResequenceCompiler;
+use Dms\Core\Tests\Persistence\Db\Doctrine\DoctrineTestBase;
+use Dms\Core\Tests\Persistence\Db\Doctrine\Mocks\ConnectionMock;
+use Dms\Core\Tests\Persistence\Db\Doctrine\Mocks\DriverMock;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

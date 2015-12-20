@@ -1,15 +1,15 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Table\Chart\Criteria;
+namespace Dms\Core\Tests\Table\Chart\Criteria;
 
-use Iddigital\Cms\Common\Testing\CmsTestCase;
-use Iddigital\Cms\Core\Form\Field\Builder\Field;
-use Iddigital\Cms\Core\Model\Criteria\OrderingDirection;
-use Iddigital\Cms\Core\Table\Chart\Criteria\AxisCondition;
-use Iddigital\Cms\Core\Table\Chart\Criteria\AxisOrdering;
-use Iddigital\Cms\Core\Table\Chart\Criteria\ChartCriteria;
-use Iddigital\Cms\Core\Table\Chart\Structure\ChartAxis;
-use Iddigital\Cms\Core\Table\Chart\Structure\LineChart;
+use Dms\Common\Testing\CmsTestCase;
+use Dms\Core\Form\Field\Builder\Field;
+use Dms\Core\Model\Criteria\OrderingDirection;
+use Dms\Core\Table\Chart\Criteria\AxisCondition;
+use Dms\Core\Table\Chart\Criteria\AxisOrdering;
+use Dms\Core\Table\Chart\Criteria\ChartCriteria;
+use Dms\Core\Table\Chart\Structure\ChartAxis;
+use Dms\Core\Table\Chart\Structure\LineChart;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

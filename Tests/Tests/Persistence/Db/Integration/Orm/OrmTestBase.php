@@ -1,9 +1,9 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Orm;
+namespace Dms\Core\Tests\Persistence\Db\Integration\Orm;
 
-use Iddigital\Cms\Common\Testing\CmsTestCase;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Orm;
+use Dms\Common\Testing\CmsTestCase;
+use Dms\Core\Persistence\Db\Mapping\Orm;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

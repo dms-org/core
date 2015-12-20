@@ -1,12 +1,12 @@
 <?php
 
-namespace Iddigital\Cms\Core\Table\DataSource\Definition;
+namespace Dms\Core\Table\DataSource\Definition;
 
-use Iddigital\Cms\Core\Form\Field\Builder\FieldBuilderBase;
-use Iddigital\Cms\Core\Form\IField;
-use Iddigital\Cms\Core\Table\Builder\Column;
-use Iddigital\Cms\Core\Table\IColumn;
-use Iddigital\Cms\Core\Table\IColumnComponent;
+use Dms\Core\Form\Field\Builder\FieldBuilderBase;
+use Dms\Core\Form\IField;
+use Dms\Core\Table\Builder\Column;
+use Dms\Core\Table\IColumn;
+use Dms\Core\Table\IColumnComponent;
 
 /**
  * The property column mapping definer class

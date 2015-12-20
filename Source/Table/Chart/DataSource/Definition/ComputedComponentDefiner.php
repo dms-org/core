@@ -1,15 +1,15 @@
 <?php
 
-namespace Iddigital\Cms\Core\Table\Chart\DataSource\Definition;
+namespace Dms\Core\Table\Chart\DataSource\Definition;
 
-use Iddigital\Cms\Core\Form\Field\Builder\FieldBuilderBase;
-use Iddigital\Cms\Core\Form\IField;
-use Iddigital\Cms\Core\Table\Chart\IChartAxis;
-use Iddigital\Cms\Core\Table\Chart\Structure\ChartAxis;
-use Iddigital\Cms\Core\Table\Column\Component\ColumnComponent;
-use Iddigital\Cms\Core\Table\Column\Component\Type\ColumnComponentType;
-use Iddigital\Cms\Core\Table\IColumnComponent;
-use Iddigital\Cms\Core\Table\IColumnComponentType;
+use Dms\Core\Form\Field\Builder\FieldBuilderBase;
+use Dms\Core\Form\IField;
+use Dms\Core\Table\Chart\IChartAxis;
+use Dms\Core\Table\Chart\Structure\ChartAxis;
+use Dms\Core\Table\Column\Component\ColumnComponent;
+use Dms\Core\Table\Column\Component\Type\ColumnComponentType;
+use Dms\Core\Table\IColumnComponent;
+use Dms\Core\Table\IColumnComponentType;
 
 /**
  * The computed chart component definer.

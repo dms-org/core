@@ -1,12 +1,12 @@
 <?php
 
-namespace Iddigital\Cms\Core\Module\Action;
+namespace Dms\Core\Module\Action;
 
-use Iddigital\Cms\Core\Auth\IAuthSystem;
-use Iddigital\Cms\Core\Auth\IPermission;
-use Iddigital\Cms\Core\Form;
-use Iddigital\Cms\Core\Module\Handler\CustomUnparameterizedActionHandler;
-use Iddigital\Cms\Core\Module\IUnparameterizedActionHandler;
+use Dms\Core\Auth\IAuthSystem;
+use Dms\Core\Auth\IPermission;
+use Dms\Core\Form;
+use Dms\Core\Module\Handler\CustomUnparameterizedActionHandler;
+use Dms\Core\Module\IUnparameterizedActionHandler;
 
 /**
  * The self-handling unparameterized action class.

@@ -1,9 +1,9 @@
 <?php
 
-namespace Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Relation\Accessor;
+namespace Dms\Core\Persistence\Db\Mapping\Definition\Relation\Accessor;
 
-use Iddigital\Cms\Core\Model\ITypedObject;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Relation\IAccessor;
+use Dms\Core\Model\ITypedObject;
+use Dms\Core\Persistence\Db\Mapping\Definition\Relation\IAccessor;
 
 /**
  * The custom accessor class.

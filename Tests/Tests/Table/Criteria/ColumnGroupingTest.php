@@ -1,14 +1,14 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Table\Criteria;
+namespace Dms\Core\Tests\Table\Criteria;
 
-use Iddigital\Cms\Common\Testing\CmsTestCase;
-use Iddigital\Cms\Core\Form\Field\Builder\Field;
-use Iddigital\Cms\Core\Table\Builder\Column;
-use Iddigital\Cms\Core\Table\Builder\Table;
-use Iddigital\Cms\Core\Table\Criteria\ColumnGrouping;
-use Iddigital\Cms\Core\Table\Data\TableRow;
-use Iddigital\Cms\Core\Table\IColumnComponent;
+use Dms\Common\Testing\CmsTestCase;
+use Dms\Core\Form\Field\Builder\Field;
+use Dms\Core\Table\Builder\Column;
+use Dms\Core\Table\Builder\Table;
+use Dms\Core\Table\Criteria\ColumnGrouping;
+use Dms\Core\Table\Data\TableRow;
+use Dms\Core\Table\IColumnComponent;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

@@ -1,19 +1,19 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Common\Crud\Modules\Fixtures\Complex;
+namespace Dms\Core\Tests\Common\Crud\Modules\Fixtures\Complex;
 
-use Iddigital\Cms\Core\Common\Crud\CrudModule;
-use Iddigital\Cms\Core\Common\Crud\Definition\CrudModuleDefinition;
-use Iddigital\Cms\Core\Common\Crud\Definition\Form\CrudFormDefinition;
-use Iddigital\Cms\Core\Common\Crud\Definition\Table\SummaryTableDefinition;
-use Iddigital\Cms\Core\Form\Builder\Form;
-use Iddigital\Cms\Core\Form\Field\Builder\Field;
-use Iddigital\Cms\Core\Model\Object\ArrayDataObject;
-use Iddigital\Cms\Core\Table\Builder\Column;
-use Iddigital\Cms\Core\Tests\Common\Crud\Modules\Fixtures\Complex\Domain\Adult;
-use Iddigital\Cms\Core\Tests\Common\Crud\Modules\Fixtures\Complex\Domain\Child;
-use Iddigital\Cms\Core\Tests\Common\Crud\Modules\Fixtures\Complex\Domain\Colour;
-use Iddigital\Cms\Core\Tests\Common\Crud\Modules\Fixtures\Complex\Domain\Person;
+use Dms\Core\Common\Crud\CrudModule;
+use Dms\Core\Common\Crud\Definition\CrudModuleDefinition;
+use Dms\Core\Common\Crud\Definition\Form\CrudFormDefinition;
+use Dms\Core\Common\Crud\Definition\Table\SummaryTableDefinition;
+use Dms\Core\Form\Builder\Form;
+use Dms\Core\Form\Field\Builder\Field;
+use Dms\Core\Model\Object\ArrayDataObject;
+use Dms\Core\Table\Builder\Column;
+use Dms\Core\Tests\Common\Crud\Modules\Fixtures\Complex\Domain\Adult;
+use Dms\Core\Tests\Common\Crud\Modules\Fixtures\Complex\Domain\Child;
+use Dms\Core\Tests\Common\Crud\Modules\Fixtures\Complex\Domain\Colour;
+use Dms\Core\Tests\Common\Crud\Modules\Fixtures\Complex\Domain\Person;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

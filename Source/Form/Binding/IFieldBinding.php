@@ -1,8 +1,8 @@
 <?php
 
-namespace Iddigital\Cms\Core\Form\Binding;
+namespace Dms\Core\Form\Binding;
 
-use Iddigital\Cms\Core\Exception\TypeMismatchException;
+use Dms\Core\Exception\TypeMismatchException;
 
 /**
  * The field binding interface.

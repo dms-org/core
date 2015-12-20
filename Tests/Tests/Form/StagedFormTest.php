@@ -1,15 +1,15 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Form;
+namespace Dms\Core\Tests\Form;
 
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Exception\InvalidOperationException;
-use Iddigital\Cms\Core\Form\Builder\Form;
-use Iddigital\Cms\Core\Form\Builder\StagedForm;
-use Iddigital\Cms\Core\Form\Field\Builder\Field;
-use Iddigital\Cms\Core\Form\Stage\DependentFormStage;
-use Iddigital\Cms\Core\Form\Stage\IndependentFormStage;
-use Iddigital\Cms\Core\Model\Type\Builder\Type;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Exception\InvalidOperationException;
+use Dms\Core\Form\Builder\Form;
+use Dms\Core\Form\Builder\StagedForm;
+use Dms\Core\Form\Field\Builder\Field;
+use Dms\Core\Form\Stage\DependentFormStage;
+use Dms\Core\Form\Stage\IndependentFormStage;
+use Dms\Core\Model\Type\Builder\Type;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

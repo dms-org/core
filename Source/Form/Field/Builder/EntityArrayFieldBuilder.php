@@ -1,6 +1,6 @@
 <?php
 
-namespace Iddigital\Cms\Core\Form\Field\Builder;
+namespace Dms\Core\Form\Field\Builder;
 
 /**
  * The entity array field builder class.

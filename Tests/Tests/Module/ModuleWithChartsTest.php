@@ -1,18 +1,18 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Module;
+namespace Dms\Core\Tests\Module;
 
-use Iddigital\Cms\Core\Auth\IPermission;
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Form\Field\Builder\Field;
-use Iddigital\Cms\Core\Module\Chart\ChartDisplay;
-use Iddigital\Cms\Core\Module\Chart\ChartView;
-use Iddigital\Cms\Core\Module\Module;
-use Iddigital\Cms\Core\Table\Chart\DataSource\ChartTableDataSourceAdapter;
-use Iddigital\Cms\Core\Table\Chart\Structure\ChartAxis;
-use Iddigital\Cms\Core\Table\Column\Component\ColumnComponent;
-use Iddigital\Cms\Core\Tests\Module\Fixtures\ModuleWithCharts;
-use Iddigital\Cms\Core\Tests\Module\Mock\MockAuthSystem;
+use Dms\Core\Auth\IPermission;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Form\Field\Builder\Field;
+use Dms\Core\Module\Chart\ChartDisplay;
+use Dms\Core\Module\Chart\ChartView;
+use Dms\Core\Module\Module;
+use Dms\Core\Table\Chart\DataSource\ChartTableDataSourceAdapter;
+use Dms\Core\Table\Chart\Structure\ChartAxis;
+use Dms\Core\Table\Column\Component\ColumnComponent;
+use Dms\Core\Tests\Module\Fixtures\ModuleWithCharts;
+use Dms\Core\Tests\Module\Mock\MockAuthSystem;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

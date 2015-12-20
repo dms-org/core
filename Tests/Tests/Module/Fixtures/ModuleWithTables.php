@@ -1,14 +1,14 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Module\Fixtures;
+namespace Dms\Core\Tests\Module\Fixtures;
 
-use Iddigital\Cms\Core\Form\Field\Builder\Field;
-use Iddigital\Cms\Core\Module\Definition\ModuleDefinition;
-use Iddigital\Cms\Core\Module\Definition\Table\TableViewDefinition;
-use Iddigital\Cms\Core\Module\Module;
-use Iddigital\Cms\Core\Table\Builder\Column;
-use Iddigital\Cms\Core\Table\DataSource\Definition\ObjectTableDefinition;
-use Iddigital\Cms\Core\Table\ITableDataSource;
+use Dms\Core\Form\Field\Builder\Field;
+use Dms\Core\Module\Definition\ModuleDefinition;
+use Dms\Core\Module\Definition\Table\TableViewDefinition;
+use Dms\Core\Module\Module;
+use Dms\Core\Table\Builder\Column;
+use Dms\Core\Table\DataSource\Definition\ObjectTableDefinition;
+use Dms\Core\Table\ITableDataSource;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

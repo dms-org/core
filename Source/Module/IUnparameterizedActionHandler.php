@@ -1,11 +1,11 @@
 <?php
 
-namespace Iddigital\Cms\Core\Module;
+namespace Dms\Core\Module;
 
-use Iddigital\Cms\Core\Exception\TypeMismatchException;
-use Iddigital\Cms\Core\Form;
-use Iddigital\Cms\Core\Model\IDataTransferObject;
-use Iddigital\Cms\Core\Persistence;
+use Dms\Core\Exception\TypeMismatchException;
+use Dms\Core\Form;
+use Dms\Core\Model\IDataTransferObject;
+use Dms\Core\Persistence;
 
 /**
  * The unparamterized action handler interface.

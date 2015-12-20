@@ -1,16 +1,16 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Module\Fixtures;
+namespace Dms\Core\Tests\Module\Fixtures;
 
-use Iddigital\Cms\Core\Form\Field\Builder\Field;
-use Iddigital\Cms\Core\Module\Definition\Chart\ChartViewDefinition;
-use Iddigital\Cms\Core\Module\Definition\ModuleDefinition;
-use Iddigital\Cms\Core\Module\Module;
-use Iddigital\Cms\Core\Table\Builder\Column;
-use Iddigital\Cms\Core\Table\Chart\DataSource\Definition\ChartTableMapperDefinition;
-use Iddigital\Cms\Core\Table\Chart\Structure\ChartAxis;
-use Iddigital\Cms\Core\Table\Chart\Structure\LineChart;
-use Iddigital\Cms\Core\Table\Chart\Structure\PieChart;
+use Dms\Core\Form\Field\Builder\Field;
+use Dms\Core\Module\Definition\Chart\ChartViewDefinition;
+use Dms\Core\Module\Definition\ModuleDefinition;
+use Dms\Core\Module\Module;
+use Dms\Core\Table\Builder\Column;
+use Dms\Core\Table\Chart\DataSource\Definition\ChartTableMapperDefinition;
+use Dms\Core\Table\Chart\Structure\ChartAxis;
+use Dms\Core\Table\Chart\Structure\LineChart;
+use Dms\Core\Table\Chart\Structure\PieChart;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

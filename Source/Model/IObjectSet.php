@@ -1,9 +1,9 @@
 <?php
 
-namespace Iddigital\Cms\Core\Model;
+namespace Dms\Core\Model;
 
-use Iddigital\Cms\Core\Exception;
-use Iddigital\Cms\Core\Model\Criteria\Criteria;
+use Dms\Core\Exception;
+use Dms\Core\Model\Criteria\Criteria;
 
 /**
  * The object set interface.

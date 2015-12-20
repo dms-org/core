@@ -1,10 +1,10 @@
 <?php
 
-namespace Iddigital\Cms\Core\Widget;
+namespace Dms\Core\Widget;
 
-use Iddigital\Cms\Core\Table\IDataTable;
-use Iddigital\Cms\Core\Table\IRowCriteria;
-use Iddigital\Cms\Core\Table\ITableDataSource;
+use Dms\Core\Table\IDataTable;
+use Dms\Core\Table\IRowCriteria;
+use Dms\Core\Table\ITableDataSource;
 
 /**
  * The table widget class.

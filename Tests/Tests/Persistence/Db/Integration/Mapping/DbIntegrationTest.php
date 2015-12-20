@@ -1,16 +1,16 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping;
+namespace Dms\Core\Tests\Persistence\Db\Integration\Mapping;
 
-use Iddigital\Cms\Core\Persistence\Db\Mapping\IEntityMapper;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\IOrm;
-use Iddigital\Cms\Core\Persistence\Db\Query\IQuery;
-use Iddigital\Cms\Core\Persistence\Db\Query\Query;
-use Iddigital\Cms\Core\Persistence\DbRepository;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Mock\MockConnection;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Mock\MockDatabase;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Mock\MockTable;
-use Iddigital\Cms\Core\Tests\Persistence\Db\MockDatabaseTestBase;
+use Dms\Core\Persistence\Db\Mapping\IEntityMapper;
+use Dms\Core\Persistence\Db\Mapping\IOrm;
+use Dms\Core\Persistence\Db\Query\IQuery;
+use Dms\Core\Persistence\Db\Query\Query;
+use Dms\Core\Persistence\DbRepository;
+use Dms\Core\Tests\Persistence\Db\Mock\MockConnection;
+use Dms\Core\Tests\Persistence\Db\Mock\MockDatabase;
+use Dms\Core\Tests\Persistence\Db\Mock\MockTable;
+use Dms\Core\Tests\Persistence\Db\MockDatabaseTestBase;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>
@@ -93,7 +93,7 @@ abstract class DbIntegrationTest extends MockDatabaseTestBase
     /**
      * @param string $table
      *
-     * @return \Iddigital\Cms\Core\Persistence\Db\Schema\Table
+     * @return \Dms\Core\Persistence\Db\Schema\Table
      */
     protected function getSchemaTable($table)
     {

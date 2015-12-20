@@ -1,8 +1,8 @@
 <?php
 
-namespace Iddigital\Cms\Core\Form\Field\Processor\Validator;
+namespace Dms\Core\Form\Field\Processor\Validator;
 
-use Iddigital\Cms\Core\Language\Message;
+use Dms\Core\Language\Message;
 
 /**
  * The min array length validator

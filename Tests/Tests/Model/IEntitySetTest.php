@@ -1,20 +1,20 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Model;
+namespace Dms\Core\Tests\Model;
 
-use Iddigital\Cms\Common\Testing\CmsTestCase;
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Exception\TypeMismatchException;
-use Iddigital\Cms\Core\Model\Criteria\Criteria;
-use Iddigital\Cms\Core\Model\Criteria\SpecificationDefinition;
-use Iddigital\Cms\Core\Model\EntityCollection;
-use Iddigital\Cms\Core\Model\EntityNotFoundException;
-use Iddigital\Cms\Core\Model\IEntitySet;
-use Iddigital\Cms\Core\Model\Type\ObjectType;
-use Iddigital\Cms\Core\Tests\Model\Criteria\Fixtures\MockSpecification;
-use Iddigital\Cms\Core\Tests\Model\Fixtures\SubObject;
-use Iddigital\Cms\Core\Tests\Model\Fixtures\TestEntity;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\Fixtures\Id\EmptyEntity;
+use Dms\Common\Testing\CmsTestCase;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Exception\TypeMismatchException;
+use Dms\Core\Model\Criteria\Criteria;
+use Dms\Core\Model\Criteria\SpecificationDefinition;
+use Dms\Core\Model\EntityCollection;
+use Dms\Core\Model\EntityNotFoundException;
+use Dms\Core\Model\IEntitySet;
+use Dms\Core\Model\Type\ObjectType;
+use Dms\Core\Tests\Model\Criteria\Fixtures\MockSpecification;
+use Dms\Core\Tests\Model\Fixtures\SubObject;
+use Dms\Core\Tests\Model\Fixtures\TestEntity;
+use Dms\Core\Tests\Persistence\Db\Integration\Mapping\Fixtures\Id\EmptyEntity;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

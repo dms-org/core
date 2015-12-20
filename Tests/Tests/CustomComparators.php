@@ -1,8 +1,8 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests;
+namespace Dms\Core\Tests;
 
-use Iddigital\Cms\Core\Tests\Helpers\Comparators\EntityCollectionComparator;
+use Dms\Core\Tests\Helpers\Comparators\EntityCollectionComparator;
 use SebastianBergmann\Comparator\Factory;
 
 /**

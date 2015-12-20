@@ -1,12 +1,12 @@
 <?php
 
-namespace Iddigital\Cms\Core\Persistence\Db\Criteria;
+namespace Dms\Core\Persistence\Db\Criteria;
 
-use Iddigital\Cms\Core\Model\Criteria\LoadCriteria;
-use Iddigital\Cms\Core\Model\ILoadCriteria;
-use Iddigital\Cms\Core\Persistence\Db\Criteria\MemberMapping\IFinalRelationMemberMapping;
-use Iddigital\Cms\Core\Persistence\Db\Criteria\MemberMapping\ToOneEmbeddedObjectMapping;
-use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Expr;
+use Dms\Core\Model\Criteria\LoadCriteria;
+use Dms\Core\Model\ILoadCriteria;
+use Dms\Core\Persistence\Db\Criteria\MemberMapping\IFinalRelationMemberMapping;
+use Dms\Core\Persistence\Db\Criteria\MemberMapping\ToOneEmbeddedObjectMapping;
+use Dms\Core\Persistence\Db\Query\Expression\Expr;
 
 /**
  * The partial load criteria mapper class

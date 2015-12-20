@@ -1,9 +1,9 @@
 <?php
 
-namespace Iddigital\Cms\Core\Form\Field\Builder;
+namespace Dms\Core\Form\Field\Builder;
 
-use Iddigital\Cms\Core\Form\Field\Processor\Validator\ImageDimensionsValidator;
-use Iddigital\Cms\Core\Form\Field\Type\ImageType;
+use Dms\Core\Form\Field\Processor\Validator\ImageDimensionsValidator;
+use Dms\Core\Form\Field\Type\ImageType;
 
 /**
  * The image field builder class.

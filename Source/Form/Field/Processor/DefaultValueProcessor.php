@@ -1,9 +1,9 @@
 <?php
 
-namespace Iddigital\Cms\Core\Form\Field\Processor;
+namespace Dms\Core\Form\Field\Processor;
 
-use Iddigital\Cms\Core\Model\Type\Builder\Type;
-use Iddigital\Cms\Core\Model\Type\IType;
+use Dms\Core\Model\Type\Builder\Type;
+use Dms\Core\Model\Type\IType;
 
 /**
  * The default value type processor.
@@ -21,7 +21,7 @@ class DefaultValueProcessor extends FieldProcessor
      * @param IType $processedType
      * @param mixed $default
      *
-     * @throws \Iddigital\Cms\Core\Exception\InvalidArgumentException
+     * @throws \Dms\Core\Exception\InvalidArgumentException
      */
     public function __construct(IType $processedType, $default)
     {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Iddigital\Cms\Core\Auth;
+namespace Dms\Core\Auth;
 
 /**
  * Exception for an unauthenticated user

@@ -1,26 +1,26 @@
 <?php
 
-namespace Iddigital\Cms\Core\Model\Criteria;
+namespace Dms\Core\Model\Criteria;
 
-use Iddigital\Cms\Core\Exception\BaseException;
-use Iddigital\Cms\Core\Model\Criteria\Member\CollectionCountMethodExpression;
-use Iddigital\Cms\Core\Model\Criteria\Member\LoadAllIdsMethodExpression;
-use Iddigital\Cms\Core\Model\Criteria\Member\LoadIdMethodExpression;
-use Iddigital\Cms\Core\Model\Criteria\Member\MemberPropertyExpression;
-use Iddigital\Cms\Core\Model\Criteria\Member\ObjectSetAverageMethodExpression;
-use Iddigital\Cms\Core\Model\Criteria\Member\ObjectSetFlattenMethodExpression;
-use Iddigital\Cms\Core\Model\Criteria\Member\ObjectSetMaximumMethodExpression;
-use Iddigital\Cms\Core\Model\Criteria\Member\ObjectSetMinimumMethodExpression;
-use Iddigital\Cms\Core\Model\Criteria\Member\ObjectSetSumMethodExpression;
-use Iddigital\Cms\Core\Model\Criteria\Member\SelfExpression;
-use Iddigital\Cms\Core\Model\IEntity;
-use Iddigital\Cms\Core\Model\Object\FinalizedClassDefinition;
-use Iddigital\Cms\Core\Model\Object\TypedObject;
-use Iddigital\Cms\Core\Model\Type\Builder\Type;
-use Iddigital\Cms\Core\Model\Type\CollectionType;
-use Iddigital\Cms\Core\Model\Type\IType;
-use Iddigital\Cms\Core\Model\Type\ObjectType;
-use Iddigital\Cms\Core\Model\Type\WithElementsType;
+use Dms\Core\Exception\BaseException;
+use Dms\Core\Model\Criteria\Member\CollectionCountMethodExpression;
+use Dms\Core\Model\Criteria\Member\LoadAllIdsMethodExpression;
+use Dms\Core\Model\Criteria\Member\LoadIdMethodExpression;
+use Dms\Core\Model\Criteria\Member\MemberPropertyExpression;
+use Dms\Core\Model\Criteria\Member\ObjectSetAverageMethodExpression;
+use Dms\Core\Model\Criteria\Member\ObjectSetFlattenMethodExpression;
+use Dms\Core\Model\Criteria\Member\ObjectSetMaximumMethodExpression;
+use Dms\Core\Model\Criteria\Member\ObjectSetMinimumMethodExpression;
+use Dms\Core\Model\Criteria\Member\ObjectSetSumMethodExpression;
+use Dms\Core\Model\Criteria\Member\SelfExpression;
+use Dms\Core\Model\IEntity;
+use Dms\Core\Model\Object\FinalizedClassDefinition;
+use Dms\Core\Model\Object\TypedObject;
+use Dms\Core\Model\Type\Builder\Type;
+use Dms\Core\Model\Type\CollectionType;
+use Dms\Core\Model\Type\IType;
+use Dms\Core\Model\Type\ObjectType;
+use Dms\Core\Model\Type\WithElementsType;
 
 /**
  * The member expression parser class.

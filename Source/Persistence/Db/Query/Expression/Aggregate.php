@@ -1,6 +1,6 @@
 <?php
 
-namespace Iddigital\Cms\Core\Persistence\Db\Query\Expression;
+namespace Dms\Core\Persistence\Db\Query\Expression;
 
 /**
  * The aggregate expression.

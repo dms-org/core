@@ -1,10 +1,10 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Form\Processor\Validator;
+namespace Dms\Core\Tests\Form\Processor\Validator;
 
-use Iddigital\Cms\Core\Form\Processor\FormValidator;
-use Iddigital\Cms\Core\Form\Processor\Validator\CustomFormValidator;
-use Iddigital\Cms\Core\Language\Message;
+use Dms\Core\Form\Processor\FormValidator;
+use Dms\Core\Form\Processor\Validator\CustomFormValidator;
+use Dms\Core\Language\Message;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

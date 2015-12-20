@@ -1,12 +1,12 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\Locking;
+namespace Dms\Core\Tests\Persistence\Db\Integration\Mapping\Locking;
 
-use Iddigital\Cms\Core\Persistence\Db\Mapping\EntityOutOfSyncException;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\IOrm;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\DbIntegrationTest;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\Locking\Fixtures\IntegerVersion\IntegerVersionedEntity;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\Locking\Fixtures\IntegerVersion\IntegerVersionedEntityMapper;
+use Dms\Core\Persistence\Db\Mapping\EntityOutOfSyncException;
+use Dms\Core\Persistence\Db\Mapping\IOrm;
+use Dms\Core\Tests\Persistence\Db\Integration\Mapping\DbIntegrationTest;
+use Dms\Core\Tests\Persistence\Db\Integration\Mapping\Locking\Fixtures\IntegerVersion\IntegerVersionedEntity;
+use Dms\Core\Tests\Persistence\Db\Integration\Mapping\Locking\Fixtures\IntegerVersion\IntegerVersionedEntityMapper;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

@@ -1,17 +1,17 @@
 <?php
 
-namespace Iddigital\Cms\Core\Persistence\Db\Mapping\ReadModel\Definition;
+namespace Dms\Core\Persistence\Db\Mapping\ReadModel\Definition;
 
-use Iddigital\Cms\Core\Persistence\Db\Mapping\IEntityMapper;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\ReadModel\ReadModelMapper;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\ReadModel\Relation\RelationReadModelReference;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\EntityRelation;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\IRelation;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\IToOneRelation;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Reference\ToManyRelationIdentityReference;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Reference\ToManyRelationObjectReference;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Reference\ToOneRelationIdentityReference;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Reference\ToOneRelationObjectReference;
+use Dms\Core\Persistence\Db\Mapping\IEntityMapper;
+use Dms\Core\Persistence\Db\Mapping\ReadModel\ReadModelMapper;
+use Dms\Core\Persistence\Db\Mapping\ReadModel\Relation\RelationReadModelReference;
+use Dms\Core\Persistence\Db\Mapping\Relation\EntityRelation;
+use Dms\Core\Persistence\Db\Mapping\Relation\IRelation;
+use Dms\Core\Persistence\Db\Mapping\Relation\IToOneRelation;
+use Dms\Core\Persistence\Db\Mapping\Relation\Reference\ToManyRelationIdentityReference;
+use Dms\Core\Persistence\Db\Mapping\Relation\Reference\ToManyRelationObjectReference;
+use Dms\Core\Persistence\Db\Mapping\Relation\Reference\ToOneRelationIdentityReference;
+use Dms\Core\Persistence\Db\Mapping\Relation\Reference\ToOneRelationObjectReference;
 
 /**
  *

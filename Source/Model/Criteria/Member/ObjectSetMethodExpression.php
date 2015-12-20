@@ -1,15 +1,15 @@
 <?php
 
-namespace Iddigital\Cms\Core\Model\Criteria\Member;
+namespace Dms\Core\Model\Criteria\Member;
 
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Model\Criteria\IMemberExpressionParser;
-use Iddigital\Cms\Core\Model\IObjectSet;
-use Iddigital\Cms\Core\Model\Object\FinalizedClassDefinition;
-use Iddigital\Cms\Core\Model\Object\TypedObject;
-use Iddigital\Cms\Core\Model\Type\Builder\Type;
-use Iddigital\Cms\Core\Model\Type\CollectionType;
-use Iddigital\Cms\Core\Model\Type\IType;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Model\Criteria\IMemberExpressionParser;
+use Dms\Core\Model\IObjectSet;
+use Dms\Core\Model\Object\FinalizedClassDefinition;
+use Dms\Core\Model\Object\TypedObject;
+use Dms\Core\Model\Type\Builder\Type;
+use Dms\Core\Model\Type\CollectionType;
+use Dms\Core\Model\Type\IType;
 
 /**
  * The object set method expression base class class.

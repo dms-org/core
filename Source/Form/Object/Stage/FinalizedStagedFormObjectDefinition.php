@@ -1,13 +1,13 @@
 <?php
 
-namespace Iddigital\Cms\Core\Form\Object\Stage;
+namespace Dms\Core\Form\Object\Stage;
 
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Form\IStagedForm;
-use Iddigital\Cms\Core\Form\Object\FinalizedFormObjectDefinition;
-use Iddigital\Cms\Core\Form\Stage\DependentFormStage;
-use Iddigital\Cms\Core\Form\Stage\IndependentFormStage;
-use Iddigital\Cms\Core\Form\StagedForm;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Form\IStagedForm;
+use Dms\Core\Form\Object\FinalizedFormObjectDefinition;
+use Dms\Core\Form\Stage\DependentFormStage;
+use Dms\Core\Form\Stage\IndependentFormStage;
+use Dms\Core\Form\StagedForm;
 
 /**
  * The finalized staged form object definition class

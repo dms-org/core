@@ -1,9 +1,9 @@
 <?php
 
-namespace Iddigital\Cms\Core\Persistence\Db\Doctrine;
+namespace Dms\Core\Persistence\Db\Doctrine;
 
-use Iddigital\Cms\Core\Persistence\Db\Connection\Connection;
-use Iddigital\Cms\Core\Persistence\Db\Connection\IQuery;
+use Dms\Core\Persistence\Db\Connection\Connection;
+use Dms\Core\Persistence\Db\Connection\IQuery;
 
 /**
  * The doctrine connection

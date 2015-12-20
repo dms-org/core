@@ -1,6 +1,6 @@
 <?php
 
-namespace Iddigital\Cms\Core\Form;
+namespace Dms\Core\Form;
 
 /**
  * Exception for an invalid inner form submission.

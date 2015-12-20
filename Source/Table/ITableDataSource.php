@@ -1,9 +1,9 @@
 <?php
 
-namespace Iddigital\Cms\Core\Table;
+namespace Dms\Core\Table;
 
-use Iddigital\Cms\Core\Table\Chart\IChartDataSource;
-use Iddigital\Cms\Core\Table\Criteria\RowCriteria;
+use Dms\Core\Table\Chart\IChartDataSource;
+use Dms\Core\Table\Criteria\RowCriteria;
 
 /**
  * The table data source interface

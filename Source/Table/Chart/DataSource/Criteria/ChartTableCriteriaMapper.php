@@ -1,10 +1,10 @@
 <?php
 
-namespace Iddigital\Cms\Core\Table\Chart\DataSource\Criteria;
+namespace Dms\Core\Table\Chart\DataSource\Criteria;
 
-use Iddigital\Cms\Core\Table\Chart\DataSource\Definition\FinalizedChartTableMapperDefinition;
-use Iddigital\Cms\Core\Table\Chart\IChartCriteria;
-use Iddigital\Cms\Core\Table\IRowCriteria;
+use Dms\Core\Table\Chart\DataSource\Definition\FinalizedChartTableMapperDefinition;
+use Dms\Core\Table\Chart\IChartCriteria;
+use Dms\Core\Table\IRowCriteria;
 
 /**
  * The chart-to-table criteria mapper class.

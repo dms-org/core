@@ -1,24 +1,24 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Persistence\Db\Doctrine;
+namespace Dms\Core\Tests\Persistence\Db\Doctrine;
 
 use Doctrine\DBAL\DriverManager;
 use Doctrine\DBAL\Platforms\SqlitePlatform;
-use Iddigital\Cms\Core\Exception\InvalidOperationException;
-use Iddigital\Cms\Core\Persistence\Db\Doctrine\DoctrineConnection;
-use Iddigital\Cms\Core\Persistence\Db\Doctrine\DoctrinePlatform;
-use Iddigital\Cms\Core\Persistence\Db\Query\BulkUpdate;
-use Iddigital\Cms\Core\Persistence\Db\Query\Delete;
-use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Expr;
-use Iddigital\Cms\Core\Persistence\Db\Query\Select;
-use Iddigital\Cms\Core\Persistence\Db\Query\Update;
-use Iddigital\Cms\Core\Persistence\Db\Query\Upsert;
-use Iddigital\Cms\Core\Persistence\Db\RowSet;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Column;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Table;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Type\Integer;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Type\Text;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Type\Varchar;
+use Dms\Core\Exception\InvalidOperationException;
+use Dms\Core\Persistence\Db\Doctrine\DoctrineConnection;
+use Dms\Core\Persistence\Db\Doctrine\DoctrinePlatform;
+use Dms\Core\Persistence\Db\Query\BulkUpdate;
+use Dms\Core\Persistence\Db\Query\Delete;
+use Dms\Core\Persistence\Db\Query\Expression\Expr;
+use Dms\Core\Persistence\Db\Query\Select;
+use Dms\Core\Persistence\Db\Query\Update;
+use Dms\Core\Persistence\Db\Query\Upsert;
+use Dms\Core\Persistence\Db\RowSet;
+use Dms\Core\Persistence\Db\Schema\Column;
+use Dms\Core\Persistence\Db\Schema\Table;
+use Dms\Core\Persistence\Db\Schema\Type\Integer;
+use Dms\Core\Persistence\Db\Schema\Type\Text;
+use Dms\Core\Persistence\Db\Schema\Type\Varchar;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

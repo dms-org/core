@@ -1,17 +1,17 @@
 <?php
 
-namespace Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Relation;
+namespace Dms\Core\Persistence\Db\Mapping\Definition\Relation;
 
-use Iddigital\Cms\Core\Exception\InvalidOperationException;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\IEntityMapper;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\IdentifyingToOneRelation;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\ManyToOneRelation;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\NonIdentifyingToOneRelation;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Reference\ToOneRelationIdentityReference;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Reference\ToOneRelationObjectReference;
-use Iddigital\Cms\Core\Persistence\Db\Schema\ForeignKey;
-use Iddigital\Cms\Core\Persistence\Db\Schema\ForeignKeyMode;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Table;
+use Dms\Core\Exception\InvalidOperationException;
+use Dms\Core\Persistence\Db\Mapping\IEntityMapper;
+use Dms\Core\Persistence\Db\Mapping\Relation\IdentifyingToOneRelation;
+use Dms\Core\Persistence\Db\Mapping\Relation\ManyToOneRelation;
+use Dms\Core\Persistence\Db\Mapping\Relation\NonIdentifyingToOneRelation;
+use Dms\Core\Persistence\Db\Mapping\Relation\Reference\ToOneRelationIdentityReference;
+use Dms\Core\Persistence\Db\Mapping\Relation\Reference\ToOneRelationObjectReference;
+use Dms\Core\Persistence\Db\Schema\ForeignKey;
+use Dms\Core\Persistence\Db\Schema\ForeignKeyMode;
+use Dms\Core\Persistence\Db\Schema\Table;
 
 /**
  * The many-to-one relation definer class.

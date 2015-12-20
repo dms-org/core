@@ -1,14 +1,14 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Model\Criteria;
+namespace Dms\Core\Tests\Model\Criteria;
 
-use Iddigital\Cms\Common\Testing\CmsTestCase;
-use Iddigital\Cms\Core\Exception\TypeMismatchException;
-use Iddigital\Cms\Core\Model\Criteria\Condition\ConditionOperator;
-use Iddigital\Cms\Core\Model\Criteria\Condition\MemberCondition;
-use Iddigital\Cms\Core\Model\Criteria\Member\MemberPropertyExpression;
-use Iddigital\Cms\Core\Model\Criteria\NestedMember;
-use Iddigital\Cms\Core\Tests\Model\Fixtures\TestEntity;
+use Dms\Common\Testing\CmsTestCase;
+use Dms\Core\Exception\TypeMismatchException;
+use Dms\Core\Model\Criteria\Condition\ConditionOperator;
+use Dms\Core\Model\Criteria\Condition\MemberCondition;
+use Dms\Core\Model\Criteria\Member\MemberPropertyExpression;
+use Dms\Core\Model\Criteria\NestedMember;
+use Dms\Core\Tests\Model\Fixtures\TestEntity;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

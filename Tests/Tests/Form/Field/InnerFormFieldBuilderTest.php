@@ -1,19 +1,19 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Form\Field;
+namespace Dms\Core\Tests\Form\Field;
 
-use Iddigital\Cms\Core\Form\Builder\Form;
-use Iddigital\Cms\Core\Form\Field\Builder\BoolFieldBuilder;
-use Iddigital\Cms\Core\Form\Field\Builder\Field;
-use Iddigital\Cms\Core\Form\Field\Processor\InnerFormProcessor;
-use Iddigital\Cms\Core\Form\Field\Processor\Validator\GreaterThanOrEqualValidator;
-use Iddigital\Cms\Core\Form\Field\Processor\Validator\TypeValidator;
-use Iddigital\Cms\Core\Form\InvalidFormSubmissionException;
-use Iddigital\Cms\Core\Form\InvalidInputException;
-use Iddigital\Cms\Core\Language\Message;
-use Iddigital\Cms\Core\Model\Type\ArrayType;
-use Iddigital\Cms\Core\Model\Type\Builder\Type;
-use Iddigital\Cms\Core\Model\Type\MixedType;
+use Dms\Core\Form\Builder\Form;
+use Dms\Core\Form\Field\Builder\BoolFieldBuilder;
+use Dms\Core\Form\Field\Builder\Field;
+use Dms\Core\Form\Field\Processor\InnerFormProcessor;
+use Dms\Core\Form\Field\Processor\Validator\GreaterThanOrEqualValidator;
+use Dms\Core\Form\Field\Processor\Validator\TypeValidator;
+use Dms\Core\Form\InvalidFormSubmissionException;
+use Dms\Core\Form\InvalidInputException;
+use Dms\Core\Language\Message;
+use Dms\Core\Model\Type\ArrayType;
+use Dms\Core\Model\Type\Builder\Type;
+use Dms\Core\Model\Type\MixedType;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>
@@ -44,8 +44,8 @@ class InnerFormFieldBuilderTest extends FieldBuilderTestBase
     }
 
     /**
-     * @return \Iddigital\Cms\Core\Form\IForm
-     * @throws \Iddigital\Cms\Core\Form\ConflictingFieldNameException
+     * @return \Dms\Core\Form\IForm
+     * @throws \Dms\Core\Form\ConflictingFieldNameException
      */
     protected function innerForm()
     {

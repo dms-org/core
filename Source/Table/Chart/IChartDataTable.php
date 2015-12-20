@@ -1,6 +1,6 @@
 <?php
 
-namespace Iddigital\Cms\Core\Table\Chart;
+namespace Dms\Core\Table\Chart;
 
 /**
  * The chart data table interface.

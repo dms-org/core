@@ -1,13 +1,13 @@
 <?php
 
-namespace Iddigital\Cms\Core\Common\Crud;
+namespace Dms\Core\Common\Crud;
 
-use Iddigital\Cms\Core\Common\Crud\Action\Object\IObjectAction;
-use Iddigital\Cms\Core\Common\Crud\Table\ISummaryTable;
-use Iddigital\Cms\Core\Model\IObjectSet;
-use Iddigital\Cms\Core\Model\ITypedObject;
-use Iddigital\Cms\Core\Module\IModule;
-use Iddigital\Cms\Core\Module\IUnparameterizedAction;
+use Dms\Core\Common\Crud\Action\Object\IObjectAction;
+use Dms\Core\Common\Crud\Table\ISummaryTable;
+use Dms\Core\Model\IObjectSet;
+use Dms\Core\Model\ITypedObject;
+use Dms\Core\Module\IModule;
+use Dms\Core\Module\IUnparameterizedAction;
 
 /**
  * The interface for a read module.

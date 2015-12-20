@@ -1,8 +1,8 @@
 <?php
 
-namespace Iddigital\Cms\Core\Form\Field\Options;
+namespace Dms\Core\Form\Field\Options;
 
-use Iddigital\Cms\Core\Form\IFieldOption;
+use Dms\Core\Form\IFieldOption;
 
 /**
  * The field option class

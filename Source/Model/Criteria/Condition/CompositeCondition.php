@@ -1,8 +1,8 @@
 <?php
 
-namespace Iddigital\Cms\Core\Model\Criteria\Condition;
+namespace Dms\Core\Model\Criteria\Condition;
 
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Exception\InvalidArgumentException;
 
 /**
  * The composite condition base class

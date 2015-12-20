@@ -1,11 +1,11 @@
 <?php
 
-namespace Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Embedded;
+namespace Dms\Core\Persistence\Db\Mapping\Definition\Embedded;
 
-use Iddigital\Cms\Core\Exception\InvalidOperationException;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\CustomValueObjectMapper;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\IEmbeddedObjectMapper;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\IObjectMapper;
+use Dms\Core\Exception\InvalidOperationException;
+use Dms\Core\Persistence\Db\Mapping\CustomValueObjectMapper;
+use Dms\Core\Persistence\Db\Mapping\IEmbeddedObjectMapper;
+use Dms\Core\Persistence\Db\Mapping\IObjectMapper;
 
 /**
  * The embedded collection definer

@@ -1,9 +1,9 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Table\DataSource\Fixtures;
+namespace Dms\Core\Tests\Table\DataSource\Fixtures;
 
-use Iddigital\Cms\Core\Model\Object\ClassDefinition;
-use Iddigital\Cms\Core\Model\Object\TypedObject;
+use Dms\Core\Model\Object\ClassDefinition;
+use Dms\Core\Model\Object\TypedObject;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

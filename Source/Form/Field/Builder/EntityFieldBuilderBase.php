@@ -1,9 +1,9 @@
 <?php
 
-namespace Iddigital\Cms\Core\Form\Field\Builder;
+namespace Dms\Core\Form\Field\Builder;
 
-use Iddigital\Cms\Core\Form\Field\Options\EntityIdOptions;
-use Iddigital\Cms\Core\Form\Field\Type\FieldType;
+use Dms\Core\Form\Field\Options\EntityIdOptions;
+use Dms\Core\Form\Field\Type\FieldType;
 
 /**
  * The entity field builder base class.

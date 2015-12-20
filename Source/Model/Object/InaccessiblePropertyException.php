@@ -1,8 +1,8 @@
 <?php
 
-namespace Iddigital\Cms\Core\Model\Object;
+namespace Dms\Core\Model\Object;
 
-use Iddigital\Cms\Core\Exception;
+use Dms\Core\Exception;
 
 /**
  * Exception for an inaccessible class property.

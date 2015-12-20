@@ -1,10 +1,10 @@
 <?php
 
-namespace Iddigital\Cms\Core\Persistence\Db\Doctrine;
+namespace Dms\Core\Persistence\Db\Doctrine;
 
 use Doctrine\DBAL\Driver\Statement;
-use Iddigital\Cms\Core\Persistence\Db\Connection\Query;
-use Iddigital\Cms\Core\Persistence\PersistenceException;
+use Dms\Core\Persistence\Db\Connection\Query;
+use Dms\Core\Persistence\PersistenceException;
 
 /**
  * The doctrine query

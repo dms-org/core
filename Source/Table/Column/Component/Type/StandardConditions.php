@@ -1,11 +1,11 @@
 <?php
 
-namespace Iddigital\Cms\Core\Table\Column\Component\Type;
+namespace Dms\Core\Table\Column\Component\Type;
 
-use Iddigital\Cms\Core\Form\Field\Builder\Field;
-use Iddigital\Cms\Core\Form\IField;
-use Iddigital\Cms\Core\Model\Criteria\Condition\ConditionOperator;
-use Iddigital\Cms\Core\Table\IColumnComponentOperator;
+use Dms\Core\Form\Field\Builder\Field;
+use Dms\Core\Form\IField;
+use Dms\Core\Model\Criteria\Condition\ConditionOperator;
+use Dms\Core\Table\IColumnComponentOperator;
 
 /**
  * The standard operators helper class

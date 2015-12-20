@@ -1,12 +1,12 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Model\Criteria\Condition;
+namespace Dms\Core\Tests\Model\Criteria\Condition;
 
-use Iddigital\Cms\Common\Testing\CmsTestCase;
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Model\Criteria\Condition\ConditionOperator;
-use Iddigital\Cms\Core\Model\Criteria\Specification;
-use Iddigital\Cms\Core\Model\Criteria\SpecificationDefinition;
+use Dms\Common\Testing\CmsTestCase;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Model\Criteria\Condition\ConditionOperator;
+use Dms\Core\Model\Criteria\Specification;
+use Dms\Core\Model\Criteria\SpecificationDefinition;
 
 class PersonIsOldSpecification extends Specification
 {
@@ -224,7 +224,7 @@ class ConditionOperatorTest extends CmsTestCase
      * @param $operator
      *
      * @return \Closure
-     * @throws \Iddigital\Cms\Core\Exception\NotImplementedException
+     * @throws \Dms\Core\Exception\NotImplementedException
      */
     protected function makeOperatorCallable($operator)
     {

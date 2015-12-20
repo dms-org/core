@@ -1,10 +1,10 @@
 <?php
 
-namespace Iddigital\Cms\Core\Module;
+namespace Dms\Core\Module;
 
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Table\IDataTable;
-use Iddigital\Cms\Core\Table\ITableDataSource;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Table\IDataTable;
+use Dms\Core\Table\ITableDataSource;
 
 /**
  * The table display interface.

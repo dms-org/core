@@ -1,12 +1,12 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Model;
+namespace Dms\Core\Tests\Model;
 
-use Iddigital\Cms\Common\Testing\CmsTestCase;
-use Iddigital\Cms\Core\Model\Object\InvalidEnumValueException;
-use Iddigital\Cms\Core\Tests\Model\Object\Fixtures\InvalidTypeEnum;
-use Iddigital\Cms\Core\Tests\Model\Object\Fixtures\TestEnum;
-use Iddigital\Cms\Core\Tests\Model\Object\Fixtures\TestSubclassEnum;
+use Dms\Common\Testing\CmsTestCase;
+use Dms\Core\Model\Object\InvalidEnumValueException;
+use Dms\Core\Tests\Model\Object\Fixtures\InvalidTypeEnum;
+use Dms\Core\Tests\Model\Object\Fixtures\TestEnum;
+use Dms\Core\Tests\Model\Object\Fixtures\TestSubclassEnum;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

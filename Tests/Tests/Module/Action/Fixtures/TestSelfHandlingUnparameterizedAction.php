@@ -1,12 +1,12 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Module\Action\Fixtures;
+namespace Dms\Core\Tests\Module\Action\Fixtures;
 
-use Iddigital\Cms\Core\Auth\IPermission;
-use Iddigital\Cms\Core\Auth\Permission;
-use Iddigital\Cms\Core\Exception\TypeMismatchException;
-use Iddigital\Cms\Core\Module\Action\SelfHandlingUnparameterizedAction;
-use Iddigital\Cms\Core\Tests\Module\Fixtures\TestDto;
+use Dms\Core\Auth\IPermission;
+use Dms\Core\Auth\Permission;
+use Dms\Core\Exception\TypeMismatchException;
+use Dms\Core\Module\Action\SelfHandlingUnparameterizedAction;
+use Dms\Core\Tests\Module\Fixtures\TestDto;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

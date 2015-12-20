@@ -1,9 +1,9 @@
 <?php
 
-namespace Iddigital\Cms\Core\Model\Criteria\Member;
+namespace Dms\Core\Model\Criteria\Member;
 
-use Iddigital\Cms\Core\Model\Object\FinalizedPropertyDefinition;
-use Iddigital\Cms\Core\Model\Type\Builder\Type;
+use Dms\Core\Model\Object\FinalizedPropertyDefinition;
+use Dms\Core\Model\Type\Builder\Type;
 
 /**
  * The member property expression class.

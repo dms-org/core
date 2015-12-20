@@ -1,19 +1,19 @@
 <?php
 
-namespace Iddigital\Cms\Core\Common\Crud\Action\Table;
+namespace Dms\Core\Common\Crud\Action\Table;
 
-use Iddigital\Cms\Core\Auth\IAuthSystem;
-use Iddigital\Cms\Core\Auth\IPermission;
-use Iddigital\Cms\Core\Common\Crud\Action\Object\CustomObjectActionHandler;
-use Iddigital\Cms\Core\Common\Crud\Action\Object\Mapping\ArrayObjectActionFormMapping;
-use Iddigital\Cms\Core\Common\Crud\Action\Object\ObjectAction;
-use Iddigital\Cms\Core\Common\Crud\Form\ObjectForm;
-use Iddigital\Cms\Core\Exception\TypeMismatchException;
-use Iddigital\Cms\Core\Form\Builder\Form;
-use Iddigital\Cms\Core\Form\Builder\StagedForm;
-use Iddigital\Cms\Core\Form\Field\Builder\Field;
-use Iddigital\Cms\Core\Model\IEntitySet;
-use Iddigital\Cms\Core\Model\Object\ArrayDataObject;
+use Dms\Core\Auth\IAuthSystem;
+use Dms\Core\Auth\IPermission;
+use Dms\Core\Common\Crud\Action\Object\CustomObjectActionHandler;
+use Dms\Core\Common\Crud\Action\Object\Mapping\ArrayObjectActionFormMapping;
+use Dms\Core\Common\Crud\Action\Object\ObjectAction;
+use Dms\Core\Common\Crud\Form\ObjectForm;
+use Dms\Core\Exception\TypeMismatchException;
+use Dms\Core\Form\Builder\Form;
+use Dms\Core\Form\Builder\StagedForm;
+use Dms\Core\Form\Field\Builder\Field;
+use Dms\Core\Model\IEntitySet;
+use Dms\Core\Model\Object\ArrayDataObject;
 
 /**
  * The reorder index action class.

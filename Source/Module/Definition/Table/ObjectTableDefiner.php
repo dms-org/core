@@ -1,11 +1,11 @@
 <?php
 
-namespace Iddigital\Cms\Core\Module\Definition\Table;
+namespace Dms\Core\Module\Definition\Table;
 
-use Iddigital\Cms\Core\Model\IObjectSet;
-use Iddigital\Cms\Core\Model\Object\TypedObject;
-use Iddigital\Cms\Core\Table\DataSource\Definition\ObjectTableDefinition;
-use Iddigital\Cms\Core\Table\DataSource\ObjectTableDataSource;
+use Dms\Core\Model\IObjectSet;
+use Dms\Core\Model\Object\TypedObject;
+use Dms\Core\Table\DataSource\Definition\ObjectTableDefinition;
+use Dms\Core\Table\DataSource\ObjectTableDataSource;
 
 /**
  * The object table definer class.

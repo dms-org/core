@@ -1,14 +1,14 @@
 <?php
 
-namespace Iddigital\Cms\Core\Common\Crud\Form;
+namespace Dms\Core\Common\Crud\Form;
 
-use Iddigital\Cms\Core\Form\Binding\FormBinding;
-use Iddigital\Cms\Core\Form\Binding\IFieldBinding;
-use Iddigital\Cms\Core\Form\Binding\IFormBinding;
-use Iddigital\Cms\Core\Form\ConflictingFieldNameException;
-use Iddigital\Cms\Core\Form\Form;
-use Iddigital\Cms\Core\Form\IFormProcessor;
-use Iddigital\Cms\Core\Form\IFormSection;
+use Dms\Core\Form\Binding\FormBinding;
+use Dms\Core\Form\Binding\IFieldBinding;
+use Dms\Core\Form\Binding\IFormBinding;
+use Dms\Core\Form\ConflictingFieldNameException;
+use Dms\Core\Form\Form;
+use Dms\Core\Form\IFormProcessor;
+use Dms\Core\Form\IFormSection;
 
 /**
  * The form class that also contains a form object binding.

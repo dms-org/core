@@ -1,9 +1,9 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\Fixtures\NestedValueObject;
+namespace Dms\Core\Tests\Persistence\Db\Integration\Mapping\Fixtures\NestedValueObject;
 
-use Iddigital\Cms\Core\Model\Object\ClassDefinition;
-use Iddigital\Cms\Core\Model\Object\ValueObject;
+use Dms\Core\Model\Object\ClassDefinition;
+use Dms\Core\Model\Object\ValueObject;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

@@ -1,6 +1,6 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Persistence\Db\Doctrine\Mocks;
+namespace Dms\Core\Tests\Persistence\Db\Doctrine\Mocks;
 
 
 class DriverMock implements \Doctrine\DBAL\Driver

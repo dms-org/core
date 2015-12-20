@@ -1,29 +1,29 @@
 <?php
 
-namespace Iddigital\Cms\Core\Module\Definition;
+namespace Dms\Core\Module\Definition;
 
-use Iddigital\Cms\Core\Auth\IAuthSystem;
-use Iddigital\Cms\Core\Auth\IPermission;
-use Iddigital\Cms\Core\Auth\Permission;
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Form\Builder\Form as FormBuilder;
-use Iddigital\Cms\Core\Form\Builder\StagedForm as StagedFormBuilder;
-use Iddigital\Cms\Core\Form\IForm;
-use Iddigital\Cms\Core\Form\IStagedForm;
-use Iddigital\Cms\Core\Form\Object\FormObject;
-use Iddigital\Cms\Core\Form\Object\Stage\StagedFormObject;
-use Iddigital\Cms\Core\Module\Action\ParameterizedAction;
-use Iddigital\Cms\Core\Module\Action\UnparameterizedAction;
-use Iddigital\Cms\Core\Module\Handler\CustomParameterizedActionHandler;
-use Iddigital\Cms\Core\Module\Handler\CustomUnparameterizedActionHandler;
-use Iddigital\Cms\Core\Module\IParameterizedActionHandler;
-use Iddigital\Cms\Core\Module\IStagedFormDtoMapping;
-use Iddigital\Cms\Core\Module\IUnparameterizedActionHandler;
-use Iddigital\Cms\Core\Module\Mapping\ArrayDataObjectFormMapping;
-use Iddigital\Cms\Core\Module\Mapping\CustomStagedFormDtoMapping;
-use Iddigital\Cms\Core\Module\Mapping\FormObjectMapping;
-use Iddigital\Cms\Core\Module\Mapping\StagedFormObjectMapping;
-use Iddigital\Cms\Core\Util\Debug;
+use Dms\Core\Auth\IAuthSystem;
+use Dms\Core\Auth\IPermission;
+use Dms\Core\Auth\Permission;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Form\Builder\Form as FormBuilder;
+use Dms\Core\Form\Builder\StagedForm as StagedFormBuilder;
+use Dms\Core\Form\IForm;
+use Dms\Core\Form\IStagedForm;
+use Dms\Core\Form\Object\FormObject;
+use Dms\Core\Form\Object\Stage\StagedFormObject;
+use Dms\Core\Module\Action\ParameterizedAction;
+use Dms\Core\Module\Action\UnparameterizedAction;
+use Dms\Core\Module\Handler\CustomParameterizedActionHandler;
+use Dms\Core\Module\Handler\CustomUnparameterizedActionHandler;
+use Dms\Core\Module\IParameterizedActionHandler;
+use Dms\Core\Module\IStagedFormDtoMapping;
+use Dms\Core\Module\IUnparameterizedActionHandler;
+use Dms\Core\Module\Mapping\ArrayDataObjectFormMapping;
+use Dms\Core\Module\Mapping\CustomStagedFormDtoMapping;
+use Dms\Core\Module\Mapping\FormObjectMapping;
+use Dms\Core\Module\Mapping\StagedFormObjectMapping;
+use Dms\Core\Util\Debug;
 
 /**
  * The action definer class.

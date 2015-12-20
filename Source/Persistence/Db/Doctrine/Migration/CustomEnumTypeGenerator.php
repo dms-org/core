@@ -1,9 +1,9 @@
 <?php
 
-namespace Iddigital\Cms\Core\Persistence\Db\Doctrine\Migration;
+namespace Dms\Core\Persistence\Db\Doctrine\Migration;
 
 use Doctrine\DBAL\Types\Type;
-use Iddigital\Cms\Core\Persistence\Db\Doctrine\Migration\Type\BaseEnumType;
+use Dms\Core\Persistence\Db\Doctrine\Migration\Type\BaseEnumType;
 
 /**
  * The custom enum type generator class.

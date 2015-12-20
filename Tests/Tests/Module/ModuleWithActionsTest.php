@@ -1,17 +1,17 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Module;
+namespace Dms\Core\Tests\Module;
 
-use Iddigital\Cms\Core\Auth\IPermission;
-use Iddigital\Cms\Core\Auth\Permission;
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Module\IAction;
-use Iddigital\Cms\Core\Module\IParameterizedAction;
-use Iddigital\Cms\Core\Module\IUnparameterizedAction;
-use Iddigital\Cms\Core\Module\Module;
-use Iddigital\Cms\Core\Tests\Module\Fixtures\ModuleWithActions;
-use Iddigital\Cms\Core\Tests\Module\Fixtures\TestDto;
-use Iddigital\Cms\Core\Tests\Module\Mock\MockAuthSystem;
+use Dms\Core\Auth\IPermission;
+use Dms\Core\Auth\Permission;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Module\IAction;
+use Dms\Core\Module\IParameterizedAction;
+use Dms\Core\Module\IUnparameterizedAction;
+use Dms\Core\Module\Module;
+use Dms\Core\Tests\Module\Fixtures\ModuleWithActions;
+use Dms\Core\Tests\Module\Fixtures\TestDto;
+use Dms\Core\Tests\Module\Mock\MockAuthSystem;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

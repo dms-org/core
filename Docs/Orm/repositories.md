@@ -3,9 +3,9 @@ Repositories
 
 [The repository interface][repo-interface] contains the api for storing and retrieving a set of
 entities from an external data-store such as a relational database. The orm already provides an
-implementation of the repository interface under [`Iddigital\Cms\Core\Persistence\DbRepository`][repo-db].
+implementation of the repository interface under [`Dms\Core\Persistence\DbRepository`][repo-db].
 
-This class requires a db connection in the form of `Iddigital\Cms\Core\Persistence\Db\Connection\IConnection`
+This class requires a db connection in the form of `Dms\Core\Persistence\Db\Connection\IConnection`
 and an entity mapper to map the rows into object instances.
 
 Custom repository specific methods can be added as required.
@@ -17,14 +17,14 @@ A simple repository example:
 
 namespace Some\Name\Space;
 
-use Iddigital\Cms\Core\Persistence\Db\Connection\IConnection;
-use Iddigital\Cms\Core\Persistence\IRepository;
-use Iddigital\Cms\Core\Persistence\DbRepository;
-use Iddigital\Cms\Core\Model\EntityNotFoundException;
-use Iddigital\Cms\Core\Model\ICriteria;
-use Iddigital\Cms\Core\Model\ISpecification;
-use Iddigital\Cms\Core\Model\Object\Entity;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\EntityMapper;
+use Dms\Core\Persistence\Db\Connection\IConnection;
+use Dms\Core\Persistence\IRepository;
+use Dms\Core\Persistence\DbRepository;
+use Dms\Core\Model\EntityNotFoundException;
+use Dms\Core\Model\ICriteria;
+use Dms\Core\Model\ISpecification;
+use Dms\Core\Model\Object\Entity;
+use Dms\Core\Persistence\Db\Mapping\EntityMapper;
 
 class User extends Entity
 {

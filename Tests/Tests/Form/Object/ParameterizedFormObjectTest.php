@@ -1,15 +1,15 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Form\Object;
+namespace Dms\Core\Tests\Form\Object;
 
-use Iddigital\Cms\Common\Testing\CmsTestCase;
-use Iddigital\Cms\Core\Form\Builder\Form;
-use Iddigital\Cms\Core\Form\Field\Builder\Field as Field;
-use Iddigital\Cms\Core\Form\Field\Processor\Validator\ExactArrayLengthValidator;
-use Iddigital\Cms\Core\Form\InvalidFormSubmissionException;
-use Iddigital\Cms\Core\Language\Message;
-use Iddigital\Cms\Core\Model\Type\Builder\Type as Type;
-use Iddigital\Cms\Core\Tests\Form\Object\Fixtures\ArrayOfInts;
+use Dms\Common\Testing\CmsTestCase;
+use Dms\Core\Form\Builder\Form;
+use Dms\Core\Form\Field\Builder\Field as Field;
+use Dms\Core\Form\Field\Processor\Validator\ExactArrayLengthValidator;
+use Dms\Core\Form\InvalidFormSubmissionException;
+use Dms\Core\Language\Message;
+use Dms\Core\Model\Type\Builder\Type as Type;
+use Dms\Core\Tests\Form\Object\Fixtures\ArrayOfInts;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

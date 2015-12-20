@@ -1,12 +1,12 @@
 <?php
 
-namespace Iddigital\Cms\Core\Common\Crud\Action\Object;
+namespace Dms\Core\Common\Crud\Action\Object;
 
-use Iddigital\Cms\Core\Auth\IAuthSystem;
-use Iddigital\Cms\Core\Exception\TypeMismatchException;
-use Iddigital\Cms\Core\Form\Field\Processor\FieldValidator;
-use Iddigital\Cms\Core\Model\Type\Builder\Type;
-use Iddigital\Cms\Core\Module\Action\ParameterizedAction;
+use Dms\Core\Auth\IAuthSystem;
+use Dms\Core\Exception\TypeMismatchException;
+use Dms\Core\Form\Field\Processor\FieldValidator;
+use Dms\Core\Model\Type\Builder\Type;
+use Dms\Core\Module\Action\ParameterizedAction;
 
 /**
  * The object action class.

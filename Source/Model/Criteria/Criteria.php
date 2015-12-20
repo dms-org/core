@@ -1,10 +1,10 @@
 <?php
 
-namespace Iddigital\Cms\Core\Model\Criteria;
+namespace Dms\Core\Model\Criteria;
 
-use Iddigital\Cms\Core\Exception;
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Model\ICriteria;
+use Dms\Core\Exception;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Model\ICriteria;
 
 /**
  * The typed object criteria class.

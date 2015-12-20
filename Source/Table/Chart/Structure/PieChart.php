@@ -1,9 +1,9 @@
 <?php
 
-namespace Iddigital\Cms\Core\Table\Chart\Structure;
+namespace Dms\Core\Table\Chart\Structure;
 
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Table\Chart\IChartAxis;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Table\Chart\IChartAxis;
 
 /**
  * The pie chart structure class.

@@ -1,10 +1,10 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Form\Object\Fixtures;
+namespace Dms\Core\Tests\Form\Object\Fixtures;
 
-use Iddigital\Cms\Core\Form\Object\EntityFormObject;
-use Iddigital\Cms\Core\Form\Object\FormObjectDefinition;
-use Iddigital\Cms\Core\Model\IEntity;
+use Dms\Core\Form\Object\EntityFormObject;
+use Dms\Core\Form\Object\FormObjectDefinition;
+use Dms\Core\Model\IEntity;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

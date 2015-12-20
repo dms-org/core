@@ -1,8 +1,8 @@
 <?php
 
-namespace Iddigital\Cms\Core\Form\Stage;
+namespace Dms\Core\Form\Stage;
 
-use Iddigital\Cms\Core\Form\IForm;
+use Dms\Core\Form\IForm;
 
 /**
  * The independent form stage base class

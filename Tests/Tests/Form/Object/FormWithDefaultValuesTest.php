@@ -1,9 +1,9 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Form\Object;
+namespace Dms\Core\Tests\Form\Object;
 
-use Iddigital\Cms\Common\Testing\CmsTestCase;
-use Iddigital\Cms\Core\Tests\Form\Object\Fixtures\FormWithDefaults;
+use Dms\Common\Testing\CmsTestCase;
+use Dms\Core\Tests\Form\Object\Fixtures\FormWithDefaults;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

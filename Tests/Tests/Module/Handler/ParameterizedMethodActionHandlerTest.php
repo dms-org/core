@@ -1,19 +1,19 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Module\Handler;
+namespace Dms\Core\Tests\Module\Handler;
 
-use Iddigital\Cms\Core\Model\IEntity;
-use Iddigital\Cms\Core\Module\InvalidHandlerClassException;
-use Iddigital\Cms\Core\Module\IParameterizedActionHandler;
-use Iddigital\Cms\Core\Model\IDataTransferObject;
-use Iddigital\Cms\Core\Model\Object\DataTransferObject;
-use Iddigital\Cms\Core\Tests\Module\Handler\Fixtures\EntityTypeHintMethodActionHandler;
-use Iddigital\Cms\Core\Tests\Module\Handler\Fixtures\NoHandleMethodActionHandler;
-use Iddigital\Cms\Core\Tests\Module\Handler\Fixtures\NoParameterMethodActionHandler;
-use Iddigital\Cms\Core\Tests\Module\Handler\Fixtures\NoTypeHintMethodActionHandler;
-use Iddigital\Cms\Core\Tests\Module\Handler\Fixtures\ParamDto;
-use Iddigital\Cms\Core\Tests\Module\Handler\Fixtures\ParameterizedMethodActionHandler;
-use Iddigital\Cms\Core\Tests\Module\Handler\Fixtures\PrivateMethodActionHandler;
+use Dms\Core\Model\IEntity;
+use Dms\Core\Module\InvalidHandlerClassException;
+use Dms\Core\Module\IParameterizedActionHandler;
+use Dms\Core\Model\IDataTransferObject;
+use Dms\Core\Model\Object\DataTransferObject;
+use Dms\Core\Tests\Module\Handler\Fixtures\EntityTypeHintMethodActionHandler;
+use Dms\Core\Tests\Module\Handler\Fixtures\NoHandleMethodActionHandler;
+use Dms\Core\Tests\Module\Handler\Fixtures\NoParameterMethodActionHandler;
+use Dms\Core\Tests\Module\Handler\Fixtures\NoTypeHintMethodActionHandler;
+use Dms\Core\Tests\Module\Handler\Fixtures\ParamDto;
+use Dms\Core\Tests\Module\Handler\Fixtures\ParameterizedMethodActionHandler;
+use Dms\Core\Tests\Module\Handler\Fixtures\PrivateMethodActionHandler;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

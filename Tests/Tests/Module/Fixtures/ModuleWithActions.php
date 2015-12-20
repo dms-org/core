@@ -1,13 +1,13 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Module\Fixtures;
+namespace Dms\Core\Tests\Module\Fixtures;
 
-use Iddigital\Cms\Core\Auth\Permission;
-use Iddigital\Cms\Core\Form\Builder\Form;
-use Iddigital\Cms\Core\Form\Field\Builder\Field;
-use Iddigital\Cms\Core\Model\Object\ArrayDataObject;
-use Iddigital\Cms\Core\Module\Definition\ModuleDefinition;
-use Iddigital\Cms\Core\Module\Module;
+use Dms\Core\Auth\Permission;
+use Dms\Core\Form\Builder\Form;
+use Dms\Core\Form\Field\Builder\Field;
+use Dms\Core\Model\Object\ArrayDataObject;
+use Dms\Core\Module\Definition\ModuleDefinition;
+use Dms\Core\Module\Module;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

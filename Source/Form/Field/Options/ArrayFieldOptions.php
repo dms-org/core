@@ -1,10 +1,10 @@
 <?php
 
-namespace Iddigital\Cms\Core\Form\Field\Options;
+namespace Dms\Core\Form\Field\Options;
 
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Form\IFieldOption;
-use Iddigital\Cms\Core\Form\IFieldOptions;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Form\IFieldOption;
+use Dms\Core\Form\IFieldOptions;
 
 /**
  * The field options class

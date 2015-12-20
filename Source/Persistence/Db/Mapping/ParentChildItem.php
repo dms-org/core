@@ -1,10 +1,10 @@
 <?php
 
-namespace Iddigital\Cms\Core\Persistence\Db\Mapping;
+namespace Dms\Core\Persistence\Db\Mapping;
 
-use Iddigital\Cms\Core\Model\IEntity;
-use Iddigital\Cms\Core\Model\Object\TypedObject;
-use Iddigital\Cms\Core\Persistence\Db\Row;
+use Dms\Core\Model\IEntity;
+use Dms\Core\Model\Object\TypedObject;
+use Dms\Core\Persistence\Db\Row;
 
 /**
  * A mapping between a parent row and a child entity.

@@ -1,11 +1,11 @@
 <?php
 
-namespace Iddigital\Cms\Core\Table\Criteria;
+namespace Dms\Core\Table\Criteria;
 
-use Iddigital\Cms\Core\Exception;
-use Iddigital\Cms\Core\Model\Criteria\OrderingDirection;
-use Iddigital\Cms\Core\Table\IColumn;
-use Iddigital\Cms\Core\Table\IColumnComponent;
+use Dms\Core\Exception;
+use Dms\Core\Model\Criteria\OrderingDirection;
+use Dms\Core\Table\IColumn;
+use Dms\Core\Table\IColumnComponent;
 
 /**
  * The column ordering class

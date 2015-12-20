@@ -1,10 +1,10 @@
 <?php
 
-namespace Iddigital\Cms\Core\Model\Type;
+namespace Dms\Core\Model\Type;
 
-use Iddigital\Cms\Core\Model\Criteria\Condition\ConditionOperator;
-use Iddigital\Cms\Core\Model\Criteria\Condition\ConditionOperatorType;
-use Iddigital\Cms\Core\Model\Type\Builder\Type;
+use Dms\Core\Model\Criteria\Condition\ConditionOperator;
+use Dms\Core\Model\Criteria\Condition\ConditionOperatorType;
+use Dms\Core\Model\Type\Builder\Type;
 
 /**
  * The base type class

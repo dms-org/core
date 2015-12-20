@@ -1,12 +1,12 @@
 <?php
 
-namespace Iddigital\Cms\Core\Form\Field\Processor\Validator;
+namespace Dms\Core\Form\Field\Processor\Validator;
 
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\File\IUploadedFile;
-use Iddigital\Cms\Core\File\IUploadedImage;
-use Iddigital\Cms\Core\Form\Field\Processor\FieldValidator;
-use Iddigital\Cms\Core\Language\Message;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\File\IUploadedFile;
+use Dms\Core\File\IUploadedImage;
+use Dms\Core\Form\Field\Processor\FieldValidator;
+use Dms\Core\Language\Message;
 
 /**
  * The uploaded file validator.

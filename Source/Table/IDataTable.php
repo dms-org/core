@@ -1,6 +1,6 @@
 <?php
 
-namespace Iddigital\Cms\Core\Table;
+namespace Dms\Core\Table;
 
 /**
  * The data table interface.

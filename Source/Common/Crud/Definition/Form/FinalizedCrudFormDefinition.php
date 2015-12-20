@@ -1,11 +1,11 @@
 <?php
 
-namespace Iddigital\Cms\Core\Common\Crud\Definition\Form;
+namespace Dms\Core\Common\Crud\Definition\Form;
 
-use Iddigital\Cms\Core\Common\Crud\Form\FormWithBinding;
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Form\IStagedForm;
-use Iddigital\Cms\Core\Model\ITypedObject;
+use Dms\Core\Common\Crud\Form\FormWithBinding;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Form\IStagedForm;
+use Dms\Core\Model\ITypedObject;
 
 /**
  * The finalized CRUD form definition class.

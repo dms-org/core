@@ -1,15 +1,15 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Module\Fixtures;
+namespace Dms\Core\Tests\Module\Fixtures;
 
-use Iddigital\Cms\Core\Form\Field\Builder\Field;
-use Iddigital\Cms\Core\Module\Definition\ModuleDefinition;
-use Iddigital\Cms\Core\Module\Module;
-use Iddigital\Cms\Core\Table\Builder\Column;
-use Iddigital\Cms\Core\Table\Chart\Criteria\ChartCriteria;
-use Iddigital\Cms\Core\Table\Chart\DataSource\Definition\ChartTableMapperDefinition;
-use Iddigital\Cms\Core\Table\Chart\Structure\LineChart;
-use Iddigital\Cms\Core\Table\Criteria\RowCriteria;
+use Dms\Core\Form\Field\Builder\Field;
+use Dms\Core\Module\Definition\ModuleDefinition;
+use Dms\Core\Module\Module;
+use Dms\Core\Table\Builder\Column;
+use Dms\Core\Table\Chart\Criteria\ChartCriteria;
+use Dms\Core\Table\Chart\DataSource\Definition\ChartTableMapperDefinition;
+use Dms\Core\Table\Chart\Structure\LineChart;
+use Dms\Core\Table\Criteria\RowCriteria;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

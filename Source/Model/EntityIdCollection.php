@@ -1,9 +1,9 @@
 <?php
 
-namespace Iddigital\Cms\Core\Model;
+namespace Dms\Core\Model;
 
-use Iddigital\Cms\Core\Exception;
-use Iddigital\Cms\Core\Model\Type\Builder\Type;
+use Dms\Core\Exception;
+use Dms\Core\Model\Type\Builder\Type;
 use Pinq\Collection as PinqCollection;
 use Pinq\Iterators\IIteratorScheme;
 

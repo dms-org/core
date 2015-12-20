@@ -1,8 +1,8 @@
 <?php
 
-namespace Iddigital\Cms\Core\Module\Definition\Chart;
+namespace Dms\Core\Module\Definition\Chart;
 
-use Iddigital\Cms\Core\Table\ITableDataSource;
+use Dms\Core\Table\ITableDataSource;
 
 /**
  * The table-to-chart mapping definer

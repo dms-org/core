@@ -1,10 +1,10 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Model\Object\Fixtures;
+namespace Dms\Core\Tests\Model\Object\Fixtures;
 
-use Iddigital\Cms\Core\Model\Object\ClassDefinition;
-use Iddigital\Cms\Core\Model\Object\TypedObject;
-use Iddigital\Cms\Core\Model\Type\Builder\Type as Type;
+use Dms\Core\Model\Object\ClassDefinition;
+use Dms\Core\Model\Object\TypedObject;
+use Dms\Core\Model\Type\Builder\Type as Type;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

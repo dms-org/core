@@ -1,11 +1,11 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Orm\Fixtures\RelatedId;
+namespace Dms\Core\Tests\Persistence\Db\Integration\Orm\Fixtures\RelatedId;
 
-use Iddigital\Cms\Core\Model\EntityIdCollection;
-use Iddigital\Cms\Core\Model\Object\ClassDefinition;
-use Iddigital\Cms\Core\Model\Object\Entity;
-use Iddigital\Cms\Core\Model\Type\Builder\Type;
+use Dms\Core\Model\EntityIdCollection;
+use Dms\Core\Model\Object\ClassDefinition;
+use Dms\Core\Model\Object\Entity;
+use Dms\Core\Model\Type\Builder\Type;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

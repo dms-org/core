@@ -1,6 +1,6 @@
 <?php
 
-namespace Iddigital\Cms\Core\Util;
+namespace Dms\Core\Util;
 
 interface IClock
 {

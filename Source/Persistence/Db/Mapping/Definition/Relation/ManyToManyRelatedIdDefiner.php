@@ -1,11 +1,11 @@
 <?php
 
-namespace Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Relation;
+namespace Dms\Core\Persistence\Db\Mapping\Definition\Relation;
 
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\ManyToManyRelation;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Reference\ToManyRelationIdentityReference;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Reference\ToManyRelationObjectReference;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Table;
+use Dms\Core\Persistence\Db\Mapping\Relation\ManyToManyRelation;
+use Dms\Core\Persistence\Db\Mapping\Relation\Reference\ToManyRelationIdentityReference;
+use Dms\Core\Persistence\Db\Mapping\Relation\Reference\ToManyRelationObjectReference;
+use Dms\Core\Persistence\Db\Schema\Table;
 
 /**
  * The many-to-many relation definer class.

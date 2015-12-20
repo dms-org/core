@@ -1,25 +1,25 @@
 <?php
 
-namespace Iddigital\Cms\Core\Persistence\Db\Mapping\ReadModel\Definition;
+namespace Dms\Core\Persistence\Db\Mapping\ReadModel\Definition;
 
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Exception\InvalidOperationException;
-use Iddigital\Cms\Core\Model\IReadModel;
-use Iddigital\Cms\Core\Model\Object\FinalizedClassDefinition;
-use Iddigital\Cms\Core\Model\Object\TypedObject;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\FinalizedMapperDefinition;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\IncompleteMapperDefinitionException;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\MapperDefinition;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\IEntityMapper;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\IObjectMapper;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\IOrm;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\ReadModel\EmbeddedMapperProxy;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\ReadModel\GenericReadModelMapper;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Embedded\EmbeddedObjectRelation;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\EntityRelation;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\IRelation;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\IToManyRelation;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\IToOneRelation;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Exception\InvalidOperationException;
+use Dms\Core\Model\IReadModel;
+use Dms\Core\Model\Object\FinalizedClassDefinition;
+use Dms\Core\Model\Object\TypedObject;
+use Dms\Core\Persistence\Db\Mapping\Definition\FinalizedMapperDefinition;
+use Dms\Core\Persistence\Db\Mapping\Definition\IncompleteMapperDefinitionException;
+use Dms\Core\Persistence\Db\Mapping\Definition\MapperDefinition;
+use Dms\Core\Persistence\Db\Mapping\IEntityMapper;
+use Dms\Core\Persistence\Db\Mapping\IObjectMapper;
+use Dms\Core\Persistence\Db\Mapping\IOrm;
+use Dms\Core\Persistence\Db\Mapping\ReadModel\EmbeddedMapperProxy;
+use Dms\Core\Persistence\Db\Mapping\ReadModel\GenericReadModelMapper;
+use Dms\Core\Persistence\Db\Mapping\Relation\Embedded\EmbeddedObjectRelation;
+use Dms\Core\Persistence\Db\Mapping\Relation\EntityRelation;
+use Dms\Core\Persistence\Db\Mapping\Relation\IRelation;
+use Dms\Core\Persistence\Db\Mapping\Relation\IToManyRelation;
+use Dms\Core\Persistence\Db\Mapping\Relation\IToOneRelation;
 
 /**
  * The read model mapper definition class

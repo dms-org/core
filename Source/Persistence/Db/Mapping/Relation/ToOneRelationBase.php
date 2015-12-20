@@ -1,12 +1,12 @@
 <?php
 
-namespace Iddigital\Cms\Core\Persistence\Db\Mapping\Relation;
+namespace Dms\Core\Persistence\Db\Mapping\Relation;
 
-use Iddigital\Cms\Core\Persistence\Db\LoadingContext;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\ParentChildMap;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Mode\IRelationMode;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Reference\IToOneRelationReference;
-use Iddigital\Cms\Core\Persistence\Db\Query\Select;
+use Dms\Core\Persistence\Db\LoadingContext;
+use Dms\Core\Persistence\Db\Mapping\ParentChildMap;
+use Dms\Core\Persistence\Db\Mapping\Relation\Mode\IRelationMode;
+use Dms\Core\Persistence\Db\Mapping\Relation\Reference\IToOneRelationReference;
+use Dms\Core\Persistence\Db\Query\Select;
 
 /**
  * The to many relation base class.

@@ -1,21 +1,21 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Orm;
+namespace Dms\Core\Tests\Persistence\Db\Integration\Orm;
 
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Persistence\Db\Connection\IConnection;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\EntityRepositoryProvider;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Orm;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Column;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Database;
-use Iddigital\Cms\Core\Persistence\Db\Schema\ForeignKey;
-use Iddigital\Cms\Core\Persistence\Db\Schema\ForeignKeyMode;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Table;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Type\Integer;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Type\Varchar;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Orm\Fixtures\RelatedId\ChildEntity;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Orm\Fixtures\RelatedId\OneToManyIdOrm;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Orm\Fixtures\RelatedId\ParentEntity;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Persistence\Db\Connection\IConnection;
+use Dms\Core\Persistence\Db\Mapping\EntityRepositoryProvider;
+use Dms\Core\Persistence\Db\Mapping\Orm;
+use Dms\Core\Persistence\Db\Schema\Column;
+use Dms\Core\Persistence\Db\Schema\Database;
+use Dms\Core\Persistence\Db\Schema\ForeignKey;
+use Dms\Core\Persistence\Db\Schema\ForeignKeyMode;
+use Dms\Core\Persistence\Db\Schema\Table;
+use Dms\Core\Persistence\Db\Schema\Type\Integer;
+use Dms\Core\Persistence\Db\Schema\Type\Varchar;
+use Dms\Core\Tests\Persistence\Db\Integration\Orm\Fixtures\RelatedId\ChildEntity;
+use Dms\Core\Tests\Persistence\Db\Integration\Orm\Fixtures\RelatedId\OneToManyIdOrm;
+use Dms\Core\Tests\Persistence\Db\Integration\Orm\Fixtures\RelatedId\ParentEntity;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

@@ -1,8 +1,8 @@
 <?php
 
-namespace Iddigital\Cms\Core\Persistence\Db;
+namespace Dms\Core\Persistence\Db;
 
-use Iddigital\Cms\Core\Persistence\Db\Connection\IConnection;
+use Dms\Core\Persistence\Db\Connection\IConnection;
 
 /**
  * The connection context class

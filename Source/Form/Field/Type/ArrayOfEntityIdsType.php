@@ -1,16 +1,16 @@
 <?php
 
-namespace Iddigital\Cms\Core\Form\Field\Type;
+namespace Dms\Core\Form\Field\Type;
 
-use Iddigital\Cms\Core\Form\Field\Processor\ArrayAllProcessor;
-use Iddigital\Cms\Core\Form\Field\Processor\TypeProcessor;
-use Iddigital\Cms\Core\Form\Field\Processor\Validator\EntityIdArrayValidator;
-use Iddigital\Cms\Core\Form\Field\Processor\Validator\IntValidator;
-use Iddigital\Cms\Core\Form\Field\Processor\Validator\RequiredValidator;
-use Iddigital\Cms\Core\Form\IField;
-use Iddigital\Cms\Core\Form\IFieldProcessor;
-use Iddigital\Cms\Core\Model\IEntitySet;
-use Iddigital\Cms\Core\Model\Type\Builder\Type;
+use Dms\Core\Form\Field\Processor\ArrayAllProcessor;
+use Dms\Core\Form\Field\Processor\TypeProcessor;
+use Dms\Core\Form\Field\Processor\Validator\EntityIdArrayValidator;
+use Dms\Core\Form\Field\Processor\Validator\IntValidator;
+use Dms\Core\Form\Field\Processor\Validator\RequiredValidator;
+use Dms\Core\Form\IField;
+use Dms\Core\Form\IFieldProcessor;
+use Dms\Core\Model\IEntitySet;
+use Dms\Core\Model\Type\Builder\Type;
 
 /**
  * The array type class.

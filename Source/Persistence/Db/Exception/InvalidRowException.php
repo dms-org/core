@@ -1,9 +1,9 @@
 <?php
 
-namespace Iddigital\Cms\Core\Persistence\Db\Exception;
+namespace Dms\Core\Persistence\Db\Exception;
 
-use Iddigital\Cms\Core\Exception\BaseException;
-use Iddigital\Cms\Core\Persistence\Db\Row;
+use Dms\Core\Exception\BaseException;
+use Dms\Core\Persistence\Db\Row;
 
 /**
  * The invalid row exception class

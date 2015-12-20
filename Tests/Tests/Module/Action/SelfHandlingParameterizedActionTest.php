@@ -1,14 +1,14 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Module\Action;
+namespace Dms\Core\Tests\Module\Action;
 
-use Iddigital\Cms\Core\Auth\Permission;
-use Iddigital\Cms\Core\Exception\TypeMismatchException;
-use Iddigital\Cms\Core\Model\Object\ArrayDataObject;
-use Iddigital\Cms\Core\Module\Handler\CustomParameterizedActionHandler;
-use Iddigital\Cms\Core\Module\Mapping\ArrayDataObjectFormMapping;
-use Iddigital\Cms\Core\Tests\Module\Action\Fixtures\TestSelfHandlingParameterizedAction;
-use Iddigital\Cms\Core\Tests\Module\Fixtures\TestDto;
+use Dms\Core\Auth\Permission;
+use Dms\Core\Exception\TypeMismatchException;
+use Dms\Core\Model\Object\ArrayDataObject;
+use Dms\Core\Module\Handler\CustomParameterizedActionHandler;
+use Dms\Core\Module\Mapping\ArrayDataObjectFormMapping;
+use Dms\Core\Tests\Module\Action\Fixtures\TestSelfHandlingParameterizedAction;
+use Dms\Core\Tests\Module\Fixtures\TestDto;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

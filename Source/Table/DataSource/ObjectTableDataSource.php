@@ -1,20 +1,20 @@
 <?php
 
-namespace Iddigital\Cms\Core\Table\DataSource;
+namespace Dms\Core\Table\DataSource;
 
-use Iddigital\Cms\Core\Model\Criteria\IMemberExpressionParser;
-use Iddigital\Cms\Core\Model\Criteria\NestedMember;
-use Iddigital\Cms\Core\Model\IObjectSet;
-use Iddigital\Cms\Core\Model\IObjectSetWithLoadCriteriaSupport;
-use Iddigital\Cms\Core\Model\ITypedObject;
-use Iddigital\Cms\Core\Table\Data\TableRow;
-use Iddigital\Cms\Core\Table\DataSource\Criteria\RowCriteriaMapper;
-use Iddigital\Cms\Core\Table\DataSource\Definition\FinalizedObjectTableDefinition;
-use Iddigital\Cms\Core\Table\IColumn;
-use Iddigital\Cms\Core\Table\IColumnComponent;
-use Iddigital\Cms\Core\Table\IRowCriteria;
-use Iddigital\Cms\Core\Table\ITableRow;
-use Iddigital\Cms\Core\Table\ITableSection;
+use Dms\Core\Model\Criteria\IMemberExpressionParser;
+use Dms\Core\Model\Criteria\NestedMember;
+use Dms\Core\Model\IObjectSet;
+use Dms\Core\Model\IObjectSetWithLoadCriteriaSupport;
+use Dms\Core\Model\ITypedObject;
+use Dms\Core\Table\Data\TableRow;
+use Dms\Core\Table\DataSource\Criteria\RowCriteriaMapper;
+use Dms\Core\Table\DataSource\Definition\FinalizedObjectTableDefinition;
+use Dms\Core\Table\IColumn;
+use Dms\Core\Table\IColumnComponent;
+use Dms\Core\Table\IRowCriteria;
+use Dms\Core\Table\ITableRow;
+use Dms\Core\Table\ITableSection;
 
 /**
  * The typed object table data source.

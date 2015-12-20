@@ -1,11 +1,11 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Form\Object;
+namespace Dms\Core\Tests\Form\Object;
 
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Model\IValueObject;
-use Iddigital\Cms\Core\Tests\Form\Object\Fixtures\SeoValueObject;
-use Iddigital\Cms\Core\Tests\Form\Object\Fixtures\SeoValueObjectForm;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Model\IValueObject;
+use Dms\Core\Tests\Form\Object\Fixtures\SeoValueObject;
+use Dms\Core\Tests\Form\Object\Fixtures\SeoValueObjectForm;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

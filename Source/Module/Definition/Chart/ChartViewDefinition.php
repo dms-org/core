@@ -1,11 +1,11 @@
 <?php
 
-namespace Iddigital\Cms\Core\Module\Definition\Chart;
+namespace Dms\Core\Module\Definition\Chart;
 
-use Iddigital\Cms\Core\Module\IChartView;
-use Iddigital\Cms\Core\Module\ITableView;
-use Iddigital\Cms\Core\Table\Chart\IChartDataSource;
-use Iddigital\Cms\Core\Table\ITableDataSource;
+use Dms\Core\Module\IChartView;
+use Dms\Core\Module\ITableView;
+use Dms\Core\Table\Chart\IChartDataSource;
+use Dms\Core\Table\ITableDataSource;
 
 /**
  * The table views definition class.

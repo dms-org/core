@@ -1,9 +1,9 @@
 <?php
 
-namespace Iddigital\Cms\Core\Model;
+namespace Dms\Core\Model;
 
-use Iddigital\Cms\Core\Exception;
-use Iddigital\Cms\Core\Model\Criteria\LoadCriteria;
+use Dms\Core\Exception;
+use Dms\Core\Model\Criteria\LoadCriteria;
 
 /**
  * The object set interface that also supports loading partial objects in the form of arrays.

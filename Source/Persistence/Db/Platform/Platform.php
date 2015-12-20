@@ -1,26 +1,26 @@
 <?php
 
-namespace Iddigital\Cms\Core\Persistence\Db\Platform;
+namespace Dms\Core\Persistence\Db\Platform;
 
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Persistence\Db\Query\Delete;
-use Iddigital\Cms\Core\Persistence\Db\Query\ResequenceOrderIndexColumn;
-use Iddigital\Cms\Core\Persistence\Db\Query\Select;
-use Iddigital\Cms\Core\Persistence\Db\Query\Update;
-use Iddigital\Cms\Core\Persistence\Db\Row;
-use Iddigital\Cms\Core\Persistence\Db\RowSet;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Table;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Type\Blob;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Type\Boolean;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Type\Date;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Type\DateTime;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Type\Decimal;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Type\Enum;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Type\Integer;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Type\Text;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Type\Time;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Type\Type;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Type\Varchar;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Persistence\Db\Query\Delete;
+use Dms\Core\Persistence\Db\Query\ResequenceOrderIndexColumn;
+use Dms\Core\Persistence\Db\Query\Select;
+use Dms\Core\Persistence\Db\Query\Update;
+use Dms\Core\Persistence\Db\Row;
+use Dms\Core\Persistence\Db\RowSet;
+use Dms\Core\Persistence\Db\Schema\Table;
+use Dms\Core\Persistence\Db\Schema\Type\Blob;
+use Dms\Core\Persistence\Db\Schema\Type\Boolean;
+use Dms\Core\Persistence\Db\Schema\Type\Date;
+use Dms\Core\Persistence\Db\Schema\Type\DateTime;
+use Dms\Core\Persistence\Db\Schema\Type\Decimal;
+use Dms\Core\Persistence\Db\Schema\Type\Enum;
+use Dms\Core\Persistence\Db\Schema\Type\Integer;
+use Dms\Core\Persistence\Db\Schema\Type\Text;
+use Dms\Core\Persistence\Db\Schema\Type\Time;
+use Dms\Core\Persistence\Db\Schema\Type\Type;
+use Dms\Core\Persistence\Db\Schema\Type\Varchar;
 
 /**
  * The db platform base class.

@@ -1,21 +1,21 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Domains;
+namespace Dms\Core\Tests\Persistence\Db\Integration\Domains;
 
-use Iddigital\Cms\Core\Persistence\Db\Mapping\IOrm;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Column;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Type\Enum;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Type\Integer;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Type\Varchar;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Cars\Car;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Cars\ConvertibleCar;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Cars\FamilyCar;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Cars\HatchCar;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Cars\Mapper\CarMapper;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Cars\SedanCar;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\DbIntegrationTest;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Mock\MockDatabase;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Mock\MockTable;
+use Dms\Core\Persistence\Db\Mapping\IOrm;
+use Dms\Core\Persistence\Db\Schema\Column;
+use Dms\Core\Persistence\Db\Schema\Type\Enum;
+use Dms\Core\Persistence\Db\Schema\Type\Integer;
+use Dms\Core\Persistence\Db\Schema\Type\Varchar;
+use Dms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Cars\Car;
+use Dms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Cars\ConvertibleCar;
+use Dms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Cars\FamilyCar;
+use Dms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Cars\HatchCar;
+use Dms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Cars\Mapper\CarMapper;
+use Dms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Cars\SedanCar;
+use Dms\Core\Tests\Persistence\Db\Integration\Mapping\DbIntegrationTest;
+use Dms\Core\Tests\Persistence\Db\Mock\MockDatabase;
+use Dms\Core\Tests\Persistence\Db\Mock\MockTable;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

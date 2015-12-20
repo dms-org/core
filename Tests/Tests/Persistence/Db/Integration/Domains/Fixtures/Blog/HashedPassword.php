@@ -1,9 +1,9 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog;
+namespace Dms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog;
 
-use Iddigital\Cms\Core\Model\Object\ClassDefinition;
-use Iddigital\Cms\Core\Model\Object\ValueObject;
+use Dms\Core\Model\Object\ClassDefinition;
+use Dms\Core\Model\Object\ValueObject;
 
 
 /**

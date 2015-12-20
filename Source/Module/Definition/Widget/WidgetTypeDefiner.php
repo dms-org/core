@@ -1,11 +1,11 @@
 <?php
 
-namespace Iddigital\Cms\Core\Module\Definition\Widget;
+namespace Dms\Core\Module\Definition\Widget;
 
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Table\Chart\IChartDataSource;
-use Iddigital\Cms\Core\Table\ITableDataSource;
-use Iddigital\Cms\Core\Util\Debug;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Table\Chart\IChartDataSource;
+use Dms\Core\Table\ITableDataSource;
+use Dms\Core\Util\Debug;
 
 /**
  * The widget type definer class

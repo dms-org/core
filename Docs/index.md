@@ -1,7 +1,7 @@
 Documentation
 =============
 
-The core package contains the foundation and components used commonly throughout the CMS project.
+The core package contains the foundation and components used commonly throughout the DMS project.
 
  - [Architecture](./architecture.md)
  - [Coding Style](./coding-style.md)

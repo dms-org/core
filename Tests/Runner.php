@@ -1,10 +1,10 @@
 <?php
 
-namespace Iddigital\Cms;
+namespace Dms;
 
 use Composer\Autoload\ClassLoader;
-use Iddigital\Cms\Common\Testing;
-use Iddigital\Cms\Core\Tests;
+use Dms\Common\Testing;
+use Dms\Core\Tests;
 
 $projectAutoLoaderPath = __DIR__ . '/../vendor/autoload.php';
 $dependencyAutoLoaderPath = __DIR__ . '/../../../../autoload.php';

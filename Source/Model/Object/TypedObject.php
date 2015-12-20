@@ -1,14 +1,14 @@
 <?php
 
-namespace Iddigital\Cms\Core\Model\Object;
+namespace Dms\Core\Model\Object;
 
-use Iddigital\Cms\Core\Exception\InvalidOperationException;
-use Iddigital\Cms\Core\Model\Criteria\Criteria;
-use Iddigital\Cms\Core\Model\ITypedObject;
-use Iddigital\Cms\Core\Model\ObjectCollection;
-use Iddigital\Cms\Core\Model\Type\Builder\Type;
-use Iddigital\Cms\Core\Model\Type\IType;
-use Iddigital\Cms\Core\Model\Type\ObjectType;
+use Dms\Core\Exception\InvalidOperationException;
+use Dms\Core\Model\Criteria\Criteria;
+use Dms\Core\Model\ITypedObject;
+use Dms\Core\Model\ObjectCollection;
+use Dms\Core\Model\Type\Builder\Type;
+use Dms\Core\Model\Type\IType;
+use Dms\Core\Model\Type\ObjectType;
 
 /**
  * The typed object base class.

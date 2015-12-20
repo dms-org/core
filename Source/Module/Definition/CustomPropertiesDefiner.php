@@ -1,10 +1,10 @@
 <?php
 
-namespace Iddigital\Cms\Core\Module\Definition;
+namespace Dms\Core\Module\Definition;
 
-use Iddigital\Cms\Core\Module\IAction;
-use Iddigital\Cms\Core\Module\IChartDisplay;
-use Iddigital\Cms\Core\Module\ITableDisplay;
+use Dms\Core\Module\IAction;
+use Dms\Core\Module\IChartDisplay;
+use Dms\Core\Module\ITableDisplay;
 
 /**
  * The custom module properties definer

@@ -1,11 +1,11 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Module\Action;
+namespace Dms\Core\Tests\Module\Action;
 
-use Iddigital\Cms\Core\Auth\Permission;
-use Iddigital\Cms\Core\Module\Handler\CustomUnparameterizedActionHandler;
-use Iddigital\Cms\Core\Tests\Module\Action\Fixtures\TestSelfHandlingUnparameterizedAction;
-use Iddigital\Cms\Core\Tests\Module\Fixtures\TestDto;
+use Dms\Core\Auth\Permission;
+use Dms\Core\Module\Handler\CustomUnparameterizedActionHandler;
+use Dms\Core\Tests\Module\Action\Fixtures\TestSelfHandlingUnparameterizedAction;
+use Dms\Core\Tests\Module\Fixtures\TestDto;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

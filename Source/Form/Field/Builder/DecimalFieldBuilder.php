@@ -1,13 +1,13 @@
 <?php
 
-namespace Iddigital\Cms\Core\Form\Field\Builder;
+namespace Dms\Core\Form\Field\Builder;
 
-use Iddigital\Cms\Core\Form\Field\Processor\Validator\DecimalPointsValidator;
-use Iddigital\Cms\Core\Form\Field\Processor\Validator\GreaterThanOrEqualValidator;
-use Iddigital\Cms\Core\Form\Field\Processor\Validator\GreaterThanValidator;
-use Iddigital\Cms\Core\Form\Field\Processor\Validator\LessThanOrEqualValidator;
-use Iddigital\Cms\Core\Form\Field\Processor\Validator\LessThanValidator;
-use Iddigital\Cms\Core\Form\Field\Type\FloatType;
+use Dms\Core\Form\Field\Processor\Validator\DecimalPointsValidator;
+use Dms\Core\Form\Field\Processor\Validator\GreaterThanOrEqualValidator;
+use Dms\Core\Form\Field\Processor\Validator\GreaterThanValidator;
+use Dms\Core\Form\Field\Processor\Validator\LessThanOrEqualValidator;
+use Dms\Core\Form\Field\Processor\Validator\LessThanValidator;
+use Dms\Core\Form\Field\Type\FloatType;
 
 /**
  * The decimal field builder class.

@@ -1,19 +1,19 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Form\Object;
+namespace Dms\Core\Tests\Form\Object;
 
-use Iddigital\Cms\Common\Testing\CmsTestCase;
-use Iddigital\Cms\Core\Form\Builder\Form;
-use Iddigital\Cms\Core\Form\Field\Builder\Field as Field;
-use Iddigital\Cms\Core\Form\Field\Processor\Validator\ArrayValidator;
-use Iddigital\Cms\Core\Form\Field\Processor\Validator\RequiredValidator;
-use Iddigital\Cms\Core\Form\Field\Processor\Validator\TypeValidator;
-use Iddigital\Cms\Core\Form\InvalidFormSubmissionException;
-use Iddigital\Cms\Core\Language\Message;
-use Iddigital\Cms\Core\Model\Type\Builder\Type as Type;
-use Iddigital\Cms\Core\Tests\Form\Object\Fixtures\CreatePageFormWithInnerFormField;
-use Iddigital\Cms\Core\Tests\Form\Object\Fixtures\KeywordForm;
-use Iddigital\Cms\Core\Tests\Form\Object\Fixtures\SeoFormWithInner;
+use Dms\Common\Testing\CmsTestCase;
+use Dms\Core\Form\Builder\Form;
+use Dms\Core\Form\Field\Builder\Field as Field;
+use Dms\Core\Form\Field\Processor\Validator\ArrayValidator;
+use Dms\Core\Form\Field\Processor\Validator\RequiredValidator;
+use Dms\Core\Form\Field\Processor\Validator\TypeValidator;
+use Dms\Core\Form\InvalidFormSubmissionException;
+use Dms\Core\Language\Message;
+use Dms\Core\Model\Type\Builder\Type as Type;
+use Dms\Core\Tests\Form\Object\Fixtures\CreatePageFormWithInnerFormField;
+use Dms\Core\Tests\Form\Object\Fixtures\KeywordForm;
+use Dms\Core\Tests\Form\Object\Fixtures\SeoFormWithInner;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

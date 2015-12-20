@@ -1,9 +1,9 @@
 <?php
 
-namespace Iddigital\Cms\Core\Module\Definition\Widget;
+namespace Dms\Core\Module\Definition\Widget;
 
-use Iddigital\Cms\Core\Module\IChartDisplay;
-use Iddigital\Cms\Core\Module\ITableDisplay;
+use Dms\Core\Module\IChartDisplay;
+use Dms\Core\Module\ITableDisplay;
 
 /**
  * The widget definer base class

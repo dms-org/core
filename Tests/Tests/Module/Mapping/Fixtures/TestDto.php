@@ -1,9 +1,9 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Module\Mapping\Fixtures;
+namespace Dms\Core\Tests\Module\Mapping\Fixtures;
 
-use Iddigital\Cms\Core\Model\Object\ClassDefinition;
-use Iddigital\Cms\Core\Model\Object\DataTransferObject;
+use Dms\Core\Model\Object\ClassDefinition;
+use Dms\Core\Model\Object\DataTransferObject;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

@@ -1,8 +1,8 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Model\Criteria\Fixtures;
+namespace Dms\Core\Tests\Model\Criteria\Fixtures;
 
-use Iddigital\Cms\Core\Model\Criteria\CustomSpecification;
+use Dms\Core\Model\Criteria\CustomSpecification;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

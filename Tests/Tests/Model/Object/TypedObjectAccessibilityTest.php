@@ -1,11 +1,11 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Model\Object;
+namespace Dms\Core\Tests\Model\Object;
 
-use Iddigital\Cms\Core\Model\Object\InaccessiblePropertyException;
-use Iddigital\Cms\Core\Model\Object\TypedObjectAccessibilityAssertion;
-use Iddigital\Cms\Core\Tests\Model\Object\Fixtures\ExtendedPropertyAccessibilities;
-use Iddigital\Cms\Core\Tests\Model\Object\Fixtures\PropertyAccessibilities;
+use Dms\Core\Model\Object\InaccessiblePropertyException;
+use Dms\Core\Model\Object\TypedObjectAccessibilityAssertion;
+use Dms\Core\Tests\Model\Object\Fixtures\ExtendedPropertyAccessibilities;
+use Dms\Core\Tests\Model\Object\Fixtures\PropertyAccessibilities;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

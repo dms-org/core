@@ -1,8 +1,8 @@
 <?php
 
-namespace Iddigital\Cms\Core\Form\Object\Stage;
+namespace Dms\Core\Form\Object\Stage;
 
-use Iddigital\Cms\Core\Form\Object\FinalizedFormObjectDefinition;
+use Dms\Core\Form\Object\FinalizedFormObjectDefinition;
 
 /**
  * The form stage definition callback.

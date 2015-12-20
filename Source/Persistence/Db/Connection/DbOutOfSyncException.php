@@ -1,10 +1,10 @@
 <?php
 
-namespace Iddigital\Cms\Core\Persistence\Db\Connection;
+namespace Dms\Core\Persistence\Db\Connection;
 
-use Iddigital\Cms\Core\Exception\BaseException;
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Persistence\Db\Row;
+use Dms\Core\Exception\BaseException;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Persistence\Db\Row;
 
 /**
  * The exception for when the database is out-of-sync

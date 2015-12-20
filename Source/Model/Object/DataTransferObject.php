@@ -1,9 +1,9 @@
 <?php
 
-namespace Iddigital\Cms\Core\Model\Object;
+namespace Dms\Core\Model\Object;
 
-use Iddigital\Cms\Core\Exception;
-use Iddigital\Cms\Core\Model\IDataTransferObject;
+use Dms\Core\Exception;
+use Dms\Core\Model\IDataTransferObject;
 
 /**
  * The data transfer object (dto) base class.

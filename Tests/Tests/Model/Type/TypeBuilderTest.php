@@ -1,21 +1,21 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Model;
+namespace Dms\Core\Tests\Model;
 
-use Iddigital\Cms\Common\Testing\CmsTestCase;
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Model\ITypedCollection;
-use Iddigital\Cms\Core\Model\ObjectCollection;
-use Iddigital\Cms\Core\Model\Type\ArrayType;
-use Iddigital\Cms\Core\Model\Type\Builder\Type;
-use Iddigital\Cms\Core\Model\Type\CollectionType;
-use Iddigital\Cms\Core\Model\Type\MixedType;
-use Iddigital\Cms\Core\Model\Type\NullType;
-use Iddigital\Cms\Core\Model\Type\ObjectType;
-use Iddigital\Cms\Core\Model\Type\ScalarType;
-use Iddigital\Cms\Core\Model\Type\UnionType;
-use Iddigital\Cms\Core\Model\TypedCollection;
-use Iddigital\Cms\Core\Tests\Model\Fixtures\TestEntity;
+use Dms\Common\Testing\CmsTestCase;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Model\ITypedCollection;
+use Dms\Core\Model\ObjectCollection;
+use Dms\Core\Model\Type\ArrayType;
+use Dms\Core\Model\Type\Builder\Type;
+use Dms\Core\Model\Type\CollectionType;
+use Dms\Core\Model\Type\MixedType;
+use Dms\Core\Model\Type\NullType;
+use Dms\Core\Model\Type\ObjectType;
+use Dms\Core\Model\Type\ScalarType;
+use Dms\Core\Model\Type\UnionType;
+use Dms\Core\Model\TypedCollection;
+use Dms\Core\Tests\Model\Fixtures\TestEntity;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

@@ -1,22 +1,22 @@
 <?php
 
-namespace Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Relation;
+namespace Dms\Core\Persistence\Db\Mapping\Definition\Relation;
 
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Embedded\EmbeddedCollectionDefiner;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Embedded\EmbeddedValueObjectDefiner;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Embedded\EnumPropertyColumnDefiner;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\MapperDefinition;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\EnumMapper;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\IEmbeddedObjectMapper;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\IObjectMapper;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\IOrm;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\NullObjectMapper;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Embedded\EmbeddedCollectionRelation;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Embedded\EmbeddedObjectRelation;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Column;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Table;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Type\Boolean;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Type\Integer;
+use Dms\Core\Persistence\Db\Mapping\Definition\Embedded\EmbeddedCollectionDefiner;
+use Dms\Core\Persistence\Db\Mapping\Definition\Embedded\EmbeddedValueObjectDefiner;
+use Dms\Core\Persistence\Db\Mapping\Definition\Embedded\EnumPropertyColumnDefiner;
+use Dms\Core\Persistence\Db\Mapping\Definition\MapperDefinition;
+use Dms\Core\Persistence\Db\Mapping\EnumMapper;
+use Dms\Core\Persistence\Db\Mapping\IEmbeddedObjectMapper;
+use Dms\Core\Persistence\Db\Mapping\IObjectMapper;
+use Dms\Core\Persistence\Db\Mapping\IOrm;
+use Dms\Core\Persistence\Db\Mapping\NullObjectMapper;
+use Dms\Core\Persistence\Db\Mapping\Relation\Embedded\EmbeddedCollectionRelation;
+use Dms\Core\Persistence\Db\Mapping\Relation\Embedded\EmbeddedObjectRelation;
+use Dms\Core\Persistence\Db\Schema\Column;
+use Dms\Core\Persistence\Db\Schema\Table;
+use Dms\Core\Persistence\Db\Schema\Type\Boolean;
+use Dms\Core\Persistence\Db\Schema\Type\Integer;
 use InvalidArgumentException;
 
 /**
@@ -66,7 +66,7 @@ class EmbeddedRelationTypeDefiner
     /**
      * Defines a relation mapped to an enum class.
      *
-     * @see \Iddigital\Cms\Core\Model\Object\Enum
+     * @see \Dms\Core\Model\Object\Enum
      *
      * @param string $class
      * @param bool $isNullable

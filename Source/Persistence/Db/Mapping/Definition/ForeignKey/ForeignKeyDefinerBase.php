@@ -1,6 +1,6 @@
 <?php
 
-namespace Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\ForeignKey;
+namespace Dms\Core\Persistence\Db\Mapping\Definition\ForeignKey;
 
 /**
  * The foreign key definer base class.

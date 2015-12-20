@@ -1,10 +1,10 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Module\Handler;
+namespace Dms\Core\Tests\Module\Handler;
 
-use Iddigital\Cms\Common\Testing\CmsTestCase;
-use Iddigital\Cms\Core\Model\IDataTransferObject;
-use Iddigital\Cms\Core\Module\IParameterizedActionHandler;
+use Dms\Common\Testing\CmsTestCase;
+use Dms\Core\Model\IDataTransferObject;
+use Dms\Core\Module\IParameterizedActionHandler;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

@@ -18,9 +18,9 @@ Member expressions are a small dsl designed to make it simple to traverse an obj
 
 namespace Some\Name\Space;
 
-use Iddigital\Cms\Core\Model\Object\ClassDefinition;
-use Iddigital\Cms\Core\Model\Object\TypedObject;
-use Iddigital\Cms\Core\Model\ObjectCollection;
+use Dms\Core\Model\Object\ClassDefinition;
+use Dms\Core\Model\Object\TypedObject;
+use Dms\Core\Model\ObjectCollection;
 
 class StronglyTypedObject extends TypedObject
 {
@@ -85,9 +85,9 @@ There are also special methods for dealing with entities and relationships using
 
 namespace Some\Name\Space;
 
-use Iddigital\Cms\Core\Model\Object\ClassDefinition;
-use Iddigital\Cms\Core\Model\Object\Entity;
-use Iddigital\Cms\Core\Model\EntityIdCollection;
+use Dms\Core\Model\Object\ClassDefinition;
+use Dms\Core\Model\Object\Entity;
+use Dms\Core\Model\EntityIdCollection;
 
 class RootEntity extends Entity
 {
@@ -140,11 +140,11 @@ data from a particular entity to load. This is supported if the collection imple
 
 namespace Some\Name\Space;
 
-use Iddigital\Cms\Core\Model\Object\ClassDefinition;
-use Iddigital\Cms\Core\Model\Object\Entity;
-use Iddigital\Cms\Core\Model\EntityIdCollection;
-use Iddigital\Cms\Core\Persistence\IRepository;
-use Iddigital\Cms\Core\Model\IObjectSetWithLoadCriteriaSupport;
+use Dms\Core\Model\Object\ClassDefinition;
+use Dms\Core\Model\Object\Entity;
+use Dms\Core\Model\EntityIdCollection;
+use Dms\Core\Persistence\IRepository;
+use Dms\Core\Model\IObjectSetWithLoadCriteriaSupport;
 
 class RootEntity extends Entity
 {
@@ -201,8 +201,8 @@ A natural extension of criteria is the [specification pattern][spec-pattern]. Th
 you to encapsulate a criteria condition as class allowing specific conditions to be
 reused without logic duplication.
 
-Specification classes extend from `Iddigital\Cms\Core\Model\Criteria\Specification` or
-must implement the `Iddigital\Cms\Core\Model\ISpecification` interface.
+Specification classes extend from `Dms\Core\Model\Criteria\Specification` or
+must implement the `Dms\Core\Model\ISpecification` interface.
 
 They share the member expression / condition dsl such that specifications can be used
 for both in-memory collections and external data-stores.
@@ -214,10 +214,10 @@ Example:
 
 namespace Some\Name\Space;
 
-use Iddigital\Cms\Core\Model\Object\ClassDefinition;
-use Iddigital\Cms\Core\Model\Object\Entity;
-use Iddigital\Cms\Core\Model\Criteria\Specification;
-use Iddigital\Cms\Core\Model\Criteria\SpecificationDefinition;
+use Dms\Core\Model\Object\ClassDefinition;
+use Dms\Core\Model\Object\Entity;
+use Dms\Core\Model\Criteria\Specification;
+use Dms\Core\Model\Criteria\SpecificationDefinition;
 
 class Person extends Entity
 {

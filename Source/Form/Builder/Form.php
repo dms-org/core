@@ -1,20 +1,20 @@
 <?php
 
-namespace Iddigital\Cms\Core\Form\Builder;
+namespace Dms\Core\Form\Builder;
 
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Form\ConflictingFieldNameException;
-use Iddigital\Cms\Core\Form\Field\Builder\FieldBuilderBase;
-use Iddigital\Cms\Core\Form\Form as ActualForm;
-use Iddigital\Cms\Core\Form\FormSection;
-use Iddigital\Cms\Core\Form\IField;
-use Iddigital\Cms\Core\Form\IForm;
-use Iddigital\Cms\Core\Form\IFormProcessor;
-use Iddigital\Cms\Core\Form\IFormSection;
-use Iddigital\Cms\Core\Form\Processor\CustomFormProcessor;
-use Iddigital\Cms\Core\Form\Processor\FormValidator;
-use Iddigital\Cms\Core\Form\Processor\Validator\CustomFormValidator;
-use Iddigital\Cms\Core\Form\Processor\Validator\MatchingFieldsValidator;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Form\ConflictingFieldNameException;
+use Dms\Core\Form\Field\Builder\FieldBuilderBase;
+use Dms\Core\Form\Form as ActualForm;
+use Dms\Core\Form\FormSection;
+use Dms\Core\Form\IField;
+use Dms\Core\Form\IForm;
+use Dms\Core\Form\IFormProcessor;
+use Dms\Core\Form\IFormSection;
+use Dms\Core\Form\Processor\CustomFormProcessor;
+use Dms\Core\Form\Processor\FormValidator;
+use Dms\Core\Form\Processor\Validator\CustomFormValidator;
+use Dms\Core\Form\Processor\Validator\MatchingFieldsValidator;
 
 /**
  * The form builder class.

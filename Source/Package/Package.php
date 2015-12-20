@@ -1,10 +1,10 @@
 <?php
 
-namespace Iddigital\Cms\Core\Package;
+namespace Dms\Core\Package;
 
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Module\IModule;
-use Iddigital\Cms\Core\Util\Debug;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Module\IModule;
+use Dms\Core\Util\Debug;
 use Interop\Container\ContainerInterface;
 
 /**

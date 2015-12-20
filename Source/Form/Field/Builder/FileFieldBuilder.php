@@ -1,11 +1,11 @@
 <?php
 
-namespace Iddigital\Cms\Core\Form\Field\Builder;
+namespace Dms\Core\Form\Field\Builder;
 
-use Iddigital\Cms\Core\Form\Field\Processor\FileMoverProcessor;
-use Iddigital\Cms\Core\Form\Field\Processor\Validator\FileExtensionValidator;
-use Iddigital\Cms\Core\Form\Field\Processor\Validator\FileSizeValidator;
-use Iddigital\Cms\Core\Form\Field\Type\FileType;
+use Dms\Core\Form\Field\Processor\FileMoverProcessor;
+use Dms\Core\Form\Field\Processor\Validator\FileExtensionValidator;
+use Dms\Core\Form\Field\Processor\Validator\FileSizeValidator;
+use Dms\Core\Form\Field\Type\FileType;
 
 /**
  * The file field builder class.

@@ -1,11 +1,11 @@
 <?php
 
-namespace Iddigital\Cms\Core\Table\Builder;
+namespace Dms\Core\Table\Builder;
 
-use Iddigital\Cms\Core\Exception\InvalidOperationException;
-use Iddigital\Cms\Core\Table\Column\Column;
-use Iddigital\Cms\Core\Table\IColumn;
-use Iddigital\Cms\Core\Table\IColumnComponent;
+use Dms\Core\Exception\InvalidOperationException;
+use Dms\Core\Table\Column\Column;
+use Dms\Core\Table\IColumn;
+use Dms\Core\Table\IColumnComponent;
 
 /**
  * The column builder base class

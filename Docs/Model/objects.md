@@ -3,7 +3,7 @@ Objects
 
 The core package introduces a set of classes to help implement strongly typed domain models.
 
-All typed classes extend `Iddigital\Cms\Core\Model\Object\TypedObject`.
+All typed classes extend `Dms\Core\Model\Object\TypedObject`.
 For instance:
 
 ```php
@@ -11,8 +11,8 @@ For instance:
 
 namespace Some\Name\Space;
 
-use Iddigital\Cms\Core\Model\Object\ClassDefinition;
-use Iddigital\Cms\Core\Model\Object\TypedObject;
+use Dms\Core\Model\Object\ClassDefinition;
+use Dms\Core\Model\Object\TypedObject;
 
 class StronglyTypedObject extends TypedObject
 {
@@ -69,16 +69,16 @@ Domain Models
 The `TypedObject` class is the basis for all strongly typed objects and often should not be used
 directly. When implementing a domain model, there are more descriptive base classes available:
 
- - `Iddigital\Cms\Core\Model\Object\Entity` - For classes containing an integer id property,
+ - `Dms\Core\Model\Object\Entity` - For classes containing an integer id property,
     they are uniquely identifiable, eg a `Product` class would be an entity.
- - `Iddigital\Cms\Core\Model\Object\ValueObject` - For classes which simply wrap a value,
+ - `Dms\Core\Model\Object\ValueObject` - For classes which simply wrap a value,
     for instance a `Money` class, it only contains a value. *NOTE:* Classes extending `ValueObject`
     are automatically immutable, their properties cannot be changed once set.
- - `Iddigital\Cms\Core\Model\Object\Enum` - For classes representing a value from particular
+ - `Dms\Core\Model\Object\Enum` - For classes representing a value from particular
    set of options, eg a `Colour` enum may contain the options red, green or blue.
- - `Iddigital\Cms\Core\Model\Object\DataTransferObject` - Or DTO for short, are classes which
+ - `Dms\Core\Model\Object\DataTransferObject` - Or DTO for short, are classes which
    simply contain data to pass around within the application.
- - `Iddigital\Cms\Core\Model\Object\ReadModel` - For classes which contain a subset of the data
+ - `Dms\Core\Model\Object\ReadModel` - For classes which contain a subset of the data
    of another class. For instance, if you only needed `name` and `price` properties of a `Product`
    entity from the repository, you could create a read model containing just those properties.
 
@@ -90,8 +90,8 @@ Example Entity
 
 namespace Some\Name\Space;
 
-use Iddigital\Cms\Core\Model\Object\ClassDefinition;
-use Iddigital\Cms\Core\Model\Object\Entity;
+use Dms\Core\Model\Object\ClassDefinition;
+use Dms\Core\Model\Object\Entity;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>
@@ -139,9 +139,9 @@ Example Value Object
 
 namespace Some\Name\Space;
 
-use Iddigital\Cms\Core\Model\Object\ClassDefinition;
-use Iddigital\Cms\Core\Model\Object\ValueObject;
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Model\Object\ClassDefinition;
+use Dms\Core\Model\Object\ValueObject;
+use Dms\Core\Exception\InvalidArgumentException;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>
@@ -208,8 +208,8 @@ Example Enum
 
 namespace Some\Name\Space;
 
-use Iddigital\Cms\Core\Model\Object\Enum;
-use Iddigital\Cms\Core\Model\Object\PropertyTypeDefiner;
+use Dms\Core\Model\Object\Enum;
+use Dms\Core\Model\Object\PropertyTypeDefiner;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

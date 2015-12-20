@@ -1,8 +1,8 @@
 <?php
 
-namespace Iddigital\Cms\Core\Table;
+namespace Dms\Core\Table;
 
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Exception\InvalidArgumentException;
 
 /**
  * The data table structure interface.

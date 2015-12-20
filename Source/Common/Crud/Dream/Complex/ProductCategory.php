@@ -1,10 +1,10 @@
 <?php
 
-namespace Iddigital\Cms\Core\Common\Crud\Dream\Complex;
+namespace Dms\Core\Common\Crud\Dream\Complex;
 
-use Iddigital\Cms\Core\Model\EntityIdCollection;
-use Iddigital\Cms\Core\Model\Object\ClassDefinition;
-use Iddigital\Cms\Core\Model\Object\Entity;
+use Dms\Core\Model\EntityIdCollection;
+use Dms\Core\Model\Object\ClassDefinition;
+use Dms\Core\Model\Object\Entity;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

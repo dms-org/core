@@ -1,18 +1,18 @@
 <?php
 
-namespace Iddigital\Cms\Core\Model\Type\Builder;
+namespace Dms\Core\Model\Type\Builder;
 
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Model\ITypedCollection;
-use Iddigital\Cms\Core\Model\Type\ArrayType;
-use Iddigital\Cms\Core\Model\Type\CollectionType;
-use Iddigital\Cms\Core\Model\Type\IType;
-use Iddigital\Cms\Core\Model\Type\MixedType;
-use Iddigital\Cms\Core\Model\Type\NullType;
-use Iddigital\Cms\Core\Model\Type\ObjectType;
-use Iddigital\Cms\Core\Model\Type\ScalarType;
-use Iddigital\Cms\Core\Model\Type\UnionType;
-use Iddigital\Cms\Core\Util\Debug;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Model\ITypedCollection;
+use Dms\Core\Model\Type\ArrayType;
+use Dms\Core\Model\Type\CollectionType;
+use Dms\Core\Model\Type\IType;
+use Dms\Core\Model\Type\MixedType;
+use Dms\Core\Model\Type\NullType;
+use Dms\Core\Model\Type\ObjectType;
+use Dms\Core\Model\Type\ScalarType;
+use Dms\Core\Model\Type\UnionType;
+use Dms\Core\Util\Debug;
 
 /**
  * The type builder class.

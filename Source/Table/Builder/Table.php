@@ -1,10 +1,10 @@
 <?php
 
-namespace Iddigital\Cms\Core\Table\Builder;
+namespace Dms\Core\Table\Builder;
 
-use Iddigital\Cms\Core\Table\IColumn;
-use Iddigital\Cms\Core\Table\ITableStructure;
-use Iddigital\Cms\Core\Table\TableStructure;
+use Dms\Core\Table\IColumn;
+use Dms\Core\Table\ITableStructure;
+use Dms\Core\Table\TableStructure;
 
 /**
  * The table structure builder class

@@ -1,12 +1,12 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Common\Crud\Modules;
+namespace Dms\Core\Tests\Common\Crud\Modules;
 
-use Iddigital\Cms\Core\Common\Crud\ICrudModule;
-use Iddigital\Cms\Core\Common\Crud\IReadModule;
-use Iddigital\Cms\Core\Model\IEntitySet;
-use Iddigital\Cms\Core\Persistence\IRepository;
-use Iddigital\Cms\Core\Tests\Module\Mock\MockAuthSystem;
+use Dms\Core\Common\Crud\ICrudModule;
+use Dms\Core\Common\Crud\IReadModule;
+use Dms\Core\Model\IEntitySet;
+use Dms\Core\Persistence\IRepository;
+use Dms\Core\Tests\Module\Mock\MockAuthSystem;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

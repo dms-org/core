@@ -1,13 +1,13 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Model;
+namespace Dms\Core\Tests\Model;
 
-use Iddigital\Cms\Common\Testing\CmsTestCase;
-use Iddigital\Cms\Core\Exception\TypeMismatchException;
-use Iddigital\Cms\Core\Model\ObjectCollection;
-use Iddigital\Cms\Core\Model\Type\Builder\Type;
-use Iddigital\Cms\Core\Tests\Form\Field\Processor\Validator\Fixtures\TestEntity;
-use Iddigital\Cms\Core\Tests\Model\Object\Fixtures\BlankTypedObject;
+use Dms\Common\Testing\CmsTestCase;
+use Dms\Core\Exception\TypeMismatchException;
+use Dms\Core\Model\ObjectCollection;
+use Dms\Core\Model\Type\Builder\Type;
+use Dms\Core\Tests\Form\Field\Processor\Validator\Fixtures\TestEntity;
+use Dms\Core\Tests\Model\Object\Fixtures\BlankTypedObject;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

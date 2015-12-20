@@ -1,11 +1,11 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Form\Object\Fixtures;
+namespace Dms\Core\Tests\Form\Object\Fixtures;
 
-use Iddigital\Cms\Core\Form\Field\Builder\Field;
-use Iddigital\Cms\Core\Form\Object\FormObjectDefinition;
-use Iddigital\Cms\Core\Form\Object\ValueObjectFormObject;
-use Iddigital\Cms\Core\Model\IValueObject;
+use Dms\Core\Form\Field\Builder\Field;
+use Dms\Core\Form\Object\FormObjectDefinition;
+use Dms\Core\Form\Object\ValueObjectFormObject;
+use Dms\Core\Model\IValueObject;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

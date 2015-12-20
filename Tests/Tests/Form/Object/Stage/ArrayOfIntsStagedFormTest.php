@@ -1,12 +1,12 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Form\Object\Stage\Fixtures;
+namespace Dms\Core\Tests\Form\Object\Stage\Fixtures;
 
-use Iddigital\Cms\Common\Testing\CmsTestCase;
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Form\Field\Type\ArrayOfType;
-use Iddigital\Cms\Core\Form\InvalidFormSubmissionException;
-use Iddigital\Cms\Core\Form\Stage\IndependentFormStage;
+use Dms\Common\Testing\CmsTestCase;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Form\Field\Type\ArrayOfType;
+use Dms\Core\Form\InvalidFormSubmissionException;
+use Dms\Core\Form\Stage\IndependentFormStage;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

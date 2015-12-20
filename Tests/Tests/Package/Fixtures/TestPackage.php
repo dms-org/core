@@ -1,11 +1,11 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Package\Fixtures;
+namespace Dms\Core\Tests\Package\Fixtures;
 
-use Iddigital\Cms\Core\Package\Package;
-use Iddigital\Cms\Core\Package\PackageDefinition;
-use Iddigital\Cms\Core\Tests\Module\Fixtures\ModuleWithActions;
-use Iddigital\Cms\Core\Tests\Module\Fixtures\ModuleWithCharts;
+use Dms\Core\Package\Package;
+use Dms\Core\Package\PackageDefinition;
+use Dms\Core\Tests\Module\Fixtures\ModuleWithActions;
+use Dms\Core\Tests\Module\Fixtures\ModuleWithCharts;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

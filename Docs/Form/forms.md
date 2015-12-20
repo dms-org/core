@@ -12,9 +12,9 @@ A simple form can be defined using the fluent builder objects:
 
 namespace Some\Name\Space;
 
-use Iddigital\Cms\Core\Form\Builder\Form;
-use Iddigital\Cms\Core\Form\Field\Builder\Field;
-use Iddigital\Cms\Core\Form\InvalidFormSubmissionException;
+use Dms\Core\Form\Builder\Form;
+use Dms\Core\Form\Field\Builder\Field;
+use Dms\Core\Form\InvalidFormSubmissionException;
 
 $form = Form::create()
         ->section('Name', [

@@ -1,12 +1,12 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Module\Table;
+namespace Dms\Core\Tests\Module\Table;
 
-use Iddigital\Cms\Common\Testing\CmsTestCase;
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Module\Table\TableDisplay;
-use Iddigital\Cms\Core\Module\Table\TableView;
-use Iddigital\Cms\Core\Table\ITableDataSource;
+use Dms\Common\Testing\CmsTestCase;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Module\Table\TableDisplay;
+use Dms\Core\Module\Table\TableView;
+use Dms\Core\Table\ITableDataSource;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

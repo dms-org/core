@@ -1,10 +1,10 @@
 <?php
 
-namespace Iddigital\Cms\Core\Module\Handler;
+namespace Dms\Core\Module\Handler;
 
-use Iddigital\Cms\Core\Form;
-use Iddigital\Cms\Core\Model\IDataTransferObject;
-use Iddigital\Cms\Core\Module\InvalidHandlerClassException;
+use Dms\Core\Form;
+use Dms\Core\Model\IDataTransferObject;
+use Dms\Core\Module\InvalidHandlerClassException;
 
 /**
  * The action handler base for handlers with a dto type

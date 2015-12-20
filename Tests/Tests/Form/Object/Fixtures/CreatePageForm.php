@@ -1,9 +1,9 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Form\Object\Fixtures;
+namespace Dms\Core\Tests\Form\Object\Fixtures;
 
-use Iddigital\Cms\Core\Form\Object\IndependentFormObject;
-use Iddigital\Cms\Core\Form\Object\FormObjectDefinition;
+use Dms\Core\Form\Object\IndependentFormObject;
+use Dms\Core\Form\Object\FormObjectDefinition;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

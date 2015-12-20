@@ -1,8 +1,8 @@
 <?php
 
-namespace Iddigital\Cms\Core\Model\Criteria\Condition;
+namespace Dms\Core\Model\Criteria\Condition;
 
-use Iddigital\Cms\Core\Model\ITypedObject;
+use Dms\Core\Model\ITypedObject;
 
 /**
  * The not condition class.

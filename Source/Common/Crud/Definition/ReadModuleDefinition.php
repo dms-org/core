@@ -1,24 +1,24 @@
 <?php
 
-namespace Iddigital\Cms\Core\Common\Crud\Definition;
+namespace Dms\Core\Common\Crud\Definition;
 
-use Iddigital\Cms\Core\Auth\IAuthSystem;
-use Iddigital\Cms\Core\Common\Crud\Action\Crud\ViewDetailsAction;
-use Iddigital\Cms\Core\Common\Crud\Action\Object\IObjectAction;
-use Iddigital\Cms\Core\Common\Crud\Definition\Action\ObjectActionDefiner;
-use Iddigital\Cms\Core\Common\Crud\Definition\Form\CrudFormDefinition;
-use Iddigital\Cms\Core\Common\Crud\Definition\Table\SummaryTableDefinition;
-use Iddigital\Cms\Core\Common\Crud\IReadModule;
-use Iddigital\Cms\Core\Common\Crud\Table\ISummaryTable;
-use Iddigital\Cms\Core\Common\Crud\UnsupportedActionException;
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Exception\InvalidOperationException;
-use Iddigital\Cms\Core\Form\Field\Builder\Field;
-use Iddigital\Cms\Core\Model\IEntity;
-use Iddigital\Cms\Core\Model\IEntitySet;
-use Iddigital\Cms\Core\Model\Object\FinalizedClassDefinition;
-use Iddigital\Cms\Core\Model\Object\TypedObject;
-use Iddigital\Cms\Core\Module\Definition\ModuleDefinition;
+use Dms\Core\Auth\IAuthSystem;
+use Dms\Core\Common\Crud\Action\Crud\ViewDetailsAction;
+use Dms\Core\Common\Crud\Action\Object\IObjectAction;
+use Dms\Core\Common\Crud\Definition\Action\ObjectActionDefiner;
+use Dms\Core\Common\Crud\Definition\Form\CrudFormDefinition;
+use Dms\Core\Common\Crud\Definition\Table\SummaryTableDefinition;
+use Dms\Core\Common\Crud\IReadModule;
+use Dms\Core\Common\Crud\Table\ISummaryTable;
+use Dms\Core\Common\Crud\UnsupportedActionException;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Exception\InvalidOperationException;
+use Dms\Core\Form\Field\Builder\Field;
+use Dms\Core\Model\IEntity;
+use Dms\Core\Model\IEntitySet;
+use Dms\Core\Model\Object\FinalizedClassDefinition;
+use Dms\Core\Model\Object\TypedObject;
+use Dms\Core\Module\Definition\ModuleDefinition;
 
 /**
  * The read module definition class.

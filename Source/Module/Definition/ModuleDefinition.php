@@ -1,16 +1,16 @@
 <?php
 
-namespace Iddigital\Cms\Core\Module\Definition;
+namespace Dms\Core\Module\Definition;
 
-use Iddigital\Cms\Core\Auth\IAuthSystem;
-use Iddigital\Cms\Core\Exception\InvalidOperationException;
-use Iddigital\Cms\Core\Module\Definition\Chart\ChartDefiner;
-use Iddigital\Cms\Core\Module\Definition\Table\TableDefiner;
-use Iddigital\Cms\Core\Module\Definition\Widget\WidgetLabelDefiner;
-use Iddigital\Cms\Core\Module\IAction;
-use Iddigital\Cms\Core\Module\IChartDisplay;
-use Iddigital\Cms\Core\Module\ITableDisplay;
-use Iddigital\Cms\Core\Widget\IWidget;
+use Dms\Core\Auth\IAuthSystem;
+use Dms\Core\Exception\InvalidOperationException;
+use Dms\Core\Module\Definition\Chart\ChartDefiner;
+use Dms\Core\Module\Definition\Table\TableDefiner;
+use Dms\Core\Module\Definition\Widget\WidgetLabelDefiner;
+use Dms\Core\Module\IAction;
+use Dms\Core\Module\IChartDisplay;
+use Dms\Core\Module\ITableDisplay;
+use Dms\Core\Widget\IWidget;
 
 /**
  * The module definition class

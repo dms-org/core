@@ -1,6 +1,6 @@
 <?php
 
-namespace Iddigital\Cms\Core\Persistence\Db\Platform;
+namespace Dms\Core\Persistence\Db\Platform;
 
 /**
  * The compiled query class.

@@ -1,8 +1,8 @@
 <?php
 
-namespace Iddigital\Cms\Core\Table\Builder;
+namespace Dms\Core\Table\Builder;
 
-use Iddigital\Cms\Core\Form\Field\Builder\Field;
+use Dms\Core\Form\Field\Builder\Field;
 
 Table::create([
     Column::from(Field::name('data')->label('Data')->string()),

@@ -1,11 +1,11 @@
 <?php
 
-namespace Iddigital\Cms\Core\Persistence;
+namespace Dms\Core\Persistence;
 
-use Iddigital\Cms\Core\Exception;
-use Iddigital\Cms\Core\Model\ICriteria;
-use Iddigital\Cms\Core\Model\IObjectSet;
-use Iddigital\Cms\Core\Model\IReadModel;
+use Dms\Core\Exception;
+use Dms\Core\Model\ICriteria;
+use Dms\Core\Model\IObjectSet;
+use Dms\Core\Model\IReadModel;
 
 /**
  * The API for a read model repository.

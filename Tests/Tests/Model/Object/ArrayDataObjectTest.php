@@ -1,9 +1,9 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Model\Object;
+namespace Dms\Core\Tests\Model\Object;
 
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Model\Object\ArrayDataObject;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Model\Object\ArrayDataObject;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

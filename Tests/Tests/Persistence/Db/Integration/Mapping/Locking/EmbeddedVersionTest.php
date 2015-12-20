@@ -1,13 +1,13 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\Locking;
+namespace Dms\Core\Tests\Persistence\Db\Integration\Mapping\Locking;
 
-use Iddigital\Cms\Core\Persistence\Db\Mapping\EntityOutOfSyncException;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\IOrm;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\DbIntegrationTest;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\Locking\Fixtures\EmbeddedVersion\EntityWithEmbeddedVersion;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\Locking\Fixtures\EmbeddedVersion\EntityWithEmbeddedVersionMapper;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\Locking\Fixtures\EmbeddedVersion\VersionValueObject;
+use Dms\Core\Persistence\Db\Mapping\EntityOutOfSyncException;
+use Dms\Core\Persistence\Db\Mapping\IOrm;
+use Dms\Core\Tests\Persistence\Db\Integration\Mapping\DbIntegrationTest;
+use Dms\Core\Tests\Persistence\Db\Integration\Mapping\Locking\Fixtures\EmbeddedVersion\EntityWithEmbeddedVersion;
+use Dms\Core\Tests\Persistence\Db\Integration\Mapping\Locking\Fixtures\EmbeddedVersion\EntityWithEmbeddedVersionMapper;
+use Dms\Core\Tests\Persistence\Db\Integration\Mapping\Locking\Fixtures\EmbeddedVersion\VersionValueObject;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

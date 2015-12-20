@@ -1,12 +1,12 @@
 <?php
 
-namespace Iddigital\Cms\Core\Persistence\Db\Mapping;
+namespace Dms\Core\Persistence\Db\Mapping;
 
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Model\Criteria\IEntitySetProvider;
-use Iddigital\Cms\Core\Model\Criteria\IRelationPropertyIdTypeProvider;
-use Iddigital\Cms\Core\Persistence\Db\Connection\IConnection;
-use Iddigital\Cms\Core\Persistence\Db\Schema\Database;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Model\Criteria\IEntitySetProvider;
+use Dms\Core\Model\Criteria\IRelationPropertyIdTypeProvider;
+use Dms\Core\Persistence\Db\Connection\IConnection;
+use Dms\Core\Persistence\Db\Schema\Database;
 
 /**
  * The orm interface.

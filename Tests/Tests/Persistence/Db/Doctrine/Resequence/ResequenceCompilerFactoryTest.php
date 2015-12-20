@@ -1,16 +1,16 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Persistence\Db\Doctrine\Resequence;
+namespace Dms\Core\Tests\Persistence\Db\Doctrine\Resequence;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Platforms\MySqlPlatform;
 use Doctrine\DBAL\Platforms\SqlitePlatform;
-use Iddigital\Cms\Common\Testing\CmsTestCase;
-use Iddigital\Cms\Core\Persistence\Db\Doctrine\DoctrineExpressionCompiler;
-use Iddigital\Cms\Core\Persistence\Db\Doctrine\DoctrinePlatform;
-use Iddigital\Cms\Core\Persistence\Db\Doctrine\Resequence\DefaultResequenceCompiler;
-use Iddigital\Cms\Core\Persistence\Db\Doctrine\Resequence\MysqlResequenceCompiler;
-use Iddigital\Cms\Core\Persistence\Db\Doctrine\Resequence\ResequenceCompilerFactory;
+use Dms\Common\Testing\CmsTestCase;
+use Dms\Core\Persistence\Db\Doctrine\DoctrineExpressionCompiler;
+use Dms\Core\Persistence\Db\Doctrine\DoctrinePlatform;
+use Dms\Core\Persistence\Db\Doctrine\Resequence\DefaultResequenceCompiler;
+use Dms\Core\Persistence\Db\Doctrine\Resequence\MysqlResequenceCompiler;
+use Dms\Core\Persistence\Db\Doctrine\Resequence\ResequenceCompilerFactory;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

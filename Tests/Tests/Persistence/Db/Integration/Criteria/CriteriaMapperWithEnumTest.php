@@ -1,12 +1,12 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Criteria;
+namespace Dms\Core\Tests\Persistence\Db\Integration\Criteria;
 
-use Iddigital\Cms\Core\Persistence\Db\Criteria\CriteriaMapper;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\CustomOrm;
-use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Expr;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\Fixtures\Enum\EntityWithEnumMapper;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Mapping\Fixtures\Enum\StatusEnum;
+use Dms\Core\Persistence\Db\Criteria\CriteriaMapper;
+use Dms\Core\Persistence\Db\Mapping\CustomOrm;
+use Dms\Core\Persistence\Db\Query\Expression\Expr;
+use Dms\Core\Tests\Persistence\Db\Integration\Mapping\Fixtures\Enum\EntityWithEnumMapper;
+use Dms\Core\Tests\Persistence\Db\Integration\Mapping\Fixtures\Enum\StatusEnum;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

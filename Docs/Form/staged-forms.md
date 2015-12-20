@@ -17,10 +17,10 @@ Building on top of the basic forms, staged forms can be defined as follows:
 
 namespace Some\Name\Space;
 
-use Iddigital\Cms\Core\Form\Builder\Form;
-use Iddigital\Cms\Core\Form\Builder\StagedForm;
-use Iddigital\Cms\Core\Form\Field\Builder\Field;
-use Iddigital\Cms\Core\Form\InvalidFormSubmissionException;
+use Dms\Core\Form\Builder\Form;
+use Dms\Core\Form\Builder\StagedForm;
+use Dms\Core\Form\Field\Builder\Field;
+use Dms\Core\Form\InvalidFormSubmissionException;
 
 $stagedForm = StagedForm::begin(
         Form::create()

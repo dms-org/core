@@ -1,11 +1,11 @@
 <?php
 
-namespace Iddigital\Cms\Core\Module\Definition\Chart;
+namespace Dms\Core\Module\Definition\Chart;
 
-use Iddigital\Cms\Core\Module\Chart\ChartView;
-use Iddigital\Cms\Core\Module\Table\TableView;
-use Iddigital\Cms\Core\Table\Chart\Criteria\ChartCriteria;
-use Iddigital\Cms\Core\Table\Chart\IChartDataSource;
+use Dms\Core\Module\Chart\ChartView;
+use Dms\Core\Module\Table\TableView;
+use Dms\Core\Table\Chart\Criteria\ChartCriteria;
+use Dms\Core\Table\Chart\IChartDataSource;
 
 /**
  * The chart view definer class.

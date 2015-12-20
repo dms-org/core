@@ -1,9 +1,9 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Persistence\Db\Doctrine;
+namespace Dms\Core\Tests\Persistence\Db\Doctrine;
 
-use Iddigital\Cms\Common\Testing\CmsTestCase;
-use Iddigital\Cms\Core\Tests\Bootstrap;
+use Dms\Common\Testing\CmsTestCase;
+use Dms\Core\Tests\Bootstrap;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

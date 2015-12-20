@@ -1,8 +1,8 @@
 <?php
 
-namespace Iddigital\Cms\Core\Table\Builder;
+namespace Dms\Core\Table\Builder;
 
-use Iddigital\Cms\Core\Table\IColumnComponent;
+use Dms\Core\Table\IColumnComponent;
 
 /**
  * The column name builder class

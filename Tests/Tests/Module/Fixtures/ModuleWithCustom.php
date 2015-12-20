@@ -1,13 +1,13 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Module\Fixtures;
+namespace Dms\Core\Tests\Module\Fixtures;
 
-use Iddigital\Cms\Core\Auth\IAuthSystem;
-use Iddigital\Cms\Core\Module\Definition\ModuleDefinition;
-use Iddigital\Cms\Core\Module\IAction;
-use Iddigital\Cms\Core\Module\IChartDisplay;
-use Iddigital\Cms\Core\Module\ITableDisplay;
-use Iddigital\Cms\Core\Module\Module;
+use Dms\Core\Auth\IAuthSystem;
+use Dms\Core\Module\Definition\ModuleDefinition;
+use Dms\Core\Module\IAction;
+use Dms\Core\Module\IChartDisplay;
+use Dms\Core\Module\ITableDisplay;
+use Dms\Core\Module\Module;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

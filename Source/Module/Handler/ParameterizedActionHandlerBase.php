@@ -1,10 +1,10 @@
 <?php
 
-namespace Iddigital\Cms\Core\Module\Handler;
+namespace Dms\Core\Module\Handler;
 
-use Iddigital\Cms\Core\Exception\TypeMismatchException;
-use Iddigital\Cms\Core\Form;
-use Iddigital\Cms\Core\Module\IParameterizedActionHandler;
+use Dms\Core\Exception\TypeMismatchException;
+use Dms\Core\Form;
+use Dms\Core\Module\IParameterizedActionHandler;
 
 /**
  * The parameterized action handler base class.

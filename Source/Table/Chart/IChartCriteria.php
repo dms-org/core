@@ -1,9 +1,9 @@
 <?php
 
-namespace Iddigital\Cms\Core\Table\Chart;
+namespace Dms\Core\Table\Chart;
 
-use Iddigital\Cms\Core\Table\Chart\Criteria\AxisCondition;
-use Iddigital\Cms\Core\Table\Chart\Criteria\AxisOrdering;
+use Dms\Core\Table\Chart\Criteria\AxisCondition;
+use Dms\Core\Table\Chart\Criteria\AxisOrdering;
 
 /**
  * The chart criteria interface

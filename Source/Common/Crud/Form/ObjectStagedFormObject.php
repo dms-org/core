@@ -1,14 +1,14 @@
 <?php
 
-namespace Iddigital\Cms\Core\Common\Crud\Form;
+namespace Dms\Core\Common\Crud\Form;
 
-use Iddigital\Cms\Core\Exception\TypeMismatchException;
-use Iddigital\Cms\Core\Form\Object\FormObjectDefinition;
-use Iddigital\Cms\Core\Form\Object\Stage\StagedFormObject;
-use Iddigital\Cms\Core\Form\Object\Stage\StagedFormObjectDefinition;
-use Iddigital\Cms\Core\Model\IEntitySet;
-use Iddigital\Cms\Core\Model\IObjectSet;
-use Iddigital\Cms\Core\Model\Object\ClassDefinition;
+use Dms\Core\Exception\TypeMismatchException;
+use Dms\Core\Form\Object\FormObjectDefinition;
+use Dms\Core\Form\Object\Stage\StagedFormObject;
+use Dms\Core\Form\Object\Stage\StagedFormObjectDefinition;
+use Dms\Core\Model\IEntitySet;
+use Dms\Core\Model\IObjectSet;
+use Dms\Core\Model\Object\ClassDefinition;
 
 /**
  * The staged form object for a object action.

@@ -1,17 +1,17 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Table\Criteria;
+namespace Dms\Core\Tests\Table\Criteria;
 
-use Iddigital\Cms\Common\Testing\CmsTestCase;
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Form\Field\Builder\Field;
-use Iddigital\Cms\Core\Model\Criteria\OrderingDirection;
-use Iddigital\Cms\Core\Table\Builder\Column;
-use Iddigital\Cms\Core\Table\Builder\Table;
-use Iddigital\Cms\Core\Table\Criteria\ColumnCondition;
-use Iddigital\Cms\Core\Table\Criteria\ColumnOrdering;
-use Iddigital\Cms\Core\Table\Data\TableRow;
-use Iddigital\Cms\Core\Table\IColumnComponent;
+use Dms\Common\Testing\CmsTestCase;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Form\Field\Builder\Field;
+use Dms\Core\Model\Criteria\OrderingDirection;
+use Dms\Core\Table\Builder\Column;
+use Dms\Core\Table\Builder\Table;
+use Dms\Core\Table\Criteria\ColumnCondition;
+use Dms\Core\Table\Criteria\ColumnOrdering;
+use Dms\Core\Table\Data\TableRow;
+use Dms\Core\Table\IColumnComponent;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

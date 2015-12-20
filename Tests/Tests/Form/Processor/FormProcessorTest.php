@@ -1,10 +1,10 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Form\Processor;
+namespace Dms\Core\Tests\Form\Processor;
 
-use Iddigital\Cms\Common\Testing\CmsTestCase;
-use Iddigital\Cms\Core\Form\IFormProcessor;
-use Iddigital\Cms\Core\Language\Message;
+use Dms\Common\Testing\CmsTestCase;
+use Dms\Core\Form\IFormProcessor;
+use Dms\Core\Language\Message;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

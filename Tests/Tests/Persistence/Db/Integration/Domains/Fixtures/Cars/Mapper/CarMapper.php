@@ -1,15 +1,15 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Cars\Mapper;
+namespace Dms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Cars\Mapper;
 
-use Iddigital\Cms\Core\Persistence\Db\Mapping\CustomOrm;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\MapperDefinition;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\EntityMapper;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Cars\Car;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Cars\ConvertibleCar;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Cars\FamilyCar;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Cars\HatchCar;
-use Iddigital\Cms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Cars\SedanCar;
+use Dms\Core\Persistence\Db\Mapping\CustomOrm;
+use Dms\Core\Persistence\Db\Mapping\Definition\MapperDefinition;
+use Dms\Core\Persistence\Db\Mapping\EntityMapper;
+use Dms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Cars\Car;
+use Dms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Cars\ConvertibleCar;
+use Dms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Cars\FamilyCar;
+use Dms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Cars\HatchCar;
+use Dms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Cars\SedanCar;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

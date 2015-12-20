@@ -1,25 +1,25 @@
 <?php
 
-namespace Iddigital\Cms\Core\Persistence\Db\Mapping\ReadModel\Relation;
+namespace Dms\Core\Persistence\Db\Mapping\ReadModel\Relation;
 
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Exception\NotImplementedException;
-use Iddigital\Cms\Core\Persistence\Db\Criteria\MemberMapping\RelationMapping;
-use Iddigital\Cms\Core\Persistence\Db\LoadingContext;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\ParentChildMap;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\ParentChildrenMap;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\ParentMapBase;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Embedded\EmbeddedObjectRelation;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\IRelation;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\ISeparateTableRelation;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\ISeparateToManyTableRelation;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\ISeparateToOneTableRelation;
-use Iddigital\Cms\Core\Persistence\Db\Mapping\Relation\Relation;
-use Iddigital\Cms\Core\Persistence\Db\PersistenceContext;
-use Iddigital\Cms\Core\Persistence\Db\Query\Clause\Join;
-use Iddigital\Cms\Core\Persistence\Db\Query\Delete;
-use Iddigital\Cms\Core\Persistence\Db\Query\Expression\Expr;
-use Iddigital\Cms\Core\Persistence\Db\Query\Select;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Exception\NotImplementedException;
+use Dms\Core\Persistence\Db\Criteria\MemberMapping\RelationMapping;
+use Dms\Core\Persistence\Db\LoadingContext;
+use Dms\Core\Persistence\Db\Mapping\ParentChildMap;
+use Dms\Core\Persistence\Db\Mapping\ParentChildrenMap;
+use Dms\Core\Persistence\Db\Mapping\ParentMapBase;
+use Dms\Core\Persistence\Db\Mapping\Relation\Embedded\EmbeddedObjectRelation;
+use Dms\Core\Persistence\Db\Mapping\Relation\IRelation;
+use Dms\Core\Persistence\Db\Mapping\Relation\ISeparateTableRelation;
+use Dms\Core\Persistence\Db\Mapping\Relation\ISeparateToManyTableRelation;
+use Dms\Core\Persistence\Db\Mapping\Relation\ISeparateToOneTableRelation;
+use Dms\Core\Persistence\Db\Mapping\Relation\Relation;
+use Dms\Core\Persistence\Db\PersistenceContext;
+use Dms\Core\Persistence\Db\Query\Clause\Join;
+use Dms\Core\Persistence\Db\Query\Delete;
+use Dms\Core\Persistence\Db\Query\Expression\Expr;
+use Dms\Core\Persistence\Db\Query\Select;
 
 /**
  * The member relation base class.
@@ -63,7 +63,7 @@ abstract class MemberRelation extends Relation
      * @param PersistenceContext $context
      * @param Delete             $parentDelete
      *
-     * @throws \Iddigital\Cms\Core\Exception\InvalidOperationException
+     * @throws \Dms\Core\Exception\InvalidOperationException
      */
     final public function delete(PersistenceContext $context, Delete $parentDelete)
     {

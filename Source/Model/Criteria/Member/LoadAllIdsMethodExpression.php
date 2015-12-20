@@ -1,14 +1,14 @@
 <?php
 
-namespace Iddigital\Cms\Core\Model\Criteria\Member;
+namespace Dms\Core\Model\Criteria\Member;
 
-use Iddigital\Cms\Core\Exception\InvalidArgumentException;
-use Iddigital\Cms\Core\Model\Criteria\NestedMember;
-use Iddigital\Cms\Core\Model\EntityCollection;
-use Iddigital\Cms\Core\Model\IEntitySet;
-use Iddigital\Cms\Core\Model\Type\Builder\Type;
-use Iddigital\Cms\Core\Model\Type\IType;
-use Iddigital\Cms\Core\Model\Type\WithElementsType;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Model\Criteria\NestedMember;
+use Dms\Core\Model\EntityCollection;
+use Dms\Core\Model\IEntitySet;
+use Dms\Core\Model\Type\Builder\Type;
+use Dms\Core\Model\Type\IType;
+use Dms\Core\Model\Type\WithElementsType;
 
 /**
  * The load all ids method expression class.

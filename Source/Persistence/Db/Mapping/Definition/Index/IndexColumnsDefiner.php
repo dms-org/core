@@ -1,6 +1,6 @@
 <?php
 
-namespace Iddigital\Cms\Core\Persistence\Db\Mapping\Definition\Index;
+namespace Dms\Core\Persistence\Db\Mapping\Definition\Index;
 
 /**
  * The index name definer class.

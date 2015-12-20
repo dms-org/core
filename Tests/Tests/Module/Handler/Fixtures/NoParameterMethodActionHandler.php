@@ -1,9 +1,9 @@
 <?php
 
-namespace Iddigital\Cms\Core\Tests\Module\Handler\Fixtures;
+namespace Dms\Core\Tests\Module\Handler\Fixtures;
 
-use Iddigital\Cms\Core\Module\Handler\ParameterizedActionHandler;
-use Iddigital\Cms\Core\Tests\Module\Mapping\Fixtures\TestDto;
+use Dms\Core\Module\Handler\ParameterizedActionHandler;
+use Dms\Core\Tests\Module\Mapping\Fixtures\TestDto;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

@@ -1,11 +1,11 @@
 <?php
 
-namespace Iddigital\Cms\Core\Table\Chart\DataSource\Definition;
+namespace Dms\Core\Table\Chart\DataSource\Definition;
 
-use Iddigital\Cms\Core\Table\Chart\IChartAxis;
-use Iddigital\Cms\Core\Table\Chart\Structure\ChartAxis;
-use Iddigital\Cms\Core\Table\Column\Component\ColumnComponent;
-use Iddigital\Cms\Core\Table\IColumnComponent;
+use Dms\Core\Table\Chart\IChartAxis;
+use Dms\Core\Table\Chart\Structure\ChartAxis;
+use Dms\Core\Table\Column\Component\ColumnComponent;
+use Dms\Core\Table\IColumnComponent;
 
 /**
  * The table component to chart component mapping definer.

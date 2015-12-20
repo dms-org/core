@@ -1,8 +1,8 @@
 <?php
 
-namespace Iddigital\Cms\Core\Form\Object;
+namespace Dms\Core\Form\Object;
 
-use Iddigital\Cms\Core\Form\Field\Builder\InnerFormFieldBuilder;
+use Dms\Core\Form\Field\Builder\InnerFormFieldBuilder;
 
 /**
  * The inner form object field builder
