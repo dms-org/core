@@ -2,15 +2,18 @@
 
 namespace Iddigital\Cms\Core\Form\Field\Processor;
 
+use Iddigital\Cms\Core\Language\Message;
 use Iddigital\Cms\Core\Model\Type\Builder\Type;
 
 /**
  * The field type processor.
- * 
+ *
  * @author Elliot Levin <elliotlevin@hotmail.com>
  */
 class TypeProcessor extends FieldProcessor
 {
+    const MESSAGE = 'validation.type';
+
     /**
      * @var string
      */
@@ -21,16 +24,30 @@ class TypeProcessor extends FieldProcessor
      */
     public function __construct($type)
     {
-        parent::__construct(Type::scalar(strtolower($type)));
+        $type = strtolower($type);
+
+        parent::__construct(Type::scalar($type));
 
         $this->type = $type;
     }
 
     protected function doProcess($input, array &$messages)
     {
-        settype($input, $this->type);
+        if (is_array($input)) {
+            $messages[] = new Message(self::MESSAGE, ['expected_type' => $this->type, 'actual_type' => 'array']);
+        }
 
-        return $input;
+        if (is_object($input) && !method_exists($input, '__toString')) {
+            $messages[] = new Message(self::MESSAGE, ['expected_type' => $this->type, 'actual_type' => 'object']);
+        }
+
+        if (empty($messages)) {
+            settype($input, $this->type);
+
+            return $input;
+        } else {
+            return null;
+        }
     }
 
     protected function doUnprocess($input)
