@@ -14,6 +14,10 @@ use Dms\Core\Form\IFormSection;
 use Dms\Core\Form\Processor\CustomFormProcessor;
 use Dms\Core\Form\Processor\FormValidator;
 use Dms\Core\Form\Processor\Validator\CustomFormValidator;
+use Dms\Core\Form\Processor\Validator\FieldGreaterThanAnotherValidator;
+use Dms\Core\Form\Processor\Validator\FieldGreaterThanOrEqualAnotherValidator;
+use Dms\Core\Form\Processor\Validator\FieldLessThanAnotherValidator;
+use Dms\Core\Form\Processor\Validator\FieldLessThanOrEqualAnotherValidator;
 use Dms\Core\Form\Processor\Validator\MatchingFieldsValidator;
 
 /**
@@ -158,14 +162,90 @@ class Form
      */
     public function fieldsMatch($fieldName, $otherFieldName)
     {
+        $this->validateFieldsExist(__METHOD__, $fieldName, $otherFieldName);
+
+        return $this->validate(new MatchingFieldsValidator($this->fields[$fieldName], $this->fields[$otherFieldName]));
+    }
+
+    /**
+     * Validates the first supplied field is less than the second field.
+     *
+     * @param string $fieldName
+     * @param string $otherFieldName
+     *
+     * @return static
+     * @throws InvalidArgumentException If the fields dont exist
+     */
+    public function fieldLessThanAnother($fieldName, $otherFieldName)
+    {
+        $this->validateFieldsExist(__METHOD__, $fieldName, $otherFieldName);
+
+        return $this->validate(new FieldLessThanAnotherValidator($this->fields[$fieldName], $this->fields[$otherFieldName]));
+    }
+
+    /**
+     * Validates the first supplied field is less than or equal to the second field.
+     *
+     * @param string $fieldName
+     * @param string $otherFieldName
+     *
+     * @return static
+     * @throws InvalidArgumentException If the fields dont exist
+     */
+    public function fieldLessThanOrEqualAnother($fieldName, $otherFieldName)
+    {
+        $this->validateFieldsExist(__METHOD__, $fieldName, $otherFieldName);
+
+        return $this->validate(new FieldLessThanOrEqualAnotherValidator($this->fields[$fieldName], $this->fields[$otherFieldName]));
+    }
+
+    /**
+     * Validates the first supplied field is greater than the second field.
+     *
+     * @param string $fieldName
+     * @param string $otherFieldName
+     *
+     * @return static
+     * @throws InvalidArgumentException If the fields dont exist
+     */
+    public function fieldGreaterThanAnother($fieldName, $otherFieldName)
+    {
+        $this->validateFieldsExist(__METHOD__, $fieldName, $otherFieldName);
+
+        return $this->validate(new FieldGreaterThanAnotherValidator($this->fields[$fieldName], $this->fields[$otherFieldName]));
+    }
+
+    /**
+     * Validates the first supplied field is greater than or equal to the second field.
+     *
+     * @param string $fieldName
+     * @param string $otherFieldName
+     *
+     * @return static
+     * @throws InvalidArgumentException If the fields dont exist
+     */
+    public function fieldGreaterThanOrEqualAnother($fieldName, $otherFieldName)
+    {
+        $this->validateFieldsExist(__METHOD__, $fieldName, $otherFieldName);
+
+        return $this->validate(new FieldGreaterThanOrEqualAnotherValidator($this->fields[$fieldName], $this->fields[$otherFieldName]));
+    }
+
+    /**
+     * @param string $method
+     * @param string $fieldName
+     * @param string $otherFieldName
+     *
+     * @throws InvalidArgumentException
+     */
+    protected function validateFieldsExist($method, $fieldName, $otherFieldName)
+    {
         foreach ([$fieldName, $otherFieldName] as $name) {
             if (!isset($this->fields[$fieldName])) {
                 throw InvalidArgumentException::format(
-                        "Invalid call to %s: field with name %s is not defined", __METHOD__, $name);
+                        "Invalid call to %s: field with name \'%s\' has not currently been defined in the form", $method, $name);
             }
         }
-
-        return $this->validate(new MatchingFieldsValidator($this->fields[$fieldName], $this->fields[$otherFieldName]));
     }
 
     /**

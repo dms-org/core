@@ -122,14 +122,14 @@ class InvalidFormSubmissionException extends BaseException
     }
 
     /**
-     * @param IField $field
+     * @param string $fieldName
      *
      * @return InvalidInputException|null
      */
-    public function getInvalidInputExceptionFor(IField $field)
+    public function getInvalidInputExceptionFor($fieldName)
     {
-        return isset($this->invalidInputExceptions[$field->getName()])
-                ? $this->invalidInputExceptions[$field->getName()]
+        return isset($this->invalidInputExceptions[$fieldName])
+                ? $this->invalidInputExceptions[$fieldName]
                 : null;
     }
 
@@ -142,31 +142,31 @@ class InvalidFormSubmissionException extends BaseException
     }
 
     /**
-     * @param IField $field
+     * @param string $fieldName
      *
      * @return InvalidInnerFormSubmissionException|null
      */
-    public function getInnerFormSubmissionExceptionFor(IField $field)
+    public function getInnerFormSubmissionExceptionFor($fieldName)
     {
-        return isset($this->invalidInnerFormSubmissionExceptions[$field->getName()])
-                ? $this->invalidInnerFormSubmissionExceptions[$field->getName()]
+        return isset($this->invalidInnerFormSubmissionExceptions[$fieldName])
+                ? $this->invalidInnerFormSubmissionExceptions[$fieldName]
                 : null;
     }
 
     /**
-     * @param IField $field
+     * @param string $fieldName
      *
      * @return Message[]
      */
-    public function getMessagesFor(IField $field)
+    public function getMessagesFor($fieldName)
     {
-        $invalidInputException = $this->getInvalidInputExceptionFor($field);
+        $invalidInputException = $this->getInvalidInputExceptionFor($fieldName);
 
         if ($invalidInputException) {
             return $invalidInputException->getMessages();
         }
 
-        $invalidFormSubmission = $this->getInnerFormSubmissionExceptionFor($field);
+        $invalidFormSubmission = $this->getInnerFormSubmissionExceptionFor($fieldName);
 
         if ($invalidFormSubmission) {
             return $invalidFormSubmission->getFieldMessageMap();
@@ -183,7 +183,7 @@ class InvalidFormSubmissionException extends BaseException
         $messages = [];
 
         foreach ($this->form->getFields() as $field) {
-            $messages[$field->getName()] = $this->getMessagesFor($field);
+            $messages[$field->getName()] = $this->getMessagesFor($field->getName());
         }
 
         return $messages;

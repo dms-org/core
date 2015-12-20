@@ -51,7 +51,7 @@ class DateFieldBuilder extends FieldBuilderBase
         $min = $this->processDateTime($min);
 
         return $this
-                ->attr(DateType::ATTR_MIN, $min)
+                ->attr(DateTimeTypeBase::ATTR_MIN, $min)
                 ->validate(new GreaterThanOrEqualValidator($this->getCurrentProcessedType(), $min));
     }
 
@@ -67,7 +67,7 @@ class DateFieldBuilder extends FieldBuilderBase
         $value = $this->processDateTime($value);
 
         return $this
-                ->attr(DateType::ATTR_MIN, $value->add($this->type->getUnit()))
+                ->attr(DateTimeTypeBase::ATTR_MIN, $value->add($this->type->getUnit()))
                 ->validate(new GreaterThanValidator($this->getCurrentProcessedType(), $value));
     }
 
@@ -84,7 +84,7 @@ class DateFieldBuilder extends FieldBuilderBase
         $max = $this->processDateTime($max);
 
         return $this
-                ->attr(DateType::ATTR_MAX, $max)
+                ->attr(DateTimeTypeBase::ATTR_MAX, $max)
                 ->validate(new LessThanOrEqualValidator($this->getCurrentProcessedType(), $max));
     }
 
@@ -100,7 +100,7 @@ class DateFieldBuilder extends FieldBuilderBase
         $value = $this->processDateTime($value);
 
         return $this
-                ->attr(DateType::ATTR_MAX, $value->sub($this->type->getUnit()))
+                ->attr(DateTimeTypeBase::ATTR_MAX, $value->sub($this->type->getUnit()))
                 ->validate(new LessThanValidator($this->getCurrentProcessedType(), $value));
     }
 

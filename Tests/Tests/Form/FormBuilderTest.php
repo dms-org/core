@@ -56,6 +56,66 @@ class FormBuilderTest extends FormBuilderTestBase
         $this->assertInvalidSubmission(['password' => 'foo', 'password_confirm' => 'bar'], $form);
     }
 
+    /**
+     * @return Form
+     */
+    protected function comparisonNumbersForm()
+    {
+        return Form::create()
+                ->section('Numbers', [
+                        Field::name('first')->label('First')->int(),
+                        Field::name('second')->label('Second')->int(),
+                ]);
+    }
+
+    public function testFieldLessThanAnother()
+    {
+        $form = $this->comparisonNumbersForm()
+                ->fieldLessThanAnother('first', 'second')
+                ->build();
+
+        $this->assertProcesses(['first' => null, 'second' => null], $form);
+        $this->assertProcesses(['first' => 0, 'second' => 10], $form);
+        $this->assertInvalidSubmission(['first' => 0, 'second' => 0], $form);
+        $this->assertInvalidSubmission(['first' => 10, 'second' => 0], $form);
+    }
+
+    public function testFieldLessThanOrEqualAnother()
+    {
+        $form = $this->comparisonNumbersForm()
+                ->fieldLessThanOrEqualAnother('first', 'second')
+                ->build();
+
+        $this->assertProcesses(['first' => null, 'second' => null], $form);
+        $this->assertProcesses(['first' => 0, 'second' => 10], $form);
+        $this->assertProcesses(['first' => 0, 'second' => 0], $form);
+        $this->assertInvalidSubmission(['first' => 10, 'second' => 0], $form);
+    }
+
+    public function testFieldGreaterThanAnother()
+    {
+        $form = $this->comparisonNumbersForm()
+                ->fieldGreaterThanAnother('first', 'second')
+                ->build();
+
+        $this->assertProcesses(['first' => null, 'second' => null], $form);
+        $this->assertProcesses(['first' => 10, 'second' => 0], $form);
+        $this->assertInvalidSubmission(['first' => 0, 'second' => 0], $form);
+        $this->assertInvalidSubmission(['first' => 0, 'second' => 10], $form);
+    }
+
+    public function testFieldGreaterThanOrEqualAnother()
+    {
+        $form = $this->comparisonNumbersForm()
+                ->fieldGreaterThanOrEqualAnother('first', 'second')
+                ->build();
+
+        $this->assertProcesses(['first' => null, 'second' => null], $form);
+        $this->assertProcesses(['first' => 10, 'second' => 0], $form);
+        $this->assertProcesses(['first' => 0, 'second' => 0], $form);
+        $this->assertInvalidSubmission(['first' => 0, 'second' => 10], $form);
+    }
+
     public function testMap()
     {
         $form = Form::create()

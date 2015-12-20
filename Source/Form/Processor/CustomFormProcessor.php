@@ -33,9 +33,9 @@ class CustomFormProcessor extends FormProcessor
      *
      * @return array
      */
-    protected function doProcess(array $input, array $messages)
+    protected function doProcess(array $input, array &$messages)
     {
-        return call_user_func($this->processCallback, $input, $messages);
+        return call_user_func_array($this->processCallback, [$input, &$messages]);
     }
 
     /**

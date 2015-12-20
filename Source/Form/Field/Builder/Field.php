@@ -335,8 +335,8 @@ class Field extends FieldBuilderBase
 
         // TODO: verify complex enum types.
         /** @var Enum|string $enumClass */
-        $this->process(new TypeProcessor($enumClass::getEnumType()->asTypeString()))
-                ->type(new StringType())
+        $this->type(new StringType())
+                ->process(new TypeProcessor($enumClass::getEnumType()->asTypeString()))
                 ->oneOf(array_intersect_key($valueLabelMap, array_flip($enumClass::getOptions())))
                 ->process(new EnumProcessor($enumClass));
 

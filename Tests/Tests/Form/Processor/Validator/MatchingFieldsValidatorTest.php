@@ -31,6 +31,8 @@ class MatchingFieldsValidatorTest extends FormValidatorTest
     public function successTests()
     {
         return [
+                [[]],
+                [['one' => null, 'two' => null]],
                 [['one' => 'abc', 'two' => 'abc']],
                 [['foo' => 'bar', 'one' => 123, 'two' => 123]],
                 [['one' => new \DateTime('2000-01-01 00:00:00'), 'two' => new \DateTime('2000-01-01 00:00:00')]],
@@ -43,7 +45,6 @@ class MatchingFieldsValidatorTest extends FormValidatorTest
     public function failTests()
     {
         return [
-                [[], new Message(MatchingFieldsValidator::MESSAGE, ['field1' => 'One', 'field2' => 'Two'])],
                 [['one' => 'bar', 'two' => 'baz'], new Message(MatchingFieldsValidator::MESSAGE, ['field1' => 'One', 'field2' => 'Two'])],
                 [['one' => 123, 'two' => '123'], new Message(MatchingFieldsValidator::MESSAGE, ['field1' => 'One', 'field2' => 'Two'])],
         ];

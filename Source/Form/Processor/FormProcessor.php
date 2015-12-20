@@ -34,7 +34,7 @@ abstract class FormProcessor implements IFormProcessor
      *
      * @return array
      */
-    abstract protected function doProcess(array $input, array $messages);
+    abstract protected function doProcess(array $input, array &$messages);
 
     /**
      * @param array $input
