@@ -52,6 +52,7 @@ abstract class FieldType implements IFieldType
     public function __construct()
     {
         $this->loadTypes();
+        $this->initializeFromCurrentAttributes();
     }
 
     /**
@@ -135,8 +136,17 @@ abstract class FieldType implements IFieldType
         $clone             = clone $this;
         $clone->attributes = $attributes + $clone->attributes;
         $clone->loadTypes();
+        $clone->initializeFromCurrentAttributes();
 
         return $clone;
+    }
+
+    /**
+     * @return void
+     */
+    protected function initializeFromCurrentAttributes()
+    {
+
     }
 
     /**
