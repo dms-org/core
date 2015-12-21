@@ -75,7 +75,7 @@ class FileFieldBuilder extends FieldBuilderBase
      *
      * @return static
      */
-    public function moveToWithClientsFileName($path)
+    public function moveToPathWithClientsFileName($path)
     {
         return $this
                 ->process(FileMoverProcessor::withClientFileName($this->isImage(), $path));
