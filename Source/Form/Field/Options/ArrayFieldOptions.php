@@ -37,7 +37,9 @@ class ArrayFieldOptions implements IFieldOptions
         $options = [];
 
         foreach ($keyValueOptions as $value => $label) {
-            $options[] = new FieldOption($value, $label);
+            $options[] = $label instanceof IFieldOption
+                    ? $label
+                    : new FieldOption($value, $label);
         }
 
         return new self($options);
@@ -46,8 +48,22 @@ class ArrayFieldOptions implements IFieldOptions
     /**
      * {@inheritDoc}
      */
-    public function all()
+    public function getAll()
     {
         return $this->options;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getAllValues()
+    {
+        $values = [];
+
+        foreach ($this->options as $option) {
+            $values[] = $option->getValue();
+        }
+
+        return $values;
     }
 }

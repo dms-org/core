@@ -3,6 +3,7 @@
 namespace Dms\Core\Form\Field\Type;
 
 use Dms\Core\Form\Field\Processor\ArrayAllProcessor;
+use Dms\Core\Form\Field\Processor\EntityArrayLoaderProcessor;
 use Dms\Core\Form\Field\Processor\TypeProcessor;
 use Dms\Core\Form\Field\Processor\Validator\EntityIdArrayValidator;
 use Dms\Core\Form\Field\Processor\Validator\IntValidator;
@@ -28,9 +29,22 @@ class ArrayOfEntityIdsType extends ArrayOfType
      */
     private $entities;
 
-    public function __construct(IEntitySet $entities, IField $entityIdField)
+    /**
+     * @var bool
+     */
+    private $loadAsObjects;
+
+    /**
+     * ArrayOfEntityIdsType constructor.
+     *
+     * @param IEntitySet $entities
+     * @param IField     $entityIdField
+     * @param bool       $loadAsObjects
+     */
+    public function __construct(IEntitySet $entities, IField $entityIdField, $loadAsObjects = false)
     {
-        $this->entities = $entities;
+        $this->entities      = $entities;
+        $this->loadAsObjects = $loadAsObjects;
         parent::__construct($entityIdField);
     }
 
@@ -39,13 +53,22 @@ class ArrayOfEntityIdsType extends ArrayOfType
      */
     protected function buildProcessors()
     {
-        return [
-                new ArrayAllProcessor([
-                        new IntValidator($this->getElementType()->getPhpTypeOfInput()),
-                        new TypeProcessor('int'),
-                        new RequiredValidator(Type::int()->nullable())
-                ]),
-                new EntityIdArrayValidator(Type::arrayOf(Type::int())->nullable(), $this->entities),
-        ];
+        $processors = [];
+
+        $this->buildArrayLengthValidators($processors);
+
+        $processors[] = new ArrayAllProcessor([
+                new IntValidator($this->getElementType()->getPhpTypeOfInput()),
+                new TypeProcessor('int'),
+                new RequiredValidator(Type::int()->nullable())
+        ]);
+
+        $processors[] = new EntityIdArrayValidator(Type::arrayOf(Type::int())->nullable(), $this->entities);
+
+        if ($this->loadAsObjects) {
+            $processors[] = new EntityArrayLoaderProcessor($this->entities);
+        }
+
+        return $processors;
     }
 }

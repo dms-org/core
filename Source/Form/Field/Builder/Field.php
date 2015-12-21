@@ -3,10 +3,6 @@
 namespace Dms\Core\Form\Field\Builder;
 
 use Dms\Core\Exception\InvalidArgumentException;
-use Dms\Core\Form\Field\Processor\EntityArrayLoaderProcessor;
-use Dms\Core\Form\Field\Processor\EntityLoaderProcessor;
-use Dms\Core\Form\Field\Processor\EnumProcessor;
-use Dms\Core\Form\Field\Processor\TypeProcessor;
 use Dms\Core\Form\Field\Type\ArrayOfEntityIdsType;
 use Dms\Core\Form\Field\Type\ArrayOfType;
 use Dms\Core\Form\Field\Type\BoolType;
@@ -15,6 +11,7 @@ use Dms\Core\Form\Field\Type\DateTimeType;
 use Dms\Core\Form\Field\Type\DateTimeTypeBase;
 use Dms\Core\Form\Field\Type\DateType;
 use Dms\Core\Form\Field\Type\EntityIdType;
+use Dms\Core\Form\Field\Type\EnumType;
 use Dms\Core\Form\Field\Type\FileType;
 use Dms\Core\Form\Field\Type\FloatType;
 use Dms\Core\Form\Field\Type\ImageType;
@@ -29,7 +26,6 @@ use Dms\Core\Form\Object\FormObject;
 use Dms\Core\Form\Object\InnerFormObjectFieldBuilder;
 use Dms\Core\Form\Object\Type\InnerFormObjectType;
 use Dms\Core\Model\IEntitySet;
-use Dms\Core\Model\Object\Enum;
 use Dms\Core\Model\Type\IType;
 
 /**
@@ -77,8 +73,7 @@ class Field extends FieldBuilderBase
     }
 
     /**
-     * Constructs a field builder to be used as an element of
-     * an array field.
+     * Constructs a field builder to be used as placeholder for a field type.
      *
      * @return Field
      */
@@ -184,9 +179,8 @@ class Field extends FieldBuilderBase
      *
      * @return DateFieldBuilder
      */
-    private function dateTypeBuilder(
-            DateTimeTypeBase $type
-    ) {
+    private function dateTypeBuilder(DateTimeTypeBase $type)
+    {
         $this->type($type);
 
         return new DateFieldBuilder($type, $this);
@@ -222,9 +216,8 @@ class Field extends FieldBuilderBase
      */
     public function entityFrom(IEntitySet $entities)
     {
-        return new EntityFieldBuilder($this
-                ->type(new EntityIdType($entities))
-                ->process(new EntityLoaderProcessor($entities))
+        return new EntityFieldBuilder(
+                $this->type(new EntityIdType($entities, $loadAsObjects = true))
         );
     }
 
@@ -250,7 +243,10 @@ class Field extends FieldBuilderBase
     public function entityIdsFrom(IEntitySet $entities)
     {
         return new ArrayOfFieldBuilder($this
-                ->type(new ArrayOfEntityIdsType($entities, Field::element()->entityIdFrom($entities)->required()->build()))
+                ->type(new ArrayOfEntityIdsType(
+                        $entities,
+                        Field::element()->entityIdFrom($entities)->required()->build()
+                ))
         );
     }
 
@@ -265,8 +261,11 @@ class Field extends FieldBuilderBase
     public function entitiesFrom(IEntitySet $entities)
     {
         return new EntityArrayFieldBuilder($this
-                ->type(new ArrayOfEntityIdsType($entities, Field::element()->entityIdFrom($entities)->required()->build()))
-                ->process(new EntityArrayLoaderProcessor($entities))
+                ->type(new ArrayOfEntityIdsType(
+                        $entities,
+                        Field::element()->entityIdFrom($entities)->required()->build(),
+                        $loadAsObjects = true
+                ))
         );
     }
 
@@ -326,21 +325,7 @@ class Field extends FieldBuilderBase
      */
     public function enum($enumClass, array $valueLabelMap)
     {
-        if (!is_subclass_of($enumClass, Enum::class, true)) {
-            throw InvalidArgumentException::format(
-                    'Invalid enum class: expecting instance of %s, %s given',
-                    Enum::class, $enumClass
-            );
-        };
-
-        // TODO: verify complex enum types.
-        /** @var Enum|string $enumClass */
-        $this->type(new StringType())
-                ->process(new TypeProcessor($enumClass::getEnumType()->asTypeString()))
-                ->oneOf(array_intersect_key($valueLabelMap, array_flip($enumClass::getOptions())))
-                ->process(new EnumProcessor($enumClass));
-
-        return $this;
+        return $this->type(new EnumType($enumClass, $valueLabelMap));
     }
 
     /**

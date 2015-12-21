@@ -6,6 +6,8 @@ use Dms\Core\Exception\InvalidArgumentException;
 use Dms\Core\Form\IFieldProcessor;
 use Dms\Core\Language\Message;
 use Dms\Core\Model\Type\ArrayType;
+use Dms\Core\Model\Type\Builder\Type;
+use Dms\Core\Model\Type\IType;
 
 /**
  * The array processor.
@@ -21,14 +23,17 @@ class ArrayAllProcessor extends FieldProcessor
 
     /**
      * @param IFieldProcessor[] $elementProcessors
+     * @param IType|null             $elementType
      */
-    public function __construct(array $elementProcessors)
+    public function __construct(array $elementProcessors, IType $elementType = null)
     {
         InvalidArgumentException::verify(!empty($elementProcessors), 'element processors cannot be empty');
         InvalidArgumentException::verifyAllInstanceOf(__METHOD__, 'elementProcessors', $elementProcessors, IFieldProcessor::class);
+
         /** @var IFieldProcessor $lastProcessor */
         $lastProcessor = end($elementProcessors);
-        parent::__construct(new ArrayType($lastProcessor->getProcessedType()));
+
+        parent::__construct(Type::arrayOf($elementType ?: $lastProcessor->getProcessedType()));
 
         $this->elementProcessors = $elementProcessors;
     }

@@ -3,10 +3,6 @@
 namespace Dms\Core\Form\Field\Builder;
 
 use Dms\Core\Form\Field\Processor\DateTimeProcessor;
-use Dms\Core\Form\Field\Processor\Validator\GreaterThanOrEqualValidator;
-use Dms\Core\Form\Field\Processor\Validator\GreaterThanValidator;
-use Dms\Core\Form\Field\Processor\Validator\LessThanOrEqualValidator;
-use Dms\Core\Form\Field\Processor\Validator\LessThanValidator;
 use Dms\Core\Form\Field\Type\DateTimeTypeBase;
 
 /**
@@ -45,9 +41,7 @@ class DateFieldBuilder extends FieldBuilderBase
     {
         $min = $this->processDateTime($min);
 
-        return $this
-                ->attr(DateTimeTypeBase::ATTR_MIN, $min)
-                ->validate(new GreaterThanOrEqualValidator($this->getCurrentProcessedType(), $min));
+        return $this->attr(DateTimeTypeBase::ATTR_MIN, $min);
     }
 
     /**
@@ -61,9 +55,7 @@ class DateFieldBuilder extends FieldBuilderBase
     {
         $value = $this->processDateTime($value);
 
-        return $this
-                ->attr(DateTimeTypeBase::ATTR_MIN, $value->add($this->type->getUnit()))
-                ->validate(new GreaterThanValidator($this->getCurrentProcessedType(), $value));
+        return $this->attr(DateTimeTypeBase::ATTR_GREATER_THAN, $value);
     }
 
     /**
@@ -78,9 +70,7 @@ class DateFieldBuilder extends FieldBuilderBase
     {
         $max = $this->processDateTime($max);
 
-        return $this
-                ->attr(DateTimeTypeBase::ATTR_MAX, $max)
-                ->validate(new LessThanOrEqualValidator($this->getCurrentProcessedType(), $max));
+        return $this->attr(DateTimeTypeBase::ATTR_MAX, $max);
     }
 
     /**
@@ -94,9 +84,7 @@ class DateFieldBuilder extends FieldBuilderBase
     {
         $value = $this->processDateTime($value);
 
-        return $this
-                ->attr(DateTimeTypeBase::ATTR_MAX, $value->sub($this->type->getUnit()))
-                ->validate(new LessThanValidator($this->getCurrentProcessedType(), $value));
+        return $this->attr(DateTimeTypeBase::ATTR_LESS_THAN, $value);
     }
 
     /**

@@ -2,8 +2,15 @@
 
 namespace Dms\Core\Form\Field\Type;
 
-use Dms\Core\Form\IFieldProcessor;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Form\Field\Processor\BoolProcessor;
+use Dms\Core\Form\Field\Processor\TypeProcessor;
+use Dms\Core\Form\Field\Processor\Validator\BoolValidator;
+use Dms\Core\Form\Field\Processor\Validator\FloatValidator;
+use Dms\Core\Form\Field\Processor\Validator\IntValidator;
+use Dms\Core\Form\Field\Processor\Validator\RequiredValidator;
 use Dms\Core\Model\Type\Builder\Type;
+use Dms\Core\Model\Type\IType;
 
 /**
  * The scalar type class.
@@ -12,19 +19,28 @@ use Dms\Core\Model\Type\Builder\Type;
  */
 abstract class ScalarType extends FieldType
 {
-    const STRING = 'string';
-    const INT = 'int';
-    const FLOAT = 'float';
-    const BOOL = 'bool';
+    const ATTR_TYPE = 'type';
+
+    const STRING = IType::STRING;
+    const INT = IType::INT;
+    const FLOAT = IType::FLOAT;
+    const BOOL = IType::BOOL;
 
     /**
-     * @var string
+     * ScalarType constructor.
+     *
+     * @param string $type
+     *
+     * @throws InvalidArgumentException
      */
-    protected $type;
-
     public function __construct($type)
     {
-        $this->type = $type;
+        if (!in_array($type, [self::STRING, self::INT, self::FLOAT, self::BOOL])) {
+            throw InvalidArgumentException::format('Unknown scalar type: %s', $type);
+        }
+
+        $this->attributes[self::ATTR_TYPE] = $type;
+
         parent::__construct();
     }
 
@@ -33,7 +49,7 @@ abstract class ScalarType extends FieldType
      */
     public function getType()
     {
-        return $this->type;
+        return $this->attributes[self::ATTR_TYPE];
     }
 
     /**
@@ -46,5 +62,58 @@ abstract class ScalarType extends FieldType
         // into their expected php types by the
         // field processors
         return Type::mixed();
+    }
+
+    /**
+     * @return IType
+     */
+    protected function getProcessedScalarType()
+    {
+        $type = Type::scalar($this->attributes[self::ATTR_TYPE]);
+
+        return $this->get(self::ATTR_REQUIRED) ? $type : $type->nullable();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function hasTypeSpecificRequiredValidator()
+    {
+        return $this->getType() === self::BOOL;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function buildProcessors()
+    {
+        $processors = [];
+
+        switch ($this->getType()) {
+            case self::STRING:
+                $processors[] = new TypeProcessor('string');
+                break;
+
+            case self::INT:
+                $processors[] = new IntValidator($this->inputType);
+                $processors[] = new TypeProcessor('int');
+                break;
+
+            case self::FLOAT:
+                $processors[] = new FloatValidator($this->inputType);
+                $processors[] = new TypeProcessor('float');
+                break;
+
+            case self::BOOL:
+                $processors[] = new BoolValidator($this->inputType);
+                $processors[] = new BoolProcessor();
+
+                if ($this->get(self::ATTR_REQUIRED)) {
+                    $processors[] = new RequiredValidator(Type::bool()->nullable());
+                }
+                break;
+        }
+
+        return $processors;
     }
 }

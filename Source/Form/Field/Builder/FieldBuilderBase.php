@@ -5,14 +5,13 @@ namespace Dms\Core\Form\Field\Builder;
 use Dms\Core\Exception\InvalidOperationException;
 use Dms\Core\Form\Field\Field as ActualField;
 use Dms\Core\Form\Field\Options\ArrayFieldOptions;
+use Dms\Core\Form\Field\Options\FieldOption;
 use Dms\Core\Form\Field\Processor\CustomProcessor;
-use Dms\Core\Form\Field\Processor\DefaultValueProcessor;
 use Dms\Core\Form\Field\Processor\FieldValidator;
 use Dms\Core\Form\Field\Processor\Validator\CustomValidator;
-use Dms\Core\Form\Field\Processor\Validator\OneOfValidator;
-use Dms\Core\Form\Field\Processor\Validator\RequiredValidator;
 use Dms\Core\Form\Field\Processor\Validator\UniquePropertyValidator;
 use Dms\Core\Form\Field\Type\FieldType;
+use Dms\Core\Form\IFieldOption;
 use Dms\Core\Form\IFieldProcessor;
 use Dms\Core\Form\IFieldType;
 use Dms\Core\Model\IObjectSet;
@@ -172,9 +171,7 @@ abstract class FieldBuilderBase
      */
     public function required()
     {
-        return $this
-                ->validate(new RequiredValidator($this->getCurrentProcessedType(__FUNCTION__)))
-                ->attr(FieldType::ATTR_REQUIRED, true);
+        return $this->attr(FieldType::ATTR_REQUIRED, true);
     }
 
     /**
@@ -186,9 +183,7 @@ abstract class FieldBuilderBase
      */
     public function defaultTo($value)
     {
-        return $this
-                ->process(new DefaultValueProcessor($this->getCurrentProcessedType(__FUNCTION__), $this->processDefaultValue($value)))
-                ->attr(FieldType::ATTR_DEFAULT, $value);
+        return $this->attr(FieldType::ATTR_DEFAULT, $this->processDefaultValue($value));
     }
 
     /**
@@ -211,22 +206,21 @@ abstract class FieldBuilderBase
      */
     public function uniqueIn(IObjectSet $objects, $propertyName)
     {
-        return $this
-                ->validate(new UniquePropertyValidator($this->getCurrentProcessedType(__FUNCTION__), $objects, $propertyName));
+        return $this->validate(new UniquePropertyValidator($this->getCurrentProcessedType(__FUNCTION__), $objects, $propertyName));
     }
 
     /**
      * Validates the input is one of the supplied values with the option
      * values as the array keys and the labels as the array values.
+     * Alternatively an array of {@see IFieldOption} can be passed as the options.
      *
-     * @param array $valueLabelMap
+     * @param array|IFieldOption[] $valueLabelMap
      *
      * @return static
      */
     public function oneOf(array $valueLabelMap)
     {
         return $this
-                ->process(new OneOfValidator($this->getCurrentProcessedType(__FUNCTION__), array_keys($valueLabelMap)))
                 ->attr(FieldType::ATTR_OPTIONS, ArrayFieldOptions::fromAssocArray($valueLabelMap));
     }
 

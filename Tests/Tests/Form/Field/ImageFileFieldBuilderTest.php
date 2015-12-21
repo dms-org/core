@@ -79,10 +79,7 @@ class ImageFileFieldBuilderTest extends FileFieldBuilderTest
                 new TypeValidator(Type::object(IUploadedImage::class)->nullable()),
                 new UploadedFileValidator(Type::object(IUploadedImage::class)->nullable()),
                 new UploadedImageValidator(Type::object(IUploadedImage::class)->nullable()),
-                new ImageDimensionsValidator(Type::object(IUploadedImage::class)->nullable(), 100),
-                new ImageDimensionsValidator(Type::object(IUploadedImage::class)->nullable(), null, 500),
-                new ImageDimensionsValidator(Type::object(IUploadedImage::class)->nullable(), null, null, 200),
-                new ImageDimensionsValidator(Type::object(IUploadedImage::class)->nullable(), null, null, null, 1000),
+                new ImageDimensionsValidator(Type::object(IUploadedImage::class)->nullable(), 100, 500, 200, 1000),
         ], $field->getProcessors());
 
         $this->assertSame(100, $field->getType()->get(ImageType::ATTR_MIN_WIDTH));

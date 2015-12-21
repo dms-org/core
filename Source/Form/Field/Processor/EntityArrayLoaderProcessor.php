@@ -5,6 +5,7 @@ namespace Dms\Core\Form\Field\Processor;
 use Dms\Core\Model\IEntity;
 use Dms\Core\Model\IEntitySet;
 use Dms\Core\Model\Type\ArrayType;
+use Dms\Core\Model\Type\Builder\Type;
 
 /**
  * The entity loader validator.
@@ -20,7 +21,7 @@ class EntityArrayLoaderProcessor extends FieldProcessor
 
     public function __construct(IEntitySet $entities)
     {
-        parent::__construct(new ArrayType($entities->getElementType()));
+        parent::__construct(Type::arrayOf($entities->getElementType()));
 
         $this->entities = $entities;
     }

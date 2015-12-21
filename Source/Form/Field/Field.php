@@ -69,9 +69,9 @@ class Field implements IField
         $this->processors = array_merge($type->getProcessors(), $processors);
         $this->type       = $type;
 
-        $this->processedType = $this->processors
-                ? end($this->processors)->getProcessedType()
-                : $type->getPhpTypeOfInput();
+        $this->processedType = $processors
+                ? end($processors)->getProcessedType()
+                : $type->getProcessedPhpType();
 
         $this->setInitialValue($initialValue);
     }

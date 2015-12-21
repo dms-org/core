@@ -2,6 +2,10 @@
 
 namespace Dms\Core\Form\Field\Type;
 
+use Dms\Core\Form\Field\Options\ArrayFieldOptions;
+use Dms\Core\Form\Field\Processor\DefaultValueProcessor;
+use Dms\Core\Form\Field\Processor\Validator\OneOfValidator;
+use Dms\Core\Form\Field\Processor\Validator\RequiredValidator;
 use Dms\Core\Form\Field\Processor\Validator\TypeValidator;
 use Dms\Core\Form\IFieldOptions;
 use Dms\Core\Form\IFieldProcessor;
@@ -51,25 +55,66 @@ abstract class FieldType implements IFieldType
      */
     public function __construct()
     {
-        $this->loadTypes();
         $this->initializeFromCurrentAttributes();
+    }
+
+    /**
+     * @return bool
+     */
+    protected function hasTypeSpecificRequiredValidator()
+    {
+        return false;
+    }
+
+
+    /**
+     * @return bool
+     */
+    protected function hasTypeSpecificOptionsValidator()
+    {
+        return false;
     }
 
     /**
      * @return void
      */
-    private function loadTypes()
+    protected function initializeFromCurrentAttributes()
     {
         $this->inputType = $this->buildPhpTypeOfInput()->nullable();
 
-        $this->processors = $this->buildProcessors();
+        $processors                       = [];
+
 
         if (!($this->inputType instanceof MixedType)) {
-            array_unshift($this->processors, new TypeValidator($this->inputType));
+            $processors[] = new TypeValidator($this->inputType);
         }
 
+        if ($this->get(self::ATTR_REQUIRED) && !$this->hasTypeSpecificRequiredValidator()) {
+            $processors[] = new RequiredValidator($this->inputType);
+        }
+
+        $processors = array_merge($processors, $this->buildProcessors());
+
         /** @var IFieldProcessor|false $lastProcessor */
-        $lastProcessor = end($this->processors);
+        $lastProcessor        = end($processors);
+        $currentProcessedType = $lastProcessor ? $lastProcessor->getProcessedType() : $this->inputType;
+
+        $options = $this->get(self::ATTR_OPTIONS);
+        if ($options instanceof ArrayFieldOptions && !$this->hasTypeSpecificOptionsValidator()) {
+            $processors[] = new OneOfValidator($currentProcessedType, $options);
+        }
+
+        if ($this->has(self::ATTR_DEFAULT)) {
+            $processors[] = new DefaultValueProcessor(
+                    $currentProcessedType,
+                    $this->get(self::ATTR_DEFAULT)
+            );
+        }
+
+        $this->processors = $processors;
+
+        /** @var IFieldProcessor|false $lastProcessor */
+        $lastProcessor = end($processors);
 
         $this->processedType = $lastProcessor ? $lastProcessor->getProcessedType() : $this->inputType;
 
@@ -135,18 +180,9 @@ abstract class FieldType implements IFieldType
     {
         $clone             = clone $this;
         $clone->attributes = $attributes + $clone->attributes;
-        $clone->loadTypes();
         $clone->initializeFromCurrentAttributes();
 
         return $clone;
-    }
-
-    /**
-     * @return void
-     */
-    protected function initializeFromCurrentAttributes()
-    {
-
     }
 
     /**

@@ -2,10 +2,6 @@
 
 namespace Dms\Core\Form\Field\Builder;
 
-use Dms\Core\Form\Field\Processor\Validator\GreaterThanOrEqualValidator;
-use Dms\Core\Form\Field\Processor\Validator\GreaterThanValidator;
-use Dms\Core\Form\Field\Processor\Validator\LessThanOrEqualValidator;
-use Dms\Core\Form\Field\Processor\Validator\LessThanValidator;
 use Dms\Core\Form\Field\Type\IntType;
 
 /**
@@ -16,8 +12,7 @@ use Dms\Core\Form\Field\Type\IntType;
 class IntFieldBuilder extends FieldBuilderBase
 {
     /**
-     * Validates the integer is greater than or equal to
-     * the supplied number
+     * Validates the integer is greater than or equal to the supplied number
      *
      * @param int $min
      *
@@ -25,9 +20,7 @@ class IntFieldBuilder extends FieldBuilderBase
      */
     public function min($min)
     {
-        return $this
-                ->attr(IntType::ATTR_MIN, $min)
-                ->validate(new GreaterThanOrEqualValidator($this->getCurrentProcessedType(), $min));
+        return $this->attr(IntType::ATTR_MIN, $min);
     }
 
     /**
@@ -39,14 +32,11 @@ class IntFieldBuilder extends FieldBuilderBase
      */
     public function greaterThan($value)
     {
-        return $this
-                ->attr(IntType::ATTR_MIN, $value + 1)
-                ->validate(new GreaterThanValidator($this->getCurrentProcessedType(), $value));
+        return $this->attr(IntType::ATTR_GREATER_THAN, $value);
     }
 
     /**
-     * Validates the integer is less than or equal to
-     * the supplied number
+     * Validates the integer is less than or equal to the supplied number
      *
      * @param int $max
      *
@@ -54,9 +44,7 @@ class IntFieldBuilder extends FieldBuilderBase
      */
     public function max($max)
     {
-        return $this
-                ->attr(IntType::ATTR_MAX, $max)
-                ->validate(new LessThanOrEqualValidator($this->getCurrentProcessedType(), $max));
+        return $this->attr(IntType::ATTR_MAX, $max);
     }
 
     /**
@@ -68,8 +56,6 @@ class IntFieldBuilder extends FieldBuilderBase
      */
     public function lessThan($value)
     {
-        return $this
-                ->attr(IntType::ATTR_MAX, $value - 1)
-                ->validate(new LessThanValidator($this->getCurrentProcessedType(), $value));
+        return $this->attr(IntType::ATTR_LESS_THAN, $value);
     }
 }

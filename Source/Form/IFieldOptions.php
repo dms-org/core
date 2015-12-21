@@ -11,8 +11,15 @@ interface IFieldOptions
 {
     /**
      * Gets the field name.
-     * 
+     *
      * @return IFieldOption[]
      */
-    public function all();
+    public function getAll();
+
+    /**
+     * Gets all the option values.
+     *
+     * @return mixed
+     */
+    public function getAllValues();
 }

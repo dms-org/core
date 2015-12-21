@@ -28,7 +28,7 @@ class ObjectFormTest extends CmsTestCase
         $this->assertInstanceOf(EntityIdType::class, $form->getField(IObjectAction::OBJECT_FIELD_NAME)->getType());
         $this->assertEquals(Type::mixed(), $form->getField(IObjectAction::OBJECT_FIELD_NAME)->getType()->getPhpTypeOfInput());
         $this->assertSame(true, $form->getField(IObjectAction::OBJECT_FIELD_NAME)->getType()->get(EntityIdType::ATTR_REQUIRED));
-        $this->assertEquals(Type::int(), $form->getField(IObjectAction::OBJECT_FIELD_NAME)->getType()->getProcessedPhpType());
+        $this->assertEquals(TestEntity::type(), $form->getField(IObjectAction::OBJECT_FIELD_NAME)->getType()->getProcessedPhpType());
         $this->assertEquals(TestEntity::type(), $form->getField(IObjectAction::OBJECT_FIELD_NAME)->getProcessedType());
 
         $this->assertEquals(

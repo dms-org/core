@@ -57,7 +57,10 @@ abstract class FieldValidator implements IFieldProcessor
     public function process($input, array &$messages)
     {
         if (!$this->inputType->isOfType($input)) {
-            throw TypeMismatchException::argument(__METHOD__, 'input', $this->inputType->asTypeString(), $input);
+            throw TypeMismatchException::argument(
+                    get_class($this) . '::' . __FUNCTION__,
+                    'input', $this->inputType->asTypeString(), $input
+            );
         }
 
         if ($input === null) {

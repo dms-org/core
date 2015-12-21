@@ -42,12 +42,11 @@ class ArrayOfFieldBuilderTest extends FieldBuilderTestBase
 
         $this->assertEquals([
                 new TypeValidator(Type::arrayOf(Type::mixed())->nullable()),
+                new ExactArrayLengthValidator(Type::arrayOf(Type::mixed())->nullable(), 3),
                 new ArrayAllProcessor([new TypeProcessor('string')]),
-                new ExactArrayLengthValidator(Type::arrayOf(Type::string()->nullable())->nullable(), 3),
         ], $field->getProcessors());
 
-        $this->assertSame(3, $field->getType()->get(ArrayOfType::ATTR_MIN_ELEMENTS));
-        $this->assertSame(3, $field->getType()->get(ArrayOfType::ATTR_MAX_ELEMENTS));
+        $this->assertSame(3, $field->getType()->get(ArrayOfType::ATTR_EXACT_ELEMENTS));
 
         $this->assertSame(['1', '2', '3'], $field->process([1, 2, 3]));
 
@@ -71,9 +70,9 @@ class ArrayOfFieldBuilderTest extends FieldBuilderTestBase
 
         $this->assertEquals([
                 new TypeValidator(Type::arrayOf(Type::mixed())->nullable()),
+                new MinArrayLengthValidator(Type::arrayOf(Type::mixed())->nullable(), 2),
+                new MaxArrayLengthValidator(Type::arrayOf(Type::mixed())->nullable(), 5),
                 new ArrayAllProcessor([new TypeProcessor('string')]),
-                new MinArrayLengthValidator(Type::arrayOf(Type::string()->nullable())->nullable(), 2),
-                new MaxArrayLengthValidator(Type::arrayOf(Type::string()->nullable())->nullable(), 5),
         ], $field->getProcessors());
 
         $this->assertSame(2, $field->getType()->get(ArrayOfType::ATTR_MIN_ELEMENTS));

@@ -3,6 +3,9 @@
 namespace Dms\Core\Form\Field\Type;
 
 use Dms\Core\Form\Field\Processor\ArrayAllProcessor;
+use Dms\Core\Form\Field\Processor\Validator\ExactArrayLengthValidator;
+use Dms\Core\Form\Field\Processor\Validator\MaxArrayLengthValidator;
+use Dms\Core\Form\Field\Processor\Validator\MinArrayLengthValidator;
 use Dms\Core\Form\IField;
 use Dms\Core\Form\IFieldProcessor;
 use Dms\Core\Form\IFieldType;
@@ -16,8 +19,11 @@ use Dms\Core\Model\Type\Builder\Type;
 class ArrayOfType extends FieldType
 {
     const ATTR_ELEMENT_TYPE = 'element-type';
+
     const ATTR_MIN_ELEMENTS = 'min-elements';
     const ATTR_MAX_ELEMENTS = 'max-elements';
+    const ATTR_EXACT_ELEMENTS = 'exact-elements';
+
     /**
      * @var IField
      */
@@ -51,8 +57,37 @@ class ArrayOfType extends FieldType
      */
     protected function buildProcessors()
     {
-        return [
-                new ArrayAllProcessor($this->elementField->getProcessors())
-        ];
+        $processors = [];
+
+        $this->buildArrayLengthValidators($processors);
+
+        $processors[] = new ArrayAllProcessor(
+                $this->elementField->getProcessors(),
+                $this->getElementType()->getProcessedPhpType())
+        ;
+
+        return $processors;
+    }
+
+    /**
+     * @param $processors
+     *
+     * @return void
+     */
+    protected function buildArrayLengthValidators(&$processors)
+    {
+        $inputType = Type::arrayOf(Type::mixed())->nullable();
+
+        if ($this->has(self::ATTR_MIN_ELEMENTS)) {
+            $processors[] = new MinArrayLengthValidator($inputType, $this->get(self::ATTR_MIN_ELEMENTS));
+        }
+
+        if ($this->has(self::ATTR_MAX_ELEMENTS)) {
+            $processors[] = new MaxArrayLengthValidator($inputType, $this->get(self::ATTR_MAX_ELEMENTS));
+        }
+
+        if ($this->has(self::ATTR_EXACT_ELEMENTS)) {
+            $processors[] = new ExactArrayLengthValidator($inputType, $this->get(self::ATTR_EXACT_ELEMENTS));
+        }
     }
 }

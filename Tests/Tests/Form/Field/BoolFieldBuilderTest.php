@@ -6,8 +6,10 @@ use Dms\Core\Form\Field\Builder\BoolFieldBuilder;
 use Dms\Core\Form\Field\Builder\Field as Field;
 use Dms\Core\Form\Field\Processor\Validator\RequiredValidator;
 use Dms\Core\Form\Field\Type\FieldType;
+use Dms\Core\Form\Field\Type\ScalarType;
 use Dms\Core\Language\Message;
 use Dms\Core\Model\Type\Builder\Type as PhpType;
+use Dms\Core\Model\Type\IType;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>
@@ -29,7 +31,10 @@ class BoolFieldBuilderTest extends FieldBuilderTestBase
     {
         $field = $this->field()->required()->build();
 
-        $this->assertAttributes([FieldType::ATTR_REQUIRED => true], $field);
+        $this->assertAttributes(
+                [FieldType::ATTR_REQUIRED => true, ScalarType::ATTR_TYPE => IType::BOOL],
+                $field
+        );
 
         foreach ([true, 1, '1', 'yes'] as $truthy) {
             $this->assertSame(true, $field->process($truthy));

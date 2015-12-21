@@ -16,6 +16,7 @@ use Dms\Core\Form\Field\Type\IntType;
 use Dms\Core\Language\Message;
 use Dms\Core\Model\EntityCollection;
 use Dms\Core\Model\Type\Builder\Type;
+use Dms\Core\Model\Type\IType;
 use Dms\Core\Model\Type\ScalarType;
 use Dms\Core\Tests\Form\Field\Processor\Validator\Fixtures\TestEntity;
 
@@ -39,7 +40,7 @@ class IntFieldBuilderTest extends FieldBuilderTestBase
     {
         $field = $this->field()->max(20)->build();
 
-        $this->assertAttributes([IntType::ATTR_MAX => 20], $field);
+        $this->assertAttributes([IntType::ATTR_TYPE => IType::INT, IntType::ATTR_MAX => 20], $field);
         $this->assertSame(12, $field->process('12'));
         $this->assertFieldThrows($field, 21, [
                 new Message(LessThanOrEqualValidator::MESSAGE, [
@@ -60,16 +61,16 @@ class IntFieldBuilderTest extends FieldBuilderTestBase
                 ->build();
 
         $this->assertEquals([
+                new RequiredValidator(Type::mixed()),
                 new IntValidator(Type::mixed()),
                 new TypeProcessor('int'),
-                new GreaterThanOrEqualValidator(Type::int()->nullable(), 10),
-                new LessThanValidator(Type::int()->nullable(), 20),
-                new DefaultValueProcessor(Type::int()->nullable(), 15),
-                new RequiredValidator(Type::int())
+                new GreaterThanOrEqualValidator(Type::int(), 10),
+                new LessThanValidator(Type::int(), 20),
+                new DefaultValueProcessor(Type::int(), 15),
         ], $field->getProcessors());
 
         $this->assertSame(10, $field->getType()->get(IntType::ATTR_MIN));
-        $this->assertSame(19, $field->getType()->get(IntType::ATTR_MAX));
+        $this->assertSame(20, $field->getType()->get(IntType::ATTR_LESS_THAN));
         $this->assertSame(17, $field->process('17'));
         $this->assertFieldThrows($field, 20, [
                 new Message(LessThanValidator::MESSAGE, [

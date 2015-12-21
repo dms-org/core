@@ -3,6 +3,7 @@
 namespace Dms\Core\Form\Field\Processor\Validator;
 
 use Dms\Core\Form\Field\Processor\FieldValidator;
+use Dms\Core\Form\IFieldOptions;
 use Dms\Core\Language\Message;
 use Dms\Core\Model\Type\IType;
 
@@ -17,11 +18,11 @@ class OneOfValidator extends FieldValidator
     const MESSAGE = 'validation.one-of';
 
     /**
-     * @var array
+     * @var IFieldOptions
      */
     protected $options;
 
-    public function __construct(IType $inputType, array $options)
+    public function __construct(IType $inputType, IFieldOptions $options)
     {
         parent::__construct($inputType);
         $this->options = $options;
@@ -32,8 +33,9 @@ class OneOfValidator extends FieldValidator
      */
     protected function validate($input, array &$messages)
     {
-        if (!in_array($input, $this->options, true)) {
-            $messages[] = new Message(self::MESSAGE, ['options' => implode(', ', $this->options)]);
+        $allowedValues = $this->options->getAllValues();
+        if (!in_array($input, $allowedValues, true)) {
+            $messages[] = new Message(self::MESSAGE, ['options' => implode(', ', $allowedValues)]);
         }
     }
 }

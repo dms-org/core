@@ -2,11 +2,6 @@
 
 namespace Dms\Core\Form\Field\Builder;
 
-use Dms\Core\Form\Field\Processor\Validator\DecimalPointsValidator;
-use Dms\Core\Form\Field\Processor\Validator\GreaterThanOrEqualValidator;
-use Dms\Core\Form\Field\Processor\Validator\GreaterThanValidator;
-use Dms\Core\Form\Field\Processor\Validator\LessThanOrEqualValidator;
-use Dms\Core\Form\Field\Processor\Validator\LessThanValidator;
 use Dms\Core\Form\Field\Type\FloatType;
 
 /**
@@ -26,9 +21,7 @@ class DecimalFieldBuilder extends FieldBuilderBase
      */
     public function min($min)
     {
-        return $this
-                ->attr(FloatType::ATTR_MIN, (double)$min)
-                ->validate(new GreaterThanOrEqualValidator($this->getCurrentProcessedType(), (double)$min));
+        return $this->attr(FloatType::ATTR_MIN, (double)$min);
     }
 
     /**
@@ -40,9 +33,7 @@ class DecimalFieldBuilder extends FieldBuilderBase
      */
     public function greaterThan($value)
     {
-        return $this
-                ->attr(FloatType::ATTR_MIN, $value + 1.0)
-                ->validate(new GreaterThanValidator($this->getCurrentProcessedType(), (double)$value));
+        return $this->attr(FloatType::ATTR_GREATER_THAN, (double)$value);
     }
 
     /**
@@ -55,9 +46,7 @@ class DecimalFieldBuilder extends FieldBuilderBase
      */
     public function max($max)
     {
-        return $this
-                ->attr(FloatType::ATTR_MAX, (double)$max)
-                ->validate(new LessThanOrEqualValidator($this->getCurrentProcessedType(), (double)$max));
+        return $this->attr(FloatType::ATTR_MAX, (double)$max);
     }
 
     /**
@@ -69,9 +58,7 @@ class DecimalFieldBuilder extends FieldBuilderBase
      */
     public function lessThan($value)
     {
-        return $this
-                ->attr(FloatType::ATTR_MAX, $value - 1.0)
-                ->validate(new LessThanValidator($this->getCurrentProcessedType(), (double)$value));
+        return $this->attr(FloatType::ATTR_LESS_THAN, (double)$value);
     }
 
     /**
@@ -83,9 +70,7 @@ class DecimalFieldBuilder extends FieldBuilderBase
      */
     public function minDecimalPoints($decimalPoints)
     {
-        return $this
-                ->attr(FloatType::ATTR_MIN_DECIMAL_POINTS, $decimalPoints)
-                ->validate(new DecimalPointsValidator($this->getCurrentProcessedType(), $decimalPoints, null));
+        return $this->attr(FloatType::ATTR_MIN_DECIMAL_POINTS, $decimalPoints);
     }
 
     /**
@@ -97,8 +82,18 @@ class DecimalFieldBuilder extends FieldBuilderBase
      */
     public function maxDecimalPoints($decimalPoints)
     {
-        return $this
-                ->attr(FloatType::ATTR_MAX_DECIMAL_POINTS, $decimalPoints)
-                ->validate(new DecimalPointsValidator($this->getCurrentProcessedType(), null, $decimalPoints));
+        return $this->attr(FloatType::ATTR_MAX_DECIMAL_POINTS, $decimalPoints);
+    }
+
+    /**
+     * Validates the decimal has a maximum number of decimal points.
+     *
+     * @param int $decimalPoints
+     *
+     * @return static
+     */
+    public function exactDecimalPoints($decimalPoints)
+    {
+        return $this->attr(FloatType::ATTR_MAX_DECIMAL_POINTS, $decimalPoints);
     }
 }

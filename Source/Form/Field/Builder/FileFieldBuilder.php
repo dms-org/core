@@ -3,8 +3,6 @@
 namespace Dms\Core\Form\Field\Builder;
 
 use Dms\Core\Form\Field\Processor\FileMoverProcessor;
-use Dms\Core\Form\Field\Processor\Validator\FileExtensionValidator;
-use Dms\Core\Form\Field\Processor\Validator\FileSizeValidator;
 use Dms\Core\Form\Field\Type\FileType;
 
 /**
@@ -35,9 +33,7 @@ class FileFieldBuilder extends FieldBuilderBase
      */
     public function extensions(array $extensions)
     {
-        return $this
-                ->attr(FileType::ATTR_EXTENSIONS, $extensions)
-                ->validate(new FileExtensionValidator($this->getCurrentProcessedType(), $extensions));
+        return $this->attr(FileType::ATTR_EXTENSIONS, $extensions);
     }
 
     /**
@@ -49,9 +45,7 @@ class FileFieldBuilder extends FieldBuilderBase
      */
     public function minSize($bytes)
     {
-        return $this
-                ->attr(FileType::ATTR_MIN_SIZE, $bytes)
-                ->validate(new FileSizeValidator($this->getCurrentProcessedType(), $bytes, null));
+        return $this->attr(FileType::ATTR_MIN_SIZE, $bytes);
     }
 
     /**
@@ -63,9 +57,7 @@ class FileFieldBuilder extends FieldBuilderBase
      */
     public function maxSize($bytes)
     {
-        return $this
-                ->attr(FileType::ATTR_MAX_SIZE, $bytes)
-                ->validate(new FileSizeValidator($this->getCurrentProcessedType(), null, $bytes));
+        return $this->attr(FileType::ATTR_MAX_SIZE, $bytes);
     }
 
     /**
@@ -77,8 +69,7 @@ class FileFieldBuilder extends FieldBuilderBase
      */
     public function moveToPathWithClientsFileName($path)
     {
-        return $this
-                ->process(FileMoverProcessor::withClientFileName($this->isImage(), $path));
+        return $this->process(FileMoverProcessor::withClientFileName($this->isImage(), $path));
     }
 
     /**
@@ -91,8 +82,7 @@ class FileFieldBuilder extends FieldBuilderBase
      */
     public function moveToPathWithRandomFileName($path, $fileNameLength = 16)
     {
-        return $this
-                ->process(FileMoverProcessor::withRandomFileName($this->isImage(), $path, $fileNameLength));
+        return $this->process(FileMoverProcessor::withRandomFileName($this->isImage(), $path, $fileNameLength));
     }
 
     protected function isImage()

@@ -2,12 +2,9 @@
 
 namespace Dms\Core\Form\Field\Builder;
 
-use Dms\Core\Form\Field\Processor\TrimProcessor;
-use Dms\Core\Form\Field\Processor\Validator\EmailValidator;
 use Dms\Core\Form\Field\Processor\Validator\ExactLengthValidator;
 use Dms\Core\Form\Field\Processor\Validator\MaxLengthValidator;
 use Dms\Core\Form\Field\Processor\Validator\MinLengthValidator;
-use Dms\Core\Form\Field\Processor\Validator\UrlValidator;
 use Dms\Core\Form\Field\Type\StringType;
 
 /**
@@ -20,13 +17,13 @@ class StringFieldBuilder extends FieldBuilderBase
     /**
      * Trims the input string of the supplied characters.
      *
-     * @param string|null $characters
+     * @param string $characters
      *
      * @return static
      */
-    public function trim($characters = null)
+    public function trim($characters = " \t\n\r\0\x0B")
     {
-        return $this->process(new TrimProcessor($characters));
+        return $this->attr(StringType::ATTR_TRIM_CHARACTERS, $characters);
     }
 
     /**
@@ -36,8 +33,7 @@ class StringFieldBuilder extends FieldBuilderBase
      */
     public function email()
     {
-        return $this->validate(new EmailValidator($this->getCurrentProcessedType()))
-            ->attr(StringType::ATTR_TYPE, StringType::TYPE_EMAIL);
+        return $this->attr(StringType::ATTR_STRING_TYPE, StringType::TYPE_EMAIL);
     }
 
     /**
@@ -47,8 +43,7 @@ class StringFieldBuilder extends FieldBuilderBase
      */
     public function url()
     {
-        return $this->validate(new UrlValidator($this->getCurrentProcessedType()))
-            ->attr(StringType::ATTR_TYPE, StringType::TYPE_URL);
+        return $this->attr(StringType::ATTR_STRING_TYPE, StringType::TYPE_URL);
     }
 
     /**
@@ -58,7 +53,7 @@ class StringFieldBuilder extends FieldBuilderBase
      */
     public function password()
     {
-        return $this->attr(StringType::ATTR_TYPE, StringType::TYPE_PASSWORD);
+        return $this->attr(StringType::ATTR_STRING_TYPE, StringType::TYPE_PASSWORD);
     }
 
     /**
@@ -68,7 +63,7 @@ class StringFieldBuilder extends FieldBuilderBase
      */
     public function html()
     {
-        return $this->attr(StringType::ATTR_TYPE, StringType::TYPE_HTML);
+        return $this->attr(StringType::ATTR_STRING_TYPE, StringType::TYPE_HTML);
     }
 
     /**
@@ -80,9 +75,7 @@ class StringFieldBuilder extends FieldBuilderBase
      */
     public function exactLength($length)
     {
-        return $this->validate(new ExactLengthValidator($this->getCurrentProcessedType(), $length))
-            ->attr(StringType::ATTR_MIN_LENGTH, $length)
-            ->attr(StringType::ATTR_MAX_LENGTH, $length);
+        return $this->attr(StringType::ATTR_EXACT_LENGTH, $length);
     }
 
     /**
@@ -94,8 +87,7 @@ class StringFieldBuilder extends FieldBuilderBase
      */
     public function minLength($length)
     {
-        return $this->validate(new MinLengthValidator($this->getCurrentProcessedType(), $length))
-            ->attr(StringType::ATTR_MIN_LENGTH, $length);
+        return $this->attr(StringType::ATTR_MIN_LENGTH, $length);
     }
 
     /**
@@ -107,7 +99,6 @@ class StringFieldBuilder extends FieldBuilderBase
      */
     public function maxLength($length)
     {
-        return $this->validate(new MaxLengthValidator($this->getCurrentProcessedType(), $length))
-            ->attr(StringType::ATTR_MAX_LENGTH, $length);
+        return $this->attr(StringType::ATTR_MAX_LENGTH, $length);
     }
 }

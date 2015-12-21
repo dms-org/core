@@ -2,8 +2,8 @@
 
 namespace Dms\Core\Tests\Form\Field;
 
-use Dms\Core\Form\Field\Builder\Field as Field;
 use Dms\Core\Form\Field\Builder\DecimalFieldBuilder;
+use Dms\Core\Form\Field\Builder\Field as Field;
 use Dms\Core\Form\Field\Processor\DefaultValueProcessor;
 use Dms\Core\Form\Field\Processor\TypeProcessor;
 use Dms\Core\Form\Field\Processor\Validator\DecimalPointsValidator;
@@ -14,8 +14,10 @@ use Dms\Core\Form\Field\Processor\Validator\LessThanValidator;
 use Dms\Core\Form\Field\Processor\Validator\RequiredValidator;
 use Dms\Core\Form\Field\Type\FloatType;
 use Dms\Core\Form\Field\Type\IntType;
+use Dms\Core\Form\Field\Type\ScalarType;
 use Dms\Core\Language\Message;
 use Dms\Core\Model\Type\Builder\Type;
+use Dms\Core\Model\Type\IType;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>
@@ -37,7 +39,7 @@ class DecimalFieldBuilderTest extends FieldBuilderTestBase
     {
         $field = $this->field()->max(20.0)->build();
 
-        $this->assertAttributes([FloatType::ATTR_MAX => 20.0], $field);
+        $this->assertAttributes([FloatType::ATTR_MAX => 20.0, ScalarType::ATTR_TYPE => IType::FLOAT], $field);
         $this->assertSame(12.013, $field->process('12.013'));
 
         $this->assertFieldThrows($field, 21, [
@@ -54,6 +56,7 @@ class DecimalFieldBuilderTest extends FieldBuilderTestBase
         $field = $this->field()->minDecimalPoints(1)->maxDecimalPoints(3)->build();
 
         $this->assertAttributes([
+                ScalarType::ATTR_TYPE              => IType::FLOAT,
                 FloatType::ATTR_MIN_DECIMAL_POINTS => 1,
                 FloatType::ATTR_MAX_DECIMAL_POINTS => 3,
         ], $field);
@@ -81,16 +84,16 @@ class DecimalFieldBuilderTest extends FieldBuilderTestBase
                 ->build();
 
         $this->assertEquals([
+                new RequiredValidator(Type::mixed()),
                 new FloatValidator(Type::mixed()),
                 new TypeProcessor('float'),
-                new GreaterThanOrEqualValidator(Type::float()->nullable(), 10),
-                new LessThanValidator(Type::float()->nullable(), 20),
-                new DefaultValueProcessor(Type::float()->nullable(), 15),
-                new RequiredValidator(Type::float()->union(Type::int()))
+                new GreaterThanOrEqualValidator(Type::float(), 10),
+                new LessThanValidator(Type::float(), 20),
+                new DefaultValueProcessor(Type::float(), 15),
         ], $field->getProcessors());
 
         $this->assertSame(10.0, $field->getType()->get(IntType::ATTR_MIN));
-        $this->assertSame(19.0, $field->getType()->get(IntType::ATTR_MAX));
+        $this->assertSame(20.0, $field->getType()->get(IntType::ATTR_LESS_THAN));
         $this->assertSame(17.0, $field->process('17.0'));
         $this->assertFieldThrows($field, 20, [
                 new Message(LessThanValidator::MESSAGE, [

@@ -63,9 +63,8 @@ class FileFieldBuilderTest extends FieldBuilderTestBase
         $this->assertEquals([
                 new TypeValidator(Type::object(IUploadedFile::class)->nullable()),
                 new UploadedFileValidator(Type::object(IUploadedFile::class)->nullable()),
-                new FileSizeValidator(Type::object(IUploadedFile::class)->nullable(), 100, null),
-                new FileSizeValidator(Type::object(IUploadedFile::class)->nullable(), null, 2000),
-                new FileExtensionValidator(Type::object(IUploadedFile::class)->nullable(), ['pdf'])
+                new FileExtensionValidator(Type::object(IUploadedFile::class)->nullable(), ['pdf']),
+                new FileSizeValidator(Type::object(IUploadedFile::class)->nullable(), 100, 2000),
         ], $field->getProcessors());
 
         $this->assertSame(100, $field->getType()->get(FileType::ATTR_MIN_SIZE));

@@ -2,7 +2,6 @@
 
 namespace Dms\Core\Form\Field\Builder;
 
-use Dms\Core\Form\Field\Processor\Validator\ImageDimensionsValidator;
 use Dms\Core\Form\Field\Type\ImageType;
 
 /**
@@ -21,9 +20,7 @@ class ImageFieldBuilder extends FileFieldBuilder
      */
     public function minWidth($pixels)
     {
-        return $this
-                ->attr(ImageType::ATTR_MIN_WIDTH, $pixels)
-                ->validate(new ImageDimensionsValidator($this->getCurrentProcessedType(), $pixels));
+        return $this->attr(ImageType::ATTR_MIN_WIDTH, $pixels);
     }
 
     /**
@@ -35,9 +32,7 @@ class ImageFieldBuilder extends FileFieldBuilder
      */
     public function maxWidth($pixels)
     {
-        return $this
-                ->attr(ImageType::ATTR_MAX_WIDTH, $pixels)
-                ->validate(new ImageDimensionsValidator($this->getCurrentProcessedType(), null, $pixels));
+        return $this->attr(ImageType::ATTR_MAX_WIDTH, $pixels);
     }
 
     /**
@@ -49,9 +44,7 @@ class ImageFieldBuilder extends FileFieldBuilder
      */
     public function minHeight($pixels)
     {
-        return $this
-                ->attr(ImageType::ATTR_MIN_HEIGHT, $pixels)
-                ->validate(new ImageDimensionsValidator($this->getCurrentProcessedType(), null, null, $pixels));
+        return $this->attr(ImageType::ATTR_MIN_HEIGHT, $pixels);
     }
 
     /**
@@ -63,9 +56,7 @@ class ImageFieldBuilder extends FileFieldBuilder
      */
     public function maxHeight($pixels)
     {
-        return $this
-                ->attr(ImageType::ATTR_MAX_HEIGHT, $pixels)
-                ->validate(new ImageDimensionsValidator($this->getCurrentProcessedType(), null, null, null, $pixels));
+        return $this->attr(ImageType::ATTR_MAX_HEIGHT, $pixels);
     }
 
     protected function isImage()

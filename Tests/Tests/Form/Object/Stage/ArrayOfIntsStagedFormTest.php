@@ -69,8 +69,7 @@ class ArrayOfIntsStagedFormTest extends CmsTestCase
 
         $this->assertNull($this->form->length);
         $this->assertNull($this->form->ints);
-        $this->assertSame(3, $form->getField('ints')->getType()->get(ArrayOfType::ATTR_MIN_ELEMENTS));
-        $this->assertSame(3, $form->getField('ints')->getType()->get(ArrayOfType::ATTR_MAX_ELEMENTS));
+        $this->assertSame(3, $form->getField('ints')->getType()->get(ArrayOfType::ATTR_EXACT_ELEMENTS));
     }
 
     public function testSubmit()
@@ -134,7 +133,7 @@ class ArrayOfIntsStagedFormTest extends CmsTestCase
 
         $this->assertCount(1, $submitted->getAllStages());
         $this->assertInstanceOf(IndependentFormStage::class, $submitted->getStage(1));
-        $this->assertSame(5, $submitted->getFirstForm()->getField('ints')->getType()->get(ArrayOfType::ATTR_MAX_ELEMENTS));
+        $this->assertSame(5, $submitted->getFirstForm()->getField('ints')->getType()->get(ArrayOfType::ATTR_EXACT_ELEMENTS));
 
         $this->assertThrows(function () {
             $this->form->submitFirstStage(['length' => 'abc']);
@@ -155,7 +154,7 @@ class ArrayOfIntsStagedFormTest extends CmsTestCase
 
         $this->assertCount(1, $submitted->getAllStages());
         $this->assertInstanceOf(IndependentFormStage::class, $submitted->getStage(1));
-        $this->assertSame(3, $submitted->getFirstForm()->getField('ints')->getType()->get(ArrayOfType::ATTR_MAX_ELEMENTS));
+        $this->assertSame(3, $submitted->getFirstForm()->getField('ints')->getType()->get(ArrayOfType::ATTR_EXACT_ELEMENTS));
 
         $this->assertThrows(function () {
             $this->form->withSubmittedFirstStage(['length' => 'abc']);

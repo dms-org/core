@@ -13,21 +13,39 @@ use Dms\Core\Form\Field\Type\FieldType;
 class EntityFieldBuilderBase extends FieldBuilderBase
 {
     /**
-     * Labels the entity options with the returned values
-     * of the supplied callback.
+     * Labels the entity options with values of the supplied member expression.
      *
-     * @param callable $labelCallback
+     * @param callable $memberExpression
      *
      * @return static
      */
-    public function labelledBy(callable $labelCallback)
+    public function labelledBy($memberExpression)
     {
         /** @var EntityIdOptions $options */
         $options = $this->type->get(FieldType::ATTR_OPTIONS);
 
         return $this->attr(FieldType::ATTR_OPTIONS, new EntityIdOptions(
-            $options->getEntities(),
-            $labelCallback
+                $options->getEntities(),
+                null,
+                $memberExpression
+        ));
+    }
+
+    /**
+     * Labels the entity options with the returned values of the supplied callback.
+     *
+     * @param callable $labelCallback
+     *
+     * @return static
+     */
+    public function labelledByCallback(callable $labelCallback)
+    {
+        /** @var EntityIdOptions $options */
+        $options = $this->type->get(FieldType::ATTR_OPTIONS);
+
+        return $this->attr(FieldType::ATTR_OPTIONS, new EntityIdOptions(
+                $options->getEntities(),
+                $labelCallback
         ));
     }
 }

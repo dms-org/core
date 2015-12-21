@@ -3,6 +3,7 @@
 namespace Dms\Core\Form\Field\Type;
 
 use Dms\Core\Form\Field\Options\EntityIdOptions;
+use Dms\Core\Form\Field\Processor\EntityLoaderProcessor;
 use Dms\Core\Form\Field\Processor\TypeProcessor;
 use Dms\Core\Form\Field\Processor\Validator\EntityIdValidator;
 use Dms\Core\Form\Field\Processor\Validator\IntValidator;
@@ -12,7 +13,7 @@ use Dms\Core\Model\Type\Builder\Type;
 use Dms\Core\Model\Type\IType as IPhpType;
 
 /**
- * The array type class.
+ * The entity id type class.
  *
  * @author Elliot Levin <elliotlevin@hotmail.com>
  */
@@ -23,10 +24,22 @@ class EntityIdType extends FieldType
      */
     private $entities;
 
-    public function __construct(IEntitySet $entities)
+    /**
+     * @var bool
+     */
+    private $loadAsObjects;
+
+    /**
+     * EntityIdType constructor.
+     *
+     * @param IEntitySet $entities
+     * @param bool       $loadAsObjects
+     */
+    public function __construct(IEntitySet $entities, $loadAsObjects = false)
     {
         $this->entities                       = $entities;
         $this->attributes[self::ATTR_OPTIONS] = new EntityIdOptions($entities);
+        $this->loadAsObjects                  = $loadAsObjects;
         parent::__construct();
     }
 
@@ -43,10 +56,16 @@ class EntityIdType extends FieldType
      */
     protected function buildProcessors()
     {
-        return [
+        $processors = [
                 new IntValidator($this->inputType),
                 new TypeProcessor('int'),
                 new EntityIdValidator(Type::int()->nullable(), $this->entities),
         ];
+
+        if ($this->loadAsObjects) {
+            $processors[] = new EntityLoaderProcessor($this->entities);
+        }
+
+        return $processors;
     }
 }

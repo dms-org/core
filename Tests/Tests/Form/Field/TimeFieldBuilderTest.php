@@ -2,8 +2,8 @@
 
 namespace Dms\Core\Tests\Form\Field;
 
-use Dms\Core\Form\Field\Builder\Field as Field;
 use Dms\Core\Form\Field\Builder\DateFieldBuilder;
+use Dms\Core\Form\Field\Builder\Field as Field;
 use Dms\Core\Form\Field\Processor\DateTimeProcessor;
 use Dms\Core\Form\Field\Processor\DefaultValueProcessor;
 use Dms\Core\Form\Field\Processor\Validator\DateFormatValidator;
@@ -14,7 +14,6 @@ use Dms\Core\Form\Field\Processor\Validator\TypeValidator;
 use Dms\Core\Form\Field\Type\TimeOfDayType;
 use Dms\Core\Language\Message;
 use Dms\Core\Model\Type\Builder\Type;
-use Dms\Core\Model\Type\ObjectType;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>
@@ -71,7 +70,7 @@ class TimeFieldBuilderTest extends FieldBuilderTestBase
         ], $field->getProcessors());
 
         $this->assertEquals($this->buildTime('01:30:00'), $field->getType()->get(TimeOfDayType::ATTR_MIN));
-        $this->assertEquals($this->buildTime('15:44:59'), $field->getType()->get(TimeOfDayType::ATTR_MAX));
+        $this->assertEquals($this->buildTime('15:45:00'), $field->getType()->get(TimeOfDayType::ATTR_LESS_THAN));
         $this->assertEquals($this->buildTime('14:12:12'), $field->process('14:12:12'));
         $this->assertFieldThrows($field, '12:00 PM', [
                 new Message(DateFormatValidator::MESSAGE, [

@@ -4,9 +4,6 @@ namespace Dms\Core\Form\Field\Builder;
 
 use Dms\Core\Form\Field\Processor\FieldValidator;
 use Dms\Core\Form\Field\Processor\Validator\AllUniquePropertyValidator;
-use Dms\Core\Form\Field\Processor\Validator\ExactArrayLengthValidator;
-use Dms\Core\Form\Field\Processor\Validator\MaxArrayLengthValidator;
-use Dms\Core\Form\Field\Processor\Validator\MinArrayLengthValidator;
 use Dms\Core\Form\Field\Type\ArrayOfType;
 use Dms\Core\Model\IObjectSet;
 use Dms\Core\Model\Type\ArrayType;
@@ -27,9 +24,7 @@ trait ArrayFieldBuilderTrait
      */
     public function minLength($length)
     {
-        return $this
-                ->attr(ArrayOfType::ATTR_MIN_ELEMENTS, $length)
-                ->validate(new MinArrayLengthValidator($this->getCurrentProcessedType(), $length));
+        return $this->attr(ArrayOfType::ATTR_MIN_ELEMENTS, $length);
     }
 
     /**
@@ -41,9 +36,7 @@ trait ArrayFieldBuilderTrait
      */
     public function maxLength($length)
     {
-        return $this
-                ->attr(ArrayOfType::ATTR_MAX_ELEMENTS, $length)
-                ->validate(new MaxArrayLengthValidator($this->getCurrentProcessedType(), $length));
+        return $this->attr(ArrayOfType::ATTR_MAX_ELEMENTS, $length);
     }
 
     /**
@@ -55,10 +48,7 @@ trait ArrayFieldBuilderTrait
      */
     public function exactLength($length)
     {
-        return $this
-                ->attr(ArrayOfType::ATTR_MIN_ELEMENTS, $length)
-                ->attr(ArrayOfType::ATTR_MAX_ELEMENTS, $length)
-                ->validate(new ExactArrayLengthValidator($this->getCurrentProcessedType(), $length));
+        return $this->attr(ArrayOfType::ATTR_EXACT_ELEMENTS, $length);
     }
 
     /**
@@ -66,14 +56,14 @@ trait ArrayFieldBuilderTrait
      * set of object properties.
      *
      * @param IObjectSet $objects
-     * @param string     $propertyName
+     * @param string     $propertyName the property member expression
      *
      * @return static
      */
     public function allUniqueIn(IObjectSet $objects, $propertyName)
     {
         return $this
-                ->validate(new AllUniquePropertyValidator($this->getCurrentProcessedType(), $objects, $propertyName));
+                ->validate(new AllUniquePropertyValidator($this->getCurrentProcessedType(__FUNCTION__), $objects, $propertyName));
     }
 
     /**

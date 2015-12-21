@@ -12,6 +12,7 @@ use Dms\Core\Form\Field\Builder\StringFieldBuilder;
 use Dms\Core\Form\Field\Type\StringType;
 use Dms\Core\Language\Message;
 use Dms\Core\Model\Type\Builder\Type;
+use Dms\Core\Model\Type\IType;
 use Dms\Core\Model\Type\ScalarType;
 
 /**
@@ -34,7 +35,7 @@ class StringFieldBuilderTest extends FieldBuilderTestBase
     {
         $field = $this->field()->maxLength(50)->build();
 
-        $this->assertAttributes([StringType::ATTR_MAX_LENGTH => 50], $field);
+        $this->assertAttributes([StringType::ATTR_TYPE => IType::STRING, StringType::ATTR_MAX_LENGTH => 50], $field);
         $this->assertSame('test', $field->process('test'));
         $this->assertFieldThrows($field, str_repeat('-', 51), [
             new Message(MaxLengthValidator::MESSAGE, [
@@ -49,7 +50,7 @@ class StringFieldBuilderTest extends FieldBuilderTestBase
     {
         $field = $this->field()->minLength(20)->build();
 
-        $this->assertAttributes([StringType::ATTR_MIN_LENGTH => 20], $field);
+        $this->assertAttributes([StringType::ATTR_TYPE => IType::STRING, StringType::ATTR_MIN_LENGTH => 20], $field);
         $this->assertSame(str_repeat('-', 51), str_repeat('-', 51));
 
         $this->assertFieldThrows($field, str_repeat('-', 19), [
@@ -64,7 +65,7 @@ class StringFieldBuilderTest extends FieldBuilderTestBase
     public function testExactLength()
     {
         $this->assertAttributes(
-            [StringType::ATTR_MIN_LENGTH => 25, StringType::ATTR_MAX_LENGTH => 25],
+            [StringType::ATTR_TYPE => IType::STRING, StringType::ATTR_EXACT_LENGTH => 25],
             $this->field()->exactLength(25)->build()
         );
     }
@@ -72,7 +73,7 @@ class StringFieldBuilderTest extends FieldBuilderTestBase
     public function testEmail()
     {
         $this->assertAttributes(
-            [StringType::ATTR_TYPE => StringType::TYPE_EMAIL],
+            [StringType::ATTR_TYPE => IType::STRING, StringType::ATTR_STRING_TYPE => StringType::TYPE_EMAIL],
             $this->field()->email()->build()
         );
     }
@@ -80,7 +81,7 @@ class StringFieldBuilderTest extends FieldBuilderTestBase
     public function testUrl()
     {
         $this->assertAttributes(
-            [StringType::ATTR_TYPE => StringType::TYPE_URL],
+            [StringType::ATTR_TYPE => IType::STRING, StringType::ATTR_STRING_TYPE => StringType::TYPE_URL],
             $this->field()->url()->build()
         );
     }
@@ -88,7 +89,7 @@ class StringFieldBuilderTest extends FieldBuilderTestBase
     public function testPassword()
     {
         $this->assertAttributes(
-                [StringType::ATTR_TYPE => StringType::TYPE_PASSWORD],
+                [StringType::ATTR_TYPE => IType::STRING, StringType::ATTR_STRING_TYPE => StringType::TYPE_PASSWORD],
                 $this->field()->password()->build()
         );
     }
@@ -96,7 +97,7 @@ class StringFieldBuilderTest extends FieldBuilderTestBase
     public function testHtml()
     {
         $this->assertAttributes(
-                [StringType::ATTR_TYPE => StringType::TYPE_HTML],
+                [StringType::ATTR_TYPE => IType::STRING, StringType::ATTR_STRING_TYPE => StringType::TYPE_HTML],
                 $this->field()->html()->build()
         );
     }
@@ -111,9 +112,9 @@ class StringFieldBuilderTest extends FieldBuilderTestBase
 
         $this->assertEquals([
                 new TypeProcessor('string'),
-                new TrimProcessor(),
-                new MaxLengthValidator(Type::string()->nullable(), 50),
-                new RequiredValidator(Type::string()->nullable())
+                new TrimProcessor(" \t\n\r\0\x0B"),
+                new RequiredValidator(Type::string()),
+                new MaxLengthValidator(Type::string(), 50),
         ], $field->getProcessors());
 
         $this->assertSame('name', $field->getName());

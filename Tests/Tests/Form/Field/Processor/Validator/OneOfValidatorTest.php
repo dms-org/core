@@ -2,6 +2,7 @@
 
 namespace Dms\Core\Tests\Form\Field\Processor\Validator;
 
+use Dms\Core\Form\Field\Options\ArrayFieldOptions;
 use Dms\Core\Form\Field\Processor\FieldValidator;
 use Dms\Core\Form\Field\Processor\Validator\OneOfValidator;
 use Dms\Core\Language\Message;
@@ -17,7 +18,9 @@ class OneOfValidatorTest extends FieldValidatorTest
      */
     protected function validator()
     {
-        return new OneOfValidator($this->processedType(), ['foo', 'bar', 'baz']);
+        return new OneOfValidator($this->processedType(), ArrayFieldOptions::fromAssocArray(
+                ['foo' => 'Foo', 'bar' => 'Bar', 'baz' => 'Baz']
+        ));
     }
 
     /**

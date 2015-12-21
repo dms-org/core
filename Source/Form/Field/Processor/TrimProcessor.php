@@ -16,7 +16,7 @@ class TrimProcessor extends FieldProcessor
      */
     private $characters;
 
-    public function __construct($characters = null)
+    public function __construct($characters)
     {
         parent::__construct(Type::string());
         $this->characters = $characters;

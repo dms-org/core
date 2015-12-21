@@ -70,7 +70,7 @@ class DateTimeFieldBuilderTest extends FieldBuilderTestBase
         ], $field->getProcessors());
 
         $this->assertEquals(new \DateTime('1970-01-01 00:00:01'), $field->getType()->get(DateTimeType::ATTR_MIN));
-        $this->assertEquals(new \DateTime('1999-12-31 23:59:59'), $field->getType()->get(DateTimeType::ATTR_MAX));
+        $this->assertEquals(new \DateTime('2000-01-01 00:00:00'), $field->getType()->get(DateTimeType::ATTR_LESS_THAN));
         $this->assertEquals(new \DateTime('1998-05-03 00:00:00'), $field->process('1998-05-03 00:00:00'));
         $this->assertFieldThrows($field, '06/12/2000 00:00::01', [
                 new Message(DateFormatValidator::MESSAGE, [

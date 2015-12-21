@@ -3,8 +3,7 @@
 namespace Dms\Core\Form\Field\Processor;
 
 use Dms\Core\Form\IForm;
-use Dms\Core\Model\Type\ArrayType;
-use Dms\Core\Model\Type\MixedType;
+use Dms\Core\Model\Type\Builder\Type;
 
 /**
  * The inner form value type processor.
@@ -20,7 +19,7 @@ class InnerFormProcessor extends FieldProcessor
 
     public function __construct(IForm $form)
     {
-        parent::__construct(new ArrayType(new MixedType()));
+        parent::__construct(Type::arrayOf(Type::mixed()));
 
         $this->form = $form;
     }

@@ -3,7 +3,7 @@
 namespace Dms\Core\Form\Field\Type;
 
 use Dms\Core\File\IUploadedImage;
-use Dms\Core\Form\Field\Processor\Validator\UploadedFileValidator;
+use Dms\Core\Form\Field\Processor\Validator\ImageDimensionsValidator;
 use Dms\Core\Form\Field\Processor\Validator\UploadedImageValidator;
 use Dms\Core\Model\Type\Builder\Type;
 
@@ -33,11 +33,24 @@ class ImageType extends FileType
      */
     protected function buildProcessors()
     {
-        return [
-                new UploadedFileValidator($this->inputType),
-                new UploadedImageValidator($this->inputType),
-        ];
+        $processors = parent::buildProcessors();
+
+        $processors[] = new UploadedImageValidator($this->inputType);
+
+        if ($this->has(self::ATTR_MIN_WIDTH)
+                || $this->has(self::ATTR_MAX_WIDTH)
+                || $this->has(self::ATTR_MIN_HEIGHT)
+                || $this->has(self::ATTR_MAX_HEIGHT)
+        ) {
+            $processors[] = new ImageDimensionsValidator(
+                    $this->inputType,
+                    $this->get(self::ATTR_MIN_WIDTH),
+                    $this->get(self::ATTR_MAX_WIDTH),
+                    $this->get(self::ATTR_MIN_HEIGHT),
+                    $this->get(self::ATTR_MAX_HEIGHT)
+            );
+        }
+
+        return $processors;
     }
-
-
 }

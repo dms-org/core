@@ -5,18 +5,19 @@ namespace Dms\Core\Form\Field\Type;
 use Dms\Core\Form\Field\Processor\DateTimeProcessor;
 use Dms\Core\Form\Field\Processor\Validator\DateFormatValidator;
 use Dms\Core\Model\Type\Builder\Type as PhpType;
+use Dms\Core\Model\Type\IType;
 
 /**
  * The date time type base class.
  *
  * @author Elliot Levin <elliotlevin@hotmail.com>
  */
-abstract class DateTimeTypeBase extends FieldType
+abstract class DateTimeTypeBase extends FieldType implements IComparableFieldConstants
 {
+    use ComparableFieldTypeTrait;
+
     const ATTR_FORMAT = 'format';
     const ATTR_TIMEZONE = 'timezone';
-    const ATTR_MIN = 'min';
-    const ATTR_MAX = 'max';
 
     /**
      * @var string
@@ -84,11 +85,22 @@ abstract class DateTimeTypeBase extends FieldType
     /**
      * @inheritDoc
      */
+    protected function getComparisonType()
+    {
+        return $this->getProcessedPhpType();
+    }
+
+    /**
+     * @inheritDoc
+     */
     protected function buildProcessors()
     {
-        return [
-                new DateFormatValidator($this->inputType, $this->getFormat()),
-                new DateTimeProcessor($this->getFormat(), $this->getTimezone(), $this->mode),
-        ];
+        return array_merge(
+                [
+                        new DateFormatValidator($this->inputType, $this->getFormat()),
+                        new DateTimeProcessor($this->getFormat(), $this->getTimezone(), $this->mode),
+                ],
+                $this->buildComparisonProcessors()
+        );
     }
 }

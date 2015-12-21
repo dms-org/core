@@ -30,6 +30,7 @@ use Dms\Core\Form\Field\Type\CustomType;
 use Dms\Core\Form\Field\Type\DateTimeType;
 use Dms\Core\Form\Field\Type\DateType;
 use Dms\Core\Form\Field\Type\EntityIdType;
+use Dms\Core\Form\Field\Type\EnumType;
 use Dms\Core\Form\Field\Type\FieldType;
 use Dms\Core\Form\Field\Type\FileType;
 use Dms\Core\Form\Field\Type\ImageType;
@@ -42,6 +43,7 @@ use Dms\Core\Model\EntityCollection;
 use Dms\Core\Model\IEntity;
 use Dms\Core\Model\Type\Builder\Type as PhpType;
 use Dms\Core\Model\Type\Builder\Type;
+use Dms\Core\Model\Type\IType;
 use Dms\Core\Model\Type\ObjectType;
 use Dms\Core\Tests\Form\Field\Processor\Fixtures\StatusEnum;
 
@@ -80,8 +82,8 @@ class FieldBuilderTest extends FieldBuilderTestBase
     {
         $field = $this->field()->string()->required()->build();
 
-        $this->assertAttributes([FieldType::ATTR_REQUIRED => true], $field);
-        $this->assertHasProcessor(new RequiredValidator(PhpType::string()->nullable()), $field);
+        $this->assertAttributes([FieldType::ATTR_REQUIRED => true, ScalarType::ATTR_TYPE => IType::STRING], $field);
+        $this->assertHasProcessor(new RequiredValidator(PhpType::mixed()), $field);
         $this->assertEquals(PhpType::string(), $field->getProcessedType());
     }
 
@@ -89,7 +91,7 @@ class FieldBuilderTest extends FieldBuilderTestBase
     {
         $field = $this->field()->string()->defaultTo('abc')->build();
 
-        $this->assertAttributes([FieldType::ATTR_DEFAULT => 'abc'], $field);
+        $this->assertAttributes([FieldType::ATTR_DEFAULT => 'abc', ScalarType::ATTR_TYPE => IType::STRING], $field);
         $this->assertHasProcessor(new DefaultValueProcessor(PhpType::string()->nullable(), 'abc'), $field);
         $this->assertEquals(PhpType::string(), $field->getProcessedType());
     }
@@ -99,10 +101,10 @@ class FieldBuilderTest extends FieldBuilderTestBase
         $field = $this->field()->string()->oneOf(['hi' => 'Hi', 'bye' => 'Bye'])->build();
 
         $this->assertAttributes(
-                [FieldType::ATTR_OPTIONS => ArrayFieldOptions::fromAssocArray(['hi' => 'Hi', 'bye' => 'Bye'])],
+                [ScalarType::ATTR_TYPE => IType::STRING, FieldType::ATTR_OPTIONS => $fieldOptions = ArrayFieldOptions::fromAssocArray(['hi' => 'Hi', 'bye' => 'Bye'])],
                 $field
         );
-        $this->assertHasProcessor(new OneOfValidator(PhpType::string()->nullable(), ['hi', 'bye']), $field);
+        $this->assertHasProcessor(new OneOfValidator(PhpType::string()->nullable(), $fieldOptions), $field);
         $this->assertEquals(PhpType::string()->nullable(), $field->getProcessedType());
     }
 
@@ -294,12 +296,13 @@ class FieldBuilderTest extends FieldBuilderTestBase
 
         /** @var StringType $type */
         $type = $field->getType();
-        $this->assertInstanceOf(StringType::class, $type);
-        $this->assertEquals([
+        $this->assertInstanceOf(EnumType::class, $type);
+        $this->assertEquals($fieldOptions = [
                 new FieldOption(StatusEnum::INACTIVE, 'Inactive'),
                 new FieldOption(StatusEnum::ACTIVE, 'Active'),
-        ], $type->getOptions()->all());
-        $this->assertHasProcessor(new OneOfValidator(PhpType::string()->nullable(), [StatusEnum::INACTIVE, StatusEnum::ACTIVE]), $field);
+        ], $type->getOptions()->getAll());
+
+        $this->assertHasProcessor(new OneOfValidator(PhpType::string()->nullable(), new ArrayFieldOptions($fieldOptions)), $field);
         $this->assertHasProcessor(new EnumProcessor(StatusEnum::class), $field);
         $this->assertEquals(PhpType::object(StatusEnum::class)->nullable(), $field->getProcessedType());
     }

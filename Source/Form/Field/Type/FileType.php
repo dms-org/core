@@ -3,6 +3,8 @@
 namespace Dms\Core\Form\Field\Type;
 
 use Dms\Core\File\IUploadedFile;
+use Dms\Core\Form\Field\Processor\Validator\FileExtensionValidator;
+use Dms\Core\Form\Field\Processor\Validator\FileSizeValidator;
 use Dms\Core\Form\Field\Processor\Validator\UploadedFileValidator;
 use Dms\Core\Form\IFieldProcessor;
 use Dms\Core\Model\Type\Builder\Type;
@@ -31,8 +33,20 @@ class FileType extends FieldType
      */
     protected function buildProcessors()
     {
-        return [
-            new UploadedFileValidator($this->inputType)
-        ];
+        $processors = [new UploadedFileValidator($this->inputType)];
+
+        if ($this->has(self::ATTR_EXTENSIONS)) {
+            $processors[] = new FileExtensionValidator($this->inputType, $this->get(self::ATTR_EXTENSIONS));
+        }
+
+        if ($this->has(self::ATTR_MIN_SIZE) || $this->has(self::ATTR_MAX_SIZE)) {
+            $processors[] = new FileSizeValidator(
+                    $this->inputType,
+                    $this->get(self::ATTR_MIN_SIZE),
+                    $this->get(self::ATTR_MAX_SIZE)
+            );
+        }
+
+        return $processors;
     }
 }
