@@ -34,26 +34,26 @@ class PersonModule extends CrudModule
         });
 
         $module->objectAction('swap-names')
-            ->authorize(self::EDIT_PERMISSION)
-            ->where(function (Person $person) {
-                return $person instanceof Adult;
-            })
-            ->form(Form::create()->section('Details', [
-                Field::name('swap_with')->label('Swap With')->entityFrom($this->dataSource)->required()
-            ]))
-            ->handler(function (Person $person, ArrayDataObject $input) {
-                /** @var Person $otherPerson */
-                $otherPerson = $input['swap_with'];
+                ->authorize(self::EDIT_PERMISSION)
+                ->where(function (Person $person) {
+                    return $person instanceof Adult;
+                })
+                ->form(Form::create()->section('Details', [
+                        Field::name('swap_with')->label('Swap With')->entityFrom($this->dataSource)->required()
+                ]))
+                ->handler(function (Person $person, ArrayDataObject $input) {
+                    /** @var Person $otherPerson */
+                    $otherPerson = $input['swap_with'];
 
-                $tempFirstName = $otherPerson->firstName;
-                $tempLastName = $otherPerson->lastName;
-                $otherPerson->firstName = $person->firstName;
-                $otherPerson->lastName = $person->lastName;
-                $person->firstName = $tempFirstName;
-                $person->lastName = $tempLastName;
+                    $tempFirstName          = $otherPerson->firstName;
+                    $tempLastName           = $otherPerson->lastName;
+                    $otherPerson->firstName = $person->firstName;
+                    $otherPerson->lastName  = $person->lastName;
+                    $person->firstName      = $tempFirstName;
+                    $person->lastName       = $tempLastName;
 
-                $this->dataSource->saveAll([$person, $otherPerson]);
-            });
+                    $this->dataSource->saveAll([$person, $otherPerson]);
+                });
 
         $module->crudForm(function (CrudFormDefinition $form) {
             $form->section('Person Details', [
