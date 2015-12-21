@@ -8,7 +8,6 @@ use Dms\Core\Form\Field\Processor\Validator\GreaterThanValidator;
 use Dms\Core\Form\Field\Processor\Validator\LessThanOrEqualValidator;
 use Dms\Core\Form\Field\Processor\Validator\LessThanValidator;
 use Dms\Core\Form\Field\Type\DateTimeTypeBase;
-use Dms\Core\Form\Field\Type\DateType;
 
 /**
  * The date time field builder class.
@@ -23,19 +22,15 @@ class DateFieldBuilder extends FieldBuilderBase
     protected $type;
 
     /**
-     * @param DateTimeTypeBase      $type
-     * @param FieldBuilderBase|null $previous
+     * DateFieldBuilder constructor.
      *
-     * @return DateFieldBuilder
+     * @param DateTimeTypeBase $type
+     * @param FieldBuilderBase $previous
      */
-    public static function construct(
-            DateTimeTypeBase $type,
-            FieldBuilderBase $previous = null
-    ) {
-        $self       = new self($previous);
-        $self->type = $type;
-
-        return $self;
+    public function __construct(DateTimeTypeBase $type, FieldBuilderBase $previous)
+    {
+        parent::__construct($previous);
+        $this->type = $type;
     }
 
     /**

@@ -50,7 +50,7 @@ abstract class FieldBuilderBase
      */
     protected $initialValue = null;
 
-    final protected function __construct(FieldBuilderBase $previous = null)
+    protected function __construct(FieldBuilderBase $previous = null)
     {
         if ($previous) {
             $this->name         = $previous->name;

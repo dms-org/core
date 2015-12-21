@@ -189,7 +189,7 @@ class Field extends FieldBuilderBase
     ) {
         $this->type($type);
 
-        return DateFieldBuilder::construct($type, $this);
+        return new DateFieldBuilder($type, $this);
     }
 
     /**
