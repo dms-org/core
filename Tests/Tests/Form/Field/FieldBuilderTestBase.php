@@ -36,7 +36,21 @@ abstract class FieldBuilderTestBase extends CmsTestCase
      */
     protected function assertAttributes(array $attributes, IField $field)
     {
-        $this->assertEquals($attributes, $field->getType()->attrs());
+        $actualAttributes = $field->getType()->attrs();
+
+        foreach ($actualAttributes as $key => $value) {
+            if ($value === null) {
+                unset($actualAttributes[$key]);
+            }
+        }
+
+        foreach ($attributes as $key => $value) {
+            if ($value === null) {
+                unset($attributes[$key]);
+            }
+        }
+
+        $this->assertEquals($attributes, $actualAttributes);
     }
 
     /**

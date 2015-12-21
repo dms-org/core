@@ -18,12 +18,18 @@ abstract class FieldType implements IFieldType
 {
     const ATTR_REQUIRED = 'required';
     const ATTR_DEFAULT = 'default';
+    const ATTR_INITIAL_VALUE = 'initial-value';
     const ATTR_OPTIONS = 'options';
 
     /**
      * @var array
      */
-    protected $attributes = [];
+    protected $attributes = [
+            self::ATTR_REQUIRED      => null,
+            self::ATTR_DEFAULT       => null,
+            self::ATTR_INITIAL_VALUE => null,
+            self::ATTR_OPTIONS       => null,
+    ];
 
     /**
      * @var IPhpType
@@ -126,8 +132,8 @@ abstract class FieldType implements IFieldType
      */
     public function withAll(array $attributes)
     {
-        $clone                         = clone $this;
-        $clone->attributes = $attributes + $clone->attributes ;
+        $clone             = clone $this;
+        $clone->attributes = $attributes + $clone->attributes;
         $clone->loadTypes();
 
         return $clone;

@@ -3,6 +3,7 @@
 namespace Dms\Core\Form\Field;
 
 use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Form\Field\Type\FieldType;
 use Dms\Core\Form\IField;
 use Dms\Core\Form\IFieldProcessor;
 use Dms\Core\Form\IFieldType;
@@ -79,6 +80,8 @@ class Field implements IField
     {
         if ($initialValue === null) {
             $this->initialValue = null;
+            $this->type         = $this->type->with(FieldType::ATTR_INITIAL_VALUE, null);
+
             return;
         }
 
@@ -92,6 +95,7 @@ class Field implements IField
         }
 
         $this->initialValue = $this->unprocess($initialValue);
+        $this->type         = $this->type->with(FieldType::ATTR_INITIAL_VALUE, $this->initialValue);
     }
 
     /**
@@ -208,6 +212,4 @@ class Field implements IField
 
         return $clone;
     }
-
-
 }
