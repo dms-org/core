@@ -110,8 +110,16 @@ abstract class FieldType implements IFieldType
      */
     public function with($attribute, $value)
     {
+        return $this->withAll([$attribute => $value]);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function withAll(array $attributes)
+    {
         $clone                         = clone $this;
-        $clone->attributes[$attribute] = $value;
+        $clone->attributes = $attributes + $clone->attributes ;
         $clone->loadTypes();
 
         return $clone;

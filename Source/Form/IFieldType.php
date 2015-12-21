@@ -47,6 +47,15 @@ interface IFieldType
     public function with($attribute, $value);
 
     /**
+     * Returns an instance of the type with the supplied attributes.
+     *
+     * @param array $attributes
+     *
+     * @return static
+     */
+    public function withAll(array $attributes);
+
+    /**
      * Gets the type as the equivalent php type.
      *
      * @return IPhpType

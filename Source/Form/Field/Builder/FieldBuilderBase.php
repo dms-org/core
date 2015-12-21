@@ -126,11 +126,24 @@ abstract class FieldBuilderBase
      */
     public function attr($typeAttribute, $value)
     {
+        return $this->attrs([$typeAttribute => $value]);
+    }
+
+    /**
+     * Sets the type attributes.
+     *
+     * @param array $typeAttributes
+     *
+     * @return static
+     * @throws InvalidOperationException
+     */
+    public function attrs(array $typeAttributes)
+    {
         if (!$this->type) {
             throw InvalidOperationException::methodCall(__METHOD__, 'type property type must be set');
         }
 
-        $this->type = $this->type->with($typeAttribute, $value);
+        $this->type = $this->type->withAll($typeAttributes);
 
         return $this;
     }
