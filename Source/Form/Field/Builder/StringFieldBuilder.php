@@ -67,6 +67,16 @@ class StringFieldBuilder extends FieldBuilderBase
     }
 
     /**
+     * Sets the field type as an ip address.
+     *
+     * @return static
+     */
+    public function ipAddress()
+    {
+        return $this->attr(StringType::ATTR_STRING_TYPE, StringType::TYPE_IP_ADDRESS);
+    }
+
+    /**
      * Validates the input has an exact string length.
      *
      * @param int $length

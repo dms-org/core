@@ -5,12 +5,12 @@ namespace Dms\Core\Form\Field\Type;
 use Dms\Core\Form\Field\Processor\TrimProcessor;
 use Dms\Core\Form\Field\Processor\Validator\EmailValidator;
 use Dms\Core\Form\Field\Processor\Validator\ExactLengthValidator;
+use Dms\Core\Form\Field\Processor\Validator\IpAddressValidator;
 use Dms\Core\Form\Field\Processor\Validator\MaxLengthValidator;
 use Dms\Core\Form\Field\Processor\Validator\MinLengthValidator;
 use Dms\Core\Form\Field\Processor\Validator\RequiredValidator;
 use Dms\Core\Form\Field\Processor\Validator\UrlValidator;
 use Dms\Core\Form\IFieldProcessor;
-use Dms\Core\Model\Type\Builder\Type;
 
 /**
  * The string type class.
@@ -29,6 +29,7 @@ class StringType extends ScalarType
     const TYPE_EMAIL = 'email';
     const TYPE_URL = 'url';
     const TYPE_HTML = 'html';
+    const TYPE_IP_ADDRESS = 'ip-address';
 
     public function __construct()
     {
@@ -72,14 +73,18 @@ class StringType extends ScalarType
             $processors[] = new ExactLengthValidator($inputType, $this->get(self::ATTR_MAX_LENGTH));
         }
 
-        if ($this->has(self::ATTR_TYPE)) {
-            switch ($this->get(self::ATTR_TYPE)) {
+        if ($this->has(self::ATTR_STRING_TYPE)) {
+            switch ($this->get(self::ATTR_STRING_TYPE)) {
                 case self::TYPE_EMAIL:
                     $processors[] = new EmailValidator($inputType);
                     break;
 
                 case self::TYPE_URL:
                     $processors[] = new UrlValidator($inputType);
+                    break;
+
+                case self::TYPE_IP_ADDRESS:
+                    $processors[] = new IpAddressValidator($inputType);
                     break;
             }
         }
