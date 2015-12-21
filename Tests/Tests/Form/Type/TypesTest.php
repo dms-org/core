@@ -29,6 +29,18 @@ class TypesTest extends CmsTestCase
         $this->assertSame('mixed', $type->getPhpTypeOfInput()->asTypeString());
     }
 
+    public function testGetAttrs()
+    {
+        $type = (new IntType())->with(IntType::ATTR_REQUIRED, false);
+
+        $this->assertSame([], $type->getAll([]));
+        $this->assertSame([IntType::ATTR_REQUIRED => false], $type->getAll([IntType::ATTR_REQUIRED]));
+        $this->assertSame(
+                [IntType::ATTR_REQUIRED => false, 'non-existent' => null],
+                $type->getAll([IntType::ATTR_REQUIRED, 'non-existent'])
+        );
+    }
+
     public function testRequiredAttribute()
     {
         $type = (new IntType())->with(IntType::ATTR_REQUIRED, true);

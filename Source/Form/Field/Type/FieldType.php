@@ -108,6 +108,14 @@ abstract class FieldType implements IFieldType
     /**
      * {@inheritDoc}
      */
+    public function getAll(array $attributes)
+    {
+        return array_intersect_key($this->attributes, array_fill_keys($attributes, true)) + array_fill_keys($attributes, null);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function with($attribute, $value)
     {
         return $this->withAll([$attribute => $value]);

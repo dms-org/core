@@ -37,6 +37,15 @@ interface IFieldType
     public function get($attribute);
 
     /**
+     * Gets the values of the attributes as an array indexed by the attribute name.
+     *
+     * @param string[] $attributes
+     *
+     * @return array
+     */
+    public function getAll(array $attributes);
+
+    /**
      * Returns an instance of the type with the supplied attribute.
      *
      * @param string $attribute
