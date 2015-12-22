@@ -4,12 +4,14 @@ namespace Dms\Core\Form\Field\Type;
 
 use Dms\Core\Form\Field\Options\ArrayFieldOptions;
 use Dms\Core\Form\Field\Processor\DefaultValueProcessor;
+use Dms\Core\Form\Field\Processor\Validator\NotSuppliedValidator;
 use Dms\Core\Form\Field\Processor\Validator\OneOfValidator;
 use Dms\Core\Form\Field\Processor\Validator\RequiredValidator;
 use Dms\Core\Form\Field\Processor\Validator\TypeValidator;
 use Dms\Core\Form\IFieldOptions;
 use Dms\Core\Form\IFieldProcessor;
 use Dms\Core\Form\IFieldType;
+use Dms\Core\Model\Type\Builder\Type;
 use Dms\Core\Model\Type\IType as IPhpType;
 use Dms\Core\Model\Type\MixedType;
 
@@ -21,6 +23,7 @@ use Dms\Core\Model\Type\MixedType;
 abstract class FieldType implements IFieldType
 {
     const ATTR_REQUIRED = 'required';
+    const ATTR_READ_ONLY = 'read-only';
     const ATTR_DEFAULT = 'default';
     const ATTR_INITIAL_VALUE = 'initial-value';
     const ATTR_OPTIONS = 'options';
@@ -30,6 +33,7 @@ abstract class FieldType implements IFieldType
      */
     protected $attributes = [
             self::ATTR_REQUIRED      => null,
+            self::ATTR_READ_ONLY     => null,
             self::ATTR_DEFAULT       => null,
             self::ATTR_INITIAL_VALUE => null,
             self::ATTR_OPTIONS       => null,
@@ -82,8 +86,7 @@ abstract class FieldType implements IFieldType
     {
         $this->inputType = $this->buildPhpTypeOfInput()->nullable();
 
-        $processors                       = [];
-
+        $processors = [];
 
         if (!($this->inputType instanceof MixedType)) {
             $processors[] = new TypeValidator($this->inputType);
@@ -120,6 +123,13 @@ abstract class FieldType implements IFieldType
 
         if ($this->get(self::ATTR_REQUIRED)) {
             $this->processedType = $this->processedType->nonNullable();
+        }
+
+        if ($this->get(self::ATTR_READ_ONLY)) {
+            $this->processors = [
+                new NotSuppliedValidator(Type::mixed()),
+                new DefaultValueProcessor($this->processedType, $this->get(self::ATTR_INITIAL_VALUE))
+            ];
         }
     }
 

@@ -78,7 +78,7 @@ class ObjectAction extends ParameterizedAction implements IObjectAction
         $objectValidators = [];
 
         foreach ($processors as $processor) {
-            if ($processor instanceof FieldValidator && $processor->getInputType()->isCompatibleWith($objectType)) {
+            if ($processor instanceof FieldValidator && $processor->getInputType()->isSubsetOf($objectType->nullable())) {
                 $objectValidators[] = $processor;
             }
         }

@@ -5,7 +5,6 @@ namespace Dms\Core\Form\Field\Builder;
 use Dms\Core\Exception\InvalidOperationException;
 use Dms\Core\Form\Field\Field as ActualField;
 use Dms\Core\Form\Field\Options\ArrayFieldOptions;
-use Dms\Core\Form\Field\Options\FieldOption;
 use Dms\Core\Form\Field\Processor\CustomProcessor;
 use Dms\Core\Form\Field\Processor\FieldValidator;
 use Dms\Core\Form\Field\Processor\Validator\CustomValidator;
@@ -40,23 +39,23 @@ abstract class FieldBuilderBase
     protected $type;
 
     /**
+     * @var array
+     */
+    protected $attributes = [];
+
+    /**
      * @var IFieldProcessor[]
      */
     protected $processors = [];
 
-    /**
-     * @var mixed
-     */
-    protected $initialValue = null;
-
     protected function __construct(FieldBuilderBase $previous = null)
     {
         if ($previous) {
-            $this->name         = $previous->name;
-            $this->label        = $previous->label;
-            $this->type         = $previous->type;
-            $this->processors   = $previous->processors;
-            $this->initialValue = $previous->initialValue;
+            $this->name       = $previous->name;
+            $this->label      = $previous->label;
+            $this->attributes = $previous->attributes;
+            $this->type       = $previous->type;
+            $this->processors = $previous->processors;
         }
     }
 
@@ -70,9 +69,8 @@ abstract class FieldBuilderBase
         return new ActualField(
                 $this->name,
                 $this->label,
-                $this->type,
-                $this->processors,
-                $this->initialValue
+                $this->type->withAll($this->attributes),
+                $this->processors
         );
     }
 
@@ -138,11 +136,7 @@ abstract class FieldBuilderBase
      */
     public function attrs(array $typeAttributes)
     {
-        if (!$this->type) {
-            throw InvalidOperationException::methodCall(__METHOD__, 'type property type must be set');
-        }
-
-        $this->type = $this->type->withAll($typeAttributes);
+        $this->attributes = $typeAttributes + $this->attributes;
 
         return $this;
     }
@@ -159,9 +153,7 @@ abstract class FieldBuilderBase
      */
     public function value($value)
     {
-        $this->initialValue = $value;
-
-        return $this;
+        return $this->attr(FieldType::ATTR_INITIAL_VALUE, $value);
     }
 
     /**
@@ -172,6 +164,16 @@ abstract class FieldBuilderBase
     public function required()
     {
         return $this->attr(FieldType::ATTR_REQUIRED, true);
+    }
+
+    /**
+     * Sets the field a readonly.
+     *
+     * @return static
+     */
+    public function readonly()
+    {
+        return $this->attr(FieldType::ATTR_READ_ONLY, true);
     }
 
     /**
@@ -220,8 +222,7 @@ abstract class FieldBuilderBase
      */
     public function oneOf(array $valueLabelMap)
     {
-        return $this
-                ->attr(FieldType::ATTR_OPTIONS, ArrayFieldOptions::fromAssocArray($valueLabelMap));
+        return $this->attr(FieldType::ATTR_OPTIONS, ArrayFieldOptions::fromAssocArray($valueLabelMap));
     }
 
     /**

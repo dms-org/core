@@ -69,17 +69,6 @@ interface IType
     public function isSubsetOf(IType $type);
 
     /**
-     * This is an alias of isSubsetOf
-     *
-     * @see isSupersetOf
-     *
-     * @param IType $type
-     *
-     * @return bool
-     */
-    public function isCompatibleWith(IType $type);
-
-    /**
      * Returns the intersection between the two types
      * or null if there is no intersection.
      *

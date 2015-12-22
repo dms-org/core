@@ -54,11 +54,10 @@ class Field implements IField
      * @param string            $label
      * @param IFieldType        $type
      * @param IFieldProcessor[] $processors
-     * @param mixed             $initialValue
      *
      * @throws InvalidArgumentException
      */
-    public function __construct($name, $label, IFieldType $type, array $processors, $initialValue = null)
+    public function __construct($name, $label, IFieldType $type, array $processors)
     {
         InvalidArgumentException::verifyAllInstanceOf(__METHOD__, 'processors', $processors, IFieldProcessor::class);
         InvalidArgumentException::verifyNotNull(__METHOD__, 'name', $name);
@@ -73,29 +72,29 @@ class Field implements IField
                 ? end($processors)->getProcessedType()
                 : $type->getProcessedPhpType();
 
-        $this->setInitialValue($initialValue);
+        $this->setInitialValue($type->get(FieldType::ATTR_INITIAL_VALUE), false);
     }
 
-    private function setInitialValue($initialValue)
+    private function setInitialValue($initialValue, $updateType = true)
     {
-        if ($initialValue === null) {
-            $this->initialValue = null;
-            $this->type         = $this->type->with(FieldType::ATTR_INITIAL_VALUE, null);
+        if ($initialValue !== null) {
+            $processedPhpType = $this->getProcessedType();
 
-            return;
+            if (!$processedPhpType->isOfType($initialValue)) {
+                throw InvalidArgumentException::format(
+                        'Invalid initial value for form field \'%s\': expecting type of %s, %s given',
+                        $this->name, $processedPhpType->asTypeString(), Debug::getType($initialValue)
+                );
+            }
+
+            $initialValue = $this->unprocess($initialValue);
         }
 
-        $processedPhpType = $this->getProcessedType();
+        $this->initialValue = $initialValue;
 
-        if (!$processedPhpType->isOfType($initialValue)) {
-            throw InvalidArgumentException::format(
-                    'Invalid initial value for form field \'%s\': expecting type of %s, %s given',
-                    $this->name, $processedPhpType->asTypeString(), Debug::getType($initialValue)
-            );
+        if ($updateType) {
+            $this->type = $this->type->with(FieldType::ATTR_INITIAL_VALUE, $this->initialValue);
         }
-
-        $this->initialValue = $this->unprocess($initialValue);
-        $this->type         = $this->type->with(FieldType::ATTR_INITIAL_VALUE, $this->initialValue);
     }
 
     /**

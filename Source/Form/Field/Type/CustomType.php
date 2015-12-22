@@ -2,6 +2,7 @@
 
 namespace Dms\Core\Form\Field\Type;
 
+use Dms\Core\Exception\InvalidArgumentException;
 use Dms\Core\Form\IFieldProcessor;
 use Dms\Core\Model\Type\IType;
 
@@ -13,6 +14,11 @@ use Dms\Core\Model\Type\IType;
 class CustomType extends FieldType
 {
     /**
+     * @var IFieldProcessor[]
+     */
+    protected $customProcessors;
+
+    /**
      * CustomType constructor.
      *
      * @param IType $inputType
@@ -20,8 +26,10 @@ class CustomType extends FieldType
      */
     public function __construct(IType $inputType, array $processors)
     {
-        $this->inputType  = $inputType;
-        $this->processors = $processors;
+        InvalidArgumentException::verifyAllInstanceOf(__METHOD__, 'processors', $processors, IFieldProcessor::class);
+
+        $this->inputType        = $inputType;
+        $this->customProcessors = $processors;
         parent::__construct();
     }
 
@@ -38,6 +46,6 @@ class CustomType extends FieldType
      */
     protected function buildProcessors()
     {
-        return $this->processors;
+        return $this->customProcessors;
     }
 }

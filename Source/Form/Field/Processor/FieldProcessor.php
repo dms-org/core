@@ -59,6 +59,18 @@ abstract class FieldProcessor implements IFieldProcessor
         return $this->doUnprocess($input);
     }
 
+    /**
+     * @param mixed      $input
+     * @param array $messages
+     *
+     * @return mixed
+     */
     abstract protected function doProcess($input, array &$messages);
+
+    /**
+     * @param mixed $input
+     *
+     * @return mixed
+     */
     abstract protected function doUnprocess($input);
 }

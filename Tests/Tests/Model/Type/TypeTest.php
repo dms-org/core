@@ -169,29 +169,6 @@ class TypeTest extends CmsTestCase
         $this->assertFalse($notNull->isSubsetOf($int));
     }
 
-    public function testIsCompatibleWith()
-    {
-        $mixed   = new MixedType();
-        $string  = new ScalarType(ScalarType::STRING);
-        $int     = new ScalarType(ScalarType::INT);
-        $notNull = new NotType(new NullType());
-
-        $this->assertTrue($string->isCompatibleWith($mixed));
-        $this->assertTrue($string->isCompatibleWith($notNull));
-        $this->assertTrue($notNull->isCompatibleWith($mixed));
-
-        $this->assertTrue($string->isCompatibleWith($string));
-        $this->assertTrue($mixed->isCompatibleWith($mixed));
-
-        $this->assertFalse($string->isCompatibleWith($int));
-        $this->assertFalse($mixed->isCompatibleWith($string));
-        $this->assertFalse($mixed->isCompatibleWith($int));
-        $this->assertFalse($mixed->isCompatibleWith($notNull));
-
-        $this->assertFalse($notNull->isCompatibleWith($string));
-        $this->assertFalse($notNull->isCompatibleWith($int));
-    }
-
     public function testIsSetOfWithObjects()
     {
         $dateTime          = new ObjectType(\DateTime::class);
