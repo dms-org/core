@@ -123,7 +123,9 @@ abstract class FieldBuilderBase
      */
     public function attr($typeAttribute, $value)
     {
-        return $this->attrs([$typeAttribute => $value]);
+        $this->attributes[$typeAttribute] = $value;
+
+        return $this;
     }
 
     /**
