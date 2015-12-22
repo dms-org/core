@@ -7,6 +7,7 @@ use Dms\Core\Form\Field\Builder\Field as Field;
 use Dms\Core\Form\Field\Processor\ArrayAllProcessor;
 use Dms\Core\Form\Field\Processor\TypeProcessor;
 use Dms\Core\Form\Field\Processor\Validator\AllUniquePropertyValidator;
+use Dms\Core\Form\Field\Processor\Validator\ArrayUniqueValidator;
 use Dms\Core\Form\Field\Processor\Validator\ExactArrayLengthValidator;
 use Dms\Core\Form\Field\Processor\Validator\IntValidator;
 use Dms\Core\Form\Field\Processor\Validator\MaxArrayLengthValidator;
@@ -61,6 +62,30 @@ class ArrayOfFieldBuilderTest extends FieldBuilderTestBase
         $this->assertEquals(Type::arrayOf(Type::string()->nullable())->nullable(), $field->getProcessedType());
     }
 
+    public function testArrayContainsNoDuplications()
+    {
+        $field = $this->field()
+                ->containsNoDuplicates()
+                ->build();
+
+        $this->assertEquals([
+                new TypeValidator(Type::arrayOf(Type::mixed())->nullable()),
+                new ArrayAllProcessor([new TypeProcessor('string')]),
+                new ArrayUniqueValidator(Type::arrayOf(Type::string()->nullable())->nullable(), 3),
+        ], $field->getProcessors());
+
+        $this->assertSame(true, $field->getType()->get(ArrayOfType::ATTR_UNIQUE_ELEMENTS));
+
+        $this->assertSame(['1', '2', '3'], $field->process([1, 2, 3]));
+
+        $this->assertFieldThrows($field, [1, 1.0], [
+                new Message(ArrayUniqueValidator::MESSAGE, [
+                        'field'  => 'Name',
+                        'input'  => ['1', '1'],
+                ])
+        ]);
+    }
+
     public function testFieldWithProcessors()
     {
         $field = $this->field()
@@ -103,7 +128,6 @@ class ArrayOfFieldBuilderTest extends FieldBuilderTestBase
                 new TestEntity(1),
                 new TestEntity(2),
         ]);
-
 
         $field = Field::name('number')
                 ->label('Number')

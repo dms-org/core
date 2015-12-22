@@ -69,6 +69,8 @@ class ArrayOfEntityIdsType extends ArrayOfType
             $processors[] = new EntityArrayLoaderProcessor($this->entities);
         }
 
+        $this->buildArrayElementsValidators($processors);
+
         return $processors;
     }
 }

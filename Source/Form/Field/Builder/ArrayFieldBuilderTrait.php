@@ -52,6 +52,16 @@ trait ArrayFieldBuilderTrait
     }
 
     /**
+     * Validates that all the array elements are unique.
+     *
+     * @return static
+     */
+    public function containsNoDuplicates()
+    {
+        return $this->attr(ArrayOfType::ATTR_UNIQUE_ELEMENTS, true);
+    }
+
+    /**
      * Validates that all the array elements are unique within the supplied
      * set of object properties.
      *
