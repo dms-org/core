@@ -70,11 +70,11 @@ class TypeProcessorTest extends FieldProcessorTest
 
         $processor->process([1, 2, 3], $messages);
 
-        $this->assertEquals([new Message(TypeProcessor::MESSAGE, ['expected_type' => 'string', 'actual_type' => 'array'])], $messages);
+        $this->assertEquals([new Message(TypeProcessor::MESSAGE, ['type' => 'string'])], $messages);
 
         $messages  = [];
         $processor->process($this, $messages);
 
-        $this->assertEquals([new Message(TypeProcessor::MESSAGE, ['expected_type' => 'string', 'actual_type' => 'object'])], $messages);
+        $this->assertEquals([new Message(TypeProcessor::MESSAGE, ['type' => 'string'])], $messages);
     }
 }

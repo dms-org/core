@@ -2,6 +2,7 @@
 
 namespace Dms\Core\Form\Field\Processor;
 
+use Dms\Core\Form\Field\Processor\Validator\TypeValidator;
 use Dms\Core\Language\Message;
 use Dms\Core\Model\Type\Builder\Type;
 
@@ -12,7 +13,7 @@ use Dms\Core\Model\Type\Builder\Type;
  */
 class TypeProcessor extends FieldProcessor
 {
-    const MESSAGE = 'validation.type';
+    const MESSAGE = TypeValidator::MESSAGE;
 
     /**
      * @var string
@@ -34,11 +35,11 @@ class TypeProcessor extends FieldProcessor
     protected function doProcess($input, array &$messages)
     {
         if (is_array($input)) {
-            $messages[] = new Message(self::MESSAGE, ['expected_type' => $this->type, 'actual_type' => 'array']);
+            $messages[] = new Message(self::MESSAGE, ['type' => $this->type]);
         }
 
         if (is_object($input) && !method_exists($input, '__toString')) {
-            $messages[] = new Message(self::MESSAGE, ['expected_type' => $this->type, 'actual_type' => 'object']);
+            $messages[] = new Message(self::MESSAGE, ['type' => $this->type]);
         }
 
         if (empty($messages)) {
