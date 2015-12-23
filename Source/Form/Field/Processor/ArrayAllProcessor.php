@@ -65,11 +65,16 @@ class ArrayAllProcessor extends FieldProcessor
 
     protected function doUnprocess($input)
     {
-        foreach ($input as $key => $element) {
-            foreach ($this->elementProcessors as $processor) {
-                $input[$key] = $processor->unprocess($element);
+        /** @var IFieldProcessor[] $reversedProcessors */
+        $reversedProcessors = array_reverse($this->elementProcessors);
+
+        foreach ($input as &$element) {
+            foreach ($reversedProcessors as $processor) {
+                $element = $processor->unprocess($element);
             }
         }
+        unset($element);
+
 
         return $input;
     }

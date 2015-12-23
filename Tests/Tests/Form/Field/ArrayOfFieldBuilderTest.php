@@ -18,6 +18,7 @@ use Dms\Core\Language\Message;
 use Dms\Core\Model\EntityCollection;
 use Dms\Core\Model\Type\Builder\Type;
 use Dms\Core\Tests\Model\Fixtures\TestEntity;
+use Dms\Core\Tests\Model\Object\Fixtures\TestEnum;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>
@@ -150,5 +151,20 @@ class ArrayOfFieldBuilderTest extends FieldBuilderTestBase
                         'property_name' => 'id',
                 ])
         ]);
+    }
+
+    public function testArrayOfDates()
+    {
+        $field = Field::forType()->arrayOf(Field::element()->date('Y-m-d'))->build();
+
+        $this->assertEquals(
+                [new \DateTimeImmutable('2000-01-01'), new \DateTimeImmutable('2001-01-01')],
+                $field->process(['2000-01-01', '2001-01-01'])
+        );
+
+        $this->assertEquals(
+                ['2000-01-01', '2001-01-01'],
+                $field->unprocess( [new \DateTimeImmutable('2000-01-01'), new \DateTimeImmutable('2001-01-01')])
+        );
     }
 }
