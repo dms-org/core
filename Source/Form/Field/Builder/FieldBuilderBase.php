@@ -48,7 +48,7 @@ abstract class FieldBuilderBase
      */
     protected $processors = [];
 
-    protected function __construct(FieldBuilderBase $previous = null)
+    public function __construct(FieldBuilderBase $previous = null)
     {
         if ($previous) {
             $this->name       = $previous->name;
