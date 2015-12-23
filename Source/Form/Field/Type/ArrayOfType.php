@@ -64,10 +64,12 @@ class ArrayOfType extends FieldType
 
         $this->buildArrayLengthValidators($processors);
 
-        $processors[] = new ArrayAllProcessor(
-                $this->elementField->getProcessors(),
-                $this->getElementType()->getProcessedPhpType()
-        );
+        if (count($this->elementField->getProcessors()) > 0) {
+            $processors[] = new ArrayAllProcessor(
+                    $this->elementField->getProcessors(),
+                    $this->getElementType()->getProcessedPhpType()
+            );
+        }
 
         $this->buildArrayElementsValidators($processors);
 
