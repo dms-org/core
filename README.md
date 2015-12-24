@@ -6,6 +6,6 @@ The core package for the DMS system.
 Links
 =====
 
- - [Documentation](./Docs/)
- - [Source](./Source/)
- - [Tests](./Tests/)
+ - [Documentation](./docs/)
+ - [Source](./src/)
+ - [Tests](./tests/)

@@ -13,8 +13,8 @@
     ],
     "autoload": {
         "psr-4": {
-            "Dms\\Core\\": "Source/",
-            "Dms\\Core\\Tests\\": "Tests/Tests"
+            "Dms\\Core\\": "src/",
+            "Dms\\Core\\Tests\\": "tests/Tests"
         }
     },
     "require": {
