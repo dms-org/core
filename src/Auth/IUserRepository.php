@@ -3,6 +3,7 @@
 namespace Dms\Core\Auth;
 
 use Dms\Core\Exception;
+use Dms\Core\Model\ICriteria;
 use Dms\Core\Model\ISpecification;
 use Dms\Core\Persistence\IRepository;
 
