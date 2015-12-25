@@ -17,14 +17,24 @@ use Dms\Core\Util\Debug;
 abstract class Orm implements IOrm
 {
     /**
-     * @var IEntityMapper[]
+     * @var string
      */
-    private $entityMappers = [];
+    private $namespace = '';
 
     /**
      * @var callable[]
      */
-    private $embeddedObjectMapperFactories = [];
+    private $embeddedObjectMapperFactories;
+
+    /**
+     * @var callable[]
+     */
+    private $entityMapperFactories;
+
+    /**
+     * @var IEntityMapper[]
+     */
+    private $entityMappers = [];
 
     /**
      * @var IOrm[]
@@ -52,11 +62,21 @@ abstract class Orm implements IOrm
 
     private function initializeMappers(array $entityMapperFactories, array $embeddedObjectMapperFactories)
     {
-        foreach ($embeddedObjectMapperFactories as $valueObjectType => $factory) {
-            $this->embeddedObjectMapperFactories[$valueObjectType] = $factory;
-        }
+        $this->entityMapperFactories         = $entityMapperFactories;
+        $this->embeddedObjectMapperFactories = $embeddedObjectMapperFactories;
 
-        foreach ($entityMapperFactories as $factory) {
+        $this->initializeEntityMappers();
+    }
+
+    /**
+     * @return void
+     */
+    private function initializeEntityMappers()
+    {
+        $this->entityMappers = [];
+        $this->database      = null;
+
+        foreach ($this->entityMapperFactories as $factory) {
             /** @var IEntityMapper $mapper */
             $mapper                = $factory($this);
             $this->entityMappers[] = $mapper;
@@ -96,6 +116,35 @@ abstract class Orm implements IOrm
         $this->database = new Database($uniqueTables);
     }
 
+    /**
+     * @return string
+     */
+    public function getNamespace()
+    {
+        return $this->namespace;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function inNamespace($prefix)
+    {
+        if ($prefix === '') {
+            return $this;
+        }
+
+        $clone = clone $this;
+
+        foreach ($clone->includedOrms as $key => $orm) {
+            $clone->includedOrms[$key] = $orm->inNamespace($prefix);
+        }
+
+        $clone->namespace = $prefix . $this->namespace;
+
+        $clone->initializeEntityMappers();
+
+        return $clone;
+    }
 
     private function loadMapperTables(IObjectMapper $mapper)
     {

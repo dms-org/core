@@ -106,6 +106,10 @@ class Index
      */
     public function withNamePrefixedBy($prefix)
     {
+        if ($prefix === '') {
+            return $this;
+        }
+
         return new Index(
                 $prefix . $this->name,
                 $this->isUnique,

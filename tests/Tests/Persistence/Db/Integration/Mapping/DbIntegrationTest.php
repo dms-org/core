@@ -5,7 +5,7 @@ namespace Dms\Core\Tests\Persistence\Db\Integration\Mapping;
 use Dms\Core\Persistence\Db\Mapping\IEntityMapper;
 use Dms\Core\Persistence\Db\Mapping\IOrm;
 use Dms\Core\Persistence\Db\Query\IQuery;
-use Dms\Core\Persistence\Db\Query\Query;
+use Dms\Core\Persistence\Db\Schema\Table;
 use Dms\Core\Persistence\DbRepository;
 use Dms\Core\Tests\Persistence\Db\Mock\MockConnection;
 use Dms\Core\Tests\Persistence\Db\Mock\MockDatabase;
@@ -76,8 +76,8 @@ abstract class DbIntegrationTest extends MockDatabaseTestBase
     }
 
     /**
-     * @param MockDatabase  $db
-     * @param IOrm $orm
+     * @param MockDatabase $db
+     * @param IOrm         $orm
      *
      * @return void
      */
@@ -93,23 +93,41 @@ abstract class DbIntegrationTest extends MockDatabaseTestBase
     /**
      * @param string $table
      *
-     * @return \Dms\Core\Persistence\Db\Schema\Table
+     * @return Table
      */
     protected function getSchemaTable($table)
     {
         return $this->db->getTable($table)->getStructure();
     }
 
+    /**
+     * @param array $reasonQueryTypeMap
+     *
+     * @return void
+     */
     protected function assertExecutedQueryTypes(array $reasonQueryTypeMap)
     {
         $this->assertSame(array_values($reasonQueryTypeMap), array_map('get_class', $this->connection->getQueryLog()));
     }
 
+    /**
+     * @param IQuery[] $queries
+     * @param string   $message
+     *
+     * @return void
+     */
     protected function assertExecutedQueries(array $queries, $message = '')
     {
         $this->assertEquals(array_values($queries), $this->connection->getQueryLog(), $message);
     }
 
+    /**
+     * @param int    $number
+     * @param IQuery $query
+     * @param string $message
+     *
+     * @return void
+     */
     protected function assertExecutedQueryNumber($number, IQuery $query, $message = '')
     {
         $this->assertEquals($query, $this->connection->getQueryLog()[$number - 1], $message);

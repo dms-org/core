@@ -34,7 +34,7 @@ class NonIdentifyingToManyRelationTest extends ToManyRelationTestBase
 
     public function testPersistParentWithId()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'parent_entities' => [
                         ['id' => 4]
                 ],
@@ -77,7 +77,7 @@ class NonIdentifyingToManyRelationTest extends ToManyRelationTestBase
     public function testRemove()
     {
         // Removing a parent should set the foreign keys of the children to null
-        $this->db->setData([
+        $this->setDataInDb([
                 'parent_entities' => [
                         ['id' => 1],
                 ],
@@ -119,7 +119,7 @@ class NonIdentifyingToManyRelationTest extends ToManyRelationTestBase
     public function testRemoveBulk()
     {
         // Removing a parent should remove all children with identifying relationships
-        $this->db->setData([
+        $this->setDataInDb([
                 'parent_entities' => [
                         ['id' => 1],
                         ['id' => 2],

@@ -155,7 +155,7 @@ abstract class ToManyRelationTestBase extends DbIntegrationTest
 
     public function testLoad()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'parent_entities' => [
                         ['id' => 1],
                 ],
@@ -178,7 +178,7 @@ abstract class ToManyRelationTestBase extends DbIntegrationTest
 
     public function testBulkLoad()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'parent_entities' => [
                         ['id' => 1],
                         ['id' => 2],

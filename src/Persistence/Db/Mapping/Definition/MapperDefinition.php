@@ -22,21 +22,15 @@ use Dms\Core\Persistence\Db\Mapping\Definition\Relation\RelationUsingDefiner;
 use Dms\Core\Persistence\Db\Mapping\Definition\Relation\ToManyRelationMapping;
 use Dms\Core\Persistence\Db\Mapping\Definition\Relation\ToOneRelationMapping;
 use Dms\Core\Persistence\Db\Mapping\Definition\Subclass\SubClassMappingDefiner;
-use Dms\Core\Persistence\Db\Mapping\EnumMapper;
-use Dms\Core\Persistence\Db\Mapping\IEmbeddedObjectMapper;
 use Dms\Core\Persistence\Db\Mapping\IObjectMapper;
 use Dms\Core\Persistence\Db\Mapping\IOrm;
 use Dms\Core\Persistence\Db\Mapping\Locking\IOptimisticLockingStrategy;
-use Dms\Core\Persistence\Db\Mapping\NullObjectMapper;
-use Dms\Core\Persistence\Db\Mapping\Relation\Embedded\EmbeddedCollectionRelation;
-use Dms\Core\Persistence\Db\Mapping\Relation\Embedded\EmbeddedObjectRelation;
 use Dms\Core\Persistence\Db\Mapping\Relation\IToManyRelation;
 use Dms\Core\Persistence\Db\Mapping\Relation\IToOneRelation;
 use Dms\Core\Persistence\Db\Schema\Column;
 use Dms\Core\Persistence\Db\Schema\ForeignKey;
 use Dms\Core\Persistence\Db\Schema\Index;
 use Dms\Core\Persistence\Db\Schema\Table;
-use Dms\Core\Persistence\Db\Schema\Type\Boolean;
 use Dms\Core\Persistence\Db\Schema\Type\Integer;
 use Dms\Core\Util\Debug;
 
@@ -543,7 +537,7 @@ class MapperDefinition extends MapperDefinitionBase
     public function index($indexName)
     {
         return new IndexColumnsDefiner(function (array $columnNames) use ($indexName) {
-            $this->indexes[] = new Index($indexName, false, $columnNames);
+            $this->indexes[] = new Index($this->orm->getNamespace() . $indexName, false, $columnNames);
         });
     }
 
@@ -557,7 +551,7 @@ class MapperDefinition extends MapperDefinitionBase
     public function unique($indexName)
     {
         return new IndexColumnsDefiner(function (array $columnNames) use ($indexName) {
-            $this->indexes[] = new Index($indexName, true, $columnNames);
+            $this->indexes[] = new Index($this->orm->getNamespace() . $indexName, true, $columnNames);
         });
     }
 
@@ -578,7 +572,7 @@ class MapperDefinition extends MapperDefinitionBase
                 $onDeleteMode
         ) use ($foreignKeyName) {
             $this->foreignKeys[] = new ForeignKey(
-                    $foreignKeyName,
+                    $this->orm->getNamespace() . $foreignKeyName,
                     $localColumnNames,
                     $referencedTable,
                     $referencedColumns,
@@ -654,7 +648,12 @@ class MapperDefinition extends MapperDefinitionBase
             }
         }
 
-        $table = new Table($tableName, $this->columns, $this->indexes, $this->foreignKeys);
+        $table = new Table(
+                $this->orm->getNamespace() . $tableName,
+                $this->columns,
+                $this->indexes,
+                $this->foreignKeys
+        );
 
         $relationsFactory = function (Table $table, IObjectMapper $parentMapper) {
             $objectType = $parentMapper->getObjectType();
@@ -673,7 +672,9 @@ class MapperDefinition extends MapperDefinitionBase
             $foreignKeys = [];
 
             foreach ($this->foreignKeyFactories as $factory) {
-                $foreignKeys[] = $factory($table);
+                /** @var ForeignKey $foreignKey */
+                $foreignKey    = $factory($table);
+                $foreignKeys[] = $foreignKey->withNamePrefixedBy($this->orm->getNamespace());
             }
 
             return $foreignKeys;

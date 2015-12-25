@@ -59,7 +59,7 @@ class NestedValueObjectTest extends DbIntegrationTest
 
     public function testLoadPartial()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'parents' => [
                         ['id' => 1, 'one_two_three_value' => 'foobar']
                 ]

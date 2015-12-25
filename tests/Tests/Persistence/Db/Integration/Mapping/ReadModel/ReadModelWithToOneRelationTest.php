@@ -25,7 +25,7 @@ class ReadModelWithToOneRelationTest extends ReadModelRepositoryTest
 
     public function testLoad()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'parent_entities' => [
                         ['id' => 1],
                         ['id' => 2],
@@ -47,7 +47,7 @@ class ReadModelWithToOneRelationTest extends ReadModelRepositoryTest
 
     public function testLoadPartial()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'parent_entities' => [
                         ['id' => 1],
                 ],

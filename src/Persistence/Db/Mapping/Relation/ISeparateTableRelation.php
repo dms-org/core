@@ -5,8 +5,6 @@ namespace Dms\Core\Persistence\Db\Mapping\Relation;
 use Dms\Core\Persistence\Db\Mapping\ParentMapBase;
 use Dms\Core\Persistence\Db\Query\Expression\Expr;
 use Dms\Core\Persistence\Db\Query\Select;
-use Dms\Core\Persistence\Db\Row;
-use Dms\Core\Persistence\Db\Schema\Table;
 
 /**
  * The relation interface for relations that map to objects stored in another table.
@@ -21,7 +19,7 @@ interface ISeparateTableRelation extends IRelation
      * NOTE: The table from which the subselect is from must be the related primary table.
      *
      * @param ParentMapBase $map
-     * @param string &$parentIdColumnName This is an out parameter
+     * @param string        &$parentIdColumnName This is an out parameter
      *
      * @return Select
      */

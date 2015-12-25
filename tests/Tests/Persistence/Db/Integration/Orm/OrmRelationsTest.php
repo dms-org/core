@@ -30,37 +30,42 @@ class OrmRelationsTest extends OrmTestBase
         return new ManyToManyOrm();
     }
 
-    public function testBuildsExpectedDatabase()
+    public function testBuildsExpectedDatabase($namespace = '')
     {
         $this->assertEquals(new Database([
-                new Table('ones', [
+                new Table($namespace . 'ones', [
                         new Column('id', Integer::normal()->autoIncrement(), true),
                 ]),
-                new Table('anothers', [
+                new Table($namespace . 'anothers', [
                         new Column('id', Integer::normal()->autoIncrement(), true),
                 ]),
-                new Table('one_anothers', [
+                new Table($namespace . 'one_anothers', [
                         new Column('one_id', Integer::normal()),
                         new Column('another_id', Integer::normal()),
                 ], [], [
                         new ForeignKey(
-                                'fk_one_anothers_one_id_ones',
+                                "fk_{$namespace}one_anothers_one_id_{$namespace}ones",
                                 ['one_id'],
-                                'ones',
+                                $namespace . 'ones',
                                 ['id'],
                                 ForeignKeyMode::CASCADE,
                                 ForeignKeyMode::CASCADE
                         ),
                         new ForeignKey(
-                                'fk_one_anothers_another_id_anothers',
+                                "fk_{$namespace}one_anothers_another_id_{$namespace}anothers",
                                 ['another_id'],
-                                'anothers',
+                                $namespace . 'anothers',
                                 ['id'],
                                 ForeignKeyMode::CASCADE,
                                 ForeignKeyMode::CASCADE
                         ),
                 ]),
-        ]), $this->orm->getDatabase());
+        ]), $this->orm->inNamespace($namespace)->getDatabase());
+    }
+
+    public function testStructureWithNamespace()
+    {
+        $this->testBuildsExpectedDatabase('namespace_');
     }
 
     public function testLoadingEntityMapper()

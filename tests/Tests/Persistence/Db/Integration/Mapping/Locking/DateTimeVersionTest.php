@@ -69,7 +69,7 @@ class DateTimeVersionTest extends DbIntegrationTest
 
     public function testLoad()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'data' => [
                         ['id' => 1, 'version' => '2000-01-01 12:00:00'],
                         ['id' => 2, 'version' => '2001-01-01 12:00:00'],
@@ -88,7 +88,7 @@ class DateTimeVersionTest extends DbIntegrationTest
     {
         $this->mockedCurrentTime = new \DateTimeImmutable('2010-01-01 12:00:00');
 
-        $this->db->setData([
+        $this->setDataInDb([
                 'data' => [
                         ['id' => 1, 'version' => '2000-01-01 12:00:00'],
                         ['id' => 2, 'version' => '2001-01-01 12:00:00'],
@@ -141,7 +141,7 @@ class DateTimeVersionTest extends DbIntegrationTest
 
     public function testOptimisticConcurrencyExceptionIsThrownWhenVersionOutOfSync()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'data' => [
                         ['id' => 1, 'version' => '2000-01-01 12:00:00'],
                 ]
@@ -161,7 +161,7 @@ class DateTimeVersionTest extends DbIntegrationTest
 
     public function testOptimisticConcurrencyExceptionIsThrownWhenNoMatchingRow()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'data' => [
 
                 ]
@@ -181,7 +181,7 @@ class DateTimeVersionTest extends DbIntegrationTest
 
     public function testRemove()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'data' => [
                         ['id' => 1, 'version' => '2010-01-01 12:00:00'],
                         ['id' => 2, 'version' => '2010-01-01 12:00:01'],

@@ -69,7 +69,7 @@ class MultiVersionTest extends DbIntegrationTest
 
     public function testLoad()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'data' => [
                         ['id' => 1, 'int_version' => 1, 'date_version' => '2000-01-01 12:00:00'],
                         ['id' => 2, 'int_version' => 1, 'date_version' => '2001-01-01 12:00:00'],
@@ -88,7 +88,7 @@ class MultiVersionTest extends DbIntegrationTest
     {
         $this->mockedCurrentTime = new \DateTimeImmutable('2010-01-01 12:00:00');
 
-        $this->db->setData([
+        $this->setDataInDb([
                 'data' => [
                         ['id' => 1, 'int_version' => 1, 'date_version' => '2000-01-01 12:00:00'],
                         ['id' => 2, 'int_version' => 5, 'date_version' => '2001-01-01 12:00:00'],
@@ -146,7 +146,7 @@ class MultiVersionTest extends DbIntegrationTest
 
     public function testOptimisticConcurrencyExceptionIsThrownWhenVersionOutOfSync()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'data' => [
                         ['id' => 1, 'int_version' => 1, 'date_version' => '2000-01-01 12:00:00'],
                 ]
@@ -179,7 +179,7 @@ class MultiVersionTest extends DbIntegrationTest
 
     public function testOptimisticConcurrencyExceptionIsThrownWhenNoMatchingRow()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'data' => [
 
                 ]
@@ -199,7 +199,7 @@ class MultiVersionTest extends DbIntegrationTest
 
     public function testRemove()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'data' => [
                         ['id' => 1, 'int_version' => 2, 'date_version' => '2010-01-01 12:00:00'],
                         ['id' => 2, 'int_version' => 6, 'date_version' => '2010-01-01 12:00:00'],

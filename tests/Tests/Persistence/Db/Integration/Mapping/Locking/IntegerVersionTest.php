@@ -40,7 +40,7 @@ class IntegerVersionTest extends DbIntegrationTest
 
     public function testLoad()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'data' => [
                         ['id' => 1, 'version' => 1],
                         ['id' => 2, 'version' => 10],
@@ -57,7 +57,7 @@ class IntegerVersionTest extends DbIntegrationTest
 
     public function testPersistExistingIncrementsVersion()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'data' => [
                         ['id' => 1, 'version' => 1],
                         ['id' => 2, 'version' => 10],
@@ -105,7 +105,7 @@ class IntegerVersionTest extends DbIntegrationTest
 
     public function testOptimisticConcurrencyExceptionIsThrownWhenVersionOutOfSync()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'data' => [
                         ['id' => 1, 'version' => 2],
                 ]
@@ -125,7 +125,7 @@ class IntegerVersionTest extends DbIntegrationTest
 
     public function testOptimisticConcurrencyExceptionIsThrownWhenNoMatchingRow()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'data' => [
 
                 ]
@@ -145,7 +145,7 @@ class IntegerVersionTest extends DbIntegrationTest
 
     public function testRemove()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'data' => [
                         ['id' => 1, 'version' => 1],
                         ['id' => 2, 'version' => 10],

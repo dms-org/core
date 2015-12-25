@@ -295,6 +295,10 @@ class Table
      */
     public function withNameAndConstraintsPrefixedBy($prefix)
     {
+        if ($prefix === '') {
+            return $this;
+        }
+
         $indexes = [];
         foreach ($this->indexes as $index) {
             $indexes[] = $index->withNamePrefixedBy($prefix);

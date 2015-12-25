@@ -47,7 +47,7 @@ class VersionedToManyRelationTest extends DbIntegrationTest
 
     public function testLoad()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'parents'  => [
                         ['id' => 1],
                 ],
@@ -69,7 +69,7 @@ class VersionedToManyRelationTest extends DbIntegrationTest
 
     public function testPersistExistingIncrementsVersion()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'parents'  => [
                         ['id' => 1],
                 ],
@@ -137,7 +137,7 @@ class VersionedToManyRelationTest extends DbIntegrationTest
 
     public function testOptimisticConcurrencyExceptionIsThrownWhenVersionOutOfSync()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'parents'  => [
                         ['id' => 1],
                 ],
@@ -162,7 +162,7 @@ class VersionedToManyRelationTest extends DbIntegrationTest
 
     public function testOptimisticConcurrencyExceptionIsThrownWhenNoMatchingRow()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'parents'  => [
                         ['id' => 1],
                 ],
@@ -187,7 +187,7 @@ class VersionedToManyRelationTest extends DbIntegrationTest
 
     public function testRemove()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'parents'  => [
                         ['id' => 1],
                 ],

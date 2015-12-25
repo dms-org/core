@@ -81,7 +81,7 @@ class TypesTest extends DbIntegrationTest
 
     public function testLoadPartial()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'types' => [
                         [
                                 'id'       => 1,

@@ -132,7 +132,7 @@ class ClassTableInheritanceTest extends DbIntegrationTest
 
     public function testPersistExisting()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'parent_entities' => [
                         ['id' => 1, 'base_prop' => 'base1-parent'],
                         ['id' => 2, 'base_prop' => 'base1'],
@@ -180,7 +180,7 @@ class ClassTableInheritanceTest extends DbIntegrationTest
 
     public function testLoadEntities()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'parent_entities' => [
                         ['id' => 1, 'base_prop' => 'base1-parent'],
                         ['id' => 2, 'base_prop' => 'base1'],
@@ -209,7 +209,7 @@ class ClassTableInheritanceTest extends DbIntegrationTest
 
     public function testRemoveEntities()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'parent_entities' => [
                         ['id' => 1, 'base_prop' => 'base1-parent'],
                         ['id' => 2, 'base_prop' => 'base1'],

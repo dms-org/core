@@ -16,7 +16,7 @@ abstract class EntityMapper extends EntityMapperBase
     /**
      * EntityMapper constructor.
      *
-     * @param IOrm   $orm
+     * @param IOrm        $orm
      * @param string|null $tableName
      */
     public function __construct(IOrm $orm, $tableName = null)

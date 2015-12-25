@@ -25,7 +25,7 @@ class ReadModelWithValueObjectCollectionTest extends ReadModelRepositoryTest
 
     public function testLoad()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'entities' => [
                         ['id' => 1]
                 ],

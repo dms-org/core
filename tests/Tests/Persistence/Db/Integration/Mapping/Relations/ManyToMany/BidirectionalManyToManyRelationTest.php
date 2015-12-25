@@ -177,7 +177,7 @@ class BidirectionalManyToManyRelationTest extends DbIntegrationTest
 
     public function testPersistExisting()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'ones'         => [
                         ['id' => 1],
                 ],
@@ -229,7 +229,7 @@ class BidirectionalManyToManyRelationTest extends DbIntegrationTest
 
     public function testLoadWithDuplicates()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'ones'         => [
                         ['id' => 1]
                 ],
@@ -265,7 +265,7 @@ class BidirectionalManyToManyRelationTest extends DbIntegrationTest
      */
     public function testLoadWithSharedChildren()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'ones'         => [
                         ['id' => 1],
                         ['id' => 2],
@@ -353,7 +353,7 @@ class BidirectionalManyToManyRelationTest extends DbIntegrationTest
      */
     public function testRemove()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'ones'         => [
                         ['id' => 1],
                         ['id' => 2],
@@ -401,7 +401,7 @@ class BidirectionalManyToManyRelationTest extends DbIntegrationTest
 
     public function testLoadCriteriaWithRecursiveFlatten()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'ones'         => [
                         ['id' => 1],
                         ['id' => 2],

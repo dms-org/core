@@ -12,7 +12,6 @@ use Dms\Core\Tests\Persistence\Db\Integration\Orm\Fixtures\Relations\ManyToManyO
  */
 class IncludedOrmRelationsTest extends OrmRelationsTest
 {
-
     /**
      * @return Orm
      */

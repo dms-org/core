@@ -35,7 +35,7 @@ class EntityWithAccessorTest extends DbIntegrationTest
 
     public function testLoad()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'entities' => [
                         ['id' => 1, 'value' => 'abc']
                 ]

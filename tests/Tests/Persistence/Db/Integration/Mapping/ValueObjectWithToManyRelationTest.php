@@ -85,7 +85,7 @@ class ValueObjectWithToManyRelationTest extends DbIntegrationTest
 
     public function testLoad()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'entities' => [
                         ['id' => 1]
                 ],
@@ -107,7 +107,7 @@ class ValueObjectWithToManyRelationTest extends DbIntegrationTest
 
     public function testRemove()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'entities' => [
                         ['id' => 1]
                 ],

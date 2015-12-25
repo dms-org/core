@@ -26,7 +26,7 @@ class ReadModelPropertiesTest extends ReadModelRepositoryTest
 
     public function testLoad()
     {
-        $this->db->setData([
+        $this->setDataInDb([
             'types' => [
                     [
                             'id'       => 1,

@@ -217,6 +217,10 @@ class ForeignKey
      */
     public function withNamePrefixedBy($prefix)
     {
+        if ($prefix === '') {
+            return $this;
+        }
+
         if (strpos($this->name, self::CONVENTION_PREFIX) === 0) {
             $name = self::CONVENTION_PREFIX . $prefix . substr($this->name, strlen(self::CONVENTION_PREFIX));
         } else {

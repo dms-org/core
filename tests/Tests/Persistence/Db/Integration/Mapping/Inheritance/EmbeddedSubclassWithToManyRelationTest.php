@@ -87,7 +87,7 @@ class EmbeddedSubclassWithToManyRelationTest extends DbIntegrationTest
 
     public function testLoad()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'entities' => [
                         ['id' => 1, 'type' => 'subclass'],
                 ],
@@ -109,7 +109,7 @@ class EmbeddedSubclassWithToManyRelationTest extends DbIntegrationTest
 
     public function testRemove()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'entities' => [
                         ['id' => 1, 'type' => 'subclass'],
                 ],

@@ -4,7 +4,6 @@ namespace Dms\Core\Persistence\Db\Mapping;
 
 use Dms\Core\Exception\InvalidArgumentException;
 use Dms\Core\Exception\InvalidOperationException;
-use Dms\Core\Model\ITypedCollection;
 use Dms\Core\Model\ITypedObject;
 use Dms\Core\Model\Object\TypedObject;
 use Dms\Core\Persistence\Db\LoadingContext;

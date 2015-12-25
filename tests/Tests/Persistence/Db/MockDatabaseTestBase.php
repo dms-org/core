@@ -24,22 +24,36 @@ class MockDatabaseTestBase extends CmsTestCase
     }
 
     /**
+     * @return string
+     */
+    protected function getTableAndConstraintNamespace()
+    {
+        return '';
+    }
+
+    /**
      * @param array[] $expectedStructure
      *
      * @return void
      */
     protected function assertDatabaseStructureSameAs(array $expectedStructure)
     {
-        $actual = [];
+        $namespace = $this->getTableAndConstraintNamespace();
+        $expected  = [];
+        $actual    = [];
 
         foreach ($this->db->getTables() as $table) {
             $actual[$table->getName()] = array_values($table->getStructure()->getColumns());
         }
 
-        ksort($expectedStructure);
+        foreach ($expectedStructure as $tableName => $columns) {
+            $expected[$namespace . $tableName] = $columns;
+        }
+
+        ksort($expected);
         ksort($actual);
 
-        $this->assertEquals($expectedStructure, $actual);
+        $this->assertEquals($expected, $actual);
     }
 
     /**
@@ -49,16 +63,40 @@ class MockDatabaseTestBase extends CmsTestCase
      */
     protected function assertDatabaseDataSameAs(array $tableRowSets)
     {
+        $namespace         = $this->getTableAndConstraintNamespace();
+        $prefixedTableData = [];
+
         // Keys dont matter
-        $dbData = array_map('array_values', $this->db->getData());
+        $dbData       = array_map('array_values', $this->db->getData());
         $tableRowSets = array_map('array_values', $tableRowSets);
+
+        foreach ($tableRowSets as $tableName => $tableData) {
+            $prefixedTableData[$namespace . $tableName] = $tableData;
+        }
 
         // Order does not matter
         ksort($dbData);
-        ksort($tableRowSets);
+        ksort($prefixedTableData);
 
-        // Assert equals first nicer error output
-        $this->assertEquals($tableRowSets, $dbData);
-        $this->assertSame($tableRowSets, $dbData);
+        // Assert equals first for nicer error output
+        $this->assertEquals($prefixedTableData, $dbData);
+        $this->assertSame($prefixedTableData, $dbData);
+    }
+
+    /**
+     * @param array $tableRowSetsMap
+     *
+     * @return void
+     */
+    public function setDataInDb(array $tableRowSetsMap)
+    {
+        $namespace         = $this->getTableAndConstraintNamespace();
+        $prefixedTableData = [];
+
+        foreach ($tableRowSetsMap as $tableName => $tableData) {
+            $prefixedTableData[$namespace . $tableName] = $tableData;
+        }
+
+        $this->db->setData($prefixedTableData);
     }
 }

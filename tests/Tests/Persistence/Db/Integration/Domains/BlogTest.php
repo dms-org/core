@@ -109,11 +109,13 @@ class BlogTest extends DbIntegrationTest
 
     public function testCreatesCorrectForeignKeys()
     {
+        $namespace = $this->getTableAndConstraintNamespace();
+
         $this->assertEquals([
                 new ForeignKey(
-                        'fk_aliases_user_id_users',
+                        "fk_{$namespace}aliases_user_id_{$namespace}users",
                         ['user_id'],
-                        'users',
+                        $namespace . 'users',
                         ['id'],
                         ForeignKeyMode::CASCADE,
                         ForeignKeyMode::CASCADE
@@ -122,9 +124,9 @@ class BlogTest extends DbIntegrationTest
 
         $this->assertEquals([
                 new ForeignKey(
-                        'fk_posts_author_id_users',
+                        "fk_{$namespace}posts_author_id_{$namespace}users",
                         ['author_id'],
-                        'users',
+                        $namespace . 'users',
                         ['id'],
                         ForeignKeyMode::CASCADE,
                         ForeignKeyMode::SET_NULL
@@ -133,17 +135,17 @@ class BlogTest extends DbIntegrationTest
 
         $this->assertEquals([
                 new ForeignKey(
-                        'fk_comments_author_id_users',
+                        "fk_{$namespace}comments_author_id_{$namespace}users",
                         ['author_id'],
-                        'users',
+                        $namespace . 'users',
                         ['id'],
                         ForeignKeyMode::CASCADE,
                         ForeignKeyMode::SET_NULL
                 ),
                 new ForeignKey(
-                        'fk_comments_post_id_posts',
+                        "fk_{$namespace}comments_post_id_{$namespace}posts",
                         ['post_id'],
-                        'posts',
+                        $namespace . 'posts',
                         ['id'],
                         ForeignKeyMode::CASCADE,
                         ForeignKeyMode::CASCADE
@@ -152,17 +154,17 @@ class BlogTest extends DbIntegrationTest
 
         $this->assertEquals([
                 new ForeignKey(
-                        'fk_user_friends_user_id_users',
+                        "fk_{$namespace}user_friends_user_id_{$namespace}users",
                         ['user_id'],
-                        'users',
+                        $namespace . 'users',
                         ['id'],
                         ForeignKeyMode::CASCADE,
                         ForeignKeyMode::CASCADE
                 ),
                 new ForeignKey(
-                        'fk_user_friends_friend_id_users',
+                        "fk_{$namespace}user_friends_friend_id_{$namespace}users",
                         ['friend_id'],
-                        'users',
+                        $namespace . 'users',
                         ['id'],
                         ForeignKeyMode::CASCADE,
                         ForeignKeyMode::CASCADE
@@ -216,7 +218,7 @@ class BlogTest extends DbIntegrationTest
      */
     protected function setUpDummyUserInDb()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'users' => [$this->dummyUserDbData(1)]
         ]);
 
@@ -345,7 +347,7 @@ class BlogTest extends DbIntegrationTest
 
     public function testLoadUser()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'users' => [
                         $this->dummyUserDbData(1)
                 ]
@@ -358,7 +360,7 @@ class BlogTest extends DbIntegrationTest
 
     public function testLoadUserWithAlias()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'aliases' => [
                         ['id' => 1, 'user_id' => 1, 'first_name' => 'Curry', 'last_name' => 'Weaver'],
                 ],
@@ -376,7 +378,7 @@ class BlogTest extends DbIntegrationTest
 
     public function testLoadUserWithFriends()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'user_friends' => [
                         ['user_id' => 1, 'friend_id' => 2],
                         ['user_id' => 2, 'friend_id' => 1],
@@ -396,7 +398,7 @@ class BlogTest extends DbIntegrationTest
 
     public function testLoadPost()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'aliases'      => [],
                 'posts'        => [
                         ['id' => 2, 'author_id' => 1, 'content' => 'Hello World!']
@@ -417,7 +419,7 @@ class BlogTest extends DbIntegrationTest
 
     public function testLoadPostAndComment()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'posts'    => [
                         ['id' => 3, 'author_id' => 1, 'content' => 'Hello World!'],
                 ],
@@ -447,7 +449,7 @@ class BlogTest extends DbIntegrationTest
 
     public function testPersistExistingUser()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'users' => [
                         $this->dummyUserDbData(1)
                 ]
@@ -474,7 +476,7 @@ class BlogTest extends DbIntegrationTest
 
     public function testPersistExistingUserWithAlias()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'aliases' => [
                         ['id' => 1, 'user_id' => 1, 'first_name' => 'Curry', 'last_name' => 'Weaver'],
                 ],
@@ -504,7 +506,7 @@ class BlogTest extends DbIntegrationTest
 
     public function testPersistExistingUserWithFriends()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'user_friends' => [
                         ['user_id' => 1, 'friend_id' => 2],
                         ['user_id' => 2, 'friend_id' => 1],
@@ -537,7 +539,7 @@ class BlogTest extends DbIntegrationTest
 
     public function testPersistExistingPost()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'posts' => [
                         ['id' => 1, 'author_id' => 1, 'content' => 'Hello World!']
                 ],
@@ -567,7 +569,7 @@ class BlogTest extends DbIntegrationTest
 
     public function testUpdatePostsAuthorThroughUsers()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'posts' => [
                         ['id' => 1, 'author_id' => 1, 'content' => 'Hello World!']
                 ],
@@ -604,7 +606,7 @@ class BlogTest extends DbIntegrationTest
 
     public function testUpdatePostAuthorThroughAuthorId()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'posts' => [
                         ['id' => 1, 'author_id' => 1, 'content' => 'Hello World!']
                 ],
@@ -636,7 +638,7 @@ class BlogTest extends DbIntegrationTest
 
     public function testPersistExistingPostAndComment()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'posts'    => [
                         ['id' => 1, 'author_id' => 1, 'content' => 'Hello World!'],
                 ],
@@ -680,7 +682,7 @@ class BlogTest extends DbIntegrationTest
 
     public function testRemoveUser()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'users' => [
                         $this->dummyUserDbData(1)
                 ]
@@ -699,7 +701,7 @@ class BlogTest extends DbIntegrationTest
 
     public function testRemoveUserWithAlias()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'aliases' => [
                         ['id' => 1, 'user_id' => 1, 'first_name' => 'Curry', 'last_name' => 'Weaver'],
                 ],
@@ -721,7 +723,7 @@ class BlogTest extends DbIntegrationTest
 
     public function testRemoveUserWithFriends()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'user_friends' => [
                         ['user_id' => 1, 'friend_id' => 2],
                         ['user_id' => 2, 'friend_id' => 1],
@@ -747,7 +749,7 @@ class BlogTest extends DbIntegrationTest
 
     public function testRemovePost()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'aliases'      => [],
                 'posts'        => [
                         ['id' => 2, 'author_id' => 1, 'content' => 'Hello World!']
@@ -774,7 +776,7 @@ class BlogTest extends DbIntegrationTest
 
     public function testRemovePostsAuthor()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'aliases'      => [],
                 'posts'        => [
                         ['id' => 2, 'author_id' => 1, 'content' => 'Hello World!']
@@ -801,7 +803,7 @@ class BlogTest extends DbIntegrationTest
 
     public function testRemovePostAndComment()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'posts'    => [
                         ['id' => 3, 'author_id' => 1, 'content' => 'Hello World!'],
                 ],
@@ -828,7 +830,7 @@ class BlogTest extends DbIntegrationTest
 
     public function testLoadCriteriaWithNestedAggregates()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'posts'    => [
                         ['id' => 1, 'author_id' => 1, 'content' => 'Hello World!'],
                         ['id' => 2, 'author_id' => 1, 'content' => 'Other World!'],
@@ -881,7 +883,7 @@ class BlogTest extends DbIntegrationTest
 
     public function testLoadThisLoadsObjectInstances()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'users'    => [
                         $this->dummyUserDbData(1),
                         $this->dummyUserDbData(2),
@@ -902,7 +904,7 @@ class BlogTest extends DbIntegrationTest
 
     public function testFilterByThisExpression()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'users'    => [
                         $this->dummyUserDbData(1),
                         $this->dummyUserDbData(2),

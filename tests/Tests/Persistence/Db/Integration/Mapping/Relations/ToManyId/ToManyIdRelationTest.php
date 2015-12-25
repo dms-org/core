@@ -88,7 +88,7 @@ class ToManyIdRelationTest extends DbIntegrationTest
 
     public function testPersistWithChildren()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'child_entities' => [
                         ['id' => 10, 'parent_id' => null, 'val' => 1],
                         ['id' => 20, 'parent_id' => null, 'val' => 2],
@@ -122,7 +122,7 @@ class ToManyIdRelationTest extends DbIntegrationTest
 
     public function testBulkPersist()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'child_entities' => [
                         ['id' => 1, 'parent_id' => null, 'val' => 10],
                         ['id' => 2, 'parent_id' => null, 'val' => 20],
@@ -176,7 +176,7 @@ class ToManyIdRelationTest extends DbIntegrationTest
 
     public function testLoad()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'parent_entities' => [
                         ['id' => 1],
                 ],
@@ -205,7 +205,7 @@ class ToManyIdRelationTest extends DbIntegrationTest
 
     public function testBulkLoad()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'parent_entities' => [
                         ['id' => 1],
                         ['id' => 2],
@@ -244,7 +244,7 @@ class ToManyIdRelationTest extends DbIntegrationTest
 
     public function testPersistExisting()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'parent_entities' => [
                         ['id' => 1],
                         ['id' => 4],
@@ -284,7 +284,7 @@ class ToManyIdRelationTest extends DbIntegrationTest
     public function testRemove()
     {
         // Removing a parent should remove all children with identifying relationships
-        $this->db->setData([
+        $this->setDataInDb([
                 'parent_entities' => [
                         ['id' => 1],
                 ],
@@ -306,7 +306,7 @@ class ToManyIdRelationTest extends DbIntegrationTest
     public function testRemoveBulk()
     {
         // Removing a parent should remove all children with identifying relationships
-        $this->db->setData([
+        $this->setDataInDb([
                 'parent_entities' => [
                         ['id' => 1],
                         ['id' => 2],
@@ -333,7 +333,7 @@ class ToManyIdRelationTest extends DbIntegrationTest
 
     public function testLoadCriteria()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'parent_entities' => [
                         ['id' => 1],
                 ],
@@ -359,7 +359,7 @@ class ToManyIdRelationTest extends DbIntegrationTest
 
     public function testLoadCriteriaWithLoadObjectReference()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'parent_entities' => [
                         ['id' => 1],
                 ],

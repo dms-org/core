@@ -26,7 +26,7 @@ class ReadModelWithEmbeddedGenericReadModelTest extends ReadModelRepositoryTest
 
     public function testLoad()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'entities' => [
                         ['id' => 1, 'title' => 'One'],
                         ['id' => 2, 'title' => 'Two'],

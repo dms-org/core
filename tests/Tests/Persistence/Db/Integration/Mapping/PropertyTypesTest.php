@@ -35,7 +35,7 @@ class PropertyTypesTest extends DbIntegrationTest
 
     public function testLoad()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'property_types' => [
                         ['id' => 1, 'value' => 'aBc', 'value_upper' => 'ABC', 'value_lower' => 'abc']
                 ]
@@ -47,7 +47,7 @@ class PropertyTypesTest extends DbIntegrationTest
 
     public function testLoadPartial()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'property_types' => [
                         ['id' => 1, 'value' => 'aBc', 'value_upper' => 'ABC', 'value_lower' => 'abc']
                 ]

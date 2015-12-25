@@ -26,7 +26,7 @@ class ReadModelWithSubEntityReadModelTest extends ReadModelRepositoryTest
 
     public function testLoad()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'parent_entities' => [
                         ['id' => 1],
                         ['id' => 2],

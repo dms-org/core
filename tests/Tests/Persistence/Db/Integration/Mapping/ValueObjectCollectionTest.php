@@ -94,7 +94,7 @@ class ValueObjectCollectionTest extends DbIntegrationTest
 
     public function testPersistExisting()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'entities' => [
                         ['id' => 1]
                 ],
@@ -138,7 +138,7 @@ class ValueObjectCollectionTest extends DbIntegrationTest
 
     public function testLoadEntities()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'entities' => [
                         ['id' => 1],
                         ['id' => 2],
@@ -164,7 +164,7 @@ class ValueObjectCollectionTest extends DbIntegrationTest
 
     public function testRemove()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'entities' => [
                         ['id' => 1],
                         ['id' => 2],
@@ -191,7 +191,7 @@ class ValueObjectCollectionTest extends DbIntegrationTest
 
     public function testRemoveBulk()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'entities' => [
                         ['id' => 1],
                         ['id' => 2],
@@ -216,7 +216,7 @@ class ValueObjectCollectionTest extends DbIntegrationTest
 
     public function testLoadPartial()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'entities' => [
                         ['id' => 1],
                 ],
@@ -244,7 +244,7 @@ class ValueObjectCollectionTest extends DbIntegrationTest
 
     public function testCriteriaWithCountAggregate()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'entities' => [
                         ['id' => 1],
                         ['id' => 2],

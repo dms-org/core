@@ -33,7 +33,7 @@ class IdentifyingToManyRelationTest extends ToManyRelationTestBase
 
     public function testPersistParentWithId()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'parent_entities' => [
                         ['id' => 4]
                 ],
@@ -74,7 +74,7 @@ class IdentifyingToManyRelationTest extends ToManyRelationTestBase
     public function testRemove()
     {
         // Removing a parent should remove all children with identifying relationships
-        $this->db->setData([
+        $this->setDataInDb([
                 'parent_entities' => [
                         ['id' => 1],
                 ],
@@ -115,7 +115,7 @@ class IdentifyingToManyRelationTest extends ToManyRelationTestBase
     public function testRemoveBulk()
     {
         // Removing a parent should remove all children with identifying relationships
-        $this->db->setData([
+        $this->setDataInDb([
                 'parent_entities' => [
                         ['id' => 1],
                         ['id' => 2],
@@ -162,7 +162,7 @@ class IdentifyingToManyRelationTest extends ToManyRelationTestBase
 
     public function testLoadCriteria()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'parent_entities' => [
                         ['id' => 1],
                 ],

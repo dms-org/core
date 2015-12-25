@@ -100,7 +100,7 @@ class PolymorphicValueObjectTest extends DbIntegrationTest
 
     public function testLoadNullValueObject()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'entities' => [
                         [
                                 'id'                 => 1,
@@ -129,7 +129,7 @@ class PolymorphicValueObjectTest extends DbIntegrationTest
 
     public function testLoadFullValueObject()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'entities' => [
                         [
                                 'id'                 => 1,
@@ -159,7 +159,7 @@ class PolymorphicValueObjectTest extends DbIntegrationTest
 
     public function testRemove()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'entities' => [
                         [
                                 'id'                 => 1,

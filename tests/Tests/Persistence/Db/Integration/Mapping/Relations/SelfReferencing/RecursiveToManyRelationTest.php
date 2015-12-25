@@ -141,7 +141,7 @@ class RecursiveToManyRelationTest extends DbIntegrationTest
 
     public function testPersistDeepExisting()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'recursive_entities' => [
                         ['id' => 1, 'parent_id' => null],
                 ],
@@ -175,7 +175,7 @@ class RecursiveToManyRelationTest extends DbIntegrationTest
 
     public function testLoad()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'recursive_entities' => [
                         ['id' => 1, 'parent_id' => null],
                         ['id' => 2, 'parent_id' => 1],
@@ -213,7 +213,7 @@ class RecursiveToManyRelationTest extends DbIntegrationTest
 
     public function testLoadRecursive()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'recursive_entities' => [
                         ['id' => 1, 'parent_id' => 2],
                         ['id' => 2, 'parent_id' => 3],
@@ -252,7 +252,7 @@ class RecursiveToManyRelationTest extends DbIntegrationTest
 
     public function testRemove()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'recursive_entities' => [
                         ['id' => 1, 'parent_id' => null],
                         ['id' => 2, 'parent_id' => 1],
@@ -280,7 +280,7 @@ class RecursiveToManyRelationTest extends DbIntegrationTest
 
     public function testDeleteBulk()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'recursive_entities' => [
                         ['id' => 1, 'parent_id' => null],
                         ['id' => 2, 'parent_id' => 1],
@@ -307,7 +307,7 @@ class RecursiveToManyRelationTest extends DbIntegrationTest
 
     public function testRemoveRecursive()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'recursive_entities' => [
                         ['id' => 1, 'parent_id' => 1],
                 ],
@@ -328,7 +328,7 @@ class RecursiveToManyRelationTest extends DbIntegrationTest
 
     public function testRemoveRecursiveMultiLevel()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'recursive_entities' => [
                         ['id' => 1, 'parent_id' => 2],
                         ['id' => 2, 'parent_id' => 3],
@@ -356,7 +356,7 @@ class RecursiveToManyRelationTest extends DbIntegrationTest
 
     public function testLoadCriteriaWithRecursiveFlatten()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'recursive_entities' => [
                         ['id' => 1, 'parent_id' => 2],
                         ['id' => 2, 'parent_id' => 1],

@@ -49,7 +49,7 @@ class PolymorphicToOneRelationTest extends DbIntegrationTest
     public function testLoad()
     {
 
-        $this->db->setData([
+        $this->setDataInDb([
                 'parent_entities'         => [
                         ['id' => 1],
                         ['id' => 2],
@@ -76,7 +76,7 @@ class PolymorphicToOneRelationTest extends DbIntegrationTest
     public function testRemoveBulk()
     {
         // Removing a parent should remove all children with identifying relationships
-        $this->db->setData([
+        $this->setDataInDb([
                 'parent_entities'         => [
                         ['id' => 1],
                         ['id' => 2],

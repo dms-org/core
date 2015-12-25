@@ -95,6 +95,7 @@ class ManyToManyRelation extends ToManyRelationBase
             $relatedForeignKeyColumnName
     ) {
         $mapper                       = $reference->getMapper();
+        $orm                          = $mapper->getDefinition()->getOrm();
         $this->parentTableName        = $parentTableName;
         $this->parentTablePrimaryKey  = $parentTablePrimaryKey;
         $this->parentForeignKeyColumn = new Column($parentForeignKeyColumnName, Integer::normal());
@@ -114,7 +115,7 @@ class ManyToManyRelation extends ToManyRelationBase
 
             $joinTable = $inverseRelation->joinTable;
         } else {
-            $joinTable = $this->buildJoinTable($joinTableName);
+            $joinTable = $this->buildJoinTable($joinTableName)->withNameAndConstraintsPrefixedBy($orm->getNamespace());
         }
 
         parent::__construct($idString, $reference, null, self::DEPENDENT_CHILDREN, [
@@ -130,6 +131,7 @@ class ManyToManyRelation extends ToManyRelationBase
     public function withReference(IToManyRelationReference $reference)
     {
         return new self(
+                $this->idString,
                 $reference,
                 $this->joinTable->getName(),
                 $this->parentTableName,

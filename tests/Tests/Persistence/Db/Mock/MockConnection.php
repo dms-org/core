@@ -6,6 +6,7 @@ use Dms\Core\Exception\NotImplementedException;
 use Dms\Core\Persistence\Db\Connection\Connection;
 use Dms\Core\Persistence\Db\Query\BulkUpdate;
 use Dms\Core\Persistence\Db\Query\Delete;
+use Dms\Core\Persistence\Db\Query\IQuery;
 use Dms\Core\Persistence\Db\Query\ResequenceOrderIndexColumn;
 use Dms\Core\Persistence\Db\Query\Select;
 use Dms\Core\Persistence\Db\Query\Update;
@@ -17,7 +18,7 @@ use Dms\Core\Persistence\Db\Query\Upsert;
 class MockConnection extends Connection
 {
     /**
-     * @var array
+     * @var IQuery[]
      */
     protected $queryLog = [];
 
@@ -57,7 +58,7 @@ class MockConnection extends Connection
     }
 
     /**
-     * @return array
+     * @return IQuery[]
      */
     public function getQueryLog()
     {

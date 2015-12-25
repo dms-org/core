@@ -317,7 +317,7 @@ class DbRepositoryTest extends DbIntegrationTest
 
     public function testContains()
     {
-        $this->db->setData([
+        $this->setDataInDb([
             'data' => [
                     ['id' => 1],
                     ['id' => 2],
@@ -337,7 +337,7 @@ class DbRepositoryTest extends DbIntegrationTest
 
     public function testContainsAll()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'data' => [
                         ['id' => 1],
                         ['id' => 2],

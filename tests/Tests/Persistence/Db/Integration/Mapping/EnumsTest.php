@@ -109,7 +109,7 @@ class EnumsTest extends DbIntegrationTest
 
     public function testLoadPartial()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'data' => [
                         [
                                 'id'              => 1,

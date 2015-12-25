@@ -35,7 +35,7 @@ class ConvertedPropertyTest extends DbIntegrationTest
 
     public function testLoad()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'converted_properties' => [
                         ['id' => 1, 'varchar' => 'integer:-100']
                 ]

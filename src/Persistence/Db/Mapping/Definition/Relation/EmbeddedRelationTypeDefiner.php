@@ -139,7 +139,7 @@ class EmbeddedRelationTypeDefiner
                                 $idString,
                                 $mapperLoader($parentMapper),
                                 $parentTable->getName(),
-                                $tableName,
+                                $this->orm->getNamespace() . $tableName,
                                 $parentTable->getPrimaryKeyColumn()->withName($primaryKeyName),
                                 new Column($foreignKeyName, Integer::normal()),
                                 $parentTable->getPrimaryKeyColumn()

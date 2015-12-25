@@ -93,7 +93,7 @@ class ToOneIdRelationTest extends DbIntegrationTest
 
     public function testPersist()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'sub_entities' => [
                         ['id' => 10, 'parent_id' => null, 'val' => 123]
                 ]
@@ -120,7 +120,7 @@ class ToOneIdRelationTest extends DbIntegrationTest
 
     public function testBulkPersist()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'sub_entities' => [
                         ['id' => 5, 'parent_id' => null, 'val' => 1],
                         ['id' => 6, 'parent_id' => null, 'val' => 1],
@@ -158,7 +158,7 @@ class ToOneIdRelationTest extends DbIntegrationTest
 
     public function testLoad()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'parent_entities' => [
                         ['id' => 1],
                 ],
@@ -187,7 +187,7 @@ class ToOneIdRelationTest extends DbIntegrationTest
 
     public function testBulkLoad()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'parent_entities' => [
                         ['id' => 1],
                         ['id' => 2],
@@ -218,7 +218,7 @@ class ToOneIdRelationTest extends DbIntegrationTest
 
     public function testPersistParentWithId()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'parent_entities' => [
                         ['id' => 4],
                 ],
@@ -256,7 +256,7 @@ class ToOneIdRelationTest extends DbIntegrationTest
     public function testRemove()
     {
         // Removing a parent should set the foreign keys of the children to null
-        $this->db->setData([
+        $this->setDataInDb([
                 'parent_entities' => [
                         ['id' => 1],
                 ],
@@ -277,7 +277,7 @@ class ToOneIdRelationTest extends DbIntegrationTest
 
     public function testRemoveBulk()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'parent_entities' => [
                         ['id' => 1],
                         ['id' => 2],
@@ -306,7 +306,7 @@ class ToOneIdRelationTest extends DbIntegrationTest
 
     public function testLoadCriteria()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'parent_entities' => [
                         ['id' => 1],
                 ],

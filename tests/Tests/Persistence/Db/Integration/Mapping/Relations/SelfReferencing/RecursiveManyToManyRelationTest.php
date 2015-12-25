@@ -151,7 +151,7 @@ class RecursiveManyToManyRelationTest extends DbIntegrationTest
      */
     public function testLoadWithSharedChildren()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'recursive_entities' => [
                         ['id' => 1],
                         ['id' => 2],
@@ -234,7 +234,7 @@ class RecursiveManyToManyRelationTest extends DbIntegrationTest
 
     public function testRemove()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'recursive_entities' => [
                         ['id' => 1],
                         ['id' => 2],
@@ -283,7 +283,7 @@ class RecursiveManyToManyRelationTest extends DbIntegrationTest
 
     public function testLoadCriteriaWithRecursiveFlatten()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'recursive_entities' => [
                         ['id' => 1],
                         ['id' => 2],

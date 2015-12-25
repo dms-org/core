@@ -91,7 +91,7 @@ class GroupedOrderIndexTest extends DbIntegrationTest
 
     public function testPersistExisting()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'data' => [
                         ['id' => 1, 'group' => 'group-1', 'order_index' => 1],
                         ['id' => 2, 'group' => 'group-1', 'order_index' => 2],
@@ -129,7 +129,7 @@ class GroupedOrderIndexTest extends DbIntegrationTest
 
     public function testPersistNewToExistingGroups()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'data' => [
                         ['id' => 1, 'group' => 'group-1', 'order_index' => 1],
                         ['id' => 2, 'group' => 'group-1', 'order_index' => 2],
@@ -185,7 +185,7 @@ class GroupedOrderIndexTest extends DbIntegrationTest
 
     public function testRemoveResequencesOrderIndex()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'data' => [
                         ['id' => 1, 'group' => 'group-1', 'order_index' => 1],
                         ['id' => 2, 'group' => 'group-1', 'order_index' => 2],
@@ -230,7 +230,7 @@ class GroupedOrderIndexTest extends DbIntegrationTest
 
     public function testReorderRowBackwards()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'data' => [
                         ['id' => 1, 'group' => 'group-1', 'order_index' => 1],
                         ['id' => 2, 'group' => 'group-1', 'order_index' => 2],
@@ -270,7 +270,7 @@ class GroupedOrderIndexTest extends DbIntegrationTest
 
     public function testReorderRowForwards()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'data' => [
                         ['id' => 1, 'group' => 'group-1', 'order_index' => 1],
                         ['id' => 2, 'group' => 'group-1', 'order_index' => 2],

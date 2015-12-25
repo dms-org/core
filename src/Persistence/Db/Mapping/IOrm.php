@@ -111,4 +111,23 @@ interface IOrm extends IRelationPropertyIdTypeProvider
      * @return IEntitySetProvider
      */
     public function getEntityDataSourceProvider(IConnection $connection);
+
+    /**
+     * Gets the current namespace of the orm.
+     *
+     * This is the prefix of table / constraint names.
+     *
+     * @return string
+     */
+    public function getNamespace();
+
+    /**
+     * Returns an equivalent orm with the table names and constraint names
+     * prefixed by the supplied string.
+     *
+     * @param string $prefix
+     *
+     * @return IOrm
+     */
+    public function inNamespace($prefix);
 }

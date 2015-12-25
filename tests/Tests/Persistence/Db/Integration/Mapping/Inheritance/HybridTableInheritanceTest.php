@@ -106,7 +106,7 @@ class HybridTableInheritanceTest extends DbIntegrationTest
 
     public function testLoadEntities()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'parent_entities' => [
                         [
                                 'id'             => 1,
@@ -152,7 +152,7 @@ class HybridTableInheritanceTest extends DbIntegrationTest
 
     public function testRemoveEntities()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'parent_entities' => [
                         [
                                 'id'             => 1,

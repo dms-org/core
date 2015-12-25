@@ -108,7 +108,7 @@ class SingleTableInheritanceTest extends DbIntegrationTest
 
     public function testLoadEntities()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'entities' => [
                         [
                                 'id'              => 1,
@@ -159,7 +159,7 @@ class SingleTableInheritanceTest extends DbIntegrationTest
 
     public function testRemoveEntities()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'entities' => [
                         [
                                 'id'              => 1,

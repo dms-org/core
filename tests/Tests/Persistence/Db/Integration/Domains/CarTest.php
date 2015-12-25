@@ -89,7 +89,7 @@ class CarTest extends DbIntegrationTest
 
     public function testPersistExisting()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'cars' => [
                         ['id' => 1, 'brand' => 'Mitsubishi', 'type' => 'sedan'],
                         ['id' => 2, 'brand' => 'Toyota', 'type' => 'family'],
@@ -121,7 +121,7 @@ class CarTest extends DbIntegrationTest
 
     public function testLoadAll()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'cars' => [
                         ['id' => 1, 'brand' => 'Mitsubishi', 'type' => 'sedan'],
                         ['id' => 2, 'brand' => 'Toyota', 'type' => 'family'],
@@ -144,7 +144,7 @@ class CarTest extends DbIntegrationTest
 
     public function testRemove()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'cars' => [
                         ['id' => 1, 'brand' => 'Mitsubishi', 'type' => 'sedan'],
                         ['id' => 2, 'brand' => 'Toyota', 'type' => 'family'],

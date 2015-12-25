@@ -132,7 +132,7 @@ class PlayerClassTableInheritanceTest extends DbIntegrationTest
 
     public function testLoadAll()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'players' => [
                         ['id' => 1, 'name' => 'Joe'],
                         ['id' => 2, 'name' => 'Jack'],
@@ -163,7 +163,7 @@ class PlayerClassTableInheritanceTest extends DbIntegrationTest
 
     public function testRemove()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'players' => [
                         ['id' => 1, 'name' => 'Joe'],
                         ['id' => 2, 'name' => 'Jack'],

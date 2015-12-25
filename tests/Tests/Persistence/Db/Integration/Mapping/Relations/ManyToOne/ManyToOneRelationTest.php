@@ -163,7 +163,7 @@ class ManyToOneRelationTest extends DbIntegrationTest
 
     public function testLoad()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'parent_entities' => [
                         ['id' => 1, 'child_id' => 1]
                 ],
@@ -182,7 +182,7 @@ class ManyToOneRelationTest extends DbIntegrationTest
 
     public function testBulkLoad()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'parent_entities' => [
                         ['id' => 1, 'child_id' => 10],
                         ['id' => 2, 'child_id' => 11],
@@ -217,7 +217,7 @@ class ManyToOneRelationTest extends DbIntegrationTest
     {
         // A many-to-one relation should not affect the child
         // entities if a relationship is removed
-        $this->db->setData([
+        $this->setDataInDb([
                 'parent_entities' => [
                         ['id' => 4, 'child_id' => 1]
                 ],
@@ -249,7 +249,7 @@ class ManyToOneRelationTest extends DbIntegrationTest
     public function testRemove()
     {
         // A many-to-one relation should not remove the child if a parent is removed
-        $this->db->setData([
+        $this->setDataInDb([
                 'parent_entities' => [
                         ['id' => 1, 'child_id' => 10],
                 ],
@@ -271,7 +271,7 @@ class ManyToOneRelationTest extends DbIntegrationTest
     public function testRemoveBulk()
     {
         // A many-to-one relation should not remove the child if a parent is removed
-        $this->db->setData([
+        $this->setDataInDb([
                 'parent_entities' => [
                         ['id' => 1, 'child_id' => 10],
                         ['id' => 2, 'child_id' => 11],
@@ -300,7 +300,7 @@ class ManyToOneRelationTest extends DbIntegrationTest
 
     public function testLoadCriteria()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'parent_entities' => [
                         ['id' => 1, 'child_id' => 10],
                 ],

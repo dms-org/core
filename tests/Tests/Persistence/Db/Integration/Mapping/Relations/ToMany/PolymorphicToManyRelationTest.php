@@ -47,7 +47,7 @@ class PolymorphicToManyRelationTest extends DbIntegrationTest
 
     public function testLoad()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'parent_entities'  => [
                         ['id' => 1]
                 ],
@@ -70,7 +70,7 @@ class PolymorphicToManyRelationTest extends DbIntegrationTest
 
     public function testRemoveBulk()
     {
-        $this->db->setData([
+        $this->setDataInDb([
                 'parent_entities'  => [
                         ['id' => 1],
                         ['id' => 2],
