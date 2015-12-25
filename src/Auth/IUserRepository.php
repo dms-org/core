@@ -3,17 +3,57 @@
 namespace Dms\Core\Auth;
 
 use Dms\Core\Exception;
-use Dms\Core\Model\EntityNotFoundException;
+use Dms\Core\Model\ISpecification;
 use Dms\Core\Persistence\IRepository;
 
 interface IUserRepository extends IRepository
 {
     /**
-     * Finds a user entity by the supplied email address.
+     * {@inheritDoc}
      *
-     * @param string $email
-     * @return IUser
-     * @throws EntityNotFoundException
+     * @return IUser[]
      */
-    public function findByEmailAddress($email);
+    public function getAll();
+
+    /**
+     * {@inheritDoc}
+     *
+     * @return IUser
+     */
+    public function get($id);
+
+    /**
+     * {@inheritDoc}
+     *
+     * @return IUser[]
+     */
+    public function getAllById(array $ids);
+
+    /**
+     * {@inheritDoc}
+     *
+     * @return IUser|null
+     */
+    public function tryGet($id);
+
+    /**
+     * {@inheritDoc}
+     *
+     * @return IUser[]
+     */
+    public function tryGetAll(array $ids);
+
+    /**
+     * {@inheritDoc}
+     *
+     * @return IUser[]
+     */
+    public function matching(ICriteria $criteria);
+
+    /**
+     * {@inheritDoc}
+     *
+     * @return IUser[]
+     */
+    public function satisfying(ISpecification $specification);
 }

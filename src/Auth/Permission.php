@@ -7,6 +7,8 @@ use Dms\Core\Model\Object\ValueObject;
 
 class Permission extends ValueObject implements IPermission
 {
+    const NAME = 'name';
+
     /**
      * @var Permission[]
      */
