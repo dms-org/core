@@ -2,9 +2,11 @@
 
 namespace Dms\Core\Persistence;
 
+use Dms\Core\Model\ICriteria;
 use Dms\Core\Model\IEntity;
 use Dms\Core\Model\IEntitySet;
 use Dms\Core\Exception;
+use Dms\Core\Model\ISpecification;
 
 /**
  * The API for a repository.
@@ -22,11 +24,6 @@ interface IRepository extends IEntitySet
      * @return string
      */
     public function getEntityType();
-    
-    /**
-     * {@inheritDoc}
-     */
-    public function getAll();
 
     /**
      * {@inheritDoc}
@@ -41,13 +38,18 @@ interface IRepository extends IEntitySet
     /**
      * {@inheritDoc}
      */
+    public function getAll();
+
+    /**
+     * {@inheritDoc}
+     */
     public function get($id);
 
     /**
      * {@inheritDoc}
      */
     public function getAllById(array $ids);
-    
+
     /**
      * {@inheritDoc}
      */
@@ -57,6 +59,16 @@ interface IRepository extends IEntitySet
      * {@inheritDoc}
      */
     public function tryGetAll(array $ids);
+
+    /**
+     * {@inheritDoc}
+     */
+    public function matching(ICriteria $criteria);
+
+    /**
+     * {@inheritDoc}
+     */
+    public function satisfying(ISpecification $specification);
     
     /**
      * Saves the supplied entity to the underlying data source.
