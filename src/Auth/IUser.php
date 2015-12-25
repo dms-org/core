@@ -29,6 +29,15 @@ interface IUser extends IEntity
     public function getPassword();
 
     /**
+     * Sets the user's hashed password.
+     *
+     * @param IHashedPassword $password
+     *
+     * @return void
+     */
+    public function setPassword(IHashedPassword $password);
+
+    /**
      * Returns whether the user is a super user.
      *
      * @return boolean
