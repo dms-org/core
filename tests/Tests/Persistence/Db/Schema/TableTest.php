@@ -66,6 +66,52 @@ class TableTest extends CmsTestCase
         $this->assertEquals(['foo_id_fk' => $fk->withPrefix('foo_')], $prefixed->getForeignKeys());
     }
 
+    public function testColumnsWithPrefix()
+    {
+        $table = new Table(
+                'table',
+                [$id = $this->idColumn(), $data = new Column('data', new Varchar(255))],
+                [$index = new Index('data_index', false, ['data'])],
+                [$fk = new ForeignKey('id_fk', ['id'], 'other_table', ['fk'], ForeignKeyMode::CASCADE, ForeignKeyMode::CASCADE)]
+        );
+
+        $this->assertSame(['data_index' => $index], $table->getIndexes());
+        $this->assertSame(['id_fk' => $fk], $table->getForeignKeys());
+
+        $prefixed = $table->withColumnsPrefixedBy('foo_');
+
+        $this->assertEquals(['foo_id' => $id->withPrefix('foo_'), 'foo_data' => $data->withPrefix('foo_')], $prefixed->getColumns());
+        $this->assertSame('table', $prefixed->getName());
+        $this->assertSame('foo_id', $prefixed->getPrimaryKeyColumnName());
+        $this->assertFalse($prefixed->hasColumn('data'));
+
+        $this->assertEquals(['data_index' => $index->withColumnsPrefixedBy('foo_')], $prefixed->getIndexes());
+        $this->assertEquals(['id_fk' => $fk->withLocalColumnsPrefixedBy('foo_')], $prefixed->getForeignKeys());
+    }
+
+    public function testNameAndConstraintsPrefix()
+    {
+        $table = new Table(
+                'table',
+                [$id = $this->idColumn(), $data = new Column('data', new Varchar(255))],
+                [$index = new Index('data_index', false, ['data'])],
+                [$fk = new ForeignKey('id_fk', ['id'], 'other_table', ['fk'], ForeignKeyMode::CASCADE, ForeignKeyMode::CASCADE)]
+        );
+
+        $this->assertSame(['data_index' => $index], $table->getIndexes());
+        $this->assertSame(['id_fk' => $fk], $table->getForeignKeys());
+
+        $prefixed = $table->withNameAndConstraintsPrefixedBy('foo_');
+
+        $this->assertEquals(['id' => $id, 'data' => $data], $prefixed->getColumns());
+        $this->assertSame('foo_table', $prefixed->getName());
+        $this->assertSame('id', $prefixed->getPrimaryKeyColumnName());
+        $this->assertTrue($prefixed->hasColumn('data'));
+
+        $this->assertEquals(['foo_data_index' => $index->withNamePrefixedBy('foo_')], $prefixed->getIndexes());
+        $this->assertEquals(['foo_id_fk' => $fk->withNamePrefixedBy('foo_')], $prefixed->getForeignKeys());
+    }
+
     public function testInvalidIndexColumn()
     {
         $this->setExpectedException(InvalidArgumentException::class);

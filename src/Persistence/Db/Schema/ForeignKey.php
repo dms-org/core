@@ -182,12 +182,41 @@ class ForeignKey
      */
     public function withPrefix($prefix)
     {
+        return $this
+                ->withLocalColumnsPrefixedBy($prefix)
+                ->withNamePrefixedBy($prefix);
+    }
+
+    /**
+     * @param string $prefix
+     *
+     * @return Index
+     */
+    public function withLocalColumnsPrefixedBy($prefix)
+    {
         $prefixedLocalColumns = [];
 
         foreach ($this->localColumnNames as $column) {
             $prefixedLocalColumns[] = $prefix . $column;
         }
 
+        return new ForeignKey(
+                $this->name,
+                $prefixedLocalColumns,
+                $this->referencedTableName,
+                $this->referencedColumnNames,
+                $this->onDeleteMode,
+                $this->onUpdateMode
+        );
+    }
+
+    /**
+     * @param string $prefix
+     *
+     * @return Index
+     */
+    public function withNamePrefixedBy($prefix)
+    {
         if (strpos($this->name, self::CONVENTION_PREFIX) === 0) {
             $name = self::CONVENTION_PREFIX . $prefix . substr($this->name, strlen(self::CONVENTION_PREFIX));
         } else {
@@ -196,7 +225,7 @@ class ForeignKey
 
         return new ForeignKey(
                 $name,
-                $prefixedLocalColumns,
+                $this->localColumnNames,
                 $this->referencedTableName,
                 $this->referencedColumnNames,
                 $this->onDeleteMode,

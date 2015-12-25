@@ -101,7 +101,7 @@ class Table
         foreach ($columnNames as $columnName) {
             if (!$this->hasColumn($columnName)) {
                 throw InvalidArgumentException::format(
-                        'Invalid column name in %s: expecting one of (%s), %s given',
+                        'Invalid column name in %s: expecting one of (%s), \'%s\' given',
                         $itemName, Debug::formatValues($this->getColumnNames()), $columnName
                 );
             }
@@ -281,6 +281,47 @@ class Table
      */
     public function withPrefix($prefix)
     {
+        return $this
+                ->withColumnsPrefixedBy($prefix)
+                ->withNameAndConstraintsPrefixedBy($prefix);
+    }
+
+    /**
+     * Returns a table with the name and constraints prefixed.
+     *
+     * @param string $prefix
+     *
+     * @return Table
+     */
+    public function withNameAndConstraintsPrefixedBy($prefix)
+    {
+        $indexes = [];
+        foreach ($this->indexes as $index) {
+            $indexes[] = $index->withNamePrefixedBy($prefix);
+        }
+
+        $foreignKeys = [];
+        foreach ($this->foreignKeys as $foreignKey) {
+            $foreignKeys[] = $foreignKey->withNamePrefixedBy($prefix);
+        }
+
+        return new self(
+                $prefix . $this->name,
+                $this->columns,
+                $indexes,
+                $foreignKeys
+        );
+    }
+
+    /**
+     * Returns a table with the name and columns prefixed.
+     *
+     * @param string $prefix
+     *
+     * @return Table
+     */
+    public function withColumnsPrefixedBy($prefix)
+    {
         $columns = [];
         foreach ($this->columns as $column) {
             $columns[] = $column->withPrefix($prefix);
@@ -288,16 +329,17 @@ class Table
 
         $indexes = [];
         foreach ($this->indexes as $index) {
-            $indexes[] = $index->withPrefix($prefix);
+            $indexes[] = $index->withColumnsPrefixedBy($prefix);
         }
 
         $foreignKeys = [];
         foreach ($this->foreignKeys as $foreignKey) {
-            $foreignKeys[] = $foreignKey->withPrefix($prefix);
+            $foreignKeys[] = $foreignKey->withLocalColumnsPrefixedBy($prefix);
         }
 
+
         return new self(
-                $prefix . $this->name,
+                $this->name,
                 $columns,
                 $indexes,
                 $foreignKeys

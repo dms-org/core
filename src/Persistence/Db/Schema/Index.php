@@ -74,6 +74,18 @@ class Index
      */
     public function withPrefix($prefix)
     {
+        return $this
+                ->withColumnsPrefixedBy($prefix)
+                ->withNamePrefixedBy($prefix);
+    }
+
+    /**
+     * @param string $prefix
+     *
+     * @return Index
+     */
+    public function withColumnsPrefixedBy($prefix)
+    {
         $prefixedColumns = [];
 
         foreach ($this->columnNames as $name) {
@@ -81,9 +93,23 @@ class Index
         }
 
         return new Index(
-                $prefix . $this->name,
+                $this->name,
                 $this->isUnique,
                 $prefixedColumns
+        );
+    }
+
+    /**
+     * @param string $prefix
+     *
+     * @return Index
+     */
+    public function withNamePrefixedBy($prefix)
+    {
+        return new Index(
+                $prefix . $this->name,
+                $this->isUnique,
+                $this->columnNames
         );
     }
 }

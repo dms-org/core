@@ -228,7 +228,7 @@ class OrderIndexPropertyLoaderHook extends PersistHook
     public function withColumnNamesPrefixedBy($prefix)
     {
         $clone                 = clone $this;
-        $clone->table          = $clone->table->withPrefix($prefix);
+        $clone->table          = $clone->table->withColumnsPrefixedBy($prefix);
         $clone->orderColumn    = $clone->orderColumn->withPrefix($prefix);
         $clone->groupingColumn = $clone->groupingColumn
                 ? $clone->groupingColumn->withPrefix($prefix)

@@ -265,8 +265,8 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
             return $this;
         }
 
-        $table       = $this->table->withPrefix($prefix);
-        $entityTable = $this->entityTable->withPrefix($prefix);
+        $table       = $this->table->withColumnsPrefixedBy($prefix);
+        $entityTable = $this->entityTable->withColumnsPrefixedBy($prefix);
 
         $propertyColumnNameMap = [];
         foreach ($this->propertyColumnNameMap as $property => $column) {
@@ -326,7 +326,7 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
             $foreignKeys = [];
             /** @var ForeignKey $foreignKey */
             foreach ($foreignKeyFactory($parentTable) as $foreignKey) {
-                $foreignKeys[] = $foreignKey->withPrefix($prefix);
+                $foreignKeys[] = $foreignKey->withLocalColumnsPrefixedBy($prefix);
             }
 
             return $foreignKeys;
