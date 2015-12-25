@@ -57,8 +57,6 @@ class OneToManyRelationDefiner extends RelationTypeDefinerBase
      * For a one-to-many relation the bidirectional relation should be
      * many-to-one.
      *
-     * NOTE: This is only used for object relations. Not id relations.
-     *
      * @param string $propertyOnRelatedEntity
      *
      * @return static
