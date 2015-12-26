@@ -15,7 +15,7 @@ class EntityFieldBuilderBase extends FieldBuilderBase
     /**
      * Labels the entity options with values of the supplied member expression.
      *
-     * @param callable $memberExpression
+     * @param string $memberExpression
      *
      * @return static
      */

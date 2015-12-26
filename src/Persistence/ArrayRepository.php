@@ -4,7 +4,6 @@ namespace Dms\Core\Persistence;
 
 use Dms\Core\Exception;
 use Dms\Core\Model\EntityCollection;
-use Dms\Core\Model\EntityNotFoundException;
 use Dms\Core\Model\ICriteria;
 use Dms\Core\Model\IEntity;
 use Dms\Core\Model\ISpecification;

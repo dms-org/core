@@ -238,11 +238,11 @@ class Field extends FieldBuilderBase
      *
      * @param IEntitySet $entities
      *
-     * @return ArrayOfFieldBuilder
+     * @return EntityArrayFieldBuilder
      */
     public function entityIdsFrom(IEntitySet $entities)
     {
-        return new ArrayOfFieldBuilder($this
+        return new EntityArrayFieldBuilder($this
                 ->type(new ArrayOfEntityIdsType(
                         $entities,
                         Field::element()->entityIdFrom($entities)->required()->build()
@@ -271,8 +271,6 @@ class Field extends FieldBuilderBase
 
     /**
      * Validates the input as an array of elements.
-     * The supplied callback will be passed an instance of FieldBuilder
-     * to define the array element validation.
      *
      * @param FieldBuilderBase $elementField
      *
@@ -285,8 +283,6 @@ class Field extends FieldBuilderBase
 
     /**
      * Validates the input as an array of elements.
-     * The supplied callback will be passed an instance of FieldBuilder
-     * to define the array element validation.
      *
      * @param IField $elementField
      *

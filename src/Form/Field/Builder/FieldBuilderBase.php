@@ -228,6 +228,16 @@ abstract class FieldBuilderBase
     }
 
     /**
+     * Sets that the field should show all the options on the screen.
+     *
+     * @return static
+     */
+    public function showAllOptions()
+    {
+        return $this->attr(FieldType::ATTR_SHOW_ALL_OPTIONS, true);
+    }
+
+    /**
      * Validates the input according to the supplied callback.
      *
      * Example with message id:

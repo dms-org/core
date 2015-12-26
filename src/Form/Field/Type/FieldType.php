@@ -27,16 +27,18 @@ abstract class FieldType implements IFieldType
     const ATTR_DEFAULT = 'default';
     const ATTR_INITIAL_VALUE = 'initial-value';
     const ATTR_OPTIONS = 'options';
+    const ATTR_SHOW_ALL_OPTIONS = 'show-all-options';
 
     /**
      * @var array
      */
     protected $attributes = [
-            self::ATTR_REQUIRED      => null,
-            self::ATTR_READ_ONLY     => null,
-            self::ATTR_DEFAULT       => null,
-            self::ATTR_INITIAL_VALUE => null,
-            self::ATTR_OPTIONS       => null,
+            self::ATTR_REQUIRED         => null,
+            self::ATTR_READ_ONLY        => null,
+            self::ATTR_DEFAULT          => null,
+            self::ATTR_INITIAL_VALUE    => null,
+            self::ATTR_OPTIONS          => null,
+            self::ATTR_SHOW_ALL_OPTIONS => null,
     ];
 
     /**
@@ -127,8 +129,8 @@ abstract class FieldType implements IFieldType
 
         if ($this->get(self::ATTR_READ_ONLY)) {
             $this->processors = [
-                new NotSuppliedValidator(Type::mixed()),
-                new DefaultValueProcessor($this->processedType, $this->get(self::ATTR_INITIAL_VALUE))
+                    new NotSuppliedValidator(Type::mixed()),
+                    new DefaultValueProcessor($this->processedType, $this->get(self::ATTR_INITIAL_VALUE))
             ];
         }
     }
