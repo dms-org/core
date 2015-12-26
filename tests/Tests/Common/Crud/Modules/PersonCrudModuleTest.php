@@ -122,8 +122,8 @@ class PersonCrudModuleTest extends CrudModuleTest
 
         $this->assertInstanceOf(IReorderAction::class, $reorderAction);
         $this->assertEquals([
-                Permission::named(IReadModule::VIEW_PERMISSION),
-                Permission::named(ICrudModule::EDIT_PERMISSION),
+                Permission::named(IReadModule::VIEW_PERMISSION)->inNamespace($this->module->getName()),
+                Permission::named(ICrudModule::EDIT_PERMISSION)->inNamespace($this->module->getName()),
         ], array_values($reorderAction->getRequiredPermissions()));
 
         $reorderAction->run([
@@ -299,7 +299,10 @@ class PersonCrudModuleTest extends CrudModuleTest
         $this->assertSame('swap-names', $action->getName());
         $this->assertSame(Person::class, $action->getObjectType());
         $this->assertSame(null, $action->getReturnTypeClass());
-        $this->assertEquals([Permission::named(ICrudModule::EDIT_PERMISSION)], array_values($action->getRequiredPermissions()));
+        $this->assertEquals(
+                [Permission::named(ICrudModule::EDIT_PERMISSION)->inNamespace($this->module->getName())],
+                array_values($action->getRequiredPermissions())
+        );
         $this->assertEquals(
                 $this->dataSource->matching(
                         $this->dataSource->criteria()->whereInstanceOf(Adult::class)

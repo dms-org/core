@@ -77,7 +77,10 @@ abstract class ReadModuleTest extends ModuleTestBase
     {
         $permissions = $this->module->getSummaryTableAction()->getRequiredPermissions();
 
-        $this->assertContains(Permission::named(IReadModule::VIEW_PERMISSION), $permissions);
+        $this->assertContains(
+                Permission::named(IReadModule::VIEW_PERMISSION)->inNamespace($this->module->getName()),
+                $permissions
+        );
     }
 
     public function testSummaryTableAction()

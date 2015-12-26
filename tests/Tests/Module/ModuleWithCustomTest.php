@@ -93,4 +93,9 @@ class ModuleWithCustomTest extends ModuleTestBase
         $this->assertCount(1, $this->module->getCharts());
         $this->assertSame($this->mockChart, $this->module->getChart('mock-chart'));
     }
+
+    public function testPackageName()
+    {
+        // Not needed
+    }
 }

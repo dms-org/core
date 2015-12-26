@@ -4,8 +4,10 @@ namespace Dms\Core\Module\Action;
 
 use Dms\Core\Auth\IAuthSystem;
 use Dms\Core\Auth\IPermission;
+use Dms\Core\Auth\Permission;
 use Dms\Core\Auth\UserForbiddenException;
 use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Exception\InvalidOperationException;
 use Dms\Core\Form;
 use Dms\Core\Module\IAction;
 use Dms\Core\Module\IActionHandler;
@@ -22,6 +24,11 @@ abstract class Action implements IAction
      * @var string
      */
     private $name;
+
+    /**
+     * @var string|null
+     */
+    private $permissionNamespace;
 
     /**
      * @var IAuthSystem
@@ -55,10 +62,10 @@ abstract class Action implements IAction
     {
         InvalidArgumentException::verifyAllInstanceOf(__METHOD__, 'requiredPermissions', $requiredPermissions, IPermission::class);
 
-        $this->name                = $name;
-        $this->auth                = $auth;
-        $this->handler             = $handler;
-        $this->returnType          = $handler->getReturnTypeClass();
+        $this->name       = $name;
+        $this->auth       = $auth;
+        $this->handler    = $handler;
+        $this->returnType = $handler->getReturnTypeClass();
 
         foreach ($requiredPermissions as $requiredPermission) {
             $this->requiredPermissions[$requiredPermission->getName()] = $requiredPermission;
@@ -71,6 +78,30 @@ abstract class Action implements IAction
     final public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getPermissionNamespace()
+    {
+        return $this->permissionNamespace;
+    }
+
+    /**
+     * @param string $permissionNamespace
+     *
+     * @throws InvalidOperationException
+     */
+    public function addPermissionNamespace($permissionNamespace)
+    {
+        if ($this->permissionNamespace) {
+            $this->permissionNamespace = $permissionNamespace . '.' . $this->permissionNamespace;
+        } else {
+            $this->permissionNamespace = $permissionNamespace;
+        }
+
+        $this->requiredPermissions = Permission::namespaceAll($this->requiredPermissions, $permissionNamespace);
     }
 
     /**

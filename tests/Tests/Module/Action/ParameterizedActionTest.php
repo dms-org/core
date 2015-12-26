@@ -2,14 +2,15 @@
 
 namespace Dms\Core\Tests\Module\Action;
 
+use Dms\Core\Auth\Permission;
 use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Exception\TypeMismatchException;
 use Dms\Core\Form\InvalidFormSubmissionException;
 use Dms\Core\Model\Object\ArrayDataObject;
 use Dms\Core\Module\Action\ParameterizedAction;
 use Dms\Core\Module\Handler\CustomParameterizedActionHandler;
 use Dms\Core\Module\Mapping\ArrayDataObjectFormMapping;
 use Dms\Core\Module\Mapping\FormObjectMapping;
-use Dms\Core\Exception\TypeMismatchException;
 use Dms\Core\Module\Mapping\StagedFormObjectMapping;
 use Dms\Core\Tests\Form\Object\Fixtures\ArrayOfInts;
 use Dms\Core\Tests\Form\Object\Fixtures\CreatePageForm;
@@ -29,7 +30,8 @@ class ParameterizedActionTest extends ActionTest
                 $this->mockAuth(),
                 [],
                 $mapping = new FormObjectMapping(ArrayOfInts::withLength(2)),
-                $handler = new CustomParameterizedActionHandler(function (ArrayOfInts $form) { })
+                $handler = new CustomParameterizedActionHandler(function (ArrayOfInts $form) {
+                })
         );
 
         $this->assertSame('name', $action->getName());
@@ -44,16 +46,46 @@ class ParameterizedActionTest extends ActionTest
         }, InvalidArgumentException::class);
     }
 
+    public function testPermissionNamespace()
+    {
+        $permission = $this->mockPermissions(['one'])[0];
+
+        $action = new ParameterizedAction(
+                'name',
+                $this->mockAuth(),
+                [$permission],
+                new FormObjectMapping(ArrayOfInts::withLength(2)),
+                new CustomParameterizedActionHandler(function (ArrayOfInts $form) use (&$called) {
+                    $this->assertSame([10, 20], $form->data);
+                    $called = true;
+                })
+        );
+
+        $this->assertSame(null, $action->getPermissionNamespace());
+        $this->assertEquals([$permission], array_values($action->getRequiredPermissions()));
+
+        $action->addPermissionNamespace('abc');
+
+        $this->assertSame('abc', $action->getPermissionNamespace());
+        $this->assertEquals([Permission::named('abc.one')], array_values($action->getRequiredPermissions()));
+
+        $action->addPermissionNamespace('123');
+
+        $this->assertSame('123.abc', $action->getPermissionNamespace());
+        $this->assertEquals([Permission::named('123.abc.one')], array_values($action->getRequiredPermissions()));
+    }
+
     public function testDtoTypeMismatch()
     {
         $this->setExpectedException(TypeMismatchException::class);
 
         new ParameterizedAction(
-            'name',
+                'name',
                 $this->mockAuth(),
                 [],
                 new FormObjectMapping(new CreatePageForm()),
-                new CustomParameterizedActionHandler(function (SeoForm $form) { })
+                new CustomParameterizedActionHandler(function (SeoForm $form) {
+                })
         );
     }
 

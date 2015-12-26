@@ -96,7 +96,8 @@ class ModuleWithActionsTest extends ModuleTestBase
 
         $this->assertInstanceOf(IUnparameterizedAction::class, $action);
         $this->assertSame('unparameterized-action-no-return', $action->getName());
-        $this->assertEquals([Permission::named('permission.name')], array_values($action->getRequiredPermissions()));
+        $this->assertEquals([Permission::named('test-module-with-actions.permission.name')],
+                array_values($action->getRequiredPermissions()));
         $this->assertEquals(null, $action->getReturnTypeClass());
         $this->assertEquals(false, $action->hasReturnType());
         $this->assertSame(null, $action->run());
@@ -108,7 +109,8 @@ class ModuleWithActionsTest extends ModuleTestBase
 
         $this->assertInstanceOf(IUnparameterizedAction::class, $action);
         $this->assertSame('unparameterized-action-with-return', $action->getName());
-        $this->assertEquals([Permission::named('permission.name')], array_values($action->getRequiredPermissions()));
+        $this->assertEquals([Permission::named('test-module-with-actions.permission.name')],
+                array_values($action->getRequiredPermissions()));
         $this->assertEquals(TestDto::class, $action->getReturnTypeClass());
         $this->assertEquals(true, $action->hasReturnType());
         $this->assertEquals(new TestDto(), $action->run());
@@ -120,7 +122,8 @@ class ModuleWithActionsTest extends ModuleTestBase
 
         $this->assertInstanceOf(IParameterizedAction::class, $action);
         $this->assertSame('mapped-form-action', $action->getName());
-        $this->assertEquals([Permission::named('permission.one')], array_values($action->getRequiredPermissions()));
+        $this->assertEquals([Permission::named('test-module-with-actions.permission.one')],
+                array_values($action->getRequiredPermissions()));
         $this->assertEquals(TestDto::class, $action->getReturnTypeClass());
         $this->assertEquals(true, $action->hasReturnType());
         $this->assertEquals(new TestDto('input-handled'), $action->run(['data' => 'input']));
@@ -132,7 +135,8 @@ class ModuleWithActionsTest extends ModuleTestBase
 
         $this->assertInstanceOf(IParameterizedAction::class, $action);
         $this->assertSame('array-form-action', $action->getName());
-        $this->assertEquals([Permission::named('permission.one')], array_values($action->getRequiredPermissions()));
+        $this->assertEquals([Permission::named('test-module-with-actions.permission.one')],
+                array_values($action->getRequiredPermissions()));
         $this->assertEquals(TestDto::class, $action->getReturnTypeClass());
         $this->assertEquals(true, $action->hasReturnType());
         $this->assertEquals(new TestDto('input-handled'), $action->run(['data' => 'input']));
@@ -144,7 +148,10 @@ class ModuleWithActionsTest extends ModuleTestBase
 
         $this->assertInstanceOf(IParameterizedAction::class, $action);
         $this->assertSame('form-object-action', $action->getName());
-        $this->assertEquals([Permission::named('permission.one'), Permission::named('permission.two')], array_values($action->getRequiredPermissions()));
+        $this->assertEquals([
+                Permission::named('test-module-with-actions.permission.one'),
+                Permission::named('test-module-with-actions.permission.two')
+        ], array_values($action->getRequiredPermissions()));
         $this->assertEquals(TestDto::class, $action->getReturnTypeClass());
         $this->assertEquals(true, $action->hasReturnType());
         $this->assertEquals(new TestDto('input-handled-object'), $action->run(['data' => 'input']));

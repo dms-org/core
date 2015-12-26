@@ -4,6 +4,7 @@ namespace Dms\Core\Module;
 
 use Dms\Core\Auth\IPermission;
 use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Exception\InvalidOperationException;
 use Dms\Core\Form;
 use Dms\Core\Widget\IWidget;
 
@@ -16,6 +17,23 @@ use Dms\Core\Widget\IWidget;
  */
 interface IModule
 {
+    /**
+     * Gets the package name
+     *
+     * @return string|null
+     */
+    public function getPackageName();
+
+    /**
+     * Sets the package name
+     *
+     * @param string $packageName
+     *
+     * @return void
+     * @throws InvalidOperationException if the package name has already been set.
+     */
+    public function setPackageName($packageName);
+
     /**
      * Gets the name
      *

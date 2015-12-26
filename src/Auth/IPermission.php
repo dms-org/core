@@ -29,7 +29,7 @@ interface IPermission extends IValueObject
      *
      * @param string $namespace
      *
-     * @return string
+     * @return static
      */
     public function inNamespace($namespace);
 

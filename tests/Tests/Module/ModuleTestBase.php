@@ -5,6 +5,8 @@ namespace Dms\Core\Tests\Module;
 use Dms\Common\Testing\CmsTestCase;
 use Dms\Core\Auth\IPermission;
 use Dms\Core\Auth\IUser;
+use Dms\Core\Exception\InvalidOperationException;
+use Dms\Core\Module\IAction;
 use Dms\Core\Module\Module;
 use Dms\Core\Table\IDataTable;
 use Dms\Core\Tests\Module\Mock\MockAuthSystem;
@@ -28,7 +30,7 @@ abstract class ModuleTestBase extends CmsTestCase
     public function setUp()
     {
         $this->authSystem = new MockAuthSystem($this->getMockForAbstractClass(IUser::class));
-        $this->module = $this->buildModule($this->authSystem);
+        $this->module     = $this->buildModule($this->authSystem);
     }
 
     /**
@@ -53,9 +55,19 @@ abstract class ModuleTestBase extends CmsTestCase
         $this->assertSame($this->expectedName(), $this->module->getName());
     }
 
-    public function testPermissions()
+    public function testPermissions($extraNamespace = null)
     {
         $expected = $this->expectedPermissions();
+
+        foreach ($expected as $key => $permission) {
+            $permission = $permission->inNamespace($this->module->getName());
+            if ($extraNamespace) {
+                $permission = $permission->inNamespace($extraNamespace);
+            }
+
+            $expected[$key] = $permission;
+        }
+
         $actual = array_values($this->module->getPermissions());
         sort($expected, SORT_REGULAR);
         sort($actual, SORT_REGULAR);
@@ -68,5 +80,24 @@ abstract class ModuleTestBase extends CmsTestCase
                 DataTableHelper::normalizeSingleComponents($expectedSections),
                 DataTableHelper::covertDataTableToNormalizedArray($dataTable)
         );
+    }
+
+    public function testPackageName()
+    {
+        $this->assertSame(null, $this->module->getPackageName());
+
+        $this->module->setPackageName('some-package');
+
+        $this->assertSame('some-package', $this->module->getPackageName());
+        $this->testPermissions('some-package');
+
+        $this->assertThrows(function () {
+            $this->module->setPackageName('abc');
+        }, InvalidOperationException::class);
+
+        /** @var IAction $action */
+        foreach ($this->module->getActions() as $action) {
+            $this->assertSame('some-package.' . $this->module->getName(), $action->getPermissionNamespace());
+        }
     }
 }

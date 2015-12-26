@@ -123,6 +123,8 @@ abstract class Package implements IPackage
             );
         }
 
+        $module->setPackageName($this->name);
+
         return $module;
     }
 
@@ -155,7 +157,7 @@ abstract class Package implements IPackage
 
         foreach ($this->loadModules() as $moduleName => $module) {
             foreach ($module->getPermissions() as $permission) {
-                $namespacedPermissions[] = $permission->inNamespace($moduleName);
+                $namespacedPermissions[] = $permission;
             }
         }
 

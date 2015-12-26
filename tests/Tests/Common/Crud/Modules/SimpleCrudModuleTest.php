@@ -162,7 +162,10 @@ class SimpleCrudModuleTest extends CrudModuleTest
         $this->assertSame('duplicate-data', $action->getName());
         $this->assertSame(SimpleEntity::class, $action->getObjectType());
         $this->assertSame(null, $action->getReturnTypeClass());
-        $this->assertEquals([Permission::named(ICrudModule::EDIT_PERMISSION)], array_values($action->getRequiredPermissions()));
+        $this->assertEquals(
+                [Permission::named(ICrudModule::EDIT_PERMISSION)->inNamespace($this->module->getName())],
+                array_values($action->getRequiredPermissions())
+        );
         $this->assertEquals($this->dataSource->getAll(), $action->getSupportedObjects($this->dataSource->getAll()));
 
         $action->run([IObjectAction::OBJECT_FIELD_NAME => 1]);

@@ -160,7 +160,7 @@ abstract class Cms implements ICms
 
         foreach ($this->loadPackages() as $packageName => $package) {
             foreach ($package->loadPermissions() as $permission) {
-                $namespacedPermissions[] = $permission->inNamespace($packageName);
+                $namespacedPermissions[] = $permission;
             }
         }
 

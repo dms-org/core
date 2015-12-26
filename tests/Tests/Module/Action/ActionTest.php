@@ -5,6 +5,7 @@ namespace Dms\Core\Tests\Module\Action;
 use Dms\Common\Testing\CmsTestCase;
 use Dms\Core\Auth\IAuthSystem;
 use Dms\Core\Auth\IPermission;
+use Dms\Core\Auth\Permission;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>
@@ -14,17 +15,14 @@ abstract class ActionTest extends CmsTestCase
     /**
      * @param string[] $names
      *
-     * @return IPermission[]
+     * @return Permission[]
      */
     protected function mockPermissions(array $names)
     {
         $permissions = [];
 
         foreach ($names as $name) {
-            $permission = $this->getMockForAbstractClass(IPermission::class);
-            $permission->method('getName')->willReturn($name);
-
-            $permissions[] = $permission;
+            $permissions[] = Permission::named($name);
         }
 
         return $permissions;
