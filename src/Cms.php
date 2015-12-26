@@ -7,7 +7,7 @@ use Dms\Core\Auth\IPermission;
 use Dms\Core\Exception\InvalidArgumentException;
 use Dms\Core\Language\ILanguageProvider;
 use Dms\Core\Package\IPackage;
-use Dms\Core\Package\PackageNotInstalledException;
+use Dms\Core\Package\PackageNotFoundException;
 use Dms\Core\Util\Debug;
 use Interop\Container\ContainerInterface;
 
@@ -107,7 +107,7 @@ abstract class Cms implements ICms
     final public function loadPackage($name)
     {
         if (!isset($this->namePackageClassMap[$name])) {
-            throw PackageNotInstalledException::format(
+            throw PackageNotFoundException::format(
                     'Invalid package name supplied to %s: expecting one of (%s), \'%s\' given',
                     get_class($this) . '::' . __FUNCTION__, Debug::formatValues($this->getPackageNames()), $name
             );

@@ -197,7 +197,7 @@ abstract class Module implements IModule
             return $this->parameterizedActions[$name];
         }
 
-        throw InvalidArgumentException::format(
+        throw ActionNotFoundException::format(
                 'Invalid call to %s: unknown action name, expecting one of (%s), \'%s\' given',
                 __METHOD__, Debug::formatValues(array_keys($this->parameterizedActions + $this->unparameterizedActions)), $name
         );
@@ -228,7 +228,7 @@ abstract class Module implements IModule
             return $this->parameterizedActions[$name];
         }
 
-        throw InvalidArgumentException::format(
+        throw ActionNotFoundException::format(
                 'Invalid call to %s: unknown action name, expecting one of (%s), \'%s\' given',
                 __METHOD__, Debug::formatValues(array_keys($this->parameterizedActions)), $name
         );
@@ -259,7 +259,7 @@ abstract class Module implements IModule
             return $this->unparameterizedActions[$name];
         }
 
-        throw InvalidArgumentException::format(
+        throw ActionNotFoundException::format(
                 'Invalid call to %s: unknown action name, expecting one of (%s), \'%s\' given',
                 __METHOD__, Debug::formatValues(array_keys($this->unparameterizedActions)), $name
         );

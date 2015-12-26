@@ -5,6 +5,7 @@ namespace Dms\Core\Tests\Package;
 use Dms\Common\Testing\CmsTestCase;
 use Dms\Core\Auth\Permission;
 use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Module\ModuleNotFoundException;
 use Dms\Core\Tests\Helpers\Mock\MockingIocContainer;
 use Dms\Core\Tests\Module\Fixtures\ModuleWithActions;
 use Dms\Core\Tests\Module\Fixtures\ModuleWithCharts;
@@ -68,7 +69,7 @@ class PackageTest extends CmsTestCase
 
         $this->assertThrows(function () {
             $this->package->loadModule('non-existent');
-        }, InvalidArgumentException::class);
+        }, ModuleNotFoundException::class);
     }
 
     public function testLoadPermissionsInModuleNamespace()

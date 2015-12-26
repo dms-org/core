@@ -5,6 +5,7 @@ namespace Dms\Core\Tests\Module;
 use Dms\Core\Auth\IPermission;
 use Dms\Core\Auth\Permission;
 use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Module\ActionNotFoundException;
 use Dms\Core\Module\IAction;
 use Dms\Core\Module\IParameterizedAction;
 use Dms\Core\Module\IUnparameterizedAction;
@@ -49,6 +50,11 @@ class ModuleWithActionsTest extends ModuleTestBase
         return 'test-module-with-actions';
     }
 
+    /**
+     * @return void
+     * @throws ActionNotFoundException
+     * @throws \Exception
+     */
     public function testActionGetters()
     {
         $this->assertCount(6, $this->module->getActions());
@@ -70,7 +76,7 @@ class ModuleWithActionsTest extends ModuleTestBase
 
         $this->assertThrows(function () {
             $this->module->getParameterizedAction('unparameterized-action-no-return');
-        }, InvalidArgumentException::class);
+        }, ActionNotFoundException::class);
 
 
         $this->assertSame(true, $this->module->hasAction('mapped-form-action'));
@@ -82,12 +88,12 @@ class ModuleWithActionsTest extends ModuleTestBase
 
         $this->assertThrows(function () {
             $this->module->getUnparameterizedAction('mapped-form-action');
-        }, InvalidArgumentException::class);
+        }, ActionNotFoundException::class);
 
 
         $this->assertThrows(function () {
             $this->module->getAction('non-existent-action');
-        }, InvalidArgumentException::class);
+        }, ActionNotFoundException::class);
     }
 
     public function testUnparameterizedActionWithNoReturn()

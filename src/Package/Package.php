@@ -4,6 +4,7 @@ namespace Dms\Core\Package;
 
 use Dms\Core\Exception\InvalidArgumentException;
 use Dms\Core\Module\IModule;
+use Dms\Core\Module\ModuleNotFoundException;
 use Dms\Core\Util\Debug;
 use Interop\Container\ContainerInterface;
 
@@ -82,7 +83,7 @@ abstract class Package implements IPackage
     final public function loadModule($name)
     {
         if (!isset($this->nameModuleClassMap[$name])) {
-            throw InvalidArgumentException::format(
+            throw ModuleNotFoundException::format(
                     'Invalid module name supplied to %s: expecting one of (%s), \'%s\' given',
                     get_class($this) . '::' . __FUNCTION__, Debug::formatValues($this->getModuleNames()), $name
             );

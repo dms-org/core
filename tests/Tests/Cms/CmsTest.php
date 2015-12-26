@@ -7,7 +7,7 @@ use Dms\Core\Auth\IAuthSystem;
 use Dms\Core\Auth\Permission;
 use Dms\Core\Exception\InvalidArgumentException;
 use Dms\Core\Language\ILanguageProvider;
-use Dms\Core\Package\PackageNotInstalledException;
+use Dms\Core\Package\PackageNotFoundException;
 use Dms\Core\Tests\Cms\Fixtures\TestCms;
 use Dms\Core\Tests\Helpers\Mock\MockingIocContainer;
 use Dms\Core\Tests\Package\Fixtures\InvalidModuleClassPackage;
@@ -66,7 +66,7 @@ class CmsTest extends CmsTestCase
 
         $this->assertThrows(function () {
             $this->cms->loadPackage('non-existent');
-        }, PackageNotInstalledException::class);
+        }, PackageNotFoundException::class);
     }
 
     public function testLoadPermissionsInPackageNamespace()

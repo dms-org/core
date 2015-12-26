@@ -6,6 +6,7 @@ use Dms\Core\Common\Crud\Action\Object\IObjectAction;
 use Dms\Core\Common\Crud\Table\ISummaryTable;
 use Dms\Core\Model\IObjectSet;
 use Dms\Core\Model\ITypedObject;
+use Dms\Core\Module\ActionNotFoundException;
 use Dms\Core\Module\IModule;
 use Dms\Core\Module\IUnparameterizedAction;
 
@@ -80,7 +81,7 @@ interface IReadModule extends IModule
      * @param string $name
      *
      * @return IObjectAction
-     * @throws UnsupportedActionException
+     * @throws ActionNotFoundException
      */
     public function getObjectAction($name);
 

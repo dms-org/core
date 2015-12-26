@@ -61,7 +61,7 @@ interface IModule
      * @param string $name
      *
      * @return IAction
-     * @throws InvalidArgumentException
+     * @throws ActionNotFoundException
      */
     public function getAction($name);
 
@@ -87,7 +87,7 @@ interface IModule
      * @param string $name
      *
      * @return IParameterizedAction
-     * @throws InvalidArgumentException
+     * @throws ActionNotFoundException
      */
     public function getParameterizedAction($name);
 
@@ -113,7 +113,7 @@ interface IModule
      * @param string $name
      *
      * @return IUnparameterizedAction
-     * @throws InvalidArgumentException
+     * @throws ActionNotFoundException
      */
     public function getUnparameterizedAction($name);
 

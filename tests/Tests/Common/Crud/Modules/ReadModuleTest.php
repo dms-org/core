@@ -7,8 +7,8 @@ use Dms\Core\Auth\Permission;
 use Dms\Core\Auth\UserForbiddenException;
 use Dms\Core\Common\Crud\Action\Crud\ViewDetailsAction;
 use Dms\Core\Common\Crud\IReadModule;
-use Dms\Core\Exception\InvalidArgumentException;
 use Dms\Core\Model\IEntitySet;
+use Dms\Core\Module\ActionNotFoundException;
 use Dms\Core\Table\DataSource\ObjectTableDataSource;
 use Dms\Core\Tests\Module\Mock\MockAuthSystem;
 use Dms\Core\Tests\Module\ModuleTestBase;
@@ -103,6 +103,6 @@ abstract class ReadModuleTest extends ModuleTestBase
         $this->assertFalse($this->module->hasObjectAction('non-existent'));
         $this->assertThrows(function () {
             $this->module->getObjectAction('non-existent');
-        }, InvalidArgumentException::class);
+        }, ActionNotFoundException::class);
     }
 }

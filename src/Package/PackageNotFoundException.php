@@ -5,11 +5,11 @@ namespace Dms\Core\Package;
 use Dms\Core\Exception\BaseException;
 
 /**
- * Exception for an unloaded module.
+ * The custom exception for invalid package references.
  * 
  * @author Elliot Levin <elliot@aanet.com.au>
  */
-class PackageNotInstalledException extends BaseException
+class PackageNotFoundException extends BaseException
 {
     
 }

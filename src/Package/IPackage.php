@@ -5,6 +5,7 @@ namespace Dms\Core\Package;
 use Dms\Core\Auth\IPermission;
 use Dms\Core\Exception\InvalidArgumentException;
 use Dms\Core\Module\IModule;
+use Dms\Core\Module\ModuleNotFoundException;
 use Interop\Container\ContainerInterface;
 
 /**
@@ -50,7 +51,7 @@ interface IPackage
      * @param string $name
      *
      * @return IModule
-     * @throws InvalidArgumentException if the module name is invalid
+     * @throws ModuleNotFoundException if the module name is invalid
      */
     public function loadModule($name);
 

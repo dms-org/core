@@ -10,6 +10,7 @@ use Dms\Core\Exception\InvalidArgumentException;
 use Dms\Core\Exception\TypeMismatchException;
 use Dms\Core\Model\IEntitySet;
 use Dms\Core\Model\ITypedObject;
+use Dms\Core\Module\ActionNotFoundException;
 use Dms\Core\Module\Definition\ModuleDefinition;
 use Dms\Core\Module\Module;
 use Dms\Core\Util\Debug;
@@ -145,7 +146,7 @@ abstract class ReadModule extends Module implements IReadModule
     final public function getObjectAction($name)
     {
         if (!isset($this->objectActions[$name])) {
-            throw InvalidArgumentException::format(
+            throw ActionNotFoundException::format(
                     'Invalid name supplied to %s: expecting one of (%s), \'%s\' given',
                     __METHOD__, Debug::formatValues(array_keys($this->objectActions)), $name
             );

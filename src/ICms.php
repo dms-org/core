@@ -6,7 +6,7 @@ use Dms\Core\Auth\IAuthSystem;
 use Dms\Core\Auth\IPermission;
 use Dms\Core\Language\ILanguageProvider;
 use Dms\Core\Package\IPackage;
-use Dms\Core\Package\PackageNotInstalledException;
+use Dms\Core\Package\PackageNotFoundException;
 use Interop\Container\ContainerInterface;
 
 /**
@@ -44,7 +44,7 @@ interface ICms
      * @param string $name
      *
      * @return IPackage
-     * @throws PackageNotInstalledException If the package is not installed
+     * @throws PackageNotFoundException If the package is not installed
      */
     public function loadPackage($name);
 
