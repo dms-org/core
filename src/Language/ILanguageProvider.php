@@ -2,6 +2,8 @@
 
 namespace Dms\Core\Language;
 
+use Dms\Core\Exception\InvalidArgumentException;
+
 /**
  * The language provider interface
  * 
@@ -19,4 +21,16 @@ interface ILanguageProvider
      * @throws MessageNotFoundException
      */
     public function format(Message $message);
+
+    /**
+     * Gets the fully formed message strings from the supplied message ids
+     * and parameters
+     *
+     * @param Message[] $messages
+     *
+     * @return string[]
+     * @throws InvalidArgumentException
+     * @throws MessageNotFoundException
+     */
+    public function formatAll(array $messages);
 }
