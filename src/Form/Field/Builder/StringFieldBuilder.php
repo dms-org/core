@@ -2,9 +2,6 @@
 
 namespace Dms\Core\Form\Field\Builder;
 
-use Dms\Core\Form\Field\Processor\Validator\ExactLengthValidator;
-use Dms\Core\Form\Field\Processor\Validator\MaxLengthValidator;
-use Dms\Core\Form\Field\Processor\Validator\MinLengthValidator;
 use Dms\Core\Form\Field\Type\StringType;
 
 /**
@@ -24,6 +21,16 @@ class StringFieldBuilder extends FieldBuilderBase
     public function trim($characters = " \t\n\r\0\x0B")
     {
         return $this->attr(StringType::ATTR_TRIM_CHARACTERS, $characters);
+    }
+
+    /**
+     * Sets the field type as a multi-line string.
+     *
+     * @return static
+     */
+    public function multiline()
+    {
+        return $this->attr(StringType::ATTR_MULTILINE, true);
     }
 
     /**

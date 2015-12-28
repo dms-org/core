@@ -64,6 +64,14 @@ class StringFieldBuilderTest extends FieldBuilderTestBase
         ]);
     }
 
+    public function testMultiline()
+    {
+        $this->assertAttributes(
+                [StringType::ATTR_TYPE => IType::STRING, StringType::ATTR_MULTILINE => true],
+                $this->field()->multiline()->build()
+        );
+    }
+
     public function testExactLength()
     {
         $this->assertAttributes(

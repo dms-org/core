@@ -20,6 +20,7 @@ use Dms\Core\Form\IFieldProcessor;
 class StringType extends ScalarType
 {
     const ATTR_STRING_TYPE = 'string-type';
+    const ATTR_MULTILINE = 'multiline';
     const ATTR_MIN_LENGTH = 'min-length';
     const ATTR_MAX_LENGTH = 'max-length';
     const ATTR_EXACT_LENGTH = 'exact-length';
