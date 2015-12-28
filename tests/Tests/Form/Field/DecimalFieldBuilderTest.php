@@ -6,7 +6,7 @@ use Dms\Core\Form\Field\Builder\DecimalFieldBuilder;
 use Dms\Core\Form\Field\Builder\Field as Field;
 use Dms\Core\Form\Field\Processor\DefaultValueProcessor;
 use Dms\Core\Form\Field\Processor\TypeProcessor;
-use Dms\Core\Form\Field\Processor\Validator\DecimalPointsValidator;
+use Dms\Core\Form\Field\Processor\Validator\MaxDecimalPointsValidator;
 use Dms\Core\Form\Field\Processor\Validator\FloatValidator;
 use Dms\Core\Form\Field\Processor\Validator\GreaterThanOrEqualValidator;
 use Dms\Core\Form\Field\Processor\Validator\LessThanOrEqualValidator;
@@ -53,11 +53,10 @@ class DecimalFieldBuilderTest extends FieldBuilderTestBase
 
     public function testDecimalPoints()
     {
-        $field = $this->field()->minDecimalPoints(1)->maxDecimalPoints(3)->build();
+        $field = $this->field()->maxDecimalPoints(3)->build();
 
         $this->assertAttributes([
                 ScalarType::ATTR_TYPE              => IType::FLOAT,
-                FloatType::ATTR_MIN_DECIMAL_POINTS => 1,
                 FloatType::ATTR_MAX_DECIMAL_POINTS => 3,
         ], $field);
 
@@ -66,7 +65,7 @@ class DecimalFieldBuilderTest extends FieldBuilderTestBase
         $this->assertFailsToProcess([12.0001, 12.0432, 43243.3244], $field);
 
         $this->assertFieldThrows($field, 0.0004, [
-                new Message(DecimalPointsValidator::MESSAGE_MAX, [
+                new Message(MaxDecimalPointsValidator::MESSAGE, [
                         'field'              => 'Name',
                         'input'              => 0.0004,
                         'max_decimal_points' => 3,

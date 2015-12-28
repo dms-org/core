@@ -62,18 +62,6 @@ class DecimalFieldBuilder extends FieldBuilderBase
     }
 
     /**
-     * Validates the decimal has a minimum number of decimal points.
-     *
-     * @param int $decimalPoints
-     *
-     * @return static
-     */
-    public function minDecimalPoints($decimalPoints)
-    {
-        return $this->attr(FloatType::ATTR_MIN_DECIMAL_POINTS, $decimalPoints);
-    }
-
-    /**
      * Validates the decimal has a maximum number of decimal points.
      *
      * @param int $decimalPoints
@@ -81,18 +69,6 @@ class DecimalFieldBuilder extends FieldBuilderBase
      * @return static
      */
     public function maxDecimalPoints($decimalPoints)
-    {
-        return $this->attr(FloatType::ATTR_MAX_DECIMAL_POINTS, $decimalPoints);
-    }
-
-    /**
-     * Validates the decimal has a maximum number of decimal points.
-     *
-     * @param int $decimalPoints
-     *
-     * @return static
-     */
-    public function exactDecimalPoints($decimalPoints)
     {
         return $this->attr(FloatType::ATTR_MAX_DECIMAL_POINTS, $decimalPoints);
     }

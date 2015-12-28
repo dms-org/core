@@ -11,24 +11,24 @@ use Dms\Core\Model\Type\IType;
  *
  * @author Elliot Levin <elliotlevin@hotmail.com>
  */
-class DecimalPointsValidator extends FieldValidator
+class MaxDecimalPointsValidator extends FieldValidator
 {
-    const MESSAGE_MIN = 'validation.decimal-points.min';
-    const MESSAGE_MAX = 'validation.decimal-points.max';
+    const MESSAGE = 'validation.max-decimal-points';
 
     /**
-     * @var int|null
-     */
-    private $minDecimalPoints;
-    /**
-     * @var int|null
+     * @var int
      */
     private $maxDecimalPoints;
 
-    public function __construct(IType $inputType, $minDecimalPoints, $maxDecimalPoints)
+    /**
+     * MaxDecimalPointsValidator constructor.
+     *
+     * @param IType $inputType
+     * @param int   $maxDecimalPoints
+     */
+    public function __construct(IType $inputType, $maxDecimalPoints)
     {
         parent::__construct($inputType);
-        $this->minDecimalPoints = $minDecimalPoints;
         $this->maxDecimalPoints = $maxDecimalPoints;
     }
 
@@ -44,12 +44,8 @@ class DecimalPointsValidator extends FieldValidator
             $decimalPoints = strlen(substr(strrchr($string, "."), 1));;
         }
 
-        if ($this->minDecimalPoints !== null & $decimalPoints < $this->minDecimalPoints) {
-            $messages[] = new Message(self::MESSAGE_MIN, ['min_decimal_points' => $this->minDecimalPoints]);
-        }
-
         if ($this->maxDecimalPoints !== null & $decimalPoints > $this->maxDecimalPoints) {
-            $messages[] = new Message(self::MESSAGE_MAX, ['max_decimal_points' => $this->maxDecimalPoints]);
+            $messages[] = new Message(self::MESSAGE, ['max_decimal_points' => $this->maxDecimalPoints]);
         }
     }
 }
