@@ -16,6 +16,8 @@ use Interop\Container\ContainerInterface;
  */
 interface ICms
 {
+    const VERSION = '0.1.0-dev';
+
     /**
      * Get the names of the installed packages within this cms.
      *
