@@ -33,7 +33,7 @@ class ChartWidgetDefiner extends WidgetDefinerBase
      */
     public function __construct($name, $label, IChartDataSource $chart, callable $callback)
     {
-        parent::__construct($name, null, null, $callback);
+        parent::__construct($name, null, null, null, $callback);
         $this->label = $label;
         $this->chart = $chart;
     }

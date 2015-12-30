@@ -32,7 +32,7 @@ class TableWidgetDefiner extends WidgetDefinerBase
      */
     public function __construct($name, $label, ITableDataSource $table, callable $callback)
     {
-        parent::__construct($name, null, null, $callback);
+        parent::__construct($name, null, null, null, $callback);
         $this->label = $label;
         $this->table = $table;
     }

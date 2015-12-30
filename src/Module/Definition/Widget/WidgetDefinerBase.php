@@ -2,6 +2,7 @@
 
 namespace Dms\Core\Module\Definition\Widget;
 
+use Dms\Core\Module\IAction;
 use Dms\Core\Module\IChartDisplay;
 use Dms\Core\Module\ITableDisplay;
 
@@ -28,6 +29,11 @@ abstract class WidgetDefinerBase
     protected $charts;
 
     /**
+     * @var IAction[]|null
+     */
+    protected $actions;
+
+    /**
      * @var callable
      */
     protected $callback;
@@ -38,13 +44,15 @@ abstract class WidgetDefinerBase
      * @param string               $name
      * @param ITableDisplay[]|null $tables
      * @param IChartDisplay[]|null $charts
+     * @param IAction[]|null       $actions
      * @param callable             $callback
      */
-    public function __construct($name, array $tables = null, array $charts = null, callable $callback)
+    public function __construct($name, array $tables = null, array $charts = null, array $actions = null, callable $callback)
     {
         $this->name     = $name;
         $this->tables   = $tables;
         $this->charts   = $charts;
+        $this->actions  = $actions;
         $this->callback = $callback;
     }
 }

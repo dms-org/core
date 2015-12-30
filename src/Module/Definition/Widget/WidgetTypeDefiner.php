@@ -3,9 +3,11 @@
 namespace Dms\Core\Module\Definition\Widget;
 
 use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Module\IAction;
 use Dms\Core\Table\Chart\IChartDataSource;
 use Dms\Core\Table\ITableDataSource;
 use Dms\Core\Util\Debug;
+use Dms\Core\Widget\ActionWidget;
 
 /**
  * The widget type definer class
@@ -24,11 +26,12 @@ class WidgetTypeDefiner extends WidgetDefinerBase
      * @param string             $label
      * @param ITableDataSource[] $tables
      * @param IChartDataSource[] $charts
+     * @param IAction[]          $actions
      * @param callable           $callback
      */
-    public function __construct($name, $label, array $tables, array $charts, callable $callback)
+    public function __construct($name, $label, array $tables, array $charts, array $actions, callable $callback)
     {
-        parent::__construct($name, $tables, $charts, $callback);
+        parent::__construct($name, $tables, $charts, $actions, $callback);
         $this->label = $label;
     }
 
@@ -64,11 +67,31 @@ class WidgetTypeDefiner extends WidgetDefinerBase
     {
         if (!isset($this->charts[$chartName])) {
             throw InvalidArgumentException::format(
-                    'Invalid table name supplied to %s: expecting one of (%s), \'%s\' given',
+                    'Invalid chart name supplied to %s: expecting one of (%s), \'%s\' given',
                     __METHOD__, Debug::formatValues(array_keys($this->charts)), $chartName
             );
         }
 
         return new ChartWidgetDefiner($this->name, $this->label, $this->charts[$chartName]->getDataSource(), $this->callback);
+    }
+
+    /**
+     * Defines the widget to contain an action from the module.
+     *
+     * @param string $actionName
+     *
+     * @return void
+     * @throws InvalidArgumentException
+     */
+    public function withAction($actionName)
+    {
+        if (!isset($this->actions[$actionName])) {
+            throw InvalidArgumentException::format(
+                    'Invalid action name supplied to %s: expecting one of (%s), \'%s\' given',
+                    __METHOD__, Debug::formatValues(array_keys($this->actions)), $actionName
+            );
+        }
+
+        call_user_func($this->callback, new ActionWidget($this->name, $this->label, $this->actions[$actionName]));
     }
 }

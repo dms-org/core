@@ -9,6 +9,7 @@ use Dms\Core\Table\Chart\IChartCriteria;
 use Dms\Core\Table\IRowCriteria;
 use Dms\Core\Tests\Module\Fixtures\ModuleWithWidgets;
 use Dms\Core\Tests\Module\Mock\MockAuthSystem;
+use Dms\Core\Widget\ActionWidget;
 use Dms\Core\Widget\ChartWidget;
 use Dms\Core\Widget\TableWidget;
 
@@ -48,11 +49,12 @@ class ModuleWithWidgetsTest extends ModuleTestBase
     {
         $this->assertSame(true, $this->module->hasWidget('table-widget.all'));
         $this->assertSame(true, $this->module->hasWidget('chart-widget.all'));
+        $this->assertSame(true, $this->module->hasWidget('action-widget'));
         $this->assertSame(false, $this->module->hasWidget('foo-widget'));
-
 
         $this->assertInstanceOf(TableWidget::class, $this->module->getWidget('table-widget.all'));
         $this->assertInstanceOf(ChartWidget::class, $this->module->getWidget('chart-widget.all'));
+        $this->assertInstanceOf(ActionWidget::class, $this->module->getWidget('action-widget'));
 
         $this->assertSame(
                 [
@@ -60,6 +62,7 @@ class ModuleWithWidgetsTest extends ModuleTestBase
                         'table-widget.with-criteria' => TableWidget::class,
                         'chart-widget.all'           => ChartWidget::class,
                         'chart-widget.with-criteria' => ChartWidget::class,
+                        'action-widget' => ActionWidget::class,
                 ],
                 array_map('get_class', $this->module->getWidgets())
         );
@@ -121,5 +124,16 @@ class ModuleWithWidgetsTest extends ModuleTestBase
         $this->assertSame(true, $widget->hasCriteria());
         $this->assertInstanceOf(IChartCriteria::class, $widget->getCriteria());
         $this->assertCount(2, $widget->getCriteria()->getConditions());
+    }
+
+    public function testActionWidget()
+    {
+        /** @var ActionWidget $widget */
+        $widget = $this->module->getWidget('action-widget');
+        $action = $this->module->getAction('module-action');
+
+        $this->assertSame($action, $widget->getAction());
+        $this->assertSame('action-widget', $widget->getName());
+        $this->assertSame('Action Widget #1', $widget->getLabel());
     }
 }

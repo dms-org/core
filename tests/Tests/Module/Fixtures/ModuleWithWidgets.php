@@ -28,6 +28,11 @@ class ModuleWithWidgets extends Module
     {
         $module->name('test-module-with-widgets');
 
+        $module->action('module-action')
+                ->handler(function () {
+
+                });
+
         $module->table('data-table')
                 ->fromArray([
                         ['x' => 1],
@@ -73,5 +78,9 @@ class ModuleWithWidgets extends Module
                     $criteria->where('x', '>', 1);
                     $criteria->where('y', '<', 3);
                 });
+
+        $module->widget('action-widget')
+                ->label('Action Widget #1')
+                ->withAction('module-action');
     }
 }

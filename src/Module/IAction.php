@@ -4,7 +4,6 @@ namespace Dms\Core\Module;
 
 use Dms\Core\Auth\IPermission;
 use Dms\Core\Exception\InvalidArgumentException;
-use Dms\Core\Exception\InvalidOperationException;
 use Dms\Core\Form;
 use Dms\Core\Persistence;
 

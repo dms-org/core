@@ -130,7 +130,7 @@ class ModuleDefinition
      */
     public function widget($name)
     {
-        return new WidgetLabelDefiner($name, $this->tables, $this->charts, function (IWidget $widget) {
+        return new WidgetLabelDefiner($name, $this->tables, $this->charts, $this->actions, function (IWidget $widget) {
             $this->widgets[$widget->getName()] = $widget;
         });
     }
