@@ -1,6 +1,6 @@
 <?php
 
-namespace Dms\Core\Package;
+namespace Dms\Core\Package\Definition;
 
 use Dms\Core\Exception\InvalidOperationException;
 
@@ -22,6 +22,11 @@ class PackageDefinition
     protected $nameModuleClassMap = [];
 
     /**
+     * @var string[]
+     */
+    protected $dashboardWidgetNames = [];
+
+    /**
      * PackageDefinition constructor.
      */
     public function __construct()
@@ -38,6 +43,26 @@ class PackageDefinition
     public function name($name)
     {
         $this->name = $name;
+    }
+
+    /**
+     * Defines the widgets contained within the package dashboard.
+     *
+     * Example:
+     * <code>
+     * $package->dashboard()
+     *      ->widgets([
+     *           'some-module-name.some-widget-name'
+     *      ]);
+     * </code>
+     *
+     * @return DashboardWidgetDefiner
+     */
+    public function dashboard()
+    {
+        return new DashboardWidgetDefiner(function (array $widgetNames) {
+            $this->dashboardWidgetNames = array_merge($this->dashboardWidgetNames, $widgetNames);
+        });
     }
 
     /**
@@ -77,6 +102,6 @@ class PackageDefinition
             );
         }
 
-        return new FinalizedPackageDefinition($this->name, $this->nameModuleClassMap);
+        return new FinalizedPackageDefinition($this->name, $this->nameModuleClassMap, $this->dashboardWidgetNames);
     }
 }

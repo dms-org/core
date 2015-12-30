@@ -33,4 +33,14 @@ class ActionWidget extends Widget
     {
         return $this->action;
     }
+
+    /**
+     * Returns whether the current user authorized to see this widget.
+     *
+     * @return bool
+     */
+    public function isAuthorized()
+    {
+        return $this->action->isAuthorized();
+    }
 }

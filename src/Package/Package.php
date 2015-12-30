@@ -3,8 +3,10 @@
 namespace Dms\Core\Package;
 
 use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Exception\InvalidOperationException;
 use Dms\Core\Module\IModule;
 use Dms\Core\Module\ModuleNotFoundException;
+use Dms\Core\Package\Definition\PackageDefinition;
 use Dms\Core\Util\Debug;
 use Interop\Container\ContainerInterface;
 
@@ -24,6 +26,16 @@ abstract class Package implements IPackage
      * @var ContainerInterface
      */
     protected $container;
+
+    /**
+     * @var string[]
+     */
+    protected $dashboardWidgetNames;
+
+    /**
+     * @var IDashboard
+     */
+    protected $dashboard;
 
     /**
      * @var string[]
@@ -48,8 +60,9 @@ abstract class Package implements IPackage
         $this->define($definition);
         $finalizedDefinition = $definition->finalize();
 
-        $this->name               = $finalizedDefinition->getName();
-        $this->nameModuleClassMap = $finalizedDefinition->getNameModuleClassMap();
+        $this->name                 = $finalizedDefinition->getName();
+        $this->dashboardWidgetNames = $finalizedDefinition->getDashboardWidgetNames();
+        $this->nameModuleClassMap   = $finalizedDefinition->getNameModuleClassMap();
     }
 
     /**
@@ -67,6 +80,51 @@ abstract class Package implements IPackage
     final public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function hasDashboard()
+    {
+        return count($this->dashboardWidgetNames) > 0;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function loadDashboard()
+    {
+        if (!$this->hasDashboard()) {
+            throw InvalidOperationException::methodCall(__METHOD__, 'no dashboard widgets defined');
+        }
+
+        if (!$this->dashboard) {
+            $this->dashboard = $this->loadDashboardWith($this->dashboardWidgetNames);
+        }
+
+        return $this->dashboard;
+    }
+
+    protected function loadDashboardWith(array $widgetNames)
+    {
+        $widgets = [];
+
+        foreach ($widgetNames as $name) {
+            if (strpos($name, '.') === false) {
+                throw InvalidArgumentException::format(
+                        'Invalid dashboard widget name: must be in format "module-name.widget-name", \'%s\' given',
+                        $name
+                );
+            }
+
+            $moduleName = substr($name, 0, strpos($name, '.'));
+            $widgetName = substr($name, strpos($name, '.') + 1);
+
+            $widgets[] = $this->loadModule($moduleName)->getWidget($widgetName);
+        }
+
+        return new Dashboard($widgets);
     }
 
     /**

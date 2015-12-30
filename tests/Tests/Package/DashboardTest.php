@@ -1,0 +1,32 @@
+<?php
+
+namespace Dms\Core\Tests\Package;
+
+use Dms\Common\Testing\CmsTestCase;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Package\Dashboard;
+use Dms\Core\Widget\IWidget;
+
+/**
+ * @author Elliot Levin <elliotlevin@hotmail.com>
+ */
+class DashboardTest extends CmsTestCase
+{
+    public function testNew()
+    {
+        $dashboard = new Dashboard([
+            $widget = $this->getMockForAbstractClass(IWidget::class)
+        ]);
+
+        $this->assertSame([$widget], $dashboard->getWidgets());
+    }
+
+    public function testInvalidWidget()
+    {
+        $this->setExpectedException(InvalidArgumentException::class);
+
+        new Dashboard([
+                $this
+        ]);
+    }
+}

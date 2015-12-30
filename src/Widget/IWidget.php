@@ -22,4 +22,11 @@ interface IWidget
      * @return string
      */
     public function getLabel();
+
+    /**
+     * Returns whether the current user authorized to see this widget.
+     *
+     * @return bool
+     */
+    public function isAuthorized();
 }

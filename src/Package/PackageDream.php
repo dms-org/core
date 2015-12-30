@@ -2,6 +2,8 @@
 
 namespace Dms\Core\Package;
 
+use Dms\Core\Package\Definition\PackageDefinition;
+
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>
  */
@@ -11,11 +13,13 @@ class PackageDream extends Package
     {
         $package->name('blog');
 
-        // MAYBE:
-        // $package->config(SomeStagedFormObject::class);
+        $package->config(SomeStagedFormObject::class);
 
-        // MAYBE:
-        // $package->dashboard('dashboard', SomeModule::class);
+        $package->dashboard()
+                ->widgets([
+                        'categories.most-updated',
+                        'posts.recent',
+                ]);
 
         $package->modules([
                 'categories' => CategoryModule::class,

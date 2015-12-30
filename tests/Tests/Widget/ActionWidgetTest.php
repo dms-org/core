@@ -20,5 +20,12 @@ class ActionWidgetTest extends CmsTestCase
         $this->assertSame('action-widget', $widget->getName());
         $this->assertSame('Action', $widget->getLabel());
         $this->assertSame($action, $widget->getAction());
+
+        $action->expects(self::exactly(2))
+                ->method('isAuthorized')
+                ->willReturnOnConsecutiveCalls(false, true);
+
+        $this->assertSame(false, $widget->isAuthorized());
+        $this->assertSame(true, $widget->isAuthorized());
     }
 }

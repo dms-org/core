@@ -2,8 +2,8 @@
 
 namespace Dms\Core\Tests\Package\Fixtures;
 
+use Dms\Core\Package\Definition\PackageDefinition;
 use Dms\Core\Package\Package;
-use Dms\Core\Package\PackageDefinition;
 use Dms\Core\Tests\Module\Fixtures\ModuleWithActions;
 use Dms\Core\Tests\Module\Fixtures\TestDto;
 

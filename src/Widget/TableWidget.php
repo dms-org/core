@@ -64,4 +64,14 @@ class TableWidget extends Widget
     {
         return $this->tableDataSource->load($this->criteria);
     }
+
+    /**
+     * Returns whether the current user authorized to see this widget.
+     *
+     * @return bool
+     */
+    public function isAuthorized()
+    {
+        return true;
+    }
 }

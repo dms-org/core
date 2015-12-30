@@ -4,7 +4,7 @@ namespace Dms\Core\Tests\Package;
 
 use Dms\Common\Testing\CmsTestCase;
 use Dms\Core\Auth\Permission;
-use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Exception\InvalidOperationException;
 use Dms\Core\Module\ModuleNotFoundException;
 use Dms\Core\Tests\Helpers\Mock\MockingIocContainer;
 use Dms\Core\Tests\Module\Fixtures\ModuleWithActions;
@@ -39,6 +39,15 @@ class PackageTest extends CmsTestCase
     public function testModuleNames()
     {
         $this->assertSame(['test-module-with-actions', 'test-module-with-charts'], $this->package->getModuleNames());
+    }
+
+    public function testDashboard()
+    {
+        $this->assertSame(false, $this->package->hasDashboard());
+
+        $this->assertThrows(function () {
+            $this->package->loadDashboard();
+        }, InvalidOperationException::class);
     }
 
     public function testHasModules()

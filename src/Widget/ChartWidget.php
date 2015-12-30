@@ -64,4 +64,14 @@ class ChartWidget extends Widget
     {
         return $this->chartDataSource->load($this->criteria);
     }
+
+    /**
+     * Returns whether the current user authorized to see this widget.
+     *
+     * @return bool
+     */
+    public function isAuthorized()
+    {
+        return true;
+    }
 }

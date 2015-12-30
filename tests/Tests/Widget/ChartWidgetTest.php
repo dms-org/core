@@ -24,6 +24,7 @@ class ChartWidgetTest extends CmsTestCase
         $this->assertSame($chart, $widget->getChartDataSource());
         $this->assertSame($criteria, $widget->getCriteria());
         $this->assertSame(true, $widget->hasCriteria());
+        $this->assertSame(true, $widget->isAuthorized());
 
         $chart->expects(self::once())
                 ->method('load')

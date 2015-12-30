@@ -3,7 +3,7 @@
 namespace Dms\Core\Package;
 
 use Dms\Core\Auth\IPermission;
-use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Exception\InvalidOperationException;
 use Dms\Core\Module\IModule;
 use Dms\Core\Module\ModuleNotFoundException;
 use Interop\Container\ContainerInterface;
@@ -21,6 +21,23 @@ interface IPackage
      * @return string
      */
     public function getName();
+
+    /**
+     * Returns whether the package has a dashboard
+     *
+     * @return bool
+     */
+    public function hasDashboard();
+
+    /**
+     * Loads the dashboard for the package.
+     *
+     * NOTE: this will load the required modules for the dashboard.
+     *
+     * @return IDashboard
+     * @throws InvalidOperationException
+     */
+    public function loadDashboard();
 
     /**
      * Gets the names of the modules contained within this package.

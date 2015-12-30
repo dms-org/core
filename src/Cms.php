@@ -3,7 +3,6 @@
 namespace Dms\Core;
 
 use Dms\Core\Auth\IAuthSystem;
-use Dms\Core\Auth\IPermission;
 use Dms\Core\Exception\InvalidArgumentException;
 use Dms\Core\Language\ILanguageProvider;
 use Dms\Core\Package\IPackage;
@@ -166,7 +165,6 @@ abstract class Cms implements ICms
 
         return $namespacedPermissions;
     }
-
 
     /**
      * @inheritDoc

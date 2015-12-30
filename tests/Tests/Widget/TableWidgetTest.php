@@ -3,11 +3,8 @@
 namespace Dms\Core\Tests\Widget;
 
 use Dms\Common\Testing\CmsTestCase;
-use Dms\Core\Table\Chart\IChartCriteria;
-use Dms\Core\Table\Chart\IChartDataSource;
 use Dms\Core\Table\IRowCriteria;
 use Dms\Core\Table\ITableDataSource;
-use Dms\Core\Widget\ChartWidget;
 use Dms\Core\Widget\TableWidget;
 
 /**
@@ -17,7 +14,7 @@ class TableWidgetTest extends CmsTestCase
 {
     public function testNewWithCriteria()
     {
-        $table = $this->getMockForAbstractClass(ITableDataSource::class);
+        $table    = $this->getMockForAbstractClass(ITableDataSource::class);
         $criteria = $this->getMockForAbstractClass(IRowCriteria::class);
 
         $widget = new TableWidget('table-widget', 'Table', $table, $criteria);
@@ -27,6 +24,7 @@ class TableWidgetTest extends CmsTestCase
         $this->assertSame($table, $widget->getTableDataSource());
         $this->assertSame($criteria, $widget->getCriteria());
         $this->assertSame(true, $widget->hasCriteria());
+        $this->assertSame(true, $widget->isAuthorized());
 
         $table->expects(self::once())
                 ->method('load')
