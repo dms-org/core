@@ -2,11 +2,11 @@
 
 namespace Dms\Core\Persistence\Db\Doctrine\Migration;
 
-use Doctrine\DBAL\Schema\Comparator;
-use Doctrine\DBAL\Schema\SchemaDiff;
 use Dms\Core\Persistence\Db\Doctrine\DoctrineConnection;
 use Dms\Core\Persistence\Db\Doctrine\Migration\Type\DoctrineTypes;
 use Dms\Core\Persistence\Db\Mapping\IOrm;
+use Doctrine\DBAL\Schema\Comparator;
+use Doctrine\DBAL\Schema\SchemaDiff;
 
 /**
  * The migration generator base class.
@@ -32,10 +32,11 @@ abstract class MigrationGenerator
     /**
      * @param DoctrineConnection $connection
      * @param IOrm               $orm
+     * @param string             $migrationName
      *
      * @return void
      */
-    public function generateMigration(DoctrineConnection $connection, IOrm $orm)
+    public function generateMigration(DoctrineConnection $connection, IOrm $orm, $migrationName)
     {
         $doctrine = $connection->getDoctrineConnection();
 
@@ -44,13 +45,14 @@ abstract class MigrationGenerator
 
         $diff = Comparator::compareSchemas($currentSchema, $expectedSchema);
 
-        $this->createMigration($diff);
+        $this->createMigration($diff, $migrationName);
     }
 
     /**
      * @param SchemaDiff $diff
+     * @param string     $migrationName
      *
      * @return void
      */
-    abstract protected function createMigration(SchemaDiff $diff);
+    abstract protected function createMigration(SchemaDiff $diff, $migrationName);
 }
