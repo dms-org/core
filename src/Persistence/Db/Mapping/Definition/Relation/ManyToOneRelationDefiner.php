@@ -111,7 +111,7 @@ class ManyToOneRelationDefiner extends RelationTypeDefinerBase
                     return new ManyToOneRelation(
                             $idString,
                             $this->loadIds
-                                    ? new ToOneRelationIdentityReference($mapper)
+                                    ? new ToOneRelationIdentityReference($mapper, $this->bidirectionalRelationProperty)
                                     : new ToOneRelationObjectReference($mapper, $this->bidirectionalRelationProperty),
                             $parentTable,
                             $columnName

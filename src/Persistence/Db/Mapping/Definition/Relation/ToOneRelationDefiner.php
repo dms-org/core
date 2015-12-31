@@ -90,7 +90,7 @@ class ToOneRelationDefiner extends RelationTypeDefinerBase
             return new ToOneRelation(
                     $idString,
                     $this->loadIds
-                            ? new ToOneRelationIdentityReference($mapper)
+                            ? new ToOneRelationIdentityReference($mapper, $this->bidirectionalRelationProperty)
                             : new ToOneRelationObjectReference($mapper, $this->bidirectionalRelationProperty),
                     $columnName,
                     $this->identifying

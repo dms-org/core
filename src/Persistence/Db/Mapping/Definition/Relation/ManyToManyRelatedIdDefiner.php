@@ -46,7 +46,7 @@ class ManyToManyRelatedIdDefiner extends ManyToManyRelationDefinerBase
             return new ManyToManyRelation(
                     $idString,
                     $this->loadIds
-                            ? new ToManyRelationIdentityReference($mapper)
+                            ? new ToManyRelationIdentityReference($mapper, $this->bidirectionalRelationProperty)
                             : new ToManyRelationObjectReference($mapper, $this->bidirectionalRelationProperty),
                     $this->joinTableName,
                     $parentTable->getName(),

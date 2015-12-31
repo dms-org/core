@@ -162,7 +162,7 @@ class OneToManyRelationDefiner extends RelationTypeDefinerBase
             return new ToManyRelation(
                     $idString,
                     $this->loadIds
-                            ? new ToManyRelationIdentityReference($mapper)
+                            ? new ToManyRelationIdentityReference($mapper, $this->bidirectionalRelationProperty)
                             : new ToManyRelationObjectReference($mapper, $this->bidirectionalRelationProperty, $persistHookId),
                     $columnName,
                     $this->identifying

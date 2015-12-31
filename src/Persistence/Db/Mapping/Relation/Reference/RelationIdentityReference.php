@@ -25,10 +25,11 @@ abstract class RelationIdentityReference extends RelationReference
 
     /**
      * @param IEntityMapper $mapper
+     * @param string|null   $bidirectionalRelationProperty
      */
-    public function __construct(IEntityMapper $mapper)
+    public function __construct(IEntityMapper $mapper, $bidirectionalRelationProperty = null)
     {
-        parent::__construct($mapper);
+        parent::__construct($mapper, $bidirectionalRelationProperty);
         $this->primaryKeyColumn = $this->mapper->getPrimaryTable()->getPrimaryKeyColumn();
     }
 
