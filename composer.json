@@ -13,14 +13,18 @@
     ],
     "autoload": {
         "psr-4": {
-            "Dms\\Core\\": "src/",
-            "Dms\\Core\\Tests\\": "tests/Tests"
+            "Dms\\Core\\": "src/"
         }
     },
     "require": {
         "timetoogo/pinq": "~3.2",
         "doctrine/dbal": "~2.5",
         "container-interop/container-interop": "~1.1"
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Dms\\Core\\Tests\\": "tests/Tests"
+        }
     },
     "require-dev": {
         "dms/common.testing": "dev-master"
