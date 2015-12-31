@@ -34,7 +34,7 @@ abstract class MigrationGenerator
      * @param IOrm               $orm
      * @param string             $migrationName
      *
-     * @return void
+     * @return string the migration file path
      */
     public function generateMigration(DoctrineConnection $connection, IOrm $orm, $migrationName)
     {
@@ -45,14 +45,14 @@ abstract class MigrationGenerator
 
         $diff = Comparator::compareSchemas($currentSchema, $expectedSchema);
 
-        $this->createMigration($diff, $migrationName);
+        return $this->createMigration($diff, $migrationName);
     }
 
     /**
      * @param SchemaDiff $diff
      * @param string     $migrationName
      *
-     * @return void
+     * @return string
      */
     abstract protected function createMigration(SchemaDiff $diff, $migrationName);
 }
