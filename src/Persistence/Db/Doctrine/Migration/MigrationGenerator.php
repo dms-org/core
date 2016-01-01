@@ -43,22 +43,24 @@ abstract class MigrationGenerator
         $currentSchema  = $doctrine->getSchemaManager()->createSchema();
         $expectedSchema = $this->databaseConverter->convertToDoctrineSchema($orm->getDatabase());
 
-        $diff = Comparator::compareSchemas($currentSchema, $expectedSchema);
+        $diff        = Comparator::compareSchemas($currentSchema, $expectedSchema);
+        $reverseDiff = Comparator::compareSchemas($expectedSchema, $currentSchema);
 
-        if ($this->isSchemaDiffEmpty($diff)) {
+        if ($this->isSchemaDiffEmpty($diff) && $this->isSchemaDiffEmpty($reverseDiff)) {
             return null;
         }
 
-        return $this->createMigration($diff, $migrationName);
+        return $this->createMigration($diff, $reverseDiff, $migrationName);
     }
 
     /**
      * @param SchemaDiff $diff
+     * @param SchemaDiff $reverseDiff
      * @param string     $migrationName
      *
-     * @return string
+     * @return string|null
      */
-    abstract protected function createMigration(SchemaDiff $diff, $migrationName);
+    abstract protected function createMigration(SchemaDiff $diff, SchemaDiff $reverseDiff, $migrationName);
 
     /**
      * @param SchemaDiff $diff
