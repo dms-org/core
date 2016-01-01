@@ -34,7 +34,7 @@ abstract class MigrationGenerator
      * @param IOrm               $orm
      * @param string             $migrationName
      *
-     * @return string the migration file path
+     * @return string|null the migration file path or null if no migration is required
      */
     public function generateMigration(DoctrineConnection $connection, IOrm $orm, $migrationName)
     {
@@ -44,6 +44,10 @@ abstract class MigrationGenerator
         $expectedSchema = $this->databaseConverter->convertToDoctrineSchema($orm->getDatabase());
 
         $diff = Comparator::compareSchemas($currentSchema, $expectedSchema);
+
+        if ($this->isSchemaDiffEmpty($diff)) {
+            return null;
+        }
 
         return $this->createMigration($diff, $migrationName);
     }
@@ -55,4 +59,24 @@ abstract class MigrationGenerator
      * @return string
      */
     abstract protected function createMigration(SchemaDiff $diff, $migrationName);
+
+    /**
+     * @param SchemaDiff $diff
+     *
+     * @return bool
+     */
+    protected function isSchemaDiffEmpty(SchemaDiff $diff)
+    {
+        return empty(array_filter([
+                $diff->changedSequences,
+                $diff->changedTables,
+                $diff->newNamespaces,
+                $diff->newSequences,
+                $diff->newTables,
+                $diff->removedTables,
+                $diff->removedNamespaces,
+                $diff->removedSequences,
+                $diff->orphanedForeignKeys,
+        ]));
+    }
 }
