@@ -6,12 +6,12 @@ use Dms\Core\Persistence\Db\Mapping\IOrm;
 use Dms\Core\Persistence\Db\Schema\ForeignKey;
 use Dms\Core\Persistence\Db\Schema\ForeignKeyMode;
 use Dms\Core\Persistence\DbRepository;
-use Dms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\HashedPassword;
+use Dms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\TestHashedPassword;
 use Dms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\Mapper\BlogOrm;
-use Dms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\Mapper\PostMapper;
-use Dms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\Mapper\UserMapper;
-use Dms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\Post;
-use Dms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\User;
+use Dms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\Mapper\TestPostMapper;
+use Dms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\Mapper\TestUserMapper;
+use Dms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\TestPost;
+use Dms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\TestUser;
 use Dms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\UserGender;
 use Dms\Core\Tests\Persistence\Db\Integration\Mapping\DbIntegrationTest;
 use Dms\Core\Tests\Persistence\Db\Mock\MockDatabase;
@@ -23,7 +23,7 @@ use Dms\Core\Tests\Persistence\Db\Mock\MockTable;
 class BlogTest extends DbIntegrationTest
 {
     /**
-     * @var UserMapper
+     * @var TestUserMapper
      */
     protected $userMapper;
 
@@ -33,7 +33,7 @@ class BlogTest extends DbIntegrationTest
     protected $userRepo;
 
     /**
-     * @var PostMapper
+     * @var TestPostMapper
      */
     protected $postMapper;
 
@@ -80,7 +80,7 @@ class BlogTest extends DbIntegrationTest
      */
     protected function mapperAndRepoType()
     {
-        return User::class;
+        return TestUser::class;
     }
 
     public function setUp()
@@ -89,7 +89,7 @@ class BlogTest extends DbIntegrationTest
         $this->userMapper = $this->mapper;
         $this->userRepo   = $this->repo;
 
-        $this->postMapper = $this->orm->getEntityMapper(Post::class);
+        $this->postMapper = $this->orm->getEntityMapper(TestPost::class);
         $this->postRepo   = new DbRepository($this->connection, $this->postMapper);
     }
 
@@ -173,17 +173,17 @@ class BlogTest extends DbIntegrationTest
     }
 
     /**
-     * @return User
+     * @return TestUser
      */
     protected function dummyUser()
     {
-        return User::register(
+        return TestUser::register(
                 'johnsmith@gmail.com',
                 'John',
                 'Smith',
                 new \DateTimeImmutable('1975-04-23'),
                 UserGender::male(),
-                new HashedPassword('some--hash', 'bcrypt')
+                new TestHashedPassword('some--hash', 'bcrypt')
         );
     }
 
@@ -214,7 +214,7 @@ class BlogTest extends DbIntegrationTest
     }
 
     /**
-     * @return User
+     * @return TestUser
      */
     protected function setUpDummyUserInDb()
     {
@@ -455,7 +455,7 @@ class BlogTest extends DbIntegrationTest
                 ]
         ]);
 
-        /** @var User $user */
+        /** @var TestUser $user */
         $user            = $this->repo->get(1);
         $user->firstName = 'Garry';
 
@@ -485,7 +485,7 @@ class BlogTest extends DbIntegrationTest
                 ]
         ]);
 
-        /** @var User $user */
+        /** @var TestUser $user */
         $user = $this->repo->get(1);
         $user->aliasAs('Salad', 'Dresser');
 
@@ -517,9 +517,9 @@ class BlogTest extends DbIntegrationTest
                 ]
         ]);
 
-        /** @var User $user1 */
+        /** @var TestUser $user1 */
         $user1 = $this->repo->get(1);
-        /** @var User $user2 */
+        /** @var TestUser $user2 */
         $user2 = $this->repo->get(2);
         $user1->unfriend($user2);
 
@@ -548,7 +548,7 @@ class BlogTest extends DbIntegrationTest
                 ]
         ]);
 
-        /** @var Post $post */
+        /** @var TestPost $post */
         $post          = $this->postRepo->get(1);
         $post->content = 'ABC';
 
@@ -579,11 +579,11 @@ class BlogTest extends DbIntegrationTest
                 ]
         ]);
 
-        /** @var Post $post */
+        /** @var TestPost $post */
         $post = $this->postRepo->get(1);
-        /** @var User $author */
+        /** @var TestUser $author */
         $author = $this->userRepo->get(1);
-        /** @var User $otherUser */
+        /** @var TestUser $otherUser */
         $otherUser = $this->userRepo->get(2);
 
         $author->transferPostTo($post, $otherUser);
@@ -616,7 +616,7 @@ class BlogTest extends DbIntegrationTest
                 ]
         ]);
 
-        /** @var Post $post */
+        /** @var TestPost $post */
         $post           = $this->postRepo->get(1);
         $post->authorId = 2;
 
@@ -651,9 +651,9 @@ class BlogTest extends DbIntegrationTest
                 ]
         ]);
 
-        /** @var User $user */
+        /** @var TestUser $user */
         $user = $this->userRepo->get(2);
-        /** @var Post $post */
+        /** @var TestPost $post */
         $post = $this->postRepo->get(1);
         $user->commentOn($post, 'Goodbye!');
 

@@ -4,15 +4,15 @@ namespace Dms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\Mapper
 
 use Dms\Core\Persistence\Db\Mapping\Definition\MapperDefinition;
 use Dms\Core\Persistence\Db\Mapping\EntityMapper;
-use Dms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\Comment;
-use Dms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\Post;
-use Dms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\User;
+use Dms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\TestComment;
+use Dms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\TestPost;
+use Dms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\TestUser;
 
 /**
  *
  * @author Elliot Levin <elliotlevin@hotmail.com>
  */
-class PostMapper extends EntityMapper
+class TestPostMapper extends EntityMapper
 {
     /**
      * Defines the entity mapper
@@ -23,7 +23,7 @@ class PostMapper extends EntityMapper
      */
     protected function define(MapperDefinition $map)
     {
-        $map->type(Post::class);
+        $map->type(TestPost::class);
         $map->toTable('posts');
 
         $map->idToPrimaryKey('id');
@@ -32,13 +32,13 @@ class PostMapper extends EntityMapper
         $map->property('content')->to('content')->asText();
 
         $map->relation('authorId')
-                ->to(User::class)
+                ->to(TestUser::class)
                 ->manyToOneId()
                 ->withBidirectionalRelation('postIds')
                 ->withRelatedIdAs('author_id');
 
         $map->relation('comments')
-                ->to(Comment::class)
+                ->to(TestComment::class)
                 ->toMany()
                 ->identifying()
                 ->withParentIdAs('post_id');

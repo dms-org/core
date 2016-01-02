@@ -19,7 +19,7 @@ use Dms\Core\Persistence\Db\Query\Clause\Join;
 use Dms\Core\Persistence\Db\Query\Expression\Expr;
 use Dms\Core\Persistence\Db\Query\Select;
 use Dms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\Mapper\BlogOrm;
-use Dms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\User;
+use Dms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\TestUser;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>
@@ -29,7 +29,7 @@ class LoadCriteriaMapperWithBlogDomainTest extends LoadCriteriaMapperTestBase
     protected function buildMapper()
     {
         return new CriteriaMapper(
-                (new BlogOrm())->getEntityMapper(User::class),
+                (new BlogOrm())->getEntityMapper(TestUser::class),
                 $this->getMockForAbstractClass(IConnection::class)
         );
     }

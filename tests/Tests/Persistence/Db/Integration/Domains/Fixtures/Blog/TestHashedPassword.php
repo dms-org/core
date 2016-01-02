@@ -5,11 +5,10 @@ namespace Dms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog;
 use Dms\Core\Model\Object\ClassDefinition;
 use Dms\Core\Model\Object\ValueObject;
 
-
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>
  */
-class HashedPassword extends ValueObject
+class TestHashedPassword extends ValueObject
 {
     /**
      * @var string

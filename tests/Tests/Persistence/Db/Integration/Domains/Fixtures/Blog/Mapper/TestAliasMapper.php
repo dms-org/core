@@ -4,12 +4,12 @@ namespace Dms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\Mapper
 
 use Dms\Core\Persistence\Db\Mapping\Definition\MapperDefinition;
 use Dms\Core\Persistence\Db\Mapping\EntityMapper;
-use Dms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\Alias;
+use Dms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\TestAlias;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>
  */
-class AliasMapper extends EntityMapper
+class TestAliasMapper extends EntityMapper
 {
     /**
      * Defines the entity mapper
@@ -20,7 +20,7 @@ class AliasMapper extends EntityMapper
      */
     protected function define(MapperDefinition $map)
     {
-        $map->type(Alias::class);
+        $map->type(TestAlias::class);
         $map->toTable('aliases');
 
         $map->idToPrimaryKey('id');

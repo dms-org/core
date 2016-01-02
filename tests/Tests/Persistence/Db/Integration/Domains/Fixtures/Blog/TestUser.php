@@ -10,7 +10,7 @@ use Dms\Core\Model\Type\Builder\Type;
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>
  */
-class User extends Entity
+class TestUser extends Entity
 {
     /**
      * @var string
@@ -28,7 +28,7 @@ class User extends Entity
     public $lastName;
 
     /**
-     * @var HashedPassword
+     * @var TestHashedPassword
      */
     public $password;
 
@@ -63,7 +63,7 @@ class User extends Entity
     public $commentIds;
 
     /**
-     * @var Alias|null
+     * @var TestAlias|null
      */
     public $alias;
 
@@ -77,14 +77,14 @@ class User extends Entity
         $class->property($this->email)->asString();
         $class->property($this->firstName)->asString();
         $class->property($this->lastName)->asString();
-        $class->property($this->password)->asObject(HashedPassword::class);
+        $class->property($this->password)->asObject(TestHashedPassword::class);
         $class->property($this->dateOfBirth)->asObject(\DateTimeImmutable::class);
         $class->property($this->gender)->asObject(UserGender::class);
         $class->property($this->status)->asObject(UserStatus::class);
         $class->property($this->postIds)->asCollectionOf(Type::int());
         $class->property($this->friendIds)->asCollectionOf(Type::int());
         $class->property($this->commentIds)->asCollectionOf(Type::int());
-        $class->property($this->alias)->asObject(Alias::class);
+        $class->property($this->alias)->asObject(TestAlias::class);
     }
 
     /**
@@ -100,7 +100,7 @@ class User extends Entity
     }
 
 
-    public static function register($email, $firstName, $lastName, \DateTimeImmutable $dateOfBirth, UserGender $gender, HashedPassword $password)
+    public static function register($email, $firstName, $lastName, \DateTimeImmutable $dateOfBirth, UserGender $gender, TestHashedPassword $password)
     {
         $user = new self();
 
@@ -123,61 +123,61 @@ class User extends Entity
      */
     public function aliasAs($firstName, $lastName)
     {
-        $this->alias = Alias::create($firstName, $lastName);
+        $this->alias = TestAlias::create($firstName, $lastName);
     }
 
     /**
      * @param string $content
      *
-     * @return Post
+     * @return TestPost
      */
     public function createPost($content)
     {
-        return Post::create($this, $content);
+        return TestPost::create($this, $content);
     }
 
     /**
-     * @param Post   $post
-     * @param string $content
+     * @param TestPost $post
+     * @param string   $content
      *
-     * @return Comment
+     * @return TestComment
      */
-    public function commentOn(Post $post, $content)
+    public function commentOn(TestPost $post, $content)
     {
-        $post->comments[] = $comment = Comment::create($this, $content);
+        $post->comments[] = $comment = TestComment::create($this, $content);
 
         return $comment;
     }
 
     /**
-     * @param User $otherUser
+     * @param TestUser $otherUser
      *
      * @return void
      */
-    public function makeFriends(User $otherUser)
+    public function makeFriends(TestUser $otherUser)
     {
         $this->friendIds[]      = $otherUser->getId();
         $otherUser->friendIds[] = $this->getId();
     }
 
     /**
-     * @param User $otherUser
+     * @param TestUser $otherUser
      *
      * @return void
      */
-    public function unfriend(User $otherUser)
+    public function unfriend(TestUser $otherUser)
     {
         $this->friendIds->remove($otherUser->getId());
         $otherUser->friendIds->remove($this->getId());
     }
 
     /**
-     * @param Post $post
-     * @param User $otherUser
+     * @param TestPost $post
+     * @param TestUser $otherUser
      *
      * @return void
      */
-    public function transferPostTo(Post $post, User $otherUser)
+    public function transferPostTo(TestPost $post, TestUser $otherUser)
     {
         $post->authorId = $otherUser->getId();
         $this->postIds->remove($post->getId());

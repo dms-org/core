@@ -4,11 +4,11 @@ namespace Dms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\Mapper
 
 use Dms\Core\Persistence\Db\Mapping\Definition\Orm\OrmDefinition;
 use Dms\Core\Persistence\Db\Mapping\Orm;
-use Dms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\Alias;
-use Dms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\Comment;
-use Dms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\HashedPassword;
-use Dms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\Post;
-use Dms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\User;
+use Dms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\TestAlias;
+use Dms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\TestComment;
+use Dms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\TestHashedPassword;
+use Dms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\TestPost;
+use Dms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\TestUser;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>
@@ -24,11 +24,11 @@ class BlogOrm extends Orm
      */
     protected function define(OrmDefinition $orm)
     {
-        $orm->entity(User::class)->from(UserMapper::class);
-        $orm->entity(Alias::class)->from(AliasMapper::class);
-        $orm->entity(Post::class)->from(PostMapper::class);
-        $orm->entity(Comment::class)->from(CommentMapper::class);
+        $orm->entity(TestUser::class)->from(TestUserMapper::class);
+        $orm->entity(TestAlias::class)->from(TestAliasMapper::class);
+        $orm->entity(TestPost::class)->from(TestPostMapper::class);
+        $orm->entity(TestComment::class)->from(TestCommentMapper::class);
 
-        $orm->valueObject(HashedPassword::class)->from(PasswordMapper::class);
+        $orm->valueObject(TestHashedPassword::class)->from(TestPasswordMapper::class);
     }
 }

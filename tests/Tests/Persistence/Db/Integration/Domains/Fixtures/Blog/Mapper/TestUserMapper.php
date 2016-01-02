@@ -4,16 +4,16 @@ namespace Dms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\Mapper
 
 use Dms\Core\Persistence\Db\Mapping\Definition\MapperDefinition;
 use Dms\Core\Persistence\Db\Mapping\EntityMapper;
-use Dms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\Alias;
-use Dms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\Comment;
-use Dms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\HashedPassword;
-use Dms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\Post;
-use Dms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\User;
+use Dms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\TestAlias;
+use Dms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\TestComment;
+use Dms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\TestHashedPassword;
+use Dms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\TestPost;
+use Dms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\TestUser;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>
  */
-class UserMapper extends EntityMapper
+class TestUserMapper extends EntityMapper
 {
     /**
      * Defines the entity mapper
@@ -24,7 +24,7 @@ class UserMapper extends EntityMapper
      */
     protected function define(MapperDefinition $map)
     {
-        $map->type(User::class);
+        $map->type(TestUser::class);
         $map->toTable('users');
 
         $map->idToPrimaryKey('id');
@@ -39,10 +39,10 @@ class UserMapper extends EntityMapper
 
         $map->embedded('password')
                 ->withColumnsPrefixedBy('password_')
-                ->to(HashedPassword::class);
+                ->to(TestHashedPassword::class);
 
         $map->relation('postIds')
-                ->to(Post::class)
+                ->to(TestPost::class)
                 ->toManyIds()
                 ->withBidirectionalRelation('authorId')
                 ->withParentIdAs('author_id');
@@ -55,12 +55,12 @@ class UserMapper extends EntityMapper
                 ->withRelatedIdAs('friend_id');
 
         $map->relation('commentIds')
-                ->to(Comment::class)
+                ->to(TestComment::class)
                 ->toManyIds()
                 ->withParentIdAs('author_id');
 
         $map->relation('alias')
-                ->to(Alias::class)
+                ->to(TestAlias::class)
                 ->toOne()
                 ->identifying()
                 ->withParentIdAs('user_id');

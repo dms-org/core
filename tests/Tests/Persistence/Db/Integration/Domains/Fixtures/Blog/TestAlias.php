@@ -8,7 +8,7 @@ use Dms\Core\Model\Object\Entity;
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>
  */
-class Alias extends Entity
+class TestAlias extends Entity
 {
     /**
      * @var string
