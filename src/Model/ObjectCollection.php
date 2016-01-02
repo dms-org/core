@@ -3,8 +3,8 @@
 namespace Dms\Core\Model;
 
 use Dms\Core\Exception;
-use Dms\Core\Model\Criteria\MemberExpressionNode;
 use Dms\Core\Model\Criteria\LoadCriteria;
+use Dms\Core\Model\Criteria\MemberExpressionNode;
 use Dms\Core\Model\Object\FinalizedClassDefinition;
 use Dms\Core\Model\Object\TypedObject;
 use Dms\Core\Model\Type\Builder\Type;
@@ -56,6 +56,18 @@ class ObjectCollection extends TypedCollection implements ITypedObjectCollection
             $objectType            = $this->getObjectType();
             $this->classDefinition = $objectType::definition();
         }
+    }
+
+    protected function dataToSerialize()
+    {
+        return $this->getObjectType();
+    }
+
+
+    protected function loadFromSerializedData($class)
+    {
+        parent::loadFromSerializedData(Type::object($class));
+        $this->classDefinition = $class::definition();
     }
 
     protected function constructScopedSelf($elements)

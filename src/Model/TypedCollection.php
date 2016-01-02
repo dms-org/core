@@ -43,6 +43,25 @@ class TypedCollection extends Collection implements ITypedCollection
         parent::__construct($values, $scheme, $source);
     }
 
+    protected function dataToSerialize()
+    {
+        return $this->elementType;
+    }
+
+    protected function loadFromSerializedData($data)
+    {
+        return $this->elementType = $data;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    function __call($name, $arguments)
+    {
+        // TODO: Implement __call() method.
+    }
+
+
     protected function constructScopedSelf($elements)
     {
         return new static(Type::mixed(), $elements, $this->scheme, $this->source ?: $this);

@@ -250,4 +250,11 @@ class EntityCollectionTest extends IEntitySetTest
 
         $this->assertEquals([$this->entityMock(1), $this->entityMock(10)], $data);
     }
+
+    public function testIsSerializable()
+    {
+        $collection = $this->collection;
+
+        $this->assertEquals($collection, unserialize(serialize($collection)));
+    }
 }

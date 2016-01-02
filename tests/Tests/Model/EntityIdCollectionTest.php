@@ -3,8 +3,6 @@
 namespace Dms\Core\Tests\Model;
 
 use Dms\Common\Testing\CmsTestCase;
-use Dms\Core\Exception\InvalidArgumentException;
-use Dms\Core\Model\EntityCollection;
 use Dms\Core\Model\EntityIdCollection;
 use Dms\Core\Model\Type\Builder\Type;
 use Dms\Core\Model\TypedCollection;
@@ -53,5 +51,12 @@ class EntityIdCollectionTest extends CmsTestCase
         $this->assertNotInstanceOf(EntityIdCollection::class, $numbers);
 
         $this->assertSame([1, 4, 9, 25], $numbers->asArray());
+    }
+
+    public function testIsSerializable()
+    {
+        $collection = new EntityIdCollection([1, 2, 3, 5]);
+
+        $this->assertEquals($collection, unserialize(serialize($collection)));
     }
 }

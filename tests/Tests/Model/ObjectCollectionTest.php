@@ -67,4 +67,14 @@ class ObjectCollectionTest extends CmsTestCase
             $this->collection->containsAll([$object1, $object2, new TestEntity(3)]);
         }, TypeMismatchException::class);
     }
+
+    public function testIsSerializable()
+    {
+        $collection = BlankTypedObject::collection([
+                $object1 = new BlankTypedObject(),
+                $object2 = new BlankTypedObject(),
+        ]);
+
+        $this->assertEquals($collection, unserialize(serialize($collection)));
+    }
 }

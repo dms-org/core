@@ -39,6 +39,7 @@ class ValueObjectCollectionTest extends CmsTestCase
 
         $this->assertEquals(['data'], $props->asArray());
     }
+
     public function testContains()
     {
         $collection = SubObject::collection([
@@ -76,5 +77,15 @@ class ValueObjectCollectionTest extends CmsTestCase
         $this->assertThrows(function () use ($collection, $object1, $object2) {
             $collection->containsAll([$object1, $object2, new TestEntity(3)]);
         }, TypeMismatchException::class);
+    }
+
+    public function testIsSerializable()
+    {
+        $collection = SubObject::collection([
+                $object1 = new SubObject('foo'),
+                $object2 = new SubObject('bar'),
+        ]);
+
+        $this->assertEquals($collection, unserialize(serialize($collection)));
     }
 }
