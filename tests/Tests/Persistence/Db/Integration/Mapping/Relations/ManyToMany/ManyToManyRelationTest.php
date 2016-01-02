@@ -225,7 +225,7 @@ class ManyToManyRelationTest extends DbIntegrationTest
                 ->addRawColumn('id')
                 ->addRawColumn('val')
                 ->addColumn('one_id', Expr::tableColumn($this->joinTable, 'one_id'))
-                ->join(Join::right($this->joinTable, $this->joinTable->getName(), [
+                ->join(Join::inner($this->joinTable, $this->joinTable->getName(), [
                         Expr::equal(Expr::tableColumn($this->joinTable, 'another_id'), Expr::tableColumn($this->anotherTable, 'id'))
                 ]))
                 ->where(Expr::in(Expr::tableColumn($this->joinTable, 'one_id'), Expr::tuple([Expr::idParam(1)])))
@@ -321,7 +321,7 @@ class ManyToManyRelationTest extends DbIntegrationTest
                 ->addRawColumn('id')
                 ->addRawColumn('val')
                 ->addColumn('one_id', Expr::tableColumn($this->joinTable, 'one_id'))
-                ->join(Join::right($this->joinTable, $this->joinTable->getName(), [
+                ->join(Join::inner($this->joinTable, $this->joinTable->getName(), [
                         Expr::equal(Expr::tableColumn($this->joinTable, 'another_id'), Expr::tableColumn($this->anotherTable, 'id'))
                 ]))
                 ->where(Expr::in(Expr::tableColumn($this->joinTable, 'one_id'),

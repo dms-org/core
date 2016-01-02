@@ -2,7 +2,6 @@
 
 namespace Dms\Core\Tests\Persistence\Db\Integration\Mapping\Relations\ManyToMany;
 
-use Dms\Core\Persistence\Db\Mapping\IEntityMapper;
 use Dms\Core\Persistence\Db\Mapping\IOrm;
 use Dms\Core\Persistence\Db\Query\Clause\Join;
 use Dms\Core\Persistence\Db\Query\Delete;
@@ -172,46 +171,32 @@ class RecursiveManyToManyRelationTest extends DbIntegrationTest
                 ],
         ]);
 
-        $another1               = new RecursiveEntity(4);
-        $another2               = new RecursiveEntity(5);
-        $another3               = new RecursiveEntity(6);
-        $entities               = [
-                new RecursiveEntity(1, [
-                        $another1,
-                        $another2,
-                        $another3,
-                ]),
+        $another4 = new RecursiveEntity(4);
+        $another5 = new RecursiveEntity(5);
+        $another3 = new RecursiveEntity(6);
+        /** @var RecursiveEntity[] $entities */
+        $entities             = [
+                new RecursiveEntity(1),
                 new RecursiveEntity(2, [
-                        $another1,
+                        $another4,
                         $another3,
                 ]),
                 new RecursiveEntity(3, [
-                        $another2,
+                        $another5,
                         $another3,
                 ]),
         ];
-        $entities[0]->parents[] = $entities[0];
+
+        $entities[0]->parents = RecursiveEntity::collection([
+                $entities[0],
+                $another4,
+                $another5,
+                $another3,
+        ]);
 
         /** @var RecursiveEntity[] $actual */
         $actual = $this->repo->tryGetAll([1, 2, 3]);
-        $this->assertCount(3, $actual);
-        $this->assertSame(1, $actual[0]->getId());
-        $this->assertSame(4, $actual[0]->parents[0]->getId());
-        $this->assertSame([], $actual[0]->parents[0]->parents->getAll());
-        $this->assertSame(5, $actual[0]->parents[1]->getId());
-        $this->assertSame([], $actual[0]->parents[1]->parents->getAll());
-        $this->assertSame(6, $actual[0]->parents[2]->getId());
-        $this->assertSame([], $actual[0]->parents[2]->parents->getAll());
-        $this->assertSame($actual[0]->parents[0], $actual[1]->parents[0]);
-        $this->assertSame($actual[0]->parents[3], $actual[0]);
-
-        $this->assertSame(2, $actual[1]->getId());
-        $this->assertSame($actual[0]->parents[0], $actual[1]->parents[0]);
-        $this->assertSame($actual[0]->parents[2], $actual[1]->parents[1]);
-
-        $this->assertSame(3, $actual[2]->getId());
-        $this->assertSame($actual[0]->parents[1], $actual[2]->parents[0]);
-        $this->assertSame($actual[0]->parents[2], $actual[2]->parents[1]);
+        $this->assertEquals(($entities), ($actual));
 
         $this->assertExecutedQueryTypes([
                 'Load parent entities'                           => Select::class,
@@ -222,11 +207,11 @@ class RecursiveManyToManyRelationTest extends DbIntegrationTest
         $this->assertExecutedQueryNumber(2, Select::from($this->entities)
                 ->addRawColumn('id')
                 ->addColumn('parent_id', Expr::tableColumn($this->joinTable, 'parent_id'))
-                ->join(Join::right($this->joinTable, $this->joinTable->getName(), [
+                ->join(Join::inner($this->joinTable, $this->joinTable->getName(), [
                         Expr::equal(Expr::tableColumn($this->joinTable, 'child_id'), Expr::tableColumn($this->entities, 'id'))
                 ]))
                 ->where(Expr::in(
-                        Expr::tableColumn( $this->joinTable, 'parent_id'),
+                        Expr::tableColumn($this->joinTable, 'parent_id'),
                         Expr::tuple([Expr::idParam(1), Expr::idParam(2), Expr::idParam(3)])
                 ))
         );
@@ -272,12 +257,15 @@ class RecursiveManyToManyRelationTest extends DbIntegrationTest
         $this->assertExecutedQueryNumber(1,
                 Delete::from($this->joinTable)
                         ->join(Join::inner($this->entities, 'recursive_entities', [
-                            Expr::or_(
-                                    Expr::equal(Expr::tableColumn($this->entities, 'id'), Expr::tableColumn($this->joinTable, 'parent_id')),
-                                    Expr::equal(Expr::tableColumn($this->entities, 'id'), Expr::tableColumn($this->joinTable, 'child_id'))
-                            )
+                                Expr::or_(
+                                        Expr::equal(Expr::tableColumn($this->entities, 'id'),
+                                                Expr::tableColumn($this->joinTable, 'parent_id')),
+                                        Expr::equal(Expr::tableColumn($this->entities, 'id'),
+                                                Expr::tableColumn($this->joinTable, 'child_id'))
+                                )
                         ]))
-                        ->where(Expr::in(Expr::tableColumn($this->entities, 'id'), Expr::tuple([Expr::idParam(1), Expr::idParam(3), Expr::idParam(4)])))
+                        ->where(Expr::in(Expr::tableColumn($this->entities, 'id'),
+                                Expr::tuple([Expr::idParam(1), Expr::idParam(3), Expr::idParam(4)])))
         );
     }
 

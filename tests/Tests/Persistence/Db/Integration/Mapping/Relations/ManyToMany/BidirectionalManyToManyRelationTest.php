@@ -340,7 +340,7 @@ class BidirectionalManyToManyRelationTest extends DbIntegrationTest
         $this->assertExecutedQueryNumber(2, Select::from($this->anotherTable)
                 ->addRawColumn('id')
                 ->addColumn('one_id', Expr::tableColumn($this->joinTable, 'one_id'))
-                ->join(Join::right($this->joinTable, $this->joinTable->getName(), [
+                ->join(Join::inner($this->joinTable, $this->joinTable->getName(), [
                         Expr::equal(Expr::tableColumn($this->joinTable, 'another_id'), Expr::tableColumn($this->anotherTable, 'id'))
                 ]))
                 ->where(Expr::in(Expr::tableColumn($this->joinTable, 'one_id'),
