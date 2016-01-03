@@ -36,6 +36,22 @@ abstract class FieldComparisonValidator extends FormValidator
     }
 
     /**
+     * @return IField
+     */
+    public function getField1()
+    {
+        return $this->field1;
+    }
+
+    /**
+     * @return IField
+     */
+    public function getField2()
+    {
+        return $this->field2;
+    }
+
+    /**
      * @param array     $input
      * @param Message[] $messages
      *

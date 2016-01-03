@@ -11,7 +11,6 @@ use Dms\Core\Language\Message;
  */
 abstract class FormValidatorTest extends CmsTestCase
 {
-
     /**
      * @var FormValidator
      */

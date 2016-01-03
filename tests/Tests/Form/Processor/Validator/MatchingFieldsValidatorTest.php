@@ -13,9 +13,13 @@ use Dms\Core\Language\Message;
  */
 class MatchingFieldsValidatorTest extends FormValidatorTest
 {
+    /**
+     * @var MatchingFieldsValidator
+     */
+    protected $validator;
 
     /**
-     * @return FormValidator
+     * @return MatchingFieldsValidator
      */
     protected function validator()
     {
@@ -48,5 +52,11 @@ class MatchingFieldsValidatorTest extends FormValidatorTest
                 [['one' => 'bar', 'two' => 'baz'], new Message(MatchingFieldsValidator::MESSAGE, ['field1' => 'One', 'field2' => 'Two'])],
                 [['one' => 123, 'two' => '123'], new Message(MatchingFieldsValidator::MESSAGE, ['field1' => 'One', 'field2' => 'Two'])],
         ];
+    }
+
+    public function testGetters()
+    {
+        $this->assertSame('one', $this->validator->getField1()->getName());
+        $this->assertSame('two', $this->validator->getField2()->getName());
     }
 }
