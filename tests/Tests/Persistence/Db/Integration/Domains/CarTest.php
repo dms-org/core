@@ -4,6 +4,7 @@ namespace Dms\Core\Tests\Persistence\Db\Integration\Domains;
 
 use Dms\Core\Persistence\Db\Mapping\IOrm;
 use Dms\Core\Persistence\Db\Schema\Column;
+use Dms\Core\Persistence\Db\Schema\PrimaryKeyBuilder;
 use Dms\Core\Persistence\Db\Schema\Type\Enum;
 use Dms\Core\Persistence\Db\Schema\Type\Integer;
 use Dms\Core\Persistence\Db\Schema\Type\Varchar;
@@ -56,7 +57,7 @@ class CarTest extends DbIntegrationTest
     public function testStructure()
     {
         $this->assertEquals([
-                'id'    => new Column('id', Integer::normal()->autoIncrement(), true),
+                'id'    => PrimaryKeyBuilder::incrementingInt('id'),
                 'brand' => new Column('brand', new Varchar(255)),
                 'type'  => new Column('type', new Enum(['sedan', 'hatch', 'convertible', 'family'])),
         ], $this->carsTable->getStructure()->getColumns());

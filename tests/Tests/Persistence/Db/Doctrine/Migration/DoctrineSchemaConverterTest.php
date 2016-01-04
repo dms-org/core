@@ -76,6 +76,8 @@ class DoctrineSchemaConverterTest extends CmsTestCase
                 new Table('test', [
                         new Column('primary_key', Integer::normal()->autoIncrement(), true),
                         //
+                        new Column('unsigned_int', Integer::normal()->unsigned()),
+                        //
                         new Column('int_tiny', Integer::tiny()),
                         new Column('int_small', Integer::small()),
                         new Column('int_normal', Integer::normal()),
@@ -114,6 +116,8 @@ class DoctrineSchemaConverterTest extends CmsTestCase
 
         $testTable->addColumn('primary_key', Type::INTEGER)->setAutoincrement(true);
         $testTable->setPrimaryKey(['primary_key']);
+
+        $testTable->addColumn('unsigned_int', Type::INTEGER)->setUnsigned(true);
 
         $testTable->addColumn('int_tiny', TinyIntType::TINYINT);
         $testTable->addColumn('int_small', Type::SMALLINT);

@@ -12,14 +12,14 @@ class Child extends Person
     const FAVOURITE_COLOUR = 'favouriteColour';
 
     /**
-     * @var Colour
+     * @var TestColour
      */
     public $favouriteColour;
 
     /**
      * @inheritDoc
      */
-    public function __construct($id, $firstName, $lastName, $age, Colour $favouriteColour)
+    public function __construct($id, $firstName, $lastName, $age, TestColour $favouriteColour)
     {
         parent::__construct($id, $firstName, $lastName, $age);
         $this->favouriteColour = $favouriteColour;
@@ -32,7 +32,7 @@ class Child extends Person
     {
         parent::defineEntity($class);
 
-        $class->property($this->favouriteColour)->asObject(Colour::class);
+        $class->property($this->favouriteColour)->asObject(TestColour::class);
     }
 
     /**

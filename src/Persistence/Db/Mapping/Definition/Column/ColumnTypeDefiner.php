@@ -160,6 +160,16 @@ class ColumnTypeDefiner
     }
 
     /**
+     * Defines the column as an unsigned INT column
+     *
+     * @return void
+     */
+    public function asUnsignedInt()
+    {
+        $this->asType(Integer::normal()->unsigned());
+    }
+
+    /**
      * Defines the column as a TINYINT column
      *
      * @return void
@@ -167,6 +177,16 @@ class ColumnTypeDefiner
     public function asTinyInt()
     {
         $this->asType(Integer::tiny());
+    }
+
+    /**
+     * Defines the column as an unsigned TINYINT column
+     *
+     * @return void
+     */
+    public function asUnsignedTinyInt()
+    {
+        $this->asType(Integer::tiny()->unsigned());
     }
 
     /**
@@ -180,6 +200,16 @@ class ColumnTypeDefiner
     }
 
     /**
+     * Defines the column as an unsigned SMALLINT column
+     *
+     * @return void
+     */
+    public function asUnsignedSmallInt()
+    {
+        $this->asType(Integer::small()->unsigned());
+    }
+
+    /**
      * Defines the column as a MEDIUMINT column
      *
      * @return void
@@ -190,6 +220,16 @@ class ColumnTypeDefiner
     }
 
     /**
+     * Defines the column as an unsigned MEDIUMINT column
+     *
+     * @return void
+     */
+    public function asUnsignedMediumInt()
+    {
+        $this->asType(Integer::medium()->unsigned());
+    }
+
+    /**
      * Defines the column as a BIGINT column
      *
      * @return void
@@ -197,6 +237,16 @@ class ColumnTypeDefiner
     public function asBigInt()
     {
         $this->asType(Integer::big());
+    }
+
+    /**
+     * Defines the column as an unsigned BIGINT column
+     *
+     * @return void
+     */
+    public function asUnsignedBigInt()
+    {
+        $this->asType(Integer::big()->unsigned());
     }
 
     /**

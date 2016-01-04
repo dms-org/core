@@ -12,7 +12,7 @@ use Dms\Core\Model\Object\ArrayDataObject;
 use Dms\Core\Table\Builder\Column;
 use Dms\Core\Tests\Common\Crud\Modules\Fixtures\Complex\Domain\Adult;
 use Dms\Core\Tests\Common\Crud\Modules\Fixtures\Complex\Domain\Child;
-use Dms\Core\Tests\Common\Crud\Modules\Fixtures\Complex\Domain\Colour;
+use Dms\Core\Tests\Common\Crud\Modules\Fixtures\Complex\Domain\TestColour;
 use Dms\Core\Tests\Common\Crud\Modules\Fixtures\Complex\Domain\Person;
 
 /**
@@ -83,11 +83,11 @@ class PersonModule extends CrudModule
                             $form->field(
                                     Field::name('favourite_colour')
                                             ->label('Favourite Colour')
-                                            ->enum(Colour::class, [
-                                                    Colour::RED    => 'Red',
-                                                    Colour::GREEN  => 'Green',
-                                                    Colour::BLUE   => 'Blue',
-                                                    Colour::YELLOW => 'Yellow',
+                                            ->enum(TestColour::class, [
+                                                    TestColour::RED    => 'Red',
+                                                    TestColour::GREEN  => 'Green',
+                                                    TestColour::BLUE   => 'Blue',
+                                                    TestColour::YELLOW => 'Yellow',
                                             ])
                                             ->required()
                             )->bindToProperty(Child::FAVOURITE_COLOUR),

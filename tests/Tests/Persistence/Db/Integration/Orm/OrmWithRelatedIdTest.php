@@ -10,6 +10,7 @@ use Dms\Core\Persistence\Db\Schema\Column;
 use Dms\Core\Persistence\Db\Schema\Database;
 use Dms\Core\Persistence\Db\Schema\ForeignKey;
 use Dms\Core\Persistence\Db\Schema\ForeignKeyMode;
+use Dms\Core\Persistence\Db\Schema\PrimaryKeyBuilder;
 use Dms\Core\Persistence\Db\Schema\Table;
 use Dms\Core\Persistence\Db\Schema\Type\Integer;
 use Dms\Core\Persistence\Db\Schema\Type\Varchar;
@@ -35,10 +36,10 @@ class OrmWithRelatedIdTest extends OrmTestBase
     {
         $this->assertEquals(new Database([
                 new Table('parents', [
-                        new Column('id', Integer::normal()->autoIncrement(), true),
+                        PrimaryKeyBuilder::incrementingInt('id'),
                 ]),
                 new Table('children', [
-                        new Column('id', Integer::normal()->autoIncrement(), true),
+                        PrimaryKeyBuilder::incrementingInt('id'),
                         new Column('parent_id', Integer::normal()),
                         new Column('data', (new Varchar(255))->nullable()),
                 ], [], [

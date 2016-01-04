@@ -2,6 +2,7 @@
 
 namespace Dms\Core\Tests\Persistence\Db\Doctrine;
 
+use Dms\Core\Persistence\Db\Schema\PrimaryKeyBuilder;
 use Doctrine\DBAL\DriverManager;
 use Doctrine\DBAL\Platforms\SqlitePlatform;
 use Dms\Core\Exception\InvalidOperationException;
@@ -114,7 +115,7 @@ class DoctrineConnectionTest extends DoctrineTestBase
         $this->connection->prepare('CREATE TABLE foo (id INTEGER PRIMARY KEY, data VARCHAR(255))')->execute();
 
         return new Table('foo', [
-                new Column('id', Integer::normal()->autoIncrement(), true),
+                PrimaryKeyBuilder::incrementingInt('id'),
                 new Column('data', new Varchar(255)),
         ]);
     }

@@ -6,9 +6,8 @@ use Dms\Common\Testing\CmsTestCase;
 use Dms\Core\Exception\InvalidArgumentException;
 use Dms\Core\Persistence\Db\Row;
 use Dms\Core\Persistence\Db\RowSet;
-use Dms\Core\Persistence\Db\Schema\Column;
+use Dms\Core\Persistence\Db\Schema\PrimaryKeyBuilder;
 use Dms\Core\Persistence\Db\Schema\Table;
-use Dms\Core\Persistence\Db\Schema\Type\Integer;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>
@@ -17,7 +16,7 @@ class RowSetTest extends CmsTestCase
 {
     private function table()
     {
-        return new Table('table', [new Column('id', Integer::normal()->autoIncrement(), true)]);
+        return new Table('table', [PrimaryKeyBuilder::incrementingInt('id')]);
     }
 
     public function testFromRows()
@@ -88,7 +87,8 @@ class RowSetTest extends CmsTestCase
         $this->assertTrue($rows->add($rows->createRow(['id' => null])));
         $this->assertTrue($rows->add($rows->createRow(['id' => null])));
 
-        $this->assertEquals([$rows->createRow(['id' => null]), $rows->createRow(['id' => null])], $rows->getRowsWithoutPrimaryKeys()->getRows());
+        $this->assertEquals([$rows->createRow(['id' => null]), $rows->createRow(['id' => null])],
+                $rows->getRowsWithoutPrimaryKeys()->getRows());
     }
 
     public function testThrowsOnWrongTableRow()

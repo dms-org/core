@@ -14,7 +14,7 @@ use Dms\Core\Persistence\ArrayRepository;
 use Dms\Core\Persistence\IRepository;
 use Dms\Core\Tests\Common\Crud\Modules\Fixtures\Complex\Domain\Adult;
 use Dms\Core\Tests\Common\Crud\Modules\Fixtures\Complex\Domain\Child;
-use Dms\Core\Tests\Common\Crud\Modules\Fixtures\Complex\Domain\Colour;
+use Dms\Core\Tests\Common\Crud\Modules\Fixtures\Complex\Domain\TestColour;
 use Dms\Core\Tests\Common\Crud\Modules\Fixtures\Complex\Domain\Person;
 use Dms\Core\Tests\Common\Crud\Modules\Fixtures\Complex\PersonModule;
 use Dms\Core\Tests\Module\Mock\MockAuthSystem;
@@ -43,9 +43,9 @@ class PersonCrudModuleTest extends CrudModuleTest
     protected function buildRepositoryDataSource()
     {
         return new ArrayRepository(Person::collection([
-                new Child(1, 'Jack', 'Baz', 15, Colour::blue()),
-                new Child(2, 'Samantha', 'Williams', 12, Colour::red()),
-                new Child(3, 'Casey', 'Low', 15, Colour::green()),
+                new Child(1, 'Jack', 'Baz', 15, TestColour::blue()),
+                new Child(2, 'Samantha', 'Williams', 12, TestColour::red()),
+                new Child(3, 'Casey', 'Low', 15, TestColour::green()),
                 //
                 new Adult(4, 'Joe', 'Quarter', 25, 'Surgeon'),
                 new Adult(5, 'Kate', 'Costa', 28, 'Lawyer'),
@@ -174,7 +174,7 @@ class PersonCrudModuleTest extends CrudModuleTest
                         Child::FIRST_NAME       => 'New',
                         Child::LAST_NAME        => 'Kid',
                         Child::AGE              => 10,
-                        Child::FAVOURITE_COLOUR => Colour::yellow()
+                        Child::FAVOURITE_COLOUR => TestColour::yellow()
                 ],
                 $this->dataSource->get(6)->toArray()
         );
@@ -224,7 +224,7 @@ class PersonCrudModuleTest extends CrudModuleTest
                 'favourite_colour'               => 'red',
         ]);
 
-        $this->assertEquals(Colour::red(), $this->dataSource->get(2)->{Child::FAVOURITE_COLOUR});
+        $this->assertEquals(TestColour::red(), $this->dataSource->get(2)->{Child::FAVOURITE_COLOUR});
     }
 
     public function testEditAdultAction()

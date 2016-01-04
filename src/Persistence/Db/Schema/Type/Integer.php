@@ -23,6 +23,11 @@ class Integer extends Type
     /**
      * @var bool
      */
+    private $unsigned = false;
+
+    /**
+     * @var bool
+     */
     private $autoIncrement = false;
 
     /**
@@ -87,11 +92,30 @@ class Integer extends Type
     }
 
     /**
+     * @return self
+     */
+    public function unsigned()
+    {
+        $clone = clone $this;
+        $clone->unsigned = true;
+
+        return $clone;
+    }
+
+    /**
      * @return bool
      */
     public function isAutoIncrement()
     {
         return $this->autoIncrement;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isUnsigned()
+    {
+        return $this->unsigned;
     }
 
     /**

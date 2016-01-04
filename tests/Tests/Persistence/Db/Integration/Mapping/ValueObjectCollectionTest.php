@@ -8,6 +8,7 @@ use Dms\Core\Persistence\Db\Query\Upsert;
 use Dms\Core\Persistence\Db\Schema\Column;
 use Dms\Core\Persistence\Db\Schema\ForeignKey;
 use Dms\Core\Persistence\Db\Schema\ForeignKeyMode;
+use Dms\Core\Persistence\Db\Schema\PrimaryKeyBuilder;
 use Dms\Core\Persistence\Db\Schema\Table;
 use Dms\Core\Persistence\Db\Schema\Type\Integer;
 use Dms\Core\Persistence\Db\Schema\Type\Varchar;
@@ -49,7 +50,7 @@ class ValueObjectCollectionTest extends DbIntegrationTest
     {
         $this->assertEquals(
                 new Table('emails', [
-                        new Column('id', Integer::normal()->autoIncrement(), true),
+                        PrimaryKeyBuilder::incrementingInt('id'),
                         new Column('entity_id', Integer::normal()),
                         new Column('email', new Varchar(255))
                 ], [], [

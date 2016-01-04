@@ -7,6 +7,7 @@ use Dms\Core\Persistence\Db\Mapping\IOrm;
 use Dms\Core\Persistence\Db\Schema\Column;
 use Dms\Core\Persistence\Db\Schema\ForeignKey;
 use Dms\Core\Persistence\Db\Schema\ForeignKeyMode;
+use Dms\Core\Persistence\Db\Schema\PrimaryKeyBuilder;
 use Dms\Core\Persistence\Db\Schema\Table;
 use Dms\Core\Persistence\Db\Schema\Type\Boolean;
 use Dms\Core\Persistence\Db\Schema\Type\Integer;
@@ -82,20 +83,20 @@ class ClassTableInheritanceTest extends DbIntegrationTest
     {
         $this->assertDatabaseStructureSameAs([
                 'parent_entities' => [
-                        new Column('id', Integer::normal()->autoIncrement(), true),
+                        PrimaryKeyBuilder::incrementingInt('id'),
                         new Column('base_prop', new Varchar(255)),
                 ],
                 'subclass1_table' => [
-                        new Column('id', Integer::normal()->autoIncrement(), true),
+                        PrimaryKeyBuilder::incrementingInt('id'),
                         new Column('subclass1_prop', Integer::normal()),
                 ],
                 'subclass2_table' => [
-                        new Column('id', Integer::normal()->autoIncrement(), true),
+                        PrimaryKeyBuilder::incrementingInt('id'),
                         new Column('subclass2_prop', Integer::normal()),
                         new Column('subclass2_prop2', new Boolean()),
                 ],
                 'subclass3_table' => [
-                        new Column('id', Integer::normal()->autoIncrement(), true),
+                        PrimaryKeyBuilder::incrementingInt('id'),
                         new Column('subclass3_prop', new Varchar(255)),
                 ],
         ]);

@@ -30,6 +30,7 @@ use Dms\Core\Persistence\Db\Mapping\Relation\IToOneRelation;
 use Dms\Core\Persistence\Db\Schema\Column;
 use Dms\Core\Persistence\Db\Schema\ForeignKey;
 use Dms\Core\Persistence\Db\Schema\Index;
+use Dms\Core\Persistence\Db\Schema\PrimaryKeyBuilder;
 use Dms\Core\Persistence\Db\Schema\Table;
 use Dms\Core\Persistence\Db\Schema\Type\Integer;
 use Dms\Core\Util\Debug;
@@ -728,7 +729,7 @@ class MapperDefinition extends MapperDefinitionBase
      */
     protected function buildPrimaryKeyColumn($name)
     {
-        return new Column($name, Integer::normal()->autoIncrement(), true);
+        return PrimaryKeyBuilder::incrementingInt($name);
     }
 
     /**

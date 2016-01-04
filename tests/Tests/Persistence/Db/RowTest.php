@@ -4,9 +4,8 @@ namespace Dms\Core\Tests\Persistence\Db;
 
 use Dms\Common\Testing\CmsTestCase;
 use Dms\Core\Persistence\Db\Row;
-use Dms\Core\Persistence\Db\Schema\Column;
+use Dms\Core\Persistence\Db\Schema\PrimaryKeyBuilder;
 use Dms\Core\Persistence\Db\Schema\Table;
-use Dms\Core\Persistence\Db\Schema\Type\Integer;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>
@@ -15,7 +14,7 @@ class RowTest extends CmsTestCase
 {
     private function table()
     {
-        return new Table('table', [new Column('id', Integer::normal()->autoIncrement(), true)]);
+        return new Table('table', [PrimaryKeyBuilder::incrementingInt('id')]);
     }
 
     public function testWithId()

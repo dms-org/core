@@ -4,6 +4,7 @@ namespace Dms\Core\Tests\Persistence\Db\Integration\Domains;
 
 use Dms\Core\Persistence\Db\Mapping\IOrm;
 use Dms\Core\Persistence\Db\Schema\Column;
+use Dms\Core\Persistence\Db\Schema\PrimaryKeyBuilder;
 use Dms\Core\Persistence\Db\Schema\Type\Integer;
 use Dms\Core\Persistence\Db\Schema\Type\Varchar;
 use Dms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Sport\Bowler;
@@ -72,23 +73,23 @@ class PlayerClassTableInheritanceTest extends DbIntegrationTest
     public function testStructure()
     {
         $this->assertEquals([
-                'id'   => new Column('id', Integer::normal()->autoIncrement(), true),
+                'id'   => PrimaryKeyBuilder::incrementingInt('id'),
                 'name' => new Column('name', new Varchar(255)),
         ], $this->playersTable->getStructure()->getColumns());
 
 
         $this->assertEquals([
-                'id'   => new Column('id', Integer::normal()->autoIncrement(), true),
+                'id'   => PrimaryKeyBuilder::incrementingInt('id'),
                 'club' => new Column('club', new Varchar(255)),
         ], $this->footballersTable->getStructure()->getColumns());
 
         $this->assertEquals([
-                'id'              => new Column('id', Integer::normal()->autoIncrement(), true),
+                'id'              => PrimaryKeyBuilder::incrementingInt('id'),
                 'batting_average' => new Column('batting_average', Integer::normal()),
         ], $this->cricketersTable->getStructure()->getColumns());
 
         $this->assertEquals([
-                'id'              => new Column('id', Integer::normal()->autoIncrement(), true),
+                'id'              => PrimaryKeyBuilder::incrementingInt('id'),
                 'bowling_average' => new Column('bowling_average', Integer::normal()),
         ], $this->bowlersTable->getStructure()->getColumns());
     }
@@ -107,7 +108,7 @@ class PlayerClassTableInheritanceTest extends DbIntegrationTest
         ]);
 
         $this->assertDatabaseDataSameAs([
-                'players' => [
+                'players'     => [
                         ['id' => 1, 'name' => 'Joe'],
                         ['id' => 2, 'name' => 'Jack'],
                         ['id' => 3, 'name' => 'John'],
@@ -115,11 +116,11 @@ class PlayerClassTableInheritanceTest extends DbIntegrationTest
                 'footballers' => [
                         ['id' => 3, 'club' => 'Melbourne City'],
                 ],
-                'cricketers' => [
+                'cricketers'  => [
                         ['id' => 1, 'batting_average' => 14],
                         ['id' => 2, 'batting_average' => 10],
                 ],
-                'bowlers' => [
+                'bowlers'     => [
                         ['id' => 1, 'bowling_average' => 3],
                 ],
         ]);
@@ -133,7 +134,7 @@ class PlayerClassTableInheritanceTest extends DbIntegrationTest
     public function testLoadAll()
     {
         $this->setDataInDb([
-                'players' => [
+                'players'     => [
                         ['id' => 1, 'name' => 'Joe'],
                         ['id' => 2, 'name' => 'Jack'],
                         ['id' => 3, 'name' => 'John'],
@@ -141,11 +142,11 @@ class PlayerClassTableInheritanceTest extends DbIntegrationTest
                 'footballers' => [
                         ['id' => 3, 'club' => 'Melbourne City'],
                 ],
-                'cricketers' => [
+                'cricketers'  => [
                         ['id' => 1, 'batting_average' => 14],
                         ['id' => 2, 'batting_average' => 10],
                 ],
-                'bowlers' => [
+                'bowlers'     => [
                         ['id' => 1, 'bowling_average' => 3],
                 ],
         ]);
@@ -164,7 +165,7 @@ class PlayerClassTableInheritanceTest extends DbIntegrationTest
     public function testRemove()
     {
         $this->setDataInDb([
-                'players' => [
+                'players'     => [
                         ['id' => 1, 'name' => 'Joe'],
                         ['id' => 2, 'name' => 'Jack'],
                         ['id' => 3, 'name' => 'John'],
@@ -172,11 +173,11 @@ class PlayerClassTableInheritanceTest extends DbIntegrationTest
                 'footballers' => [
                         ['id' => 3, 'club' => 'Melbourne City'],
                 ],
-                'cricketers' => [
+                'cricketers'  => [
                         ['id' => 1, 'batting_average' => 14],
                         ['id' => 2, 'batting_average' => 10],
                 ],
-                'bowlers' => [
+                'bowlers'     => [
                         ['id' => 1, 'bowling_average' => 3],
                 ],
         ]);
@@ -184,15 +185,15 @@ class PlayerClassTableInheritanceTest extends DbIntegrationTest
         $this->repo->removeAllById([1, 3]);
 
         $this->assertDatabaseDataSameAs([
-                'players' => [
+                'players'     => [
                         ['id' => 2, 'name' => 'Jack'],
                 ],
                 'footballers' => [
                 ],
-                'cricketers' => [
+                'cricketers'  => [
                         ['id' => 2, 'batting_average' => 10],
                 ],
-                'bowlers' => [
+                'bowlers'     => [
                 ],
         ]);
     }

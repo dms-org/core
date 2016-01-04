@@ -6,6 +6,7 @@ use Dms\Core\Persistence\Db\Mapping\IOrm;
 use Dms\Core\Persistence\Db\Schema\Column;
 use Dms\Core\Persistence\Db\Schema\ForeignKey;
 use Dms\Core\Persistence\Db\Schema\ForeignKeyMode;
+use Dms\Core\Persistence\Db\Schema\PrimaryKeyBuilder;
 use Dms\Core\Persistence\Db\Schema\Type\Enum;
 use Dms\Core\Persistence\Db\Schema\Type\Integer;
 use Dms\Core\Tests\Persistence\Db\Integration\Mapping\DbIntegrationTest;
@@ -53,11 +54,11 @@ class EmbeddedSubclassWithToManyRelationTest extends DbIntegrationTest
     {
         $this->assertDatabaseStructureSameAs([
                 'entities' => [
-                        new Column('id', Integer::normal()->autoIncrement(), true),
+                        PrimaryKeyBuilder::incrementingInt('id'),
                         new Column('type', (new Enum(['subclass']))->nullable()),
                 ],
                 'children' => [
-                        new Column('id', Integer::normal()->autoIncrement(), true),
+                        PrimaryKeyBuilder::incrementingInt('id'),
                         new Column('parent_id', Integer::normal()),
                 ]
         ]);

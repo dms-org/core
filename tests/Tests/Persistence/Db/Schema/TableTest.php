@@ -8,6 +8,7 @@ use Dms\Core\Persistence\Db\Schema\Column;
 use Dms\Core\Persistence\Db\Schema\ForeignKey;
 use Dms\Core\Persistence\Db\Schema\ForeignKeyMode;
 use Dms\Core\Persistence\Db\Schema\Index;
+use Dms\Core\Persistence\Db\Schema\PrimaryKeyBuilder;
 use Dms\Core\Persistence\Db\Schema\Table;
 use Dms\Core\Persistence\Db\Schema\Type\Integer;
 use Dms\Core\Persistence\Db\Schema\Type\Varchar;
@@ -22,7 +23,7 @@ class TableTest extends CmsTestCase
      */
     private function idColumn()
     {
-        return new Column('id', Integer::normal()->autoIncrement(), true);
+        return PrimaryKeyBuilder::incrementingInt('id');
     }
 
     public function testGetters()

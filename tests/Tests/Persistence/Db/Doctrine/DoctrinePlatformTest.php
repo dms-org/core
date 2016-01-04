@@ -2,6 +2,7 @@
 
 namespace Dms\Core\Tests\Persistence\Db\Doctrine;
 
+use Dms\Core\Persistence\Db\Schema\PrimaryKeyBuilder;
 use Doctrine\DBAL\Platforms\MySqlPlatform;
 use Dms\Core\Persistence\Db\Doctrine\DoctrinePlatform;
 use Dms\Core\Persistence\Db\Query\Clause\Join;
@@ -43,7 +44,7 @@ class DoctrinePlatformTest extends DoctrineTestBase
     protected function mockTable()
     {
         return new Table('foo', [
-                new Column('id', Integer::normal()->autoIncrement(), true),
+                PrimaryKeyBuilder::incrementingInt('id'),
                 new Column('data', new Varchar(255)),
         ]);
     }

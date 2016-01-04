@@ -2,6 +2,7 @@
 
 namespace Dms\Core\Tests\Persistence\Db\Doctrine\Resequence;
 
+use Dms\Core\Persistence\Db\Schema\PrimaryKeyBuilder;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Platforms\MySqlPlatform;
 use Doctrine\DBAL\Platforms\SqlitePlatform;
@@ -41,7 +42,7 @@ class DefaultResequenceCompilerTest extends ResequenceCompilerTestBase
     {
         $query = new ResequenceOrderIndexColumn(
                 new Table('test', [
-                        new Column('id', Integer::normal()->autoIncrement(), true),
+                        PrimaryKeyBuilder::incrementingInt('id'),
                         new Column('order_index', Integer::normal()),
                 ]),
                 'order_index',
@@ -72,7 +73,7 @@ SQL
     {
         $query = new ResequenceOrderIndexColumn(
                 new Table('test', [
-                        new Column('id', Integer::normal()->autoIncrement(), true),
+                        PrimaryKeyBuilder::incrementingInt('id'),
                         new Column('order_index', Integer::normal()),
                         new Column('group', Integer::normal()),
                 ]),

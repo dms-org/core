@@ -4,6 +4,7 @@ namespace Dms\Core\Tests\Persistence\Db\Integration\Mapping\Inheritance;
 
 use Dms\Core\Persistence\Db\Mapping\CustomOrm;
 use Dms\Core\Persistence\Db\Schema\Column;
+use Dms\Core\Persistence\Db\Schema\PrimaryKeyBuilder;
 use Dms\Core\Persistence\Db\Schema\Table;
 use Dms\Core\Persistence\Db\Schema\Type\Boolean;
 use Dms\Core\Persistence\Db\Schema\Type\Enum;
@@ -44,14 +45,14 @@ class HybridTableInheritanceTest extends DbIntegrationTest
     {
         $this->assertDatabaseStructureSameAs([
                 'parent_entities' => [
-                        new Column('id', Integer::normal()->autoIncrement(), true),
+                        PrimaryKeyBuilder::incrementingInt('id'),
                         new Column('class_type', (new Enum(['subclass1', 'subclass3']))->nullable()),
                         new Column('base_prop', new Varchar(255)),
                         new Column('subclass1_prop', Integer::normal()->nullable()),
                         new Column('subclass3_prop', (new Varchar(255))->nullable()),
                 ],
                 'subclass2_table' => [
-                        new Column('id', Integer::normal()->autoIncrement(), true),
+                        PrimaryKeyBuilder::incrementingInt('id'),
                         new Column('subclass2_prop', Integer::normal()),
                         new Column('subclass2_prop2', new Boolean()),
                 ]

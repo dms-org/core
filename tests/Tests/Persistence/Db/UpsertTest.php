@@ -7,6 +7,7 @@ use Dms\Core\Exception\InvalidArgumentException;
 use Dms\Core\Persistence\Db\Query\Upsert;
 use Dms\Core\Persistence\Db\RowSet;
 use Dms\Core\Persistence\Db\Schema\Column;
+use Dms\Core\Persistence\Db\Schema\PrimaryKeyBuilder;
 use Dms\Core\Persistence\Db\Schema\Table;
 use Dms\Core\Persistence\Db\Schema\Type\Integer;
 
@@ -17,7 +18,7 @@ class UpsertTest extends CmsTestCase
 {
     private function table()
     {
-        return new Table('table', [new Column('id', Integer::normal()->autoIncrement(), true)]);
+        return new Table('table', [PrimaryKeyBuilder::incrementingInt('id')]);
     }
 
     public function testNew()

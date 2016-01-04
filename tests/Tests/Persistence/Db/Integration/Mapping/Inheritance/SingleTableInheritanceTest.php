@@ -4,6 +4,7 @@ namespace Dms\Core\Tests\Persistence\Db\Integration\Mapping\Inheritance;
 
 use Dms\Core\Persistence\Db\Mapping\CustomOrm;
 use Dms\Core\Persistence\Db\Schema\Column;
+use Dms\Core\Persistence\Db\Schema\PrimaryKeyBuilder;
 use Dms\Core\Persistence\Db\Schema\Table;
 use Dms\Core\Persistence\Db\Schema\Type\Boolean;
 use Dms\Core\Persistence\Db\Schema\Type\Enum;
@@ -44,7 +45,7 @@ class SingleTableInheritanceTest extends DbIntegrationTest
     {
         $this->assertDatabaseStructureSameAs([
                 'entities' => [
-                        new Column('id', Integer::normal()->autoIncrement(), true),
+                        PrimaryKeyBuilder::incrementingInt('id'),
                         new Column('class_type', new Enum(['subclass1', 'subclass2', 'subclass3'])),
                         new Column('base_prop', new Varchar(255)),
                         new Column('subclass1_prop', Integer::normal()->nullable()),

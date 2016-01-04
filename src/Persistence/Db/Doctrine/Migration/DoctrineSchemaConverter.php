@@ -2,9 +2,6 @@
 
 namespace Dms\Core\Persistence\Db\Doctrine\Migration;
 
-use Doctrine\DBAL\Schema\Schema;
-use Doctrine\DBAL\Schema\Table as DoctrineTable;
-use Doctrine\DBAL\Types\Type as DoctrineType;
 use Dms\Core\Exception\InvalidArgumentException;
 use Dms\Core\Persistence\Db\Doctrine\Migration\Type\MediumIntType;
 use Dms\Core\Persistence\Db\Doctrine\Migration\Type\TinyIntType;
@@ -15,6 +12,9 @@ use Dms\Core\Persistence\Db\Schema\ForeignKeyMode;
 use Dms\Core\Persistence\Db\Schema\Index;
 use Dms\Core\Persistence\Db\Schema\Table;
 use Dms\Core\Persistence\Db\Schema\Type;
+use Doctrine\DBAL\Schema\Schema;
+use Doctrine\DBAL\Schema\Table as DoctrineTable;
+use Doctrine\DBAL\Types\Type as DoctrineType;
 
 /**
  * The doctrine schema converter maps the built in
@@ -124,6 +124,7 @@ class DoctrineSchemaConverter
         switch (true) {
             case $type instanceof Type\Blob:
                 $options['length'] = $this->getBlobModeLength($type->getMode());
+
                 return [DoctrineType::BLOB, $options];
 
             case $type instanceof Type\Boolean:
@@ -146,6 +147,7 @@ class DoctrineSchemaConverter
 
             case $type instanceof Type\Integer:
                 $options['autoincrement'] = $type->isAutoIncrement();
+                $options['unsigned']      = $type->isUnsigned();
 
                 return [$this->getIntegerType($type->getMode()), $options];
 

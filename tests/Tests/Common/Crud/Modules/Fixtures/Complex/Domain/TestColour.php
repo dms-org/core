@@ -8,7 +8,7 @@ use Dms\Core\Model\Object\PropertyTypeDefiner;
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>
  */
-class Colour extends Enum
+class TestColour extends Enum
 {
     const RED = 'red';
     const GREEN = 'green';
@@ -28,7 +28,7 @@ class Colour extends Enum
     }
 
     /**
-     * @return Colour
+     * @return TestColour
      */
     public static function red()
     {
@@ -36,7 +36,7 @@ class Colour extends Enum
     }
 
     /**
-     * @return Colour
+     * @return TestColour
      */
     public static function green()
     {
@@ -44,7 +44,7 @@ class Colour extends Enum
     }
 
     /**
-     * @return Colour
+     * @return TestColour
      */
     public static function blue()
     {
@@ -52,7 +52,7 @@ class Colour extends Enum
     }
 
     /**
-     * @return Colour
+     * @return TestColour
      */
     public static function yellow()
     {
