@@ -45,11 +45,6 @@ class Field implements IField
     private $processedType;
 
     /**
-     * @var mixed
-     */
-    private $initialValue;
-
-    /**
      * @param string            $name
      * @param string            $label
      * @param IFieldType        $type
@@ -72,10 +67,10 @@ class Field implements IField
                 ? end($processors)->getProcessedType()
                 : $type->getProcessedPhpType();
 
-        $this->setInitialValue($type->get(FieldType::ATTR_INITIAL_VALUE), false);
+        $this->validateInitialValue($type->get(FieldType::ATTR_INITIAL_VALUE));
     }
 
-    private function setInitialValue($initialValue, $updateType = true)
+    private function validateInitialValue($initialValue)
     {
         if ($initialValue !== null) {
             $processedPhpType = $this->getProcessedType();
@@ -86,14 +81,6 @@ class Field implements IField
                         $this->name, $processedPhpType->asTypeString(), Debug::getType($initialValue)
                 );
             }
-
-            $initialValue = $this->unprocess($initialValue);
-        }
-
-        $this->initialValue = $initialValue;
-
-        if ($updateType) {
-            $this->type = $this->type->with(FieldType::ATTR_INITIAL_VALUE, $this->initialValue);
         }
     }
 
@@ -144,7 +131,17 @@ class Field implements IField
      */
     public function getInitialValue()
     {
-        return $this->initialValue;
+        return $this->type->get(FieldType::ATTR_INITIAL_VALUE);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getUnprocessedInitialValue()
+    {
+        $initialValue = $this->getInitialValue();
+
+        return $initialValue === null ? null : $this->unprocess($initialValue);
     }
 
     /**
@@ -207,7 +204,8 @@ class Field implements IField
     public function withInitialValue($value)
     {
         $clone = clone $this;
-        $clone->setInitialValue($value);
+        $clone->validateInitialValue($value);
+        $clone->type = $clone->type->with(FieldType::ATTR_INITIAL_VALUE, $value);
 
         return $clone;
     }

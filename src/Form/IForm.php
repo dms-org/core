@@ -115,4 +115,16 @@ interface IForm
      * @throws InvalidArgumentException
      */
     public function withInitialValues(array $initialProcessedValues);
+
+    /**
+     * Returns an equivalent form with the field names updated
+     * from the supplied array containing the old field names as the key
+     * and the new field names as the value.
+     *
+     * @param string[] $fieldNameMap
+     *
+     * @return IForm
+     * @throws InvalidArgumentException
+     */
+    public function withFieldNames(array $fieldNameMap);
 }

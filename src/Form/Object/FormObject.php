@@ -171,6 +171,14 @@ abstract class FormObject extends TypedObject implements IDataTransferObject, IF
     }
 
     /**
+     * @inheritDoc
+     */
+    final public function withFieldNames(array $fieldNameMap)
+    {
+        return $this->form->withFieldNames($fieldNameMap);
+    }
+
+    /**
      * {@inheritDoc}
      */
     final public function asStagedForm()

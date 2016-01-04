@@ -77,6 +77,25 @@ abstract class FieldComparisonValidator extends FormValidator
     }
 
     /**
+     * @inheritDoc
+     */
+    public function withFieldNames(array $fieldNameMap)
+    {
+        $field1Name = $this->field1->getName();
+        $field2Name = $this->field2->getName();
+
+        if (isset($fieldNameMap[$field1Name])) {
+            $field1Name = $fieldNameMap[$field1Name];
+        }
+
+        if (isset($fieldNameMap[$field2Name])) {
+            $field2Name = $fieldNameMap[$field2Name];
+        }
+
+        return new static($this->field1->withName($field1Name), $this->field2->withName($field2Name));
+    }
+
+    /**
      * @return string
      */
     abstract protected function getMessageId();

@@ -174,6 +174,57 @@ class FormTest extends FormBuilderTestBase
         $this->assertThrows(function () use ($form) {
             $form->withInitialValues(['foo' => 'invalid-value-for-int']);
         }, InvalidArgumentException::class);
+
+        $newForm = $form->withInitialValues([
+                'name' => '123',
+        ]);
+
+        $this->assertSame([
+                'name' => '123',
+                'foo'  => null,
+                'bar'  => 10.0
+        ], $newForm->getInitialValues());
+    }
+
+    public function testWithFieldNames()
+    {
+        $form = Form::create()
+                ->section('Details', [
+                        Field::name('name')->label('Name')->string(),
+                        Field::name('foo')->label('Foo')->int(),
+                        Field::name('bar')->label('Bar')->decimal(),
+                ])
+                ->build();
+
+        $newForm = $form->withFieldNames([
+                'name' => 'another',
+                'foo'  => 'aaa123',
+                'bar'  => 'qwerty',
+        ]);
+
+        $this->assertNotEquals($form, $newForm);
+
+        $this->assertSame([
+                'another',
+                'aaa123',
+                'qwerty',
+        ], $newForm->getFieldNames());
+
+        $this->assertSame([
+                'name',
+                'foo',
+                'bar',
+        ], $form->getFieldNames());
+
+        $newForm = $form->withFieldNames([
+                'name' => 'a123',
+        ]);
+
+        $this->assertSame([
+                'a123',
+                'foo',
+                'bar'
+        ], $newForm->getFieldNames());
     }
 
     public function testValidateProcessedSubmission()

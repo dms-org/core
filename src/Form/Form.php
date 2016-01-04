@@ -245,6 +245,8 @@ class Form implements IForm
             $newFields[$field->getName()] = $field->withInitialValue($initialValue);
         }
 
+        $newFields = $newFields + $this->getFields();
+
         $sections = [];
 
         foreach ($this->sections as $section) {
@@ -260,5 +262,34 @@ class Form implements IForm
         }
 
         return new Form($sections, $this->processors);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function withFieldNames(array $fieldNameMap)
+    {
+        $newSections   = [];
+        $newProcessors = [];
+
+        foreach ($this->sections as $section) {
+            $newFields = [];
+
+            foreach ($section->getFields() as $field) {
+                if (isset($fieldNameMap[$field->getName()])) {
+                    $field = $field->withName($fieldNameMap[$field->getName()]);
+                }
+
+                $newFields[] = $field;
+            }
+
+            $newSections[] = new FormSection($section->getTitle(), $newFields);
+        }
+
+        foreach ($this->processors as $processor) {
+            $newProcessors[] = $processor->withFieldNames($fieldNameMap);
+        }
+
+        return new Form($newSections, $newProcessors);
     }
 }

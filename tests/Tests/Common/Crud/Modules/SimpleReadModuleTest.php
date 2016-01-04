@@ -84,7 +84,10 @@ class SimpleReadModuleTest extends ReadModuleTest
 
         $this->assertInstanceOf(IForm::class, $detailsForm);
         $this->assertSame([IObjectAction::OBJECT_FIELD_NAME, 'data'], $detailsForm->getFieldNames());
-        $this->assertSame([IObjectAction::OBJECT_FIELD_NAME => 1, 'data' => 'abc'], $detailsForm->getInitialValues());
+        $this->assertSame([
+                IObjectAction::OBJECT_FIELD_NAME => $this->dataSource->get(1),
+                'data' => 'abc'
+        ], $detailsForm->getInitialValues());
 
         $this->assertThrows(function () {
             $nonExistentId = 5;

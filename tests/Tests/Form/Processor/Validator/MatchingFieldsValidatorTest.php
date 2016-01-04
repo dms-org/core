@@ -30,6 +30,14 @@ class MatchingFieldsValidatorTest extends FormValidatorTest
     }
 
     /**
+     * @return string[]
+     */
+    public function fieldNameMap()
+    {
+        return ['one' => 'abc', 'two' => 'def'];
+    }
+
+    /**
      * @return array[]
      */
     public function successTests()
@@ -58,5 +66,13 @@ class MatchingFieldsValidatorTest extends FormValidatorTest
     {
         $this->assertSame('one', $this->validator->getField1()->getName());
         $this->assertSame('two', $this->validator->getField2()->getName());
+    }
+
+    public function testGettersAfterWithNames()
+    {
+        $this->validator = $this->validator->withFieldNames($this->fieldNameMap());
+
+        $this->assertSame('abc', $this->validator->getField1()->getName());
+        $this->assertSame('def', $this->validator->getField2()->getName());
     }
 }

@@ -23,6 +23,14 @@ class CustomFormValidatorTest extends FormValidatorTest
     }
 
     /**
+     * @return string[]
+     */
+    public function fieldNameMap()
+    {
+        return ['required' => 'some_other_field'];
+    }
+
+    /**
      * @return array[]
      */
     public function successTests()

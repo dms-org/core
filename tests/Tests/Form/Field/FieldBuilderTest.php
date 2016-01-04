@@ -76,6 +76,15 @@ class FieldBuilderTest extends FieldBuilderTestBase
         $field = $this->field()->value('abcdef')->string()->build();
 
         $this->assertSame('abcdef', $field->getInitialValue());
+        $this->assertSame('abcdef', $field->getUnprocessedInitialValue());
+    }
+
+    public function testUnprocessedInitialValue()
+    {
+        $field = $this->field()->value(new \DateTimeImmutable('2000-01-01'))->date('Y-m-d')->build();
+
+        $this->assertEquals(new \DateTimeImmutable('2000-01-01'), $field->getInitialValue());
+        $this->assertSame('2000-01-01', $field->getUnprocessedInitialValue());
     }
 
     public function testRequiredField()

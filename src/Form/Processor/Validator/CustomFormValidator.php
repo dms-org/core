@@ -2,6 +2,7 @@
 
 namespace Dms\Core\Form\Processor\Validator;
 
+use Dms\Core\Form\Processor\ArrayKeyHelper;
 use Dms\Core\Form\Processor\FormValidator;
 use Dms\Core\Language\Message;
 
@@ -42,10 +43,29 @@ class CustomFormValidator extends FormValidator
      */
     protected function validate(array $input, array &$messages)
     {
-        if (!call_user_func($this->validationCallback, $input, $messages)) {
-            if($this->messageId) {
+        if (!call_user_func_array($this->validationCallback, [$input, &$messages])) {
+            if ($this->messageId) {
                 $messages[] = new Message($this->messageId, $this->messageParameters);
             }
         }
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function withFieldNames(array $fieldNameMap)
+    {
+        $inverseFieldMap = array_flip($fieldNameMap);
+
+        return new self(
+                function (array $input, array &$messages) use ($fieldNameMap, $inverseFieldMap) {
+                    return call_user_func_array(
+                            $this->validationCallback,
+                            [ArrayKeyHelper::mapArrayKeys($input, $inverseFieldMap), &$messages]
+                    );
+                },
+                $this->messageId,
+                $this->messageParameters
+        );
     }
 }

@@ -8,12 +8,10 @@ use Dms\Core\Form\Field\Builder\Field;
 use Dms\Core\Form\Field\Processor\InnerFormProcessor;
 use Dms\Core\Form\Field\Processor\Validator\GreaterThanOrEqualValidator;
 use Dms\Core\Form\Field\Processor\Validator\TypeValidator;
+use Dms\Core\Form\Field\Type\InnerFormType;
 use Dms\Core\Form\InvalidFormSubmissionException;
-use Dms\Core\Form\InvalidInputException;
 use Dms\Core\Language\Message;
-use Dms\Core\Model\Type\ArrayType;
 use Dms\Core\Model\Type\Builder\Type;
-use Dms\Core\Model\Type\MixedType;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>
@@ -31,18 +29,6 @@ class InnerFormFieldBuilderTest extends FieldBuilderTestBase
         return Field::name($name)->label($label)->form($this->innerForm());
     }
 
-    public function testInnerFormValidation()
-    {
-        $field = $this->field()->build();
-
-        $this->assertEquals([
-                new TypeValidator(Type::arrayOf(Type::mixed())->nullable()),
-                new InnerFormProcessor($this->innerForm()),
-        ], $field->getProcessors());
-
-        $this->assertEquals(Type::arrayOf(Type::mixed())->nullable(), $field->getProcessedType());
-    }
-
     /**
      * @return \Dms\Core\Form\IForm
      * @throws \Dms\Core\Form\ConflictingFieldNameException
@@ -55,6 +41,19 @@ class InnerFormFieldBuilderTest extends FieldBuilderTestBase
                 ])
                 ->build();
     }
+
+    public function testInnerFormValidation()
+    {
+        $field = $this->field()->build();
+
+        $this->assertEquals([
+                new TypeValidator(Type::arrayOf(Type::mixed())->nullable()),
+                new InnerFormProcessor($this->innerForm()),
+        ], $field->getProcessors());
+
+        $this->assertEquals(Type::arrayOf(Type::mixed())->nullable(), $field->getProcessedType());
+    }
+
     public function testProcess()
     {
         $this->assertSame(
@@ -94,10 +93,9 @@ class InnerFormFieldBuilderTest extends FieldBuilderTestBase
     {
         /** @var InvalidFormSubmissionException $e */
         $e = $this->assertThrows(function () {
-            Form::create()->section('Section',[
-                $this->field('name', 'Name')
-            ])->build()
-                ->process(['name' => ['field' => -1]]);
+            Form::create()->section('Section', [
+                    $this->field('name', 'Name')
+            ])->build()->process(['name' => ['field' => -1]]);
         }, InvalidFormSubmissionException::class);
 
         $this->assertEquals(
@@ -109,6 +107,36 @@ class InnerFormFieldBuilderTest extends FieldBuilderTestBase
                         ])
                 ],
                 $e->getAllMessages()
+        );
+    }
+
+    public function testGetInnerFormAsArrayForm()
+    {
+        /** @var InnerFormType $type */
+        $type = $this->field('name')
+                ->value([
+                    'field' => 10
+                ])
+                ->build()
+                ->getType();
+
+        $this->assertInstanceOf(InnerFormType::class, $type);
+
+        $innerFormAsArray = $type->getInnerArrayForm('name');
+
+        $this->assertEquals(
+                Form::create()
+                        ->section('Section', [
+                                Field::create()
+                                        ->name('name[field]')
+                                        ->label('Field')
+                                        ->int()
+                                        ->min(0)
+                                        ->value(10)
+                                        ->required()
+                        ])
+                        ->build(),
+                $innerFormAsArray
         );
     }
 }

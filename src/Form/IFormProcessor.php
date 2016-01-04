@@ -31,4 +31,15 @@ interface IFormProcessor
      * @return array
      */
     public function unprocess(array $input);
+
+    /**
+     * Returns an equivalent processor with the field names updated
+     * from the supplied array containing the old field names as the key
+     * and the new field names as the value.
+     *
+     * @param string[] $fieldNameMap
+     *
+     * @return static
+     */
+    public function withFieldNames(array $fieldNameMap);
 }

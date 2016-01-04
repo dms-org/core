@@ -47,4 +47,30 @@ class CustomFormProcessor extends FormProcessor
     {
         return call_user_func($this->unprocessCallback, $input);
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function withFieldNames(array $fieldNameMap)
+    {
+        $inverseFieldMap = array_flip($fieldNameMap);
+
+        return new self(
+                function (array $input, array &$messages) use ($fieldNameMap, $inverseFieldMap) {
+                    return ArrayKeyHelper::mapArrayKeys(
+                            $this->process(
+                                    ArrayKeyHelper::mapArrayKeys($input, $inverseFieldMap),
+                                    $messages
+                            ),
+                            $fieldNameMap
+                    );
+                },
+                function (array $input) use ($fieldNameMap, $inverseFieldMap) {
+                    return ArrayKeyHelper::mapArrayKeys(
+                            $this->unprocess(ArrayKeyHelper::mapArrayKeys($input, $inverseFieldMap)),
+                            $fieldNameMap
+                    );
+                }
+        );
+    }
 }

@@ -14,11 +14,11 @@ class FormWithDefaultValuesTest extends CmsTestCase
     {
         $expectedValues = [
                 'terms'         => ['foo', 'bar', 'baz'],
-                'event_date'    => '2015-01-01',
+                'event_date'    => new \DateTimeImmutable('2015-01-01'),
                 'inner_default' => 0.123,
                 'inner_awesome' => 'cool',
         ];
 
-        $this->assertSame($expectedValues, FormWithDefaults::initialValues());
+        $this->assertEquals($expectedValues, FormWithDefaults::initialValues());
     }
 }

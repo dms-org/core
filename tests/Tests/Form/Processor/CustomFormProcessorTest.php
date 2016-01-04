@@ -10,7 +10,6 @@ use Dms\Core\Form\Processor\CustomFormProcessor;
  */
 class CustomFormProcessorTest extends FormProcessorTest
 {
-
     /**
      * @return IFormProcessor
      */
@@ -32,6 +31,14 @@ class CustomFormProcessorTest extends FormProcessorTest
                     return $input;
                 }
         );
+    }
+
+    /**
+     * @return string[]
+     */
+    public function fieldNameMap()
+    {
+        return ['field' => 'prefix_field'];
     }
 
     /**

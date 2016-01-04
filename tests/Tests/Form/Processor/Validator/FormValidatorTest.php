@@ -3,6 +3,7 @@
 namespace Dms\Core\Tests\Form\Processor\Validator;
 
 use Dms\Common\Testing\CmsTestCase;
+use Dms\Core\Form\Processor\ArrayKeyHelper;
 use Dms\Core\Form\Processor\FormValidator;
 use Dms\Core\Language\Message;
 
@@ -35,6 +36,11 @@ abstract class FormValidatorTest extends CmsTestCase
      * @return array[]
      */
     abstract public function failTests();
+
+    /**
+     * @return string[]
+     */
+    abstract public function fieldNameMap();
 
     /**
      * @dataProvider successTests
@@ -73,5 +79,31 @@ abstract class FormValidatorTest extends CmsTestCase
                 'A validator should return the same value as the input.');
         $this->assertNotEmpty($actualMessages, 'An invalid input should generate messages');
         $this->assertEquals($messages, $actualMessages);
+    }
+
+    /**
+     * @dataProvider successTests
+     */
+    public function testValidValuesWithFieldNameMap(array $input)
+    {
+        $fieldNameMap    = $this->fieldNameMap();
+        $this->validator = $this->validator->withFieldNames($fieldNameMap);
+
+        $input = ArrayKeyHelper::mapArrayKeys($input, $fieldNameMap);
+
+        $this->testValidValues($input);
+    }
+
+    /**
+     * @dataProvider failTests
+     */
+    public function testInvalidValuesDataCorrectlyWithFieldNameMap(array $input, $messages)
+    {
+        $fieldNameMap = $this->fieldNameMap();
+        $this->validator = $this->validator->withFieldNames($fieldNameMap);
+
+        $input = ArrayKeyHelper::mapArrayKeys($input, $fieldNameMap);
+
+        $this->testInvalidValues($input, $messages);
     }
 }

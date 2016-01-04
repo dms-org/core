@@ -47,12 +47,18 @@ interface IField
     public function getProcessors();
 
     /**
-     * Gets the initial value of the field.
+     * Gets the (processed) initial value of the field.
      *
      * @return mixed
-     * @throws InvalidInputException
      */
     public function getInitialValue();
+
+    /**
+     * Gets the unprocessed initial value of the field.
+     *
+     * @return mixed
+     */
+    public function getUnprocessedInitialValue();
 
     /**
      * Processes the field input.
@@ -84,7 +90,7 @@ interface IField
     public function withName($name, $label = null);
 
     /**
-     * Gets an equivalent form field with the supplied initial value.
+     * Gets an equivalent form field with the supplied (processed) initial value.
      *
      * @param mixed $value
      *
