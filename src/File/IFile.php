@@ -26,7 +26,7 @@ interface IFile
     public function getExtension();
 
     /**
-     * Gets the full file path.
+     * Gets the full file path including the file name.
      *
      * @return string
      */
