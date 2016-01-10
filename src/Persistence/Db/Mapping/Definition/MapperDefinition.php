@@ -32,7 +32,6 @@ use Dms\Core\Persistence\Db\Schema\ForeignKey;
 use Dms\Core\Persistence\Db\Schema\Index;
 use Dms\Core\Persistence\Db\Schema\PrimaryKeyBuilder;
 use Dms\Core\Persistence\Db\Schema\Table;
-use Dms\Core\Persistence\Db\Schema\Type\Integer;
 use Dms\Core\Util\Debug;
 
 /**
@@ -152,6 +151,10 @@ class MapperDefinition extends MapperDefinitionBase
     {
         $this->orm    = $orm;
         $this->parent = $parent;
+
+        if ($parent) {
+            $this->verifyAllPropertiesMapped = $parent->verifyAllPropertiesMapped;
+        }
     }
 
     /**
