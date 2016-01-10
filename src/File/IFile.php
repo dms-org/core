@@ -19,6 +19,21 @@ interface IFile
     public function getName();
 
     /**
+     * Gets the client's file name including the extension.
+     *
+     * @return string|null
+     */
+    public function getClientFileName();
+
+    /**
+     * Gets the client's file name including the extension or fall back to the
+     * actual file name.
+     *
+     * @return string
+     */
+    public function getClientFileNameWithFallback();
+
+    /**
      * Gets the file extension.
      *
      * @return string
