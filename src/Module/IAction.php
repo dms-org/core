@@ -4,6 +4,7 @@ namespace Dms\Core\Module;
 
 use Dms\Core\Auth\IPermission;
 use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Exception\InvalidOperationException;
 use Dms\Core\Form;
 use Dms\Core\Persistence;
 
@@ -36,20 +37,29 @@ interface IAction
     public function getReturnTypeClass();
 
     /**
-     * Gets the namespace of the required permissions
+     * Gets the name of the parent package of this action
      *
      * @return string|null
      */
-    public function getPermissionNamespace();
+    public function getPackageName();
 
     /**
-     * Adds a namespace of the required permissions
+     * Gets the name of the parent module of this action
      *
-     * @param string $namespace
+     * @return string|null
+     */
+    public function getModuleName();
+
+    /**
+     * Sets the name of the parent package module of this action
+     *
+     * @param string $packageName
+     * @param string $moduleName
      *
      * @return void
+     * @throws InvalidOperationException if the names are already set
      */
-    public function addPermissionNamespace($namespace);
+    public function setPackageAndModuleName($packageName, $moduleName);
 
     /**
      * Gets the permissions required to execute the action.

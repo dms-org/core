@@ -97,8 +97,6 @@ abstract class Module implements IModule
         $this->permissions = Permission::namespaceAll($this->definition->getPermissions(), $this->name);
 
         foreach ($this->definition->getActions() as $action) {
-            $action->addPermissionNamespace($this->name);
-
             if ($action instanceof IParameterizedAction) {
                 $this->parameterizedActions[$action->getName()] = $action;
             } elseif ($action instanceof IUnparameterizedAction) {
@@ -166,7 +164,7 @@ abstract class Module implements IModule
         $this->permissions = Permission::namespaceAll($this->permissions, $packageName);
 
         foreach ($this->getActions() as $action) {
-            $action->addPermissionNamespace($packageName);
+            $action->setPackageAndModuleName($packageName, $this->name);
         }
     }
 

@@ -97,7 +97,7 @@ abstract class ModuleTestBase extends CmsTestCase
 
         /** @var IAction $action */
         foreach ($this->module->getActions() as $action) {
-            $this->assertSame('some-package.' . $this->module->getName(), $action->getPermissionNamespace());
+            $this->assertSame('some-package', $action->getPackageName());
         }
     }
 }

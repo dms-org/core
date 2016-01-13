@@ -28,7 +28,12 @@ abstract class Action implements IAction
     /**
      * @var string|null
      */
-    private $permissionNamespace;
+    private $moduleName;
+
+    /**
+     * @var string|null
+     */
+    private $packageName;
 
     /**
      * @var IAuthSystem
@@ -81,27 +86,33 @@ abstract class Action implements IAction
     }
 
     /**
-     * @return string|null
+     * {@inheritdoc}
      */
-    public function getPermissionNamespace()
+    public function getPackageName()
     {
-        return $this->permissionNamespace;
+        return $this->packageName;
     }
 
     /**
-     * @param string $permissionNamespace
-     *
-     * @throws InvalidOperationException
+     * {@inheritdoc}
      */
-    public function addPermissionNamespace($permissionNamespace)
+    public function getModuleName()
     {
-        if ($this->permissionNamespace) {
-            $this->permissionNamespace = $permissionNamespace . '.' . $this->permissionNamespace;
-        } else {
-            $this->permissionNamespace = $permissionNamespace;
+        return $this->moduleName;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setPackageAndModuleName($packageName, $moduleName)
+    {
+        if ($this->packageName || $this->moduleName) {
+            throw InvalidOperationException::methodCall(__METHOD__, 'package/module name already set');
         }
 
-        $this->requiredPermissions = Permission::namespaceAll($this->requiredPermissions, $permissionNamespace);
+        $this->packageName         = $packageName;
+        $this->moduleName          = $moduleName;
+        $this->requiredPermissions = Permission::namespaceAll($this->requiredPermissions, $packageName . '.' . $moduleName);
     }
 
     /**

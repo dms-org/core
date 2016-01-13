@@ -4,6 +4,7 @@ namespace Dms\Core\Tests\Module\Action;
 
 use Dms\Core\Auth\Permission;
 use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Exception\InvalidOperationException;
 use Dms\Core\Exception\TypeMismatchException;
 use Dms\Core\Form\InvalidFormSubmissionException;
 use Dms\Core\Model\Object\ArrayDataObject;
@@ -46,7 +47,7 @@ class ParameterizedActionTest extends ActionTest
         }, InvalidArgumentException::class);
     }
 
-    public function testPermissionNamespace()
+    public function testPackageAndModuleName()
     {
         $permission = $this->mockPermissions(['one'])[0];
 
@@ -61,18 +62,19 @@ class ParameterizedActionTest extends ActionTest
                 })
         );
 
-        $this->assertSame(null, $action->getPermissionNamespace());
+        $this->assertSame(null, $action->getPackageName());
+        $this->assertSame(null, $action->getModuleName());
         $this->assertEquals([$permission], array_values($action->getRequiredPermissions()));
 
-        $action->addPermissionNamespace('abc');
+        $action->setPackageAndModuleName('abc', '123');
 
-        $this->assertSame('abc', $action->getPermissionNamespace());
-        $this->assertEquals([Permission::named('abc.one')], array_values($action->getRequiredPermissions()));
+        $this->assertSame('abc', $action->getPackageName());
+        $this->assertSame('123', $action->getModuleName());
+        $this->assertEquals([Permission::named('abc.123.one')], array_values($action->getRequiredPermissions()));
 
-        $action->addPermissionNamespace('123');
-
-        $this->assertSame('123.abc', $action->getPermissionNamespace());
-        $this->assertEquals([Permission::named('123.abc.one')], array_values($action->getRequiredPermissions()));
+        $this->assertThrows(function () use ($action) {
+            $action->setPackageAndModuleName('abc', '123');
+        }, InvalidOperationException::class);
     }
 
     public function testDtoTypeMismatch()
