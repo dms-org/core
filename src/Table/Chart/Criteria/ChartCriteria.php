@@ -141,4 +141,12 @@ class ChartCriteria implements IChartCriteria
     {
         return $this->orderBy($axisName, OrderingDirection::DESC);
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function asNewCriteria()
+    {
+        return clone $this;
+    }
 }

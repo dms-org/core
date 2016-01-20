@@ -33,6 +33,8 @@ class ChartCriteriaTest extends CmsTestCase
         $this->assertSame($structure, $criteria->getStructure());
         $this->assertSame([], $criteria->getConditions());
         $this->assertSame([], $criteria->getOrderings());
+        $this->assertNotSame($criteria, $criteria->asNewCriteria());
+        $this->assertEquals($criteria, $criteria->asNewCriteria());
     }
 
     public function testWhere()

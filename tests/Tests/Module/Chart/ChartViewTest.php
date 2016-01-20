@@ -22,6 +22,8 @@ class ChartViewTest extends CmsTestCase
         $this->assertSame(false, $view->isDefault());
         $this->assertSame(true, $view->hasCriteria());
         $this->assertSame($criteria, $view->getCriteria());
+        $this->assertNotSame($criteria, $view->getCriteriaCopy());
+        $this->assertEquals($criteria, $view->getCriteria());
     }
 
     public function testWithoutCriteria()
@@ -33,6 +35,7 @@ class ChartViewTest extends CmsTestCase
         $this->assertSame(true, $view->isDefault());
         $this->assertSame(false, $view->hasCriteria());
         $this->assertSame(null, $view->getCriteria());
+        $this->assertSame(null, $view->getCriteriaCopy());
     }
 
     public function testCreateDefault()

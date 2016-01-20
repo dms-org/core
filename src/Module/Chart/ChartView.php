@@ -3,6 +3,7 @@
 namespace Dms\Core\Module\Chart;
 
 use Dms\Core\Module\IChartView;
+use Dms\Core\Table\Chart\Criteria\ChartCriteria;
 use Dms\Core\Table\Chart\IChartCriteria;
 use Dms\Core\Table\IRowCriteria;
 
@@ -95,5 +96,13 @@ class ChartView implements IChartView
     public function getCriteria()
     {
         return $this->criteria;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getCriteriaCopy()
+    {
+        return $this->criteria ? $this->criteria->asNewCriteria() : null;
     }
 }

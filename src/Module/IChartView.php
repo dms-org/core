@@ -2,6 +2,7 @@
 
 namespace Dms\Core\Module;
 
+use Dms\Core\Table\Chart\Criteria\ChartCriteria;
 use Dms\Core\Table\Chart\IChartCriteria;
 
 /**
@@ -45,4 +46,11 @@ interface IChartView
      * @return IChartCriteria|null
      */
     public function getCriteria();
+
+    /**
+     * Gets a copy of the chart criteria or null if there is no criteria.
+     *
+     * @return ChartCriteria|null
+     */
+    public function getCriteriaCopy();
 }
