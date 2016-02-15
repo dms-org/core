@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Auth;
 
@@ -11,19 +11,19 @@ interface IHashedPassword extends IValueObject
      *
      * @return string
      */
-    public function getHash();
+    public function getHash() : string;
 
     /**
      * Gets the hashing algorithm.
      *
      * @return string
      */
-    public function getAlgorithm();
+    public function getAlgorithm() : string;
 
     /**
      * Gets the hashing cost factor.
      *
      * @return int
      */
-    public function getCostFactor();
+    public function getCostFactor() : int;
 }

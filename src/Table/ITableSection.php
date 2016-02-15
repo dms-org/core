@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Table;
 
@@ -14,12 +14,12 @@ interface ITableSection
     /**
      * @return ITableStructure
      */
-    public function getStructure();
+    public function getStructure() : ITableStructure;
 
     /**
      * @return bool
      */
-    public function hasGroupData();
+    public function hasGroupData() : bool;
 
     /**
      * @return ITableRow|null
@@ -29,5 +29,5 @@ interface ITableSection
     /**
      * @return ITableRow[]
      */
-    public function getRows();
+    public function getRows() : array;
 }

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Mapping\Definition\Embedded;
 
@@ -36,7 +36,7 @@ class EmbeddedCollectionDefiner extends EmbeddedRelationDefiner
      *
      * @return static
      */
-    public function toTable($tableName)
+    public function toTable(string $tableName)
     {
         $this->tableName = $tableName;
 
@@ -50,7 +50,7 @@ class EmbeddedCollectionDefiner extends EmbeddedRelationDefiner
      *
      * @return static
      */
-    public function withPrimaryKey($primaryKeyName)
+    public function withPrimaryKey(string $primaryKeyName)
     {
         $this->primaryKeyName = $primaryKeyName;
 
@@ -67,7 +67,7 @@ class EmbeddedCollectionDefiner extends EmbeddedRelationDefiner
      *
      * @return static
      */
-    public function withForeignKeyToParentAs($foreignKeyName)
+    public function withForeignKeyToParentAs(string $foreignKeyName)
     {
         $this->foreignKeyToParentName = $foreignKeyName;
 
@@ -97,7 +97,7 @@ class EmbeddedCollectionDefiner extends EmbeddedRelationDefiner
      * @return void
      * @throws InvalidOperationException
      */
-    public function to($valueObjectClass)
+    public function to(string $valueObjectClass)
     {
         $this->defineRelation(function (IObjectMapper $parentMapper) use ($valueObjectClass) {
             return $this->orm->loadEmbeddedObjectMapper($parentMapper, $valueObjectClass);

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Model\Criteria\Condition;
 
@@ -30,7 +30,7 @@ class NotCondition extends Condition
     /**
      * @return Condition
      */
-    public function getCondition()
+    public function getCondition() : Condition
     {
         return $this->condition;
     }
@@ -38,7 +38,7 @@ class NotCondition extends Condition
     /**
      * @inheritdoc
      */
-    protected function makeArrayFilterCallable()
+    protected function makeArrayFilterCallable() : callable
     {
         $innerCondition = $this->condition->getFilterCallable();
 

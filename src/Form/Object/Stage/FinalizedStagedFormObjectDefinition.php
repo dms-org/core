@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Form\Object\Stage;
 
@@ -72,7 +72,7 @@ class FinalizedStagedFormObjectDefinition
     /**
      * @return IStagedForm
      */
-    public function getStagedForm()
+    public function getStagedForm() : \Dms\Core\Form\IStagedForm
     {
         return $this->stagedForm;
     }
@@ -80,7 +80,7 @@ class FinalizedStagedFormObjectDefinition
     /**
      * @param FormStageCallback[] $defineStageCallbacks
      *
-     * @return StagedForm
+     * @return void
      */
     private function loadStagedForm(array $defineStageCallbacks)
     {

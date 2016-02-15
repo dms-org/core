@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Criteria\MemberMapping;
 
@@ -44,7 +44,7 @@ class ToOneEmbeddedObjectMapping extends ToOneRelationMapping implements IFinalR
     /**
      * @inheritDoc
      */
-    public function asMemberRelation()
+    public function asMemberRelation() : \Dms\Core\Persistence\Db\Mapping\ReadModel\Relation\MemberRelation
     {
         return new ToOneMemberRelation($this);
     }
@@ -52,7 +52,7 @@ class ToOneEmbeddedObjectMapping extends ToOneRelationMapping implements IFinalR
     /**
      * @return bool
      */
-    protected function isSingleColumnObject()
+    protected function isSingleColumnObject() : bool
     {
         return $this->getSingleColumn() !== null;
     }
@@ -70,7 +70,7 @@ class ToOneEmbeddedObjectMapping extends ToOneRelationMapping implements IFinalR
     /**
      * @inheritDoc
      */
-    public function getWhereConditionExpr(Select $select, $tableAlias, $operator, $value)
+    public function getWhereConditionExpr(Select $select, string $tableAlias, string $operator, $value) : \Dms\Core\Persistence\Db\Query\Expression\Expr
     {
         $isSingleColumn = $this->isSingleColumnObject();
 
@@ -167,7 +167,7 @@ class ToOneEmbeddedObjectMapping extends ToOneRelationMapping implements IFinalR
     /**
      * @inheritDoc
      */
-    public function addOrderByToSelect(Select $select, $tableAlias, $isAsc)
+    public function addOrderByToSelect(Select $select, string $tableAlias, bool $isAsc)
     {
         if (!$this->isSingleColumnObject()) {
             throw InvalidOperationException::format(
@@ -184,7 +184,7 @@ class ToOneEmbeddedObjectMapping extends ToOneRelationMapping implements IFinalR
     /**
      * @inheritDoc
      */
-    public function addSelectColumn(Select $select, $tableAlias, $alias)
+    public function addSelectColumn(Select $select, string $tableAlias, string $alias)
     {
         throw InvalidOperationException::format('Cannot select an value object of type %s as a column', $this->getRelatedObjectType());
     }
@@ -192,7 +192,7 @@ class ToOneEmbeddedObjectMapping extends ToOneRelationMapping implements IFinalR
     /**
      * @inheritDoc
      */
-    protected function getSingleValueExpressionInSelect(Select $select, $tableAlias)
+    protected function getSingleValueExpressionInSelect(Select $select, string $tableAlias) : \Dms\Core\Persistence\Db\Query\Expression\Expr
     {
         throw NotImplementedException::method(__METHOD__);
     }

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Mapping\Locking;
 
@@ -29,7 +29,7 @@ abstract class SinglePropertyLockingStrategy implements IOptimisticLockingStrate
      * @param string $propertyName
      * @param string $columnName
      */
-    public function __construct($propertyName, $columnName)
+    public function __construct(string $propertyName, string $columnName)
     {
         $this->propertyName = $propertyName;
         $this->columnName   = $columnName;
@@ -38,7 +38,7 @@ abstract class SinglePropertyLockingStrategy implements IOptimisticLockingStrate
     /**
      * @return string[]
      */
-    public function getLockingColumnNames()
+    public function getLockingColumnNames() : array
     {
         return [$this->columnName];
     }
@@ -46,7 +46,7 @@ abstract class SinglePropertyLockingStrategy implements IOptimisticLockingStrate
     /**
      * @inheritDoc
      */
-    public function withColumnNamesPrefixedBy($prefix)
+    public function withColumnNamesPrefixedBy(string $prefix)
     {
         $clone             = clone $this;
         $clone->columnName = $prefix . $clone->columnName;

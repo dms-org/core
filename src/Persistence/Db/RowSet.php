@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db;
 
@@ -46,7 +46,7 @@ class RowSet
      *
      * @return RowSet
      */
-    public static function fromRowArray(Table $table, array $rows)
+    public static function fromRowArray(Table $table, array $rows) : RowSet
     {
         $self = new self($table);
 
@@ -62,7 +62,7 @@ class RowSet
      *
      * @return Row
      */
-    public function createRow(array $data)
+    public function createRow(array $data) : Row
     {
         return new Row($this->table, $data);
     }
@@ -70,9 +70,9 @@ class RowSet
     /**
      * @param array $rows
      *
-     * @return string
+     * @return self
      */
-    public function withRows(array $rows)
+    public function withRows(array $rows) : self
     {
         return new self($this->table, $rows);
     }
@@ -80,7 +80,7 @@ class RowSet
     /**
      * @return Table
      */
-    public function getTable()
+    public function getTable() : Schema\Table
     {
         return $this->table;
     }
@@ -88,7 +88,7 @@ class RowSet
     /**
      * @return array
      */
-    public function getPrimaryKeys()
+    public function getPrimaryKeys() : array
     {
         $primaryKeys = [];
 
@@ -105,8 +105,12 @@ class RowSet
     /**
      * @return RowSet
      */
-    public function getRowsWithoutPrimaryKeys()
+    public function getRowsWithoutPrimaryKeys() : RowSet
     {
+        if (!$this->primaryKey) {
+            return $this;
+        }
+
         $rowWithoutPrimaryKeys = [];
 
         foreach ($this->rows as $row) {
@@ -121,8 +125,12 @@ class RowSet
     /**
      * @return RowSet
      */
-    public function getRowsWithPrimaryKeys()
+    public function getRowsWithPrimaryKeys() : RowSet
     {
+        if (!$this->primaryKey) {
+            return $this->withRows([]);
+        }
+
         $rowWithPrimaryKeys = [];
 
         foreach ($this->rows as $row) {
@@ -137,7 +145,7 @@ class RowSet
     /**
      * @return Row[]
      */
-    public function getRows()
+    public function getRows() : array
     {
         return $this->rows;
     }
@@ -153,7 +161,7 @@ class RowSet
     /**
      * @return array[]
      */
-    public function asArray()
+    public function asArray() : array
     {
         $columnData = [];
 
@@ -169,7 +177,7 @@ class RowSet
      *
      * @return bool
      */
-    public function has($primaryKey)
+    public function has(int $primaryKey) : bool
     {
         foreach ($this->rows as $row) {
             if ($row->getColumn($this->primaryKey) === $primaryKey) {
@@ -186,7 +194,7 @@ class RowSet
      * @return bool
      * @throws InvalidArgumentException
      */
-    public function add(Row $row)
+    public function add(Row $row) : bool
     {
         if ($row->getTable()->getName() !== $this->table->getName()) {
             throw InvalidArgumentException::format(
@@ -196,7 +204,7 @@ class RowSet
             );
         }
 
-        if ($row->hasColumn($this->primaryKey) && $this->has($row->getColumn($this->primaryKey))) {
+        if ($this->primaryKey && $row->hasColumn($this->primaryKey) && $this->has($row->getColumn($this->primaryKey))) {
             return false;
         }
 
@@ -210,7 +218,7 @@ class RowSet
      *
      * @return bool
      */
-    public function remove($primaryKey)
+    public function remove(int $primaryKey) : bool
     {
         foreach ($this->rows as $key => $row) {
             if ($row->getColumn($this->primaryKey) === $primaryKey) {

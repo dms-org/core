@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Table\Chart;
 
@@ -17,7 +17,7 @@ interface IChartStructure
      *
      * @return IChartAxis[]
      */
-    public function getAxes();
+    public function getAxes() : array;
 
     /**
      * Gets the axis with the supplied name.
@@ -27,7 +27,7 @@ interface IChartStructure
      * @return IChartAxis
      * @throws InvalidArgumentException
      */
-    public function getAxis($name);
+    public function getAxis(string $name) : IChartAxis;
 
     /**
      * Returns whether the chart has the supplied axis.
@@ -36,5 +36,5 @@ interface IChartStructure
      *
      * @return bool
      */
-    public function hasAxis($name);
+    public function hasAxis(string $name) : bool;
 }

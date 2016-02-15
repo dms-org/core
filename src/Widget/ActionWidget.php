@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Widget;
 
@@ -29,7 +29,7 @@ class ActionWidget extends Widget
     /**
      * @return IAction
      */
-    public function getAction()
+    public function getAction() : \Dms\Core\Module\IAction
     {
         return $this->action;
     }
@@ -39,7 +39,7 @@ class ActionWidget extends Widget
      *
      * @return bool
      */
-    public function isAuthorized()
+    public function isAuthorized() : bool
     {
         return $this->action->isAuthorized();
     }

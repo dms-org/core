@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Mapping\Definition\Embedded;
 
@@ -26,7 +26,7 @@ class EnumPropertyColumnDefiner
      *
      * @return EnumPropertyDefiner
      */
-    public function to($columnName)
+    public function to(string $columnName) : EnumPropertyDefiner
     {
         return new EnumPropertyDefiner($this->callback, $columnName);
     }

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Criteria;
 
@@ -51,7 +51,7 @@ class MappedLoadQuery
     /**
      * @return Select
      */
-    public function getSelect()
+    public function getSelect() : \Dms\Core\Persistence\Db\Query\Select
     {
         return $this->select;
     }
@@ -61,7 +61,7 @@ class MappedLoadQuery
      *
      * @return array[]
      */
-    public function load(LoadingContext $context)
+    public function load(LoadingContext $context) : array
     {
         $rows      = $context->query($this->select)->getRows();
         $rowKeyMap = new \SplObjectStorage();

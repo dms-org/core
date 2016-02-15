@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Table\Chart;
 
@@ -18,7 +18,7 @@ interface IChartCriteria
      *
      * @return IChartStructure
      */
-    public function getStructure();
+    public function getStructure() : IChartStructure;
 
     /**
      * Gets the conditions which the rows must match
@@ -26,19 +26,19 @@ interface IChartCriteria
      *
      * @return AxisCondition[]
      */
-    public function getConditions();
+    public function getConditions() : array;
 
     /**
      * Gets the order in which to load the rows
      *
      * @return AxisOrdering[]
      */
-    public function getOrderings();
+    public function getOrderings() : array;
 
     /**
      * Returns a copy of the criteria.
      *
      * @return ChartCriteria
      */
-    public function asNewCriteria();
+    public function asNewCriteria() : Criteria\ChartCriteria;
 }

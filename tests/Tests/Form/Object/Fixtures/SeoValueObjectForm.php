@@ -32,7 +32,7 @@ class SeoValueObjectForm extends ValueObjectFormObject
      *
      * @return string
      */
-    protected function valueObjectType()
+    protected function valueObjectType() : string
     {
         return SeoValueObject::class;
     }
@@ -88,7 +88,7 @@ class SeoValueObjectForm extends ValueObjectFormObject
      *
      * @return IValueObject
      */
-    protected function populateValueObjectFromForm()
+    protected function populateValueObjectFromForm() : IValueObject
     {
         return new SeoValueObject($this->title, $this->description, $this->keywords);
     }

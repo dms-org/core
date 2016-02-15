@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Query\Clause;
 
@@ -30,7 +30,7 @@ class Ordering
      * @param Expr $expression
      * @param string     $mode
      */
-    public function __construct(Expr $expression, $mode)
+    public function __construct(Expr $expression, string $mode)
     {
         $this->expression = $expression;
         $this->mode       = $mode;
@@ -39,7 +39,7 @@ class Ordering
     /**
      * @return Expr
      */
-    public function getExpression()
+    public function getExpression() : \Dms\Core\Persistence\Db\Query\Expression\Expr
     {
         return $this->expression;
     }
@@ -47,7 +47,7 @@ class Ordering
     /**
      * @return string
      */
-    public function getMode()
+    public function getMode() : string
     {
         return $this->mode;
     }
@@ -55,7 +55,7 @@ class Ordering
     /**
      * @return bool
      */
-    public function isAsc()
+    public function isAsc() : bool
     {
         return $this->mode === self::ASC;
     }

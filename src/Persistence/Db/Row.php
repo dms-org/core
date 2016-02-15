@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db;
 
@@ -54,13 +54,13 @@ class Row
     /**
      * @return Table
      */
-    public function getTable()
+    public function getTable() : Table
     {
         return $this->table;
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getPrimaryKeyColumn()
     {
@@ -70,7 +70,7 @@ class Row
     /**
      * @return bool
      */
-    public function hasPrimaryKey()
+    public function hasPrimaryKey() : bool
     {
         return $this->primaryKey && $this->columnData[$this->primaryKey] !== null;
     }
@@ -100,7 +100,7 @@ class Row
     /**
      * @return array
      */
-    public function getColumnData()
+    public function getColumnData() : array
     {
         return $this->columnData;
     }
@@ -110,9 +110,9 @@ class Row
      *
      * @param string $column
      *
-     * @return mixed
+     * @return bool
      */
-    public function hasColumn($column)
+    public function hasColumn(string $column) : bool
     {
         return isset($this->columnData[$column]);
     }
@@ -122,7 +122,7 @@ class Row
      *
      * @return mixed
      */
-    public function getColumn($column)
+    public function getColumn(string $column)
     {
         return isset($this->columnData[$column]) ? $this->columnData[$column] : null;
     }
@@ -133,7 +133,7 @@ class Row
      *
      * @return void
      */
-    public function setColumn($column, $value)
+    public function setColumn(string $column, $value)
     {
         $this->columnData[$column] = $value;
     }
@@ -141,7 +141,7 @@ class Row
     /**
      * @return array
      */
-    public function getLockingColumnData()
+    public function getLockingColumnData() : array
     {
         return $this->lockingColumnData;
     }
@@ -152,7 +152,7 @@ class Row
      *
      * @return void
      */
-    public function setLockingColumn($column, $value)
+    public function setLockingColumn(string $column, $value)
     {
         $this->lockingColumnData[$column] = $value;
     }
@@ -173,7 +173,7 @@ class Row
      *
      * @return void
      */
-    public function firePrimaryKeyCallbacks($primaryKey)
+    public function firePrimaryKeyCallbacks(int $primaryKey)
     {
         $this->columnData[$this->primaryKey] = $primaryKey;
 

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Module\Definition\Table;
 
@@ -26,7 +26,7 @@ class ObjectTableDefiner extends TableDefinerBase
      * @param callable   $callback
      * @param IObjectSet $data
      */
-    public function __construct($name, callable $callback, IObjectSet $data)
+    public function __construct(string $name, callable $callback, IObjectSet $data)
     {
         parent::__construct($name, $callback);
         $this->data = $data;
@@ -49,7 +49,7 @@ class ObjectTableDefiner extends TableDefinerBase
      *
      * @return TableViewsDefiner
      */
-    public function withStructure(callable $structureDefinitionCallback)
+    public function withStructure(callable $structureDefinitionCallback) : TableViewsDefiner
     {
         /** @var string|TypedObject $objectType */
         $objectType = $this->data->getObjectType();

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Module;
 
@@ -18,28 +18,28 @@ interface ITableDisplay
      *
      * @return string
      */
-    public function getName();
+    public function getName() : string;
 
     /**
      * Gets the table data source
      *
      * @return ITableDataSource
      */
-    public function getDataSource();
+    public function getDataSource() : \Dms\Core\Table\ITableDataSource;
 
     /**
      * Gets the default view.
      *
      * @return ITableView
      */
-    public function getDefaultView();
+    public function getDefaultView() : ITableView;
 
     /**
      * Gets the views.
      *
      * @return ITableView[]
      */
-    public function getViews();
+    public function getViews() : array;
 
     /**
      * Get whether the view with the supplied name exists.
@@ -48,7 +48,7 @@ interface ITableDisplay
      *
      * @return bool
      */
-    public function hasView($name);
+    public function hasView(string $name) : bool;
 
     /**
      * Gets the view with the supplied name.
@@ -58,7 +58,7 @@ interface ITableDisplay
      * @return ITableView
      * @throws InvalidArgumentException
      */
-    public function getView($name);
+    public function getView(string $name) : ITableView;
 
     /**
      * Loads the data the view with the supplied name.
@@ -70,5 +70,5 @@ interface ITableDisplay
      *
      * @return IDataTable
      */
-    public function loadView($name = null, $skipRows = 0, $limitRows = null);
+    public function loadView(string $name = null, int $skipRows = 0, int $limitRows = null) : \Dms\Core\Table\IDataTable;
 }

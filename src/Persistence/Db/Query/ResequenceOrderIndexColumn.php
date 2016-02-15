@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Query;
 
@@ -49,7 +49,7 @@ class ResequenceOrderIndexColumn implements IQuery
      *
      * @throws \Dms\Core\Exception\InvalidArgumentException
      */
-    public function __construct(Table $table, $columnName, $groupingColumnName = null, Expr $whereCondition = null)
+    public function __construct(Table $table, string $columnName, string $groupingColumnName = null, Expr $whereCondition = null)
     {
         $this->table          = $table;
         $this->column         = $table->getColumn($columnName);
@@ -60,7 +60,7 @@ class ResequenceOrderIndexColumn implements IQuery
     /**
      * @return Table
      */
-    public function getTable()
+    public function getTable() : \Dms\Core\Persistence\Db\Schema\Table
     {
         return $this->table;
     }
@@ -68,7 +68,7 @@ class ResequenceOrderIndexColumn implements IQuery
     /**
      * @return Column
      */
-    public function getColumn()
+    public function getColumn() : \Dms\Core\Persistence\Db\Schema\Column
     {
         return $this->column;
     }
@@ -76,7 +76,7 @@ class ResequenceOrderIndexColumn implements IQuery
     /**
      * @return bool
      */
-    public function hasGroupingColumn()
+    public function hasGroupingColumn() : bool
     {
         return $this->groupingColumn !== null;
     }
@@ -92,7 +92,7 @@ class ResequenceOrderIndexColumn implements IQuery
     /**
      * @return bool
      */
-    public function hasWhereCondition()
+    public function hasWhereCondition() : bool
     {
         return $this->whereCondition !== null;
     }

@@ -4,6 +4,7 @@ namespace Dms\Core\Tests\Persistence\Db\Mock;
 
 use Dms\Core\Exception\InvalidArgumentException;
 use Dms\Core\Exception\NotImplementedException;
+use Dms\Core\Persistence\Db\Platform\CompiledQuery;
 use Dms\Core\Persistence\Db\Platform\CompiledQueryBuilder;
 use Dms\Core\Persistence\Db\Platform\Platform;
 use Dms\Core\Persistence\Db\Query\Clause\Join;
@@ -37,7 +38,7 @@ class MockPlatform extends Platform
     /**
      * @return string
      */
-    protected function dateFormatString()
+    protected function dateFormatString() : string
     {
         return 'Y-m-d';
     }
@@ -45,7 +46,7 @@ class MockPlatform extends Platform
     /**
      * @return string
      */
-    protected function dateTimeFormatString()
+    protected function dateTimeFormatString() : string
     {
         return 'Y-m-d H:i:s';
     }
@@ -53,7 +54,7 @@ class MockPlatform extends Platform
     /**
      * @return string
      */
-    protected function timeFormatString()
+    protected function timeFormatString() : string
     {
         return 'H:i:s';
     }
@@ -318,7 +319,7 @@ class MockPlatform extends Platform
     /**
      * @inheritDoc
      */
-    public function compileSelect(Select $query)
+    public function compileSelect(Select $query) : CompiledQuery
     {
         $compiledQuery = function (MockDatabase $database, array $outerData = null) use ($query) {
             $rows = $this->loadFromTableRows($query, $database);
@@ -492,7 +493,7 @@ class MockPlatform extends Platform
     /**
      * @inheritDoc
      */
-    public function compileUpdate(Update $query)
+    public function compileUpdate(Update $query) : CompiledQuery
     {
         $compiledQuery = function (MockDatabase $database) use ($query) {
             $allRows = $rows = $this->loadFromTableRows($query, $database);
@@ -538,7 +539,7 @@ class MockPlatform extends Platform
     /**
      * @inheritDoc
      */
-    public function compileDelete(Delete $query)
+    public function compileDelete(Delete $query) : CompiledQuery
     {
         $compiledQuery = function (MockDatabase $database) use ($query) {
             $allRows = $rows = $this->loadFromTableRows($query, $database);
@@ -575,7 +576,7 @@ class MockPlatform extends Platform
     /**
      * @inheritDoc
      */
-    public function compileResequenceOrderIndexColumn(ResequenceOrderIndexColumn $query)
+    public function compileResequenceOrderIndexColumn(ResequenceOrderIndexColumn $query) : CompiledQuery
     {
         $compiledQuery = function (MockDatabase $database) use ($query) {
             $tableName  = $query->getTable()->getName();

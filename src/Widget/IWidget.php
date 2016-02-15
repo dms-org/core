@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Widget;
 
@@ -14,19 +14,19 @@ interface IWidget
      *
      * @return string
      */
-    public function getName();
+    public function getName() : string;
 
     /**
      * Gets the label.
      *
      * @return string
      */
-    public function getLabel();
+    public function getLabel() : string;
 
     /**
      * Returns whether the current user authorized to see this widget.
      *
      * @return bool
      */
-    public function isAuthorized();
+    public function isAuthorized() : bool;
 }

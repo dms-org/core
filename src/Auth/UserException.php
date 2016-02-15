@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Auth;
 
@@ -16,7 +16,7 @@ class UserException extends BaseException
      */
     private $user;
 
-    public function __construct(IUser $user, $message, $code = null, $previous = null)
+    public function __construct(IUser $user, $message, $code = 0, $previous = null)
     {
         parent::__construct($message, $code, $previous);
         $this->user = $user;
@@ -25,7 +25,7 @@ class UserException extends BaseException
     /**
      * @return IUser
      */
-    public function getUser()
+    public function getUser() : IUser
     {
         return $this->user;
     }

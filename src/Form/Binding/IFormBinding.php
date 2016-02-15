@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Form\Binding;
 
@@ -21,7 +21,7 @@ interface IFormBinding
      *
      * @return string
      */
-    public function getObjectType();
+    public function getObjectType() : string;
 
     /**
      * Gets the form with initial values from the supplied object or none if NULL.
@@ -31,7 +31,7 @@ interface IFormBinding
      * @return IForm
      * @throws TypeMismatchException
      */
-    public function getForm($object = null);
+    public function getForm($object = null) : \Dms\Core\Form\IForm;
 
     /**
      * Binds the form data to the supplied object.
@@ -64,7 +64,7 @@ interface IFormBinding
      *
      * @return bool
      */
-    public function hasFieldBinding($name);
+    public function hasFieldBinding(string $name) : bool;
 
     /**
      * Gets field binding for the supplied form field.
@@ -74,12 +74,12 @@ interface IFormBinding
      * @return IFieldBinding
      * @throws InvalidArgumentException
      */
-    public function getFieldBinding($name);
+    public function getFieldBinding(string $name) : IFieldBinding;
 
     /**
      * Gets field bindings.
      *
      * @return IFieldBinding[]
      */
-    public function getFieldBindings();
+    public function getFieldBindings() : array;
 }

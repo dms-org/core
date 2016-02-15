@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Mapping\Definition\Relation;
 
@@ -21,7 +21,7 @@ class ToManyRelationDefiner extends OneToManyRelationDefiner
      *
      * @return OneToManyRelationDefiner
      */
-    public function identifying()
+    public function identifying() : OneToManyRelationDefiner
     {
         return new OneToManyRelationDefiner($this->callback, $this->mapperLoader, $this->loadIds, $identifying = true);
     }
@@ -34,7 +34,7 @@ class ToManyRelationDefiner extends OneToManyRelationDefiner
      *
      * @return ManyToManyParentIdDefiner
      */
-    public function throughJoinTable($tableName)
+    public function throughJoinTable(string $tableName) : ManyToManyParentIdDefiner
     {
         return new ManyToManyParentIdDefiner($this->callback, $this->mapperLoader, $tableName, $this->bidirectionalRelationProperty,  $this->loadIds);
     }

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Auth;
 
@@ -12,21 +12,21 @@ interface IUser extends IEntity
      *
      * @return string
      */
-    public function getEmailAddress();
+    public function getEmailAddress() : string;
 
     /**
      * Gets the username.
      *
      * @return string
      */
-    public function getUsername();
+    public function getUsername() : string;
 
     /**
      * Gets the user's hashed password.
      *
      * @return IHashedPassword
      */
-    public function getPassword();
+    public function getPassword() : IHashedPassword;
 
     /**
      * Sets the user's hashed password.
@@ -42,19 +42,19 @@ interface IUser extends IEntity
      *
      * @return boolean
      */
-    public function isSuperUser();
+    public function isSuperUser() : bool;
 
     /**
      * Returns whether the user is banned.
      *
      * @return boolean
      */
-    public function isBanned();
+    public function isBanned() : bool;
 
     /**
      * Gets the user's role ids.
      *
      * @return EntityIdCollection
      */
-    public function getRoleIds();
+    public function getRoleIds() : \Dms\Core\Model\EntityIdCollection;
 }

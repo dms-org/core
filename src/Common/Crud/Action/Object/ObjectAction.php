@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Common\Crud\Action\Object;
 
@@ -48,7 +48,7 @@ class ObjectAction extends ParameterizedAction implements IObjectAction
     /**
      * @inheritDoc
      */
-    public function getObjectForm()
+    public function getObjectForm() : \Dms\Core\Form\IForm
     {
         return $this->formDtoMapping->getObjectForm();
     }
@@ -56,7 +56,7 @@ class ObjectAction extends ParameterizedAction implements IObjectAction
     /**
      * @inheritDoc
      */
-    public function getObjectType()
+    public function getObjectType() : string
     {
         return $this->handler->getObjectType();
     }
@@ -64,7 +64,7 @@ class ObjectAction extends ParameterizedAction implements IObjectAction
     /**
      * @inheritDoc
      */
-    public function getSupportedObjects(array $objects)
+    public function getSupportedObjects(array $objects) : array
     {
         TypeMismatchException::verifyAllInstanceOf(__METHOD__, 'objects', $objects, $this->handler->getObjectType());
         $objectType = Type::object($this->handler->getObjectType());
@@ -103,7 +103,7 @@ class ObjectAction extends ParameterizedAction implements IObjectAction
     /**
      * @inheritDoc
      */
-    public function isSupported($object)
+    public function isSupported($object) : bool
     {
         return $this->getSupportedObjects([$object]) === [$object];
     }

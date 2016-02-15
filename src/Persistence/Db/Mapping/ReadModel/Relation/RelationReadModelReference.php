@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Mapping\ReadModel\Relation;
 
@@ -33,7 +33,7 @@ class RelationReadModelReference extends RelationObjectReference implements IToO
     /**
      * {@inheritDoc}
      */
-    public function loadValues(LoadingContext $context, array $rows)
+    public function loadValues(LoadingContext $context, array $rows) : array
     {
         return $this->mapper->loadAll($context, $rows);
     }
@@ -41,7 +41,7 @@ class RelationReadModelReference extends RelationObjectReference implements IToO
     /**
      * {@inheritDoc}
      */
-    public function buildNewCollection(array $children)
+    public function buildNewCollection(array $children) : \Dms\Core\Model\ITypedCollection
     {
         return $this->mapper->buildCollection($children);
     }
@@ -49,7 +49,7 @@ class RelationReadModelReference extends RelationObjectReference implements IToO
     /**
      * {@inheritDoc}
      */
-    public function loadCollectionValues(LoadingContext $context, array $rows)
+    public function loadCollectionValues(LoadingContext $context, array $rows) : array
     {
         return $this->mapper->loadAll($context, $rows);
     }
@@ -61,7 +61,7 @@ class RelationReadModelReference extends RelationObjectReference implements IToO
         throw NotImplementedException::method(__METHOD__);
     }
 
-    public function syncRelated(PersistenceContext $context, array $modifiedColumns, array $children)
+    public function syncRelated(PersistenceContext $context, array $modifiedColumns, array $children) : array
     {
         throw NotImplementedException::method(__METHOD__);
     }

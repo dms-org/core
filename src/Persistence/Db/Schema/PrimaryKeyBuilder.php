@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Schema;
 
@@ -16,7 +16,7 @@ class PrimaryKeyBuilder
      *
      * @return Column
      */
-    public static function incrementingInt($name)
+    public static function incrementingInt(string $name) : Column
     {
         return new Column($name, Integer::normal()->unsigned()->autoIncrement(), true);
     }

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Model\Criteria\Member;
 
@@ -57,7 +57,7 @@ abstract class ObjectSetMethodExpression extends MethodExpression
     /**
      * @return FinalizedClassDefinition
      */
-    public function getObjectDefinition()
+    public function getObjectDefinition() : \Dms\Core\Model\Object\FinalizedClassDefinition
     {
         return $this->objectDefinition;
     }
@@ -65,7 +65,7 @@ abstract class ObjectSetMethodExpression extends MethodExpression
     /**
      * @return string
      */
-    public function getObjectType()
+    public function getObjectType() : string
     {
         return $this->objectType;
     }

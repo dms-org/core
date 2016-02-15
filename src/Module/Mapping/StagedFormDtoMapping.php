@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Module\Mapping;
 
@@ -29,7 +29,7 @@ abstract class StagedFormDtoMapping implements IStagedFormDtoMapping
      * @param IStagedForm $form
      * @param string      $dtoType
      */
-    public function __construct(IStagedForm $form, $dtoType)
+    public function __construct(IStagedForm $form, string $dtoType)
     {
         $this->stagedForm = $form;
         $this->dtoType    = $dtoType;
@@ -38,7 +38,7 @@ abstract class StagedFormDtoMapping implements IStagedFormDtoMapping
     /**
      * {@inheritdoc}
      */
-    final public function getStagedForm()
+    final public function getStagedForm() : \Dms\Core\Form\IStagedForm
     {
         return $this->stagedForm;
     }
@@ -46,7 +46,7 @@ abstract class StagedFormDtoMapping implements IStagedFormDtoMapping
     /**
      * {@inheritdoc}
      */
-    final public function getDtoType()
+    final public function getDtoType() : string
     {
         return $this->dtoType;
     }

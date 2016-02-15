@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Model;
 
@@ -18,7 +18,7 @@ interface ISpecification
      *
      * @return FinalizedClassDefinition
      */
-    public function getClass();
+    public function getClass() : FinalizedClassDefinition;
 
     /**
      * Throws an exception if the criteria of not for the supplied class.
@@ -28,7 +28,7 @@ interface ISpecification
      * @return void
      * @throws Exception\TypeMismatchException
      */
-    public function verifyOfClass($class);
+    public function verifyOfClass(string $class);
 
     /**
      * Gets the conditions defining of the object.
@@ -42,7 +42,7 @@ interface ISpecification
      *
      * @return ICriteria
      */
-    public function asCriteria();
+    public function asCriteria() : ICriteria;
 
     /**
      * Returns a specification that is satisfied if BOTH specifications
@@ -53,7 +53,7 @@ interface ISpecification
      * @return ISpecification
      * @throws Exception\TypeMismatchException
      */
-    public function and_(ISpecification $specification);
+    public function and_(ISpecification $specification) : ISpecification;
 
     /**
      * Returns a specification that is satisfied if EITHER specifications
@@ -64,7 +64,7 @@ interface ISpecification
      * @return ISpecification
      * @throws Exception\TypeMismatchException
      */
-    public function or_(ISpecification $specification);
+    public function or_(ISpecification $specification) : ISpecification;
 
     /**
      * Returns a specification that is satisfied if the current specification
@@ -72,7 +72,7 @@ interface ISpecification
      *
      * @return ISpecification
      */
-    public function not();
+    public function not() : ISpecification;
 
     /**
      * Returns whether the object satisfies the specification.
@@ -82,7 +82,7 @@ interface ISpecification
      * @return bool
      * @throws Exception\TypeMismatchException
      */
-    public function isSatisfiedBy(ITypedObject $object);
+    public function isSatisfiedBy(ITypedObject $object) : bool;
 
     /**
      * Returns whether all the object satisfies the specification.
@@ -92,7 +92,7 @@ interface ISpecification
      * @return bool
      * @throws Exception\TypeMismatchException
      */
-    public function isSatisfiedByAll(array $objects);
+    public function isSatisfiedByAll(array $objects) : bool;
 
     /**
      * Returns whether all the object satisfies the specification.
@@ -102,7 +102,7 @@ interface ISpecification
      * @return bool
      * @throws Exception\TypeMismatchException
      */
-    public function isSatisfiedByAny(array $objects);
+    public function isSatisfiedByAny(array $objects) : bool;
 
     /**
      * Returns only the objects which is satisfied by this specification.
@@ -114,5 +114,5 @@ interface ISpecification
      * @return ITypedObject[]
      * @throws Exception\TypeMismatchException
      */
-    public function filter(array $objects);
+    public function filter(array $objects) : array;
 }

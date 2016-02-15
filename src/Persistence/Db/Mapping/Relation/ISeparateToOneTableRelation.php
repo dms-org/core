@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Mapping\Relation;
 
@@ -22,5 +22,5 @@ interface ISeparateToOneTableRelation extends ISeparateTableRelation, IToOneRela
      *
      * @return void
      */
-    public function loadFromSelect(LoadingContext $context, ParentChildMap $map, Select $select, $relatedTableAlias, $parentIdColumnName);
+    public function loadFromSelect(LoadingContext $context, ParentChildMap $map, Select $select, string $relatedTableAlias, string $parentIdColumnName);
 }

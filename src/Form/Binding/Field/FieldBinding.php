@@ -1,9 +1,9 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Form\Binding\Field;
 
-use Dms\Core\Form\Binding\IFieldBinding;
 use Dms\Core\Exception\TypeMismatchException;
+use Dms\Core\Form\Binding\IFieldBinding;
 use Dms\Core\Form\IField;
 
 /**
@@ -29,16 +29,16 @@ abstract class FieldBinding implements IFieldBinding
      * @param string $fieldName
      * @param string $objectType
      */
-    public function __construct($fieldName, $objectType)
+    public function __construct(string $fieldName, string $objectType)
     {
-        $this->fieldName      = $fieldName;
+        $this->fieldName  = $fieldName;
         $this->objectType = $objectType;
     }
 
     /**
      * @inheritDoc
      */
-    final public function getFieldName()
+    final public function getFieldName() : string
     {
         return $this->fieldName;
     }
@@ -46,7 +46,7 @@ abstract class FieldBinding implements IFieldBinding
     /**
      * @inheritDoc
      */
-    final public function getObjectType()
+    final public function getObjectType() : string
     {
         return $this->objectType;
     }

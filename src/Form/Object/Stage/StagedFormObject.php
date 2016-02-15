@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Form\Object\Stage;
 
@@ -107,7 +107,7 @@ abstract class StagedFormObject extends TypedObject implements IDataTransferObje
     /**
      * @return FinalizedStagedFormObjectDefinition
      */
-    final public function getStagedFormDefinition()
+    final public function getStagedFormDefinition() : FinalizedStagedFormObjectDefinition
     {
         return $this->formDefinition;
     }
@@ -115,7 +115,7 @@ abstract class StagedFormObject extends TypedObject implements IDataTransferObje
     /**
      * @return IndependentFormStage
      */
-    final public function getFirstStage()
+    final public function getFirstStage() : \Dms\Core\Form\Stage\IndependentFormStage
     {
         return $this->stagedFormForClone->getFirstStage();
     }
@@ -123,7 +123,7 @@ abstract class StagedFormObject extends TypedObject implements IDataTransferObje
     /**
      * @return IFormStage[]
      */
-    final public function getFollowingStages()
+    final public function getFollowingStages() : array
     {
         return $this->stagedFormForClone->getFollowingStages();
     }
@@ -131,7 +131,7 @@ abstract class StagedFormObject extends TypedObject implements IDataTransferObje
     /**
      * @inheritDoc
      */
-    final public function getAllStages()
+    final public function getAllStages() : array
     {
         return $this->stagedFormForClone->getAllStages();
     }
@@ -139,7 +139,7 @@ abstract class StagedFormObject extends TypedObject implements IDataTransferObje
     /**
      * @return int
      */
-    final public function getAmountOfStages()
+    final public function getAmountOfStages() : int
     {
         return $this->stagedFormForClone->getAmountOfStages();
     }
@@ -147,7 +147,7 @@ abstract class StagedFormObject extends TypedObject implements IDataTransferObje
     /**
      * @return IForm
      */
-    final public function getFirstForm()
+    final public function getFirstForm() : \Dms\Core\Form\IForm
     {
         return $this->stagedFormForClone->getFirstForm();
     }
@@ -155,7 +155,7 @@ abstract class StagedFormObject extends TypedObject implements IDataTransferObje
     /**
      * @inheritDoc
      */
-    final public function getStageWithFieldName($fieldName)
+    final public function getStageWithFieldName(string $fieldName) : \Dms\Core\Form\IFormStage
     {
         return $this->stagedFormForClone->getStageWithFieldName($fieldName);
     }
@@ -163,7 +163,7 @@ abstract class StagedFormObject extends TypedObject implements IDataTransferObje
     /**
      * @inheritDoc
      */
-    final public function getRequiredFieldGroupedByStagesForStage($stageNumber)
+    final public function getRequiredFieldGroupedByStagesForStage(int $stageNumber)
     {
         return $this->stagedFormForClone->getRequiredFieldGroupedByStagesForStage($stageNumber);
     }
@@ -174,7 +174,7 @@ abstract class StagedFormObject extends TypedObject implements IDataTransferObje
      * @return IFormStage
      * @throws InvalidArgumentException If it is out of range
      */
-    final public function getStage($stageNumber)
+    final public function getStage(int $stageNumber) : \Dms\Core\Form\IFormStage
     {
         return $this->stagedFormForClone->getStage($stageNumber);
     }
@@ -182,7 +182,7 @@ abstract class StagedFormObject extends TypedObject implements IDataTransferObje
     /**
      * @inheritDoc
      */
-    final public function getFormForStage($stageNumber, array $previousStagesSubmission)
+    final public function getFormForStage(int $stageNumber, array $previousStagesSubmission) : \Dms\Core\Form\IForm
     {
         return $this->stagedFormForClone->getFormForStage($stageNumber, $previousStagesSubmission);
     }
@@ -215,7 +215,7 @@ abstract class StagedFormObject extends TypedObject implements IDataTransferObje
      * @return array
      * @throws InvalidFormSubmissionException
      */
-    final public function process(array $submission)
+    final public function process(array $submission) : array
     {
         return $this->stagedFormForClone->process($submission);
     }
@@ -227,7 +227,7 @@ abstract class StagedFormObject extends TypedObject implements IDataTransferObje
      *
      * @return array
      */
-    final public function unprocess(array $processedSubmission)
+    final public function unprocess(array $processedSubmission) : array
     {
         return $this->stagedFormForClone->unprocess($processedSubmission);
     }

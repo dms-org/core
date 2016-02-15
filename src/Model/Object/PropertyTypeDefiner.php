@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Model\Object;
 
@@ -32,7 +32,7 @@ class PropertyTypeDefiner
     /**
      * @return PropertyDefinition
      */
-    public function getDefinition()
+    public function getDefinition() : PropertyDefinition
     {
         return $this->definition;
     }
@@ -137,7 +137,7 @@ class PropertyTypeDefiner
      *
      * @return void
      */
-    public function asObject($class = null)
+    public function asObject(string $class = null)
     {
         $this->defineType(Type::object($class));
     }
@@ -158,7 +158,7 @@ class PropertyTypeDefiner
      *
      * @return void
      */
-    public function asCollectionOf(IType $elementType, $collectionClass = ITypedCollection::class)
+    public function asCollectionOf(IType $elementType, string $collectionClass = ITypedCollection::class)
     {
         $this->defineType(Type::collectionOf($elementType, $collectionClass));
     }

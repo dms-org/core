@@ -67,7 +67,7 @@ class FieldPropertyBindingTest extends FieldBindingTest
         $this->setExpectedException(InvalidArgumentException::class);
 
         new FieldPropertyBinding(
-                $this->buildField(),
+                $this->buildField()->getName(),
                 TestFormBoundClass::definition(),
                 'invalid-property-name'
         );

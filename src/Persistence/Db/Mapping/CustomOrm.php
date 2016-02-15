@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Mapping;
 
@@ -45,7 +45,7 @@ class CustomOrm extends Orm
      *
      * @return CustomOrm
      */
-    public static function from(array $entityMappersMap, array $valueObjectMapperMap = [], array $includedOrms = [])
+    public static function from(array $entityMappersMap, array $valueObjectMapperMap = [], array $includedOrms = []) : CustomOrm
     {
         return new self(function (OrmDefinition $orm) use ($entityMappersMap, $valueObjectMapperMap, $includedOrms) {
             $orm->entities($entityMappersMap);

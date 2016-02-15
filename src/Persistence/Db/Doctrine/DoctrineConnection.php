@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Doctrine;
 
@@ -41,7 +41,7 @@ class DoctrineConnection extends Connection
      *
      * @return int
      */
-    public function getLastInsertId()
+    public function getLastInsertId() : int
     {
         return (int)$this->doctrineConnection->lastInsertId();
     }
@@ -61,7 +61,7 @@ class DoctrineConnection extends Connection
      *
      * @return bool
      */
-    public function isInTransaction()
+    public function isInTransaction() : bool
     {
         return $this->doctrineConnection->isTransactionActive();
     }
@@ -94,7 +94,7 @@ class DoctrineConnection extends Connection
      *
      * @return IQuery
      */
-    public function prepare($sql, array $parameters = [])
+    public function prepare($sql, array $parameters = []) : IQuery
     {
         return new DoctrineQuery($this, $this->doctrineConnection->prepare($sql), $parameters);
     }

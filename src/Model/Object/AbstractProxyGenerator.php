@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Model\Object;
 
@@ -23,7 +23,7 @@ class AbstractProxyGenerator
      *
      * @return object
      */
-    public static function createProxyInstance($class)
+    public static function createProxyInstance(string $class)
     {
         if (!isset(self::$proxyCache[$class])) {
             $reflection = new \ReflectionClass($class);

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Form;
 
@@ -32,7 +32,7 @@ class FormSection implements IFormSection
     /**
      * {@inheritDoc}
      */
-    public function getTitle()
+    public function getTitle() : string
     {
         return $this->title;
     }
@@ -40,7 +40,7 @@ class FormSection implements IFormSection
     /**
      * {@inheritDoc}
      */
-    public function getFields()
+    public function getFields() : array
     {
         return $this->fields;
     }

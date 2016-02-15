@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Form\Field\Processor;
 
@@ -34,7 +34,7 @@ class DateTimeProcessor extends FieldProcessor
      * @param \DateTimeZone|null $timeZone
      * @param string|null        $mode
      */
-    public function __construct($format, \DateTimeZone $timeZone = null, $mode = null)
+    public function __construct(string $format, \DateTimeZone $timeZone = null, string $mode = null)
     {
         parent::__construct(new ObjectType(\DateTimeImmutable::class));
 

@@ -47,7 +47,7 @@ class EntityTest extends TypedObjectTest
 
     public function testSetIdToNullThrows()
     {
-        $this->setExpectedException(InvalidArgumentException::class);
+        $this->setExpectedException(\TypeError::class);
         $this->object->setId(null);
     }
 

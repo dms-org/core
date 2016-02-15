@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Mapping\Relation\Reference;
 
@@ -20,7 +20,7 @@ interface IToManyRelationReference extends IRelationReference
      *
      * @return ITypedCollection
      */
-    public function buildNewCollection(array $children);
+    public function buildNewCollection(array $children) : \Dms\Core\Model\ITypedCollection;
 
     /**
      * @param LoadingContext $context
@@ -28,7 +28,7 @@ interface IToManyRelationReference extends IRelationReference
      *
      * @return array
      */
-    public function loadCollectionValues(LoadingContext $context, array $rows);
+    public function loadCollectionValues(LoadingContext $context, array $rows) : array;
 
     /**
      * @param PersistenceContext $context
@@ -37,5 +37,5 @@ interface IToManyRelationReference extends IRelationReference
      *
      * @return Row[]
      */
-    public function syncRelated(PersistenceContext $context, array $modifiedColumns, array $children);
+    public function syncRelated(PersistenceContext $context, array $modifiedColumns, array $children) : array;
 }

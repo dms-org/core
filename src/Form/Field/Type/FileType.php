@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Form\Field\Type;
 
@@ -23,7 +23,7 @@ class FileType extends FieldType
     /**
      * {@inheritdoc}
      */
-    public function buildPhpTypeOfInput()
+    public function buildPhpTypeOfInput() : \Dms\Core\Model\Type\IType
     {
         return Type::object(IUploadedFile::class);
     }
@@ -31,7 +31,7 @@ class FileType extends FieldType
     /**
      * @return IFieldProcessor[]
      */
-    protected function buildProcessors()
+    protected function buildProcessors() : array
     {
         $processors = [new UploadedFileValidator($this->inputType)];
 

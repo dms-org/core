@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Language;
 
@@ -20,7 +20,7 @@ interface ILanguageProvider
      * @return string
      * @throws MessageNotFoundException
      */
-    public function format(Message $message);
+    public function format(Message $message) : string;
 
     /**
      * Gets the fully formed message strings from the supplied message ids
@@ -32,5 +32,5 @@ interface ILanguageProvider
      * @throws InvalidArgumentException
      * @throws MessageNotFoundException
      */
-    public function formatAll(array $messages);
+    public function formatAll(array $messages) : array;
 }

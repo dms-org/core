@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Query;
 
@@ -43,7 +43,7 @@ class Select extends Query
      *
      * @return Select
      */
-    public static function allFrom(Table $table)
+    public static function allFrom(Table $table) : Select
     {
         $select = new Select($table);
 
@@ -69,7 +69,7 @@ class Select extends Query
      *
      * @return Select
      */
-    public function buildSubSelect(Table $fromTable)
+    public function buildSubSelect(Table $fromTable) : Select
     {
         $subSelect = Select::from($fromTable);
         $subSelect->setAlias($this->generateUniqueAliasFor($fromTable->getName()));
@@ -84,7 +84,7 @@ class Select extends Query
      *
      * @return Table
      */
-    public function getResultSetTableStructure()
+    public function getResultSetTableStructure() : \Dms\Core\Persistence\Db\Schema\Table
     {
         $columns = [];
 
@@ -98,7 +98,7 @@ class Select extends Query
     /**
      * @return Expr[]
      */
-    public function getAliasColumnMap()
+    public function getAliasColumnMap() : array
     {
         return $this->aliasColumnMap;
     }
@@ -106,7 +106,7 @@ class Select extends Query
     /**
      * @return string[]
      */
-    protected function getTakenAliases()
+    protected function getTakenAliases() : array
     {
         return array_merge(parent::getTakenAliases(), $this->outerSelectAliases);
     }
@@ -117,7 +117,7 @@ class Select extends Query
      *
      * @return static
      */
-    public function addColumn($alias, Expr $column)
+    public function addColumn(string $alias, Expr $column)
     {
         $this->aliasColumnMap[$alias] = $column;
 
@@ -133,7 +133,7 @@ class Select extends Query
      * @return static
      * @throws InvalidArgumentException
      */
-    public function addAliasedRawColumn($alias, $column)
+    public function addAliasedRawColumn(string $alias, string $column)
     {
         $table = $this->getTable();
 
@@ -157,7 +157,7 @@ class Select extends Query
      * @return static
      * @throws InvalidArgumentException
      */
-    public function addRawColumn($column)
+    public function addRawColumn(string $column)
     {
         return $this->addAliasedRawColumn($column, $column);
     }
@@ -179,7 +179,7 @@ class Select extends Query
     /**
      * @return Expr[]
      */
-    public function getGroupBy()
+    public function getGroupBy() : array
     {
         return $this->groupBy;
     }
@@ -199,7 +199,7 @@ class Select extends Query
     /**
      * @return Expr[]
      */
-    public function getHaving()
+    public function getHaving() : array
     {
         return $this->having;
     }

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Table;
 
@@ -17,36 +17,35 @@ interface IColumn
      *
      * @return string
      */
-    public function getName();
+    public function getName() : string;
 
     /**
      * Gets the label of the column
      *
      * @return string
      */
-    public function getLabel();
+    public function getLabel() : string;
 
     /**
      * Gets the column components.
      *
      * @return IColumnComponent[]
      */
-    public function getComponents();
+    public function getComponents() : array;
 
     /**
      * Gets the column component names.
      *
      * @return string[]
      */
-    public function getComponentNames();
+    public function getComponentNames() : array;
 
     /**
      * @param string $componentName
      *
-     * @return IColumnComponent
-     * @throws bool
+     * @return bool
      */
-    public function hasComponent($componentName);
+    public function hasComponent(string $componentName) : bool;
 
     /**
      * @param string $componentName
@@ -54,7 +53,7 @@ interface IColumn
      * @return IColumnComponent
      * @throws InvalidArgumentException
      */
-    public function getComponent($componentName = null);
+    public function getComponent(string $componentName = null) : IColumnComponent;
 
     /**
      * Gets the component id for the supplied component name.
@@ -64,7 +63,7 @@ interface IColumn
      * @return string
      * @throws InvalidArgumentException
      */
-    public function getComponentId($componentName = null);
+    public function getComponentId(string $componentName = null) : string;
 
     /**
      * Returns whether the column only contains a single
@@ -72,5 +71,5 @@ interface IColumn
      *
      * @return bool
      */
-    public function hasSingleComponent();
+    public function hasSingleComponent() : bool;
 }

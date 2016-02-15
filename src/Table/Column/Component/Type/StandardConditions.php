@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Table\Column\Component\Type;
 
@@ -21,7 +21,7 @@ class StandardConditions
      *
      * @return IColumnComponentOperator[]
      */
-    public static function forField(IField $field, array $operators = null)
+    public static function forField(IField $field, array $operators = null) : array
     {
         if ($operators === null) {
             $operators = $field->getProcessedType()->getConditionOperators();

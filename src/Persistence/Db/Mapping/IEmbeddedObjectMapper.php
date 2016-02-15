@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Mapping;
 
@@ -21,7 +21,7 @@ interface IEmbeddedObjectMapper extends IObjectMapper
     /**
      * @return EmbeddedParentObjectMapping
      */
-    public function getMapping();
+    public function getMapping() : Hierarchy\ParentObjectMapping;
 
     /**
      * Gets the mapper for the object which this object is
@@ -29,13 +29,13 @@ interface IEmbeddedObjectMapper extends IObjectMapper
      *
      * @return IObjectMapper
      */
-    public function getParentMapper();
+    public function getParentMapper() : IObjectMapper;
 
     /**
      * Gets the root entity mapper for the object which this object is
      * embedded within.
      *
-     * @return IEntityMapper
+     * @return IEntityMapper|null
      */
     public function getRootEntityMapper();
 
@@ -104,7 +104,7 @@ interface IEmbeddedObjectMapper extends IObjectMapper
      *
      * @return IEmbeddedObjectMapper
      */
-    public function withColumnsPrefixedBy($prefix);
+    public function withColumnsPrefixedBy(string $prefix) : IEmbeddedObjectMapper;
 
     /**
      * Returns an equivalent mapper that will map objects and execute queries as if it
@@ -117,5 +117,5 @@ interface IEmbeddedObjectMapper extends IObjectMapper
      *
      * @return IEmbeddedObjectMapper
      */
-    public function asSeparateTable($name, array $extraColumns = [], array $extraIndexes = [], array $extraForeignKeys = []);
+    public function asSeparateTable(string $name, array $extraColumns = [], array $extraIndexes = [], array $extraForeignKeys = []) : IEmbeddedObjectMapper;
 }

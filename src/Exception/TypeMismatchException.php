@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Exception;
 
@@ -21,7 +21,7 @@ class TypeMismatchException extends BaseException
      *
      * @return TypeMismatchException
      */
-    public static function argument($method, $argumentName, $expectedType, $argument)
+    public static function argument(string $method, string $argumentName, string $expectedType, $argument) : TypeMismatchException
     {
         $actualType = Type::from($argument)->asTypeString();
 

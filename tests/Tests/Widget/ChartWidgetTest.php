@@ -5,6 +5,7 @@ namespace Dms\Core\Tests\Widget;
 use Dms\Common\Testing\CmsTestCase;
 use Dms\Core\Table\Chart\IChartCriteria;
 use Dms\Core\Table\Chart\IChartDataSource;
+use Dms\Core\Table\Chart\IChartDataTable;
 use Dms\Core\Widget\ChartWidget;
 
 /**
@@ -29,9 +30,9 @@ class ChartWidgetTest extends CmsTestCase
         $chart->expects(self::once())
                 ->method('load')
                 ->with($criteria)
-                ->willReturn(true);
+                ->willReturn($mock = $this->getMock(IChartDataTable::class));
 
-        $this->assertSame(true, $widget->loadData());
+        $this->assertSame($mock, $widget->loadData());
     }
 
     public function testNewWithoutCriteria()
@@ -50,8 +51,8 @@ class ChartWidgetTest extends CmsTestCase
         $chart->expects(self::once())
                 ->method('load')
                 ->with(null)
-                ->willReturn(true);
+                ->willReturn($mock = $this->getMock(IChartDataTable::class));
 
-        $this->assertSame(true, $widget->loadData());
+        $this->assertSame($mock, $widget->loadData());
     }
 }

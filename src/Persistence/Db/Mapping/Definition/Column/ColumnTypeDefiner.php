@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Mapping\Definition\Column;
 
@@ -64,8 +64,8 @@ class ColumnTypeDefiner
     public function __construct(
             MapperDefinition $definition,
             callable $callback,
-            $name,
-            $nullable = false
+            string $name,
+            bool $nullable = false
     ) {
         $this->definition = $definition;
         $this->callback   = $callback;
@@ -92,7 +92,7 @@ class ColumnTypeDefiner
      *
      * @return static
      */
-    public function index($indexName = null)
+    public function index(string $indexName = null)
     {
         $this->indexName = $indexName ?: $this->name . '_index';
 
@@ -106,7 +106,7 @@ class ColumnTypeDefiner
      *
      * @return static
      */
-    public function unique($indexName = null)
+    public function unique(string $indexName = null)
     {
         $this->indexName = $indexName ?: $this->name . '_unique_index';
         $this->isUnique  = true;
@@ -134,7 +134,7 @@ class ColumnTypeDefiner
      *
      * @return void
      */
-    public function asVarchar($length)
+    public function asVarchar(int $length)
     {
         $this->asType(new Varchar($length));
     }
@@ -257,7 +257,7 @@ class ColumnTypeDefiner
      *
      * @return void
      */
-    public function asDecimal($totalPrecision, $decimalPoints = 0)
+    public function asDecimal(int $totalPrecision, int $decimalPoints = 0)
     {
         $this->asType(new Decimal($totalPrecision, $decimalPoints));
     }

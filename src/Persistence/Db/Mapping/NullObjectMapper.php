@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Mapping;
 
@@ -28,40 +28,40 @@ class NullObjectMapper implements IEntityMapper
     }
 
 
-    public function getMapperHash()
+    public function getMapperHash() : string
     {
     }
 
 
-    public function getObjectType()
+    public function getObjectType() : string
     {
     }
 
 
-    public function getDefinition()
+    public function getDefinition() : Definition\FinalizedMapperDefinition
     {
     }
 
 
-    public function getMapping()
+    public function getMapping() : Hierarchy\ParentObjectMapping
     {
     }
 
 
-    public function getNestedMappers()
+    public function getNestedMappers() : array
     {
     }
 
-    public function findMapperFor($class)
+    public function findMapperFor(string $class) : IObjectMapper
     {
     }
 
-    public function load(LoadingContext $context, Row $row)
+    public function load(LoadingContext $context, Row $row) : \Dms\Core\Model\ITypedObject
     {
     }
 
 
-    public function loadAll(LoadingContext $context, array $rows)
+    public function loadAll(LoadingContext $context, array $rows) : array
     {
     }
 
@@ -70,19 +70,19 @@ class NullObjectMapper implements IEntityMapper
     {
     }
 
-    public function getPrimaryTable()
+    public function getPrimaryTable() : \Dms\Core\Persistence\Db\Schema\Table
     {
     }
 
-    public function getPrimaryTableName()
+    public function getPrimaryTableName() : string
     {
     }
 
-    public function getTables()
+    public function getTables() : array
     {
     }
 
-    public function getSelect()
+    public function getSelect() : \Dms\Core\Persistence\Db\Query\Select
     {
     }
 
@@ -94,15 +94,15 @@ class NullObjectMapper implements IEntityMapper
     {
     }
 
-    public function rowSet(array $rows)
+    public function rowSet(array $rows) : \Dms\Core\Persistence\Db\RowSet
     {
     }
 
-    public function persist(PersistenceContext $context, IEntity $entity)
+    public function persist(PersistenceContext $context, IEntity $entity) : \Dms\Core\Persistence\Db\Row
     {
     }
 
-    public function persistAll(PersistenceContext $context, array $entities)
+    public function persistAll(PersistenceContext $context, array $entities) : array
     {
     }
 
@@ -115,7 +115,7 @@ class NullObjectMapper implements IEntityMapper
 
     }
 
-    public function buildCollection(array $objects)
+    public function buildCollection(array $objects) : \Dms\Core\Model\ITypedCollection
     {
 
     }

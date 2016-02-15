@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Query\Clause;
 
@@ -45,7 +45,7 @@ class Join
      * @param string $alias
      * @param Expr[] $on
      */
-    public function __construct($type, Table $table, $alias, array $on)
+    public function __construct(string $type, Table $table, string $alias, array $on)
     {
         InvalidArgumentException::verify(in_array($type, [self::INNER, self::LEFT, self::RIGHT]), 'on', 'Invalid join type \'%s\' given', $type);
         InvalidArgumentException::verifyAllInstanceOf(__METHOD__, 'on', $on, Expr::class);
@@ -63,7 +63,7 @@ class Join
      *
      * @return Join
      */
-    public static function inner(Table $table, $alias, array $on)
+    public static function inner(Table $table, string $alias, array $on) : Join
     {
         return new self(self::INNER, $table, $alias, $on);
     }
@@ -75,7 +75,7 @@ class Join
      *
      * @return Join
      */
-    public static function left(Table $table, $alias, array $on)
+    public static function left(Table $table, string $alias, array $on) : Join
     {
         return new self(self::LEFT, $table, $alias, $on);
     }
@@ -87,7 +87,7 @@ class Join
      *
      * @return Join
      */
-    public static function right(Table $table, $alias, array $on)
+    public static function right(Table $table, string $alias, array $on) : Join
     {
         return new self(self::RIGHT, $table, $alias, $on);
     }
@@ -95,7 +95,7 @@ class Join
     /**
      * @return Table
      */
-    public function getTable()
+    public function getTable() : \Dms\Core\Persistence\Db\Schema\Table
     {
         return $this->table;
     }
@@ -103,7 +103,7 @@ class Join
     /**
      * @return string
      */
-    public function getTableName()
+    public function getTableName() : string
     {
         return $this->table->getName();
     }
@@ -111,7 +111,7 @@ class Join
     /**
      * @return string
      */
-    public function getAlias()
+    public function getAlias() : string
     {
         return $this->alias;
     }
@@ -119,7 +119,7 @@ class Join
     /**
      * @return bool
      */
-    public function isTableAliased()
+    public function isTableAliased() : bool
     {
         return $this->alias !== $this->getTableName();
     }
@@ -127,7 +127,7 @@ class Join
     /**
      * @return string
      */
-    public function getType()
+    public function getType() : string
     {
         return $this->type;
     }
@@ -135,7 +135,7 @@ class Join
     /**
      * @return Expr[]
      */
-    public function getOn()
+    public function getOn() : array
     {
         return $this->on;
     }

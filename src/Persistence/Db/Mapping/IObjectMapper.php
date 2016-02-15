@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Mapping;
 
@@ -30,34 +30,34 @@ interface IObjectMapper
     /**
      * @return string
      */
-    public function getMapperHash();
+    public function getMapperHash() : string;
 
     /**
      * @return string
      */
-    public function getObjectType();
+    public function getObjectType() : string;
 
     /**
      * @return FinalizedMapperDefinition
      */
-    public function getDefinition();
+    public function getDefinition() : Definition\FinalizedMapperDefinition;
 
     /**
      * @return ParentObjectMapping
      */
-    public function getMapping();
+    public function getMapping() : Hierarchy\ParentObjectMapping;
 
     /**
      * @return IObjectMapper[]
      */
-    public function getNestedMappers();
+    public function getNestedMappers() : array;
 
     /**
      * @param string $class
      *
      * @return IObjectMapper
      */
-    public function findMapperFor($class);
+    public function findMapperFor(string $class) : IObjectMapper;
 
     /**
      * Loads an object from the supplied row.
@@ -68,7 +68,7 @@ interface IObjectMapper
      * @return ITypedObject
      * @throws InvalidArgumentException
      */
-    public function load(LoadingContext $context, Row $row);
+    public function load(LoadingContext $context, Row $row) : \Dms\Core\Model\ITypedObject;
 
     /**
      * Loads an array of objects from the supplied rows.
@@ -81,7 +81,7 @@ interface IObjectMapper
      * @return ITypedObject[]
      * @throws InvalidArgumentException
      */
-    public function loadAll(LoadingContext $context, array $rows);
+    public function loadAll(LoadingContext $context, array $rows) : array;
 
     /**
      * @param PersistenceContext $context
@@ -98,5 +98,5 @@ interface IObjectMapper
      *
      * @return ITypedCollection
      */
-    public function buildCollection(array $objects);
+    public function buildCollection(array $objects) : \Dms\Core\Model\ITypedCollection;
 }

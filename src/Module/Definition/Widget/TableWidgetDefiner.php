@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Module\Definition\Widget;
 
@@ -30,7 +30,7 @@ class TableWidgetDefiner extends WidgetDefinerBase
      * @param ITableDataSource $table
      * @param callable         $callback
      */
-    public function __construct($name, $label, ITableDataSource $table, callable $callback)
+    public function __construct(string $name, string $label, ITableDataSource $table, callable $callback)
     {
         parent::__construct($name, null, null, null, $callback);
         $this->label = $label;

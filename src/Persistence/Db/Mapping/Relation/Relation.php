@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Mapping\Relation;
 
@@ -48,7 +48,7 @@ abstract class Relation implements IRelation
      * @param Table[]       $relationshipTables
      * @param Column[]      $parentColumnsToLoad
      */
-    public function __construct($idString, IObjectMapper $mapper, $dependencyMode, array $relationshipTables, array $parentColumnsToLoad)
+    public function __construct(string $idString, IObjectMapper $mapper, string $dependencyMode, array $relationshipTables, array $parentColumnsToLoad)
     {
         $this->idString            = $idString;
         $this->mapper              = $mapper;
@@ -60,7 +60,7 @@ abstract class Relation implements IRelation
     /**
      * @return string
      */
-    public function getIdString()
+    public function getIdString() : string
     {
         return $this->idString;
     }
@@ -68,7 +68,7 @@ abstract class Relation implements IRelation
     /**
      * @return IObjectMapper
      */
-    final public function getMapper()
+    final public function getMapper() : \Dms\Core\Persistence\Db\Mapping\IObjectMapper
     {
         return $this->mapper;
     }
@@ -76,7 +76,7 @@ abstract class Relation implements IRelation
     /**
      * @return string
      */
-    final public function getDependencyMode()
+    final public function getDependencyMode() : string
     {
         return $this->dependencyMode;
     }
@@ -84,7 +84,7 @@ abstract class Relation implements IRelation
     /**
      * @return Table[]
      */
-    final public function getRelationshipTables()
+    final public function getRelationshipTables() : array
     {
         return $this->relationshipTables;
     }
@@ -92,7 +92,7 @@ abstract class Relation implements IRelation
     /**
      * @inheritDoc
      */
-    public function withEmbeddedColumnsPrefixedBy($prefix)
+    public function withEmbeddedColumnsPrefixedBy(string $prefix)
     {
         $clone = clone $this;
 
@@ -106,7 +106,7 @@ abstract class Relation implements IRelation
     /**
      * @inheritDoc
      */
-    final public function getParentColumnsToLoad()
+    final public function getParentColumnsToLoad() : array
     {
         return $this->parentColumnsToLoad;
     }
@@ -118,7 +118,7 @@ abstract class Relation implements IRelation
      *
      * @return void
      */
-    final protected function setForeignKey(array $rows, $foreignKey, $value)
+    final protected function setForeignKey(array $rows, string $foreignKey, $value)
     {
         foreach ($rows as $row) {
             $row->setColumn($foreignKey, $value);

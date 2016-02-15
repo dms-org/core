@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Doctrine\Migration\Type;
 
@@ -22,7 +22,7 @@ abstract class BaseEnumType extends Type
     /**
      * @return string
      */
-    public static function getTypeName()
+    public static function getTypeName() : string
     {
         return 'enum(' . implode(',', static::$values) . ')';
     }
@@ -38,7 +38,7 @@ abstract class BaseEnumType extends Type
     /**
      * @return string[]
      */
-    public function getValues()
+    public function getValues() : array
     {
         return static::$values;
     }

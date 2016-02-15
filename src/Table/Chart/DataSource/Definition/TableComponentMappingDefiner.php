@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Table\Chart\DataSource\Definition;
 
@@ -47,7 +47,7 @@ class TableComponentMappingDefiner
      *
      * @return IChartAxis
      */
-    public function toAxis($axisName = null, $axisLabel = null, $componentName = null, $componentLabel = null)
+    public function toAxis(string $axisName = null, string $axisLabel = null, string $componentName = null, string $componentLabel = null) : \Dms\Core\Table\Chart\IChartAxis
     {
         $axisName  = $axisName ?: $this->component->getName();
         $axisLabel = $axisLabel ?: $this->component->getLabel();
@@ -68,7 +68,7 @@ class TableComponentMappingDefiner
      *
      * @return IColumnComponent
      */
-    public function asComponent($componentName = null, $componentLabel = null)
+    public function asComponent(string $componentName = null, string $componentLabel = null) : \Dms\Core\Table\IColumnComponent
     {
         $componentName  = $componentName ?: $this->component->getName();
         $componentLabel = $componentLabel ?: $this->component->getLabel();

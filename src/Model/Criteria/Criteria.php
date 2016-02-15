@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Model\Criteria;
 
@@ -32,7 +32,7 @@ class Criteria extends SpecificationDefinition implements ICriteria
     /**
      * {@inheritDoc}
      */
-    final public function hasOrderings()
+    final public function hasOrderings() : bool
     {
         return count($this->orderings) > 0;
     }
@@ -40,7 +40,7 @@ class Criteria extends SpecificationDefinition implements ICriteria
     /**
      * {@inheritDoc}
      */
-    final public function getOrderings()
+    final public function getOrderings() : array
     {
         return $this->orderings;
     }
@@ -59,7 +59,7 @@ class Criteria extends SpecificationDefinition implements ICriteria
      * @return static
      * @throws InvalidArgumentException
      */
-    final public function orderBy($memberExpression, $direction)
+    final public function orderBy(string $memberExpression, string $direction)
     {
         $this->orderings[] = new MemberOrdering(
                 $this->memberExpressionParser->parse($this->class, $memberExpression),
@@ -82,7 +82,7 @@ class Criteria extends SpecificationDefinition implements ICriteria
      * @return static
      * @throws InvalidArgumentException
      */
-    final public function orderByAsc($memberExpression)
+    final public function orderByAsc(string $memberExpression)
     {
         return $this->orderBy($memberExpression, OrderingDirection::ASC);
     }
@@ -100,7 +100,7 @@ class Criteria extends SpecificationDefinition implements ICriteria
      * @return static
      * @throws InvalidArgumentException
      */
-    final public function orderByDesc($memberExpression)
+    final public function orderByDesc(string $memberExpression)
     {
         return $this->orderBy($memberExpression, OrderingDirection::DESC);
     }
@@ -108,7 +108,7 @@ class Criteria extends SpecificationDefinition implements ICriteria
     /**
      * {@inheritDoc}
      */
-    final public function getStartOffset()
+    final public function getStartOffset() : int
     {
         return $this->startOffset;
     }
@@ -118,7 +118,7 @@ class Criteria extends SpecificationDefinition implements ICriteria
      *
      * @return static
      */
-    final public function skip($amount)
+    final public function skip(int $amount)
     {
         $this->startOffset = (int)$amount;
 
@@ -128,7 +128,7 @@ class Criteria extends SpecificationDefinition implements ICriteria
     /**
      * @inheritDoc
      */
-    final public function hasLimitAmount()
+    final public function hasLimitAmount() : bool
     {
         return $this->limitAmount !== null;
     }
@@ -142,13 +142,13 @@ class Criteria extends SpecificationDefinition implements ICriteria
     }
 
     /**
-     * @param int $amount
+     * @param int|null $amount
      *
      * @return static
      */
-    final public function limit($amount)
+    final public function limit(int $amount = null)
     {
-        $this->limitAmount = $amount === null ? null : (int)$amount;
+        $this->limitAmount = $amount === null ? null : $amount;
 
         return $this;
     }

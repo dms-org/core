@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Mapping;
 
@@ -69,14 +69,14 @@ abstract class ObjectMapper implements IObjectMapper
      *
      * @return ParentObjectMapping
      */
-    abstract protected function loadMapping(FinalizedMapperDefinition $definition);
+    abstract protected function loadMapping(FinalizedMapperDefinition $definition) : Hierarchy\ParentObjectMapping;
 
     abstract protected function loadFromDefinition(FinalizedMapperDefinition $definition);
 
     /**
      * {@inheritDoc}
      */
-    final public function getDefinition()
+    final public function getDefinition() : Definition\FinalizedMapperDefinition
     {
         if (!$this->mapping) {
             throw new InvalidOperationException('Mapping not defined yet');
@@ -88,7 +88,7 @@ abstract class ObjectMapper implements IObjectMapper
     /**
      * {@inheritDoc}
      */
-    final public function getObjectType()
+    final public function getObjectType() : string
     {
         return $this->objectType;
     }
@@ -96,7 +96,7 @@ abstract class ObjectMapper implements IObjectMapper
     /**
      * @inheritDoc
      */
-    public function buildCollection(array $objects)
+    public function buildCollection(array $objects) : \Dms\Core\Model\ITypedCollection
     {
         /** @var string|TypedObject $objectType */
         $objectType = $this->objectType;
@@ -107,7 +107,7 @@ abstract class ObjectMapper implements IObjectMapper
     /**
      * @inheritDoc
      */
-    final public function getMapperHash()
+    final public function getMapperHash() : string
     {
         return spl_object_hash($this);
     }
@@ -115,7 +115,7 @@ abstract class ObjectMapper implements IObjectMapper
     /**
      * @return ParentObjectMapping
      */
-    final public function getMapping()
+    final public function getMapping() : Hierarchy\ParentObjectMapping
     {
         return $this->mapping;
     }
@@ -123,7 +123,7 @@ abstract class ObjectMapper implements IObjectMapper
     /**
      * @inheritDoc
      */
-    final public function getNestedMappers()
+    final public function getNestedMappers() : array
     {
         $mappers = [];
         $this->findMappers($mappers);
@@ -134,7 +134,7 @@ abstract class ObjectMapper implements IObjectMapper
     /**
      * @inheritDoc
      */
-    public function findMapperFor($class)
+    public function findMapperFor(string $class) : IObjectMapper
     {
         /** @var IObjectMapper[] $mappers */
         $mappers = array_merge([$this], $this->getNestedMappers());
@@ -184,7 +184,7 @@ abstract class ObjectMapper implements IObjectMapper
     /**
      * {@inheritDoc}
      */
-    final public function load(LoadingContext $context, Row $row)
+    final public function load(LoadingContext $context, Row $row) : \Dms\Core\Model\ITypedObject
     {
         return $this->loadAll($context, [$row])[0];
     }
@@ -192,7 +192,7 @@ abstract class ObjectMapper implements IObjectMapper
     /**
      * {@inheritDoc}
      */
-    final public function loadAll(LoadingContext $context, array $rows)
+    final public function loadAll(LoadingContext $context, array $rows) : array
     {
         InvalidArgumentException::verifyAllInstanceOf(__METHOD__, 'rows', $rows, Row::class);
 
@@ -235,7 +235,7 @@ abstract class ObjectMapper implements IObjectMapper
      *
      * @return ITypedObject
      */
-    final protected function constructNewObjectsFromRow(LoadingContext $context, Row $row)
+    final protected function constructNewObjectsFromRow(LoadingContext $context, Row $row) : \Dms\Core\Model\ITypedObject
     {
         return $this->mapping->constructNewObjectFromRow($row);
     }

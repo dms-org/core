@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Model\Type;
 
@@ -29,7 +29,7 @@ class MixedType extends BaseType
     /**
      * {@inheritDoc}
      */
-    public function union(IType $type)
+    public function union(IType $type) : IType
     {
         return $this;
     }
@@ -37,7 +37,7 @@ class MixedType extends BaseType
     /**
      * {@inheritDoc}
      */
-    public function nullable()
+    public function nullable() : IType
     {
         return $this;
     }
@@ -45,7 +45,7 @@ class MixedType extends BaseType
     /**
      * @inheritDoc
      */
-    public function nonNullable()
+    public function nonNullable() : IType
     {
         return new NotType(Type::null());
     }
@@ -53,7 +53,7 @@ class MixedType extends BaseType
     /**
      * {@inheritDoc}
      */
-    public function isOfType($value)
+    public function isOfType($value) : bool
     {
         return true;
     }

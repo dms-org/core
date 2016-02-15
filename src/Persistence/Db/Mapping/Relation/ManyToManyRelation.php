@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Mapping\Relation;
 
@@ -86,13 +86,13 @@ class ManyToManyRelation extends ToManyRelationBase
      * @throws InvalidArgumentException
      */
     public function __construct(
-            $idString,
+            string $idString,
             IToManyRelationReference $reference,
-            $joinTableName,
-            $parentTableName,
+            string $joinTableName,
+            string $parentTableName,
             Column $parentTablePrimaryKey,
-            $parentForeignKeyColumnName,
-            $relatedForeignKeyColumnName
+            string $parentForeignKeyColumnName,
+            string $relatedForeignKeyColumnName
     ) {
         $mapper                       = $reference->getMapper();
         $orm                          = $mapper->getDefinition()->getOrm();
@@ -248,7 +248,7 @@ class ManyToManyRelation extends ToManyRelationBase
     /**
      * @inheritDoc
      */
-    public function getRelationSelectFromParentRows(ParentMapBase $map, &$parentIdColumnName = null)
+    public function getRelationSelectFromParentRows(ParentMapBase $map, &$parentIdColumnName = null) : \Dms\Core\Persistence\Db\Query\Select
     {
         // SELECT <related>.*, <parent id> FROM <related>
         // INNER JOIN <join table> ON <join table>.<related key> = <related>.<primary key>
@@ -282,8 +282,8 @@ class ManyToManyRelation extends ToManyRelationBase
             LoadingContext $context,
             ParentChildrenMap $map,
             Select $select,
-            $relatedTableAlias,
-            $parentIdColumnName
+            string $relatedTableAlias,
+            string $parentIdColumnName
     ) {
         $primaryKey = $map->getPrimaryKeyColumn();
 
@@ -354,7 +354,7 @@ class ManyToManyRelation extends ToManyRelationBase
     /**
      * @inheritDoc
      */
-    public function joinSelectToRelatedTable($parentTableAlias, $joinType, Select $select)
+    public function joinSelectToRelatedTable(string $parentTableAlias, string $joinType, Select $select) : string
     {
         $joinTableAlias = $select->generateUniqueAliasFor($this->joinTable->getName());
 
@@ -377,7 +377,7 @@ class ManyToManyRelation extends ToManyRelationBase
     /**
      * @inheritDoc
      */
-    public function getRelationSubSelect(Select $outerSelect, $parentTableAlias)
+    public function getRelationSubSelect(Select $outerSelect, string $parentTableAlias) : \Dms\Core\Persistence\Db\Query\Select
     {
         $subSelect = $outerSelect->buildSubSelect($this->relatedTable);
 
@@ -398,7 +398,7 @@ class ManyToManyRelation extends ToManyRelationBase
     /**
      * @inheritDoc
      */
-    public function getRelationJoinCondition($parentTableAlias, $relatedTableAlias)
+    public function getRelationJoinCondition(string $parentTableAlias, string $relatedTableAlias) : \Dms\Core\Persistence\Db\Query\Expression\Expr
     {
         $joinTableAlias = $relatedTableAlias;
 

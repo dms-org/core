@@ -1,10 +1,11 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Form\Field\Type;
 
 use Dms\Core\Form\Field\Processor\DateTimeProcessor;
 use Dms\Core\Form\Field\Processor\Validator\DateFormatValidator;
 use Dms\Core\Model\Type\Builder\Type as PhpType;
+use Dms\Core\Model\Type\Builder\Type;
 use Dms\Core\Model\Type\IType;
 
 /**
@@ -61,7 +62,7 @@ abstract class DateTimeTypeBase extends FieldType implements IComparableFieldCon
     /**
      * @return string
      */
-    public function getFormat()
+    public function getFormat() : string
     {
         return $this->get(self::ATTR_FORMAT);
     }
@@ -77,7 +78,7 @@ abstract class DateTimeTypeBase extends FieldType implements IComparableFieldCon
     /**
      * {@inheritdoc}
      */
-    public function buildPhpTypeOfInput()
+    public function buildPhpTypeOfInput() : IType
     {
         return PhpType::string();
     }
@@ -85,15 +86,15 @@ abstract class DateTimeTypeBase extends FieldType implements IComparableFieldCon
     /**
      * @inheritDoc
      */
-    protected function getComparisonType()
+    protected function getComparisonType() : IType
     {
-        return $this->getProcessedPhpType();
+        return Type::object(\DateTimeImmutable::class)->nullable();
     }
 
     /**
      * @inheritDoc
      */
-    protected function buildProcessors()
+    protected function buildProcessors() : array
     {
         return array_merge(
                 [

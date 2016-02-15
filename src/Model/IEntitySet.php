@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Model;
 
@@ -17,21 +17,21 @@ interface IEntitySet extends IObjectSet
      *
      * @return string
      */
-    public function getEntityType();
+    public function getEntityType() : string;
 
     /**
      * {@inheritDoc}
      *
      * @return Criteria
      */
-    public function criteria();
+    public function criteria() : Criteria;
 
     /**
      * {@inheritDoc}
      *
      * @return IEntity[]
      */
-    public function getAll();
+    public function getAll() : array;
 
     /**
      * {@inheritDoc}
@@ -46,7 +46,7 @@ interface IEntitySet extends IObjectSet
      * @param int $id
      * @return bool
      */
-    public function has($id);
+    public function has(int $id) : bool;
 
     /**
      * Returns whether the entities with the given ids are within this collection.
@@ -54,7 +54,7 @@ interface IEntitySet extends IObjectSet
      * @param int[] $ids
      * @return bool
      */
-    public function hasAll(array $ids);
+    public function hasAll(array $ids) : bool;
 
     /**
      * Returns the entity with the given id.
@@ -63,7 +63,7 @@ interface IEntitySet extends IObjectSet
      * @return IEntity
      * @throws EntityNotFoundException
      */
-    public function get($id);
+    public function get(int $id) : IEntity;
 
     /**
      * Returns the entities with the given ids.
@@ -72,7 +72,7 @@ interface IEntitySet extends IObjectSet
      * @return IEntity[]
      * @throws EntityNotFoundException
      */
-    public function getAllById(array $ids);
+    public function getAllById(array $ids) : array;
 
     /**
      * Returns the entity with the given id or null if does not exist.
@@ -80,7 +80,7 @@ interface IEntitySet extends IObjectSet
      * @param int $id
      * @return IEntity|null
      */
-    public function tryGet($id);
+    public function tryGet(int $id);
 
     /**
      * Returns the entities with the given ids.
@@ -88,7 +88,7 @@ interface IEntitySet extends IObjectSet
      * @param int[] $ids
      * @return IEntity[]
      */
-    public function tryGetAll(array $ids);
+    public function tryGetAll(array $ids) : array;
 
     /**
      * {@inheritDoc}
@@ -96,7 +96,7 @@ interface IEntitySet extends IObjectSet
      * @return IEntity[]
      * @throws Exception\TypeMismatchException
      */
-    public function matching(ICriteria $criteria);
+    public function matching(ICriteria $criteria) : array;
 
     /**
      * {@inheritDoc}
@@ -104,5 +104,5 @@ interface IEntitySet extends IObjectSet
      * @return IEntity[]
      * @throws Exception\TypeMismatchException
      */
-    public function satisfying(ISpecification $specification);
+    public function satisfying(ISpecification $specification) : array;
 }

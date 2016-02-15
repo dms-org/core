@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Schema;
 
@@ -43,7 +43,7 @@ class Database
     /**
      * @return Table[]
      */
-    public function getTables()
+    public function getTables() : array
     {
         return $this->tables;
     }
@@ -51,7 +51,7 @@ class Database
     /**
      * @return string[]
      */
-    public function getTableNames()
+    public function getTableNames() : array
     {
         return array_keys($this->tables);
     }
@@ -59,9 +59,9 @@ class Database
     /**
      * @param string $name
      *
-     * @return Table
+     * @return bool
      */
-    public function hasTable($name)
+    public function hasTable(string $name) : bool
     {
         return isset($this->tables[$name]);
     }
@@ -72,7 +72,7 @@ class Database
      * @return Table
      * @throws InvalidArgumentException
      */
-    public function getTable($name)
+    public function getTable(string $name) : Table
     {
         if (!$this->hasTable($name)) {
             throw InvalidArgumentException::format(

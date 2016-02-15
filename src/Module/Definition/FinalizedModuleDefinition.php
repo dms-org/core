@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Module\Definition;
 
@@ -57,7 +57,7 @@ class FinalizedModuleDefinition
      * @param IChartDisplay[] $charts
      * @param IWidget[]       $widgets
      */
-    public function __construct($name, array $actions, array $tables, array $charts, array $widgets)
+    public function __construct(string $name, array $actions, array $tables, array $charts, array $widgets)
     {
         InvalidArgumentException::verifyAllInstanceOf(__METHOD__, 'actions', $actions, IAction::class);
         InvalidArgumentException::verifyAllInstanceOf(__METHOD__, 'tables', $tables, ITableDisplay::class);
@@ -80,7 +80,7 @@ class FinalizedModuleDefinition
     /**
      * @return string
      */
-    public function getName()
+    public function getName() : string
     {
         return $this->name;
     }
@@ -88,7 +88,7 @@ class FinalizedModuleDefinition
     /**
      * @return IPermission[]
      */
-    public function getPermissions()
+    public function getPermissions() : array
     {
         return $this->permissions;
     }
@@ -96,7 +96,7 @@ class FinalizedModuleDefinition
     /**
      * @return IAction[]
      */
-    public function getActions()
+    public function getActions() : array
     {
         return $this->actions;
     }
@@ -104,7 +104,7 @@ class FinalizedModuleDefinition
     /**
      * @return ITableDisplay[]
      */
-    public function getTables()
+    public function getTables() : array
     {
         return $this->tables;
     }
@@ -112,7 +112,7 @@ class FinalizedModuleDefinition
     /**
      * @return IChartDisplay[]
      */
-    public function getCharts()
+    public function getCharts() : array
     {
         return $this->charts;
     }
@@ -120,7 +120,7 @@ class FinalizedModuleDefinition
     /**
      * @return IWidget[]
      */
-    public function getWidgets()
+    public function getWidgets() : array
     {
         return $this->widgets;
     }

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Mapping\Definition\Relation;
 
@@ -74,7 +74,7 @@ class EmbeddedRelationTypeDefiner
      * @return EnumPropertyColumnDefiner
      * @throws InvalidArgumentException
      */
-    public function enum($class, $isNullable = false)
+    public function enum(string $class, bool $isNullable = false) : \Dms\Core\Persistence\Db\Mapping\Definition\Embedded\EnumPropertyColumnDefiner
     {
         return new EnumPropertyColumnDefiner(function ($columnName, array $valueMap = null) use ($class, $isNullable) {
             $enumMapper = new EnumMapper($this->orm, $isNullable, $columnName, $class, $valueMap);
@@ -92,7 +92,7 @@ class EmbeddedRelationTypeDefiner
      * @return EmbeddedValueObjectDefiner
      * @throws InvalidArgumentException
      */
-    public function object()
+    public function object() : \Dms\Core\Persistence\Db\Mapping\Definition\Embedded\EmbeddedValueObjectDefiner
     {
         return new EmbeddedValueObjectDefiner($this->orm, function (callable $mapperLoader, $issetColumnName = null) {
             if ($issetColumnName) {
@@ -124,7 +124,7 @@ class EmbeddedRelationTypeDefiner
      * @return EmbeddedCollectionDefiner
      * @throws InvalidArgumentException
      */
-    public function collection()
+    public function collection() : \Dms\Core\Persistence\Db\Mapping\Definition\Embedded\EmbeddedCollectionDefiner
     {
         return new EmbeddedCollectionDefiner(
                 $this->orm,

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Connection;
 
@@ -16,7 +16,7 @@ interface IQuery
      *
      * @return IConnection
      */
-    public function getConnection();
+    public function getConnection() : IConnection;
 
     /**
      * Sets the query parameter
@@ -26,7 +26,7 @@ interface IQuery
      *
      * @return IQuery
      */
-    public function setParameter($parameter, $value);
+    public function setParameter($parameter, $value) : IQuery;
 
     /**
      * Sets the query parameters
@@ -35,7 +35,7 @@ interface IQuery
      *
      * @return IQuery
      */
-    public function setParameters(array $parameters);
+    public function setParameters(array $parameters) : IQuery;
 
     /**
      * Executes the query.
@@ -44,14 +44,14 @@ interface IQuery
      *
      * @return IQuery
      */
-    public function execute(array $parameters = []);
+    public function execute(array $parameters = []) : IQuery;
 
     /**
      *  Returns whether the query has executed.
      *
      * @return bool
      */
-    public function hasExecuted();
+    public function hasExecuted() : bool;
 
     /**
      * Gets the affected rows or null if not applicable

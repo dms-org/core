@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Doctrine\Resequence;
 
@@ -16,7 +16,7 @@ class ResequenceCompilerFactory
      *
      * @return IResequenceCompiler
      */
-    public static function buildFor(DoctrinePlatform $platform)
+    public static function buildFor(DoctrinePlatform $platform) : \Dms\Core\Persistence\Db\Doctrine\IResequenceCompiler
     {
         $doctrinePlatform   = $platform->getDoctrinePlatform();
         $expressionCompiler = $platform->getExpressionCompiler();

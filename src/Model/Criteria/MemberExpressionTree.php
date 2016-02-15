@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Model\Criteria;
 
@@ -16,7 +16,7 @@ class MemberExpressionTree
      *
      * @return MemberExpressionNode[]
      */
-    public static function buildTree(array $aliasMemberMap)
+    public static function buildTree(array $aliasMemberMap) : array
     {
         InvalidArgumentException::verifyAllInstanceOf(__METHOD__, 'aliasMemberMap', $aliasMemberMap, NestedMember::class);
 

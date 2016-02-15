@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Form\Field\Options;
 
@@ -38,7 +38,7 @@ class FieldOption implements IFieldOption
     /**
      * {@inheritDoc]
      */
-    public function getLabel()
+    public function getLabel() : string
     {
         return $this->label;
     }

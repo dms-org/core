@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Exception;
 
@@ -14,9 +14,9 @@ class NotImplementedException extends BaseException
      *
      * @param string $method
      *
-     * @return InvalidOperationException
+     * @return self
      */
-    public static function method($method)
+    public static function method(string $method) : self
     {
         return self::format('Invalid call to %s: not implemented', $method);
     }

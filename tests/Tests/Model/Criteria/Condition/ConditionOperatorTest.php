@@ -15,7 +15,7 @@ class PersonIsOldSpecification extends Specification
      *
      * @return string
      */
-    protected function type()
+    protected function type() : string
     {
         return Person::class;
     }

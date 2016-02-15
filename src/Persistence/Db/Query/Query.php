@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Query;
 
@@ -86,7 +86,7 @@ abstract class Query implements IQuery
     /**
      * @return string[]
      */
-    public function getAliases()
+    public function getAliases() : array
     {
         $aliases = [$this->alias];
 
@@ -103,7 +103,7 @@ abstract class Query implements IQuery
      * @return Table
      * @throws InvalidArgumentException
      */
-    public function getTableFromAlias($alias)
+    public function getTableFromAlias(string $alias) : \Dms\Core\Persistence\Db\Schema\Table
     {
         if ($this->alias === $alias) {
             return $this->table;
@@ -126,7 +126,7 @@ abstract class Query implements IQuery
      *
      * @return string
      */
-    public function generateUniqueAliasFor($tableName)
+    public function generateUniqueAliasFor(string $tableName) : string
     {
         $aliases = array_flip($this->getTakenAliases());
         if (!isset($aliases[$tableName])) {
@@ -145,7 +145,7 @@ abstract class Query implements IQuery
     /**
      * @return string[]
      */
-    protected function getTakenAliases()
+    protected function getTakenAliases() : array
     {
         return $this->getAliases();
     }
@@ -163,7 +163,7 @@ abstract class Query implements IQuery
     /**
      * @return Table
      */
-    public function getTable()
+    public function getTable() : \Dms\Core\Persistence\Db\Schema\Table
     {
         return $this->table;
     }
@@ -171,7 +171,7 @@ abstract class Query implements IQuery
     /**
      * @return string
      */
-    public function getTableName()
+    public function getTableName() : string
     {
         return $this->table->getName();
     }
@@ -179,7 +179,7 @@ abstract class Query implements IQuery
     /**
      * @return string
      */
-    public function getTableAlias()
+    public function getTableAlias() : string
     {
         return $this->alias;
     }
@@ -187,7 +187,7 @@ abstract class Query implements IQuery
     /**
      * @return bool
      */
-    public function isTableAliased()
+    public function isTableAliased() : bool
     {
         return $this->alias !== $this->getTableName();
     }
@@ -197,7 +197,7 @@ abstract class Query implements IQuery
      *
      * @return static
      */
-    public function setAlias($alias)
+    public function setAlias(string $alias)
     {
         $this->alias = $alias;
 
@@ -220,7 +220,7 @@ abstract class Query implements IQuery
     /**
      * @return Clause\Join[]
      */
-    public function getJoins()
+    public function getJoins() : array
     {
         return $this->joins;
     }
@@ -263,7 +263,7 @@ abstract class Query implements IQuery
     /**
      * @return Expr[]
      */
-    public function getWhere()
+    public function getWhere() : array
     {
         return $this->where;
     }
@@ -292,7 +292,7 @@ abstract class Query implements IQuery
     /**
      * @return Ordering[]
      */
-    public function getOrderings()
+    public function getOrderings() : array
     {
         return $this->orderings;
     }
@@ -332,7 +332,7 @@ abstract class Query implements IQuery
     /**
      * @return int
      */
-    public function getOffset()
+    public function getOffset() : int
     {
         return $this->offset;
     }
@@ -342,7 +342,7 @@ abstract class Query implements IQuery
      *
      * @return static
      */
-    public function offset($offset)
+    public function offset(int $offset)
     {
         $this->offset = $offset;
 
@@ -350,9 +350,9 @@ abstract class Query implements IQuery
     }
 
     /**
-     * @return int
+     * @return bool
      */
-    public function hasLimit()
+    public function hasLimit() : bool
     {
         return $this->limit !== null;
     }
@@ -370,7 +370,7 @@ abstract class Query implements IQuery
      *
      * @return static
      */
-    public function limit($limit)
+    public function limit(int $limit = null)
     {
         $this->limit = $limit;
 
@@ -380,7 +380,7 @@ abstract class Query implements IQuery
     /**
      * @return bool
      */
-    public function hasLimitOrOffset()
+    public function hasLimitOrOffset() : bool
     {
         return $this->hasLimit() || $this->offset !== 0;
     }

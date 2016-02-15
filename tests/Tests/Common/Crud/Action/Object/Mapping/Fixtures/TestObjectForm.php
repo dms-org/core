@@ -20,7 +20,7 @@ class TestObjectForm extends ObjectStagedFormObject
     /**
      * @inheritDoc
      */
-    public function getObjectType()
+    public function getObjectType() : string
     {
         return TestEntity::class;
     }

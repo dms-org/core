@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Model\Criteria\Member;
 
@@ -24,7 +24,7 @@ class SelfExpression extends MemberExpression
     /**
      * @inheritDoc
      */
-    public function isPropertyValue()
+    public function isPropertyValue() : bool
     {
         return false;
     }
@@ -40,7 +40,7 @@ class SelfExpression extends MemberExpression
     /**
      * @inheritDoc
      */
-    public function createArrayGetterCallable()
+    public function createArrayGetterCallable() : callable
     {
         return function (array $values) {
             return $values;

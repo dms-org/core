@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Form\Field\Processor;
 
@@ -29,7 +29,7 @@ class FileMoverProcessor extends FieldProcessor
      * @param string   $path
      * @param callable $fileNameCallback
      */
-    public function __construct($isImage, $path, callable $fileNameCallback)
+    public function __construct(bool $isImage, string $path, callable $fileNameCallback)
     {
         parent::__construct(Type::object($isImage ? IImage::class : IFile::class));
 

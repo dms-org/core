@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Model\Criteria;
 
@@ -18,28 +18,28 @@ interface IMemberExpression
      *
      * @return string
      */
-    public function asString();
+    public function asString() : string;
 
     /**
      * Gets the source type of the expression.
      *
      * @return IType
      */
-    public function getSourceType();
+    public function getSourceType() : \Dms\Core\Model\Type\IType;
 
     /**
      * Gets the resulting type of the expression.
      *
      * @return IType
      */
-    public function getResultingType();
+    public function getResultingType() : \Dms\Core\Model\Type\IType;
 
     /**
      * Returns whether the resulting expression is a property value.
      *
      * @return bool
      */
-    public function isPropertyValue();
+    public function isPropertyValue() : bool;
 
     /**
      * Gets the property of which the expression returns.
@@ -55,7 +55,7 @@ interface IMemberExpression
      * @return callable
      * @throws NotImplementedException
      */
-    public function createGetterCallable();
+    public function createGetterCallable() : callable;
 
     /**
      * Returns a callable that takes a parameter an array of the source types
@@ -66,5 +66,5 @@ interface IMemberExpression
      * @return callable
      * @throws NotImplementedException
      */
-    public function createArrayGetterCallable();
+    public function createArrayGetterCallable() : callable;
 }

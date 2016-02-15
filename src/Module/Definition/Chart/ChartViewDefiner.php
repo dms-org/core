@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Module\Definition\Chart;
 
@@ -41,7 +41,7 @@ class ChartViewDefiner extends ChartCriteria
      * @param string           $name
      * @param string           $label
      */
-    public function __construct(IChartDataSource $dataSource, $name, $label)
+    public function __construct(IChartDataSource $dataSource, string $name, string $label)
     {
         parent::__construct($dataSource->getStructure());
 
@@ -65,7 +65,7 @@ class ChartViewDefiner extends ChartCriteria
     /**
      * @return ChartView
      */
-    public function finalize()
+    public function finalize() : \Dms\Core\Module\Chart\ChartView
     {
         return new ChartView(
                 $this->name,

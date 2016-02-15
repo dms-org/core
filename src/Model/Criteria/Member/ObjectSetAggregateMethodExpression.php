@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Model\Criteria\Member;
 
@@ -23,7 +23,7 @@ abstract class ObjectSetAggregateMethodExpression extends ObjectSetMethodExpress
      * @param IType        $sourceType
      * @param NestedMember $member
      */
-    public function __construct($methodName, IType $sourceType, NestedMember $member)
+    public function __construct(string $methodName, IType $sourceType, NestedMember $member)
     {
         parent::__construct($sourceType, $methodName, [$member->asString()], $member->getResultingType());
 
@@ -33,7 +33,7 @@ abstract class ObjectSetAggregateMethodExpression extends ObjectSetMethodExpress
     /**
      * @return NestedMember
      */
-    public function getAggregatedMember()
+    public function getAggregatedMember() : \Dms\Core\Model\Criteria\NestedMember
     {
         return $this->member;
     }
@@ -41,7 +41,7 @@ abstract class ObjectSetAggregateMethodExpression extends ObjectSetMethodExpress
     /**
      * @inheritDoc
      */
-    public function isPropertyValue()
+    public function isPropertyValue() : bool
     {
         return false;
     }
@@ -57,7 +57,7 @@ abstract class ObjectSetAggregateMethodExpression extends ObjectSetMethodExpress
     /**
      * @return \Closure
      */
-    public function createArrayGetterCallable()
+    public function createArrayGetterCallable() : callable
     {
         $memberGetter = $this->member->makeArrayGetterCallable();
 

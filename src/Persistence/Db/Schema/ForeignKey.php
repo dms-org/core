@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Schema;
 
@@ -57,20 +57,20 @@ class ForeignKey
      * @param string   $onUpdateMode
      */
     public function __construct(
-            $name,
-            array $localColumnNames,
-            $referencedTableName,
-            array $referencedColumnNames,
-            $onDeleteMode,
-            $onUpdateMode
+        string $name,
+        array $localColumnNames,
+        string $referencedTableName,
+        array $referencedColumnNames,
+        string $onDeleteMode,
+        string $onUpdateMode
     ) {
         InvalidArgumentException::verifyAll(__METHOD__, 'localColumnNames', $localColumnNames, 'is_string');
         InvalidArgumentException::verifyAll(__METHOD__, 'referencedColumnNames', $referencedColumnNames, 'is_string');
 
         InvalidArgumentException::verify(
-                count($localColumnNames) === count($referencedColumnNames),
-                'Local columns must match the amount of referenced columns: %s != %s',
-                count($localColumnNames), count($referencedColumnNames)
+            count($localColumnNames) === count($referencedColumnNames),
+            'Local columns must match the amount of referenced columns: %s != %s',
+            count($localColumnNames), count($referencedColumnNames)
         );
 
 
@@ -101,33 +101,34 @@ class ForeignKey
      * @return ForeignKey
      */
     public static function createWithNamingConvention(
-            $tableName,
-            array $localColumnNames,
-            $referencedTableName,
-            array $referencedColumnNames,
-            $onDeleteMode,
-            $onUpdateMode
-    ) {
+        string $tableName,
+        array $localColumnNames,
+        string $referencedTableName,
+        array $referencedColumnNames,
+        string $onDeleteMode,
+        string $onUpdateMode
+    ) : ForeignKey
+    {
         $fkName = self::CONVENTION_PREFIX . implode('_', [
                 $tableName,
                 implode('_', $localColumnNames),
-                $referencedTableName
-        ]);
+                $referencedTableName,
+            ]);
 
         return new self(
-                $fkName,
-                $localColumnNames,
-                $referencedTableName,
-                $referencedColumnNames,
-                $onDeleteMode,
-                $onUpdateMode
+            $fkName,
+            $localColumnNames,
+            $referencedTableName,
+            $referencedColumnNames,
+            $onDeleteMode,
+            $onUpdateMode
         );
     }
 
     /**
      * @return string
      */
-    public function getName()
+    public function getName() : string
     {
         return $this->name;
     }
@@ -135,7 +136,7 @@ class ForeignKey
     /**
      * @return string[]
      */
-    public function getLocalColumnNames()
+    public function getLocalColumnNames() : array
     {
         return $this->localColumnNames;
     }
@@ -143,7 +144,7 @@ class ForeignKey
     /**
      * @return string
      */
-    public function getReferencedTableName()
+    public function getReferencedTableName() : string
     {
         return $this->referencedTableName;
     }
@@ -151,7 +152,7 @@ class ForeignKey
     /**
      * @return string[]
      */
-    public function getReferencedColumnNames()
+    public function getReferencedColumnNames() : array
     {
         return $this->referencedColumnNames;
     }
@@ -159,7 +160,7 @@ class ForeignKey
     /**
      * @return string
      */
-    public function getOnDeleteMode()
+    public function getOnDeleteMode() : string
     {
         return $this->onDeleteMode;
     }
@@ -167,7 +168,7 @@ class ForeignKey
     /**
      * @return string
      */
-    public function getOnUpdateMode()
+    public function getOnUpdateMode() : string
     {
         return $this->onUpdateMode;
     }
@@ -180,19 +181,19 @@ class ForeignKey
      *
      * @return ForeignKey
      */
-    public function withPrefix($prefix)
+    public function withPrefix(string $prefix) : ForeignKey
     {
         return $this
-                ->withLocalColumnsPrefixedBy($prefix)
-                ->withNamePrefixedBy($prefix);
+            ->withLocalColumnsPrefixedBy($prefix)
+            ->withNamePrefixedBy($prefix);
     }
 
     /**
      * @param string $prefix
      *
-     * @return Index
+     * @return ForeignKey
      */
-    public function withLocalColumnsPrefixedBy($prefix)
+    public function withLocalColumnsPrefixedBy(string $prefix) : ForeignKey
     {
         $prefixedLocalColumns = [];
 
@@ -201,21 +202,21 @@ class ForeignKey
         }
 
         return new ForeignKey(
-                $this->name,
-                $prefixedLocalColumns,
-                $this->referencedTableName,
-                $this->referencedColumnNames,
-                $this->onDeleteMode,
-                $this->onUpdateMode
+            $this->name,
+            $prefixedLocalColumns,
+            $this->referencedTableName,
+            $this->referencedColumnNames,
+            $this->onDeleteMode,
+            $this->onUpdateMode
         );
     }
 
     /**
      * @param string $prefix
      *
-     * @return Index
+     * @return ForeignKey
      */
-    public function withNamePrefixedBy($prefix)
+    public function withNamePrefixedBy(string $prefix) : ForeignKey
     {
         if ($prefix === '') {
             return $this;
@@ -228,12 +229,12 @@ class ForeignKey
         }
 
         return new ForeignKey(
-                $name,
-                $this->localColumnNames,
-                $this->referencedTableName,
-                $this->referencedColumnNames,
-                $this->onDeleteMode,
-                $this->onUpdateMode
+            $name,
+            $this->localColumnNames,
+            $this->referencedTableName,
+            $this->referencedColumnNames,
+            $this->onDeleteMode,
+            $this->onUpdateMode
         );
     }
 }

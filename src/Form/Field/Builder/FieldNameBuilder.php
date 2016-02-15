@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Form\Field\Builder;
 
@@ -14,7 +14,7 @@ class FieldNameBuilder extends FieldBuilderBase
      *
      * @return FieldLabelBuilder
      */
-    public function name($name)
+    public function name($name) : FieldLabelBuilder
     {
         $this->name = $name;
 

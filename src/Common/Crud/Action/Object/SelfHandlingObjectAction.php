@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Common\Crud\Action\Object;
 
@@ -40,21 +40,21 @@ abstract class SelfHandlingObjectAction extends ObjectAction
      *
      * @return string
      */
-    abstract protected function name();
+    abstract protected function name() : string;
 
     /**
      * Gets the required permissions.
      *
      * @return IPermission[]
      */
-    abstract protected function permissions();
+    abstract protected function permissions() : array;
 
     /**
      * Gets the action form mapping.
      *
      * @return IObjectActionFormMapping
      */
-    abstract protected function formMapping();
+    abstract protected function formMapping() : IObjectActionFormMapping;
 
     /**
      * Gets the return dto type.
@@ -68,7 +68,7 @@ abstract class SelfHandlingObjectAction extends ObjectAction
      *
      * @return string
      */
-    abstract protected function objectType();
+    abstract protected function objectType() : string;
 
     /**
      * Runs the action handler.

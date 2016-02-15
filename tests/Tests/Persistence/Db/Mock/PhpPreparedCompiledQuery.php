@@ -69,7 +69,7 @@ class PhpPreparedCompiledQuery extends Query
     /**
      * @return int
      */
-    protected function loadAffectedRows()
+    protected function loadAffectedRows() : int
     {
         return $this->result;
     }
@@ -77,7 +77,7 @@ class PhpPreparedCompiledQuery extends Query
     /**
      * @return array[]
      */
-    protected function loadResults()
+    protected function loadResults() : array
     {
         return $this->result;
     }

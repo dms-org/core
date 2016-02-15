@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Mapping\Definition\Relation\Accessor;
 
@@ -22,7 +22,7 @@ class PropertyAccessor implements IAccessor
      *
      * @param string $propertyName
      */
-    public function __construct($propertyName)
+    public function __construct(string $propertyName)
     {
         $this->propertyName = $propertyName;
     }
@@ -30,7 +30,7 @@ class PropertyAccessor implements IAccessor
     /**
      * @return string
      */
-    public function getPropertyName()
+    public function getPropertyName() : string
     {
         return $this->propertyName;
     }

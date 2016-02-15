@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Mapping;
 
@@ -43,7 +43,7 @@ class EntityOutOfSyncException extends BaseException
                                 ? 'contains an entity which has since been modified by another instance'
                                 : 'no longer contains an entry with that id'
                 ),
-                null,
+                0,
                 $innerException
         );
 
@@ -61,7 +61,7 @@ class EntityOutOfSyncException extends BaseException
     /**
      * @return IEntity
      */
-    public function getEntityBeingPersisted()
+    public function getEntityBeingPersisted() : \Dms\Core\Model\IEntity
     {
         return $this->entityBeingPersisted;
     }
@@ -69,7 +69,7 @@ class EntityOutOfSyncException extends BaseException
     /**
      * @return bool
      */
-    public function hasCurrentEntityInDb()
+    public function hasCurrentEntityInDb() : bool
     {
         return $this->currentEntityInDb !== null;
     }

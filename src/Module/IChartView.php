@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Module;
 
@@ -17,28 +17,28 @@ interface IChartView
      *
      * @return string
      */
-    public function getName();
+    public function getName() : string;
 
     /**
      * Gets the label.
      *
      * @return string
      */
-    public function getLabel();
+    public function getLabel() : string;
 
     /**
      * Gets whether this is the default chart view.
      *
      * @return bool
      */
-    public function isDefault();
+    public function isDefault() : bool;
 
     /**
      * Gets whether the view contains criteria.
      *
      * @return bool
      */
-    public function hasCriteria();
+    public function hasCriteria() : bool;
 
     /**
      * Gets the chart criteria.

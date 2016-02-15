@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Mapping;
 
@@ -62,7 +62,7 @@ class EnumMapper extends ValueObjectMapper
      * @throws InvalidArgumentException
      * @throws InvalidHandlerClassException
      */
-    public function __construct(IOrm $orm, $nullable, $columnName, $enumClass, array $valueMap = null)
+    public function __construct(IOrm $orm, bool $nullable, string $columnName, string $enumClass, array $valueMap = null)
     {
         $this->nullable      = $nullable;
         $this->columnName    = $columnName;

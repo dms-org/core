@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Form\Field\Type;
 
@@ -67,7 +67,7 @@ abstract class FieldType implements IFieldType
     /**
      * @return bool
      */
-    protected function hasTypeSpecificRequiredValidator()
+    protected function hasTypeSpecificRequiredValidator() : bool
     {
         return false;
     }
@@ -76,7 +76,7 @@ abstract class FieldType implements IFieldType
     /**
      * @return bool
      */
-    protected function hasTypeSpecificOptionsValidator()
+    protected function hasTypeSpecificOptionsValidator() : bool
     {
         return false;
     }
@@ -138,17 +138,17 @@ abstract class FieldType implements IFieldType
     /**
      * @return IPhpType
      */
-    abstract protected function buildPhpTypeOfInput();
+    abstract protected function buildPhpTypeOfInput() : IPhpType;
 
     /**
      * @return IFieldProcessor[]
      */
-    abstract protected function buildProcessors();
+    abstract protected function buildProcessors() : array;
 
     /**
      * {@inheritDoc}
      */
-    public function attrs()
+    public function attrs() : array
     {
         return $this->attributes;
     }
@@ -156,7 +156,7 @@ abstract class FieldType implements IFieldType
     /**
      * {@inheritDoc}
      */
-    public function has($attribute)
+    public function has(string $attribute) : bool
     {
         return isset($this->attributes[$attribute]);
     }
@@ -164,7 +164,7 @@ abstract class FieldType implements IFieldType
     /**
      * {@inheritDoc}
      */
-    public function get($attribute)
+    public function get(string $attribute)
     {
         return isset($this->attributes[$attribute]) ? $this->attributes[$attribute] : null;
     }
@@ -172,7 +172,7 @@ abstract class FieldType implements IFieldType
     /**
      * {@inheritDoc}
      */
-    public function getAll(array $attributes)
+    public function getAll(array $attributes) : array
     {
         return array_intersect_key($this->attributes, array_fill_keys($attributes, true)) + array_fill_keys($attributes, null);
     }
@@ -180,7 +180,7 @@ abstract class FieldType implements IFieldType
     /**
      * {@inheritDoc}
      */
-    public function with($attribute, $value)
+    public function with(string $attribute, $value)
     {
         return $this->withAll([$attribute => $value]);
     }
@@ -208,7 +208,7 @@ abstract class FieldType implements IFieldType
     /**
      * {@inheritDoc}
      */
-    final public function getPhpTypeOfInput()
+    final public function getPhpTypeOfInput() : IPhpType
     {
         return $this->inputType;
     }
@@ -216,7 +216,7 @@ abstract class FieldType implements IFieldType
     /**
      * {@inheritDoc}
      */
-    final public function getProcessors()
+    final public function getProcessors() : array
     {
         return $this->processors;
     }
@@ -224,7 +224,7 @@ abstract class FieldType implements IFieldType
     /**
      * {@inheritDoc}
      */
-    final public function getProcessedPhpType()
+    final public function getProcessedPhpType() : IPhpType
     {
         return $this->processedType;
     }

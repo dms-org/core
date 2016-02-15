@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Table\Chart\Criteria;
 
@@ -48,7 +48,7 @@ class AxisCondition extends AxisCriterion
     /**
      * @return IColumnComponentOperator
      */
-    public function getOperator()
+    public function getOperator() : \Dms\Core\Table\IColumnComponentOperator
     {
         return $this->operator;
     }

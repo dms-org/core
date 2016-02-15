@@ -1,8 +1,9 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Form\Field\Type;
 
 use Dms\Core\Form\IFieldProcessor;
+use Dms\Core\Model\Type\IType;
 
 /**
  * The numeric field type base class.
@@ -16,7 +17,7 @@ abstract class NumericType extends ScalarType implements IComparableFieldConstan
     /**
      * @return IFieldProcessor[]
      */
-    protected function buildProcessors()
+    protected function buildProcessors() : array
     {
         return array_merge(parent::buildProcessors(), $this->buildComparisonProcessors());
     }
@@ -24,7 +25,7 @@ abstract class NumericType extends ScalarType implements IComparableFieldConstan
     /**
      * @inheritDoc
      */
-    protected function getComparisonType()
+    protected function getComparisonType() : IType
     {
         return $this->getProcessedScalarType();
     }

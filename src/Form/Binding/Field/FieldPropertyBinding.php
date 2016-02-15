@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Form\Binding\Field;
 
@@ -27,7 +27,7 @@ class FieldPropertyBinding extends FieldBinding
      * @throws InvalidArgumentException
      * @throws TypeMismatchException
      */
-    public function __construct($fieldName, FinalizedClassDefinition $classDefinition, $propertyName)
+    public function __construct(string $fieldName, FinalizedClassDefinition $classDefinition, string $propertyName)
     {
         parent::__construct($fieldName, $classDefinition->getClassName());
         $this->property = $classDefinition->getProperty($propertyName);

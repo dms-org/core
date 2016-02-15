@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Mapping\Definition\Column;
 
@@ -58,8 +58,8 @@ class ColumnTypeDefinerWithVersioning extends ColumnTypeDefiner
             callable $phpToDbConverter = null,
             callable $dbToPhpConverter = null,
             $propertyName,
-            $name,
-            $nullable = false
+            string $name,
+            bool $nullable = false
     ) {
         parent::__construct($definition, $callback, $name, $nullable);
 

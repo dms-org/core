@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Common\Crud\Action\Table;
 
@@ -25,5 +25,5 @@ interface IReorderAction extends IObjectAction
      * @throws UserForbiddenException if the authenticated user does not have the required permissions
      * @throws InvalidFormSubmissionException if the form data is invalid
      */
-    public function runReorder($object, $newIndex);
+    public function runReorder($object, int $newIndex);
 }

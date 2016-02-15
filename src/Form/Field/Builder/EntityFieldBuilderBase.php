@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Form\Field\Builder;
 
@@ -19,7 +19,7 @@ class EntityFieldBuilderBase extends FieldBuilderBase
      *
      * @return static
      */
-    public function labelledBy($memberExpression)
+    public function labelledBy(string $memberExpression)
     {
         /** @var EntityIdOptions $options */
         $options = $this->type->get(FieldType::ATTR_OPTIONS);

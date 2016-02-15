@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Widget;
 
@@ -36,7 +36,7 @@ class TableWidget extends Widget
     /**
      * @return ITableDataSource
      */
-    public function getTableDataSource()
+    public function getTableDataSource() : \Dms\Core\Table\ITableDataSource
     {
         return $this->tableDataSource;
     }
@@ -52,7 +52,7 @@ class TableWidget extends Widget
     /**
      * @return bool
      */
-    public function hasCriteria()
+    public function hasCriteria() : bool
     {
         return $this->criteria !== null;
     }
@@ -60,7 +60,7 @@ class TableWidget extends Widget
     /**
      * @return IDataTable
      */
-    public function loadData()
+    public function loadData() : IDataTable
     {
         return $this->tableDataSource->load($this->criteria);
     }
@@ -70,7 +70,7 @@ class TableWidget extends Widget
      *
      * @return bool
      */
-    public function isAuthorized()
+    public function isAuthorized() : bool
     {
         return true;
     }

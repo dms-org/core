@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Criteria;
 
@@ -33,7 +33,7 @@ class LoadCriteriaMapper
     /**
      * @return LoadCriteria
      */
-    public function newCriteria()
+    public function newCriteria() : \Dms\Core\Model\Criteria\LoadCriteria
     {
         $memberExpressionParser = $this->criteriaMapper->buildMemberExpressionParser();
 
@@ -47,7 +47,7 @@ class LoadCriteriaMapper
      *
      * @return MappedLoadQuery
      */
-    public function mapLoadCriteriaToQuery(ILoadCriteria $criteria)
+    public function mapLoadCriteriaToQuery(ILoadCriteria $criteria) : MappedLoadQuery
     {
         $select = $this->criteriaMapper->mapCriteriaToSelect($criteria, $memberMappings, $criteria->getAliasNestedMemberMap());
         $select->setColumns([]);

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Mapping\Relation\Reference;
 
@@ -21,7 +21,7 @@ class ToManyRelationObjectReference extends RelationObjectReference implements I
      *
      * @return ITypedCollection
      */
-    public function buildNewCollection(array $children)
+    public function buildNewCollection(array $children) : \Dms\Core\Model\ITypedCollection
     {
         return $this->mapper->buildCollection($children);
     }
@@ -32,7 +32,7 @@ class ToManyRelationObjectReference extends RelationObjectReference implements I
      *
      * @return array
      */
-    public function loadCollectionValues(LoadingContext $context, array $rows)
+    public function loadCollectionValues(LoadingContext $context, array $rows) : array
     {
         return $this->mapper->loadAll($context, $rows);
     }
@@ -44,7 +44,7 @@ class ToManyRelationObjectReference extends RelationObjectReference implements I
      *
      * @return Row[]
      */
-    public function syncRelated(PersistenceContext $context, array $modifiedColumns, array $children)
+    public function syncRelated(PersistenceContext $context, array $modifiedColumns, array $children) : array
     {
         return $this->persistChildrenIgnoringBidirectionalRelation($context, $children);
     }

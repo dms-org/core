@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Form\Object;
 
@@ -64,7 +64,7 @@ class FormObjectDefinition extends FormBuilder
     /**
      * @return ClassDefinition
      */
-    public function getClass()
+    public function getClass() : \Dms\Core\Model\Object\ClassDefinition
     {
         return $this->class;
     }
@@ -77,7 +77,7 @@ class FormObjectDefinition extends FormBuilder
      * @return FormObjectFieldNameBuilder
      * @throws InvalidPropertyDefinitionException
      */
-    public function field(&$property)
+    public function field(&$property) : FormObjectFieldNameBuilder
     {
         $typeDefiner  = $this->class->property($property);
         $propertyName = $this->loadTypeDefiner($typeDefiner);
@@ -94,7 +94,7 @@ class FormObjectDefinition extends FormBuilder
      *
      * @return PropertyFormBinding
      */
-    public function bind(&$property)
+    public function bind(&$property) : PropertyFormBinding
     {
         $typeDefiner  = $this->class->property($property);
         $propertyName = $this->loadTypeDefiner($typeDefiner);
@@ -141,7 +141,7 @@ class FormObjectDefinition extends FormBuilder
      * {@inheritDoc}
      * @throws InvalidFieldDefinitionException
      */
-    public function section($title, array $fields)
+    public function section(string $title, array $fields)
     {
         $fields = $this->buildAllFields($fields);
 
@@ -182,7 +182,7 @@ class FormObjectDefinition extends FormBuilder
      * @return FinalizedFormObjectDefinition
      * @throws \Dms\Core\Model\Object\IncompleteClassDefinitionException
      */
-    public function finalize(FinalizedClassDefinition $class = null)
+    public function finalize(FinalizedClassDefinition $class = null) : FinalizedFormObjectDefinition
     {
         return new FinalizedFormObjectDefinition(
                 $class ?: $this->class->finalize(),

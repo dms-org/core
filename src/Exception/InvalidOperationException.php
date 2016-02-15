@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Exception;
 
@@ -18,7 +18,7 @@ class InvalidOperationException extends BaseException
      *
      * @return InvalidOperationException
      */
-    public static function methodCall($method, $message, $_ = null)
+    public static function methodCall(string $method, string $message, $_ = null) : InvalidOperationException
     {
         return self::formatArray('Invalid call to %s: ' . $message, array_merge([$method], array_slice(func_get_args(), 2)));
     }

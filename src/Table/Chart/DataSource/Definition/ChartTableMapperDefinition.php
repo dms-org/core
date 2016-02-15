@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Table\Chart\DataSource\Definition;
 
@@ -71,7 +71,7 @@ class ChartTableMapperDefinition
      *
      * @return TableComponentMappingDefiner
      */
-    public function column($componentId)
+    public function column(string $componentId) : TableComponentMappingDefiner
     {
         /** @var IColumn $column */
         /** @var IColumnComponent $component */
@@ -91,7 +91,7 @@ class ChartTableMapperDefinition
      *
      * @return ComputedComponentDefiner
      */
-    public function computed(callable $callback)
+    public function computed(callable $callback) : ComputedComponentDefiner
     {
         return new ComputedComponentDefiner(function (IColumnComponent $chartAxisComponent, array $columnsToLoad) use ($callback) {
             $this->chartComponentCallableMap[$chartAxisComponent] = $callback;
@@ -112,7 +112,7 @@ class ChartTableMapperDefinition
      * @return FinalizedChartTableMapperDefinition
      * @throws InvalidOperationException
      */
-    public function finalize()
+    public function finalize() : FinalizedChartTableMapperDefinition
     {
         if (!$this->structure) {
             throw InvalidOperationException::format('Chart structure must be set: use $map->structure(...)');

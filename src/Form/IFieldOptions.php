@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Form;
 
@@ -14,7 +14,7 @@ interface IFieldOptions
      *
      * @return IFieldOption[]
      */
-    public function getAll();
+    public function getAll() : array;
 
     /**
      * Gets all the option values.

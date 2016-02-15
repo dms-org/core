@@ -23,7 +23,7 @@ class TestSelfHandlingParameterizedAction extends SelfHandlingParameterizedActio
      *
      * @return string
      */
-    protected function name()
+    protected function name() : string
     {
         return 'test-parameterized-action';
     }
@@ -33,7 +33,7 @@ class TestSelfHandlingParameterizedAction extends SelfHandlingParameterizedActio
      *
      * @return IPermission[]
      */
-    protected function permissions()
+    protected function permissions() : array
     {
         return [
                 Permission::named('test-permission')
@@ -45,7 +45,7 @@ class TestSelfHandlingParameterizedAction extends SelfHandlingParameterizedActio
      *
      * @return IStagedFormDtoMapping
      */
-    protected function formMapping()
+    protected function formMapping() : IStagedFormDtoMapping
     {
         return new ArrayDataObjectFormMapping(
                 Form::create()->section('Input', [

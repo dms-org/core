@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Form;
 
@@ -100,7 +100,7 @@ class InvalidFormSubmissionException extends BaseException
     /**
      * @return IForm
      */
-    public function getForm()
+    public function getForm() : IForm
     {
         return $this->form;
     }
@@ -108,7 +108,7 @@ class InvalidFormSubmissionException extends BaseException
     /**
      * @return array
      */
-    public function getInput()
+    public function getInput() : array
     {
         return $this->input;
     }
@@ -116,7 +116,7 @@ class InvalidFormSubmissionException extends BaseException
     /**
      * @return InvalidInputException[]
      */
-    public function getInvalidInputExceptions()
+    public function getInvalidInputExceptions() : array
     {
         return $this->invalidInputExceptions;
     }
@@ -126,7 +126,7 @@ class InvalidFormSubmissionException extends BaseException
      *
      * @return InvalidInputException|null
      */
-    public function getInvalidInputExceptionFor($fieldName)
+    public function getInvalidInputExceptionFor(string $fieldName)
     {
         return isset($this->invalidInputExceptions[$fieldName])
                 ? $this->invalidInputExceptions[$fieldName]
@@ -136,7 +136,7 @@ class InvalidFormSubmissionException extends BaseException
     /**
      * @return InvalidInnerFormSubmissionException[]
      */
-    public function getInvalidInnerFormSubmissionExceptions()
+    public function getInvalidInnerFormSubmissionExceptions() : array
     {
         return $this->invalidInnerFormSubmissionExceptions;
     }
@@ -146,7 +146,7 @@ class InvalidFormSubmissionException extends BaseException
      *
      * @return InvalidInnerFormSubmissionException|null
      */
-    public function getInnerFormSubmissionExceptionFor($fieldName)
+    public function getInnerFormSubmissionExceptionFor(string $fieldName)
     {
         return isset($this->invalidInnerFormSubmissionExceptions[$fieldName])
                 ? $this->invalidInnerFormSubmissionExceptions[$fieldName]
@@ -158,7 +158,7 @@ class InvalidFormSubmissionException extends BaseException
      *
      * @return Message[]
      */
-    public function getMessagesFor($fieldName)
+    public function getMessagesFor(string $fieldName) : array
     {
         $invalidInputException = $this->getInvalidInputExceptionFor($fieldName);
 
@@ -178,7 +178,7 @@ class InvalidFormSubmissionException extends BaseException
     /**
      * @return Message[][]
      */
-    public function getFieldMessageMap()
+    public function getFieldMessageMap() : array
     {
         $messages = [];
 
@@ -192,7 +192,7 @@ class InvalidFormSubmissionException extends BaseException
     /**
      * @return UnmetConstraintException[]
      */
-    public function getUnmetConstraintExceptions()
+    public function getUnmetConstraintExceptions() : array
     {
         return $this->unmetConstraintExceptions;
     }
@@ -200,7 +200,7 @@ class InvalidFormSubmissionException extends BaseException
     /**
      * @return Message[]
      */
-    public function getAllConstraintMessages()
+    public function getAllConstraintMessages() : array
     {
         $messages = [];
 
@@ -216,7 +216,7 @@ class InvalidFormSubmissionException extends BaseException
     /**
      * @return Message[]
      */
-    public function getAllMessages()
+    public function getAllMessages() : array
     {
         $messages = [];
 

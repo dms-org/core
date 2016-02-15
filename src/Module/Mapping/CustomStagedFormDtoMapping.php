@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Module\Mapping;
 
@@ -25,7 +25,7 @@ class CustomStagedFormDtoMapping extends StagedFormDtoMapping
      * @param string      $dtoType
      * @param callable    $mappingCallback
      */
-    public function __construct(IStagedForm $stagedForm, $dtoType, callable $mappingCallback)
+    public function __construct(IStagedForm $stagedForm, string $dtoType, callable $mappingCallback)
     {
         parent::__construct($stagedForm, $dtoType);
         $this->mappingCallback = $mappingCallback;
@@ -38,7 +38,7 @@ class CustomStagedFormDtoMapping extends StagedFormDtoMapping
      *
      * @return CustomStagedFormDtoMapping
      */
-    public static function fromForm(IForm $form, $dtoType, callable $mappingCallback)
+    public static function fromForm(IForm $form, string $dtoType, callable $mappingCallback) : CustomStagedFormDtoMapping
     {
         return new self($form->asStagedForm(), $dtoType, $mappingCallback);
     }

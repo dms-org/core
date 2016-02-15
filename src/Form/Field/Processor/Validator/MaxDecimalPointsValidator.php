@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Form\Field\Processor\Validator;
 
@@ -26,7 +26,7 @@ class MaxDecimalPointsValidator extends FieldValidator
      * @param IType $inputType
      * @param int   $maxDecimalPoints
      */
-    public function __construct(IType $inputType, $maxDecimalPoints)
+    public function __construct(IType $inputType, int $maxDecimalPoints)
     {
         parent::__construct($inputType);
         $this->maxDecimalPoints = $maxDecimalPoints;

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Common\Crud\Action\Crud;
 
@@ -55,7 +55,7 @@ class ViewDetailsAction extends SelfHandlingObjectAction
      *
      * @return string
      */
-    protected function name()
+    protected function name() : string
     {
         return IReadModule::DETAILS_ACTION;
     }
@@ -65,7 +65,7 @@ class ViewDetailsAction extends SelfHandlingObjectAction
      *
      * @return IPermission[]
      */
-    protected function permissions()
+    protected function permissions() : array
     {
         return [
                 Permission::named(IReadModule::VIEW_PERMISSION),
@@ -77,7 +77,7 @@ class ViewDetailsAction extends SelfHandlingObjectAction
      *
      * @return IObjectActionFormMapping
      */
-    protected function formMapping()
+    protected function formMapping() : \Dms\Core\Common\Crud\Action\Object\IObjectActionFormMapping
     {
         return new WrapperObjectActionFormMapping(
                 ObjectForm::build($this->dataSource)
@@ -99,7 +99,7 @@ class ViewDetailsAction extends SelfHandlingObjectAction
      *
      * @return string
      */
-    protected function objectType()
+    protected function objectType() : string
     {
         return $this->dataSource->getObjectType();
     }

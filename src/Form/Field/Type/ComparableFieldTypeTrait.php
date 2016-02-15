@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Form\Field\Type;
 
@@ -47,19 +47,19 @@ trait ComparableFieldTypeTrait
     /**
      * @return IType
      */
-    abstract protected function getComparisonType();
+    abstract protected function getComparisonType() : IType;
 
     /**
      * @param string $attribute
      *
      * @return bool
      */
-    abstract protected function has($attribute);
+    abstract protected function has(string $attribute) : bool;
 
     /**
      * @param string $attribute
      *
      * @return mixed
      */
-    abstract protected function get($attribute);
+    abstract protected function get(string $attribute);
 }

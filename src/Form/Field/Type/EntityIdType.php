@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Form\Field\Type;
 
@@ -35,7 +35,7 @@ class EntityIdType extends FieldType
      * @param IEntitySet $entities
      * @param bool       $loadAsObjects
      */
-    public function __construct(IEntitySet $entities, $loadAsObjects = false)
+    public function __construct(IEntitySet $entities, bool $loadAsObjects = false)
     {
         $this->entities                       = $entities;
         $this->attributes[self::ATTR_OPTIONS] = new EntityIdOptions($entities);
@@ -46,7 +46,7 @@ class EntityIdType extends FieldType
     /**
      * @return IPhpType
      */
-    protected function buildPhpTypeOfInput()
+    protected function buildPhpTypeOfInput() : \Dms\Core\Model\Type\IType
     {
         return Type::mixed();
     }
@@ -54,7 +54,7 @@ class EntityIdType extends FieldType
     /**
      * @return IFieldProcessor[]
      */
-    protected function buildProcessors()
+    protected function buildProcessors() : array
     {
         $processors = [
                 new IntValidator($this->inputType),

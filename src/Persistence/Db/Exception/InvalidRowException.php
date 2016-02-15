@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Exception;
 
@@ -26,7 +26,7 @@ class InvalidRowException extends BaseException
     /**
      * @return Row
      */
-    final public function getRow()
+    final public function getRow() : \Dms\Core\Persistence\Db\Row
     {
         return $this->row;
     }

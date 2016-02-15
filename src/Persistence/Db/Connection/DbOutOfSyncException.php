@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Connection;
 
@@ -47,7 +47,7 @@ class DbOutOfSyncException extends BaseException
     /**
      * @return Row
      */
-    public function getRowBeingPersisted()
+    public function getRowBeingPersisted() : \Dms\Core\Persistence\Db\Row
     {
         return $this->rowBeingPersisted;
     }

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\File;
 
@@ -16,7 +16,7 @@ interface IFile
      * 
      * @return string
      */
-    public function getName();
+    public function getName() : string;
 
     /**
      * Gets the client's file name including the extension.
@@ -31,21 +31,21 @@ interface IFile
      *
      * @return string
      */
-    public function getClientFileNameWithFallback();
+    public function getClientFileNameWithFallback() : string;
 
     /**
      * Gets the file extension.
      *
      * @return string
      */
-    public function getExtension();
+    public function getExtension() : string;
 
     /**
      * Gets the full file path including the file name.
      *
      * @return string
      */
-    public function getFullPath();
+    public function getFullPath() : string;
 
     /**
      * Gets the file size in bytes.
@@ -53,14 +53,14 @@ interface IFile
      * @return int
      * @throws InvalidOperationException if the file does not exist
      */
-    public function getSize();
+    public function getSize() : int;
 
     /**
      * Gets whether the file exists.
      *
      * @return bool
      */
-    public function exists();
+    public function exists() : bool;
 
     /**
      * Get the file info

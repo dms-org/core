@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Doctrine;
 
@@ -65,7 +65,7 @@ class DoctrinePlatform extends Platform
     /**
      * @return DoctrineAbstractPlatform
      */
-    public function getDoctrinePlatform()
+    public function getDoctrinePlatform() : \Doctrine\DBAL\Platforms\AbstractPlatform
     {
         return $this->doctrinePlatform;
     }
@@ -73,7 +73,7 @@ class DoctrinePlatform extends Platform
     /**
      * @return DoctrineExpressionCompiler
      */
-    public function getExpressionCompiler()
+    public function getExpressionCompiler() : DoctrineExpressionCompiler
     {
         return $this->expressionCompiler;
     }
@@ -81,7 +81,7 @@ class DoctrinePlatform extends Platform
     /**
      * @inheritDoc
      */
-    public function compilePreparedInsert(Table $table)
+    public function compilePreparedInsert(Table $table) : string
     {
         $queryBuilder = $this->doctrineConnection->createQueryBuilder();
 
@@ -101,7 +101,7 @@ class DoctrinePlatform extends Platform
     /**
      * @inheritDoc
      */
-    public function compilePreparedUpdate(Table $table, array $updateColumns, array $whereColumnNameParameterMap)
+    public function compilePreparedUpdate(Table $table, array $updateColumns, array $whereColumnNameParameterMap) : string
     {
         $queryBuilder = $this->doctrineConnection->createQueryBuilder();
 
@@ -132,7 +132,7 @@ class DoctrinePlatform extends Platform
     /**
      * @inheritDoc
      */
-    protected function dateFormatString()
+    protected function dateFormatString() : string
     {
         return $this->doctrinePlatform->getDateFormatString();
     }
@@ -140,7 +140,7 @@ class DoctrinePlatform extends Platform
     /**
      * @inheritDoc
      */
-    protected function dateTimeFormatString()
+    protected function dateTimeFormatString() : string
     {
         return $this->doctrinePlatform->getDateTimeFormatString();
     }
@@ -148,7 +148,7 @@ class DoctrinePlatform extends Platform
     /**
      * @inheritDoc
      */
-    protected function timeFormatString()
+    protected function timeFormatString() : string
     {
         return $this->doctrinePlatform->getTimeFormatString();
     }
@@ -340,7 +340,7 @@ class DoctrinePlatform extends Platform
     /**
      * @inheritDoc
      */
-    public function compileResequenceOrderIndexColumn(ResequenceOrderIndexColumn $query)
+    public function compileResequenceOrderIndexColumn(ResequenceOrderIndexColumn $query) : \Dms\Core\Persistence\Db\Platform\CompiledQuery
     {
         return $this->resequenceCompiler->compileResequenceQuery($this->doctrineConnection->createQueryBuilder(), $query);
     }
@@ -363,7 +363,7 @@ class DoctrinePlatform extends Platform
      *
      * @return string
      */
-    protected function identifier($identifier)
+    protected function identifier($identifier) : string
     {
         return $this->doctrinePlatform->quoteSingleIdentifier($identifier);
     }

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Model\Type\Builder;
 
@@ -59,7 +59,7 @@ class Type
     /**
      * @return MixedType
      */
-    public static function mixed()
+    public static function mixed() : \Dms\Core\Model\Type\MixedType
     {
         if (!self::$mixed) {
             self::$mixed = new MixedType();
@@ -73,7 +73,7 @@ class Type
      *
      * @return ScalarType
      */
-    public static function string()
+    public static function string() : ScalarType
     {
         return self::scalar(IType::STRING);
     }
@@ -83,7 +83,7 @@ class Type
      *
      * @return ScalarType
      */
-    public static function int()
+    public static function int() : ScalarType
     {
         return self::scalar(IType::INT);
     }
@@ -93,7 +93,7 @@ class Type
      *
      * @return ScalarType
      */
-    public static function bool()
+    public static function bool() : ScalarType
     {
         return self::scalar(IType::BOOL);
     }
@@ -103,7 +103,7 @@ class Type
      *
      * @return ScalarType
      */
-    public static function float()
+    public static function float() : ScalarType
     {
         return self::scalar(IType::FLOAT);
     }
@@ -113,7 +113,7 @@ class Type
      *
      * @return UnionType
      */
-    public static function number()
+    public static function number() : UnionType
     {
         if (!self::$number) {
             self::$number = UnionType::create([self::scalar(IType::INT), self::scalar(IType::FLOAT)]);
@@ -125,9 +125,9 @@ class Type
     /**
      * The 'null' type.
      *
-     * @return ScalarType
+     * @return NullType
      */
-    public static function null()
+    public static function null() : NullType
     {
         if (!self::$null) {
             self::$null = new NullType();
@@ -141,7 +141,7 @@ class Type
      *
      * @return ScalarType
      */
-    public static function scalar($scalarType)
+    public static function scalar(string $scalarType) : ScalarType
     {
         if (!isset(self::$scalars[$scalarType])) {
             self::$scalars[$scalarType] = new ScalarType($scalarType);
@@ -158,7 +158,7 @@ class Type
      *
      * @return ObjectType
      */
-    public static function object($class = null)
+    public static function object(string $class = null) : \Dms\Core\Model\Type\ObjectType
     {
         if (!isset(self::$objects[$class])) {
             self::$objects[$class] = new ObjectType($class);
@@ -174,7 +174,7 @@ class Type
      *
      * @return ArrayType
      */
-    public static function arrayOf(IType $elementType)
+    public static function arrayOf(IType $elementType) : \Dms\Core\Model\Type\ArrayType
     {
         $elementTypeString = $elementType->asTypeString();
 
@@ -196,7 +196,7 @@ class Type
      *
      * @return CollectionType
      */
-    public static function collectionOf(IType $elementType, $collectionClass = ITypedCollection::class)
+    public static function collectionOf(IType $elementType, string $collectionClass = ITypedCollection::class) : \Dms\Core\Model\Type\CollectionType
     {
         $elementTypeString = $elementType->asTypeString();
 
@@ -215,7 +215,7 @@ class Type
      * @return IType
      * @throws InvalidArgumentException
      */
-    public static function from($default)
+    public static function from($default) : \Dms\Core\Model\Type\IType
     {
         switch (gettype($default)) {
             case 'NULL':

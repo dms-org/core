@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Model\Type;
 
@@ -33,7 +33,7 @@ class ArrayType extends WithElementsType
     /**
      * {@inheritDoc}
      */
-    public function isOfType($value)
+    public function isOfType($value) : bool
     {
         if (!is_array($value)) {
             return false;

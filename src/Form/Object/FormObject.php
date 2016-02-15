@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Form\Object;
 
@@ -67,7 +67,7 @@ abstract class FormObject extends TypedObject implements IDataTransferObject, IF
      *
      * @return FinalizedFormObjectDefinition
      */
-    final public function getFormDefinition()
+    final public function getFormDefinition() : FinalizedFormObjectDefinition
     {
         return $this->formDefinition;
     }
@@ -77,7 +77,7 @@ abstract class FormObject extends TypedObject implements IDataTransferObject, IF
      *
      * @return IForm
      */
-    final public function getForm()
+    final public function getForm() : \Dms\Core\Form\IForm
     {
         return $this->formDefinition->getForm();
     }
@@ -85,7 +85,7 @@ abstract class FormObject extends TypedObject implements IDataTransferObject, IF
     /**
      * {@inheritDoc}
      */
-    final public function getProcessors()
+    final public function getProcessors() : array
     {
         return $this->form->getProcessors();
     }
@@ -93,7 +93,7 @@ abstract class FormObject extends TypedObject implements IDataTransferObject, IF
     /**
      * {@inheritDoc}
      */
-    final public function getSections()
+    final public function getSections() : array
     {
         return $this->form->getSections();
     }
@@ -109,7 +109,7 @@ abstract class FormObject extends TypedObject implements IDataTransferObject, IF
     /**
      * {@inheritDoc}
      */
-    final public function process(array $submission)
+    final public function process(array $submission) : array
     {
         return $this->form->process($submission);
     }
@@ -117,7 +117,7 @@ abstract class FormObject extends TypedObject implements IDataTransferObject, IF
     /**
      * {@inheritDoc}
      */
-    final public function unprocess(array $processedSubmission)
+    final public function unprocess(array $processedSubmission) : array
     {
         return $this->form->unprocess($processedSubmission);
     }
@@ -125,7 +125,7 @@ abstract class FormObject extends TypedObject implements IDataTransferObject, IF
     /**
      * {@inheritDoc}
      */
-    final public function getFields()
+    final public function getFields() : array
     {
         return $this->form->getFields();
     }
@@ -133,7 +133,7 @@ abstract class FormObject extends TypedObject implements IDataTransferObject, IF
     /**
      * {@inheritDoc}
      */
-    final public function getFieldNames()
+    final public function getFieldNames() : array
     {
         return $this->form->getFieldNames();
     }
@@ -141,7 +141,7 @@ abstract class FormObject extends TypedObject implements IDataTransferObject, IF
     /**
      * {@inheritDoc}
      */
-    final public function hasField($fieldName)
+    final public function hasField(string $fieldName) : bool
     {
         return $this->form->hasField($fieldName);
     }
@@ -149,7 +149,7 @@ abstract class FormObject extends TypedObject implements IDataTransferObject, IF
     /**
      * {@inheritDoc}
      */
-    final public function getField($fieldName)
+    final public function getField(string $fieldName) : \Dms\Core\Form\IField
     {
         return $this->form->getField($fieldName);
     }
@@ -157,7 +157,7 @@ abstract class FormObject extends TypedObject implements IDataTransferObject, IF
     /**
      * @return array
      */
-    final public function getInitialValues()
+    final public function getInitialValues() : array
     {
         return $this->initialValues;
     }
@@ -165,7 +165,7 @@ abstract class FormObject extends TypedObject implements IDataTransferObject, IF
     /**
      * @inheritDoc
      */
-    final public function withInitialValues(array $initialProcessedValues)
+    final public function withInitialValues(array $initialProcessedValues) : \Dms\Core\Form\IForm
     {
         return $this->form->withInitialValues($initialProcessedValues);
     }
@@ -173,7 +173,7 @@ abstract class FormObject extends TypedObject implements IDataTransferObject, IF
     /**
      * @inheritDoc
      */
-    final public function withFieldNames(array $fieldNameMap)
+    final public function withFieldNames(array $fieldNameMap) : \Dms\Core\Form\IForm
     {
         return $this->form->withFieldNames($fieldNameMap);
     }
@@ -181,7 +181,7 @@ abstract class FormObject extends TypedObject implements IDataTransferObject, IF
     /**
      * {@inheritDoc}
      */
-    final public function asStagedForm()
+    final public function asStagedForm() : \Dms\Core\Form\IStagedForm
     {
         return $this->form->asStagedForm();
     }

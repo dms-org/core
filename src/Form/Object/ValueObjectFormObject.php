@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Form\Object;
 
@@ -20,7 +20,7 @@ abstract class ValueObjectFormObject extends TypedObjectFormObject
     /**
      * @inheritDoc
      */
-    final protected function objectType()
+    final protected function objectType() : string
     {
         return $this->valueObjectType();
     }
@@ -39,7 +39,7 @@ abstract class ValueObjectFormObject extends TypedObjectFormObject
      *
      * @return IValueObject
      */
-    final public function populateValueObject()
+    final public function populateValueObject() : IValueObject
     {
         return $this->populateValueObjectFromForm();
     }
@@ -49,7 +49,7 @@ abstract class ValueObjectFormObject extends TypedObjectFormObject
      *
      * @return string
      */
-    abstract protected function valueObjectType();
+    abstract protected function valueObjectType() : string;
 
     /**
      * Populates the form with the value object's values.
@@ -65,5 +65,5 @@ abstract class ValueObjectFormObject extends TypedObjectFormObject
      *
      * @return IValueObject
      */
-    abstract protected function populateValueObjectFromForm();
+    abstract protected function populateValueObjectFromForm() : IValueObject;
 }

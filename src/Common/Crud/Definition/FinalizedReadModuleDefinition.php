@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Common\Crud\Definition;
 
@@ -36,7 +36,7 @@ class FinalizedReadModuleDefinition extends FinalizedModuleDefinition
     /**
      * @return callable
      */
-    public function getLabelObjectCallback()
+    public function getLabelObjectCallback() : callable
     {
         return $this->labelObjectCallback;
     }

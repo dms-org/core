@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Form;
 
@@ -17,35 +17,35 @@ interface IStagedForm
      *
      * @return IndependentFormStage
      */
-    public function getFirstStage();
+    public function getFirstStage() : Stage\IndependentFormStage;
 
     /**
      * Gets the stages after the first stage.
      *
      * @return IFormStage[]
      */
-    public function getFollowingStages();
+    public function getFollowingStages() : array;
 
     /**
      * Gets all the stages.
      *
      * @return IFormStage[]
      */
-    public function getAllStages();
+    public function getAllStages() : array;
 
     /**
      * Gets the number of stages.
      *
      * @return int
      */
-    public function getAmountOfStages();
+    public function getAmountOfStages() : int;
 
     /**
      * Gets the form of the first stage.
      *
      * @return IForm
      */
-    public function getFirstForm();
+    public function getFirstForm() : IForm;
 
     /**
      * @param string $fieldName
@@ -53,7 +53,7 @@ interface IStagedForm
      * @return IFormStage
      * @throws InvalidArgumentException If no known field is defined.
      */
-    public function getStageWithFieldName($fieldName);
+    public function getStageWithFieldName(string $fieldName) : IFormStage;
 
     /**
      * @param int $stageNumber The 1-based stage number
@@ -61,7 +61,7 @@ interface IStagedForm
      * @return IFormStage
      * @throws InvalidArgumentException If it is out of range
      */
-    public function getStage($stageNumber);
+    public function getStage(int $stageNumber) : IFormStage;
 
     /**
      * Gets the required field names for the supplied form stage.
@@ -78,7 +78,7 @@ interface IStagedForm
      * @return string[][]|string[]
      * @throws InvalidArgumentException If the stage number is out of the range
      */
-    public function getRequiredFieldGroupedByStagesForStage($stageNumber);
+    public function getRequiredFieldGroupedByStagesForStage(int $stageNumber);
 
     /**
      * Gets the form the the stage using the previous stages submission data.
@@ -90,7 +90,7 @@ interface IStagedForm
      * @throws InvalidArgumentException If the stage number is out of the range
      * @throws InvalidFormSubmissionException
      */
-    public function getFormForStage($stageNumber, array $previousStagesSubmission);
+    public function getFormForStage(int $stageNumber, array $previousStagesSubmission) : IForm;
 
     /**
      * Creates a new staged form without the first stage.
@@ -125,7 +125,7 @@ interface IStagedForm
      * @return array
      * @throws InvalidFormSubmissionException
      */
-    public function process(array $submission);
+    public function process(array $submission) : array;
 
     /**
      * Unprocesses the form submission back into the initial format.
@@ -134,5 +134,5 @@ interface IStagedForm
      *
      * @return array
      */
-    public function unprocess(array $processedSubmission);
+    public function unprocess(array $processedSubmission) : array;
 }

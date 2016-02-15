@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Query\Expression;
 
@@ -32,7 +32,7 @@ class Tuple extends Expr
     /**
      * @return Expr[]
      */
-    public function getExpressions()
+    public function getExpressions() : array
     {
         return $this->expressions;
     }
@@ -40,7 +40,7 @@ class Tuple extends Expr
     /**
      * @inheritDoc
      */
-    public function getChildren()
+    public function getChildren() : array
     {
         return $this->expressions;
     }
@@ -50,7 +50,7 @@ class Tuple extends Expr
      * @return Type
      * @throws InvalidOperationException
      */
-    public function getResultingType()
+    public function getResultingType() : \Dms\Core\Persistence\Db\Schema\Type\Type
     {
         throw InvalidOperationException::methodCall(__METHOD__, 'Tuple cannot be used a standalone expression');
     }

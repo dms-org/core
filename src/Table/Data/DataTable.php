@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Table\Data;
 
@@ -51,7 +51,7 @@ class DataTable implements IDataTable
     /**
      * @return ITableStructure
      */
-    final public function getStructure()
+    final public function getStructure() : \Dms\Core\Table\ITableStructure
     {
         return $this->structure;
     }
@@ -59,7 +59,7 @@ class DataTable implements IDataTable
     /**
      * @return ITableSection[]
      */
-    final public function getSections()
+    final public function getSections() : array
     {
         return $this->sections;
     }

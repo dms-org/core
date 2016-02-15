@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Module\Definition\Table;
 
@@ -24,7 +24,7 @@ class TableViewsDefiner extends TableDefinerBase
      * @param callable         $callback
      * @param ITableDataSource $dataSource
      */
-    public function __construct($name, callable $callback, ITableDataSource $dataSource)
+    public function __construct(string $name, callable $callback, ITableDataSource $dataSource)
     {
         parent::__construct($name, $callback);
         $this->dataSource = $dataSource;

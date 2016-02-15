@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Mapping\Definition\Relation;
 
@@ -15,7 +15,7 @@ class RelationDefiner extends RelationTypeDefinerBase
      *
      * @return ToOneRelationDefiner
      */
-    public function toOne()
+    public function toOne() : ToOneRelationDefiner
     {
         return new ToOneRelationDefiner($this->callback, $this->mapperLoader, $loadIds = false);
     }
@@ -26,7 +26,7 @@ class RelationDefiner extends RelationTypeDefinerBase
      *
      * @return ToOneRelationDefiner
      */
-    public function toOneId()
+    public function toOneId() : ToOneRelationDefiner
     {
         return new ToOneRelationDefiner($this->callback, $this->mapperLoader, $loadIds = true);
     }
@@ -37,7 +37,7 @@ class RelationDefiner extends RelationTypeDefinerBase
      *
      * @return ToManyRelationDefiner
      */
-    public function toMany()
+    public function toMany() : ToManyRelationDefiner
     {
         return new ToManyRelationDefiner($this->callback, $this->mapperLoader, $loadIds = false);
     }
@@ -48,7 +48,7 @@ class RelationDefiner extends RelationTypeDefinerBase
      *
      * @return ToManyRelationDefiner
      */
-    public function toManyIds()
+    public function toManyIds() : ToManyRelationDefiner
     {
         return new ToManyRelationDefiner($this->callback, $this->mapperLoader, $loadIds = true);
     }
@@ -59,7 +59,7 @@ class RelationDefiner extends RelationTypeDefinerBase
      *
      * @return ManyToOneRelationDefiner
      */
-    public function manyToOne()
+    public function manyToOne() : ManyToOneRelationDefiner
     {
         return new ManyToOneRelationDefiner($this->callback, $this->mapperLoader, $loadIds = false);
     }
@@ -70,7 +70,7 @@ class RelationDefiner extends RelationTypeDefinerBase
      *
      * @return ManyToOneRelationDefiner
      */
-    public function manyToOneId()
+    public function manyToOneId() : ManyToOneRelationDefiner
     {
         return new ManyToOneRelationDefiner($this->callback, $this->mapperLoader, $loadIds = true);
     }

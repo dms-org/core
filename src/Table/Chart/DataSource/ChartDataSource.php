@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Table\Chart\DataSource;
 
@@ -34,7 +34,7 @@ abstract class ChartDataSource implements IChartDataSource
     /**
      * @inheritDoc
      */
-    final public function getStructure()
+    final public function getStructure() : \Dms\Core\Table\Chart\IChartStructure
     {
         return $this->structure;
     }
@@ -42,7 +42,7 @@ abstract class ChartDataSource implements IChartDataSource
     /**
      * @inheritDoc
      */
-    final public function criteria()
+    final public function criteria() : \Dms\Core\Table\Chart\Criteria\ChartCriteria
     {
         return new ChartCriteria($this->structure);
     }
@@ -50,7 +50,7 @@ abstract class ChartDataSource implements IChartDataSource
     /**
      * @inheritDoc
      */
-    final public function load(IChartCriteria $criteria = null)
+    final public function load(IChartCriteria $criteria = null) : \Dms\Core\Table\Chart\IChartDataTable
     {
         $this->verifyCriteria(__METHOD__, $criteria);
 
@@ -62,7 +62,7 @@ abstract class ChartDataSource implements IChartDataSource
      *
      * @return array[]
      */
-    abstract protected function loadData(IChartCriteria $criteria = null);
+    abstract protected function loadData(IChartCriteria $criteria = null) : array;
 
     protected function verifyCriteria($method, IChartCriteria $criteria = null)
     {

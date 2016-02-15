@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db;
 
@@ -28,7 +28,7 @@ class LoadingContext extends ConnectionContext
     /**
      * @return IdentityMap[]
      */
-    public function getIdentityMaps()
+    public function getIdentityMaps() : array
     {
         return $this->identityMaps;
     }
@@ -38,7 +38,7 @@ class LoadingContext extends ConnectionContext
      *
      * @return IdentityMap
      */
-    public function getIdentityMap($entityType)
+    public function getIdentityMap(string $entityType) : IdentityMap
     {
         if (!isset($this->identityMaps[$entityType])) {
             $this->identityMaps[$entityType] = new IdentityMap($entityType);
@@ -52,7 +52,7 @@ class LoadingContext extends ConnectionContext
      *
      * @return RowSet
      */
-    public function query(Select $select)
+    public function query(Select $select) : RowSet
     {
         return $this->connection->load($select);
     }

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Model\Criteria\Condition;
 
@@ -12,7 +12,7 @@ class AndCondition extends CompositeCondition
     /**
      * @inheritdoc
      */
-    protected function makeArrayFilterCallable()
+    protected function makeArrayFilterCallable() : callable
     {
         $conditions = $this->getConditions();
         /** @var Condition $firstCondition */

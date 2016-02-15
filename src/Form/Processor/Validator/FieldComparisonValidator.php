@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Form\Processor\Validator;
 
@@ -38,7 +38,7 @@ abstract class FieldComparisonValidator extends FormValidator
     /**
      * @return IField
      */
-    public function getField1()
+    public function getField1() : \Dms\Core\Form\IField
     {
         return $this->field1;
     }
@@ -46,7 +46,7 @@ abstract class FieldComparisonValidator extends FormValidator
     /**
      * @return IField
      */
-    public function getField2()
+    public function getField2() : \Dms\Core\Form\IField
     {
         return $this->field2;
     }
@@ -98,7 +98,7 @@ abstract class FieldComparisonValidator extends FormValidator
     /**
      * @return string
      */
-    abstract protected function getMessageId();
+    abstract protected function getMessageId() : string;
 
     /**
      * @param mixed $value1
@@ -106,5 +106,5 @@ abstract class FieldComparisonValidator extends FormValidator
      *
      * @return bool
      */
-    abstract protected function doValuesSatisfyComparison($value1, $value2);
+    abstract protected function doValuesSatisfyComparison($value1, $value2) : bool;
 }

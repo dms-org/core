@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Query\Expression;
 
@@ -41,7 +41,7 @@ class SubSelect extends Expr
     /**
      * @return Select
      */
-    public function getSelect()
+    public function getSelect() : \Dms\Core\Persistence\Db\Query\Select
     {
         return $this->select;
     }
@@ -51,7 +51,7 @@ class SubSelect extends Expr
      *
      * @return Type
      */
-    public function getResultingType()
+    public function getResultingType() : \Dms\Core\Persistence\Db\Schema\Type\Type
     {
         $selectedExpressions = $this->select->getAliasColumnMap();
         /** @var Expr $selectExpression */
@@ -65,7 +65,7 @@ class SubSelect extends Expr
      *
      * @return Expr[]
      */
-    public function getChildren()
+    public function getChildren() : array
     {
         return [];
     }

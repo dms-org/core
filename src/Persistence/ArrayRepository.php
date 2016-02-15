@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence;
 
@@ -7,6 +7,8 @@ use Dms\Core\Model\EntityCollection;
 use Dms\Core\Model\ICriteria;
 use Dms\Core\Model\IEntity;
 use Dms\Core\Model\ISpecification;
+use Dms\Core\Model\ITypedObject;
+use Dms\Core\Model\Type\IType;
 
 /**
  * An implementation of the repository using an in-memory store.
@@ -44,7 +46,7 @@ class ArrayRepository implements IRepository
     /**
      * @return EntityCollection
      */
-    final public function getCollection()
+    final public function getCollection() : EntityCollection
     {
         return $this->collection;
     }
@@ -52,7 +54,7 @@ class ArrayRepository implements IRepository
     /**
      * {@inheritDoc}
      */
-    public function getElementType()
+    public function getElementType() : IType
     {
         return $this->collection->getElementType();
     }
@@ -60,7 +62,7 @@ class ArrayRepository implements IRepository
     /**
      * {@inheritDoc}
      */
-    public function getObjectType()
+    public function getObjectType() : string
     {
         return $this->collection->getObjectType();
     }
@@ -68,7 +70,7 @@ class ArrayRepository implements IRepository
     /**
      * {@inheritDoc}
      */
-    public function getEntityType()
+    public function getEntityType() : string
     {
         return $this->collection->getEntityType();
     }
@@ -84,7 +86,7 @@ class ArrayRepository implements IRepository
     /**
      * {@inheritDoc}
      */
-    public function getAll()
+    public function getAll() : array
     {
         return $this->collection->getAll();
     }
@@ -92,7 +94,7 @@ class ArrayRepository implements IRepository
     /**
      * {@inheritDoc}
      */
-    public function has($id)
+    public function has(int $id) : bool
     {
         return $this->collection->has($id);
     }
@@ -100,7 +102,7 @@ class ArrayRepository implements IRepository
     /**
      * {@inheritDoc}
      */
-    public function hasAll(array $ids)
+    public function hasAll(array $ids) : bool
     {
         return $this->collection->hasAll($ids);
     }
@@ -116,7 +118,7 @@ class ArrayRepository implements IRepository
     /**
      * {@inheritDoc}
      */
-    public function containsAll(array $objects)
+    public function containsAll(array $objects) : bool
     {
         return $this->collection->containsAll($objects);
     }
@@ -124,7 +126,7 @@ class ArrayRepository implements IRepository
     /**
      * {@inheritDoc}
      */
-    public function get($id)
+    public function get(int $id) : IEntity
     {
         return $this->collection->get($id);
     }
@@ -132,7 +134,7 @@ class ArrayRepository implements IRepository
     /**
      * {@inheritDoc}
      */
-    public function getAllById(array $ids)
+    public function getAllById(array $ids) : array
     {
         return $this->collection->getAllById($ids);
     }
@@ -140,7 +142,7 @@ class ArrayRepository implements IRepository
     /**
      * {@inheritDoc}
      */
-    public function tryGet($id)
+    public function tryGet(int $id)
     {
         return $this->collection->tryGet($id);
     }
@@ -148,7 +150,7 @@ class ArrayRepository implements IRepository
     /**
      * {@inheritDoc}
      */
-    public function tryGetAll(array $ids)
+    public function tryGetAll(array $ids) : array
     {
         return $this->collection->tryGetAll($ids);
     }
@@ -207,7 +209,7 @@ class ArrayRepository implements IRepository
     /**
      * {@inheritDoc}
      */
-    public function removeById($id)
+    public function removeById(int $id)
     {
         $this->removeAllById([$id]);
     }
@@ -234,7 +236,7 @@ class ArrayRepository implements IRepository
     /**
      * {@inheritDoc}
      */
-    public function criteria()
+    public function criteria() : \Dms\Core\Model\Criteria\Criteria
     {
         return $this->collection->criteria();
     }
@@ -242,7 +244,7 @@ class ArrayRepository implements IRepository
     /**
      * {@inheritDoc}
      */
-    public function countMatching(ICriteria $criteria)
+    public function countMatching(ICriteria $criteria) : int
     {
         return $this->collection->countMatching($criteria);
     }
@@ -250,7 +252,7 @@ class ArrayRepository implements IRepository
     /**
      * {@inheritDoc}
      */
-    public function matching(ICriteria $criteria)
+    public function matching(ICriteria $criteria) : array
     {
         return $this->collection->matching($criteria);
     }
@@ -258,7 +260,7 @@ class ArrayRepository implements IRepository
     /**
      * {@inheritDoc}
      */
-    public function satisfying(ISpecification $specification)
+    public function satisfying(ISpecification $specification) : array
     {
         return $this->collection->satisfying($specification);
     }

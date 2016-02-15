@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Form\Field\Type;
 
@@ -42,7 +42,7 @@ class ArrayOfType extends FieldType
     /**
      * @return IFieldType
      */
-    public function getElementType()
+    public function getElementType() : \Dms\Core\Form\IFieldType
     {
         return $this->get(self::ATTR_ELEMENT_TYPE);
     }
@@ -50,7 +50,7 @@ class ArrayOfType extends FieldType
     /**
      * {@inheritdoc}
      */
-    public function buildPhpTypeOfInput()
+    public function buildPhpTypeOfInput() : \Dms\Core\Model\Type\IType
     {
         return Type::arrayOf($this->getElementType()->getPhpTypeOfInput());
     }
@@ -58,7 +58,7 @@ class ArrayOfType extends FieldType
     /**
      * @return IFieldProcessor[]
      */
-    protected function buildProcessors()
+    protected function buildProcessors() : array
     {
         $processors = [];
 

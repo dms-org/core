@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Form\Object;
 
@@ -33,7 +33,7 @@ abstract class EntityFormObject extends TypedObjectFormObject
     /**
      * @inheritDoc
      */
-    final protected function objectType()
+    final protected function objectType() : string
     {
         return $this->entityType();
     }
@@ -65,14 +65,14 @@ abstract class EntityFormObject extends TypedObjectFormObject
      *
      * @return string
      */
-    abstract protected function entityType();
+    abstract protected function entityType() : string;
 
     /**
      * Populates the form with the entity's values.
      *
      * @param IEntity $entity
      *
-     * @return string
+     * @return void
      */
     abstract protected function populateFormWithEntity(IEntity $entity);
 
@@ -81,7 +81,7 @@ abstract class EntityFormObject extends TypedObjectFormObject
      *
      * @param IEntity $entity
      *
-     * @return string
+     * @return void
      */
     abstract protected function populateEntityWithForm(IEntity $entity);
 }

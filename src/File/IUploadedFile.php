@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\File;
 
@@ -14,7 +14,7 @@ interface IUploadedFile extends IFile
      *
      * @return bool
      */
-    public function hasUploadedSuccessfully();
+    public function hasUploadedSuccessfully() : bool;
 
     /**
      * Gets the status of the upload.
@@ -23,7 +23,7 @@ interface IUploadedFile extends IFile
      *
      * @return int
      */
-    public function getUploadError();
+    public function getUploadError() : int;
 
     /**
      * Gets the client's file name including the extension.
@@ -46,5 +46,5 @@ interface IUploadedFile extends IFile
      *
      * @return IFile
      */
-    public function moveTo($fullPath);
+    public function moveTo(string $fullPath) : IFile;
 }

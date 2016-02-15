@@ -26,7 +26,7 @@ class TestSelfHandlingObjectAction extends SelfHandlingObjectAction
      *
      * @return string
      */
-    protected function name()
+    protected function name() : string
     {
         return 'test-object-action';
     }
@@ -36,7 +36,7 @@ class TestSelfHandlingObjectAction extends SelfHandlingObjectAction
      *
      * @return IPermission[]
      */
-    protected function permissions()
+    protected function permissions() : array
     {
         return [
             Permission::named('test-permission')
@@ -48,7 +48,7 @@ class TestSelfHandlingObjectAction extends SelfHandlingObjectAction
      *
      * @return IObjectActionFormMapping
      */
-    protected function formMapping()
+    protected function formMapping() : IObjectActionFormMapping
     {
         return new ArrayObjectActionFormMapping(
             StagedForm::begin(
@@ -76,7 +76,7 @@ class TestSelfHandlingObjectAction extends SelfHandlingObjectAction
      *
      * @return string
      */
-    protected function objectType()
+    protected function objectType() : string
     {
         return TestEntity::class;
     }

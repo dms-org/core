@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Module\Handler;
 
@@ -26,7 +26,7 @@ class CustomParameterizedActionHandler extends ReflectionBasedActionHandler
      *
      * @throws \Dms\Core\Module\InvalidHandlerClassException
      */
-    public function __construct(callable $handlerCallback, $returnType = null, $parameterType = null)
+    public function __construct(callable $handlerCallback, string $returnType = null, string $parameterType = null)
     {
         parent::__construct(
                 $parameterType ?: $this->getTypeFromParameter(Reflection::fromCallable($handlerCallback), 'function'),

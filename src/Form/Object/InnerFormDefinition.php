@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Form\Object;
 
@@ -31,7 +31,7 @@ class InnerFormDefinition
      * @param FormObject $formInstance
      * @param string[]   $embeddedFieldMap
      */
-    public function __construct($property, FormObject $formInstance, array $embeddedFieldMap)
+    public function __construct(string $property, FormObject $formInstance, array $embeddedFieldMap)
     {
         $this->property         = $property;
         $this->formInstance     = $formInstance;
@@ -41,7 +41,7 @@ class InnerFormDefinition
     /**
      * @return string
      */
-    public function getProperty()
+    public function getProperty() : string
     {
         return $this->property;
     }
@@ -49,7 +49,7 @@ class InnerFormDefinition
     /**
      * @return FormObject
      */
-    public function getNewFormInstance()
+    public function getNewFormInstance() : FormObject
     {
         return clone $this->formInstance;
     }
@@ -60,7 +60,7 @@ class InnerFormDefinition
      *
      * @return string[]
      */
-    public function getEmbeddedFieldMap()
+    public function getEmbeddedFieldMap() : array
     {
         return $this->embeddedFieldMap;
     }

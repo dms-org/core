@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Form\Object\Stage;
 
@@ -108,7 +108,7 @@ class StagedFormObjectDefinition
      *
      * @return FinalizedStagedFormObjectDefinition
      */
-    public function finalize(StagedFormObject $instance)
+    public function finalize(StagedFormObject $instance) : FinalizedStagedFormObjectDefinition
     {
         return new FinalizedStagedFormObjectDefinition($instance, $this->stageCallbacks);
     }

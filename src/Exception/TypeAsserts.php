@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 
 namespace Dms\Core\Exception;
@@ -29,7 +29,7 @@ trait TypeAsserts
      * @return void
      * @throws static
      */
-    public static function verifyNotNull($method, $name, $argument)
+    public static function verifyNotNull(string $method, string $name, $argument)
     {
         static::verify(
                 $argument !== null,
@@ -47,7 +47,7 @@ trait TypeAsserts
      *
      * @throws static
      */
-    public static function verifyInstanceOf($method, $name, $argument, $class)
+    public static function verifyInstanceOf(string $method, string $name, $argument, string $class)
     {
         static::verify(
                 $argument instanceof $class,
@@ -68,7 +68,7 @@ trait TypeAsserts
      *
      * @throws mixed
      */
-    public static function verifyAll($method, $name, $argument, callable $satisfiesCallback)
+    public static function verifyAll(string $method, string $name, $argument, callable $satisfiesCallback)
     {
         $failed   = false;
         $failType = null;
@@ -103,7 +103,7 @@ trait TypeAsserts
      *
      * @throws mixed
      */
-    public static function verifyAllInstanceOf($method, $name, $argument, $class)
+    public static function verifyAllInstanceOf(string $method, string $name, $argument, string $class)
     {
         $failed   = false;
         $failType = null;

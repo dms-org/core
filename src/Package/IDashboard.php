@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Package;
 
@@ -16,5 +16,5 @@ interface IDashboard
      *
      * @return IWidget[]
      */
-    public function getWidgets();
+    public function getWidgets() : array;
 }

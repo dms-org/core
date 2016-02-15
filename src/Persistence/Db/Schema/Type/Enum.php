@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Schema\Type;
 
@@ -27,7 +27,7 @@ class Enum extends Type
     /**
      * @return string[]
      */
-    public function getOptions()
+    public function getOptions() : array
     {
         return $this->options;
     }

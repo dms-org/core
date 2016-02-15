@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Mapping\Definition\Subclass;
 
@@ -41,7 +41,7 @@ class SubClassDefinitionDefiner extends SubClassDefinerBase
      *
      * @return void
      */
-    public function asType($classType)
+    public function asType(string $classType)
     {
         $this->define(function (MapperDefinition $map) use ($classType) {
             $map->type($classType);

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Model\Criteria\Condition;
 
@@ -40,7 +40,7 @@ abstract class CompositeCondition extends Condition
     /**
      * @return Condition[]
      */
-    public function getConditions()
+    public function getConditions() : array
     {
         return $this->children;
     }

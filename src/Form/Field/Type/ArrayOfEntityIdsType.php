@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Form\Field\Type;
 
@@ -41,7 +41,7 @@ class ArrayOfEntityIdsType extends ArrayOfType
      * @param IField     $entityIdField
      * @param bool       $loadAsObjects
      */
-    public function __construct(IEntitySet $entities, IField $entityIdField, $loadAsObjects = false)
+    public function __construct(IEntitySet $entities, IField $entityIdField, bool $loadAsObjects = false)
     {
         $this->entities      = $entities;
         $this->loadAsObjects = $loadAsObjects;
@@ -51,7 +51,7 @@ class ArrayOfEntityIdsType extends ArrayOfType
     /**
      * @return IFieldProcessor[]
      */
-    protected function buildProcessors()
+    protected function buildProcessors() : array
     {
         $processors = [];
 

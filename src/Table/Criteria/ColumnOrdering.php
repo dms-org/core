@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Table\Criteria;
 
@@ -28,7 +28,7 @@ class ColumnOrdering extends ColumnCriterion
      *
      * @throws Exception\InvalidArgumentException
      */
-    public function __construct(IColumn $column, IColumnComponent $component, $direction)
+    public function __construct(IColumn $column, IColumnComponent $component, string $direction)
     {
         OrderingDirection::validate($direction);
         parent::__construct($column, $component);
@@ -39,7 +39,7 @@ class ColumnOrdering extends ColumnCriterion
     /**
      * @return string
      */
-    public function getDirection()
+    public function getDirection() : string
     {
         return $this->direction;
     }
@@ -47,7 +47,7 @@ class ColumnOrdering extends ColumnCriterion
     /**
      * @return bool
      */
-    public function isAsc()
+    public function isAsc() : bool
     {
         return $this->direction === OrderingDirection::ASC;
     }

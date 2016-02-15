@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence;
 
@@ -6,6 +6,7 @@ use Dms\Core\Exception\InvalidArgumentException;
 use Dms\Core\Exception\TypeMismatchException;
 use Dms\Core\Model\EntityNotFoundException;
 use Dms\Core\Model\IEntity;
+use Dms\Core\Model\ITypedObject;
 use Dms\Core\Persistence\Db\Connection\DbOutOfSyncException;
 use Dms\Core\Persistence\Db\Connection\IConnection;
 use Dms\Core\Persistence\Db\Mapping\EntityOutOfSyncException;
@@ -43,7 +44,7 @@ class DbRepository extends DbRepositoryBase implements IRepository
     /**
      * {@inheritDoc}
      */
-    final public function getEntityType()
+    final public function getEntityType() : string
     {
         return $this->mapper->getObjectType();
     }
@@ -51,7 +52,7 @@ class DbRepository extends DbRepositoryBase implements IRepository
     /**
      * @return Select
      */
-    final protected function select()
+    final protected function select() : Db\Query\Select
     {
         return $this->mapper->getSelect();
     }
@@ -59,7 +60,7 @@ class DbRepository extends DbRepositoryBase implements IRepository
     /**
      * @return ColumnExpr
      */
-    final protected function primaryKey()
+    final protected function primaryKey() : Db\Query\Expression\ColumnExpr
     {
         $table = $this->mapper->getPrimaryTable();
 
@@ -71,7 +72,7 @@ class DbRepository extends DbRepositoryBase implements IRepository
      *
      * @return Db\Query\Expression\Parameter[]
      */
-    final protected function parameterIds(array $values)
+    final protected function parameterIds(array $values) : array
     {
         foreach ($values as $key => $value) {
             $values[$key] = Expr::idParam($value);
@@ -87,7 +88,7 @@ class DbRepository extends DbRepositoryBase implements IRepository
      *
      * @return Reorder
      */
-    final protected function reorder($columnName)
+    final protected function reorder(string $columnName) : Db\Query\Reorder
     {
         return new Reorder($this->mapper->getPrimaryTable(), $columnName);
     }
@@ -95,7 +96,7 @@ class DbRepository extends DbRepositoryBase implements IRepository
     /**
      * {@inheritDoc}
      */
-    public function getAll()
+    public function getAll() : array
     {
         return $this->load($this->select());
     }
@@ -111,7 +112,7 @@ class DbRepository extends DbRepositoryBase implements IRepository
     /**
      * {@inheritDoc}
      */
-    public function has($id)
+    public function has(int $id) : bool
     {
         return $this->hasAll([$id]);
     }
@@ -119,7 +120,7 @@ class DbRepository extends DbRepositoryBase implements IRepository
     /**
      * {@inheritDoc}
      */
-    public function hasAll(array $ids)
+    public function hasAll(array $ids) : bool
     {
         if (empty($ids)) {
             return true;
@@ -155,7 +156,7 @@ class DbRepository extends DbRepositoryBase implements IRepository
     /**
      * @inheritDoc
      */
-    public function containsAll(array $objects)
+    public function containsAll(array $objects) : bool
     {
         if (empty($objects)) {
             return true;
@@ -179,7 +180,7 @@ class DbRepository extends DbRepositoryBase implements IRepository
     /**
      * {@inheritDoc}
      */
-    public function get($id)
+    public function get(int $id) : \Dms\Core\Model\IEntity
     {
         $entity = $this->tryGet($id);
 
@@ -193,7 +194,7 @@ class DbRepository extends DbRepositoryBase implements IRepository
     /**
      * @inheritDoc
      */
-    public function getAllById(array $ids)
+    public function getAllById(array $ids) : array
     {
         $entities = $this->tryGetAll($ids);
 
@@ -217,7 +218,7 @@ class DbRepository extends DbRepositoryBase implements IRepository
     /**
      * {@inheritDoc}
      */
-    public function tryGet($id)
+    public function tryGet(int $id)
     {
         $entities = $this->tryGetAll([$id]);
 
@@ -227,7 +228,7 @@ class DbRepository extends DbRepositoryBase implements IRepository
     /**
      * {@inheritDoc}
      */
-    public function tryGetAll(array $ids)
+    public function tryGetAll(array $ids) : array
     {
         return $this->load(
                 $this->select()
@@ -288,7 +289,7 @@ class DbRepository extends DbRepositoryBase implements IRepository
             throw $e;
         }
 
-        $mapper = $this->mapper->findMapperFor($entityBeingPersisted);
+        $mapper = $this->mapper->findMapperFor(get_class($entityBeingPersisted));
 
         if (!$mapper) {
             throw $e;
@@ -339,7 +340,7 @@ class DbRepository extends DbRepositoryBase implements IRepository
     /**
      * {@inheritDoc}
      */
-    public function removeById($id)
+    public function removeById(int $id)
     {
         $this->removeAllById([$id]);
     }

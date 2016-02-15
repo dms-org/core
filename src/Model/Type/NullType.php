@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Model\Type;
 
@@ -30,7 +30,7 @@ class NullType extends BaseType
     /**
      * @inheritDoc
      */
-    protected function loadValidOperatorTypes()
+    protected function loadValidOperatorTypes() : array
     {
         $mixedType      = Type::mixed();
         $array          = Type::arrayOf($mixedType);
@@ -53,7 +53,7 @@ class NullType extends BaseType
     /**
      * {@inheritDoc}
      */
-    public function isOfType($value)
+    public function isOfType($value) : bool
     {
         return $value === null;
     }

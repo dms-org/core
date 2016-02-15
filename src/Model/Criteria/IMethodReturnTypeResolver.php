@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Model\Criteria;
 
@@ -22,5 +22,5 @@ interface IMethodReturnTypeResolver
      * @return IType
      * @throws InvalidArgumentException
      */
-    public function loadReturnTypeFor(IType $sourceType, $name, array $arguments);
+    public function loadReturnTypeFor(IType $sourceType, string $name, array $arguments) : \Dms\Core\Model\Type\IType;
 }

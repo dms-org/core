@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Module\Definition\Chart;
 
@@ -33,7 +33,7 @@ class TableChartMappingDefiner
      * @param ITableDataSource $tableSource
      * @param callable         $callback
      */
-    public function __construct($name, ITableDataSource $tableSource, callable $callback)
+    public function __construct(string $name, ITableDataSource $tableSource, callable $callback)
     {
         $this->name        = $name;
         $this->tableSource = $tableSource;
@@ -58,7 +58,7 @@ class TableChartMappingDefiner
      *
      * @return ChartViewsDefiner
      */
-    public function map(callable $mapDefinitionCallback)
+    public function map(callable $mapDefinitionCallback) : ChartViewsDefiner
     {
         $chartDataSource = $this->tableSource->asChart($mapDefinitionCallback);
 

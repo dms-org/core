@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Query;
 
@@ -74,7 +74,7 @@ class Upsert implements IQuery
     /**
      * @return Table
      */
-    public function getTable()
+    public function getTable() : \Dms\Core\Persistence\Db\Schema\Table
     {
         return $this->rowsWithPrimaryKeys->getTable();
     }
@@ -82,7 +82,7 @@ class Upsert implements IQuery
     /**
      * @return RowSet
      */
-    public function getRowsWithPrimaryKeys()
+    public function getRowsWithPrimaryKeys() : \Dms\Core\Persistence\Db\RowSet
     {
         return $this->rowsWithPrimaryKeys;
     }
@@ -90,7 +90,7 @@ class Upsert implements IQuery
     /**
      * @return RowSet
      */
-    public function getRowsWithoutPrimaryKeys()
+    public function getRowsWithoutPrimaryKeys() : \Dms\Core\Persistence\Db\RowSet
     {
         return $this->rowsWithoutPrimaryKeys;
     }
@@ -98,7 +98,7 @@ class Upsert implements IQuery
     /**
      * @return string[]
      */
-    public function getLockingColumnNames()
+    public function getLockingColumnNames() : array
     {
         return $this->lockingColumnNames;
     }

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Table\Builder;
 
@@ -24,7 +24,7 @@ class Column extends ColumnBuilderBase
      * @return IColumn
      * @throws TypeMismatchException
      */
-    public static function from($componentOrField)
+    public static function from($componentOrField) : \Dms\Core\Table\IColumn
     {
         if ($componentOrField instanceof IColumnComponent) {
 
@@ -49,7 +49,7 @@ class Column extends ColumnBuilderBase
      *
      * @return ColumnLabelBuilder
      */
-    public static function name($name)
+    public static function name(string $name) : ColumnLabelBuilder
     {
         $self       = new self();
         $self->name = $name;

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Mapping\Definition\Relation;
 
@@ -25,7 +25,7 @@ class ToManyRelationMapping extends RelationMapping
     /**
      * @return IToManyRelation
      */
-    public function getRelation()
+    public function getRelation() : \Dms\Core\Persistence\Db\Mapping\Relation\IRelation
     {
         return parent::getRelation();
     }

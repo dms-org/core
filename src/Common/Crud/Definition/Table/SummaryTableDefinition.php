@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Common\Crud\Definition\Table;
 
@@ -91,7 +91,7 @@ class SummaryTableDefinition
      * @return ObjectTableDefinition
      * @throws InvalidOperationException
      */
-    public function map()
+    public function map() : \Dms\Core\Table\DataSource\Definition\ObjectTableDefinition
     {
         if ($this->isFinishedStructure) {
             throw InvalidOperationException::format(
@@ -110,7 +110,7 @@ class SummaryTableDefinition
      *
      * @return ColumnMappingDefiner
      */
-    public function mapProperty($memberExpression)
+    public function mapProperty(string $memberExpression) : \Dms\Core\Table\DataSource\Definition\ColumnMappingDefiner
     {
         return $this->map()->property($memberExpression);
     }
@@ -131,7 +131,7 @@ class SummaryTableDefinition
      *
      * @return ColumnMappingDefiner
      */
-    public function mapCallback(callable $callback)
+    public function mapCallback(callable $callback) : \Dms\Core\Table\DataSource\Definition\ColumnMappingDefiner
     {
         return $this->map()->computed($callback);
     }
@@ -159,7 +159,7 @@ class SummaryTableDefinition
      *
      * @return TableViewAndReorderDefiner
      */
-    public function view($name, $label)
+    public function view(string $name, string $label) : TableViewAndReorderDefiner
     {
         $dataSource  = $this->finalizeTableStructure();
         $viewDefiner = new TableViewAndReorderDefiner(
@@ -228,7 +228,7 @@ class SummaryTableDefinition
      *
      * @return ISummaryTable
      */
-    public function finalize()
+    public function finalize() : \Dms\Core\Common\Crud\Table\ISummaryTable
     {
         $dataSource = $this->finalizeTableStructure();
         $views      = [];

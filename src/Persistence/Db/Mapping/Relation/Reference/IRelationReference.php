@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Mapping\Relation\Reference;
 
@@ -16,7 +16,7 @@ interface IRelationReference
     /**
      * @return IEntityMapper
      */
-    public function getMapper();
+    public function getMapper() : \Dms\Core\Persistence\Db\Mapping\IEntityMapper;
 
     /**
      * @param Select $select
@@ -24,7 +24,7 @@ interface IRelationReference
      *
      * @return void
      */
-    public function addLoadToSelect(Select $select, $relatedTableAlias);
+    public function addLoadToSelect(Select $select, string $relatedTableAlias);
 
     /**
      * @param mixed $childValue

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Table\Column\Component\Type;
 
@@ -29,7 +29,7 @@ class ColumnComponentOperator implements IColumnComponentOperator
      * @param string $operator
      * @param IField $field
      */
-    public function __construct($operator, IField $field)
+    public function __construct(string $operator, IField $field)
     {
         ConditionOperator::validate($operator);
         $this->operator = $operator;
@@ -39,7 +39,7 @@ class ColumnComponentOperator implements IColumnComponentOperator
     /**
      * @return string
      */
-    final public function getOperator()
+    final public function getOperator() : string
     {
         return $this->operator;
     }
@@ -47,7 +47,7 @@ class ColumnComponentOperator implements IColumnComponentOperator
     /**
      * @return IField
      */
-    final public function getField()
+    final public function getField() : \Dms\Core\Form\IField
     {
         return $this->field;
     }
@@ -55,7 +55,7 @@ class ColumnComponentOperator implements IColumnComponentOperator
     /**
      * @inheritDoc
      */
-    public function withFieldAs($name, $label)
+    public function withFieldAs(string $name, string $label)
     {
         $clone = clone $this;
         $clone->field = $this->field->withName($name, $label);

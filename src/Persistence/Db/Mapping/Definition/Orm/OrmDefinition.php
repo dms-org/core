@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Mapping\Definition\Orm;
 
@@ -34,7 +34,7 @@ class OrmDefinition
      *
      * @return EntityMapperDefiner
      */
-    public function entity($entityClass)
+    public function entity(string $entityClass) : EntityMapperDefiner
     {
         return new EntityMapperDefiner(function (callable $entityMapperFactory) use ($entityClass) {
             $this->entityMapperFactories[] = $entityMapperFactory;
@@ -69,7 +69,7 @@ class OrmDefinition
      *
      * @return EmbeddedMapperDefiner
      */
-    public function valueObject($valueObjectClass)
+    public function valueObject(string $valueObjectClass) : EmbeddedMapperDefiner
     {
         return new EmbeddedMapperDefiner(function (callable $embeddedMapperFactory) use ($valueObjectClass) {
             $this->embeddedObjectMapperFactories[$valueObjectClass] = $embeddedMapperFactory;

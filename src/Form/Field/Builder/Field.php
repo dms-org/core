@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Form\Field\Builder;
 
@@ -39,7 +39,7 @@ class Field extends FieldBuilderBase
     /**
      * @return FieldNameBuilder
      */
-    final public static function create()
+    final public static function create() : FieldNameBuilder
     {
         return new FieldNameBuilder();
     }
@@ -49,7 +49,7 @@ class Field extends FieldBuilderBase
      *
      * @return FieldLabelBuilder
      */
-    final public static function name($fieldName)
+    final public static function name(string $fieldName) : FieldLabelBuilder
     {
         $labelBuilder       = new FieldLabelBuilder();
         $labelBuilder->name = $fieldName;
@@ -63,7 +63,7 @@ class Field extends FieldBuilderBase
      *
      * @return Field
      */
-    final public static function element()
+    final public static function element() : Field
     {
         $labelBuilder        = new self();
         $labelBuilder->name  = '__element';
@@ -77,7 +77,7 @@ class Field extends FieldBuilderBase
      *
      * @return Field
      */
-    final public static function forType()
+    final public static function forType() : Field
     {
         $labelBuilder        = new self();
         $labelBuilder->name  = '__type';
@@ -91,7 +91,7 @@ class Field extends FieldBuilderBase
      *
      * @return StringFieldBuilder
      */
-    public function string()
+    public function string() : StringFieldBuilder
     {
         return new StringFieldBuilder($this->type(new StringType()));
     }
@@ -101,7 +101,7 @@ class Field extends FieldBuilderBase
      *
      * @return IntFieldBuilder
      */
-    public function int()
+    public function int() : IntFieldBuilder
     {
         return new IntFieldBuilder($this->type(new IntType()));
     }
@@ -111,7 +111,7 @@ class Field extends FieldBuilderBase
      *
      * @return DecimalFieldBuilder
      */
-    public function decimal()
+    public function decimal() : DecimalFieldBuilder
     {
         return new DecimalFieldBuilder($this->type(new FloatType()));
     }
@@ -121,7 +121,7 @@ class Field extends FieldBuilderBase
      *
      * @return BoolFieldBuilder
      */
-    public function bool()
+    public function bool() : BoolFieldBuilder
     {
         return new BoolFieldBuilder($this->type(new BoolType()));
     }
@@ -137,7 +137,7 @@ class Field extends FieldBuilderBase
      *
      * @return DateFieldBuilder
      */
-    public function date($format, \DateTimeZone $timeZone = null)
+    public function date(string $format, \DateTimeZone $timeZone = null) : DateFieldBuilder
     {
         return $this->dateTypeBuilder(new DateType($format, $timeZone));
     }
@@ -153,7 +153,7 @@ class Field extends FieldBuilderBase
      *
      * @return DateFieldBuilder
      */
-    public function datetime($format, \DateTimeZone $timeZone = null)
+    public function datetime(string $format, \DateTimeZone $timeZone = null) : DateFieldBuilder
     {
         return $this->dateTypeBuilder(new DateTimeType($format, $timeZone));
     }
@@ -169,7 +169,7 @@ class Field extends FieldBuilderBase
      *
      * @return DateFieldBuilder
      */
-    public function time($format, \DateTimeZone $timeZone = null)
+    public function time(string $format, \DateTimeZone $timeZone = null) : DateFieldBuilder
     {
         return $this->dateTypeBuilder(new TimeOfDayType($format, $timeZone));
     }
@@ -179,7 +179,7 @@ class Field extends FieldBuilderBase
      *
      * @return DateFieldBuilder
      */
-    private function dateTypeBuilder(DateTimeTypeBase $type)
+    private function dateTypeBuilder(DateTimeTypeBase $type) : DateFieldBuilder
     {
         $this->type($type);
 
@@ -191,7 +191,7 @@ class Field extends FieldBuilderBase
      *
      * @return FileFieldBuilder
      */
-    public function file()
+    public function file() : FileFieldBuilder
     {
         return new FileFieldBuilder($this->type(new FileType()));
     }
@@ -201,7 +201,7 @@ class Field extends FieldBuilderBase
      *
      * @return ImageFieldBuilder
      */
-    public function image()
+    public function image() : ImageFieldBuilder
     {
         return new ImageFieldBuilder($this->type(new ImageType()));
     }
@@ -214,7 +214,7 @@ class Field extends FieldBuilderBase
      *
      * @return EntityFieldBuilder
      */
-    public function entityFrom(IEntitySet $entities)
+    public function entityFrom(IEntitySet $entities) : EntityFieldBuilder
     {
         return new EntityFieldBuilder(
                 $this->type(new EntityIdType($entities, $loadAsObjects = true))
@@ -228,7 +228,7 @@ class Field extends FieldBuilderBase
      *
      * @return EntityFieldBuilder
      */
-    public function entityIdFrom(IEntitySet $entities)
+    public function entityIdFrom(IEntitySet $entities) : EntityFieldBuilder
     {
         return new EntityFieldBuilder($this->type(new EntityIdType($entities)));
     }
@@ -240,7 +240,7 @@ class Field extends FieldBuilderBase
      *
      * @return EntityArrayFieldBuilder
      */
-    public function entityIdsFrom(IEntitySet $entities)
+    public function entityIdsFrom(IEntitySet $entities) : EntityArrayFieldBuilder
     {
         return new EntityArrayFieldBuilder($this
                 ->type(new ArrayOfEntityIdsType(
@@ -258,7 +258,7 @@ class Field extends FieldBuilderBase
      *
      * @return EntityArrayFieldBuilder
      */
-    public function entitiesFrom(IEntitySet $entities)
+    public function entitiesFrom(IEntitySet $entities) : EntityArrayFieldBuilder
     {
         return new EntityArrayFieldBuilder($this
                 ->type(new ArrayOfEntityIdsType(
@@ -276,7 +276,7 @@ class Field extends FieldBuilderBase
      *
      * @return ArrayOfFieldBuilder
      */
-    public function arrayOf(FieldBuilderBase $elementField)
+    public function arrayOf(FieldBuilderBase $elementField) : ArrayOfFieldBuilder
     {
         return $this->arrayOfField($elementField->build());
     }
@@ -288,7 +288,7 @@ class Field extends FieldBuilderBase
      *
      * @return ArrayOfFieldBuilder
      */
-    public function arrayOfField(IField $elementField)
+    public function arrayOfField(IField $elementField) : ArrayOfFieldBuilder
     {
         return new ArrayOfFieldBuilder($this->type(new ArrayOfType($elementField)));
     }
@@ -300,7 +300,7 @@ class Field extends FieldBuilderBase
      *
      * @return InnerFormFieldBuilder
      */
-    public function form(IForm $form)
+    public function form(IForm $form) : InnerFormFieldBuilder
     {
         if ($form instanceof FormObject) {
             return new InnerFormObjectFieldBuilder($this->type(new InnerFormObjectType($form)));
@@ -319,7 +319,7 @@ class Field extends FieldBuilderBase
      * @return FieldBuilderBase
      * @throws InvalidArgumentException
      */
-    public function enum($enumClass, array $valueLabelMap)
+    public function enum(string $enumClass, array $valueLabelMap) : FieldBuilderBase
     {
         return $this->type(new EnumType($enumClass, $valueLabelMap));
     }
@@ -332,7 +332,7 @@ class Field extends FieldBuilderBase
      *
      * @return FieldBuilderBase
      */
-    public function custom(IType $type, array $processors)
+    public function custom(IType $type, array $processors) : FieldBuilderBase
     {
         $this->type(new CustomType($type, $processors));
 

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Form\Processor;
 
@@ -33,7 +33,7 @@ class CustomFormProcessor extends FormProcessor
      *
      * @return array
      */
-    protected function doProcess(array $input, array &$messages)
+    protected function doProcess(array $input, array &$messages) : array
     {
         return call_user_func_array($this->processCallback, [$input, &$messages]);
     }
@@ -43,7 +43,7 @@ class CustomFormProcessor extends FormProcessor
      *
      * @return array
      */
-    protected function doUnprocess(array $input)
+    protected function doUnprocess(array $input) : array
     {
         return call_user_func($this->unprocessCallback, $input);
     }

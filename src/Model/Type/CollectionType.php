@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Model\Type;
 
@@ -35,7 +35,7 @@ class CollectionType extends WithElementsType
     /**
      * @return string
      */
-    public function getCollectionClass()
+    public function getCollectionClass() : string
     {
         return $this->collectionClass;
     }
@@ -62,7 +62,7 @@ class CollectionType extends WithElementsType
     /**
      * {@inheritDoc}
      */
-    public function isOfType($value)
+    public function isOfType($value) : bool
     {
         if (!($value instanceof $this->collectionClass)) {
             return false;

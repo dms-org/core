@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Schema;
 
@@ -35,7 +35,7 @@ class Column
      * @param Type  $type
      * @param bool   $isPrimaryKey
      */
-    public function __construct($name, Type $type, $isPrimaryKey = false)
+    public function __construct(string $name, Type $type, bool $isPrimaryKey = false)
     {
         InvalidArgumentException::verify(is_string($name), 'Column name must be a string, %s given', gettype($name));
 
@@ -47,7 +47,7 @@ class Column
     /**
      * @return string
      */
-    public function getName()
+    public function getName() : string
     {
         return $this->name;
     }
@@ -55,7 +55,7 @@ class Column
     /**
      * @return Type
      */
-    public function getType()
+    public function getType() : Type
     {
         return $this->type;
     }
@@ -63,7 +63,7 @@ class Column
     /**
      * @return bool
      */
-    public function isPrimaryKey()
+    public function isPrimaryKey() : bool
     {
         return $this->isPrimaryKey;
     }
@@ -73,7 +73,7 @@ class Column
      *
      * @return Column
      */
-    public function withName($name)
+    public function withName(string $name) : Column
     {
         if ($this->name === $name) {
             return $this;
@@ -85,7 +85,7 @@ class Column
     /**
      * @return Column
      */
-    public function asNullable()
+    public function asNullable() : Column
     {
         return new self($this->name, $this->type->nullable(), $this->isPrimaryKey);
     }
@@ -95,7 +95,7 @@ class Column
      *
      * @return Column
      */
-    public function withPrefix($prefix)
+    public function withPrefix($prefix) : Column
     {
         return $this->withName($prefix . $this->name);
     }

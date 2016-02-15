@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Model\Criteria;
 
@@ -63,7 +63,7 @@ class SpecificationDefinition extends ObjectCriteriaBase
      * @throws InvalidArgumentException
      * @throws InvalidMemberExpressionException
      */
-    final public function where($memberExpression, $operator, $value)
+    final public function where(string $memberExpression, string $operator, $value)
     {
         $this->append(new MemberCondition(
                 $this->memberExpressionParser->parse($this->class, $memberExpression),
@@ -158,7 +158,7 @@ class SpecificationDefinition extends ObjectCriteriaBase
      *
      * @return static
      */
-    final public function whereStringContains($memberExpression, $value)
+    final public function whereStringContains(string $memberExpression, $value)
     {
         return $this->where($memberExpression, ConditionOperator::STRING_CONTAINS, $value);
     }
@@ -172,7 +172,7 @@ class SpecificationDefinition extends ObjectCriteriaBase
      *
      * @return static
      */
-    final public function whereStringContainsCaseInsensitive($memberExpression, $value)
+    final public function whereStringContainsCaseInsensitive(string $memberExpression, $value)
     {
         return $this->where($memberExpression, ConditionOperator::STRING_CONTAINS_CASE_INSENSITIVE, $value);
     }
@@ -186,7 +186,7 @@ class SpecificationDefinition extends ObjectCriteriaBase
      *
      * @return static
      */
-    final public function whereIn($memberExpression, array $values)
+    final public function whereIn(string $memberExpression, array $values)
     {
         return $this->where($memberExpression, ConditionOperator::IN, $values);
     }
@@ -200,7 +200,7 @@ class SpecificationDefinition extends ObjectCriteriaBase
      *
      * @return static
      */
-    final public function whereNotIn($memberExpression, array $values)
+    final public function whereNotIn(string $memberExpression, array $values)
     {
         return $this->where($memberExpression, ConditionOperator::NOT_IN, $values);
     }
@@ -214,7 +214,7 @@ class SpecificationDefinition extends ObjectCriteriaBase
      * @return static
      * @throws InvalidArgumentException
      */
-    final public function whereInstanceOf($class)
+    final public function whereInstanceOf(string $class)
     {
         if (!is_a($class, $this->class->getClassName(), true)) {
             throw InvalidArgumentException::format(

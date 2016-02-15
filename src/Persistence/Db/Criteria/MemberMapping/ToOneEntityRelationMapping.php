@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Criteria\MemberMapping;
 
@@ -54,7 +54,7 @@ class ToOneEntityRelationMapping extends ToOneRelationMapping implements IFinalR
     /**
      * @inheritDoc
      */
-    public function asMemberRelation()
+    public function asMemberRelation() : \Dms\Core\Persistence\Db\Mapping\ReadModel\Relation\MemberRelation
     {
         return new ToOneMemberRelation($this);
     }
@@ -62,7 +62,7 @@ class ToOneEntityRelationMapping extends ToOneRelationMapping implements IFinalR
     /**
      * @inheritDoc
      */
-    public function getWhereConditionExpr(Select $select, $tableAlias, $operator, $value)
+    public function getWhereConditionExpr(Select $select, string $tableAlias, string $operator, $value) : \Dms\Core\Persistence\Db\Query\Expression\Expr
     {
         $allowedOperators = [
                 ConditionOperator::EQUALS,
@@ -144,7 +144,7 @@ class ToOneEntityRelationMapping extends ToOneRelationMapping implements IFinalR
     /**
      * @inheritDoc
      */
-    public function addOrderByToSelect(Select $select, $tableAlias, $isAsc)
+    public function addOrderByToSelect(Select $select, string $tableAlias, bool $isAsc)
     {
         throw InvalidOperationException::format('Cannot order by entity of type %s', $this->getRelatedObjectType());
     }
@@ -152,7 +152,7 @@ class ToOneEntityRelationMapping extends ToOneRelationMapping implements IFinalR
     /**
      * @inheritDoc
      */
-    public function addSelectColumn(Select $select, $tableAlias, $alias)
+    public function addSelectColumn(Select $select, string $tableAlias, string $alias)
     {
         throw InvalidOperationException::format('Cannot select an entity of type %s as a column', $this->getRelatedObjectType());
     }
@@ -160,7 +160,7 @@ class ToOneEntityRelationMapping extends ToOneRelationMapping implements IFinalR
     /**
      * @inheritDoc
      */
-    protected function getSingleValueExpressionInSelect(Select $select, $tableAlias)
+    protected function getSingleValueExpressionInSelect(Select $select, string $tableAlias) : \Dms\Core\Persistence\Db\Query\Expression\Expr
     {
         throw NotImplementedException::method(__METHOD__);
     }

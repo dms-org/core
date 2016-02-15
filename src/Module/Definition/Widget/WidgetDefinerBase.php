@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Module\Definition\Widget;
 
@@ -47,7 +47,7 @@ abstract class WidgetDefinerBase
      * @param IAction[]|null       $actions
      * @param callable             $callback
      */
-    public function __construct($name, array $tables = null, array $charts = null, array $actions = null, callable $callback)
+    public function __construct(string $name, array $tables = null, array $charts = null, array $actions = null, callable $callback)
     {
         $this->name     = $name;
         $this->tables   = $tables;

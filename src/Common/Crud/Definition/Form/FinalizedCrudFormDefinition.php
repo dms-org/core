@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Common\Crud\Definition\Form;
 
@@ -49,7 +49,7 @@ class FinalizedCrudFormDefinition
      * @param callable[]    $onSaveCallbacks
      */
     public function __construct(
-            $mode,
+            string $mode,
             IStagedForm $stagedForm,
             callable $createObjectCallback = null,
             array $onSubmitCallbacks,
@@ -69,7 +69,7 @@ class FinalizedCrudFormDefinition
     /**
      * @return string
      */
-    public function getMode()
+    public function getMode() : string
     {
         return $this->mode;
     }
@@ -77,7 +77,7 @@ class FinalizedCrudFormDefinition
     /**
      * @return IStagedForm
      */
-    public function getStagedForm()
+    public function getStagedForm() : \Dms\Core\Form\IStagedForm
     {
         return $this->stagedForm;
     }
@@ -93,7 +93,7 @@ class FinalizedCrudFormDefinition
     /**
      * @return callable[]
      */
-    public function getOnSubmitCallbacks()
+    public function getOnSubmitCallbacks() : array
     {
         return $this->onSubmitCallbacks;
     }
@@ -101,7 +101,7 @@ class FinalizedCrudFormDefinition
     /**
      * @return callable[]
      */
-    public function getOnSaveCallbacks()
+    public function getOnSaveCallbacks() : array
     {
         return $this->onSaveCallbacks;
     }

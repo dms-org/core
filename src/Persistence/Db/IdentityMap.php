@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db;
 
@@ -31,7 +31,7 @@ class IdentityMap
     /**
      * @param string $entityType
      */
-    public function __construct($entityType)
+    public function __construct(string $entityType)
     {
         $this->entityType = $entityType;
     }
@@ -39,7 +39,7 @@ class IdentityMap
     /**
      * @return string
      */
-    public function getEntityType()
+    public function getEntityType() : string
     {
         return $this->entityType;
     }
@@ -47,7 +47,7 @@ class IdentityMap
     /**
      * @return IEntity[]
      */
-    public function getEntities()
+    public function getEntities() : array
     {
         return $this->entities;
     }
@@ -57,7 +57,7 @@ class IdentityMap
      *
      * @return IEntity|null
      */
-    public function get($id)
+    public function get(int $id)
     {
         if ($id === null) {
             return null;
@@ -84,7 +84,7 @@ class IdentityMap
      *
      * @return bool
      */
-    public function has($id)
+    public function has(int $id) : bool
     {
         return $this->get($id) !== null;
     }
@@ -94,7 +94,7 @@ class IdentityMap
      *
      * @return bool
      */
-    public function remove($id)
+    public function remove(int $id) : bool
     {
         if ($this->has($id)) {
             unset($this->entities[$id]);
@@ -121,7 +121,7 @@ class IdentityMap
      * @throws InvalidArgumentException
      * @throws TypeMismatchException
      */
-    public function add(IEntity $entity)
+    public function add(IEntity $entity) : bool
     {
         $class = $this->entityType;
 
@@ -131,6 +131,7 @@ class IdentityMap
 
         if ($entity->getId() === null) {
             $this->nullIdEntities[] = $entity;
+            return true;
         }
 
         $id = $entity->getId();

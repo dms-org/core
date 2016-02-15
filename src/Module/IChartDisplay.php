@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Module;
 
@@ -17,28 +17,28 @@ interface IChartDisplay
      *
      * @return string
      */
-    public function getName();
+    public function getName() : string;
 
     /**
      * Gets the chart data source
      *
      * @return IChartDataSource
      */
-    public function getDataSource();
+    public function getDataSource() : \Dms\Core\Table\Chart\IChartDataSource;
 
     /**
      * Gets the default view.
      *
      * @return IChartView
      */
-    public function getDefaultView();
+    public function getDefaultView() : IChartView;
 
     /**
      * Gets the views.
      *
      * @return IChartView[]
      */
-    public function getViews();
+    public function getViews() : array;
 
     /**
      * Get whether the view with the supplied name exists.
@@ -47,7 +47,7 @@ interface IChartDisplay
      *
      * @return bool
      */
-    public function hasView($name);
+    public function hasView(string $name) : bool;
 
     /**
      * Gets the view with the supplied name.
@@ -57,5 +57,5 @@ interface IChartDisplay
      * @return IChartView
      * @throws InvalidArgumentException
      */
-    public function getView($name);
+    public function getView(string $name) : IChartView;
 }

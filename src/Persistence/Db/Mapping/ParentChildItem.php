@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Mapping;
 
@@ -32,7 +32,7 @@ class ParentChildItem
     /**
      * @return Row
      */
-    public function getParent()
+    public function getParent() : \Dms\Core\Persistence\Db\Row
     {
         return $this->parent;
     }

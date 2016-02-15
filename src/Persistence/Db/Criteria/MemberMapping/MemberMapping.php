@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Criteria\MemberMapping;
 
@@ -55,7 +55,7 @@ abstract class MemberMapping
     /**
      * @return IEntityMapper
      */
-    public function getRootEntityMapper()
+    public function getRootEntityMapper() : \Dms\Core\Persistence\Db\Mapping\IEntityMapper
     {
         return $this->rootEntityMapper;
     }
@@ -63,7 +63,7 @@ abstract class MemberMapping
     /**
      * @return IRelation[]
      */
-    public function getRelationsToSubSelect()
+    public function getRelationsToSubSelect() : array
     {
         return $this->relationsToSubSelect;
     }
@@ -92,7 +92,7 @@ abstract class MemberMapping
      * @return Expr
      * @throws InvalidArgumentException
      */
-    public function getWhereConditionExpr(Select $select, $tableAlias, $operator, $value)
+    public function getWhereConditionExpr(Select $select, string $tableAlias, string $operator, $value) : \Dms\Core\Persistence\Db\Query\Expression\Expr
     {
         $operand = $this->getExpressionInSelect($select, $tableAlias);
 
@@ -129,7 +129,7 @@ abstract class MemberMapping
      *
      * @return string
      */
-    protected function mapConditionOperator($operator)
+    protected function mapConditionOperator(string $operator) : string
     {
         ConditionOperator::validate($operator);
 
@@ -157,7 +157,7 @@ abstract class MemberMapping
      * @return void
      * @throws InvalidOperationException
      */
-    public function addOrderByToSelect(Select $select, $tableAlias, $isAsc)
+    public function addOrderByToSelect(Select $select, string $tableAlias, bool $isAsc)
     {
         $this->addOrderBy($select, $this->getExpressionInSelect($select, $tableAlias), $isAsc);
     }
@@ -178,7 +178,7 @@ abstract class MemberMapping
      * @return void
      * @throws InvalidOperationException
      */
-    public function addSelectColumn(Select $select, $tableAlias, $alias)
+    public function addSelectColumn(Select $select, string $tableAlias, string $alias)
     {
         $select->addColumn($alias, $this->getExpressionInSelect($select, $tableAlias));
     }
@@ -190,7 +190,7 @@ abstract class MemberMapping
      * @return Expr
      * @throws InvalidOperationException
      */
-    protected function getExpressionInSelect(Select $select, $tableAlias)
+    protected function getExpressionInSelect(Select $select, string $tableAlias) : \Dms\Core\Persistence\Db\Query\Expression\Expr
     {
         return $this->loadExpressionWithNecessarySubselects($select, $tableAlias, function (Select $select, $tableAlias) {
             return $this->getSingleValueExpressionInSelect($select, $tableAlias);
@@ -203,12 +203,12 @@ abstract class MemberMapping
      *
      * @return Expr
      */
-    abstract protected function getSingleValueExpressionInSelect(Select $select, $tableAlias);
+    abstract protected function getSingleValueExpressionInSelect(Select $select, string $tableAlias) : \Dms\Core\Persistence\Db\Query\Expression\Expr;
 
     /**
      * @return ISeparateTableRelation[]
      */
-    public function getSeperateTableRelations()
+    public function getSeperateTableRelations() : array
     {
         /** @var ISeparateTableRelation[] $separateTableRelations */
         $separateTableRelations = [];
@@ -229,7 +229,7 @@ abstract class MemberMapping
      *
      * @return Expr
      */
-    protected function loadExpressionWithNecessarySubselects(Select $select, $tableAlias, callable $expressionCallback)
+    protected function loadExpressionWithNecessarySubselects(Select $select, string $tableAlias, callable $expressionCallback) : \Dms\Core\Persistence\Db\Query\Expression\Expr
     {
         $separateTableRelations = $this->getSeperateTableRelations();
 
@@ -250,10 +250,10 @@ abstract class MemberMapping
      */
     protected function getExpressionByJoiningRelations(
             Select $select,
-            $tableAlias,
+            string $tableAlias,
             array $separateTableRelations,
             callable $expressionLoader
-    ) {
+    ) : \Dms\Core\Persistence\Db\Query\Expression\Expr {
         /** @var Select $subSelect */
         list($subSelect, $joinedTableAlias) = $this->getJoinedSubSelectAndTableAlias($select, $tableAlias, $separateTableRelations);
 
@@ -269,7 +269,7 @@ abstract class MemberMapping
      *
      * @return array
      */
-    protected function getJoinedSubSelectAndTableAlias(Select $select, $tableAlias, array $separateTableRelations)
+    protected function getJoinedSubSelectAndTableAlias(Select $select, string $tableAlias, array $separateTableRelations) : array
     {
         InvalidArgumentException::verifyAllInstanceOf(
                 __METHOD__, 'separateTableRelations', $separateTableRelations, ISeparateTableRelation::class

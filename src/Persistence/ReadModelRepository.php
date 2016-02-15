@@ -1,9 +1,10 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence;
 
 use Dms\Core\Exception;
 use Dms\Core\Exception\NotImplementedException;
+use Dms\Core\Model\ITypedObject;
 use Dms\Core\Persistence\Db\Connection\IConnection;
 use Dms\Core\Persistence\Db\Mapping\IObjectMapper;
 use Dms\Core\Persistence\Db\Mapping\IOrm;
@@ -55,7 +56,7 @@ abstract class ReadModelRepository extends DbRepositoryBase implements IReadMode
     /**
      * {@inheritDoc}
      */
-    final public function getReadModelType()
+    final public function getReadModelType() : string
     {
         return $this->mapper->getObjectType();
     }
@@ -63,7 +64,7 @@ abstract class ReadModelRepository extends DbRepositoryBase implements IReadMode
     /**
      * @return IObjectMapper
      */
-    final public function getParentMapper()
+    final public function getParentMapper() : Db\Mapping\IObjectMapper
     {
         return $this->parentMapper;
     }
@@ -79,7 +80,7 @@ abstract class ReadModelRepository extends DbRepositoryBase implements IReadMode
     /**
      * {@inheritDoc}
      */
-    public function getAll()
+    public function getAll() : array
     {
         return $this->load($this->mapper->getSelect());
     }
@@ -95,7 +96,7 @@ abstract class ReadModelRepository extends DbRepositoryBase implements IReadMode
     /**
      * @inheritDoc
      */
-    public function containsAll(array $objects)
+    public function containsAll(array $objects) : bool
     {
         throw NotImplementedException::method(__METHOD__);
     }

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Model\Object;
 
@@ -47,11 +47,11 @@ class FinalizedPropertyDefinition
      * @param bool                  $immutable
      */
     public function __construct(
-            $name,
+            string $name,
             IType $type,
             $defaultValue,
             PropertyAccessibility $accessibility,
-            $immutable
+            bool $immutable
     ) {
         $this->name          = $name;
         $this->type          = $type;
@@ -63,7 +63,7 @@ class FinalizedPropertyDefinition
     /**
      * @return string
      */
-    public function getName()
+    public function getName() : string
     {
         return $this->name;
     }
@@ -71,7 +71,7 @@ class FinalizedPropertyDefinition
     /**
      * @return IType
      */
-    public function getType()
+    public function getType() : \Dms\Core\Model\Type\IType
     {
         return $this->type;
     }
@@ -87,7 +87,7 @@ class FinalizedPropertyDefinition
     /**
      * @return PropertyAccessibility
      */
-    public function getAccessibility()
+    public function getAccessibility() : PropertyAccessibility
     {
         return $this->accessibility;
     }
@@ -95,7 +95,7 @@ class FinalizedPropertyDefinition
     /**
      * @return boolean
      */
-    public function isImmutable()
+    public function isImmutable() : bool
     {
         return $this->immutable;
     }
@@ -103,7 +103,7 @@ class FinalizedPropertyDefinition
     /**
      * @return self
      */
-    public function asNullable()
+    public function asNullable() : self
     {
         return new self(
                 $this->name,

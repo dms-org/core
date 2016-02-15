@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Form\Field\Builder;
 
@@ -18,7 +18,7 @@ class StringFieldBuilder extends FieldBuilderBase
      *
      * @return static
      */
-    public function trim($characters = " \t\n\r\0\x0B")
+    public function trim(string $characters = " \t\n\r\0\x0B")
     {
         return $this->attr(StringType::ATTR_TRIM_CHARACTERS, $characters);
     }
@@ -90,7 +90,7 @@ class StringFieldBuilder extends FieldBuilderBase
      *
      * @return static
      */
-    public function exactLength($length)
+    public function exactLength(int $length)
     {
         return $this->attr(StringType::ATTR_EXACT_LENGTH, $length);
     }
@@ -102,7 +102,7 @@ class StringFieldBuilder extends FieldBuilderBase
      *
      * @return static
      */
-    public function minLength($length)
+    public function minLength(int $length)
     {
         return $this->attr(StringType::ATTR_MIN_LENGTH, $length);
     }
@@ -114,7 +114,7 @@ class StringFieldBuilder extends FieldBuilderBase
      *
      * @return static
      */
-    public function maxLength($length)
+    public function maxLength(int $length)
     {
         return $this->attr(StringType::ATTR_MAX_LENGTH, $length);
     }

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Form\Field\Type;
 
@@ -40,7 +40,7 @@ class StringType extends ScalarType
     /**
      * @inheritDoc
      */
-    protected function hasTypeSpecificRequiredValidator()
+    protected function hasTypeSpecificRequiredValidator() : bool
     {
         return $this->has(self::ATTR_TRIM_CHARACTERS);
     }
@@ -48,7 +48,7 @@ class StringType extends ScalarType
     /**
      * @return IFieldProcessor[]
      */
-    protected function buildProcessors()
+    protected function buildProcessors() : array
     {
         $processors = parent::buildProcessors();
 

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Form\Field\Builder;
 
@@ -18,7 +18,7 @@ class IntFieldBuilder extends FieldBuilderBase
      *
      * @return static
      */
-    public function min($min)
+    public function min(int $min)
     {
         return $this->attr(IntType::ATTR_MIN, $min);
     }
@@ -30,7 +30,7 @@ class IntFieldBuilder extends FieldBuilderBase
      *
      * @return static
      */
-    public function greaterThan($value)
+    public function greaterThan(int $value)
     {
         return $this->attr(IntType::ATTR_GREATER_THAN, $value);
     }
@@ -42,7 +42,7 @@ class IntFieldBuilder extends FieldBuilderBase
      *
      * @return static
      */
-    public function max($max)
+    public function max(int $max)
     {
         return $this->attr(IntType::ATTR_MAX, $max);
     }
@@ -54,7 +54,7 @@ class IntFieldBuilder extends FieldBuilderBase
      *
      * @return static
      */
-    public function lessThan($value)
+    public function lessThan(int $value)
     {
         return $this->attr(IntType::ATTR_LESS_THAN, $value);
     }

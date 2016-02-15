@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Criteria\MemberMapping;
 
@@ -43,7 +43,7 @@ abstract class RelationMapping extends MemberMapping
     /**
      * @return IRelation
      */
-    public function getFirstRelation()
+    public function getFirstRelation() : \Dms\Core\Persistence\Db\Mapping\Relation\IRelation
     {
         return reset($this->relationsToSubSelect) ?: $this->relation;
     }
@@ -51,7 +51,7 @@ abstract class RelationMapping extends MemberMapping
     /**
      * @return string
      */
-    protected function getRelatedObjectType()
+    protected function getRelatedObjectType() : string
     {
         return $this->relation->getMapper()->getObjectType();
     }

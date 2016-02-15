@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Table\DataSource;
 
@@ -62,7 +62,7 @@ class ObjectTableDataSource extends TableDataSource
     /**
      * @return IObjectSet
      */
-    final public function getObjectDataSource()
+    final public function getObjectDataSource() : \Dms\Core\Model\IObjectSet
     {
         return $this->objectSource;
     }
@@ -70,7 +70,7 @@ class ObjectTableDataSource extends TableDataSource
     /**
      * @return FinalizedObjectTableDefinition
      */
-    final public function getDefinition()
+    final public function getDefinition() : Definition\FinalizedObjectTableDefinition
     {
         return $this->definition;
     }
@@ -80,7 +80,7 @@ class ObjectTableDataSource extends TableDataSource
      *
      * @return ITableSection[]
      */
-    protected function loadRows(IRowCriteria $criteria = null)
+    protected function loadRows(IRowCriteria $criteria = null) : array
     {
         $objectSource = $this->objectSource;
 
@@ -138,7 +138,7 @@ class ObjectTableDataSource extends TableDataSource
      *
      * @return ITableRow[]
      */
-    private function mapObjectsToRows(FinalizedObjectTableDefinition $definition, array $objectProperties, array $objects = null)
+    private function mapObjectsToRows(FinalizedObjectTableDefinition $definition, array $objectProperties, array $objects = null) : array
     {
         $propertyComponentIdMap = $definition->getPropertyComponentIdMap();
         $componentIdCallableMap = $definition->getComponentIdCallableMap();
@@ -187,7 +187,7 @@ class ObjectTableDataSource extends TableDataSource
      *
      * @return int
      */
-    protected function loadCount(IRowCriteria $criteria = null)
+    protected function loadCount(IRowCriteria $criteria = null) : int
     {
         if ($criteria) {
             return $this->objectSource->countMatching($this->criteriaMapper->mapCriteria($criteria));

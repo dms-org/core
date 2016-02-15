@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core;
 
@@ -23,14 +23,14 @@ interface ICms
      *
      * @return string[]
      */
-    public function getPackageNames();
+    public function getPackageNames() : array;
 
     /**
      * Loads the installed packages.
      *
      * @return IPackage[]
      */
-    public function loadPackages();
+    public function loadPackages() : array;
     
     /**
      * Returns whether a package with the supplied name is installed.
@@ -38,7 +38,7 @@ interface ICms
      * @param string $name
      * @return bool
      */
-    public function hasPackage($name);
+    public function hasPackage(string $name) : bool;
     
     /**
      * Loads the package with the supplied name.
@@ -48,28 +48,28 @@ interface ICms
      * @return IPackage
      * @throws PackageNotFoundException If the package is not installed
      */
-    public function loadPackage($name);
+    public function loadPackage(string $name) : Package\IPackage;
 
     /**
      * Gets the authentication system for the cms.
      *
      * @return IAuthSystem
      */
-    public function getAuth();
+    public function getAuth() : Auth\IAuthSystem;
 
     /**
      * Gets the language provider for the cms.
      *
      * @return ILanguageProvider
      */
-    public function getLang();
+    public function getLang() : Language\ILanguageProvider;
 
     /**
      * Gets the inversion of control container used within this cms instance.
      *
      * @return ContainerInterface
      */
-    public function getIocContainer();
+    public function getIocContainer() : \Interop\Container\ContainerInterface;
 
     /**
      * Loads the namespaced permissions.
@@ -78,5 +78,5 @@ interface ICms
      *
      * @return IPermission[]
      */
-    public function loadPermissions();
+    public function loadPermissions() : array;
 }

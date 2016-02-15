@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Module;
 
@@ -18,7 +18,7 @@ interface IParameterizedActionHandler extends IActionHandler
      *
      * @return string
      */
-    public function getParameterTypeClass();
+    public function getParameterTypeClass() : string;
 
     /**
      * Runs the action handler.

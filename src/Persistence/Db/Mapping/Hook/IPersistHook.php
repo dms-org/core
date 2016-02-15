@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Mapping\Hook;
 
@@ -19,7 +19,7 @@ interface IPersistHook
      *
      * @return string
      */
-    public function getIdString();
+    public function getIdString() : string;
 
     /**
      * @param PersistenceContext $context
@@ -60,5 +60,5 @@ interface IPersistHook
      *
      * @return static
      */
-    public function withColumnNamesPrefixedBy($prefix);
+    public function withColumnNamesPrefixedBy(string $prefix);
 }

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Form\Object;
 
@@ -60,7 +60,7 @@ class FinalizedFormObjectDefinition
     /**
      * @return FinalizedClassDefinition
      */
-    public function getClass()
+    public function getClass() : \Dms\Core\Model\Object\FinalizedClassDefinition
     {
         return $this->class;
     }
@@ -68,7 +68,7 @@ class FinalizedFormObjectDefinition
     /**
      * @return IForm
      */
-    public function getForm()
+    public function getForm() : \Dms\Core\Form\IForm
     {
         return $this->form;
     }
@@ -76,7 +76,7 @@ class FinalizedFormObjectDefinition
     /**
      * @return string[]
      */
-    public function getPropertyFieldMap()
+    public function getPropertyFieldMap() : array
     {
         return $this->propertyFieldMap;
     }
@@ -84,7 +84,7 @@ class FinalizedFormObjectDefinition
     /**
      * @return InnerFormDefinition[]
      */
-    public function getPropertyInnerFormMap()
+    public function getPropertyInnerFormMap() : array
     {
         return $this->propertyInnerFormMap;
     }

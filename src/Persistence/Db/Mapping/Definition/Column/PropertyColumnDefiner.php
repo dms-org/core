@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Mapping\Definition\Column;
 
@@ -74,7 +74,7 @@ class PropertyColumnDefiner
      *
      * @return ColumnTypeDefinerWithVersioning
      */
-    public function to($columnName)
+    public function to(string $columnName) : ColumnTypeDefinerWithVersioning
     {
         return new ColumnTypeDefinerWithVersioning(
                 $this->definition,

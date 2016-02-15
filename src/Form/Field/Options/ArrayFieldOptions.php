@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Form\Field\Options;
 
@@ -32,7 +32,7 @@ class ArrayFieldOptions implements IFieldOptions
      *
      * @return ArrayFieldOptions
      */
-    public static function fromAssocArray(array $keyValueOptions)
+    public static function fromAssocArray(array $keyValueOptions) : ArrayFieldOptions
     {
         $options = [];
 
@@ -48,7 +48,7 @@ class ArrayFieldOptions implements IFieldOptions
     /**
      * {@inheritDoc}
      */
-    public function getAll()
+    public function getAll() : array
     {
         return $this->options;
     }

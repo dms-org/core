@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Model\Criteria\Member;
 
@@ -26,7 +26,7 @@ class ObjectSetMinimumMethodExpression extends ObjectSetAggregateMethodExpressio
     /**
      * @inheritDoc
      */
-    public function isPropertyValue()
+    public function isPropertyValue() : bool
     {
         return $this->member->isPropertyValue();
     }

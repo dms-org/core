@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Form\Field\Type;
 
@@ -28,7 +28,7 @@ class EnumType extends ScalarType
      *
      * @throws InvalidArgumentException
      */
-    public function __construct($enumClass, array $valueLabelMap)
+    public function __construct(string $enumClass, array $valueLabelMap)
     {
         if (!is_subclass_of($enumClass, Enum::class, true)) {
             throw InvalidArgumentException::format(
@@ -61,7 +61,7 @@ class EnumType extends ScalarType
     /**
      * @inheritDoc
      */
-    protected function hasTypeSpecificOptionsValidator()
+    protected function hasTypeSpecificOptionsValidator() : bool
     {
         return true;
     }
@@ -69,7 +69,7 @@ class EnumType extends ScalarType
     /**
      * @return IFieldProcessor[]
      */
-    protected function buildProcessors()
+    protected function buildProcessors() : array
     {
         $enumValueType = Type::scalar($this->getType());
 

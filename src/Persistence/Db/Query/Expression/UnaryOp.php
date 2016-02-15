@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Query\Expression;
 
@@ -38,7 +38,7 @@ class UnaryOp extends Expr
      * @param Expr   $operand
      * @param Type   $resultingType
      */
-    private function __construct($operator, Expr $operand, Type $resultingType)
+    private function __construct(string $operator, Expr $operand, Type $resultingType)
     {
         $this->operator      = $operator;
         $this->operand       = $operand;
@@ -50,7 +50,7 @@ class UnaryOp extends Expr
      *
      * @return UnaryOp
      */
-    public static function isNull(Expr $operand)
+    public static function isNull(Expr $operand) : UnaryOp
     {
         return new self(self::IS_NULL, $operand, new Boolean());
     }
@@ -60,7 +60,7 @@ class UnaryOp extends Expr
      *
      * @return UnaryOp
      */
-    public static function isNotNull(Expr $operand)
+    public static function isNotNull(Expr $operand) : UnaryOp
     {
         return new self(self::IS_NOT_NULL, $operand, new Boolean());
     }
@@ -70,7 +70,7 @@ class UnaryOp extends Expr
      *
      * @return UnaryOp
      */
-    public static function not(Expr $operand)
+    public static function not(Expr $operand) : Expr
     {
         if ($operand instanceof self) {
             if ($operand->getOperator() === self::IS_NULL) {
@@ -88,7 +88,7 @@ class UnaryOp extends Expr
     /**
      * @return string
      */
-    public function getOperator()
+    public function getOperator() : string
     {
         return $this->operator;
     }
@@ -96,7 +96,7 @@ class UnaryOp extends Expr
     /**
      * @return Expr
      */
-    public function getOperand()
+    public function getOperand() : Expr
     {
         return $this->operand;
     }
@@ -104,7 +104,7 @@ class UnaryOp extends Expr
     /**
      * @inheritDoc
      */
-    public function getChildren()
+    public function getChildren() : array
     {
         return [$this->operand];
     }
@@ -114,7 +114,7 @@ class UnaryOp extends Expr
      *
      * @return Type
      */
-    public function getResultingType()
+    public function getResultingType() : \Dms\Core\Persistence\Db\Schema\Type\Type
     {
         return $this->resultingType;
     }

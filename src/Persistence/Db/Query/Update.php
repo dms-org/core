@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Query;
 
@@ -22,7 +22,7 @@ class Update extends Query
     /**
      * @return Expr[]
      */
-    public function getColumnSetMap()
+    public function getColumnSetMap() : array
     {
         return $this->columnSetMap;
     }
@@ -33,7 +33,7 @@ class Update extends Query
      *
      * @return static
      */
-    public function set($column, Expr $expression)
+    public function set(string $column, Expr $expression)
     {
         $this->columnSetMap[$column] = $expression;
 

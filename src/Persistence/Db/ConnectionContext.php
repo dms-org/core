@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db;
 
@@ -29,7 +29,7 @@ abstract class ConnectionContext
     /**
      * @return IConnection
      */
-    final public function getConnection()
+    final public function getConnection() : Connection\IConnection
     {
         return $this->connection;
     }

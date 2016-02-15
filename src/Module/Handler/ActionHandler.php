@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Module\Handler;
 
@@ -23,11 +23,11 @@ abstract class ActionHandler implements IActionHandler
     /**
      * ActionHandler constructor.
      *
-     * @param string $returnType
+     * @param string|null $returnType
      *
      * @throws InvalidArgumentException
      */
-    public function __construct($returnType)
+    public function __construct(string $returnType = null)
     {
         if ($returnType && !class_exists($returnType, true) && !interface_exists($returnType, true)) {
             throw InvalidArgumentException::format(

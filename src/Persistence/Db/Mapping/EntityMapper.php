@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Mapping;
 
@@ -19,7 +19,7 @@ abstract class EntityMapper extends EntityMapperBase
      * @param IOrm        $orm
      * @param string|null $tableName
      */
-    public function __construct(IOrm $orm, $tableName = null)
+    public function __construct(IOrm $orm, string $tableName = null)
     {
         $definition = new MapperDefinition($orm);
         $this->define($definition);

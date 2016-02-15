@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Form;
 
@@ -16,35 +16,35 @@ interface IField
      *
      * @return string
      */
-    public function getName();
+    public function getName() : string;
 
     /**
      * Gets the label name.
      *
      * @return string
      */
-    public function getLabel();
+    public function getLabel() : string;
 
     /**
      * Gets the field input type data.
      *
      * @return IFieldType
      */
-    public function getType();
+    public function getType() : IFieldType;
 
     /**
      * Gets the processed type.
      *
      * @return IType
      */
-    public function getProcessedType();
+    public function getProcessedType() : \Dms\Core\Model\Type\IType;
 
     /**
      * Gets the field processors.
      *
      * @return IFieldProcessor[]
      */
-    public function getProcessors();
+    public function getProcessors() : array;
 
     /**
      * Gets the (processed) initial value of the field.
@@ -87,7 +87,7 @@ interface IField
      *
      * @return IField
      */
-    public function withName($name, $label = null);
+    public function withName(string $name, string $label = null) : IField;
 
     /**
      * Gets an equivalent form field with the supplied (processed) initial value.
@@ -96,5 +96,5 @@ interface IField
      *
      * @return IField
      */
-    public function withInitialValue($value);
+    public function withInitialValue($value) : IField;
 }

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Mapping\Relation\Reference;
 
@@ -29,7 +29,7 @@ abstract class RelationReference implements IRelationReference
      * @param IEntityMapper $mapper
      * @param string|null   $bidirectionalRelationProperty
      */
-    public function __construct(IEntityMapper $mapper, $bidirectionalRelationProperty = null)
+    public function __construct(IEntityMapper $mapper, string $bidirectionalRelationProperty = null)
     {
         $this->mapper                        = $mapper;
         $this->bidirectionalRelationProperty = $bidirectionalRelationProperty;
@@ -38,7 +38,7 @@ abstract class RelationReference implements IRelationReference
     /**
      * {@inheritDoc}
      */
-    final public function getMapper()
+    final public function getMapper() : \Dms\Core\Persistence\Db\Mapping\IEntityMapper
     {
         return $this->mapper;
     }

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Module;
 
@@ -20,14 +20,14 @@ interface IStagedFormDtoMapping
      *
      * @return IStagedForm
      */
-    public function getStagedForm();
+    public function getStagedForm() : \Dms\Core\Form\IStagedForm;
 
     /**
      * Gets the type of DTO which the form submission is mapped to.
      *
      * @return string
      */
-    public function getDtoType();
+    public function getDtoType() : string;
 
     /**
      * Gets the supplied form submission data mapped to a dto.

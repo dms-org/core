@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Module\Definition\Table;
 
@@ -26,7 +26,7 @@ class ArrayTableDefiner extends TableDefinerBase
      * @param callable $callback
      * @param array[]  $data
      */
-    public function __construct($name, callable $callback, array $data)
+    public function __construct(string $name, callable $callback, array $data)
     {
         parent::__construct($name, $callback);
         $this->data = $data;
@@ -39,7 +39,7 @@ class ArrayTableDefiner extends TableDefinerBase
      *
      * @return TableViewsDefiner
      */
-    public function withStructure(ITableStructure $structure)
+    public function withStructure(ITableStructure $structure) : TableViewsDefiner
     {
         return new TableViewsDefiner($this->name, $this->callback, new ArrayTableDataSource($structure, $this->data));
     }
@@ -51,7 +51,7 @@ class ArrayTableDefiner extends TableDefinerBase
      *
      * @return TableViewsDefiner
      */
-    public function withColumns(array $columns)
+    public function withColumns(array $columns) : TableViewsDefiner
     {
         return $this->withStructure(Table::create($columns));
     }

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Mapping\Relation\Embedded;
 
@@ -29,9 +29,9 @@ abstract class EmbeddedRelation extends Relation implements IRelation
      * @param array $parentColumnsToLoad
      */
     public function __construct(
-            $idString,
+            string $idString,
             IEmbeddedObjectMapper $mapper,
-            $dependencyMode,
+            string $dependencyMode,
             array $relationshipTables,
             array $parentColumnsToLoad
     ) {
@@ -41,7 +41,7 @@ abstract class EmbeddedRelation extends Relation implements IRelation
     /**
      * @return IEmbeddedObjectMapper
      */
-    final public function getEmbeddedObjectMapper()
+    final public function getEmbeddedObjectMapper() : \Dms\Core\Persistence\Db\Mapping\IEmbeddedObjectMapper
     {
         return $this->mapper;
     }

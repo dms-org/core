@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Model\Object;
 
@@ -49,7 +49,7 @@ abstract class TypedObject implements ITypedObject, \Serializable
      *
      * @return FinalizedClassDefinition
      */
-    final public static function definition()
+    final public static function definition() : FinalizedClassDefinition
     {
         $class = get_called_class();
 
@@ -85,7 +85,7 @@ abstract class TypedObject implements ITypedObject, \Serializable
      *
      * @return Criteria
      */
-    public static function criteria()
+    public static function criteria() : \Dms\Core\Model\Criteria\Criteria
     {
         return new Criteria(static::definition());
     }
@@ -95,7 +95,7 @@ abstract class TypedObject implements ITypedObject, \Serializable
      *
      * @return ObjectType
      */
-    final public static function type()
+    final public static function type() : \Dms\Core\Model\Type\ObjectType
     {
         return Type::object(get_called_class());
     }
@@ -118,7 +118,7 @@ abstract class TypedObject implements ITypedObject, \Serializable
      *
      * @return IType
      */
-    public static function collectionType()
+    public static function collectionType() : \Dms\Core\Model\Type\IType
     {
         return Type::collectionOf(Type::object(get_called_class()), ObjectCollection::class);
     }
@@ -145,7 +145,7 @@ abstract class TypedObject implements ITypedObject, \Serializable
      *
      * @return FinalizedClassDefinition
      */
-    final public function getClassDefinition()
+    final public function getClassDefinition() : FinalizedClassDefinition
     {
         return $this->definition;
     }
@@ -153,7 +153,7 @@ abstract class TypedObject implements ITypedObject, \Serializable
     /**
      * {@inheritDoc}
      */
-    final public function toArray()
+    final public function toArray() : array
     {
         return $this->properties;
     }
@@ -297,10 +297,5 @@ abstract class TypedObject implements ITypedObject, \Serializable
     {
         $class = get_class($this);
         throw new InvalidOperationException("Cannot unset(...->\${$name}): property deletion is disallowed on {$class}");
-    }
-
-    final public function __debugInfo()
-    {
-        return $this->properties;
     }
 }

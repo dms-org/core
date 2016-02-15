@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Form\Field\Builder;
 
@@ -19,7 +19,7 @@ class DecimalFieldBuilder extends FieldBuilderBase
      *
      * @return static
      */
-    public function min($min)
+    public function min(float $min)
     {
         return $this->attr(FloatType::ATTR_MIN, (double)$min);
     }
@@ -31,7 +31,7 @@ class DecimalFieldBuilder extends FieldBuilderBase
      *
      * @return static
      */
-    public function greaterThan($value)
+    public function greaterThan(float $value)
     {
         return $this->attr(FloatType::ATTR_GREATER_THAN, (double)$value);
     }
@@ -44,7 +44,7 @@ class DecimalFieldBuilder extends FieldBuilderBase
      *
      * @return static
      */
-    public function max($max)
+    public function max(float $max)
     {
         return $this->attr(FloatType::ATTR_MAX, (double)$max);
     }
@@ -56,7 +56,7 @@ class DecimalFieldBuilder extends FieldBuilderBase
      *
      * @return static
      */
-    public function lessThan($value)
+    public function lessThan(float $value)
     {
         return $this->attr(FloatType::ATTR_LESS_THAN, (double)$value);
     }
@@ -68,7 +68,7 @@ class DecimalFieldBuilder extends FieldBuilderBase
      *
      * @return static
      */
-    public function maxDecimalPoints($decimalPoints)
+    public function maxDecimalPoints(int $decimalPoints)
     {
         return $this->attr(FloatType::ATTR_MAX_DECIMAL_POINTS, $decimalPoints);
     }

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Model\Criteria;
 
@@ -18,5 +18,5 @@ interface IEntitySetProvider
      *
      * @return IEntitySet
      */
-    public function loadDataSourceFor($entityType);
+    public function loadDataSourceFor(string $entityType) : \Dms\Core\Model\IEntitySet;
 }

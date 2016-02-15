@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Mapping\Relation;
 
@@ -62,10 +62,10 @@ abstract class EntityRelation extends Relation implements ISeparateTableRelation
      * @param string[]           $parentColumnsToLoad
      */
     public function __construct(
-            $idString,
+            string $idString,
             IRelationReference $reference,
             IRelationMode $mode = null,
-            $dependencyMode,
+            string $dependencyMode,
             array $relationshipTables = [],
             array $parentColumnsToLoad = []
     ) {
@@ -101,7 +101,7 @@ abstract class EntityRelation extends Relation implements ISeparateTableRelation
     /**
      * @return IRelationReference
      */
-    final public function getReference()
+    final public function getReference() : Reference\IRelationReference
     {
         return $this->reference;
     }
@@ -109,7 +109,7 @@ abstract class EntityRelation extends Relation implements ISeparateTableRelation
     /**
      * @return IEntityMapper
      */
-    final public function getEntityMapper()
+    final public function getEntityMapper() : \Dms\Core\Persistence\Db\Mapping\IEntityMapper
     {
         return $this->mapper;
     }
@@ -117,7 +117,7 @@ abstract class EntityRelation extends Relation implements ISeparateTableRelation
     /**
      * @return Column
      */
-    final public function getRelatedPrimaryKey()
+    final public function getRelatedPrimaryKey() : \Dms\Core\Persistence\Db\Schema\Column
     {
         return $this->mapper->getPrimaryTable()->getPrimaryKeyColumn();
     }
@@ -135,7 +135,7 @@ abstract class EntityRelation extends Relation implements ISeparateTableRelation
      *
      * @return RowSet
      */
-    final protected function rowSet(array $rows = [])
+    final protected function rowSet(array $rows = []) : \Dms\Core\Persistence\Db\RowSet
     {
         return new RowSet(
                 $this->relatedTable,
@@ -146,7 +146,7 @@ abstract class EntityRelation extends Relation implements ISeparateTableRelation
     /**
      * @return Select
      */
-    final protected function select()
+    final protected function select() : \Dms\Core\Persistence\Db\Query\Select
     {
         return Select::from($this->relatedTable);
     }
@@ -166,7 +166,7 @@ abstract class EntityRelation extends Relation implements ISeparateTableRelation
      *
      * @return ColumnExpr
      */
-    protected function column(Column $column)
+    protected function column(Column $column) : \Dms\Core\Persistence\Db\Query\Expression\ColumnExpr
     {
         return Expr::column($this->relatedTable->getName(), $column);
     }

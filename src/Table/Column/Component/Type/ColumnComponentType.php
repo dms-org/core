@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Table\Column\Component\Type;
 
@@ -47,7 +47,7 @@ class ColumnComponentType implements IColumnComponentType
      *
      * @return ColumnComponentType
      */
-    public static function forField(IField $field)
+    public static function forField(IField $field) : ColumnComponentType
     {
         return new self(
                 $field->getProcessedType(),
@@ -58,7 +58,7 @@ class ColumnComponentType implements IColumnComponentType
     /**
      * {@inheritDoc}
      */
-    final public function getPhpType()
+    final public function getPhpType() : \Dms\Core\Model\Type\IType
     {
         return $this->phpType;
     }
@@ -66,7 +66,7 @@ class ColumnComponentType implements IColumnComponentType
     /**
      * {@inheritDoc}
      */
-    final public function getConditionOperators()
+    final public function getConditionOperators() : array
     {
         return $this->validOperators;
     }
@@ -76,7 +76,7 @@ class ColumnComponentType implements IColumnComponentType
      *
      * @return bool
      */
-    public function hasOperator($operatorString)
+    public function hasOperator(string $operatorString) : bool
     {
         return isset($this->validOperators[$operatorString]);
     }
@@ -87,7 +87,7 @@ class ColumnComponentType implements IColumnComponentType
      * @return IColumnComponentOperator
      * @throws InvalidArgumentException
      */
-    public function getOperator($operatorString)
+    public function getOperator(string $operatorString) : \Dms\Core\Table\IColumnComponentOperator
     {
         if (!isset($this->validOperators[$operatorString])) {
             throw InvalidArgumentException::format(
@@ -102,7 +102,7 @@ class ColumnComponentType implements IColumnComponentType
     /**
      * @inheritDoc
      */
-    public function withFieldAs($name, $label)
+    public function withFieldAs(string $name, string $label)
     {
         $clone = clone $this;
 
@@ -116,7 +116,7 @@ class ColumnComponentType implements IColumnComponentType
     /**
      * @inheritDoc
      */
-    public function equals(IColumnComponentType $type)
+    public function equals(IColumnComponentType $type) : bool
     {
         return $this->withFieldAs('*', '*') == $type->withFieldAs('*', '*');
     }

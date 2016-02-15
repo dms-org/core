@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Form\Object;
 
@@ -39,7 +39,7 @@ abstract class IndependentFormObject extends FormObject
      *
      * @return FinalizedFormObjectDefinition
      */
-    final public static function formDefinition()
+    final public static function formDefinition() : FinalizedFormObjectDefinition
     {
         $class = get_called_class();
 
@@ -69,7 +69,7 @@ abstract class IndependentFormObject extends FormObject
      *
      * @return array
      */
-    final public static function initialValues()
+    final public static function initialValues() : array
     {
         /** @var self $newInstance */
         $newInstance = static::formDefinition()->getClass()->getCleanInstance();
@@ -82,7 +82,7 @@ abstract class IndependentFormObject extends FormObject
      *
      * @return IForm
      */
-    final public static function asForm()
+    final public static function asForm() : \Dms\Core\Form\IForm
     {
         return static::formDefinition()->getForm();
     }

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Common\Crud\Action\Crud;
 
@@ -50,7 +50,7 @@ class CreateAction extends SelfHandlingParameterizedAction
      *
      * @return string
      */
-    protected function name()
+    protected function name() : string
     {
         return ICrudModule::CREATE_ACTION;
     }
@@ -60,7 +60,7 @@ class CreateAction extends SelfHandlingParameterizedAction
      *
      * @return IPermission[]
      */
-    protected function permissions()
+    protected function permissions() : array
     {
         return [
                 Permission::named(ICrudModule::VIEW_PERMISSION),
@@ -73,7 +73,7 @@ class CreateAction extends SelfHandlingParameterizedAction
      *
      * @return IStagedFormDtoMapping
      */
-    protected function formMapping()
+    protected function formMapping() : \Dms\Core\Module\IStagedFormDtoMapping
     {
         return new ArrayDataObjectFormMapping(
                 $this->form->getStagedForm()

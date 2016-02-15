@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Mapping;
 
@@ -119,7 +119,7 @@ abstract class Orm implements IOrm
     /**
      * @return string
      */
-    public function getNamespace()
+    public function getNamespace() : string
     {
         return $this->namespace;
     }
@@ -127,7 +127,7 @@ abstract class Orm implements IOrm
     /**
      * @inheritDoc
      */
-    public function inNamespace($prefix)
+    public function inNamespace(string $prefix) : IOrm
     {
         if ($prefix === '') {
             return $this;
@@ -196,7 +196,7 @@ abstract class Orm implements IOrm
     /**
      * @inheritDoc
      */
-    final public function getEntityMappers()
+    final public function getEntityMappers() : array
     {
         return $this->entityMappers;
     }
@@ -204,7 +204,7 @@ abstract class Orm implements IOrm
     /**
      * @inheritDoc
      */
-    final  public function hasEntityMapper($entityClass, $tableName = null)
+    final  public function hasEntityMapper(string $entityClass, string $tableName = null) : bool
     {
         return $this->findEntityMapper($entityClass, $tableName) !== null;
     }
@@ -212,7 +212,7 @@ abstract class Orm implements IOrm
     /**
      * @inheritDoc
      */
-    final public function getEntityMapper($entityClass, $tableName = null)
+    final public function getEntityMapper(string $entityClass, string $tableName = null) : IEntityMapper
     {
         $mapper = $this->findEntityMapper($entityClass, $tableName);
 
@@ -226,7 +226,7 @@ abstract class Orm implements IOrm
         return $mapper;
     }
 
-    final public function findEntityMapper($entityClass, $tableName = null)
+    final public function findEntityMapper(string $entityClass, string $tableName = null)
     {
         $mappers = [];
 
@@ -261,7 +261,7 @@ abstract class Orm implements IOrm
     /**
      * @inheritDoc
      */
-    final public function getEmbeddedObjectTypes()
+    final public function getEmbeddedObjectTypes() : array
     {
         return array_keys($this->embeddedObjectMapperFactories);
     }
@@ -269,7 +269,7 @@ abstract class Orm implements IOrm
     /**
      * @inheritDoc
      */
-    final public function hasEmbeddedObjectMapper($valueObjectClass)
+    final public function hasEmbeddedObjectMapper(string $valueObjectClass) : bool
     {
         if ($this->findEmbeddedObjectMapperFactory($valueObjectClass) !== null) {
             return true;
@@ -287,7 +287,7 @@ abstract class Orm implements IOrm
     /**
      * @inheritDoc
      */
-    final public function loadEmbeddedObjectMapper(IObjectMapper $parentMapper, $valueObjectClass)
+    final public function loadEmbeddedObjectMapper(IObjectMapper $parentMapper, string $valueObjectClass) : IEmbeddedObjectMapper
     {
         $factory = $this->findEmbeddedObjectMapperFactory($valueObjectClass);
 
@@ -319,7 +319,7 @@ abstract class Orm implements IOrm
     /**
      * @inheritDoc
      */
-    final public function getIncludedOrms()
+    final public function getIncludedOrms() : array
     {
         return $this->includedOrms;
     }
@@ -327,7 +327,7 @@ abstract class Orm implements IOrm
     /**
      * @inheritDoc
      */
-    final public function getDatabase()
+    final public function getDatabase() : \Dms\Core\Persistence\Db\Schema\Database
     {
         if (!$this->database) {
             $this->initializeDb();
@@ -339,7 +339,7 @@ abstract class Orm implements IOrm
     /**
      * @inheritDoc
      */
-    public function loadRelatedEntityType($entityType, $idPropertyName)
+    public function loadRelatedEntityType(string $entityType, string $idPropertyName) : string
     {
         $mapper = $this->getEntityMapper($entityType);
 
@@ -359,7 +359,7 @@ abstract class Orm implements IOrm
     /**
      * @inheritDoc
      */
-    public function getEntityDataSourceProvider(IConnection $connection)
+    public function getEntityDataSourceProvider(IConnection $connection) : \Dms\Core\Model\Criteria\IEntitySetProvider
     {
         return new EntityRepositoryProvider($this, $connection);
     }

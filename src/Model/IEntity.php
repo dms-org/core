@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Model;
 
@@ -25,7 +25,7 @@ interface IEntity extends ITypedObject
      *
      * @return bool
      */
-    public function hasId();
+    public function hasId() : bool;
 
     /**
      * Sets the entity's unique identifier.
@@ -35,5 +35,5 @@ interface IEntity extends ITypedObject
      * @return void
      * @throws Exception\InvalidOperationException If the id is already set.
      */
-    public function setId($id);
+    public function setId(int $id);
 }

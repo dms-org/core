@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Mapping\ReadModel\Relation;
 
@@ -54,7 +54,7 @@ abstract class MemberRelation extends Relation
     /**
      * @return IRelation
      */
-    public function getFirstRelation()
+    public function getFirstRelation() : \Dms\Core\Persistence\Db\Mapping\Relation\IRelation
     {
         return $this->memberMapping->getFirstRelation();
     }
@@ -74,7 +74,7 @@ abstract class MemberRelation extends Relation
      * @param LoadingContext $context
      * @param ParentMapBase  $map
      *
-     * @return Select
+     * @return void
      * @throws InvalidArgumentException
      */
     public function loadRelation(LoadingContext $context, ParentMapBase $map)

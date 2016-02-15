@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Form\Binding;
 
@@ -39,7 +39,7 @@ class FormBinding implements IFormBinding
      *
      * @throws InvalidArgumentException
      */
-    public function __construct(IForm $form, $objectType, array $fieldBindings)
+    public function __construct(IForm $form, string $objectType, array $fieldBindings)
     {
         InvalidArgumentException::verifyAllInstanceOf(__METHOD__, 'fieldBindings', $fieldBindings, IFieldBinding::class);
 
@@ -70,7 +70,7 @@ class FormBinding implements IFormBinding
     /**
      * @inheritDoc
      */
-    public function getObjectType()
+    public function getObjectType() : string
     {
         return $this->objectType;
     }
@@ -78,7 +78,7 @@ class FormBinding implements IFormBinding
     /**
      * @inheritDoc
      */
-    public function getForm($object = null)
+    public function getForm($object = null) : \Dms\Core\Form\IForm
     {
         if ($object) {
             if (!($object instanceof $this->objectType)) {
@@ -128,7 +128,7 @@ class FormBinding implements IFormBinding
     /**
      * @inheritDoc
      */
-    public function hasFieldBinding($name)
+    public function hasFieldBinding(string $name) : bool
     {
         return isset($this->fieldBindings[$name]);
     }
@@ -136,7 +136,7 @@ class FormBinding implements IFormBinding
     /**
      * @inheritDoc
      */
-    public function getFieldBinding($name)
+    public function getFieldBinding(string $name) : IFieldBinding
     {
         if (!isset($this->fieldBindings[$name])) {
             throw InvalidArgumentException::format(
@@ -151,7 +151,7 @@ class FormBinding implements IFormBinding
     /**
      * @inheritDoc
      */
-    public function getFieldBindings()
+    public function getFieldBindings() : array
     {
         return $this->fieldBindings;
     }

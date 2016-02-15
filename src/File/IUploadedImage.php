@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\File;
 
@@ -14,5 +14,5 @@ interface IUploadedImage extends IUploadedFile, IImage
      *
      * @return IImage
      */
-    public function moveTo($fullPath);
+    public function moveTo(string $fullPath) : IFile;
 }

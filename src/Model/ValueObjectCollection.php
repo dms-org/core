@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Model;
 
@@ -21,8 +21,8 @@ class ValueObjectCollection extends ObjectCollection implements IValueObjectColl
      * @throws Exception\InvalidArgumentException
      */
     public function __construct(
-            $valueObjectType,
-            $valueObjects = [],
+            string $valueObjectType,
+            array $valueObjects = [],
             IIteratorScheme $scheme = null,
             Collection $source = null
     ) {
@@ -44,7 +44,7 @@ class ValueObjectCollection extends ObjectCollection implements IValueObjectColl
      *
      * @return bool
      */
-    protected function doesContainsObjects(array $objects)
+    protected function doesContainsObjects(array $objects) : bool
     {
         $objectsLookup = $this->asArray();
 

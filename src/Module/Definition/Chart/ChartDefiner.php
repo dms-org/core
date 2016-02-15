@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Module\Definition\Chart;
 
@@ -35,7 +35,7 @@ class ChartDefiner
      * @param ITableDisplay[] $tables
      * @param callable        $callback
      */
-    public function __construct($name, array $tables, callable $callback)
+    public function __construct(string $name, array $tables, callable $callback)
     {
         $this->name     = $name;
         $this->tables   = $tables;
@@ -50,7 +50,7 @@ class ChartDefiner
      * @return TableChartMappingDefiner
      * @throws InvalidArgumentException
      */
-    public function fromTable($tableName)
+    public function fromTable(string $tableName) : TableChartMappingDefiner
     {
         if (!isset($this->tables[$tableName])) {
             throw InvalidArgumentException::format(

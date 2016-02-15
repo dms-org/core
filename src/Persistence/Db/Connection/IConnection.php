@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Connection;
 
@@ -23,14 +23,14 @@ interface IConnection
      *
      * @return IPlatform
      */
-    public function getPlatform();
+    public function getPlatform() : \Dms\Core\Persistence\Db\Platform\IPlatform;
 
     /**
      * Gets the last insert id.
      *
      * @return int
      */
-    public function getLastInsertId();
+    public function getLastInsertId() : int;
 
     /**
      * Begins a transaction.
@@ -44,7 +44,7 @@ interface IConnection
      *
      * @return bool
      */
-    public function isInTransaction();
+    public function isInTransaction() : bool;
 
     /**
      * Commits the transaction.
@@ -83,7 +83,7 @@ interface IConnection
      *
      * @return IQuery
      */
-    public function prepare($sql, array $parameters = []);
+    public function prepare($sql, array $parameters = []) : IQuery;
 
     /**
      * Loads the result set from the supplied select query.
@@ -92,7 +92,7 @@ interface IConnection
      *
      * @return RowSet
      */
-    public function load(Select $query);
+    public function load(Select $query) : RowSet;
 
     /**
      * Performs the update query and returns the number of affected rows.
@@ -101,7 +101,7 @@ interface IConnection
      *
      * @return int
      */
-    public function update(Update $query);
+    public function update(Update $query) : int;
 
     /**
      * Performs the delete query and returns the number of affected rows.
@@ -110,7 +110,7 @@ interface IConnection
      *
      * @return int
      */
-    public function delete(Delete $query);
+    public function delete(Delete $query) : int;
 
     /**
      * Performs the upsert query. Rows without primary keys are expected to

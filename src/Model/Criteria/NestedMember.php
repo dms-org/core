@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Model\Criteria;
 
@@ -47,7 +47,7 @@ class NestedMember
     /**
      * @return IMemberExpression[]
      */
-    final public function getParts()
+    final public function getParts() : array
     {
         return $this->parts;
     }
@@ -55,7 +55,7 @@ class NestedMember
     /**
      * @return IMemberExpression[]
      */
-    final public function getPartsExceptLast()
+    final public function getPartsExceptLast() : array
     {
         return array_slice($this->parts, 0, -1);
     }
@@ -63,7 +63,7 @@ class NestedMember
     /**
      * @return IMemberExpression
      */
-    final public function getLastPart()
+    final public function getLastPart() : IMemberExpression
     {
         return end($this->parts);
     }
@@ -71,7 +71,7 @@ class NestedMember
     /**
      * @return IType
      */
-    final public function getResultingType()
+    final public function getResultingType() : \Dms\Core\Model\Type\IType
     {
         return $this->getLastPart()->getResultingType();
     }
@@ -79,7 +79,7 @@ class NestedMember
     /**
      * @return bool
      */
-    final public function isPropertyValue()
+    final public function isPropertyValue() : bool
     {
         return $this->getLastPart()->isPropertyValue();
     }
@@ -87,7 +87,7 @@ class NestedMember
     /**
      * @return FinalizedPropertyDefinition
      */
-    final public function getProperty()
+    final public function getProperty() : \Dms\Core\Model\Object\FinalizedPropertyDefinition
     {
         return $this->getLastPart()->getProperty();
     }
@@ -95,7 +95,7 @@ class NestedMember
     /**
      * @return string
      */
-    final public function asString()
+    final public function asString() : string
     {
         return $this->expressionString;
     }

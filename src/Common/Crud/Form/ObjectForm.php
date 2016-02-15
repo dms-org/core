@@ -1,10 +1,11 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Common\Crud\Form;
 
 use Dms\Core\Common\Crud\Action\Object\IObjectAction;
 use Dms\Core\Form\Builder\Form;
 use Dms\Core\Form\Field\Builder\Field;
+use Dms\Core\Form\Field\Builder\FieldBuilderBase;
 use Dms\Core\Form\Field\Builder\FieldNameBuilder;
 use Dms\Core\Form\IForm;
 use Dms\Core\Model\IEntitySet;
@@ -24,7 +25,7 @@ class ObjectForm
      *
      * @return IForm
      */
-    public static function build(IEntitySet $dataSource, callable $objectValidationCallback = null)
+    public static function build(IEntitySet $dataSource, callable $objectValidationCallback = null) : IForm
     {
         return Form::create()->section('Object', [
                 self::objectField(Field::create(), $dataSource, $objectValidationCallback)
@@ -38,13 +39,14 @@ class ObjectForm
      * @param IEntitySet       $dataSource
      * @param callable|null    $objectValidationCallback
      *
-     * @return Field
+     * @return FieldBuilderBase
      */
     final public static function objectField(
             FieldNameBuilder $fieldBuilder,
             IEntitySet $dataSource,
             callable $objectValidationCallback = null
-    ) {
+    ) : FieldBuilderBase
+    {
         $field = $fieldBuilder
                 ->name(IObjectAction::OBJECT_FIELD_NAME)
                 ->label('Object')

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Table\Criteria;
 
@@ -66,7 +66,7 @@ class RowCriteria implements IRowCriteria
      *
      * @return RowCriteria
      */
-    public static function fromExisting(IRowCriteria $criteria)
+    public static function fromExisting(IRowCriteria $criteria) : RowCriteria
     {
         $self = new self($criteria->getStructure());
 
@@ -83,7 +83,7 @@ class RowCriteria implements IRowCriteria
     /**
      * {@inheritDoc}
      */
-    public function getStructure()
+    public function getStructure() : \Dms\Core\Table\ITableStructure
     {
         return $this->structure;
     }
@@ -91,7 +91,7 @@ class RowCriteria implements IRowCriteria
     /**
      * {@inheritDoc}
      */
-    public function getConditions()
+    public function getConditions() : array
     {
         return $this->conditions;
     }
@@ -99,7 +99,7 @@ class RowCriteria implements IRowCriteria
     /**
      * {@inheritDoc}
      */
-    public function getColumnsToLoad()
+    public function getColumnsToLoad() : array
     {
         return $this->columnsToLoad;
     }
@@ -107,7 +107,7 @@ class RowCriteria implements IRowCriteria
     /**
      * {@inheritDoc}
      */
-    public function getColumnNamesToLoad()
+    public function getColumnNamesToLoad() : array
     {
         return array_keys($this->columnsToLoad);
     }
@@ -115,7 +115,7 @@ class RowCriteria implements IRowCriteria
     /**
      * {@inheritDoc}
      */
-    public function getWhetherLoadsAllColumns()
+    public function getWhetherLoadsAllColumns() : bool
     {
         return count(array_diff_key($this->structure->getColumns(), $this->columnsToLoad)) === 0;
     }
@@ -147,7 +147,7 @@ class RowCriteria implements IRowCriteria
      *
      * @return static
      */
-    public function load($columnName)
+    public function load(string $columnName)
     {
         $this->columnsToLoad[$columnName] = $this->structure->getColumn($columnName);
 
@@ -163,7 +163,7 @@ class RowCriteria implements IRowCriteria
      *
      * @return static
      */
-    public function where($componentId, $operator, $value)
+    public function where(string $componentId, string $operator, $value)
     {
         /** @var IColumnComponent $component */
         list($column, $component) = $this->structure->getColumnAndComponent($componentId);
@@ -182,7 +182,7 @@ class RowCriteria implements IRowCriteria
     /**
      * {@inheritDoc}
      */
-    public function getOrderings()
+    public function getOrderings() : array
     {
         return $this->orderings;
     }
@@ -195,7 +195,7 @@ class RowCriteria implements IRowCriteria
      *
      * @return static
      */
-    public function orderBy($componentId, $direction)
+    public function orderBy(string $componentId, string $direction)
     {
         list($column, $component) = $this->structure->getColumnAndComponent($componentId);
 
@@ -211,7 +211,7 @@ class RowCriteria implements IRowCriteria
      *
      * @return static
      */
-    public function orderByAsc($componentId)
+    public function orderByAsc(string $componentId)
     {
         return $this->orderBy($componentId, OrderingDirection::ASC);
     }
@@ -223,7 +223,7 @@ class RowCriteria implements IRowCriteria
      *
      * @return static
      */
-    public function orderByDesc($componentId)
+    public function orderByDesc(string $componentId)
     {
         return $this->orderBy($componentId, OrderingDirection::DESC);
     }
@@ -231,7 +231,7 @@ class RowCriteria implements IRowCriteria
     /**
      * @inheritDoc
      */
-    public function getGroupings()
+    public function getGroupings() : array
     {
         return $this->groupings;
     }
@@ -243,7 +243,7 @@ class RowCriteria implements IRowCriteria
      *
      * @return static
      */
-    public function groupBy($componentId)
+    public function groupBy(string $componentId)
     {
         /** @var IColumn $column */
         list($column, $component) = $this->structure->getColumnAndComponent($componentId);
@@ -257,7 +257,7 @@ class RowCriteria implements IRowCriteria
     /**
      * {@inheritDoc}
      */
-    public function getRowsToSkip()
+    public function getRowsToSkip() : int
     {
         return $this->rowsToSkip;
     }
@@ -269,7 +269,7 @@ class RowCriteria implements IRowCriteria
      *
      * @return static
      */
-    public function skipRows($rowNumber)
+    public function skipRows(int $rowNumber)
     {
         $this->rowsToSkip = (int)$rowNumber;
 
@@ -291,7 +291,7 @@ class RowCriteria implements IRowCriteria
      *
      * @return static
      */
-    public function maxRows($amountOfRows)
+    public function maxRows(int $amountOfRows)
     {
         $this->amountOfRows = (int)$amountOfRows;
 
@@ -301,7 +301,7 @@ class RowCriteria implements IRowCriteria
     /**
      * @inheritDoc
      */
-    public function asNewCriteria()
+    public function asNewCriteria() : RowCriteria
     {
         return clone $this;
     }

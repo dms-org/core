@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Module\Definition\Chart;
 
@@ -42,7 +42,7 @@ class ChartViewDefinition
      *
      * @return ChartViewDefiner
      */
-    public function name($name, $label)
+    public function name(string $name, string $label) : ChartViewDefiner
     {
         $definer = new ChartViewDefiner($this->dataSource, $name, $label);
 
@@ -54,7 +54,7 @@ class ChartViewDefinition
     /**
      * @return IChartView[]
      */
-    public function finalize()
+    public function finalize() : array
     {
         $views = [];
 

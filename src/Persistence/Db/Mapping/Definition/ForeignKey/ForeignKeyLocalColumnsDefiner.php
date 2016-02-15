@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Mapping\Definition\ForeignKey;
 
@@ -14,7 +14,7 @@ class ForeignKeyLocalColumnsDefiner extends ForeignKeyDefinerBase
      *
      * @return ForeignKeyReferencedColumnsDefiner
      */
-    public function columns($columnNames)
+    public function columns($columnNames) : ForeignKeyReferencedColumnsDefiner
     {
         return new ForeignKeyReferencedColumnsDefiner(
                 $this->callback,

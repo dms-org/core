@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Mapping\Hierarchy;
 
@@ -41,7 +41,7 @@ class EmbeddedSubClassObjectMapping extends SubClassObjectMapping implements IEm
      *
      * @throws InvalidArgumentException
      */
-    public function __construct(Table $parentTable, FinalizedMapperDefinition $definition, $classTypeColumnName, $classTypeValue)
+    public function __construct(Table $parentTable, FinalizedMapperDefinition $definition, string $classTypeColumnName, $classTypeValue)
     {
         InvalidArgumentException::verify(is_string($classTypeColumnName), 'class type column name must be a string');
 
@@ -117,7 +117,7 @@ class EmbeddedSubClassObjectMapping extends SubClassObjectMapping implements IEm
     /**
      * {@inheritDoc}
      */
-    public function withEmbeddedColumnsPrefixedBy($prefix)
+    public function withEmbeddedColumnsPrefixedBy(string $prefix)
     {
         $clone                      = parent::withEmbeddedColumnsPrefixedBy($prefix);
         $clone->classTypeColumnName = $prefix . $clone->classTypeColumnName;
@@ -128,7 +128,7 @@ class EmbeddedSubClassObjectMapping extends SubClassObjectMapping implements IEm
     /**
      * {@inheritdoc}
      */
-    public function rowMatchesObjectType(Row $row)
+    public function rowMatchesObjectType(Row $row) : bool
     {
         return $row->getColumn($this->classTypeColumnName) === $this->classTypeValue;
     }
@@ -136,7 +136,7 @@ class EmbeddedSubClassObjectMapping extends SubClassObjectMapping implements IEm
     /**
      * {@inheritdoc}
      */
-    public function makeClassConditionExpr(Query $query)
+    public function makeClassConditionExpr(Query $query) : \Dms\Core\Persistence\Db\Query\Expression\Expr
     {
         $parentAlias = $this->parentTable->getName();
         $column      = $this->parentTable->findColumn($this->classTypeColumnName);
@@ -150,7 +150,7 @@ class EmbeddedSubClassObjectMapping extends SubClassObjectMapping implements IEm
     /**
      * {@inheritdoc}
      */
-    public function addSpecificLoadToQuery(Query $query, $objectType)
+    public function addSpecificLoadToQuery(Query $query, string $objectType)
     {
         foreach ($this->subClassMappings as $mapping) {
             if ($mapping instanceof self && is_a($objectType, $mapping->getObjectType(), true)) {

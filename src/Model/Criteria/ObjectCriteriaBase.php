@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Model\Criteria;
 
@@ -43,7 +43,7 @@ class ObjectCriteriaBase
     /**
      * {@inheritDoc}
      */
-    final public function getClass()
+    final public function getClass() : FinalizedClassDefinition
     {
         return $this->class;
     }
@@ -51,7 +51,7 @@ class ObjectCriteriaBase
     /**
      * @return IMemberExpressionParser
      */
-    final public function getMemberExpressionParser()
+    final public function getMemberExpressionParser() : IMemberExpressionParser
     {
         return $this->memberExpressionParser;
     }
@@ -59,7 +59,7 @@ class ObjectCriteriaBase
     /**
      * {@inheritDoc}
      */
-    final public function verifyOfClass($class)
+    final public function verifyOfClass(string $class)
     {
         if ($this->class->getClassName() !== $class) {
             throw Exception\TypeMismatchException::format(
@@ -72,7 +72,7 @@ class ObjectCriteriaBase
     /**
      * {@inheritDoc}
      */
-    final public function hasCondition()
+    final public function hasCondition() : bool
     {
         return $this->condition !== null;
     }

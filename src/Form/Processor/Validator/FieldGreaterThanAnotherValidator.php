@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Form\Processor\Validator;
 
@@ -14,7 +14,7 @@ class FieldGreaterThanAnotherValidator extends FieldComparisonValidator
     /**
      * @inheritDoc
      */
-    protected function getMessageId()
+    protected function getMessageId() : string
     {
         return self::MESSAGE;
     }
@@ -22,7 +22,7 @@ class FieldGreaterThanAnotherValidator extends FieldComparisonValidator
     /**
      * @inheritDoc
      */
-    protected function doValuesSatisfyComparison($value1, $value2)
+    protected function doValuesSatisfyComparison($value1, $value2) : bool
     {
         return $value1 > $value2;
     }

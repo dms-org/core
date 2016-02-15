@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Model;
 
@@ -19,7 +19,7 @@ interface IObjectSetWithLoadCriteriaSupport extends IObjectSet
      * @return LoadCriteria
      * @throws Exception\TypeMismatchException
      */
-    public function loadCriteria();
+    public function loadCriteria() : Criteria\LoadCriteria;
 
     /**
      * Returns an array of arrays containing the properties of the
@@ -30,5 +30,5 @@ interface IObjectSetWithLoadCriteriaSupport extends IObjectSet
      * @return array[]
      * @throws Exception\TypeMismatchException
      */
-    public function loadMatching(ILoadCriteria $criteria);
+    public function loadMatching(ILoadCriteria $criteria) : array;
 }

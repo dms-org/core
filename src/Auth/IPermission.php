@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Auth;
 
@@ -11,7 +11,7 @@ interface IPermission extends IValueObject
      *
      * @return string
      */
-    public function getName();
+    public function getName() : string;
 
     /**
      * Returns an equivalent permission in the supplied namespace.
@@ -31,7 +31,7 @@ interface IPermission extends IValueObject
      *
      * @return static
      */
-    public function inNamespace($namespace);
+    public function inNamespace(string $namespace);
 
     /**
      * Returns whether the permissions are equal
@@ -40,5 +40,5 @@ interface IPermission extends IValueObject
      *
      * @return bool
      */
-    public function equals(IPermission $permission);
+    public function equals(IPermission $permission) : bool;
 }

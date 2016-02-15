@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Mapping\Definition\Column;
 
@@ -40,7 +40,7 @@ class GetterSetterColumnDefiner
      *
      * @return ColumnTypeDefiner
      */
-    public function to($columnName)
+    public function to(string $columnName) : ColumnTypeDefiner
     {
         return new ColumnTypeDefiner(
                 $this->definition,

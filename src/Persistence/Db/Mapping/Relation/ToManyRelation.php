@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Mapping\Relation;
 
@@ -64,12 +64,12 @@ class ToManyRelation extends ToManyRelationBase
      * @throws InvalidRelationException
      */
     public function __construct(
-            $idString,
+            string $idString,
             IToManyRelationReference $reference,
-            $parentForeignKey,
+            string $parentForeignKey,
             IRelationMode $mode,
-            $orderByColumnNameDirectionMap = [],
-            $orderPersistColumn = null
+            array $orderByColumnNameDirectionMap = [],
+            string $orderPersistColumn = null
     ) {
         parent::__construct($idString, $reference, $mode, self::DEPENDENT_CHILDREN);
         $this->foreignKeyToParent       = $parentForeignKey;
@@ -254,7 +254,7 @@ class ToManyRelation extends ToManyRelationBase
     /**
      * @inheritDoc
      */
-    public function getRelationSelectFromParentRows(ParentMapBase $map, &$parentIdColumnName = null)
+    public function getRelationSelectFromParentRows(ParentMapBase $map, &$parentIdColumnName = null) : \Dms\Core\Persistence\Db\Query\Select
     {
         $primaryKey = $map->getPrimaryKeyColumn();
         $parentIds  = [];
@@ -281,8 +281,8 @@ class ToManyRelation extends ToManyRelationBase
             LoadingContext $context,
             ParentChildrenMap $map,
             Select $select,
-            $relatedTableAlias,
-            $parentIdColumnName
+            string $relatedTableAlias,
+            string $parentIdColumnName
     ) {
         $primaryKey = $map->getPrimaryKeyColumn();
 
@@ -329,7 +329,7 @@ class ToManyRelation extends ToManyRelationBase
     /**
      * @inheritDoc
      */
-    public function joinSelectToRelatedTable($parentTableAlias, $joinType, Select $select)
+    public function joinSelectToRelatedTable(string $parentTableAlias, string $joinType, Select $select) : string
     {
         $relatedTableAlias = $select->generateUniqueAliasFor($this->relatedTable->getName());
 
@@ -345,7 +345,7 @@ class ToManyRelation extends ToManyRelationBase
     /**
      * @inheritDoc
      */
-    public function getRelationSubSelect(Select $outerSelect, $parentTableAlias)
+    public function getRelationSubSelect(Select $outerSelect, string $parentTableAlias) : \Dms\Core\Persistence\Db\Query\Select
     {
         $subSelect = $outerSelect->buildSubSelect($this->relatedTable);
 
@@ -359,7 +359,7 @@ class ToManyRelation extends ToManyRelationBase
     /**
      * @inheritDoc
      */
-    public function getRelationJoinCondition($parentTableAlias, $relatedTableAlias)
+    public function getRelationJoinCondition(string $parentTableAlias, string $relatedTableAlias) : \Dms\Core\Persistence\Db\Query\Expression\Expr
     {
         return Expr::equal(
                 Expr::column($parentTableAlias, $this->relatedPrimaryKey),

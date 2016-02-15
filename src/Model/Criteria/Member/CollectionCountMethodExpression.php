@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Model\Criteria\Member;
 
@@ -34,7 +34,7 @@ class CollectionCountMethodExpression extends MethodExpression
     /**
      * @inheritDoc
      */
-    public function isPropertyValue()
+    public function isPropertyValue() : bool
     {
         return false;
     }
@@ -48,9 +48,9 @@ class CollectionCountMethodExpression extends MethodExpression
     }
 
     /**
-     * @return \Closure
+     * @return callable
      */
-    public function createArrayGetterCallable()
+    public function createArrayGetterCallable() : callable
     {
         return function (array $collections) {
             $results = [];

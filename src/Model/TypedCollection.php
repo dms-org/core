@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Model;
 
@@ -22,17 +22,17 @@ class TypedCollection extends Collection implements ITypedCollection
 
     /**
      * @param IType                $elementType
-     * @param array                $values
+     * @param \Traversable|array   $values
      * @param IIteratorScheme|null $scheme
      * @param Collection|null      $source
      *
      * @throws Exception\InvalidArgumentException
      */
     public function __construct(
-            IType $elementType,
-            $values = [],
-            IIteratorScheme $scheme = null,
-            Collection $source = null
+        IType $elementType,
+        $values = [],
+        IIteratorScheme $scheme = null,
+        Collection $source = null
     ) {
         $this->elementType = $elementType;
 
@@ -53,15 +53,6 @@ class TypedCollection extends Collection implements ITypedCollection
         return $this->elementType = $data;
     }
 
-    /**
-     * @inheritDoc
-     */
-    function __call($name, $arguments)
-    {
-        // TODO: Implement __call() method.
-    }
-
-
     protected function constructScopedSelf($elements)
     {
         return new static(Type::mixed(), $elements, $this->scheme, $this->source ?: $this);
@@ -75,7 +66,7 @@ class TypedCollection extends Collection implements ITypedCollection
     /**
      * {@inheritDoc}
      */
-    final public function getElementType()
+    final public function getElementType() : IType
     {
         return $this->elementType;
     }
@@ -97,8 +88,8 @@ class TypedCollection extends Collection implements ITypedCollection
     {
         if (!$this->elementType->isOfType($value)) {
             throw Exception\InvalidArgumentException::format(
-                    'Invalid element supplied to collection: expecting type of %s, %s given',
-                    $this->elementType->asTypeString(), Debug::getType($value)
+                'Invalid element supplied to collection: expecting type of %s, %s given',
+                $this->elementType->asTypeString(), Debug::getType($value)
             );
         }
     }

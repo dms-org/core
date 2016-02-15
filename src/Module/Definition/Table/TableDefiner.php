@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Module\Definition\Table;
 
@@ -18,7 +18,7 @@ class TableDefiner extends TableDefinerBase
      *
      * @return ArrayTableDefiner
      */
-    public function fromArray(array $rows)
+    public function fromArray(array $rows) : ArrayTableDefiner
     {
         return new ArrayTableDefiner($this->name, $this->callback, $rows);
     }
@@ -30,7 +30,7 @@ class TableDefiner extends TableDefinerBase
      *
      * @return ObjectTableDefiner
      */
-    public function fromObjects(IObjectSet $objects)
+    public function fromObjects(IObjectSet $objects) : ObjectTableDefiner
     {
         return new ObjectTableDefiner($this->name, $this->callback, $objects);
     }

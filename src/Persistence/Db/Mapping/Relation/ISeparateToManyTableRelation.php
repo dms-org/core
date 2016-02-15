@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Mapping\Relation;
 
@@ -26,7 +26,7 @@ interface ISeparateToManyTableRelation extends ISeparateTableRelation, IToManyRe
             LoadingContext $context,
             ParentChildrenMap $map,
             Select $select,
-            $relatedTableAlias,
-            $parentIdColumnName
+            string $relatedTableAlias,
+            string $parentIdColumnName
     );
 }

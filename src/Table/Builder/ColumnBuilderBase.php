@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Table\Builder;
 
@@ -47,7 +47,7 @@ abstract class ColumnBuilderBase
      * @return IColumn
      * @throws InvalidOperationException
      */
-    protected function build()
+    protected function build() : \Dms\Core\Table\IColumn
     {
         if (!$this->name || !$this->label || !$this->components) {
             throw new InvalidOperationException('Cannot build column: must define name, label and components');

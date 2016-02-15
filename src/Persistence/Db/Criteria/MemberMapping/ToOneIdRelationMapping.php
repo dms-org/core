@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Criteria\MemberMapping;
 
@@ -46,7 +46,7 @@ class ToOneIdRelationMapping extends ToOneRelationMapping
     /**
      * @inheritDoc
      */
-    protected function getSingleValueExpressionInSelect(Select $select, $tableAlias)
+    protected function getSingleValueExpressionInSelect(Select $select, string $tableAlias) : \Dms\Core\Persistence\Db\Query\Expression\Expr
     {
         return Expr::column($tableAlias, $this->relation->getRelatedPrimaryKey());
     }

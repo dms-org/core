@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Mapping\Relation\Reference;
 
@@ -20,7 +20,7 @@ class ToOneRelationObjectReference extends RelationObjectReference implements IT
      *
      * @return array
      */
-    public function loadValues(LoadingContext $context, array $rows)
+    public function loadValues(LoadingContext $context, array $rows) : array
     {
         return $this->mapper->loadAll($context, $rows);
     }
@@ -32,7 +32,7 @@ class ToOneRelationObjectReference extends RelationObjectReference implements IT
      *
      * @return int[]
      */
-    public function syncRelated(PersistenceContext $context, array $modifiedColumns, array $children)
+    public function syncRelated(PersistenceContext $context, array $modifiedColumns, array $children) : array
     {
         return $this->persistChildrenIgnoringBidirectionalRelation($context, $children);
     }

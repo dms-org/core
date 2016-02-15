@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Model\Criteria\Member;
 
@@ -23,7 +23,7 @@ class MemberPropertyExpression extends MemberExpression
      * @param FinalizedPropertyDefinition $property
      * @param bool                        $isSourceNullable
      */
-    public function __construct(FinalizedPropertyDefinition $property, $isSourceNullable)
+    public function __construct(FinalizedPropertyDefinition $property, bool $isSourceNullable)
     {
         $sourceType = Type::object($property->getAccessibility()->getDeclaredClass());
 
@@ -39,7 +39,7 @@ class MemberPropertyExpression extends MemberExpression
     /**
      * @inheritDoc
      */
-    public function isPropertyValue()
+    public function isPropertyValue() : bool
     {
         return true;
     }
@@ -55,7 +55,7 @@ class MemberPropertyExpression extends MemberExpression
     /**
      * @inheritDoc
      */
-    public function createArrayGetterCallable()
+    public function createArrayGetterCallable() : callable
     {
         $name = $this->property->getName();
 

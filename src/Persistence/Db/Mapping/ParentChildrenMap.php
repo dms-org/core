@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Mapping;
 
@@ -19,7 +19,7 @@ class ParentChildrenMap extends ParentMapBase
     /**
      * @return ParentChildrenItem[]
      */
-    public function getItems()
+    public function getItems() : array
     {
         return $this->items;
     }
@@ -27,7 +27,7 @@ class ParentChildrenMap extends ParentMapBase
     /**
      * @return Row[]
      */
-    public function getAllParents()
+    public function getAllParents() : array
     {
         $rows = [];
 
@@ -41,7 +41,7 @@ class ParentChildrenMap extends ParentMapBase
     /**
      * @return array
      */
-    public function getAllChildren()
+    public function getAllChildren() : array
     {
         $children = [];
 

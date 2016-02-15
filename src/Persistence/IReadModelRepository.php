@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence;
 
@@ -19,18 +19,18 @@ interface IReadModelRepository extends IObjectSet
      *
      * @return string
      */
-    public function getReadModelType();
+    public function getReadModelType() : string;
 
     /**
      * {@inheritDoc}
      * @return IReadModel[]
      */
-    public function getAll();
+    public function getAll() : array;
 
     /**
      * {@inheritDoc}
      */
-    public function criteria();
+    public function criteria() : \Dms\Core\Model\Criteria\Criteria;
 
     /**
      * {@inheritDoc}
@@ -38,5 +38,5 @@ interface IReadModelRepository extends IObjectSet
      * @return IReadModel[]
      * @throws Exception\TypeMismatchException
      */
-    public function matching(ICriteria $criteria);
+    public function matching(ICriteria $criteria) : array;
 }

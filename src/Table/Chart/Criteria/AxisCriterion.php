@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Table\Chart\Criteria;
 
@@ -36,7 +36,7 @@ abstract class AxisCriterion
     /**
      * @return IChartAxis
      */
-    final public function getAxis()
+    final public function getAxis() : \Dms\Core\Table\Chart\IChartAxis
     {
         return $this->axis;
     }

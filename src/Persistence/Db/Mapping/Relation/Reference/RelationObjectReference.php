@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Mapping\Relation\Reference;
 
@@ -31,7 +31,7 @@ abstract class RelationObjectReference extends RelationReference
      *
      * @throws InvalidArgumentException
      */
-    public function __construct(IEntityMapper $mapper, $bidirectionalRelationProperty = null, $persistHookIdToIgnore = null)
+    public function __construct(IEntityMapper $mapper, string $bidirectionalRelationProperty = null, string $persistHookIdToIgnore = null)
     {
         parent::__construct($mapper, $bidirectionalRelationProperty);
 
@@ -44,7 +44,7 @@ abstract class RelationObjectReference extends RelationReference
      *
      * @return void
      */
-    public function addLoadToSelect(Select $select, $relatedTableAlias)
+    public function addLoadToSelect(Select $select, string $relatedTableAlias)
     {
         $this->mapper->getMapping()->addLoadToSelect($select, $relatedTableAlias);
     }
@@ -77,7 +77,7 @@ abstract class RelationObjectReference extends RelationReference
     final protected function persistChildrenIgnoringBidirectionalRelation(
             PersistenceContext $context,
             array $children
-    ) {
+    ) : array {
         $bidirectionalRelation = $this->getBidirectionalRelation();
         $persistHook           = $this->getPersistHook();
 

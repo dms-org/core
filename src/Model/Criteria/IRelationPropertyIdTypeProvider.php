@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Model\Criteria;
 
@@ -18,8 +18,8 @@ interface IRelationPropertyIdTypeProvider
      * @param string $entityType
      * @param string $idPropertyName
      *
-     * @return IEntitySet
+     * @return string
      * @throws InvalidArgumentException
      */
-    public function loadRelatedEntityType($entityType, $idPropertyName);
+    public function loadRelatedEntityType(string $entityType, string $idPropertyName) : string;
 }

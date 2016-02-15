@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Mapping\Definition\Relation;
 
@@ -61,7 +61,7 @@ class OneToManyRelationDefiner extends RelationTypeDefinerBase
      *
      * @return static
      */
-    public function withBidirectionalRelation($propertyOnRelatedEntity)
+    public function withBidirectionalRelation(string $propertyOnRelatedEntity)
     {
         $this->bidirectionalRelationProperty = $propertyOnRelatedEntity;
 
@@ -76,7 +76,7 @@ class OneToManyRelationDefiner extends RelationTypeDefinerBase
      *
      * @return OneToManyRelationDefiner
      */
-    public function orderByAsc($columnName)
+    public function orderByAsc(string $columnName) : OneToManyRelationDefiner
     {
         $this->orderByColumnNameDirectionMap[$columnName] = Ordering::ASC;
 
@@ -91,7 +91,7 @@ class OneToManyRelationDefiner extends RelationTypeDefinerBase
      *
      * @return OneToManyRelationDefiner
      */
-    public function orderByDesc($columnName)
+    public function orderByDesc(string $columnName) : OneToManyRelationDefiner
     {
         $this->orderByColumnNameDirectionMap[$columnName] = Ordering::DESC;
 
@@ -112,7 +112,7 @@ class OneToManyRelationDefiner extends RelationTypeDefinerBase
      *
      * @return OneToManyRelationDefiner
      */
-    public function withOrderPersistedTo($columnName)
+    public function withOrderPersistedTo(string $columnName) : OneToManyRelationDefiner
     {
         $this->orderPersistColumn = $columnName;
         $this->orderByAsc($columnName);
@@ -128,7 +128,7 @@ class OneToManyRelationDefiner extends RelationTypeDefinerBase
      *
      * @return void
      */
-    public function withParentIdAs($columnName)
+    public function withParentIdAs(string $columnName)
     {
         call_user_func($this->callback, function ($idString, Table $parentTable) use ($columnName) {
             /** @var IEntityMapper $mapper */

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Module\Definition\Table;
 
@@ -40,7 +40,7 @@ class TableViewDefinition
      *
      * @return TableViewDefiner
      */
-    public function name($name, $label)
+    public function name(string $name, string $label) : TableViewDefiner
     {
         $definer = new TableViewDefiner($this->dataSource, $name, $label);
 
@@ -52,7 +52,7 @@ class TableViewDefinition
     /**
      * @return ITableView[]
      */
-    public function finalize()
+    public function finalize() : array
     {
         $views = [];
 

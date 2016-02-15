@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Form;
 
@@ -46,7 +46,7 @@ class InvalidInputException extends BaseException
     /**
      * @return IField
      */
-    public function getField()
+    public function getField() : IField
     {
         return $this->field;
     }
@@ -54,7 +54,7 @@ class InvalidInputException extends BaseException
     /**
      * @return Message[]
      */
-    public function getMessages()
+    public function getMessages() : array
     {
         return $this->messages;
     }

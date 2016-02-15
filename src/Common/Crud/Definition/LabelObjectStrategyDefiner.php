@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Common\Crud\Definition;
 
@@ -28,7 +28,7 @@ class LabelObjectStrategyDefiner
      * @param string   $classType
      * @param callable $callback
      */
-    public function __construct($classType, callable $callback)
+    public function __construct(string $classType, callable $callback)
     {
         $this->classType = $classType;
         $this->callback  = $callback;
@@ -42,7 +42,7 @@ class LabelObjectStrategyDefiner
      * @return void
      * @throws InvalidArgumentException
      */
-    public function fromProperty($propertyName)
+    public function fromProperty(string $propertyName)
     {
         if (!property_exists($this->classType, $propertyName)) {
             throw InvalidArgumentException::format(

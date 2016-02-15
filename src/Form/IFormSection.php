@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Form;
 
@@ -14,12 +14,12 @@ interface IFormSection
      * 
      * @return string
      */
-    public function getTitle();
+    public function getTitle() : string;
 
     /**
      * Gets the sections fields.
      *
      * @return IField[]
      */
-    public function getFields();
+    public function getFields() : array;
 }

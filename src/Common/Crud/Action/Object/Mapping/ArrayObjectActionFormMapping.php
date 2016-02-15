@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Common\Crud\Action\Object\Mapping;
 
@@ -30,7 +30,7 @@ class ArrayObjectActionFormMapping extends ObjectActionFormMapping
      *
      * @param array $submission
      *
-     * @return IDataTransferObject
+     * @return object
      * @throws InvalidFormSubmissionException
      */
     public function mapFormSubmissionToDto(array $submission)

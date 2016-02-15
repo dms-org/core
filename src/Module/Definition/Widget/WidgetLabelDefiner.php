@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Module\Definition\Widget;
 
@@ -16,7 +16,7 @@ class WidgetLabelDefiner extends WidgetDefinerBase
      *
      * @return WidgetTypeDefiner
      */
-    public function label($label)
+    public function label(string $label) : WidgetTypeDefiner
     {
         return new WidgetTypeDefiner($this->name, $label, $this->tables, $this->charts, $this->actions, $this->callback);
     }

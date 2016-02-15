@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Query;
 
@@ -28,7 +28,7 @@ abstract class RowSetQuery implements IQuery
     /**
      * @return Table
      */
-    public function getTable()
+    public function getTable() : \Dms\Core\Persistence\Db\Schema\Table
     {
         return $this->rows->getTable();
     }
@@ -36,7 +36,7 @@ abstract class RowSetQuery implements IQuery
     /**
      * @return RowSet
      */
-    public function getRows()
+    public function getRows() : \Dms\Core\Persistence\Db\RowSet
     {
         return $this->rows;
     }

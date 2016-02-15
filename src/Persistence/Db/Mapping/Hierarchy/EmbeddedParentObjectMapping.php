@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Mapping\Hierarchy;
 
@@ -44,7 +44,7 @@ class EmbeddedParentObjectMapping extends ParentObjectMapping implements IEmbedd
     /**
      * @inheritDoc
      */
-    public function withEmbeddedColumnsPrefixedBy($prefix)
+    public function withEmbeddedColumnsPrefixedBy(string $prefix)
     {
         $clone = parent::withEmbeddedColumnsPrefixedBy($prefix);
         $this->loadPrimaryKeyColumnName();
@@ -68,7 +68,7 @@ class EmbeddedParentObjectMapping extends ParentObjectMapping implements IEmbedd
      *
      * @return Row[]
      */
-    public function persistAllObjects(PersistenceContext $context, array $objects)
+    public function persistAllObjects(PersistenceContext $context, array $objects) : array
     {
         $rows = [];
 

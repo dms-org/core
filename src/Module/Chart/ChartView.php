@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Module\Chart;
 
@@ -42,7 +42,7 @@ class ChartView implements IChartView
      * @param bool              $default
      * @param IChartCriteria|null $criteria
      */
-    public function __construct($name, $label, $default, IChartCriteria $criteria = null)
+    public function __construct(string $name, string $label, bool $default, IChartCriteria $criteria = null)
     {
         $this->name     = $name;
         $this->label    = $label;
@@ -53,7 +53,7 @@ class ChartView implements IChartView
     /**
      * @return ChartView
      */
-    public static function createDefault()
+    public static function createDefault() : ChartView
     {
         return new self('default', 'Default', true);
     }
@@ -61,7 +61,7 @@ class ChartView implements IChartView
     /**
      * @return string
      */
-    public function getName()
+    public function getName() : string
     {
         return $this->name;
     }
@@ -69,7 +69,7 @@ class ChartView implements IChartView
     /**
      * @return string
      */
-    public function getLabel()
+    public function getLabel() : string
     {
         return $this->label;
     }
@@ -77,7 +77,7 @@ class ChartView implements IChartView
     /**
      * @return boolean
      */
-    public function isDefault()
+    public function isDefault() : bool
     {
         return $this->default;
     }
@@ -85,7 +85,7 @@ class ChartView implements IChartView
     /**
      * @return bool
      */
-    public function hasCriteria()
+    public function hasCriteria() : bool
     {
         return $this->criteria !== null;
     }

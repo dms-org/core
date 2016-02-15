@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Module;
 
@@ -32,28 +32,28 @@ interface IModule
      * @return void
      * @throws InvalidOperationException if the package name has already been set.
      */
-    public function setPackageName($packageName);
+    public function setPackageName(string $packageName);
 
     /**
      * Gets the name
      *
      * @return string
      */
-    public function getName();
+    public function getName() : string;
 
     /**
      * Gets all the permissions used within the module
      *
      * @return IPermission[]
      */
-    public function getPermissions();
+    public function getPermissions() : array;
 
     /**
      * Gets the actions.
      *
      * @return IAction[]
      */
-    public function getActions();
+    public function getActions() : array;
 
     /**
      * Gets the action with the supplied name.
@@ -63,7 +63,7 @@ interface IModule
      * @return IAction
      * @throws ActionNotFoundException
      */
-    public function getAction($name);
+    public function getAction(string $name) : IAction;
 
     /**
      * Returns whether the module contains the supplied action.
@@ -72,14 +72,14 @@ interface IModule
      *
      * @return bool
      */
-    public function hasAction($name);
+    public function hasAction(string $name) : bool;
 
     /**
      * Gets the parameterized actions.
      *
      * @return IParameterizedAction[]
      */
-    public function getParameterizedActions();
+    public function getParameterizedActions() : array;
 
     /**
      * Gets the parameterized action with the supplied name.
@@ -89,7 +89,7 @@ interface IModule
      * @return IParameterizedAction
      * @throws ActionNotFoundException
      */
-    public function getParameterizedAction($name);
+    public function getParameterizedAction(string $name) : IParameterizedAction;
 
     /**
      * Returns whether the module contains the supplied parameterized action.
@@ -98,14 +98,14 @@ interface IModule
      *
      * @return bool
      */
-    public function hasParameterizedAction($name);
+    public function hasParameterizedAction(string $name) : bool;
 
     /**
      * Gets the unparameterized actions.
      *
      * @return IUnparameterizedAction[]
      */
-    public function getUnparameterizedActions();
+    public function getUnparameterizedActions() : array;
 
     /**
      * Gets the unparameterized action with the supplied name.
@@ -115,7 +115,7 @@ interface IModule
      * @return IUnparameterizedAction
      * @throws ActionNotFoundException
      */
-    public function getUnparameterizedAction($name);
+    public function getUnparameterizedAction(string $name) : IUnparameterizedAction;
 
     /**
      * Returns whether the module contains the supplied unparameterized action.
@@ -124,14 +124,14 @@ interface IModule
      *
      * @return bool
      */
-    public function hasUnparameterizedAction($name);
+    public function hasUnparameterizedAction(string $name) : bool;
 
     /**
      * Gets the table data sources.
      *
      * @return ITableDisplay[]
      */
-    public function getTables();
+    public function getTables() : array;
 
     /**
      * Gets the table data source with the supplied name.
@@ -141,7 +141,7 @@ interface IModule
      * @return ITableDisplay
      * @throws InvalidArgumentException
      */
-    public function getTable($name);
+    public function getTable(string $name) : ITableDisplay;
 
     /**
      * Returns whether the module contains the supplied table.
@@ -150,14 +150,14 @@ interface IModule
      *
      * @return bool
      */
-    public function hasTable($name);
+    public function hasTable(string $name) : bool;
 
     /**
      * Gets the chart data sources.
      *
      * @return IChartDisplay[]
      */
-    public function getCharts();
+    public function getCharts() : array;
 
     /**
      * Gets the chart data source with the supplied name.
@@ -167,7 +167,7 @@ interface IModule
      * @return IChartDisplay
      * @throws InvalidArgumentException
      */
-    public function getChart($name);
+    public function getChart(string $name) : IChartDisplay;
 
     /**
      * Returns whether the module contains the supplied chart.
@@ -176,14 +176,14 @@ interface IModule
      *
      * @return bool
      */
-    public function hasChart($name);
+    public function hasChart(string $name) : bool;
 
     /**
      * Gets the widgets.
      *
      * @return IWidget[]
      */
-    public function getWidgets();
+    public function getWidgets() : array;
 
     /**
      * Gets the widget with the supplied name.
@@ -193,7 +193,7 @@ interface IModule
      * @return IWidget
      * @throws InvalidArgumentException
      */
-    public function getWidget($name);
+    public function getWidget(string $name) : \Dms\Core\Widget\IWidget;
 
     /**
      * Returns whether the module contains the supplied widget.
@@ -202,5 +202,5 @@ interface IModule
      *
      * @return bool
      */
-    public function hasWidget($name);
+    public function hasWidget(string $name) : bool;
 }

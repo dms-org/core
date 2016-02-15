@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Table\Chart\Structure;
 
@@ -34,7 +34,7 @@ class ChartAxis extends Column implements IChartAxis
      *
      * @throws InvalidArgumentException
      */
-    public function __construct($name, $label, array $components)
+    public function __construct(string $name, string $label, array $components)
     {
         InvalidArgumentException::verifyAllInstanceOf(__METHOD__, 'components', $components, IColumnComponent::class);
         InvalidArgumentException::verify(!empty($components), 'Components cannot be empty');
@@ -63,7 +63,7 @@ class ChartAxis extends Column implements IChartAxis
      *
      * @return ChartAxis
      */
-    public static function forField(IField $field)
+    public static function forField(IField $field) : ChartAxis
     {
         return self::fromComponent(ColumnComponent::forField($field));
     }
@@ -73,7 +73,7 @@ class ChartAxis extends Column implements IChartAxis
      *
      * @return ChartAxis
      */
-    public static function fromComponent(IColumnComponent $component)
+    public static function fromComponent(IColumnComponent $component) : ChartAxis
     {
         return new self($component->getName(), $component->getLabel(), [$component]);
     }
@@ -81,7 +81,7 @@ class ChartAxis extends Column implements IChartAxis
     /**
      * @return IColumnComponentType
      */
-    public function getType()
+    public function getType() : \Dms\Core\Table\IColumnComponentType
     {
         return $this->type;
     }

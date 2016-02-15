@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Mapping;
 
@@ -20,9 +20,9 @@ abstract class ParentMapBase
     /**
      * ParentMapBase constructor.
      *
-     * @param string $primaryKeyColumn
+     * @param string|null $primaryKeyColumn
      */
-    public function __construct($primaryKeyColumn)
+    public function __construct(string $primaryKeyColumn = null)
     {
         $this->primaryKeyColumn = $primaryKeyColumn;
     }
@@ -30,7 +30,7 @@ abstract class ParentMapBase
     /**
      * @return string
      */
-    final public function getPrimaryKeyColumn()
+    final public function getPrimaryKeyColumn() : string
     {
         return $this->primaryKeyColumn;
     }
@@ -38,7 +38,7 @@ abstract class ParentMapBase
     /**
      * @return int[]
      */
-    public function getAllParentPrimaryKeys()
+    public function getAllParentPrimaryKeys() : array
     {
         $keys = [];
 
@@ -52,17 +52,17 @@ abstract class ParentMapBase
     /**
      * @return Row[]
      */
-    abstract public function getAllParents();
+    abstract public function getAllParents() : array;
 
     /**
      * @return TypedObject[]
      */
-    abstract public function getAllChildren();
+    abstract public function getAllChildren() : array;
 
     /**
      * @return bool
      */
-    final public function hasAnyParentsWithPrimaryKeys()
+    final public function hasAnyParentsWithPrimaryKeys() : bool
     {
         foreach ($this->getAllParents() as $parent) {
             if ($parent->getColumn($this->primaryKeyColumn) !== null) {

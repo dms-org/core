@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Table\DataSource;
 
@@ -46,7 +46,7 @@ class ArrayTableDataSource extends TableDataSource
      * @return ITableRow[]
      * @throws InvalidArgumentException
      */
-    private function buildNormalizedRows(ITableStructure $structure, array $array)
+    private function buildNormalizedRows(ITableStructure $structure, array $array) : array
     {
         $columns           = $structure->getColumns();
         $columnNames       = $structure->getColumnNames();
@@ -109,7 +109,7 @@ class ArrayTableDataSource extends TableDataSource
      *
      * @return ITableSection[]
      */
-    protected function loadRows(IRowCriteria $criteria = null)
+    protected function loadRows(IRowCriteria $criteria = null) : array
     {
         $criteria = $criteria ?: $this->defaultLoadCriteria();
 
@@ -154,7 +154,7 @@ class ArrayTableDataSource extends TableDataSource
      *
      * @return int
      */
-    protected function loadCount(IRowCriteria $criteria = null)
+    protected function loadCount(IRowCriteria $criteria = null) : int
     {
         return count($this->loadRows($criteria));
     }

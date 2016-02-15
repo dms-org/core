@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Module\Definition\Chart;
 
@@ -34,7 +34,7 @@ class ChartViewsDefiner
      * @param callable         $callback
      * @param IChartDataSource $dataSource
      */
-    public function __construct($name, callable $callback, IChartDataSource $dataSource)
+    public function __construct(string $name, callable $callback, IChartDataSource $dataSource)
     {
         $this->name       = $name;
         $this->callback   = $callback;

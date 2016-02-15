@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Form\Field\Type;
 
@@ -26,7 +26,7 @@ class InnerFormType extends FieldType
     /**
      * @return IForm
      */
-    public function getForm()
+    public function getForm() : \Dms\Core\Form\IForm
     {
         return $this->get(self::ATTR_FORM);
     }
@@ -34,7 +34,7 @@ class InnerFormType extends FieldType
     /**
      * {@inheritdoc}
      */
-    protected function buildPhpTypeOfInput()
+    protected function buildPhpTypeOfInput() : \Dms\Core\Model\Type\IType
     {
         return Type::arrayOf(Type::mixed());
     }
@@ -42,7 +42,7 @@ class InnerFormType extends FieldType
     /**
      * @return IFieldProcessor[]
      */
-    protected function buildProcessors()
+    protected function buildProcessors() : array
     {
         return [
                 new InnerFormProcessor($this->getForm())
@@ -54,7 +54,7 @@ class InnerFormType extends FieldType
      *
      * @return IForm
      */
-    public function getInnerArrayForm($arrayFieldName)
+    public function getInnerArrayForm(string $arrayFieldName) : \Dms\Core\Form\IForm
     {
         $form         = $this->getForm();
 

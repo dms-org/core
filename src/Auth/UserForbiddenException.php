@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Auth;
 
@@ -43,7 +43,7 @@ class UserForbiddenException extends UserException
     /**
      * @return IPermission[]
      */
-    public function getRequiredPermissions()
+    public function getRequiredPermissions() : array
     {
         return $this->requiredPermissions;
     }

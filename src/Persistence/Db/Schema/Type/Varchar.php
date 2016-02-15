@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Schema\Type;
 
@@ -19,7 +19,7 @@ class Varchar extends Type
      *
      * @param int $length
      */
-    public function __construct($length)
+    public function __construct(int $length)
     {
         $this->length = $length;
     }
@@ -27,7 +27,7 @@ class Varchar extends Type
     /**
      * @return int
      */
-    public function getLength()
+    public function getLength() : int
     {
         return $this->length;
     }

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Common\Crud\Form;
 
@@ -66,7 +66,7 @@ abstract class ObjectStagedFormObject extends StagedFormObject
      *
      * @return string
      */
-    abstract public function getObjectType();
+    abstract public function getObjectType() : string;
 
     /**
      * Defines the structure of this class.
@@ -105,7 +105,7 @@ abstract class ObjectStagedFormObject extends StagedFormObject
     /**
      * @return IEntitySet
      */
-    public function getDataSource()
+    public function getDataSource() : \Dms\Core\Model\IEntitySet
     {
         return $this->dataSource;
     }

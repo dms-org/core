@@ -1,9 +1,11 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Connection\Dummy;
 
 use Dms\Core\Exception\NotImplementedException;
 use Dms\Core\Persistence\Db\Connection\IConnection;
+use Dms\Core\Persistence\Db\Connection\IQuery;
+use Dms\Core\Persistence\Db\Platform\IPlatform;
 use Dms\Core\Persistence\Db\Query\BulkUpdate;
 use Dms\Core\Persistence\Db\Query\Delete;
 use Dms\Core\Persistence\Db\Query\ResequenceOrderIndexColumn;
@@ -22,7 +24,7 @@ class DummyConnection implements IConnection
     /**
      * @inheritDoc
      */
-    public function getPlatform()
+    public function getPlatform() : IPlatform
     {
         throw NotImplementedException::method(__METHOD__);
     }
@@ -30,7 +32,7 @@ class DummyConnection implements IConnection
     /**
      * @inheritDoc
      */
-    public function getLastInsertId()
+    public function getLastInsertId() : int
     {
         return null;
     }
@@ -46,7 +48,7 @@ class DummyConnection implements IConnection
     /**
      * @inheritDoc
      */
-    public function isInTransaction()
+    public function isInTransaction() : bool
     {
         return false;
     }
@@ -78,7 +80,7 @@ class DummyConnection implements IConnection
     /**
      * @inheritDoc
      */
-    public function prepare($sql, array $parameters = [])
+    public function prepare($sql, array $parameters = []) : IQuery
     {
         throw NotImplementedException::method(__METHOD__);
     }
@@ -86,7 +88,7 @@ class DummyConnection implements IConnection
     /**
      * @inheritDoc
      */
-    public function load(Select $query)
+    public function load(Select $query) : RowSet
     {
         return new RowSet($query->getResultSetTableStructure());
     }
@@ -94,7 +96,7 @@ class DummyConnection implements IConnection
     /**
      * @inheritDoc
      */
-    public function update(Update $query)
+    public function update(Update $query) : int
     {
 
     }
@@ -102,7 +104,7 @@ class DummyConnection implements IConnection
     /**
      * @inheritDoc
      */
-    public function delete(Delete $query)
+    public function delete(Delete $query) : int
     {
 
     }

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Table\DataSource\Criteria;
 
@@ -48,7 +48,7 @@ class RowCriteriaMapper
      *
      * @return ILoadCriteria
      */
-    public function mapCriteria(IRowCriteria $criteria)
+    public function mapCriteria(IRowCriteria $criteria) : \Dms\Core\Model\ILoadCriteria
     {
         $objectCriteria = new LoadCriteria($this->definition->getClass());
 

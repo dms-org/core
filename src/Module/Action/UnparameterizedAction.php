@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Module\Action;
 
@@ -30,7 +30,7 @@ class UnparameterizedAction extends Action implements IUnparameterizedAction
     /**
      * @return IUnparameterizedActionHandler
      */
-    final public function getHandler()
+    final public function getHandler() : \Dms\Core\Module\IActionHandler
     {
         return $this->handler;
     }

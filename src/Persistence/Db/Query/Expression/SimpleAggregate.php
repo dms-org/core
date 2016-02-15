@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Query\Expression;
 
@@ -34,7 +34,7 @@ class SimpleAggregate extends Aggregate
      * @param string $type
      * @param Expr   $argument
      */
-    public function __construct($type, Expr $argument)
+    public function __construct(string $type, Expr $argument)
     {
         $this->type     = $type;
         $this->argument = $argument;
@@ -43,7 +43,7 @@ class SimpleAggregate extends Aggregate
     /**
      * @return string
      */
-    public function getType()
+    public function getType() : string
     {
         return $this->type;
     }
@@ -51,7 +51,7 @@ class SimpleAggregate extends Aggregate
     /**
      * @return Expr
      */
-    public function getArgument()
+    public function getArgument() : Expr
     {
         return $this->argument;
     }
@@ -59,7 +59,7 @@ class SimpleAggregate extends Aggregate
     /**
      * @inheritDoc
      */
-    public function getChildren()
+    public function getChildren() : array
     {
         return [$this->argument];
     }
@@ -69,7 +69,7 @@ class SimpleAggregate extends Aggregate
      *
      * @return Type
      */
-    public function getResultingType()
+    public function getResultingType() : \Dms\Core\Persistence\Db\Schema\Type\Type
     {
         if ($this->type === self::AVG && $this->argument->getResultingType() instanceof Integer) {
             return new Decimal(30, 15);

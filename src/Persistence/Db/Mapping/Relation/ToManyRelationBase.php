@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Mapping\Relation;
 
@@ -49,7 +49,7 @@ abstract class ToManyRelationBase extends EntityRelation implements ISeparateToM
     /**
      * @inheritDoc
      */
-    public function buildCollection(array $children)
+    public function buildCollection(array $children) : \Dms\Core\Model\ITypedCollection
     {
         return $this->reference->buildNewCollection($children);
     }

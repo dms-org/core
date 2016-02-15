@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Form\Field\Processor;
 
@@ -23,7 +23,7 @@ class TypeProcessor extends FieldProcessor
     /**
      * @param string $type
      */
-    public function __construct($type)
+    public function __construct(string $type)
     {
         $type = strtolower($type);
 

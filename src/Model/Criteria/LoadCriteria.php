@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Model\Criteria;
 
@@ -48,7 +48,7 @@ class LoadCriteria extends Criteria implements ILoadCriteria
     /**
      * @inheritdoc
      */
-    final public function getAliasNestedMemberMap()
+    final public function getAliasNestedMemberMap() : array
     {
         return $this->nestedMembersToLoad;
     }
@@ -56,7 +56,7 @@ class LoadCriteria extends Criteria implements ILoadCriteria
     /**
      * @inheritDoc
      */
-    final public function getAliasNestedMemberStringMap()
+    final public function getAliasNestedMemberStringMap() : array
     {
         $aliasMemberStringMap = [];
 
@@ -70,7 +70,7 @@ class LoadCriteria extends Criteria implements ILoadCriteria
     /**
      * @inheritdoc
      */
-    public function getAliasMemberTree()
+    public function getAliasMemberTree() : array
     {
         return MemberExpressionTree::buildTree($this->nestedMembersToLoad);
     }

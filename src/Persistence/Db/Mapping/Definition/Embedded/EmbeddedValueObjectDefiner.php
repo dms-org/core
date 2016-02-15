@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Mapping\Definition\Embedded;
 
@@ -31,7 +31,7 @@ class EmbeddedValueObjectDefiner extends EmbeddedRelationDefiner
      *
      * @return static
      */
-    public function withColumnsPrefixedBy($prefix)
+    public function withColumnsPrefixedBy(string $prefix)
     {
         $this->prefix = $prefix;
 
@@ -46,7 +46,7 @@ class EmbeddedValueObjectDefiner extends EmbeddedRelationDefiner
      *
      * @return static
      */
-    public function withIssetColumn($columnName)
+    public function withIssetColumn(string $columnName)
     {
         $this->issetColumnName = $columnName;
 
@@ -90,7 +90,7 @@ class EmbeddedValueObjectDefiner extends EmbeddedRelationDefiner
      *
      * @return void
      */
-    public function to($valueObjectClass)
+    public function to(string $valueObjectClass)
     {
         $this->defineRelation(function (IObjectMapper $parentObjectMapper) use ($valueObjectClass) {
             return $this->orm->loadEmbeddedObjectMapper($parentObjectMapper, $valueObjectClass);

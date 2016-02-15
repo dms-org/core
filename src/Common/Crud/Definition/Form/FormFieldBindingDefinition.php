@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Common\Crud\Definition\Form;
 
@@ -47,7 +47,7 @@ class FormFieldBindingDefinition
     /**
      * @return IField
      */
-    public function getField()
+    public function getField() : \Dms\Core\Form\IField
     {
         return $this->field;
     }
@@ -55,7 +55,7 @@ class FormFieldBindingDefinition
     /**
      * @return bool
      */
-    public function hasBinding()
+    public function hasBinding() : bool
     {
         return $this->binding !== null;
     }

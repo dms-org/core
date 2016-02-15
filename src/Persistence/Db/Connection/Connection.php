@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Connection;
 
@@ -38,7 +38,7 @@ abstract class Connection implements IConnection
     /**
      * @return IPlatform
      */
-    final public function getPlatform()
+    final public function getPlatform() : \Dms\Core\Persistence\Db\Platform\IPlatform
     {
         return $this->platform;
     }
@@ -72,7 +72,7 @@ abstract class Connection implements IConnection
      *
      * @return IQuery
      */
-    protected function loadQueryFrom(CompiledQuery $compiledQuery)
+    protected function loadQueryFrom(CompiledQuery $compiledQuery) : IQuery
     {
         return $this->prepare($compiledQuery->getSql(), $compiledQuery->getParameters());
     }
@@ -80,7 +80,7 @@ abstract class Connection implements IConnection
     /**
      *{@inheritDoc}
      */
-    public function load(Select $query)
+    public function load(Select $query) : \Dms\Core\Persistence\Db\RowSet
     {
         $compiled = $this->loadQueryFrom($this->platform->compileSelect($query));
         $compiled->execute();
@@ -91,7 +91,7 @@ abstract class Connection implements IConnection
     /**
      *{@inheritDoc}
      */
-    public function update(Update $query)
+    public function update(Update $query) : int
     {
         $compiled = $this->loadQueryFrom($this->platform->compileUpdate($query));
         $compiled->execute();
@@ -102,7 +102,7 @@ abstract class Connection implements IConnection
     /**
      *{@inheritDoc}
      */
-    public function delete(Delete $query)
+    public function delete(Delete $query) : int
     {
         $compiled = $this->loadQueryFrom($this->platform->compileDelete($query));
         $compiled->execute();

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Model\Criteria;
 
@@ -64,7 +64,7 @@ abstract class Specification extends ObjectCriteriaBase implements ISpecificatio
      *
      * @return string
      */
-    abstract protected function type();
+    abstract protected function type() : string;
 
     /**
      * Defines the criteria for the specification.
@@ -78,7 +78,7 @@ abstract class Specification extends ObjectCriteriaBase implements ISpecificatio
     /**
      * {@inheritDoc}
      */
-    final public function asCriteria()
+    final public function asCriteria() : \Dms\Core\Model\ICriteria
     {
         return (new Criteria($this->getClass()))->whereSatisfies($this);
     }
@@ -86,7 +86,7 @@ abstract class Specification extends ObjectCriteriaBase implements ISpecificatio
     /**
      * {@inheritDoc}
      */
-    final public function and_(ISpecification $specification)
+    final public function and_(ISpecification $specification) : \Dms\Core\Model\ISpecification
     {
         $specification->verifyOfClass($this->class->getClassName());
 
@@ -104,7 +104,7 @@ abstract class Specification extends ObjectCriteriaBase implements ISpecificatio
     /**
      * {@inheritDoc}
      */
-    final public function or_(ISpecification $specification)
+    final public function or_(ISpecification $specification) : \Dms\Core\Model\ISpecification
     {
         $specification->verifyOfClass($this->class->getClassName());
 
@@ -122,7 +122,7 @@ abstract class Specification extends ObjectCriteriaBase implements ISpecificatio
     /**
      * {@inheritDoc}
      */
-    final public function not()
+    final public function not() : \Dms\Core\Model\ISpecification
     {
         return new CustomSpecification(
                 $this->class->getClassName(),
@@ -135,7 +135,7 @@ abstract class Specification extends ObjectCriteriaBase implements ISpecificatio
     /**
      * @inheritDoc
      */
-    public function isSatisfiedBy(ITypedObject $object)
+    public function isSatisfiedBy(ITypedObject $object) : bool
     {
         return count($this->filter([$object])) === 1;
     }
@@ -143,7 +143,7 @@ abstract class Specification extends ObjectCriteriaBase implements ISpecificatio
     /**
      * @inheritDoc
      */
-    public function isSatisfiedByAll(array $objects)
+    public function isSatisfiedByAll(array $objects) : bool
     {
         return count($this->filter($objects)) === count($objects);
     }
@@ -151,7 +151,7 @@ abstract class Specification extends ObjectCriteriaBase implements ISpecificatio
     /**
      * @inheritDoc
      */
-    public function isSatisfiedByAny(array $objects)
+    public function isSatisfiedByAny(array $objects) : bool
     {
         return count($this->filter($objects)) > 0;
     }
@@ -159,7 +159,7 @@ abstract class Specification extends ObjectCriteriaBase implements ISpecificatio
     /**
      * @inheritDoc
      */
-    public function filter(array $objects)
+    public function filter(array $objects) : array
     {
         Exception\TypeMismatchException::verifyAllInstanceOf(__METHOD__, 'objects', $objects, $this->type);
 

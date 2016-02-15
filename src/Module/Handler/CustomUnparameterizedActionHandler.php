@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Module\Handler;
 
@@ -31,7 +31,7 @@ class CustomUnparameterizedActionHandler extends UnparameterizedActionHandler im
      *
      * @throws \Dms\Core\Exception\InvalidArgumentException
      */
-    public function __construct(callable $handleCallback, $returnType = null)
+    public function __construct(callable $handleCallback, string $returnType = null)
     {
         $this->handleCallback = $handleCallback;
         $this->returnType     = $returnType;

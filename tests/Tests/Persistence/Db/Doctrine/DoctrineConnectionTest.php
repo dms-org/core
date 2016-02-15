@@ -97,11 +97,11 @@ class DoctrineConnectionTest extends DoctrineTestBase
     {
         $this->assertFalse($this->connection->isInTransaction());
 
-        $exception = null;
+        $exception = new \Exception;
         try {
-            $this->connection->withinTransaction(function () use (&$exception) {
+            $this->connection->withinTransaction(function () use ($exception) {
                 $this->assertTrue($this->connection->isInTransaction());
-                throw $exception = new \Exception;
+                throw $exception;
             });
         } catch (\Exception $caught) {
             $this->assertSame($exception, $caught);

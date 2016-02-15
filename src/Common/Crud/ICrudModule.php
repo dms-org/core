@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Common\Crud;
 
@@ -28,7 +28,7 @@ interface ICrudModule extends IReadModule
      *
      * @return bool
      */
-    public function allowsCreate();
+    public function allowsCreate() : bool;
 
     /**
      * Gets the create object action.
@@ -36,14 +36,14 @@ interface ICrudModule extends IReadModule
      * @return IParameterizedAction
      * @throws UnsupportedActionException
      */
-    public function getCreateAction();
+    public function getCreateAction() : IParameterizedAction;
 
     /**
      * Returns whether the modules allows objects to be edited.
      *
      * @return bool
      */
-    public function allowsEdit();
+    public function allowsEdit() : bool;
 
     /**
      * Gets the edit object action.
@@ -51,14 +51,14 @@ interface ICrudModule extends IReadModule
      * @return IObjectAction
      * @throws UnsupportedActionException
      */
-    public function getEditAction();
+    public function getEditAction() : IObjectAction;
 
     /**
      * Returns whether the modules allows objects to be removed.
      *
      * @return bool
      */
-    public function allowsRemove();
+    public function allowsRemove() : bool;
 
     /**
      * Gets the remove object action.
@@ -66,5 +66,5 @@ interface ICrudModule extends IReadModule
      * @return IObjectAction
      * @throws UnsupportedActionException
      */
-    public function getRemoveAction();
+    public function getRemoveAction() : IObjectAction;
 }

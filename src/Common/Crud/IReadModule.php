@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Common\Crud;
 
@@ -33,14 +33,14 @@ interface IReadModule extends IModule
      *
      * @return string
      */
-    public function getObjectType();
+    public function getObjectType() : string;
 
     /**
      * Gets the underlying object data source.
      *
      * @return IObjectSet
      */
-    public function getDataSource();
+    public function getDataSource() : \Dms\Core\Model\IObjectSet;
 
     /**
      * Gets a label string for the supplied typed object.
@@ -49,21 +49,21 @@ interface IReadModule extends IModule
      *
      * @return string
      */
-    public function getLabelFor(ITypedObject $object);
+    public function getLabelFor(ITypedObject $object) : string;
 
     /**
      * Gets the table display for the summary table.
      *
      * @return ISummaryTable
      */
-    public function getSummaryTable();
+    public function getSummaryTable() : Table\ISummaryTable;
 
     /**
      * Gets the defined object actions.
      *
      * @return IObjectAction[]
      */
-    public function getObjectActions();
+    public function getObjectActions() : array;
 
     /**
      * Returns whether an object action with the supplied name is defined
@@ -73,7 +73,7 @@ interface IReadModule extends IModule
      *
      * @return bool
      */
-    public function hasObjectAction($name);
+    public function hasObjectAction(string $name) : bool;
 
     /**
      * Gets the object action with the supplied name.
@@ -83,21 +83,21 @@ interface IReadModule extends IModule
      * @return IObjectAction
      * @throws ActionNotFoundException
      */
-    public function getObjectAction($name);
+    public function getObjectAction(string $name) : Action\Object\IObjectAction;
 
     /**
      * Gets the action to view the summary table.
      *
      * @return IUnparameterizedAction
      */
-    public function getSummaryTableAction();
+    public function getSummaryTableAction() : \Dms\Core\Module\IUnparameterizedAction;
 
     /**
      * Returns whether the modules allows view in details.
      *
      * @return bool
      */
-    public function allowsDetails();
+    public function allowsDetails() : bool;
 
     /**
      * Gets view object details action.
@@ -105,5 +105,5 @@ interface IReadModule extends IModule
      * @return IObjectAction
      * @throws UnsupportedActionException
      */
-    public function getDetailsAction();
+    public function getDetailsAction() : Action\Object\IObjectAction;
 }

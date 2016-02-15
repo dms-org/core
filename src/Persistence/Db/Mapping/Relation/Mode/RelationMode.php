@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Mapping\Relation\Mode;
 
@@ -24,7 +24,7 @@ abstract class RelationMode implements IRelationMode
      *
      * @return Query
      */
-    final protected function foreignKeyJoin(Query $newQuery, Query $parentQuery, Column $foreignKeyToParentColumn, Column $parentKeyColumn)
+    final protected function foreignKeyJoin(Query $newQuery, Query $parentQuery, Column $foreignKeyToParentColumn, Column $parentKeyColumn) : \Dms\Core\Persistence\Db\Query\Query
     {
         $parentTable = $parentQuery->getTable();
         $tableAlias  = $newQuery->generateUniqueAliasFor($parentTable->getName());

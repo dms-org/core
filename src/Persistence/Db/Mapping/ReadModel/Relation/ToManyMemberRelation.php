@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Mapping\ReadModel\Relation;
 
@@ -41,7 +41,7 @@ class ToManyMemberRelation extends MemberRelation implements IToManyRelation
     /**
      * @inheritDoc
      */
-    public function buildCollection(array $children)
+    public function buildCollection(array $children) : \Dms\Core\Model\ITypedCollection
     {
         return $this->memberMapping->getRelation()->buildCollection($children);
     }

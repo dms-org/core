@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Mapping;
 
@@ -20,7 +20,7 @@ interface IOrm extends IRelationPropertyIdTypeProvider
      *
      * @return IEntityMapper[]
      */
-    public function getEntityMappers();
+    public function getEntityMappers() : array;
 
     /**
      * Returns whether the orm has a mapper for the supplied
@@ -35,7 +35,7 @@ interface IOrm extends IRelationPropertyIdTypeProvider
      * @return bool
      * @throws InvalidArgumentException
      */
-    public function hasEntityMapper($entityClass, $tableName = null);
+    public function hasEntityMapper(string $entityClass, string $tableName = null) : bool;
 
     /**
      * Gets the entity mapper for the supplied class.
@@ -48,7 +48,7 @@ interface IOrm extends IRelationPropertyIdTypeProvider
      * @return IEntityMapper
      * @throws InvalidArgumentException
      */
-    public function getEntityMapper($entityClass, $tableName = null);
+    public function getEntityMapper(string $entityClass, string $tableName = null) : IEntityMapper;
 
     /**
      * Gets the entity mapper for the supplied class.
@@ -60,14 +60,14 @@ interface IOrm extends IRelationPropertyIdTypeProvider
      *
      * @return IEntityMapper|null
      */
-    public function findEntityMapper($entityClass, $tableName = null);
+    public function findEntityMapper(string $entityClass, string $tableName = null);
 
     /**
      * Gets all the embedded object type registered in the orm.
      *
      * @return string[]
      */
-    public function getEmbeddedObjectTypes();
+    public function getEmbeddedObjectTypes() : array;
 
     /**
      * Returns whether the orm has a mapper for the supplied object class.
@@ -76,7 +76,7 @@ interface IOrm extends IRelationPropertyIdTypeProvider
      *
      * @return bool
      */
-    public function hasEmbeddedObjectMapper($valueObjectClass);
+    public function hasEmbeddedObjectMapper(string $valueObjectClass) : bool;
 
     /**
      * Gets the embedded object mapper for the supplied class.
@@ -87,21 +87,21 @@ interface IOrm extends IRelationPropertyIdTypeProvider
      * @return IEmbeddedObjectMapper
      * @throws InvalidArgumentException
      */
-    public function loadEmbeddedObjectMapper(IObjectMapper $parentMapper, $valueObjectClass);
+    public function loadEmbeddedObjectMapper(IObjectMapper $parentMapper, string $valueObjectClass) : IEmbeddedObjectMapper;
 
     /**
      * Gets the orms which have been included in this parent orm.
      *
      * @return IOrm[]
      */
-    public function getIncludedOrms();
+    public function getIncludedOrms() : array;
 
     /**
      * Gets the database structure for the orm.
      *
      * @return Database
      */
-    public function getDatabase();
+    public function getDatabase() : \Dms\Core\Persistence\Db\Schema\Database;
 
     /**
      * Loads the entity set provider for the supplied db connection.
@@ -110,7 +110,7 @@ interface IOrm extends IRelationPropertyIdTypeProvider
      *
      * @return IEntitySetProvider
      */
-    public function getEntityDataSourceProvider(IConnection $connection);
+    public function getEntityDataSourceProvider(IConnection $connection) : \Dms\Core\Model\Criteria\IEntitySetProvider;
 
     /**
      * Gets the current namespace of the orm.
@@ -119,7 +119,7 @@ interface IOrm extends IRelationPropertyIdTypeProvider
      *
      * @return string
      */
-    public function getNamespace();
+    public function getNamespace() : string;
 
     /**
      * Returns an equivalent orm with the table names and constraint names
@@ -129,5 +129,5 @@ interface IOrm extends IRelationPropertyIdTypeProvider
      *
      * @return IOrm
      */
-    public function inNamespace($prefix);
+    public function inNamespace(string $prefix) : IOrm;
 }

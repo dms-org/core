@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Model\Object;
 
@@ -61,7 +61,7 @@ class PropertyDefinition
     /**
      * @return string
      */
-    public function getName()
+    public function getName() : string
     {
         return $this->name;
     }
@@ -69,7 +69,7 @@ class PropertyDefinition
     /**
      * @return string
      */
-    public function getClass()
+    public function getClass() : string
     {
         return $this->class;
     }
@@ -77,7 +77,7 @@ class PropertyDefinition
     /**
      * @return PropertyAccessibility
      */
-    public function getAccessibility()
+    public function getAccessibility() : PropertyAccessibility
     {
         return $this->accessibility;
     }
@@ -97,7 +97,7 @@ class PropertyDefinition
     /**
      * @return IType
      */
-    public function getType()
+    public function getType() : \Dms\Core\Model\Type\IType
     {
         return $this->type;
     }
@@ -113,7 +113,7 @@ class PropertyDefinition
     /**
      * @return bool
      */
-    public function hasType()
+    public function hasType() : bool
     {
         return $this->type !== null;
     }
@@ -121,7 +121,7 @@ class PropertyDefinition
     /**
      * @return bool
      */
-    public function isIgnored()
+    public function isIgnored() : bool
     {
         return $this->ignored;
     }
@@ -129,7 +129,7 @@ class PropertyDefinition
     /**
      * @param bool $isIgnored
      */
-    public function setIgnored($isIgnored)
+    public function setIgnored(bool $isIgnored)
     {
         $this->ignored = $isIgnored;
     }
@@ -137,7 +137,7 @@ class PropertyDefinition
     /**
      * @return bool
      */
-    public function isImmutable()
+    public function isImmutable() : bool
     {
         return $this->immutable;
     }
@@ -145,7 +145,7 @@ class PropertyDefinition
     /**
      * @param bool $immutable
      */
-    public function setImmutable($immutable)
+    public function setImmutable(bool $immutable)
     {
         $this->immutable = $immutable;
     }

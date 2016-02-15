@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Doctrine;
 
@@ -47,7 +47,7 @@ class DoctrineExpressionCompiler
      *
      * @return array
      */
-    public function compileExpressions(QueryBuilder $queryBuilder, array $expressions)
+    public function compileExpressions(QueryBuilder $queryBuilder, array $expressions) : array
     {
         $compiled = [];
 

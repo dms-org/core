@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Model\Criteria;
 
@@ -26,5 +26,5 @@ interface IMemberExpressionParser
      * @return NestedMember
      * @throws InvalidArgumentException
      */
-    public function parse(FinalizedClassDefinition $rootCollectionType, $string);
+    public function parse(FinalizedClassDefinition $rootCollectionType, string $string) : NestedMember;
 }

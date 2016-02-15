@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Mapping\Relation\Reference;
 
@@ -18,7 +18,7 @@ class ToOneRelationIdentityReference extends RelationIdentityReference implement
     /**
      * @return ToOneRelationObjectReference
      */
-    public function asObjectReference()
+    public function asObjectReference() : RelationObjectReference
     {
         return new ToOneRelationObjectReference($this->mapper, $this->bidirectionalRelationProperty);
     }
@@ -29,7 +29,7 @@ class ToOneRelationIdentityReference extends RelationIdentityReference implement
      *
      * @return array
      */
-    public function loadValues(LoadingContext $context, array $rows)
+    public function loadValues(LoadingContext $context, array $rows) : array
     {
         $primaryKey = $this->primaryKeyColumn->getName();
         $ids        = [];
@@ -49,7 +49,7 @@ class ToOneRelationIdentityReference extends RelationIdentityReference implement
      * @return Row[]
      * @throws InvalidArgumentException
      */
-    public function syncRelated(PersistenceContext $context, array $modifiedColumns, array $children)
+    public function syncRelated(PersistenceContext $context, array $modifiedColumns, array $children) : array
     {
         return $this->bulkUpdateForeignKeys($context, $modifiedColumns, $children);
     }

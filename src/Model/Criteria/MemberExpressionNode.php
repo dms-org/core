@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Model\Criteria;
 
@@ -46,7 +46,7 @@ class MemberExpressionNode
     /**
      * @return IMemberExpression
      */
-    public function getMemberExpression()
+    public function getMemberExpression() : IMemberExpression
     {
         return $this->memberExpression;
     }
@@ -54,7 +54,7 @@ class MemberExpressionNode
     /**
      * @return MemberExpressionNode[]
      */
-    public function getChildren()
+    public function getChildren() : array
     {
         return $this->children;
     }
@@ -62,7 +62,7 @@ class MemberExpressionNode
     /**
      * @return string[]
      */
-    public function getLoadAliases()
+    public function getLoadAliases() : array
     {
         return $this->aliases;
     }

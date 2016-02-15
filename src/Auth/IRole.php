@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Auth;
 
@@ -12,7 +12,7 @@ interface IRole extends IEntity
      *
      * @return string
      */
-    public function getName();
+    public function getName() : string;
 
     /**
      * Gets the permission.

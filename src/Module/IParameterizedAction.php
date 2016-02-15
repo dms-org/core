@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Module;
 
@@ -22,14 +22,14 @@ interface IParameterizedAction extends IAction
      *
      * @return IParameterizedActionHandler
      */
-    public function getHandler();
+    public function getHandler() : IActionHandler;
 
     /**
      * Gets the form required to run this action.
      *
      * @return IStagedForm
      */
-    public function getStagedForm();
+    public function getStagedForm() : \Dms\Core\Form\IStagedForm;
 
     /**
      * Runs the action.

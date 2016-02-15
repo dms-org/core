@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Module\Action;
 
@@ -54,7 +54,7 @@ class ParameterizedAction extends Action implements IParameterizedAction
     /**
      * @return IParameterizedActionHandler
      */
-    final public function getHandler()
+    final public function getHandler() : \Dms\Core\Module\IActionHandler
     {
         return $this->handler;
     }
@@ -62,7 +62,7 @@ class ParameterizedAction extends Action implements IParameterizedAction
     /**
      * {@inheritDoc}
      */
-    final public function getStagedForm()
+    final public function getStagedForm() : \Dms\Core\Form\IStagedForm
     {
         return $this->stagedForm;
     }
@@ -70,7 +70,7 @@ class ParameterizedAction extends Action implements IParameterizedAction
     /**
      * @return IStagedFormDtoMapping
      */
-    final public function getFormDtoMapping()
+    final public function getFormDtoMapping() : \Dms\Core\Module\IStagedFormDtoMapping
     {
         return $this->formDtoMapping;
     }

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Doctrine\Migration;
 
@@ -36,7 +36,7 @@ abstract class MigrationGenerator
      *
      * @return string|null the migration file path or null if no migration is required
      */
-    public function generateMigration(DoctrineConnection $connection, IOrm $orm, $migrationName)
+    public function generateMigration(DoctrineConnection $connection, IOrm $orm, string $migrationName)
     {
         $doctrine = $connection->getDoctrineConnection();
 
@@ -60,14 +60,14 @@ abstract class MigrationGenerator
      *
      * @return string|null
      */
-    abstract protected function createMigration(SchemaDiff $diff, SchemaDiff $reverseDiff, $migrationName);
+    abstract protected function createMigration(SchemaDiff $diff, SchemaDiff $reverseDiff, string $migrationName);
 
     /**
      * @param SchemaDiff $diff
      *
      * @return bool
      */
-    protected function isSchemaDiffEmpty(SchemaDiff $diff)
+    protected function isSchemaDiffEmpty(SchemaDiff $diff) : bool
     {
         return empty(array_filter([
                 $diff->changedSequences,

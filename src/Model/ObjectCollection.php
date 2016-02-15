@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Model;
 
@@ -29,23 +29,23 @@ class ObjectCollection extends TypedCollection implements ITypedObjectCollection
     protected $classDefinition;
 
     /**
-     * @param string               $objectType
-     * @param ITypedObject[]       $objects
-     * @param IIteratorScheme|null $scheme
-     * @param Collection|null      $source
+     * @param string                      $objectType
+     * @param \Traversable|ITypedObject[] $objects
+     * @param IIteratorScheme|null        $scheme
+     * @param Collection|null             $source
      *
      * @throws Exception\InvalidArgumentException
      */
     public function __construct(
-            $objectType,
-            $objects = [],
-            IIteratorScheme $scheme = null,
-            Collection $source = null
+        string $objectType,
+        $objects = [],
+        IIteratorScheme $scheme = null,
+        Collection $source = null
     ) {
         if (!is_a($objectType, ITypedObject::class, true)) {
             throw Exception\InvalidArgumentException::format(
-                    'Invalid object class: expecting instance of %s, %s given',
-                    ITypedObject::class, $objectType
+                'Invalid object class: expecting instance of %s, %s given',
+                ITypedObject::class, $objectType
             );
         }
 
@@ -75,7 +75,7 @@ class ObjectCollection extends TypedCollection implements ITypedObjectCollection
         return new TypedCollection(Type::mixed(), $elements, $this->scheme, $this->source ?: $this);
     }
 
-    public function getAll()
+    public function getAll() : array
     {
         return $this->toOrderedMap()->values();
     }
@@ -83,7 +83,7 @@ class ObjectCollection extends TypedCollection implements ITypedObjectCollection
     /**
      * {@inheritDoc}
      */
-    public function getObjectType()
+    public function getObjectType() : string
     {
         return $this->elementType->getClass();
     }
@@ -102,7 +102,7 @@ class ObjectCollection extends TypedCollection implements ITypedObjectCollection
     /**
      * @inheritDoc
      */
-    public function containsAll(array $objects)
+    public function containsAll(array $objects) : bool
     {
         Exception\TypeMismatchException::verifyAllInstanceOf(__METHOD__, 'objects', $objects, $this->getObjectType());
 
@@ -114,7 +114,7 @@ class ObjectCollection extends TypedCollection implements ITypedObjectCollection
      *
      * @return bool
      */
-    protected function doesContainsObjects(array $objects)
+    protected function doesContainsObjects(array $objects) : bool
     {
         $objectsLookup = new \SplObjectStorage();
 
@@ -134,7 +134,7 @@ class ObjectCollection extends TypedCollection implements ITypedObjectCollection
     /**
      * @inheritDoc
      */
-    public function criteria()
+    public function criteria() : Criteria\Criteria
     {
         /** @var string|TypedObject $objectType */
         $objectType = $this->getObjectType();
@@ -145,13 +145,13 @@ class ObjectCollection extends TypedCollection implements ITypedObjectCollection
     /**
      * @inheritDoc
      */
-    public function loadCriteria()
+    public function loadCriteria() : Criteria\LoadCriteria
     {
         return new LoadCriteria($this->classDefinition);
     }
 
 
-    public function countMatching(ICriteria $criteria)
+    public function countMatching(ICriteria $criteria) : int
     {
         return count($this->matching($criteria));
     }
@@ -159,7 +159,7 @@ class ObjectCollection extends TypedCollection implements ITypedObjectCollection
     /**
      * @inheritDoc
      */
-    public function matching(ICriteria $criteria)
+    public function matching(ICriteria $criteria) : array
     {
         $criteria->verifyOfClass($this->getObjectType());
 
@@ -190,7 +190,7 @@ class ObjectCollection extends TypedCollection implements ITypedObjectCollection
     /**
      * {@inheritDoc}
      */
-    public function satisfying(ISpecification $specification)
+    public function satisfying(ISpecification $specification) : array
     {
         $specification->verifyOfClass($this->getObjectType());
 
@@ -200,7 +200,7 @@ class ObjectCollection extends TypedCollection implements ITypedObjectCollection
     /**
      * @inheritDoc
      */
-    public function loadMatching(ILoadCriteria $criteria)
+    public function loadMatching(ILoadCriteria $criteria) : array
     {
         $criteria->verifyOfClass($this->getObjectType());
 

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Model\Criteria\Condition;
 
@@ -15,7 +15,7 @@ class OrCondition extends CompositeCondition
      *
      * @return callable
      */
-    protected function makeArrayFilterCallable()
+    protected function makeArrayFilterCallable() : callable
     {
         $conditions = $this->getConditions();
         /** @var Condition $firstCondition */

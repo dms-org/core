@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Util\Hashing;
 
@@ -18,7 +18,7 @@ class ValueHasher
      *
      * @return string
      */
-    public static function hash($value)
+    public static function hash($value) : string
     {
         if (is_object($value)) {
             if ($value instanceof IHashable) {

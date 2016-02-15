@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db;
 
@@ -62,7 +62,7 @@ class PersistenceContext extends ConnectionContext
      *
      * @return PersistenceContext
      */
-    public static function dummy()
+    public static function dummy() : PersistenceContext
     {
         return new PersistenceContext(new DummyConnection());
     }
@@ -85,7 +85,7 @@ class PersistenceContext extends ConnectionContext
      *
      * @return bool
      */
-    public function isPersisted(IEntity $entity)
+    public function isPersisted(IEntity $entity) : bool
     {
         return isset($this->persistedEntities[spl_object_hash($entity)]);
     }
@@ -139,7 +139,7 @@ class PersistenceContext extends ConnectionContext
      *
      * @return bool
      */
-    public function isRelationIgnored(IRelation $relation)
+    public function isRelationIgnored(IRelation $relation) : bool
     {
         if (empty($this->ignoreRelationStack)) {
             return false;
@@ -169,7 +169,7 @@ class PersistenceContext extends ConnectionContext
      *
      * @return bool
      */
-    public function isPersistHookIgnored(IPersistHook $persistHook)
+    public function isPersistHookIgnored(IPersistHook $persistHook) : bool
     {
         if (empty($this->ignorePersistHookStack)) {
             return false;
@@ -181,7 +181,7 @@ class PersistenceContext extends ConnectionContext
     /**
      * @return IQuery[]
      */
-    public function getOperations()
+    public function getOperations() : array
     {
         return $this->operations;
     }

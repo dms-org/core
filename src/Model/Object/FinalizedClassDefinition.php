@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Model\Object;
 
@@ -103,7 +103,7 @@ class FinalizedClassDefinition
     /**
      * @return string
      */
-    public function getClassName()
+    public function getClassName() : string
     {
         return $this->className;
     }
@@ -133,7 +133,7 @@ class FinalizedClassDefinition
     /**
      * @return FinalizedPropertyDefinition[]
      */
-    public function getProperties()
+    public function getProperties() : array
     {
         return $this->properties;
     }
@@ -144,7 +144,7 @@ class FinalizedClassDefinition
      * @return FinalizedPropertyDefinition
      * @throws Exception\InvalidArgumentException
      */
-    public function getProperty($name)
+    public function getProperty(string $name) : FinalizedPropertyDefinition
     {
         if (!isset($this->properties[$name])) {
             throw Exception\InvalidArgumentException::format(
@@ -161,7 +161,7 @@ class FinalizedClassDefinition
      *
      * @return bool
      */
-    public function hasProperty($name)
+    public function hasProperty(string $name) : bool
     {
         return isset($this->propertyTypeMap[$name]);
     }
@@ -169,7 +169,7 @@ class FinalizedClassDefinition
     /**
      * @return IType[]
      */
-    public function getPropertyTypeMap()
+    public function getPropertyTypeMap() : array
     {
         return $this->propertyTypeMap;
     }
@@ -181,7 +181,7 @@ class FinalizedClassDefinition
      *
      * @return IType|null
      */
-    public function getPropertyType($name)
+    public function getPropertyType(string $name)
     {
         return isset($this->propertyTypeMap[$name]) ? $this->propertyTypeMap[$name] : null;
     }
@@ -189,7 +189,7 @@ class FinalizedClassDefinition
     /**
      * @return array
      */
-    public function getPropertyDefaultMap()
+    public function getPropertyDefaultMap() : array
     {
         return $this->propertyDefaultMap;
     }
@@ -197,7 +197,7 @@ class FinalizedClassDefinition
     /**
      * @return PropertyAccessibility[]
      */
-    public function getPropertyAccessibilityMap()
+    public function getPropertyAccessibilityMap() : array
     {
         return $this->propertyAccessibilityMap;
     }
@@ -209,7 +209,7 @@ class FinalizedClassDefinition
      *
      * @return PropertyAccessibility|null
      */
-    public function getAccessibility($property)
+    public function getAccessibility(string $property)
     {
         return isset($this->propertyAccessibilityMap[$property])
                 ? $this->propertyAccessibilityMap[$property]
@@ -225,7 +225,7 @@ class FinalizedClassDefinition
      *
      * @return bool
      */
-    public function isAccessibleFrom($property, $class)
+    public function isAccessibleFrom(string $property, $class) : bool
     {
         return isset($this->propertyAccessibilityMap[$property])
                 ? $this->propertyAccessibilityMap[$property]->isAccessibleFrom($class)
@@ -237,7 +237,7 @@ class FinalizedClassDefinition
      *
      * @return bool
      */
-    public function isAbstract()
+    public function isAbstract() : bool
     {
         return $this->isAbstract;
     }

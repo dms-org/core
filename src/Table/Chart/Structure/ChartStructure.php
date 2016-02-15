@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Table\Chart\Structure;
 
@@ -36,7 +36,7 @@ abstract class ChartStructure implements IChartStructure
     /**
      * @inheritDoc
      */
-    final public function getAxes()
+    final public function getAxes() : array
     {
         return $this->axes;
     }
@@ -44,7 +44,7 @@ abstract class ChartStructure implements IChartStructure
     /**
      * @inheritDoc
      */
-    final public function getAxis($name)
+    final public function getAxis(string $name) : \Dms\Core\Table\Chart\IChartAxis
     {
         if (!isset($this->axes[$name])) {
             throw InvalidArgumentException::format(
@@ -59,7 +59,7 @@ abstract class ChartStructure implements IChartStructure
     /**
      * @inheritDoc
      */
-    final public function hasAxis($name)
+    final public function hasAxis(string $name) : bool
     {
         return isset($this->axes[$name]);
     }

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Model;
 
@@ -17,21 +17,21 @@ interface IObjectSet extends ITypedCollection, \Countable
      *
      * @return string
      */
-    public function getObjectType();
+    public function getObjectType() : string;
 
     /**
      * Returns a new criteria instance for the object type.
      *
      * @return Criteria
      */
-    public function criteria();
+    public function criteria() : Criteria;
 
     /**
      * Returns all the object as an array.
      *
      * @return ITypedObject[]
      */
-    public function getAll();
+    public function getAll() : array;
 
     /**
      * Returns the amount of objects
@@ -58,7 +58,7 @@ interface IObjectSet extends ITypedCollection, \Countable
      * @return bool
      * @throws Exception\TypeMismatchException
      */
-    public function containsAll(array $objects);
+    public function containsAll(array $objects) : bool;
 
     /**
      * Returns the amount of objects matching the supplied criteria
@@ -67,7 +67,7 @@ interface IObjectSet extends ITypedCollection, \Countable
      *
      * @return int
      */
-    public function countMatching(ICriteria $criteria);
+    public function countMatching(ICriteria $criteria) : int;
 
     /**
      * Returns an array of objects matching the supplied criteria.
@@ -77,7 +77,7 @@ interface IObjectSet extends ITypedCollection, \Countable
      * @return ITypedObject[]
      * @throws Exception\TypeMismatchException
      */
-    public function matching(ICriteria $criteria);
+    public function matching(ICriteria $criteria) : array;
 
     /**
      * Returns an array of objects which satisfy the supplied specification.
@@ -87,5 +87,5 @@ interface IObjectSet extends ITypedCollection, \Countable
      * @return ITypedObject[]
      * @throws Exception\TypeMismatchException
      */
-    public function satisfying(ISpecification $specification);
+    public function satisfying(ISpecification $specification) : array;
 }

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Model\Object;
 
@@ -43,7 +43,7 @@ class PropertyAccessibility
      *
      * @return PropertyAccessibility
      */
-    public static function from(\ReflectionProperty $reflection)
+    public static function from(\ReflectionProperty $reflection) : PropertyAccessibility
     {
         if ($reflection->isPublic()) {
             $accessibility = self::ACCESS_PUBLIC;
@@ -59,7 +59,7 @@ class PropertyAccessibility
     /**
      * @return string
      */
-    public function getAccessibility()
+    public function getAccessibility() : string
     {
         return $this->accessibility;
     }
@@ -67,7 +67,7 @@ class PropertyAccessibility
     /**
      * @return bool
      */
-    public function isPublic()
+    public function isPublic() : bool
     {
         return $this->accessibility === self::ACCESS_PUBLIC;
     }
@@ -75,7 +75,7 @@ class PropertyAccessibility
     /**
      * @return bool
      */
-    public function isPrivate()
+    public function isPrivate() : bool
     {
         return $this->accessibility === self::ACCESS_PRIVATE;
     }
@@ -83,27 +83,27 @@ class PropertyAccessibility
     /**
      * @return string
      */
-    public function getDeclaredClass()
+    public function getDeclaredClass() : string
     {
         return $this->declaredClass;
     }
 
     /**
      * Returns whether the property is accessible from the supplied class
-     * or null if not in a class scope.
+     * or class is null which means it is not in a class scope.
      *
      * @param string|null $class
      *
      * @return bool
      */
-    public function isAccessibleFrom($class)
+    public function isAccessibleFrom(string $class = null) : bool
     {
         switch ($this->accessibility) {
             case self::ACCESS_PUBLIC:
                 return true;
 
             case self::ACCESS_PROTECTED:
-                return is_a($class, $this->declaredClass, true) || is_a($this->declaredClass, $class, true);
+                return $class && (is_a($class, $this->declaredClass, true) || is_a($this->declaredClass, $class, true));
 
             case self::ACCESS_PRIVATE:
                 return $class === $this->declaredClass;

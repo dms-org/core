@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Table\Column;
 
@@ -41,7 +41,7 @@ class Column implements IColumn
      * @param string             $label
      * @param IColumnComponent[] $components
      */
-    public function __construct($name, $label, array $components)
+    public function __construct(string $name, string $label, array $components)
     {
         InvalidArgumentException::verifyAllInstanceOf(__METHOD__, 'components', $components, IColumnComponent::class);
 
@@ -55,7 +55,7 @@ class Column implements IColumn
     /**
      * @return string
      */
-    final public function getName()
+    final public function getName() : string
     {
         return $this->name;
     }
@@ -63,7 +63,7 @@ class Column implements IColumn
     /**
      * @return mixed
      */
-    final public function getLabel()
+    final public function getLabel() : string
     {
         return $this->label;
     }
@@ -71,7 +71,7 @@ class Column implements IColumn
     /**
      * @return IColumnComponent[]
      */
-    final public function getComponents()
+    final public function getComponents() : array
     {
         return $this->components;
     }
@@ -79,7 +79,7 @@ class Column implements IColumn
     /**
      * @return string[]
      */
-    final public function getComponentNames()
+    final public function getComponentNames() : array
     {
         return array_keys($this->components);
     }
@@ -87,7 +87,7 @@ class Column implements IColumn
     /**
      * @inheritDoc
      */
-    public function hasSingleComponent()
+    public function hasSingleComponent() : bool
     {
         return count($this->components) === 1;
     }
@@ -95,10 +95,9 @@ class Column implements IColumn
     /**
      * @param string $componentName
      *
-     * @return IColumnComponent
-     * @throws bool
+     * @return bool
      */
-    final public function hasComponent($componentName)
+    final public function hasComponent(string $componentName) : bool
     {
         return isset($this->components[$componentName]);
     }
@@ -109,7 +108,7 @@ class Column implements IColumn
      * @return IColumnComponent
      * @throws InvalidArgumentException
      */
-    final public function getComponent($componentName = null)
+    final public function getComponent(string $componentName = null) : IColumnComponent
     {
         if ($componentName === null) {
             if ($this->hasSingleComponent()) {
@@ -135,7 +134,7 @@ class Column implements IColumn
     /**
      * {@inheritdoc}
      */
-    public function getComponentId($componentName = null)
+    public function getComponentId(string $componentName = null) : string
     {
         return $this->name . '.' . $this->getComponent($componentName)->getName();
     }

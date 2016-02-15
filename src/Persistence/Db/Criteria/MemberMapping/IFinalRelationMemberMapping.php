@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Criteria\MemberMapping;
 
@@ -14,5 +14,5 @@ interface IFinalRelationMemberMapping
     /**
      * @return MemberRelation
      */
-    public function asMemberRelation();
+    public function asMemberRelation() : \Dms\Core\Persistence\Db\Mapping\ReadModel\Relation\MemberRelation;
 }

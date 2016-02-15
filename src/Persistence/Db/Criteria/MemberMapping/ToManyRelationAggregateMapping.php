@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Criteria\MemberMapping;
 
@@ -45,7 +45,7 @@ class ToManyRelationAggregateMapping extends RelationMapping
             IEntityMapper $rootEntityMapper,
             array $relationsToSubSelect,
             IToManyRelation $relation,
-            $aggregateType,
+            string $aggregateType,
             MemberMapping $argumentMemberMapping
     ) {
         parent::__construct($rootEntityMapper, $relationsToSubSelect, $relation);
@@ -56,7 +56,7 @@ class ToManyRelationAggregateMapping extends RelationMapping
     /**
      * @inheritDoc
      */
-    protected function getSingleValueExpressionInSelect(Select $select, $tableAlias)
+    protected function getSingleValueExpressionInSelect(Select $select, string $tableAlias) : \Dms\Core\Persistence\Db\Query\Expression\Expr
     {
         $argument = $this->argumentMemberMapping->getExpressionInSelect($select, $tableAlias);
 

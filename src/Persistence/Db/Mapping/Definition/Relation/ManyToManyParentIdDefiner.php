@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Mapping\Definition\Relation;
 
@@ -16,7 +16,7 @@ class ManyToManyParentIdDefiner extends ManyToManyRelationDefinerBase
      *
      * @return ManyToManyRelatedIdDefiner
      */
-    public function withParentIdAs($column)
+    public function withParentIdAs(string $column) : ManyToManyRelatedIdDefiner
     {
         return new ManyToManyRelatedIdDefiner(
                 $this->callback,

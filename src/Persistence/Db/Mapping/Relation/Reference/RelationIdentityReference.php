@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Mapping\Relation\Reference;
 
@@ -27,7 +27,7 @@ abstract class RelationIdentityReference extends RelationReference
      * @param IEntityMapper $mapper
      * @param string|null   $bidirectionalRelationProperty
      */
-    public function __construct(IEntityMapper $mapper, $bidirectionalRelationProperty = null)
+    public function __construct(IEntityMapper $mapper, string $bidirectionalRelationProperty = null)
     {
         parent::__construct($mapper, $bidirectionalRelationProperty);
         $this->primaryKeyColumn = $this->mapper->getPrimaryTable()->getPrimaryKeyColumn();
@@ -36,7 +36,7 @@ abstract class RelationIdentityReference extends RelationReference
     /**
      * @return RelationObjectReference
      */
-    abstract public function asObjectReference();
+    abstract public function asObjectReference() : RelationObjectReference;
 
     /**
      * @param Select $select
@@ -44,7 +44,7 @@ abstract class RelationIdentityReference extends RelationReference
      *
      * @return void
      */
-    public function addLoadToSelect(Select $select, $relatedTableAlias)
+    public function addLoadToSelect(Select $select, string $relatedTableAlias)
     {
         $select->addColumn($this->primaryKeyColumn->getName(), Expr::column($relatedTableAlias, $this->primaryKeyColumn));
     }
@@ -66,7 +66,7 @@ abstract class RelationIdentityReference extends RelationReference
      * @return Row[]
      * @throws InvalidArgumentException
      */
-    final protected function bulkUpdateForeignKeys(PersistenceContext $context, array $modifiedColumns, array $children)
+    final protected function bulkUpdateForeignKeys(PersistenceContext $context, array $modifiedColumns, array $children) : array
     {
         $primaryKey     = $this->mapper->getPrimaryTable()->getPrimaryKeyColumn();
         $primaryKeyName = $primaryKey->getName();

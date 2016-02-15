@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Platform;
 
@@ -62,7 +62,7 @@ abstract class Platform implements IPlatform
     /**
      * @return array
      */
-    protected function typeMap()
+    protected function typeMap() : array
     {
         return [
                 Varchar::class => 'string',
@@ -78,17 +78,17 @@ abstract class Platform implements IPlatform
     /**
      * @return string
      */
-    abstract protected function dateFormatString();
+    abstract protected function dateFormatString() : string;
 
     /**
      * @return string
      */
-    abstract protected function dateTimeFormatString();
+    abstract protected function dateTimeFormatString() : string;
 
     /**
      * @return string
      */
-    abstract protected function timeFormatString();
+    abstract protected function timeFormatString() : string;
 
     /**
      * {@inheritDoc}
@@ -111,7 +111,7 @@ abstract class Platform implements IPlatform
     /**
      * {@inheritDoc}
      */
-    final public function mapResultSetToDbFormat(RowSet $rows, $lockingColumnDataPrefix = null)
+    final public function mapResultSetToDbFormat(RowSet $rows, string $lockingColumnDataPrefix = null) : array
     {
         $results             = [];
         $columnDateFormatMap = $this->getColumnDateFormatMap($rows->getTable());
@@ -153,7 +153,7 @@ abstract class Platform implements IPlatform
     /**
      * {@inheritDoc}
      */
-    final public function mapResultSetToPhpForm(Table $table, array $results)
+    final public function mapResultSetToPhpForm(Table $table, array $results) : RowSet
     {
         $rows                = [];
         $columnDateFormatMap = $this->getColumnDateFormatMap($table);
@@ -202,7 +202,7 @@ abstract class Platform implements IPlatform
     /**
      *{@inheritDoc}
      */
-    public function compileSelect(Select $query)
+    public function compileSelect(Select $query) : CompiledQuery
     {
         $compiled = new CompiledQueryBuilder();
         $this->compileSelectQuery($query, $compiled);
@@ -221,7 +221,7 @@ abstract class Platform implements IPlatform
     /**
      *{@inheritDoc}
      */
-    public function compileUpdate(Update $query)
+    public function compileUpdate(Update $query) : CompiledQuery
     {
         $compiled = new CompiledQueryBuilder();
         $this->compileUpdateQuery($query, $compiled);
@@ -240,7 +240,7 @@ abstract class Platform implements IPlatform
     /**
      *{@inheritDoc}
      */
-    public function compileDelete(Delete $query)
+    public function compileDelete(Delete $query) : CompiledQuery
     {
         $compiled = new CompiledQueryBuilder();
         $this->compileDeleteQuery($query, $compiled);
@@ -259,7 +259,7 @@ abstract class Platform implements IPlatform
     /**
      *{@inheritDoc}
      */
-    public function compileResequenceOrderIndexColumn(ResequenceOrderIndexColumn $query)
+    public function compileResequenceOrderIndexColumn(ResequenceOrderIndexColumn $query) : CompiledQuery
     {
         $compiled = new CompiledQueryBuilder();
         $this->compileResequenceOrderIndexColumnQuery($query, $compiled);

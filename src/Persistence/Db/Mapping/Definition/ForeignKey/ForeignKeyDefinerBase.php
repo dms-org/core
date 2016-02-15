@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Mapping\Definition\ForeignKey;
 
@@ -53,9 +53,9 @@ abstract class ForeignKeyDefinerBase
             callable $callback,
             array $localColumnNames = null,
             array$referencedColumnNames = null,
-            $referencedTableName = null,
-            $onDeleteMode = null,
-            $onUpdateMode = null
+            string $referencedTableName = null,
+            string $onDeleteMode = null,
+            string $onUpdateMode = null
     ) {
         $this->callback              = $callback;
         $this->localColumnNames      = $localColumnNames;

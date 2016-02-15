@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Criteria;
 
@@ -27,7 +27,7 @@ class MemberMappingWithTableAlias
      * @param MemberMapping $mapping
      * @param string        $tableAlias
      */
-    public function __construct(MemberMapping $mapping, $tableAlias)
+    public function __construct(MemberMapping $mapping, string $tableAlias)
     {
         $this->mapping    = $mapping;
         $this->tableAlias = $tableAlias;
@@ -36,7 +36,7 @@ class MemberMappingWithTableAlias
     /**
      * @return MemberMapping
      */
-    public function getMapping()
+    public function getMapping() : MemberMapping
     {
         return $this->mapping;
     }
@@ -44,7 +44,7 @@ class MemberMappingWithTableAlias
     /**
      * @return string
      */
-    public function getTableAlias()
+    public function getTableAlias() : string
     {
         return $this->tableAlias;
     }

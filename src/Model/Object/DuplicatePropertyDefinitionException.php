@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Model\Object;
 
@@ -19,7 +19,7 @@ class DuplicatePropertyDefinitionException extends BaseException
      * @param            $file
      * @param            $line
      */
-    public function __construct($class, $name, $file, $line)
+    public function __construct(string $class, $name, $file, $line)
     {
         parent::__construct(
                 "Cannot build {$class}: duplicate property definition for \${$name} in file {$file} on line {$line}"

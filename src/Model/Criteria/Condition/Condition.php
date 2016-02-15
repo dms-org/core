@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Model\Criteria\Condition;
 
@@ -37,7 +37,7 @@ abstract class Condition
     /**
      * @return Condition[]
      */
-    public function getChildren()
+    public function getChildren() : array
     {
         return $this->children;
     }
@@ -64,12 +64,12 @@ abstract class Condition
      *
      * @return callable
      */
-    abstract protected function makeArrayFilterCallable();
+    abstract protected function makeArrayFilterCallable() : callable;
 
     /**
      * @return callable
      */
-    final public function getFilterCallable()
+    final public function getFilterCallable() : callable
     {
         $arrayCallback = $this->arrayFilterCallable;
 
@@ -81,7 +81,7 @@ abstract class Condition
     /**
      * @return callable
      */
-    final public function getArrayFilterCallable()
+    final public function getArrayFilterCallable() : callable
     {
         return $this->arrayFilterCallable;
     }

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Platform;
 
@@ -25,7 +25,7 @@ class CompiledQuery
      * @param string $sql
      * @param array  $parameters
      */
-    public function __construct($sql, array $parameters)
+    public function __construct(string $sql, array $parameters)
     {
         $this->sql        = $sql;
         $this->parameters = $parameters;
@@ -34,7 +34,7 @@ class CompiledQuery
     /**
      * @return string
      */
-    public function getSql()
+    public function getSql() : string
     {
         return $this->sql;
     }
@@ -42,7 +42,7 @@ class CompiledQuery
     /**
      * @return array
      */
-    public function getParameters()
+    public function getParameters() : array
     {
         return $this->parameters;
     }

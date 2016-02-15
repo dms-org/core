@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Package;
 
@@ -20,14 +20,14 @@ interface IPackage
      *
      * @return string
      */
-    public function getName();
+    public function getName() : string;
 
     /**
      * Returns whether the package has a dashboard
      *
      * @return bool
      */
-    public function hasDashboard();
+    public function hasDashboard() : bool;
 
     /**
      * Loads the dashboard for the package.
@@ -37,21 +37,21 @@ interface IPackage
      * @return IDashboard
      * @throws InvalidOperationException
      */
-    public function loadDashboard();
+    public function loadDashboard() : IDashboard;
 
     /**
      * Gets the names of the modules contained within this package.
      *
      * @return string[]
      */
-    public function getModuleNames();
+    public function getModuleNames() : array;
 
     /**
      * Loads the modules.
      *
      * @return IModule[]
      */
-    public function loadModules();
+    public function loadModules() : array;
 
     /**
      * Returns whether the package contains the supplied module.
@@ -60,7 +60,7 @@ interface IPackage
      *
      * @return bool
      */
-    public function hasModule($name);
+    public function hasModule(string $name) : bool;
 
     /**
      * Loads the module with the supplied name.
@@ -70,7 +70,7 @@ interface IPackage
      * @return IModule
      * @throws ModuleNotFoundException if the module name is invalid
      */
-    public function loadModule($name);
+    public function loadModule(string $name) : \Dms\Core\Module\IModule;
 
     /**
      * Loads the namespaced permissions.
@@ -79,12 +79,12 @@ interface IPackage
      *
      * @return IPermission[]
      */
-    public function loadPermissions();
+    public function loadPermissions() : array;
 
     /**
      * Gets the inversion of control container used within this package.
      *
      * @return ContainerInterface
      */
-    public function getIocContainer();
+    public function getIocContainer() : \Interop\Container\ContainerInterface;
 }

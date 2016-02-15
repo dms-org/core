@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence;
 
@@ -68,7 +68,7 @@ abstract class DbRepositoryBase implements IObjectSetWithLoadCriteriaSupport
     /**
      * @return IConnection
      */
-    final public function getConnection()
+    final public function getConnection() : Db\Connection\IConnection
     {
         return $this->connection;
     }
@@ -76,7 +76,7 @@ abstract class DbRepositoryBase implements IObjectSetWithLoadCriteriaSupport
     /**
      * @return IEntityMapper
      */
-    final public function getMapper()
+    final public function getMapper() : Db\Mapping\IEntityMapper
     {
         return $this->mapper;
     }
@@ -84,7 +84,7 @@ abstract class DbRepositoryBase implements IObjectSetWithLoadCriteriaSupport
     /**
      * {@inheritDoc}
      */
-    final public function getElementType()
+    final public function getElementType() : \Dms\Core\Model\Type\IType
     {
         return Type::object($this->mapper->getObjectType());
     }
@@ -92,7 +92,7 @@ abstract class DbRepositoryBase implements IObjectSetWithLoadCriteriaSupport
     /**
      * {@inheritDoc}
      */
-    final public function getObjectType()
+    final public function getObjectType() : string
     {
         return $this->mapper->getObjectType();
     }
@@ -102,7 +102,7 @@ abstract class DbRepositoryBase implements IObjectSetWithLoadCriteriaSupport
      *
      * @return IEntity[]
      */
-    protected function load(Select $query)
+    protected function load(Select $query) : array
     {
         $rows = $this->connection->load($query);
 
@@ -114,7 +114,7 @@ abstract class DbRepositoryBase implements IObjectSetWithLoadCriteriaSupport
      *
      * @return int
      */
-    protected function loadCount(Select $select)
+    protected function loadCount(Select $select) : int
     {
         $limit  = $select->getLimit();
         $offset = $select->getOffset();
@@ -149,7 +149,7 @@ abstract class DbRepositoryBase implements IObjectSetWithLoadCriteriaSupport
     /**
      * {@inheritDoc}
      */
-    public function criteria()
+    public function criteria() : \Dms\Core\Model\Criteria\Criteria
     {
         return $this->criteriaMapper->newCriteria();
     }
@@ -157,7 +157,7 @@ abstract class DbRepositoryBase implements IObjectSetWithLoadCriteriaSupport
     /**
      * {@inheritDoc}
      */
-    public function loadCriteria()
+    public function loadCriteria() : \Dms\Core\Model\Criteria\LoadCriteria
     {
         return $this->loadCriteriaMapper->newCriteria();
     }
@@ -165,7 +165,7 @@ abstract class DbRepositoryBase implements IObjectSetWithLoadCriteriaSupport
     /**
      * {@inheritDoc}
      */
-    public function countMatching(ICriteria $criteria)
+    public function countMatching(ICriteria $criteria) : int
     {
         return $this->loadCount($this->criteriaMapper->mapCriteriaToSelect($criteria));
     }
@@ -173,7 +173,7 @@ abstract class DbRepositoryBase implements IObjectSetWithLoadCriteriaSupport
     /**
      * {@inheritDoc}
      */
-    public function matching(ICriteria $criteria)
+    public function matching(ICriteria $criteria) : array
     {
         return $this->load($this->criteriaMapper->mapCriteriaToSelect($criteria));
     }
@@ -181,7 +181,7 @@ abstract class DbRepositoryBase implements IObjectSetWithLoadCriteriaSupport
     /**
      * {@inheritDoc}
      */
-    public function satisfying(ISpecification $specification)
+    public function satisfying(ISpecification $specification) : array
     {
         return $this->matching($specification->asCriteria());
     }
@@ -189,7 +189,7 @@ abstract class DbRepositoryBase implements IObjectSetWithLoadCriteriaSupport
     /**
      * @inheritDoc
      */
-    public function loadMatching(ILoadCriteria $criteria)
+    public function loadMatching(ILoadCriteria $criteria) : array
     {
         $criteria->verifyOfClass($this->getObjectType());
 

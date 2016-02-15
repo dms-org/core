@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core;
 
@@ -43,7 +43,7 @@ class CmsDefinition
     /**
      * @return FinalizedCmsDefinition
      */
-    public function finalize()
+    public function finalize() : FinalizedCmsDefinition
     {
         return new FinalizedCmsDefinition($this->namePackageMap);
     }

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Common\Crud\Form;
 
@@ -30,7 +30,7 @@ class FormWithBinding extends Form
      *
      * @throws ConflictingFieldNameException
      */
-    public function __construct(array $sections, array $processors, $bindingObjectType, array $fieldBindings)
+    public function __construct(array $sections, array $processors, string $bindingObjectType, array $fieldBindings)
     {
         parent::__construct($sections, $processors);
 
@@ -42,7 +42,7 @@ class FormWithBinding extends Form
      *
      * @return IFormBinding
      */
-    public function getBinding()
+    public function getBinding() : \Dms\Core\Form\Binding\IFormBinding
     {
         return $this->binding;
     }

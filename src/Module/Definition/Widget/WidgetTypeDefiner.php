@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Module\Definition\Widget;
 
@@ -29,7 +29,7 @@ class WidgetTypeDefiner extends WidgetDefinerBase
      * @param IAction[]          $actions
      * @param callable           $callback
      */
-    public function __construct($name, $label, array $tables, array $charts, array $actions, callable $callback)
+    public function __construct(string $name, string $label, array $tables, array $charts, array $actions, callable $callback)
     {
         parent::__construct($name, $tables, $charts, $actions, $callback);
         $this->label = $label;
@@ -43,7 +43,7 @@ class WidgetTypeDefiner extends WidgetDefinerBase
      * @return TableWidgetDefiner
      * @throws InvalidArgumentException
      */
-    public function withTable($tableName)
+    public function withTable(string $tableName) : TableWidgetDefiner
     {
         if (!isset($this->tables[$tableName])) {
             throw InvalidArgumentException::format(
@@ -63,7 +63,7 @@ class WidgetTypeDefiner extends WidgetDefinerBase
      * @return ChartWidgetDefiner
      * @throws InvalidArgumentException
      */
-    public function withChart($chartName)
+    public function withChart(string $chartName) : ChartWidgetDefiner
     {
         if (!isset($this->charts[$chartName])) {
             throw InvalidArgumentException::format(
@@ -83,7 +83,7 @@ class WidgetTypeDefiner extends WidgetDefinerBase
      * @return void
      * @throws InvalidArgumentException
      */
-    public function withAction($actionName)
+    public function withAction(string $actionName)
     {
         if (!isset($this->actions[$actionName])) {
             throw InvalidArgumentException::format(

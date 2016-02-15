@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Form;
 
@@ -20,7 +20,7 @@ interface IFormProcessor
      *
      * @return array
      */
-    public function process(array $input, array &$messages);
+    public function process(array $input, array &$messages) : array;
 
     /**
      * Performs the opposite operation on the input.
@@ -30,7 +30,7 @@ interface IFormProcessor
      *
      * @return array
      */
-    public function unprocess(array $input);
+    public function unprocess(array $input) : array;
 
     /**
      * Returns an equivalent processor with the field names updated

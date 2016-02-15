@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Table;
 
@@ -12,10 +12,10 @@ interface IDataTable
     /**
      * @return ITableStructure
      */
-    public function getStructure();
+    public function getStructure() : ITableStructure;
 
     /**
      * @return ITableSection[]
      */
-    public function getSections();
+    public function getSections() : array;
 }

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Form\Object;
 
@@ -71,7 +71,7 @@ abstract class TypedObjectFormObject extends IndependentFormObject
      *
      * @return string
      */
-    abstract protected function objectType();
+    abstract protected function objectType() : string;
 
     /**
      * Populates the form with the object's values.
@@ -92,14 +92,14 @@ abstract class TypedObjectFormObject extends IndependentFormObject
      *
      * @param ITypedObject $object
      *
-     * @return string
+     * @return void
      */
     abstract protected function populateFormWithObject(ITypedObject $object);
 
     /**
      * @return string
      */
-    final public function getObjectType()
+    final public function getObjectType() : string
     {
         return $this->objectClass;
     }

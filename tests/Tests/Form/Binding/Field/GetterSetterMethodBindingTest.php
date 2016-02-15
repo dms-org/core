@@ -68,7 +68,7 @@ class GetterSetterMethodBindingTest extends FieldBindingTest
         $this->setExpectedException(InvalidArgumentException::class);
 
         return new GetterSetterMethodBinding(
-                $this->buildField(),
+                $this->buildField()->getName(),
                 TestFormBoundClass::class,
                 'nonExistentMethod', 'setInt'
         );
@@ -79,7 +79,7 @@ class GetterSetterMethodBindingTest extends FieldBindingTest
         $this->setExpectedException(InvalidArgumentException::class);
 
         return new GetterSetterMethodBinding(
-                $this->buildField(),
+                $this->buildField()->getName(),
                 TestFormBoundClass::class,
                 'getInt', 'nonExistentMethod'
         );

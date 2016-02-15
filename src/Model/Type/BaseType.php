@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Model\Type;
 
@@ -26,7 +26,7 @@ abstract class BaseType implements IType
     /**
      * @param string $typeString
      */
-    public function __construct($typeString)
+    public function __construct(string $typeString)
     {
         $this->typeString = $typeString;
     }
@@ -34,7 +34,7 @@ abstract class BaseType implements IType
     /**
      * @return IType[]
      */
-    protected function loadValidOperatorTypes()
+    protected function loadValidOperatorTypes() : array
     {
         $arrayOfThis = Type::arrayOf($this);
 
@@ -49,7 +49,7 @@ abstract class BaseType implements IType
     /**
      * @inheritDoc
      */
-    final public function isSupersetOf(IType $type)
+    final public function isSupersetOf(IType $type) : bool
     {
         return $type->isSubsetOf($this);
     }
@@ -57,7 +57,7 @@ abstract class BaseType implements IType
     /**
      * @inheritDoc
      */
-    final public function isSubsetOf(IType $type)
+    final public function isSubsetOf(IType $type) : bool
     {
         if ($this->equals($type)) {
             return true;
@@ -80,7 +80,7 @@ abstract class BaseType implements IType
      *
      * @return bool
      */
-    protected function checkThisIsSubsetOf(IType $type)
+    protected function checkThisIsSubsetOf(IType $type) : bool
     {
         if ($type instanceof MixedType) {
             return true;
@@ -96,7 +96,7 @@ abstract class BaseType implements IType
     /**
      * {@inheritDoc}
      */
-    final public function asTypeString()
+    final public function asTypeString() : string
     {
         return $this->typeString;
     }
@@ -125,7 +125,7 @@ abstract class BaseType implements IType
     /**
      * {@inheritDoc}
      */
-    public function union(IType $type)
+    public function union(IType $type) : IType
     {
         if ($type instanceof MixedType) {
             return $type;
@@ -137,7 +137,7 @@ abstract class BaseType implements IType
     /**
      * {@inheritDoc}
      */
-    public function nullable()
+    public function nullable() : IType
     {
         return $this->isOfType(null) ? $this : $this->union(Type::null());
     }
@@ -145,7 +145,7 @@ abstract class BaseType implements IType
     /**
      * {@inheritDoc}
      */
-    final public function isNullable()
+    final public function isNullable() : bool
     {
         return $this->isOfType(null);
     }
@@ -153,7 +153,7 @@ abstract class BaseType implements IType
     /**
      * {@inheritDoc}
      */
-    public function nonNullable()
+    public function nonNullable() : IType
     {
         if (!($this instanceof UnionType)) {
             return $this;
@@ -175,7 +175,7 @@ abstract class BaseType implements IType
     /**
      * {@inheritDoc}
      */
-    final public function equals(IType $type)
+    final public function equals(IType $type) : bool
     {
         // Value-wise equality
         return $this == $type;
@@ -184,7 +184,7 @@ abstract class BaseType implements IType
     /**
      * {@inheritDoc}
      */
-    final public function getConditionOperatorTypes()
+    final public function getConditionOperatorTypes() : array
     {
         if ($this->validOperatorTypes === null) {
             $this->validOperatorTypes = [];
@@ -203,7 +203,7 @@ abstract class BaseType implements IType
     /**
      * @return string[]
      */
-    public function getConditionOperators()
+    public function getConditionOperators() : array
     {
         return array_keys($this->getConditionOperatorTypes());
     }

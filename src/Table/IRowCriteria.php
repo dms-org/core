@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Table;
 
@@ -20,28 +20,28 @@ interface IRowCriteria
      *
      * @return ITableStructure
      */
-    public function getStructure();
+    public function getStructure() : ITableStructure;
 
     /**
      * Gets the table columns to load.
      *
      * @return IColumn[]
      */
-    public function getColumnsToLoad();
+    public function getColumnsToLoad() : array;
 
     /**
      * Gets the table column names to load.
      *
      * @return string[]
      */
-    public function getColumnNamesToLoad();
+    public function getColumnNamesToLoad() : array;
 
     /**
      * Returns whether all columns are loaded.
      *
      * @return bool
      */
-    public function getWhetherLoadsAllColumns();
+    public function getWhetherLoadsAllColumns() : bool;
 
     /**
      * Gets the conditions which the rows must match
@@ -49,28 +49,28 @@ interface IRowCriteria
      *
      * @return ColumnCondition[]
      */
-    public function getConditions();
+    public function getConditions() : array;
 
     /**
      * Gets the order in which to load the rows
      *
      * @return ColumnOrdering[]
      */
-    public function getOrderings();
+    public function getOrderings() : array;
 
     /**
      * Gets the groupings which will group the rows into sections.
      *
      * @return ColumnGrouping[]
      */
-    public function getGroupings();
+    public function getGroupings() : array;
 
     /**
      * Gets the starting row offset.
      *
      * @return int
      */
-    public function getRowsToSkip();
+    public function getRowsToSkip() : int;
 
     /**
      * Gets the amount of rows to load.
@@ -84,5 +84,5 @@ interface IRowCriteria
      *
      * @return RowCriteria
      */
-    public function asNewCriteria();
+    public function asNewCriteria() : Criteria\RowCriteria;
 }

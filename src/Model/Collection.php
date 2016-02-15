@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Model;
 
@@ -15,7 +15,7 @@ class Collection extends \Pinq\Collection implements ICollection, \Serializable
     /**
      * @return string
      */
-    final public function serialize()
+    final public function serialize() : string
     {
         return serialize([$this->asArray(), $this->dataToSerialize()]);
     }

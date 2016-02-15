@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Mapping\Relation;
 
@@ -31,7 +31,7 @@ interface IToManyRelation extends IRelation
      *
      * @return ITypedCollection
      */
-    public function buildCollection(array $children);
+    public function buildCollection(array $children) : \Dms\Core\Model\ITypedCollection;
 
     /**
      * @param PersistenceContext $context

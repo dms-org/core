@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Form\Processor;
 
@@ -15,7 +15,7 @@ abstract class FormProcessor implements IFormProcessor
     /**
      * {@inheritDoc}
      */
-    public function process(array $input, array &$messages)
+    public function process(array $input, array &$messages) : array
     {
         return $this->doProcess($input, $messages);
     }
@@ -23,7 +23,7 @@ abstract class FormProcessor implements IFormProcessor
     /**
      * {@inheritDoc}
      */
-    public function unprocess(array $input)
+    public function unprocess(array $input) : array
     {
         return $this->doUnprocess($input);
     }
@@ -34,12 +34,12 @@ abstract class FormProcessor implements IFormProcessor
      *
      * @return array
      */
-    abstract protected function doProcess(array $input, array &$messages);
+    abstract protected function doProcess(array $input, array &$messages) : array;
 
     /**
      * @param array $input
      *
      * @return array
      */
-    abstract protected function doUnprocess(array $input);
+    abstract protected function doUnprocess(array $input) : array;
 }

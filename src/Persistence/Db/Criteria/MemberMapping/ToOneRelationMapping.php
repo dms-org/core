@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Criteria\MemberMapping;
 
@@ -33,7 +33,7 @@ abstract class ToOneRelationMapping extends RelationMapping
     /**
      * @return IToOneRelation
      */
-    public function getRelation()
+    public function getRelation() : \Dms\Core\Persistence\Db\Mapping\Relation\IToOneRelation
     {
         return $this->relation;
     }

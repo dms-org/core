@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Table;
 
@@ -18,14 +18,14 @@ interface IColumnComponentOperator
      *
      * @return string
      */
-    public function getOperator();
+    public function getOperator() : string;
 
     /**
      * Gets the equivalent form field for this condition operator.
      *
      * @return IField
      */
-    public function getField();
+    public function getField() : \Dms\Core\Form\IField;
 
     /**
      * Returns an equivalent operator with the field with
@@ -36,5 +36,5 @@ interface IColumnComponentOperator
      *
      * @return static
      */
-    public function withFieldAs($name, $label);
+    public function withFieldAs(string $name, string $label);
 }

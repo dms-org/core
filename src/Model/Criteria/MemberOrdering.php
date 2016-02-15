@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Model\Criteria;
 
@@ -30,7 +30,7 @@ class MemberOrdering
      *
      * @throws InvalidArgumentException
      */
-    public function __construct(NestedMember $nestedMember, $direction)
+    public function __construct(NestedMember $nestedMember, string $direction)
     {
         OrderingDirection::validate($direction);
 
@@ -41,7 +41,7 @@ class MemberOrdering
     /**
      * @return NestedMember
      */
-    final public function getNestedMember()
+    final public function getNestedMember() : NestedMember
     {
         return $this->nestedMember;
     }
@@ -49,7 +49,7 @@ class MemberOrdering
     /**
      * @return string
      */
-    final public function getDirection()
+    final public function getDirection() : string
     {
         return $this->direction;
     }
@@ -57,7 +57,7 @@ class MemberOrdering
     /**
      * @return bool
      */
-    final public function isAsc()
+    final public function isAsc() : bool
     {
         return $this->direction === OrderingDirection::ASC;
     }
@@ -68,7 +68,7 @@ class MemberOrdering
      *
      * @return callable
      */
-    public function getArrayOrderCallable()
+    public function getArrayOrderCallable() : callable
     {
         return $this->nestedMember->makeArrayGetterCallable();
     }

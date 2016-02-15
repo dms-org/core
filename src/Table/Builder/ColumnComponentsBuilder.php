@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Table\Builder;
 
@@ -23,7 +23,7 @@ class ColumnComponentsBuilder extends ColumnBuilderBase
      * @return IColumn
      * @throws TypeMismatchException
      */
-    public function components(array $components)
+    public function components(array $components) : \Dms\Core\Table\IColumn
     {
         foreach ($components as $key => $component) {
             if ($component instanceof IColumnComponent) {

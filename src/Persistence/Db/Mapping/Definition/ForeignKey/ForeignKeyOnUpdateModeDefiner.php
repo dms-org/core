@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Mapping\Definition\ForeignKey;
 
@@ -47,7 +47,7 @@ class ForeignKeyOnUpdateModeDefiner extends ForeignKeyDefinerBase
      *
      * @return void
      */
-    protected function onUpdate($mode)
+    protected function onUpdate(string $mode)
     {
         call_user_func($this->callback,
                 $this->localColumnNames,

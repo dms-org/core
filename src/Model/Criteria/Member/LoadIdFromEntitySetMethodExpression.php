@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Model\Criteria\Member;
 
@@ -30,7 +30,7 @@ abstract class LoadIdFromEntitySetMethodExpression extends MethodExpression
      * @param IEntitySet   $dataSource
      * @param IType        $returnType
      */
-    public function __construct(IType $sourceType, $methodName, NestedMember $member, IEntitySet $dataSource, IType $returnType)
+    public function __construct(IType $sourceType, string $methodName, NestedMember $member, IEntitySet $dataSource, IType $returnType)
     {
         parent::__construct($sourceType, $methodName, [$member->asString()], $returnType);
         $this->dataSource = $dataSource;
@@ -40,7 +40,7 @@ abstract class LoadIdFromEntitySetMethodExpression extends MethodExpression
     /**
      * @return NestedMember
      */
-    public function getIdMember()
+    public function getIdMember() : \Dms\Core\Model\Criteria\NestedMember
     {
         return $this->member;
     }
@@ -48,7 +48,7 @@ abstract class LoadIdFromEntitySetMethodExpression extends MethodExpression
     /**
      * @return IEntitySet
      */
-    public function getDataSource()
+    public function getDataSource() : \Dms\Core\Model\IEntitySet
     {
         return $this->dataSource;
     }
@@ -56,7 +56,7 @@ abstract class LoadIdFromEntitySetMethodExpression extends MethodExpression
     /**
      * @inheritDoc
      */
-    public function isPropertyValue()
+    public function isPropertyValue() : bool
     {
         return false;
     }

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Common\Crud\Definition\Form;
 
@@ -108,7 +108,7 @@ class CrudFormDefinition
      *
      * @throws InvalidArgumentException
      */
-    public function __construct(IEntitySet $dataSource, FinalizedClassDefinition $class, $mode, $isDependent = false)
+    public function __construct(IEntitySet $dataSource, FinalizedClassDefinition $class, string $mode, bool $isDependent = false)
     {
         if (!in_array($mode, self::$modes, true)) {
             throw InvalidArgumentException::format(
@@ -146,7 +146,7 @@ class CrudFormDefinition
      *
      * @return bool
      */
-    public function isDetailsForm()
+    public function isDetailsForm() : bool
     {
         return $this->mode === self::MODE_DETAILS;
     }
@@ -157,7 +157,7 @@ class CrudFormDefinition
      *
      * @return bool
      */
-    public function isCreateForm()
+    public function isCreateForm() : bool
     {
         return $this->mode === self::MODE_CREATE;
     }
@@ -168,7 +168,7 @@ class CrudFormDefinition
      *
      * @return bool
      */
-    public function isEditForm()
+    public function isEditForm() : bool
     {
         return $this->mode === self::MODE_EDIT;
     }
@@ -193,7 +193,7 @@ class CrudFormDefinition
      * @return void
      * @throws InvalidArgumentException
      */
-    public function section($title, array $fieldBindings)
+    public function section(string $title, array $fieldBindings)
     {
         InvalidArgumentException::verifyAllInstanceOf(__METHOD__, 'fieldBindings', $fieldBindings, FormFieldBindingDefinition::class);
 
@@ -228,7 +228,7 @@ class CrudFormDefinition
      *
      * @return FormFieldBindingDefiner
      */
-    public function field($field)
+    public function field($field) : FormFieldBindingDefiner
     {
         if ($field instanceof FieldBuilderBase) {
             $field = $field->build();
@@ -384,7 +384,7 @@ class CrudFormDefinition
      * @return void
      * @throws InvalidArgumentException
      */
-    public function mapToSubClass($classType)
+    public function mapToSubClass(string $classType)
     {
         if ($this->isEditForm() && $this->currentEditedObjectType) {
             if ($this->currentEditedObjectType !== $classType) {
@@ -414,7 +414,7 @@ class CrudFormDefinition
      *
      * @return ObjectConstructorCallbackDefiner
      */
-    public function createObjectType()
+    public function createObjectType() : ObjectConstructorCallbackDefiner
     {
         return new ObjectConstructorCallbackDefiner($this->class, function (callable $typeCallback) {
             $this->createObjectCallback = function (array $input) use ($typeCallback) {
@@ -493,7 +493,7 @@ class CrudFormDefinition
      * @return FinalizedCrudFormDefinition
      * @throws InvalidArgumentException
      */
-    public function finalize()
+    public function finalize() : FinalizedCrudFormDefinition
     {
         if ($this->isCreateForm() && !$this->createObjectCallback) {
             throw InvalidArgumentException::format(

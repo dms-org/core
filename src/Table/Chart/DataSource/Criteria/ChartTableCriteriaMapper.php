@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Table\Chart\DataSource\Criteria;
 
@@ -40,7 +40,7 @@ class ChartTableCriteriaMapper
      *
      * @return IRowCriteria
      */
-    public function mapCriteria(IChartCriteria $chartCriteria)
+    public function mapCriteria(IChartCriteria $chartCriteria) : \Dms\Core\Table\IRowCriteria
     {
         $rowCriteria = $this->definition->getTableDataSource()->criteria();
 
@@ -80,7 +80,7 @@ class ChartTableCriteriaMapper
      * @return string
      * @throws CriteriaMappingException
      */
-    protected function getTableComponentIdFromChartComponentId($chartComponentId)
+    protected function getTableComponentIdFromChartComponentId($chartComponentId) : string
     {
         if (!isset($this->chartToTableComponentMap[$chartComponentId])) {
             throw CriteriaMappingException::mustBeMappedToColumn($chartComponentId);

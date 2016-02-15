@@ -29,10 +29,19 @@ class EntityLoaderProcessorTest extends FieldProcessorTest
         $entitiesMock->expects($this->any())
             ->method('get')
             ->will($this->returnCallback(function ($id) {
-                return (object)['id' => $id];
+                return $this->mockEntity($id);
             }));
 
         return new EntityLoaderProcessor($entitiesMock);
+    }
+
+    protected function mockEntity($id) : IEntity
+    {
+        $entity = $this->getMockForAbstractClass(IEntity::class);
+
+        $entity->method('getId')->willReturn($id);
+
+        return $entity;
     }
 
     /**
@@ -50,10 +59,10 @@ class EntityLoaderProcessorTest extends FieldProcessorTest
     {
         return [
             [null, null],
-            [1, (object)['id' => 1]],
-            [2, (object)['id' => 2]],
-            [3, (object)['id' => 3]],
-            [100, (object)['id' => 100]],
+            [1, $this->mockEntity(1)],
+            [2, $this->mockEntity(2)],
+            [3, $this->mockEntity(3)],
+            [100, $this->mockEntity(100)],
         ];
     }
 

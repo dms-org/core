@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Table\Chart;
 
@@ -12,7 +12,7 @@ interface IChartDataTable
     /**
      * @return IChartStructure
      */
-    public function getStructure();
+    public function getStructure() : IChartStructure;
 
     /**
      * Gets the array of rows for the chart.
@@ -31,5 +31,5 @@ interface IChartDataTable
      *
      * @return array[]
      */
-    public function getRows();
+    public function getRows() : array;
 }

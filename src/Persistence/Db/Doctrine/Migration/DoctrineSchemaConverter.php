@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Doctrine\Migration;
 
@@ -31,7 +31,7 @@ class DoctrineSchemaConverter
      *
      * @return Schema
      */
-    public function convertToDoctrineSchema(Database $database)
+    public function convertToDoctrineSchema(Database $database) : \Doctrine\DBAL\Schema\Schema
     {
         $schema = new Schema();
 

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Form;
 
@@ -16,7 +16,7 @@ interface IFieldType
      *
      * @return array
      */
-    public function attrs();
+    public function attrs() : array;
 
     /**
      * Returns whether the type has an attribute set.
@@ -25,7 +25,7 @@ interface IFieldType
      *
      * @return bool
      */
-    public function has($attribute);
+    public function has(string $attribute) : bool;
 
     /**
      * Gets the value of the attribute or null if not set.
@@ -34,7 +34,7 @@ interface IFieldType
      *
      * @return mixed
      */
-    public function get($attribute);
+    public function get(string $attribute);
 
     /**
      * Gets the values of the attributes as an array indexed by the attribute name.
@@ -43,7 +43,7 @@ interface IFieldType
      *
      * @return array
      */
-    public function getAll(array $attributes);
+    public function getAll(array $attributes) : array;
 
     /**
      * Returns an instance of the type with the supplied attribute.
@@ -53,7 +53,7 @@ interface IFieldType
      *
      * @return static
      */
-    public function with($attribute, $value);
+    public function with(string $attribute, $value);
 
     /**
      * Returns an instance of the type with the supplied attributes.
@@ -69,19 +69,19 @@ interface IFieldType
      *
      * @return IPhpType
      */
-    public function getPhpTypeOfInput();
+    public function getPhpTypeOfInput() : \Dms\Core\Model\Type\IType;
 
     /**
      * Gets the field processors of the type.
      *
      * @return IFieldProcessor[]
      */
-    public function getProcessors();
+    public function getProcessors() : array;
 
     /**
      * Gets the php of the processed data.
      *
      * @return IPhpType
      */
-    public function getProcessedPhpType();
+    public function getProcessedPhpType() : \Dms\Core\Model\Type\IType;
 }

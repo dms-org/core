@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Module;
 
@@ -18,16 +18,16 @@ interface IAction
     /**
      * Gets the name of the action.
      *
-     * @return bool
+     * @return string
      */
-    public function getName();
+    public function getName() : string;
 
     /**
      * Returns whether the action has a return type.
      *
      * @return bool
      */
-    public function hasReturnType();
+    public function hasReturnType() : bool;
 
     /**
      * Gets the return type of data transfer object for this handler.
@@ -59,14 +59,14 @@ interface IAction
      * @return void
      * @throws InvalidOperationException if the names are already set
      */
-    public function setPackageAndModuleName($packageName, $moduleName);
+    public function setPackageAndModuleName(string $packageName, string $moduleName);
 
     /**
      * Gets the permissions required to execute the action.
      *
      * @return IPermission[]
      */
-    public function getRequiredPermissions();
+    public function getRequiredPermissions() : array;
 
     /**
      * Returns whether the action requires a permission with the supplied name.
@@ -75,7 +75,7 @@ interface IAction
      *
      * @return bool
      */
-    public function requiresPermission($name);
+    public function requiresPermission(string $name) : bool;
 
     /**
      * Gets required permission with the supplied name.
@@ -85,19 +85,19 @@ interface IAction
      * @return IPermission
      * @throws InvalidArgumentException
      */
-    public function getRequiredPermission($name);
+    public function getRequiredPermission(string $name) : \Dms\Core\Auth\IPermission;
 
     /**
      * Returns whether the currently authenticated user is authorized.
      *
      * @return bool
      */
-    public function isAuthorized();
+    public function isAuthorized() : bool;
 
     /**
      * Gets the action handler
      *
      * @return IActionHandler
      */
-    public function getHandler();
+    public function getHandler() : IActionHandler;
 }

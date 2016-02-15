@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Table\Chart\Data;
 
@@ -37,7 +37,7 @@ class ChartDataTable implements IChartDataTable
     /**
      * @return IChartStructure
      */
-    public function getStructure()
+    public function getStructure() : \Dms\Core\Table\Chart\IChartStructure
     {
         return $this->structure;
     }
@@ -45,7 +45,7 @@ class ChartDataTable implements IChartDataTable
     /**
      * {@inheritdoc}
      */
-    public function getRows()
+    public function getRows() : array
     {
         return $this->rows;
     }

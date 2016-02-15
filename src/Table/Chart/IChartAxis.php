@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Table\Chart;
 
@@ -17,22 +17,22 @@ interface IChartAxis extends IColumn
     /**
      * @return string
      */
-    public function getName();
+    public function getName() : string;
 
     /**
      * @return string
      */
-    public function getLabel();
+    public function getLabel() : string;
 
     /**
      * @return IColumnComponentType
      */
-    public function getType();
+    public function getType() : IColumnComponentType;
 
     /**
      * @return IColumnComponent[]
      */
-    public function getComponents();
+    public function getComponents() : array;
 
     /**
      * @param string|null $name
@@ -40,12 +40,12 @@ interface IChartAxis extends IColumn
      * @return IColumnComponent
      * @throws InvalidArgumentException
      */
-    public function getComponent($name = null);
+    public function getComponent(string $name = null) : IColumnComponent;
 
     /**
      * @param string $name
      *
      * @return bool
      */
-    public function hasComponent($name);
+    public function hasComponent(string $name) : bool;
 }

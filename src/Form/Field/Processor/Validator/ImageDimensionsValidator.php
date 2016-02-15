@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Form\Field\Processor\Validator;
 
@@ -51,10 +51,10 @@ class ImageDimensionsValidator extends FieldValidator
      */
     public function __construct(
             IType $inputType,
-            $minWidth = null,
-            $maxWidth = null,
-            $minHeight = null,
-            $maxHeight = null
+            int $minWidth = null,
+            int $maxWidth = null,
+            int $minHeight = null,
+            int $maxHeight = null
     ) {
         parent::__construct($inputType);
         $this->minWidth  = $minWidth;
@@ -87,7 +87,7 @@ class ImageDimensionsValidator extends FieldValidator
      * @param int       $height
      * @param Message[] $messages
      */
-    private function validateDimensions($width, $height, array &$messages)
+    private function validateDimensions(int $width, int $height, array &$messages)
     {
         if ($this->minWidth && $width < $this->minWidth) {
             $messages[] = new Message(self::MESSAGE_MIN_WIDTH, ['min_width' => $this->minWidth]);

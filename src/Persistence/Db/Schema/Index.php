@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Schema;
 
@@ -34,7 +34,7 @@ class Index
      * @param bool     $isUnique
      * @param string[] $columnNames
      */
-    public function __construct($name, $isUnique, array $columnNames)
+    public function __construct(string $name, bool $isUnique, array $columnNames)
     {
         InvalidArgumentException::verify(!empty($columnNames), 'Column names cannot be empty');
 
@@ -46,7 +46,7 @@ class Index
     /**
      * @return string
      */
-    public function getName()
+    public function getName() : string
     {
         return $this->name;
     }
@@ -54,7 +54,7 @@ class Index
     /**
      * @return boolean
      */
-    public function isUnique()
+    public function isUnique() : bool
     {
         return $this->isUnique;
     }
@@ -62,7 +62,7 @@ class Index
     /**
      * @return string[]
      */
-    public function getColumnNames()
+    public function getColumnNames() : array
     {
         return $this->columnNames;
     }
@@ -72,7 +72,7 @@ class Index
      *
      * @return Index
      */
-    public function withPrefix($prefix)
+    public function withPrefix(string $prefix) : Index
     {
         return $this
                 ->withColumnsPrefixedBy($prefix)
@@ -84,7 +84,7 @@ class Index
      *
      * @return Index
      */
-    public function withColumnsPrefixedBy($prefix)
+    public function withColumnsPrefixedBy(string $prefix) : Index
     {
         $prefixedColumns = [];
 
@@ -104,7 +104,7 @@ class Index
      *
      * @return Index
      */
-    public function withNamePrefixedBy($prefix)
+    public function withNamePrefixedBy(string $prefix) : Index
     {
         if ($prefix === '') {
             return $this;

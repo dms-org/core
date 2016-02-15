@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Common\Crud\Table;
 
@@ -20,7 +20,7 @@ interface ISummaryTable extends ITableDisplay
      *
      * @return IReorderAction[]
      */
-    public function getReorderActions();
+    public function getReorderActions() : array;
 
     /**
      * Returns whether the supplied view has a reorder action.
@@ -29,7 +29,7 @@ interface ISummaryTable extends ITableDisplay
      *
      * @return bool
      */
-    public function hasReorderAction($viewName);
+    public function hasReorderAction(string $viewName) : bool;
 
     /**
      * Gets the reorder action for the supplied view.
@@ -39,5 +39,5 @@ interface ISummaryTable extends ITableDisplay
      * @return IReorderAction
      * @throws InvalidArgumentException
      */
-    public function getReorderAction($viewName);
+    public function getReorderAction(string $viewName) : \Dms\Core\Common\Crud\Action\Table\IReorderAction;
 }

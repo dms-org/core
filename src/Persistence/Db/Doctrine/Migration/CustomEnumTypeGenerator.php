@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Doctrine\Migration;
 
@@ -27,7 +27,7 @@ PHP;
      *
      * @return string The doctrine type name
      */
-    public static function generate(array $values)
+    public static function generate(array $values) : string
     {
         $namespace = '__CustomDoctrineEnums';
         $className = 'CustomEnum__' . implode('__', $values);

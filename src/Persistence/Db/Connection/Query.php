@@ -1,9 +1,8 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Connection;
 
 use Dms\Core\Exception\InvalidOperationException;
-use Dms\Core\Persistence\Db\Platform\IPlatform;
 
 /**
  * The query base class.
@@ -31,9 +30,9 @@ abstract class Query implements IQuery
     }
 
     /**
-     * @return IPlatform
+     * @return IConnection
      */
-    final public function getConnection()
+    final public function getConnection() : IConnection
     {
         return $this->connection;
     }
@@ -41,7 +40,7 @@ abstract class Query implements IQuery
     /**
      * {@inheritDoc}
      */
-    final public function setParameter($parameter, $value)
+    final public function setParameter($parameter, $value) : IQuery
     {
         $this->doSetParameter($parameter, $value);
 
@@ -49,8 +48,8 @@ abstract class Query implements IQuery
     }
 
     /**
-     * @param string $parameter
-     * @param mixed $value
+     * @param int|string $parameter
+     * @param mixed      $value
      *
      * @return void
      */
@@ -59,7 +58,7 @@ abstract class Query implements IQuery
     /**
      * {@inheritDoc}
      */
-    final public function setParameters(array $parameters)
+    final public function setParameters(array $parameters) : IQuery
     {
         $this->doSetParameters($parameters);
 
@@ -81,7 +80,7 @@ abstract class Query implements IQuery
     /**
      * @inheritDoc
      */
-    final public function execute(array $parameters = [])
+    final public function execute(array $parameters = []) : IQuery
     {
         $this->setParameters($parameters);
         $this->doExecute();
@@ -99,7 +98,7 @@ abstract class Query implements IQuery
     /**
      * @inheritDoc
      */
-    final public function hasExecuted()
+    final public function hasExecuted() : bool
     {
         return $this->executed;
     }
@@ -117,7 +116,7 @@ abstract class Query implements IQuery
     /**
      * @return int
      */
-    abstract protected function loadAffectedRows();
+    abstract protected function loadAffectedRows() : int;
 
 
     /**
@@ -133,14 +132,14 @@ abstract class Query implements IQuery
     /**
      * @return array[]
      */
-    abstract protected function loadResults();
+    abstract protected function loadResults() : array;
 
     protected function verifyExecuted($method)
     {
         if (!$this->executed) {
             throw InvalidOperationException::format(
-                    'Invalid call to %s::%s: query has not been executed, call %s::%s to run the query',
-                    get_class($this), $method, get_class($this), 'execute'
+                'Invalid call to %s::%s: query has not been executed, call %s::%s to run the query',
+                get_class($this), $method, get_class($this), 'execute'
             );
         }
     }

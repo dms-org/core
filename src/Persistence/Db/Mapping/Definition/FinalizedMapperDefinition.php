@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Mapping\Definition;
 
@@ -238,7 +238,7 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
     /**
      * @return IOrm
      */
-    public function getOrm()
+    public function getOrm() : \Dms\Core\Persistence\Db\Mapping\IOrm
     {
         return $this->orm;
     }
@@ -246,7 +246,7 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
     /**
      * @return string
      */
-    public function getClassName()
+    public function getClassName() : string
     {
         return $this->class->getClassName();
     }
@@ -259,7 +259,7 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
      *
      * @return FinalizedMapperDefinition
      */
-    public function withColumnsPrefixedBy($prefix)
+    public function withColumnsPrefixedBy(string $prefix) : FinalizedMapperDefinition
     {
         if ($prefix === '') {
             return $this;
@@ -365,7 +365,7 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
     /**
      * @return FinalizedClassDefinition
      */
-    public function getClass()
+    public function getClass() : \Dms\Core\Model\Object\FinalizedClassDefinition
     {
         return $this->class;
     }
@@ -373,7 +373,7 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
     /**
      * @return Table
      */
-    public function getTable()
+    public function getTable() : \Dms\Core\Persistence\Db\Schema\Table
     {
         return $this->table;
     }
@@ -383,7 +383,7 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
      *
      * @return Table
      */
-    public function getEntityTable()
+    public function getEntityTable() : \Dms\Core\Persistence\Db\Schema\Table
     {
         return $this->entityTable;
     }
@@ -391,7 +391,7 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
     /**
      * @return string[]
      */
-    public function getPropertyColumnMap()
+    public function getPropertyColumnMap() : array
     {
         return $this->propertyColumnNameMap;
     }
@@ -399,7 +399,7 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
     /**
      * @return callable[]
      */
-    public function getPhpToDbPropertyConverterMap()
+    public function getPhpToDbPropertyConverterMap() : array
     {
         return $this->phpToDbPropertyConverterMap;
     }
@@ -407,7 +407,7 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
     /**
      * @return callable[]
      */
-    public function getDbToPhpPropertyConverterMap()
+    public function getDbToPhpPropertyConverterMap() : array
     {
         return $this->dbToPhpPropertyConverterMap;
     }
@@ -415,7 +415,7 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
     /**
      * @return callable[]
      */
-    public function getColumnGetterMap()
+    public function getColumnGetterMap() : array
     {
         return $this->columnGetterMap;
     }
@@ -423,7 +423,7 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
     /**
      * @return callable[]
      */
-    public function getColumnSetterMap()
+    public function getColumnSetterMap() : array
     {
         return $this->columnSetterMap;
     }
@@ -431,7 +431,7 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
     /**
      * @return string[]
      */
-    public function getMethodColumnMap()
+    public function getMethodColumnMap() : array
     {
         return $this->methodColumnNameMap;
     }
@@ -441,7 +441,7 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
      *
      * @return IRelation[]
      */
-    public function getPropertyRelationMap()
+    public function getPropertyRelationMap() : array
     {
         $relations = [];
 
@@ -459,7 +459,7 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
     /**
      * @return RelationMapping[]
      */
-    public function getRelationMappings()
+    public function getRelationMappings() : array
     {
         return array_merge($this->toOneRelations, $this->toManyRelations);
     }
@@ -467,7 +467,7 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
     /**
      * @return ToOneRelationMapping[]
      */
-    public function getToOneRelationMappings()
+    public function getToOneRelationMappings() : array
     {
         return $this->toOneRelations;
     }
@@ -475,7 +475,7 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
     /**
      * @return ToManyRelationMapping[]
      */
-    public function getToManyRelationMappings()
+    public function getToManyRelationMappings() : array
     {
         return $this->toManyRelations;
     }
@@ -483,7 +483,7 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
     /**
      * @return IRelation[]
      */
-    public function getRelations()
+    public function getRelations() : array
     {
         $relations = [];
 
@@ -499,7 +499,7 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
      *
      * @return IRelation|null
      */
-    public function getRelationMappedToProperty($property)
+    public function getRelationMappedToProperty(string $property)
     {
         InvalidArgumentException::verify(is_string($property), 'property must be a string');
         $relations = $this->getRelationMappings();
@@ -523,7 +523,7 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
      *
      * @return RelationMapping[]
      */
-    public function getRelationMappingsWith($dependencyMode)
+    public function getRelationMappingsWith(string $dependencyMode) : array
     {
         $mappings = [];
 
@@ -539,7 +539,7 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
     /**
      * @return IOptimisticLockingStrategy[]
      */
-    public function getLockingStrategies()
+    public function getLockingStrategies() : array
     {
         return $this->lockingStrategies;
     }
@@ -547,7 +547,7 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
     /**
      * @return IPersistHook[]
      */
-    public function getPersistHooks()
+    public function getPersistHooks() : array
     {
         return $this->persistHooks;
     }
@@ -557,7 +557,7 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
      *
      * @return IPersistHook|null
      */
-    public function getPersistHook($idString)
+    public function getPersistHook(string $idString)
     {
         return isset($this->persistHooks[$idString]) ? $this->persistHooks[$idString] : null;
     }
@@ -565,7 +565,7 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
     /**
      * @return IObjectMapping[]
      */
-    public function getSubClassMappings()
+    public function getSubClassMappings() : array
     {
         return $this->subClassMappings;
     }
@@ -575,7 +575,7 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
      *
      * @return IObjectMapping[]
      */
-    public function getSubClassMappingsWith($dependencyMode)
+    public function getSubClassMappingsWith(string $dependencyMode) : array
     {
         $mappings = [];
 
@@ -591,7 +591,7 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
     /**
      * @return bool
      */
-    public function isForAbstractClass()
+    public function isForAbstractClass() : bool
     {
         return $this->class->isAbstract();
     }
@@ -601,7 +601,7 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
      *
      * @return FinalizedMapperDefinition
      */
-    public function withTable(Table $table)
+    public function withTable(Table $table) : FinalizedMapperDefinition
     {
         $clone        = clone $this;
         $clone->table = $table;
@@ -614,7 +614,7 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
      *
      * @return string|null
      */
-    public function getPropertyLinkedToColumn($columnName)
+    public function getPropertyLinkedToColumn(string $columnName)
     {
         $columnName = array_search($columnName, $this->propertyColumnNameMap, true);
 

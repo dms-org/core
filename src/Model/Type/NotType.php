@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Model\Type;
 
@@ -38,7 +38,7 @@ class NotType extends BaseType
     /**
      * @inheritDoc
      */
-    protected function checkThisIsSubsetOf(IType $type)
+    protected function checkThisIsSubsetOf(IType $type) : bool
     {
         if ($type instanceof self) {
             return $this->type->isSupersetOf($type->type);
@@ -51,7 +51,7 @@ class NotType extends BaseType
     /**
      * @return IType
      */
-    public function getType()
+    public function getType() : IType
     {
         return $this->type;
     }
@@ -59,7 +59,7 @@ class NotType extends BaseType
     /**
      * @inheritDoc
      */
-    public function nonNullable()
+    public function nonNullable() : IType
     {
         return $this->type->isNullable() ? $this : new self($this->type->nullable());
     }
@@ -67,7 +67,7 @@ class NotType extends BaseType
     /**
      * {@inheritDoc}
      */
-    public function isOfType($value)
+    public function isOfType($value) : bool
     {
         return !$this->type->isOfType($value);
     }

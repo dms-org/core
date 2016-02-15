@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Form;
 
@@ -36,7 +36,7 @@ class InvalidInnerFormSubmissionException extends InvalidFormSubmissionException
     /**
      * @return IField
      */
-    public function getField()
+    public function getField() : IField
     {
         return $this->field;
     }

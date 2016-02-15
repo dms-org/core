@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Model\Type;
 
@@ -25,7 +25,7 @@ abstract class WithElementsType extends BaseType
      *
      * @return bool
      */
-    protected function checkThisIsSubsetOf(IType $type)
+    protected function checkThisIsSubsetOf(IType $type) : bool
     {
         $class = get_called_class();
         if ($type instanceof $class) {
@@ -41,7 +41,7 @@ abstract class WithElementsType extends BaseType
      *
      * @return IType
      */
-    public function getElementType()
+    public function getElementType() : IType
     {
         return $this->elementType;
     }

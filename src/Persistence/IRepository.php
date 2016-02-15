@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence;
 
@@ -23,52 +23,52 @@ interface IRepository extends IEntitySet
      * 
      * @return string
      */
-    public function getEntityType();
+    public function getEntityType() : string;
 
     /**
      * {@inheritDoc}
      */
-    public function has($id);
+    public function has(int $id) : bool;
 
     /**
      * {@inheritDoc}
      */
-    public function hasAll(array $ids);
+    public function hasAll(array $ids) : bool;
 
     /**
      * {@inheritDoc}
      */
-    public function getAll();
+    public function getAll() : array;
 
     /**
      * {@inheritDoc}
      */
-    public function get($id);
+    public function get(int $id) : \Dms\Core\Model\IEntity;
 
     /**
      * {@inheritDoc}
      */
-    public function getAllById(array $ids);
+    public function getAllById(array $ids) : array;
 
     /**
      * {@inheritDoc}
      */
-    public function tryGet($id);
+    public function tryGet(int $id);
 
     /**
      * {@inheritDoc}
      */
-    public function tryGetAll(array $ids);
+    public function tryGetAll(array $ids) : array;
 
     /**
      * {@inheritDoc}
      */
-    public function matching(ICriteria $criteria);
+    public function matching(ICriteria $criteria) : array;
 
     /**
      * {@inheritDoc}
      */
-    public function satisfying(ISpecification $specification);
+    public function satisfying(ISpecification $specification) : array;
     
     /**
      * Saves the supplied entity to the underlying data source.
@@ -100,7 +100,7 @@ interface IRepository extends IEntitySet
      * @param int $id
      * @return void
      */
-    public function removeById($id);
+    public function removeById(int $id);
     
     /**
      * Removes the supplied entities from the underlying data source.

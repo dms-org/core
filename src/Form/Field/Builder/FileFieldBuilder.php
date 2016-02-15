@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Form\Field\Builder;
 
@@ -19,7 +19,7 @@ class FileFieldBuilder extends FieldBuilderBase
      *
      * @return static
      */
-    public function extension($extension)
+    public function extension(string $extension)
     {
         return $this->extensions([$extension]);
     }
@@ -43,7 +43,7 @@ class FileFieldBuilder extends FieldBuilderBase
      *
      * @return static
      */
-    public function minSize($bytes)
+    public function minSize(int $bytes)
     {
         return $this->attr(FileType::ATTR_MIN_SIZE, $bytes);
     }
@@ -55,7 +55,7 @@ class FileFieldBuilder extends FieldBuilderBase
      *
      * @return static
      */
-    public function maxSize($bytes)
+    public function maxSize(int $bytes)
     {
         return $this->attr(FileType::ATTR_MAX_SIZE, $bytes);
     }
@@ -67,7 +67,7 @@ class FileFieldBuilder extends FieldBuilderBase
      *
      * @return static
      */
-    public function moveToPathWithClientsFileName($path)
+    public function moveToPathWithClientsFileName(string $path)
     {
         return $this->process(FileMoverProcessor::withClientFileName($this->isImage(), $path));
     }
@@ -80,7 +80,7 @@ class FileFieldBuilder extends FieldBuilderBase
      *
      * @return static
      */
-    public function moveToPathWithRandomFileName($path, $fileNameLength = 16)
+    public function moveToPathWithRandomFileName(string $path, int $fileNameLength = 16)
     {
         return $this->process(FileMoverProcessor::withRandomFileName($this->isImage(), $path, $fileNameLength));
     }

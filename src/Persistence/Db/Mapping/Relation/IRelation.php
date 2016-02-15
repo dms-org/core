@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Mapping\Relation;
 
@@ -22,36 +22,36 @@ interface IRelation
      *
      * @return string
      */
-    public function getIdString();
+    public function getIdString() : string;
 
     /**
      * @return string
      */
-    public function getDependencyMode();
+    public function getDependencyMode() : string;
 
     /**
      * Gets the columns on the parent table required to load the relation.
      *
      * @return string[]
      */
-    public function getParentColumnsToLoad();
+    public function getParentColumnsToLoad() : array;
 
     /**
      * @return Table[]
      */
-    public function getRelationshipTables();
+    public function getRelationshipTables() : array;
 
     /**
      * @return IObjectMapper
      */
-    public function getMapper();
+    public function getMapper() : \Dms\Core\Persistence\Db\Mapping\IObjectMapper;
 
     /**
      * @param string $prefix
      *
      * @return static
      */
-    public function withEmbeddedColumnsPrefixedBy($prefix);
+    public function withEmbeddedColumnsPrefixedBy(string $prefix);
 
     /**
      * @param PersistenceContext $context

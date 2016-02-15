@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Table\DataSource\Definition;
 
@@ -55,7 +55,7 @@ class ColumnMappingDefiner
      *
      * @return void
      */
-    public function toComponent($componentId)
+    public function toComponent(string $componentId)
     {
         call_user_func($this->componentIdCallback, $componentId);
     }

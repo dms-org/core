@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Table\Chart\Structure;
 
@@ -42,7 +42,7 @@ abstract class GraphChart extends ChartStructure
     /**
      * @return IChartAxis
      */
-    public function getHorizontalAxis()
+    public function getHorizontalAxis() : \Dms\Core\Table\Chart\IChartAxis
     {
         return $this->horizontalAxis;
     }
@@ -50,7 +50,7 @@ abstract class GraphChart extends ChartStructure
     /**
      * @return IChartAxis
      */
-    public function getVerticalAxis()
+    public function getVerticalAxis() : \Dms\Core\Table\Chart\IChartAxis
     {
         return $this->verticalAxis;
     }

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Form;
 
@@ -17,7 +17,7 @@ interface IFieldProcessor
      *
      * @return IType
      */
-    public function getProcessedType();
+    public function getProcessedType() : \Dms\Core\Model\Type\IType;
 
     /**
      * Processes the supplied input and adds any error messages

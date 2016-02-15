@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Form\Builder;
 
@@ -46,7 +46,7 @@ class StagedForm
     /**
      * @return ActualStagedForm
      */
-    public function build()
+    public function build() : \Dms\Core\Form\StagedForm
     {
         return new ActualStagedForm($this->firstStage, $this->followingStages);
     }
@@ -73,7 +73,7 @@ class StagedForm
      * @return ActualStagedForm
      * @throws InvalidArgumentException
      */
-    public static function generator($numberOfStages, callable $formStagesGeneratorFunction)
+    public static function generator(int $numberOfStages, callable $formStagesGeneratorFunction) : \Dms\Core\Form\StagedForm
     {
         $generator = $formStagesGeneratorFunction();
 
@@ -109,7 +109,7 @@ class StagedForm
      * @return StagedForm
      * @throws InvalidArgumentException
      */
-    public static function begin($firstStageForm)
+    public static function begin($firstStageForm) : StagedForm
     {
         $firstStage = self::parseStage($firstStageForm);
 
@@ -127,7 +127,7 @@ class StagedForm
      *
      * @return StagedForm
      */
-    public static function fromExisting(IStagedForm $form)
+    public static function fromExisting(IStagedForm $form) : StagedForm
     {
         $self = new self($form->getFirstStage());
 
@@ -143,7 +143,7 @@ class StagedForm
      * @return StagedForm
      * @throws InvalidArgumentException
      */
-    public function then($formStage, array $fieldNamesDefinedInStage = [])
+    public function then($formStage, array $fieldNamesDefinedInStage = []) : StagedForm
     {
         $this->followingStages[] = self::parseStage($formStage, null, $fieldNamesDefinedInStage);
 
@@ -158,7 +158,7 @@ class StagedForm
      * @return StagedForm
      * @throws InvalidArgumentException
      */
-    public function thenDependingOn(array $fieldNames, callable $formStage, array $fieldNamesDefinedInStage = [])
+    public function thenDependingOn(array $fieldNames, callable $formStage, array $fieldNamesDefinedInStage = []) : StagedForm
     {
         $this->followingStages[] = self::parseStage($formStage, $fieldNames, $fieldNamesDefinedInStage);
 
@@ -172,7 +172,7 @@ class StagedForm
      *
      * @return StagedForm
      */
-    public function embed(IStagedForm $embeddedForm)
+    public function embed(IStagedForm $embeddedForm) : StagedForm
     {
         foreach ($embeddedForm->getAllStages() as $stage) {
             $this->followingStages[] = $stage;
@@ -188,7 +188,7 @@ class StagedForm
      *
      * @return StagedForm
      */
-    public function embedStage(IFormStage $stage)
+    public function embedStage(IFormStage $stage) : StagedForm
     {
         $this->followingStages[] = $stage;
 

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Mapping\Definition;
 
@@ -164,7 +164,7 @@ class MapperDefinition extends MapperDefinitionBase
      *
      * @return void
      */
-    public function toTable($tableName)
+    public function toTable(string $tableName)
     {
         $this->tableName = $tableName;
     }
@@ -177,7 +177,7 @@ class MapperDefinition extends MapperDefinitionBase
      * @return void
      * @throws InvalidArgumentException
      */
-    public function type($classType)
+    public function type(string $classType)
     {
         $baseType = $this->class ? $this->class->getClassName() : TypedObject::class;
         if (!is_a($classType, $baseType, true)) {
@@ -198,7 +198,7 @@ class MapperDefinition extends MapperDefinitionBase
      *
      * @return void
      */
-    public function idToPrimaryKey($columnName)
+    public function idToPrimaryKey(string $columnName)
     {
         $this->verifyProperty(__METHOD__, IEntity::ID);
         $this->propertyColumnMap[IEntity::ID] = $columnName;
@@ -213,7 +213,7 @@ class MapperDefinition extends MapperDefinitionBase
      *
      * @return void
      */
-    public function primaryKey($columnName)
+    public function primaryKey(string $columnName)
     {
         $this->primaryKey = $this->buildPrimaryKeyColumn($columnName);
         $this->columns    = [$columnName => $this->primaryKey] + $this->columns;
@@ -229,7 +229,7 @@ class MapperDefinition extends MapperDefinitionBase
      *
      * @return ColumnTypeDefiner
      */
-    public function column($columnName)
+    public function column(string $columnName) : ColumnTypeDefiner
     {
         return new ColumnTypeDefiner(
                 $this,
@@ -272,7 +272,7 @@ class MapperDefinition extends MapperDefinitionBase
      * @return PropertyColumnDefiner
      * @throws InvalidArgumentException
      */
-    public function property($propertyName)
+    public function property(string $propertyName) : PropertyColumnDefiner
     {
         $this->verifyProperty(__METHOD__, $propertyName);
 
@@ -324,7 +324,7 @@ class MapperDefinition extends MapperDefinitionBase
      *
      * @return GetterSetterColumnDefiner
      */
-    public function accessor(callable $getter, callable $setter)
+    public function accessor(callable $getter, callable $setter) : GetterSetterColumnDefiner
     {
         return new GetterSetterColumnDefiner($this, function (Column $column) use ($getter, $setter) {
             $this->columnGetterMap[$column->getName()] = $getter;
@@ -342,7 +342,7 @@ class MapperDefinition extends MapperDefinitionBase
      *
      * @return PropertyColumnDefiner
      */
-    public function method($methodName)
+    public function method(string $methodName) : PropertyColumnDefiner
     {
         return new PropertyColumnDefiner($this, null, function (Column $column) use ($methodName) {
             $this->methodColumnMap[$methodName] = $column->getName();
@@ -366,7 +366,7 @@ class MapperDefinition extends MapperDefinitionBase
      *
      * @return GetterSetterColumnDefiner
      */
-    public function computed(callable $computedPropertyCallback)
+    public function computed(callable $computedPropertyCallback) : GetterSetterColumnDefiner
     {
         return new GetterSetterColumnDefiner($this, function (Column $column) use ($computedPropertyCallback) {
             $this->columnGetterMap[$column->getName()] = $computedPropertyCallback;
@@ -384,7 +384,7 @@ class MapperDefinition extends MapperDefinitionBase
      * @return EnumPropertyColumnDefiner
      * @throws InvalidArgumentException
      */
-    public function enum($property)
+    public function enum(string $property) : EnumPropertyColumnDefiner
     {
         $this->verifyProperty(__METHOD__, $property);
         $type       = $this->class->getPropertyType($property);
@@ -411,7 +411,7 @@ class MapperDefinition extends MapperDefinitionBase
      * @return EmbeddedValueObjectDefiner
      * @throws InvalidArgumentException
      */
-    public function embedded($property)
+    public function embedded(string $property) : EmbeddedValueObjectDefiner
     {
         $this->verifyProperty(__METHOD__, $property);
 
@@ -426,7 +426,7 @@ class MapperDefinition extends MapperDefinitionBase
      * @return EmbeddedCollectionDefiner
      * @throws InvalidArgumentException
      */
-    public function embeddedCollection($property)
+    public function embeddedCollection(string $property) : EmbeddedCollectionDefiner
     {
         $this->verifyProperty(__METHOD__, $property);
 
@@ -441,7 +441,7 @@ class MapperDefinition extends MapperDefinitionBase
      * @return RelationUsingDefiner
      * @throws InvalidArgumentException
      */
-    public function relation($property)
+    public function relation(string $property) : RelationUsingDefiner
     {
         $this->verifyProperty(__METHOD__, $property);
 
@@ -459,7 +459,7 @@ class MapperDefinition extends MapperDefinitionBase
      * @return RelationUsingDefiner
      * @throws InvalidArgumentException
      */
-    public function accessorRelation(callable $getter, callable $setter)
+    public function accessorRelation(callable $getter, callable $setter) : RelationUsingDefiner
     {
         return $this->defineRelationVia(new CustomAccessor($getter, $setter), function () {
             $this->verifyAllPropertiesMapped = false;
@@ -507,7 +507,7 @@ class MapperDefinition extends MapperDefinitionBase
      * @return SubClassMappingDefiner
      * @throws IncompleteMapperDefinitionException
      */
-    public function subclass()
+    public function subclass() : SubClassMappingDefiner
     {
         $this->verifyDefinedClass();
 
@@ -538,7 +538,7 @@ class MapperDefinition extends MapperDefinitionBase
      *
      * @return IndexColumnsDefiner
      */
-    public function index($indexName)
+    public function index(string $indexName) : IndexColumnsDefiner
     {
         return new IndexColumnsDefiner(function (array $columnNames) use ($indexName) {
             $this->indexes[] = new Index($this->orm->getNamespace() . $indexName, false, $columnNames);
@@ -552,7 +552,7 @@ class MapperDefinition extends MapperDefinitionBase
      *
      * @return IndexColumnsDefiner
      */
-    public function unique($indexName)
+    public function unique(string $indexName) : IndexColumnsDefiner
     {
         return new IndexColumnsDefiner(function (array $columnNames) use ($indexName) {
             $this->indexes[] = new Index($this->orm->getNamespace() . $indexName, true, $columnNames);
@@ -566,7 +566,7 @@ class MapperDefinition extends MapperDefinitionBase
      *
      * @return ForeignKeyLocalColumnsDefiner
      */
-    public function foreignKey($foreignKeyName)
+    public function foreignKey(string $foreignKeyName) : ForeignKeyLocalColumnsDefiner
     {
         return new ForeignKeyLocalColumnsDefiner(function (
                 array $localColumnNames,
@@ -613,7 +613,7 @@ class MapperDefinition extends MapperDefinitionBase
      *
      * @return HookTypeDefiner
      */
-    public function hook()
+    public function hook() : Hook\HookTypeDefiner
     {
         return new HookTypeDefiner(function (callable $persistHookFactory) {
             $this->persistHookFactories[] = $persistHookFactory;
@@ -631,7 +631,7 @@ class MapperDefinition extends MapperDefinitionBase
      * @return FinalizedMapperDefinition
      * @throws IncompleteMapperDefinitionException
      */
-    public function finalize($tableName = null)
+    public function finalize(string $tableName = null) : FinalizedMapperDefinition
     {
         $this->verifyDefinedClass();
 
@@ -730,7 +730,7 @@ class MapperDefinition extends MapperDefinitionBase
      *
      * @return Column
      */
-    protected function buildPrimaryKeyColumn($name)
+    protected function buildPrimaryKeyColumn(string $name) : Column
     {
         return PrimaryKeyBuilder::incrementingInt($name);
     }
@@ -738,7 +738,7 @@ class MapperDefinition extends MapperDefinitionBase
     /**
      * @return Column[]
      */
-    public function getColumns()
+    public function getColumns() : array
     {
         return $this->columns;
     }

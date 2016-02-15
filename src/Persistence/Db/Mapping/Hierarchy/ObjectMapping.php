@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Mapping\Hierarchy;
 
@@ -82,9 +82,9 @@ abstract class ObjectMapping implements IObjectMapping
      * ObjectMapping constructor.
      *
      * @param FinalizedMapperDefinition $definition
-     * @param string                    $dependencyMode
+     * @param string|null               $dependencyMode
      */
-    public function __construct(FinalizedMapperDefinition $definition, $dependencyMode)
+    public function __construct(FinalizedMapperDefinition $definition, string $dependencyMode = null)
     {
         $this->dependencyMode = $dependencyMode;
         $this->loadFromDefinition($definition);
@@ -129,7 +129,7 @@ abstract class ObjectMapping implements IObjectMapping
     /**
      * @return string[]
      */
-    protected function findAllColumnsToLoad()
+    protected function findAllColumnsToLoad() : array
     {
         $columns = [];
 
@@ -182,7 +182,7 @@ abstract class ObjectMapping implements IObjectMapping
     /**
      * @return bool
      */
-    final protected function hasEntityRelations()
+    final protected function hasEntityRelations() : bool
     {
         foreach ($this->definition->getRelationMappings() as $relation) {
             if ($relation->getRelation() instanceof EntityRelation) {
@@ -196,7 +196,7 @@ abstract class ObjectMapping implements IObjectMapping
     /**
      * {@inheritDoc}
      */
-    final public function getDefinition()
+    final public function getDefinition() : FinalizedMapperDefinition
     {
         return $this->definition;
     }
@@ -204,7 +204,7 @@ abstract class ObjectMapping implements IObjectMapping
     /**
      * {@inheritDoc}
      */
-    final public function getObjectType()
+    final public function getObjectType() : string
     {
         return $this->objectType;
     }
@@ -220,7 +220,7 @@ abstract class ObjectMapping implements IObjectMapping
     /**
      * {@inheritDoc}
      */
-    final public function getMappingTables()
+    final public function getMappingTables() : array
     {
         $tables = $this->mappingTables;
 
@@ -236,7 +236,7 @@ abstract class ObjectMapping implements IObjectMapping
     /**
      * {@inheritDoc}
      */
-    public function withEmbeddedColumnsPrefixedBy($prefix)
+    public function withEmbeddedColumnsPrefixedBy(string $prefix)
     {
         $clone                       = clone $this;
         $clone->definition           = $this->definition->withColumnsPrefixedBy($prefix);
@@ -259,7 +259,7 @@ abstract class ObjectMapping implements IObjectMapping
     /**
      * {@inheritdoc}
      */
-    final public function addLoadToSelect(Select $select, $tableAlias)
+    final public function addLoadToSelect(Select $select, string $tableAlias)
     {
         $tableAlias = $this->addLoadClausesToSelect($select, $tableAlias);
 
@@ -271,7 +271,7 @@ abstract class ObjectMapping implements IObjectMapping
     /**
      * {@inheritdoc}
      */
-    public function addSpecificLoadToQuery(Query $query, $objectType)
+    public function addSpecificLoadToQuery(Query $query, string $objectType)
     {
         foreach ($this->subClassMappings as $subType) {
             if (is_a($objectType, $subType->getObjectType(), true)) {
@@ -283,7 +283,7 @@ abstract class ObjectMapping implements IObjectMapping
     /**
      * {@inheritdoc}
      */
-    final public function getClassConditionExpr(Query $query, $objectType)
+    final public function getClassConditionExpr(Query $query, string $objectType) : \Dms\Core\Persistence\Db\Query\Expression\Expr
     {
         foreach ($this->subClassMappings as $subType) {
             if (is_a($objectType, $subType->getObjectType(), true)) {
@@ -299,7 +299,7 @@ abstract class ObjectMapping implements IObjectMapping
      *
      * @return Expr
      */
-    abstract protected function makeClassConditionExpr(Query $query);
+    abstract protected function makeClassConditionExpr(Query $query) : \Dms\Core\Persistence\Db\Query\Expression\Expr;
 
     /**
      * @param Select $select
@@ -307,7 +307,7 @@ abstract class ObjectMapping implements IObjectMapping
      *
      * @return string
      */
-    protected function addLoadClausesToSelect(Select $select, $tableAlias)
+    protected function addLoadClausesToSelect(Select $select, string $tableAlias) : string
     {
         $table = $select->getTable();
 
@@ -321,7 +321,7 @@ abstract class ObjectMapping implements IObjectMapping
     /**
      * @return string[]
      */
-    final public function getAllColumnsToLoad()
+    final public function getAllColumnsToLoad() : array
     {
         return $this->allColumnsToLoad;
     }
@@ -329,7 +329,7 @@ abstract class ObjectMapping implements IObjectMapping
     /**
      * {@inheritdoc}
      */
-    final public function constructNewObjectFromRow(Row $row)
+    final public function constructNewObjectFromRow(Row $row) : \Dms\Core\Model\ITypedObject
     {
         $subClassRow = $this->processRowBeforeLoadSubclass($row);
         foreach ($this->subClassMappings as $subType) {
@@ -354,7 +354,7 @@ abstract class ObjectMapping implements IObjectMapping
     /**
      * {@inheritdoc}
      */
-    final public function rowMatchesType(Row $row)
+    final public function rowMatchesType(Row $row) : bool
     {
         foreach ($this->subClassMappings as $subType) {
             if ($subType->rowMatchesType($row)) {
@@ -370,7 +370,7 @@ abstract class ObjectMapping implements IObjectMapping
      *
      * @return bool
      */
-    abstract protected function rowMatchesObjectType(Row $row);
+    abstract protected function rowMatchesObjectType(Row $row) : bool;
 
     /**
      * @param LoadingContext $context
@@ -393,7 +393,7 @@ abstract class ObjectMapping implements IObjectMapping
      *
      * @return array[]
      */
-    public function loadAllProperties(LoadingContext $context, array $rows, array $objects)
+    public function loadAllProperties(LoadingContext $context, array $rows, array $objects) : array
     {
         /** @var Row[] $rows */
         foreach ($rows as $key => $row) {
@@ -462,10 +462,10 @@ abstract class ObjectMapping implements IObjectMapping
      * @return void
      */
     private function loadRelations(
-            LoadingContext $context,
-            array $rows,
-            array $objects,
-            array &$objectProperties
+        LoadingContext $context,
+        array $rows,
+        array $objects,
+        array &$objectProperties
     ) {
         foreach ($this->definition->getToOneRelationMappings() as $relationMapping) {
             $relation = $relationMapping->getRelation();
@@ -516,10 +516,10 @@ abstract class ObjectMapping implements IObjectMapping
      * @param array|null         $extraData
      */
     public function persistAll(
-            PersistenceContext $context,
-            array $objects,
-            array $rows,
-            array $extraData = null
+        PersistenceContext $context,
+        array $objects,
+        array $rows,
+        array $extraData = null
     ) {
         $objectProperties = $this->persistObjectDataToRows($objects, $rows);
 
@@ -577,7 +577,7 @@ abstract class ObjectMapping implements IObjectMapping
      *
      * @return array[]
      */
-    protected function getObjectProperties(array $objects)
+    protected function getObjectProperties(array $objects) : array
     {
         $objectProperties = [];
         /** @var ITypedObject[] $objects */
@@ -686,8 +686,8 @@ abstract class ObjectMapping implements IObjectMapping
 
                     if (!($propertyValue instanceof \Traversable)) {
                         throw PersistenceException::format(
-                                'Invalid value found for to-many relation to %s on type %s: expecting instance of %s, %s given',
-                                $relation->getMapper()->getObjectType(), $this->objectType, \Traversable::class, Debug::getType($propertyValue)
+                            'Invalid value found for to-many relation to %s on type %s: expecting instance of %s, %s given',
+                            $relation->getMapper()->getObjectType(), $this->objectType, \Traversable::class, Debug::getType($propertyValue)
                         );
                     }
 
@@ -903,7 +903,7 @@ abstract class ObjectMapping implements IObjectMapping
      *
      * @return array
      */
-    protected function loadInstancesForSubclass(IObjectMapping $mapping, array $rows, array $objects)
+    protected function loadInstancesForSubclass(IObjectMapping $mapping, array $rows, array $objects) : array
     {
         $subClass          = $mapping->getObjectType();
         $objectsOfSubClass = [];
@@ -916,7 +916,7 @@ abstract class ObjectMapping implements IObjectMapping
             }
         }
 
-        return array($objectsOfSubClass, $rowsForSubClass);
+        return [$objectsOfSubClass, $rowsForSubClass];
     }
 
     /**
@@ -926,7 +926,7 @@ abstract class ObjectMapping implements IObjectMapping
      *
      * @return array
      */
-    protected function loadPropertiesForSubclass(IObjectMapping $mapping, array $rows, array $objectProperties)
+    protected function loadPropertiesForSubclass(IObjectMapping $mapping, array $rows, array $objectProperties) : array
     {
         $objectsPropertiesOfSubClass = [];
         $rowsForSubClass             = [];
@@ -938,6 +938,6 @@ abstract class ObjectMapping implements IObjectMapping
             }
         }
 
-        return array($objectsPropertiesOfSubClass, $rowsForSubClass);
+        return [$objectsPropertiesOfSubClass, $rowsForSubClass];
     }
 }

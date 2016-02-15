@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Model\Object;
 
@@ -34,7 +34,7 @@ abstract class ValueObject extends TypedObject implements IValueObject, IHashabl
      *
      * @return IType
      */
-    public static function collectionType()
+    public static function collectionType() : \Dms\Core\Model\Type\IType
     {
         return Type::collectionOf(Type::object(get_called_class()), ValueObjectCollection::class);
     }
@@ -42,7 +42,7 @@ abstract class ValueObject extends TypedObject implements IValueObject, IHashabl
     /**
      * @inheritDoc
      */
-    public function getObjectHash()
+    public function getObjectHash() : string
     {
         return serialize($this->dataToSerialize());
     }

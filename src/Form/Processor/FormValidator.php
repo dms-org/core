@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Form\Processor;
 
@@ -15,7 +15,7 @@ abstract class FormValidator implements IFormProcessor
     /**
      * {@inheritDoc}
      */
-    public function process(array $input, array &$messages)
+    public function process(array $input, array &$messages) : array
     {
         $this->validate($input, $messages);
 
@@ -25,7 +25,7 @@ abstract class FormValidator implements IFormProcessor
     /**
      * {@inheritDoc}
      */
-    final public function unprocess(array $input)
+    final public function unprocess(array $input) : array
     {
         return $input;
     }

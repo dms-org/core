@@ -100,6 +100,6 @@ class UploadedFileValidatorTest extends FieldValidatorTest
         $this->setExpectedException(InvalidArgumentException::class);
 
         $actualMessages = [];
-        $this->validator->process($this->mockUploadedFile('some-invalid-status'), $actualMessages);
+        $this->validator->process($this->mockUploadedFile($invalidStatus = 6546456), $actualMessages);
     }
 }

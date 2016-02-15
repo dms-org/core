@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Model\Object;
 
@@ -26,7 +26,7 @@ abstract class Entity extends TypedObject implements IEntity, IHashable
      *
      * @param int|null $id
      */
-    public function __construct($id = null)
+    public function __construct(int $id = null)
     {
         parent::__construct();
         $this->id = $id;
@@ -50,7 +50,7 @@ abstract class Entity extends TypedObject implements IEntity, IHashable
      *
      * @return IType
      */
-    public static function collectionType()
+    public static function collectionType() : \Dms\Core\Model\Type\IType
     {
         return Type::collectionOf(Type::object(get_called_class()), EntityCollection::class);
     }
@@ -85,7 +85,7 @@ abstract class Entity extends TypedObject implements IEntity, IHashable
     /**
      * {@inheritDoc}
      */
-    final public function hasId()
+    final public function hasId() : bool
     {
         return $this->id !== null;
     }
@@ -93,7 +93,7 @@ abstract class Entity extends TypedObject implements IEntity, IHashable
     /**
      * {@inheritDoc}
      */
-    final public function setId($id)
+    final public function setId(int $id)
     {
         if ($this->id !== null) {
             throw Exception\InvalidOperationException::methodCall(__METHOD__, 'the id has already been set');
@@ -107,7 +107,7 @@ abstract class Entity extends TypedObject implements IEntity, IHashable
     /**
      * @inheritDoc
      */
-    public function getObjectHash()
+    public function getObjectHash() : string
     {
         return $this->id === null
                 ? serialize($this->toArray())

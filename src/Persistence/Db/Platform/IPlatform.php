@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Platform;
 
@@ -39,7 +39,7 @@ interface IPlatform
      *
      * @return array
      */
-    public function mapResultSetToDbFormat(RowSet $rows, $lockingColumnDataPrefix = null);
+    public function mapResultSetToDbFormat(RowSet $rows, string $lockingColumnDataPrefix = null) : array;
 
     /**
      * Maps the supplied result set array to a row set object
@@ -50,7 +50,7 @@ interface IPlatform
      *
      * @return RowSet
      */
-    public function mapResultSetToPhpForm(Table $table, array $rows);
+    public function mapResultSetToPhpForm(Table $table, array $rows) : RowSet;
 
     /**
      * Compiles the select query.
@@ -59,7 +59,7 @@ interface IPlatform
      *
      * @return CompiledQuery
      */
-    public function compileSelect(Select $query);
+    public function compileSelect(Select $query) : CompiledQuery;
 
     /**
      * Compiles the update query.
@@ -68,7 +68,7 @@ interface IPlatform
      *
      * @return CompiledQuery
      */
-    public function compileUpdate(Update $query);
+    public function compileUpdate(Update $query) : CompiledQuery;
 
     /**
      * Compiles the delete query.
@@ -77,7 +77,7 @@ interface IPlatform
      *
      * @return CompiledQuery
      */
-    public function compileDelete(Delete $query);
+    public function compileDelete(Delete $query) : CompiledQuery;
 
     /**
      * Compiles an array of queries that will update the supplied column to a set of (1-based) incrementing integers
@@ -89,7 +89,7 @@ interface IPlatform
      *
      * @return CompiledQuery
      */
-    public function compileResequenceOrderIndexColumn(ResequenceOrderIndexColumn $query);
+    public function compileResequenceOrderIndexColumn(ResequenceOrderIndexColumn $query) : CompiledQuery;
 
     /**
      * Compiles a prepared insert query with the values as named parameters named with their respective column.

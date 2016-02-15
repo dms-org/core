@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Form;
 
@@ -75,7 +75,7 @@ class StagedForm implements IStagedForm
     /**
      * @return IndependentFormStage
      */
-    public function getFirstStage()
+    public function getFirstStage() : Stage\IndependentFormStage
     {
         return $this->firstStage;
     }
@@ -86,7 +86,7 @@ class StagedForm implements IStagedForm
      * @return IFormStage
      * @throws InvalidArgumentException
      */
-    public function getStage($stageNumber)
+    public function getStage(int $stageNumber) : IFormStage
     {
         InvalidArgumentException::verify(
                 $stageNumber > 0 && $stageNumber <= $this->getAmountOfStages(),
@@ -103,7 +103,7 @@ class StagedForm implements IStagedForm
     /**
      * @inheritDoc
      */
-    public function getStageWithFieldName($fieldName)
+    public function getStageWithFieldName(string $fieldName) : IFormStage
     {
         $allFieldNames = [];
 
@@ -126,7 +126,7 @@ class StagedForm implements IStagedForm
     /**
      * @return IFormStage[]
      */
-    public function getFollowingStages()
+    public function getFollowingStages() : array
     {
         return $this->followingStages;
     }
@@ -134,7 +134,7 @@ class StagedForm implements IStagedForm
     /**
      * @return IFormStage[]
      */
-    public function getAllStages()
+    public function getAllStages() : array
     {
         return array_merge([$this->firstStage], $this->followingStages);
     }
@@ -142,7 +142,7 @@ class StagedForm implements IStagedForm
     /**
      * @return int
      */
-    public function getAmountOfStages()
+    public function getAmountOfStages() : int
     {
         return 1 + count($this->followingStages);
     }
@@ -150,7 +150,7 @@ class StagedForm implements IStagedForm
     /**
      * @inheritDoc
      */
-    public function getFirstForm()
+    public function getFirstForm() : IForm
     {
         return $this->firstStage->loadForm();
     }
@@ -158,7 +158,7 @@ class StagedForm implements IStagedForm
     /**
      * @inheritDoc
      */
-    public function getRequiredFieldGroupedByStagesForStage($stageNumber)
+    public function getRequiredFieldGroupedByStagesForStage(int $stageNumber)
     {
         $requiredFields = [];
         $this->getRequiredFieldsForStage($stageNumber, $requiredFields);
@@ -215,7 +215,7 @@ class StagedForm implements IStagedForm
     /**
      * @inheritDoc
      */
-    public function getFormForStage($stageNumber, array $previousStagesSubmission)
+    public function getFormForStage(int $stageNumber, array $previousStagesSubmission) : IForm
     {
         $requiredFields      = $this->getRequiredFieldGroupedByStagesForStage($stageNumber);
         $processedSubmission = $this->knownFormData;
@@ -298,7 +298,7 @@ class StagedForm implements IStagedForm
     /**
      * {@inheritdoc]
      */
-    public function process(array $submission)
+    public function process(array $submission) : array
     {
         $processed = $this->knownFormData;
         $processed += $this->firstStage->loadForm()->process($submission);
@@ -315,7 +315,7 @@ class StagedForm implements IStagedForm
     /**
      * {@inheritdoc]
      */
-    public function unprocess(array $processedSubmission)
+    public function unprocess(array $processedSubmission) : array
     {
         $unprocessed = [];
 

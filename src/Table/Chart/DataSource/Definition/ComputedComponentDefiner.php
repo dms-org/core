@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Table\Chart\DataSource\Definition;
 
@@ -61,7 +61,7 @@ class ComputedComponentDefiner
      *
      * @return static
      */
-    public function requiresColumn($columnName)
+    public function requiresColumn(string $columnName)
     {
         $this->columnsToLoad[] = $columnName;
 
@@ -80,7 +80,7 @@ class ComputedComponentDefiner
      *
      * @return IChartAxis
      */
-    public function toAxis($axisName, $axisLabel, $componentType, $componentName = null, $componentLabel = null)
+    public function toAxis(string $axisName, string $axisLabel, $componentType, string $componentName = null, string $componentLabel = null) : \Dms\Core\Table\Chart\IChartAxis
     {
         $componentName  = $componentName ?: $axisName;
         $componentLabel = $componentLabel ?: $axisLabel;
@@ -102,7 +102,7 @@ class ComputedComponentDefiner
      *
      * @return IColumnComponent
      */
-    public function asComponent($componentName, $componentLabel, $componentType)
+    public function asComponent(string $componentName, string $componentLabel, $componentType) : \Dms\Core\Table\IColumnComponent
     {
         if ($componentType instanceof FieldBuilderBase) {
             $componentType = ColumnComponentType::forField($componentType->build()->withName($componentName, $componentLabel));

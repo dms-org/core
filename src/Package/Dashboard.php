@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Package;
 
@@ -32,7 +32,7 @@ class Dashboard implements IDashboard
     /**
      * @inheritdoc
      */
-    public function getWidgets()
+    public function getWidgets() : array
     {
         return $this->widgets;
     }

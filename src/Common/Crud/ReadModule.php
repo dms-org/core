@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Common\Crud;
 
@@ -6,7 +6,6 @@ use Dms\Core\Auth\IAuthSystem;
 use Dms\Core\Common\Crud\Action\Object\IObjectAction;
 use Dms\Core\Common\Crud\Definition\FinalizedReadModuleDefinition;
 use Dms\Core\Common\Crud\Definition\ReadModuleDefinition;
-use Dms\Core\Exception\InvalidArgumentException;
 use Dms\Core\Exception\TypeMismatchException;
 use Dms\Core\Model\IEntitySet;
 use Dms\Core\Model\ITypedObject;
@@ -86,7 +85,7 @@ abstract class ReadModule extends Module implements IReadModule
     /**
      * @inheritDoc
      */
-    final public function getObjectType()
+    final public function getObjectType() : string
     {
         return $this->dataSource->getObjectType();
     }
@@ -94,7 +93,7 @@ abstract class ReadModule extends Module implements IReadModule
     /**
      * @inheritDoc
      */
-    final public function getDataSource()
+    final public function getDataSource() : \Dms\Core\Model\IObjectSet
     {
         return $this->dataSource;
     }
@@ -102,14 +101,14 @@ abstract class ReadModule extends Module implements IReadModule
     /**
      * @inheritDoc
      */
-    final public function getLabelFor(ITypedObject $object)
+    final public function getLabelFor(ITypedObject $object) : string
     {
         $objectType = $this->dataSource->getObjectType();
 
         if (!($object instanceof $objectType)) {
             throw TypeMismatchException::format(
-                    'Invalid object supplied to %s: expecting type %s, %s given',
-                    __METHOD__, $objectType, Debug::getType($object)
+                'Invalid object supplied to %s: expecting type %s, %s given',
+                __METHOD__, $objectType, Debug::getType($object)
             );
         }
 
@@ -119,7 +118,7 @@ abstract class ReadModule extends Module implements IReadModule
     /**
      * @inheritDoc
      */
-    final public function getSummaryTable()
+    final public function getSummaryTable() : Table\ISummaryTable
     {
         return $this->getTable(self::SUMMARY_TABLE);
     }
@@ -127,7 +126,7 @@ abstract class ReadModule extends Module implements IReadModule
     /**
      * @inheritDoc
      */
-    final public function getObjectActions()
+    final public function getObjectActions() : array
     {
         return $this->objectActions;
     }
@@ -135,7 +134,7 @@ abstract class ReadModule extends Module implements IReadModule
     /**
      * @inheritDoc
      */
-    final  public function hasObjectAction($name)
+    final  public function hasObjectAction(string $name) : bool
     {
         return isset($this->objectActions[$name]);
     }
@@ -143,12 +142,12 @@ abstract class ReadModule extends Module implements IReadModule
     /**
      * @inheritDoc
      */
-    final public function getObjectAction($name)
+    final public function getObjectAction(string $name) : Action\Object\IObjectAction
     {
         if (!isset($this->objectActions[$name])) {
             throw ActionNotFoundException::format(
-                    'Invalid name supplied to %s: expecting one of (%s), \'%s\' given',
-                    __METHOD__, Debug::formatValues(array_keys($this->objectActions)), $name
+                'Invalid name supplied to %s: expecting one of (%s), \'%s\' given',
+                __METHOD__, Debug::formatValues(array_keys($this->objectActions)), $name
             );
         }
 
@@ -158,7 +157,7 @@ abstract class ReadModule extends Module implements IReadModule
     /**
      * @inheritDoc
      */
-    final public function getSummaryTableAction()
+    final public function getSummaryTableAction() : \Dms\Core\Module\IUnparameterizedAction
     {
         return $this->getUnparameterizedAction(self::SUMMARY_TABLE_ACTION);
     }
@@ -166,7 +165,7 @@ abstract class ReadModule extends Module implements IReadModule
     /**
      * @inheritDoc
      */
-    final public function allowsDetails()
+    final public function allowsDetails() : bool
     {
         return isset($this->objectActions[self::DETAILS_ACTION]);
     }
@@ -174,12 +173,12 @@ abstract class ReadModule extends Module implements IReadModule
     /**
      * @inheritDoc
      */
-    final public function getDetailsAction()
+    final public function getDetailsAction() : Action\Object\IObjectAction
     {
         if (!isset($this->objectActions[self::DETAILS_ACTION])) {
             throw UnsupportedActionException::format(
-                    'Cannot get details action in crud module for \'%s\': action is not supported',
-                    $this->getObjectType()
+                'Cannot get details action in crud module for \'%s\': action is not supported',
+                $this->getObjectType()
             );
         }
 

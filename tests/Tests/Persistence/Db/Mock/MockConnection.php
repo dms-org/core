@@ -6,11 +6,12 @@ use Dms\Core\Exception\NotImplementedException;
 use Dms\Core\Persistence\Db\Connection\Connection;
 use Dms\Core\Persistence\Db\Query\BulkUpdate;
 use Dms\Core\Persistence\Db\Query\Delete;
-use Dms\Core\Persistence\Db\Query\IQuery;
+use Dms\Core\Persistence\Db\Connection\IQuery;
 use Dms\Core\Persistence\Db\Query\ResequenceOrderIndexColumn;
 use Dms\Core\Persistence\Db\Query\Select;
 use Dms\Core\Persistence\Db\Query\Update;
 use Dms\Core\Persistence\Db\Query\Upsert;
+use Dms\Core\Persistence\Db\RowSet;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>
@@ -76,7 +77,7 @@ class MockConnection extends Connection
     /**
      * @inheritDoc
      */
-    public function load(Select $query)
+    public function load(Select $query) : RowSet
     {
         $this->queryLog[] = $query;
         $results = $this->db->query($this->platform->compileSelect($query));
@@ -87,7 +88,7 @@ class MockConnection extends Connection
     /**
      * @inheritDoc
      */
-    public function update(Update $query)
+    public function update(Update $query) : int
     {
         $this->queryLog[] = $query;
         return $this->db->query($this->platform->compileUpdate($query));
@@ -96,7 +97,7 @@ class MockConnection extends Connection
     /**
      * @inheritDoc
      */
-    public function delete(Delete $query)
+    public function delete(Delete $query) : int
     {
         $this->queryLog[] = $query;
         return $this->db->query($this->platform->compileDelete($query));
@@ -129,7 +130,7 @@ class MockConnection extends Connection
         parent::bulkUpdate($query);
     }
 
-    public function getLastInsertId()
+    public function getLastInsertId() : int
     {
         return $this->db->getLastInsertId();
     }
@@ -149,7 +150,7 @@ class MockConnection extends Connection
      *
      * @return bool
      */
-    public function isInTransaction()
+    public function isInTransaction() : bool
     {
         return $this->db->isInTransaction();
     }
@@ -174,7 +175,7 @@ class MockConnection extends Connection
         $this->db->rollbackTransaction();
     }
 
-    public function prepare($sql, array $parameters = [])
+    public function prepare($sql, array $parameters = []) : IQuery
     {
         if ($sql instanceof PhpPreparedCompiledQuery) {
             $sql->setConnection($this);

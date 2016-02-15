@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Query\Expression;
 
@@ -36,7 +36,7 @@ class Parameter extends Expr
     /**
      * @return Type
      */
-    public function getType()
+    public function getType() : \Dms\Core\Persistence\Db\Schema\Type\Type
     {
         return $this->type;
     }
@@ -54,7 +54,7 @@ class Parameter extends Expr
      *
      * @return Expr[]
      */
-    public function getChildren()
+    public function getChildren() : array
     {
         return [];
     }
@@ -64,7 +64,7 @@ class Parameter extends Expr
      *
      * @return Type
      */
-    public function getResultingType()
+    public function getResultingType() : \Dms\Core\Persistence\Db\Schema\Type\Type
     {
         return $this->type;
     }

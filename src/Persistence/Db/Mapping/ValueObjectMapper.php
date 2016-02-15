@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Mapping;
 
@@ -63,7 +63,7 @@ abstract class ValueObjectMapper extends ObjectMapper implements IEmbeddedObject
     /**
      * @return IObjectMapper
      */
-    final public function getParentMapper()
+    final public function getParentMapper() : IObjectMapper
     {
         return $this->parentMapper;
     }
@@ -86,7 +86,7 @@ abstract class ValueObjectMapper extends ObjectMapper implements IEmbeddedObject
     /**
      * {@inheritDoc}
      */
-    final protected function loadMapping(FinalizedMapperDefinition $definition)
+    final protected function loadMapping(FinalizedMapperDefinition $definition) : Hierarchy\ParentObjectMapping
     {
         return new EmbeddedParentObjectMapping($definition, $this->getRootEntityMapper());
     }
@@ -94,7 +94,7 @@ abstract class ValueObjectMapper extends ObjectMapper implements IEmbeddedObject
     /**
      * {@inheritDoc}
      */
-    final public function asSeparateTable($name, array $extraColumns = [], array $extraIndexes = [], array $extraForeignKeys = [])
+    final public function asSeparateTable(string $name, array $extraColumns = [], array $extraIndexes = [], array $extraForeignKeys = []) : IEmbeddedObjectMapper
     {
         $table = $this->loadTableWithoutParentColumns($name, $extraColumns, $extraIndexes, $extraForeignKeys);
 
@@ -137,7 +137,7 @@ abstract class ValueObjectMapper extends ObjectMapper implements IEmbeddedObject
     /**
      * {@inheritDoc}
      */
-    final public function withColumnsPrefixedBy($prefix)
+    final public function withColumnsPrefixedBy(string $prefix) : IEmbeddedObjectMapper
     {
         $clone          = clone $this;
         $clone->mapping = $this->mapping->withEmbeddedColumnsPrefixedBy($prefix);

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Common\Crud;
 
@@ -55,7 +55,7 @@ abstract class CrudModule extends ReadModule implements ICrudModule
     /**
      * @inheritDoc
      */
-    final public function allowsCreate()
+    final public function allowsCreate() : bool
     {
         return $this->hasParameterizedAction(self::CREATE_ACTION);
     }
@@ -63,7 +63,7 @@ abstract class CrudModule extends ReadModule implements ICrudModule
     /**
      * @inheritDoc
      */
-    final public function getCreateAction()
+    final public function getCreateAction() : \Dms\Core\Module\IParameterizedAction
     {
         if (!$this->hasParameterizedAction(self::CREATE_ACTION)) {
             throw UnsupportedActionException::format(
@@ -78,7 +78,7 @@ abstract class CrudModule extends ReadModule implements ICrudModule
     /**
      * @inheritDoc
      */
-    final public function allowsEdit()
+    final public function allowsEdit() : bool
     {
         return $this->hasObjectAction(self::EDIT_ACTION);
     }
@@ -86,7 +86,7 @@ abstract class CrudModule extends ReadModule implements ICrudModule
     /**
      * @inheritDoc
      */
-    final public function getEditAction()
+    final public function getEditAction() : Action\Object\IObjectAction
     {
         if (!$this->hasObjectAction(self::EDIT_ACTION)) {
             throw UnsupportedActionException::format(
@@ -101,7 +101,7 @@ abstract class CrudModule extends ReadModule implements ICrudModule
     /**
      * @inheritDoc
      */
-    final public function allowsRemove()
+    final public function allowsRemove() : bool
     {
         return $this->hasObjectAction(self::REMOVE_ACTION);
     }
@@ -109,7 +109,7 @@ abstract class CrudModule extends ReadModule implements ICrudModule
     /**
      * @inheritDoc
      */
-    final  public function getRemoveAction()
+    final  public function getRemoveAction() : Action\Object\IObjectAction
     {
         if (!$this->hasObjectAction(self::REMOVE_ACTION)) {
             throw UnsupportedActionException::format(

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Table;
 
@@ -14,19 +14,19 @@ interface IColumnComponent
      *
      * @return string
      */
-    public function getName();
+    public function getName() : string;
 
     /**
      * Gets the label of the column component
      *
      * @return string
      */
-    public function getLabel();
+    public function getLabel() : string;
 
     /**
      * Gets the type of the column component.
      *
      * @return IColumnComponentType
      */
-    public function getType();
+    public function getType() : IColumnComponentType;
 }

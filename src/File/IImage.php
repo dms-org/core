@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\File;
 
@@ -16,7 +16,7 @@ interface IImage extends IFile
      *
      * @return bool
      */
-    public function isValidImage();
+    public function isValidImage() : bool;
 
     /**
      * Gets the image width in pixels.
@@ -24,7 +24,7 @@ interface IImage extends IFile
      * @return int
      * @throws InvalidOperationException if the file is not a valid image
      */
-    public function getWidth();
+    public function getWidth() : int;
 
     /**
      * Gets the image height in pixels.
@@ -32,5 +32,5 @@ interface IImage extends IFile
      * @return int
      * @throws InvalidOperationException if the file is not a valid image
      */
-    public function getHeight();
+    public function getHeight() : int;
 }

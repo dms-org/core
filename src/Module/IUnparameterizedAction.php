@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Module;
 
@@ -19,7 +19,7 @@ interface IUnparameterizedAction extends IAction
      *
      * @return IUnparameterizedActionHandler
      */
-    public function getHandler();
+    public function getHandler() : IActionHandler;
 
     /**
      * Runs the action handler.

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Form\Stage;
 
@@ -18,7 +18,7 @@ abstract class FormStage implements IFormStage
     /**
      * @inheritDoc
      */
-    final public function requiresPreviousSubmission()
+    final public function requiresPreviousSubmission() : bool
     {
         return $this->areAllFieldsRequired() || count($this->getRequiredFieldNames()) > 0;
     }
@@ -26,7 +26,7 @@ abstract class FormStage implements IFormStage
     /**
      * @inheritDoc
      */
-    public function areAllFieldsRequired()
+    public function areAllFieldsRequired() : bool
     {
         return $this->getRequiredFieldNames() === null;
     }
@@ -34,7 +34,7 @@ abstract class FormStage implements IFormStage
     /**
      * @inheritDoc
      */
-    final public function loadForm(array $previousSubmission = null)
+    final public function loadForm(array $previousSubmission = null) : \Dms\Core\Form\IForm
     {
         if ($this->requiresPreviousSubmission() && $previousSubmission === null) {
             throw InvalidArgumentException::format(

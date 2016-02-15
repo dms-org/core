@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Mapping\ReadModel\Definition;
 
@@ -37,7 +37,7 @@ class RelationAliasDefiner
      *
      * @return RelationLoadingDefiner
      */
-    public function to($propertyName)
+    public function to($propertyName) : RelationLoadingDefiner
     {
         return new RelationLoadingDefiner($this->definition, $propertyName, $this->callback);
     }

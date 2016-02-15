@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Exception;
 
@@ -9,7 +9,7 @@ namespace Dms\Core\Exception;
  */
 class BaseException extends \Exception
 {
-    public function __construct($message = '', $code = null, $previous = null)
+    public function __construct(string $message = '', int $code = 0, \Throwable $previous = null)
     {
         parent::__construct($message, $code, $previous);
     }
@@ -19,11 +19,11 @@ class BaseException extends \Exception
      * the message is passed to sprintf to interpolate the values.
      *
      * @param string $message
-     * @param string $_ ...
+     * @param mixed  $_ ...
      *
      * @return static
      */
-    public static function format($message, $_ = null)
+    public static function format(string $message, $_ = null)
     {
         return new static(vsprintf($message, array_slice(func_get_args(), 1)));
     }
@@ -37,7 +37,7 @@ class BaseException extends \Exception
      *
      * @return static
      */
-    public static function formatArray($message, array $values = [])
+    public static function formatArray(string $message, array $values = [])
     {
         return new static(vsprintf($message, $values));
     }
@@ -49,11 +49,11 @@ class BaseException extends \Exception
      *
      * @param \Exception $innerException
      * @param string     $message
-     * @param string     $_ ...
+     * @param mixed      $_ ...
      *
      * @return static
      */
-    public static function wrapper(\Exception $innerException, $message, $_ = null)
+    public static function wrapper(\Exception $innerException, string $message, $_ = null)
     {
         return new static(vsprintf($message, array_slice(func_get_args(), 2)), null, $innerException);
     }
@@ -64,12 +64,12 @@ class BaseException extends \Exception
      *
      * @param boolean $condition The boolean to evaluate.
      * @param string  $message
-     * @param string  $_         ...
+     * @param mixed   $_         ...
      *
      * @return void
      * @throws static
      */
-    public static function verify($condition, $message, $_ = null)
+    public static function verify(bool $condition, string $message, $_ = null)
     {
         if (!$condition) {
             throw forward_static_call_array([__CLASS__, 'format'], array_slice(func_get_args(), 1));
@@ -83,7 +83,7 @@ class BaseException extends \Exception
      *
      * @return string
      */
-    public static function getType($value)
+    public static function getType($value) : string
     {
         return is_object($value) ? get_class($value) : gettype($value);
     }

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Table\Chart\DataSource;
 
@@ -75,7 +75,7 @@ class ChartTableDataSourceAdapter extends ChartDataSource
     /**
      * @return FinalizedChartTableMapperDefinition
      */
-    public function getDefinition()
+    public function getDefinition() : Definition\FinalizedChartTableMapperDefinition
     {
         return $this->definition;
     }
@@ -85,7 +85,7 @@ class ChartTableDataSourceAdapter extends ChartDataSource
      *
      * @return array[]
      */
-    protected function loadData(IChartCriteria $criteria = null)
+    protected function loadData(IChartCriteria $criteria = null) : array
     {
         $criteria = $criteria ?: $this->criteria();
 

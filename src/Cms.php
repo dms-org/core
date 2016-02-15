@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core;
 
@@ -73,7 +73,7 @@ abstract class Cms implements ICms
     /**
      * @inheritDoc
      */
-    final public function getPackageNames()
+    final public function getPackageNames() : array
     {
         return array_keys($this->namePackageClassMap);
     }
@@ -81,7 +81,7 @@ abstract class Cms implements ICms
     /**
      * @inheritDoc
      */
-    final public function loadPackages()
+    final public function loadPackages() : array
     {
         $packages = [];
 
@@ -95,7 +95,7 @@ abstract class Cms implements ICms
     /**
      * @inheritDoc
      */
-    final public function hasPackage($name)
+    final public function hasPackage(string $name) : bool
     {
         return isset($this->namePackageClassMap[$name]);
     }
@@ -103,7 +103,7 @@ abstract class Cms implements ICms
     /**
      * @inheritDoc
      */
-    final public function loadPackage($name)
+    final public function loadPackage(string $name) : Package\IPackage
     {
         if (!isset($this->namePackageClassMap[$name])) {
             throw PackageNotFoundException::format(
@@ -128,7 +128,7 @@ abstract class Cms implements ICms
      * @return IPackage
      * @throws InvalidArgumentException
      */
-    private function loadPackageFromClass($name, $packageClass)
+    private function loadPackageFromClass(string $name, string $packageClass) : Package\IPackage
     {
         if (!is_subclass_of($packageClass, IPackage::class, true)) {
             throw InvalidArgumentException::format(
@@ -153,7 +153,7 @@ abstract class Cms implements ICms
     /**
      * @inheritDoc
      */
-    public function loadPermissions()
+    public function loadPermissions() : array
     {
         $namespacedPermissions = [];
 
@@ -169,7 +169,7 @@ abstract class Cms implements ICms
     /**
      * @inheritDoc
      */
-    final public function getAuth()
+    final public function getAuth() : Auth\IAuthSystem
     {
         return $this->auth;
     }
@@ -177,7 +177,7 @@ abstract class Cms implements ICms
     /**
      * @inheritDoc
      */
-    final public function getLang()
+    final public function getLang() : Language\ILanguageProvider
     {
         return $this->lang;
     }
@@ -185,7 +185,7 @@ abstract class Cms implements ICms
     /**
      * @inheritDoc
      */
-    final public function getIocContainer()
+    final public function getIocContainer() : \Interop\Container\ContainerInterface
     {
         return $this->container;
     }

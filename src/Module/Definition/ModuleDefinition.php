@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Module\Definition;
 
@@ -62,7 +62,7 @@ class ModuleDefinition
     /**
      * @return IAuthSystem
      */
-    public function getAuthSystem()
+    public function getAuthSystem() : \Dms\Core\Auth\IAuthSystem
     {
         return $this->authSystem;
     }
@@ -74,7 +74,7 @@ class ModuleDefinition
      *
      * @return void
      */
-    public function name($name)
+    public function name(string $name)
     {
         $this->name = $name;
     }
@@ -86,7 +86,7 @@ class ModuleDefinition
      *
      * @return ActionDefiner
      */
-    public function action($name)
+    public function action(string $name) : ActionDefiner
     {
         return new ActionDefiner($this->authSystem, $name, function (IAction $action) {
             $this->actions[$action->getName()] = $action;
@@ -100,7 +100,7 @@ class ModuleDefinition
      *
      * @return TableDefiner
      */
-    public function table($name)
+    public function table(string $name) : Table\TableDefiner
     {
         return new TableDefiner($name, function (ITableDisplay $table) {
             $this->tables[$table->getName()] = $table;
@@ -114,7 +114,7 @@ class ModuleDefinition
      *
      * @return ChartDefiner
      */
-    public function chart($name)
+    public function chart(string $name) : Chart\ChartDefiner
     {
         return new ChartDefiner($name, $this->tables, function (IChartDisplay $chart) {
             $this->charts[$chart->getName()] = $chart;
@@ -128,7 +128,7 @@ class ModuleDefinition
      *
      * @return WidgetLabelDefiner
      */
-    public function widget($name)
+    public function widget(string $name) : Widget\WidgetLabelDefiner
     {
         return new WidgetLabelDefiner($name, $this->tables, $this->charts, $this->actions, function (IWidget $widget) {
             $this->widgets[$widget->getName()] = $widget;
@@ -140,7 +140,7 @@ class ModuleDefinition
      *
      * @return CustomPropertiesDefiner
      */
-    public function custom()
+    public function custom() : CustomPropertiesDefiner
     {
         return new CustomPropertiesDefiner($this->actions, $this->tables, $this->charts);
     }
@@ -149,7 +149,7 @@ class ModuleDefinition
      * @return FinalizedModuleDefinition
      * @throws InvalidOperationException
      */
-    public function finalize()
+    public function finalize() : FinalizedModuleDefinition
     {
         $this->verifyCanBeFinalized();
 

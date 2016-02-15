@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Table;
 
@@ -34,7 +34,7 @@ class TableStructure implements ITableStructure
     /**
      * @return IColumn[]
      */
-    final public function getColumns()
+    final public function getColumns() : array
     {
         return $this->columns;
     }
@@ -42,12 +42,12 @@ class TableStructure implements ITableStructure
     /**
      * @return string[]
      */
-    final public function getColumnNames()
+    final public function getColumnNames() : array
     {
         return array_keys($this->columns);
     }
 
-    final public function hasColumn($name)
+    final public function hasColumn($name) : bool
     {
         return isset($this->columns[$name]);
     }
@@ -55,7 +55,7 @@ class TableStructure implements ITableStructure
     /**
      * @inheritdoc
      */
-    final public function getColumn($name)
+    final public function getColumn(string $name) : IColumn
     {
         if (!isset($this->columns[$name])) {
             throw InvalidArgumentException::format(
@@ -70,7 +70,7 @@ class TableStructure implements ITableStructure
     /**
      * @inheritdoc
      */
-    final public function getColumnAndComponent($componentId)
+    final public function getColumnAndComponent(string $componentId) : array
     {
         if (strpos($componentId, '.') === false) {
             $columnName    = $componentId;
@@ -87,7 +87,7 @@ class TableStructure implements ITableStructure
     /**
      * @inheritdoc
      */
-    final public function getComponent($componentId)
+    final public function getComponent(string $componentId) : IColumnComponent
     {
         return $this->getColumnAndComponent($componentId)[1];
     }

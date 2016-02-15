@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Module\Table;
 
@@ -38,7 +38,7 @@ class TableDisplay implements ITableDisplay
      * @param ITableDataSource $dataSource
      * @param ITableView[]     $views
      */
-    public function __construct($name, ITableDataSource $dataSource, array $views)
+    public function __construct(string $name, ITableDataSource $dataSource, array $views)
     {
         InvalidArgumentException::verifyAllInstanceOf(__METHOD__, 'views', $views, ITableView::class);
 
@@ -53,7 +53,7 @@ class TableDisplay implements ITableDisplay
     /**
      * @return string
      */
-    public function getName()
+    public function getName() : string
     {
         return $this->name;
     }
@@ -61,7 +61,7 @@ class TableDisplay implements ITableDisplay
     /**
      * @return ITableDataSource
      */
-    public function getDataSource()
+    public function getDataSource() : \Dms\Core\Table\ITableDataSource
     {
         return $this->dataSource;
     }
@@ -69,7 +69,7 @@ class TableDisplay implements ITableDisplay
     /**
      * @return ITableView|null
      */
-    public function getDefaultView()
+    public function getDefaultView() : \Dms\Core\Module\ITableView
     {
         foreach ($this->views as $view) {
             if ($view->isDefault()) {
@@ -83,7 +83,7 @@ class TableDisplay implements ITableDisplay
     /**
      * @return ITableView[]
      */
-    public function getViews()
+    public function getViews() : array
     {
         return $this->views;
     }
@@ -93,7 +93,7 @@ class TableDisplay implements ITableDisplay
      *
      * @return bool
      */
-    public function hasView($name)
+    public function hasView(string $name) : bool
     {
         return isset($this->views[$name]);
     }
@@ -104,7 +104,7 @@ class TableDisplay implements ITableDisplay
      * @return ITableView
      * @throws InvalidArgumentException
      */
-    public function getView($name)
+    public function getView(string $name) : \Dms\Core\Module\ITableView
     {
         if (isset($this->views[$name])) {
             return $this->views[$name];
@@ -119,7 +119,7 @@ class TableDisplay implements ITableDisplay
     /**
      * @inheritDoc
      */
-    public function loadView($name = null, $skipRows = 0, $limitRows = null)
+    public function loadView(string $name = null, int $skipRows = 0, int $limitRows = null) : \Dms\Core\Table\IDataTable
     {
         $view = $name ? $this->getView($name) : $this->getDefaultView();
 

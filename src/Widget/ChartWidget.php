@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Widget;
 
@@ -36,7 +36,7 @@ class ChartWidget extends Widget
     /**
      * @return IChartDataSource
      */
-    public function getChartDataSource()
+    public function getChartDataSource() : \Dms\Core\Table\Chart\IChartDataSource
     {
         return $this->chartDataSource;
     }
@@ -52,7 +52,7 @@ class ChartWidget extends Widget
     /**
      * @return bool
      */
-    public function hasCriteria()
+    public function hasCriteria() : bool
     {
         return $this->criteria !== null;
     }
@@ -60,7 +60,7 @@ class ChartWidget extends Widget
     /**
      * @return IChartDataTable
      */
-    public function loadData()
+    public function loadData() : \Dms\Core\Table\Chart\IChartDataTable
     {
         return $this->chartDataSource->load($this->criteria);
     }
@@ -70,7 +70,7 @@ class ChartWidget extends Widget
      *
      * @return bool
      */
-    public function isAuthorized()
+    public function isAuthorized() : bool
     {
         return true;
     }

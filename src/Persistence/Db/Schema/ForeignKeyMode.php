@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Schema;
 
@@ -27,7 +27,7 @@ class ForeignKeyMode
      *
      * @return bool
      */
-    public static function isValid($mode)
+    public static function isValid(string $mode) : bool
     {
         return in_array($mode, self::$modes, true);
     }
@@ -37,7 +37,7 @@ class ForeignKeyMode
      *
      * @throws InvalidArgumentException
      */
-    public static function validate($mode)
+    public static function validate(string $mode)
     {
         if (!self::isValid($mode)) {
             throw InvalidArgumentException::format(

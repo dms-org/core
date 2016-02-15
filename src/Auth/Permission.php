@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Auth;
 
@@ -27,7 +27,7 @@ class Permission extends ValueObject implements IPermission
      *
      * @throws InvalidArgumentException
      */
-    public function __construct($name)
+    public function __construct(string $name)
     {
         if (empty($name)) {
             throw InvalidArgumentException::format('Invalid call to %s: name cannot be empty', __METHOD__);
@@ -54,7 +54,7 @@ class Permission extends ValueObject implements IPermission
      *
      * @return Permission
      */
-    public static function named($name)
+    public static function named(string $name) : Permission
     {
         if (!isset(self::$permissionCache[$name])) {
             self::$permissionCache[$name] = new self($name);
@@ -66,7 +66,7 @@ class Permission extends ValueObject implements IPermission
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getName() : string
     {
         return $this->name;
     }
@@ -74,7 +74,7 @@ class Permission extends ValueObject implements IPermission
     /**
      * @inheritDoc
      */
-    public function inNamespace($namespace)
+    public function inNamespace(string $namespace)
     {
         return self::named($namespace . '.' . $this->name);
     }
@@ -82,7 +82,7 @@ class Permission extends ValueObject implements IPermission
     /**
      * {@inheritDoc}
      */
-    public function equals(IPermission $permission)
+    public function equals(IPermission $permission) : bool
     {
         return $this->name === $permission->getName();
     }
@@ -95,7 +95,7 @@ class Permission extends ValueObject implements IPermission
      *
      * @return IPermission[]
      */
-    public static function namespaceAll(array $permissions, $namespace)
+    public static function namespaceAll(array $permissions, string $namespace) : array
     {
         InvalidArgumentException::verifyAllInstanceOf(__METHOD__, 'permissions', $permissions, IPermission::class);
 

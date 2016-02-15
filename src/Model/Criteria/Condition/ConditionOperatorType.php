@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Model\Criteria\Condition;
 
@@ -27,7 +27,7 @@ class ConditionOperatorType
      * @param string $operator
      * @param IType  $valueType
      */
-    public function __construct($operator, IType $valueType)
+    public function __construct(string $operator, IType $valueType)
     {
         ConditionOperator::validate($operator);
         $this->operator  = $operator;
@@ -37,7 +37,7 @@ class ConditionOperatorType
     /**
      * @return string
      */
-    final public function getOperator()
+    final public function getOperator() : string
     {
         return $this->operator;
     }
@@ -45,7 +45,7 @@ class ConditionOperatorType
     /**
      * @return IType
      */
-    final public function getValueType()
+    final public function getValueType() : \Dms\Core\Model\Type\IType
     {
         return $this->valueType;
     }

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Table\Chart\Structure;
 
@@ -47,7 +47,7 @@ class PieChart extends ChartStructure
     /**
      * @return IChartAxis
      */
-    public function getTypeAxis()
+    public function getTypeAxis() : \Dms\Core\Table\Chart\IChartAxis
     {
         return $this->typeAxis;
     }
@@ -55,7 +55,7 @@ class PieChart extends ChartStructure
     /**
      * @return IChartAxis
      */
-    public function getValueAxis()
+    public function getValueAxis() : \Dms\Core\Table\Chart\IChartAxis
     {
         return $this->valueAxis;
     }

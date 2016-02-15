@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Form;
 
@@ -17,7 +17,7 @@ interface IFormStage
      *
      * @return bool
      */
-    public function requiresPreviousSubmission();
+    public function requiresPreviousSubmission() : bool;
 
     /**
      * Gets the names of the fields that are required to load the form
@@ -33,7 +33,7 @@ interface IFormStage
      *
      * @return bool
      */
-    public function areAllFieldsRequired();
+    public function areAllFieldsRequired() : bool;
 
     /**
      * Loads the form for this stage according to the previous submission.
@@ -43,7 +43,7 @@ interface IFormStage
      * @return IForm
      * @throws InvalidArgumentException if the previous submission is not supplied and is required.
      */
-    public function loadForm(array $previousSubmission = null);
+    public function loadForm(array $previousSubmission = null) : IForm;
 
     /**
      * Gets the defined field names in this form stage.
@@ -53,5 +53,5 @@ interface IFormStage
      *
      * @return string[]
      */
-    public function getDefinedFieldNames();
+    public function getDefinedFieldNames() : array;
 }

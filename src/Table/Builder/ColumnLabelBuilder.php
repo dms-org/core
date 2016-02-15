@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Table\Builder;
 
@@ -18,7 +18,7 @@ class ColumnLabelBuilder extends ColumnBuilderBase
      *
      * @return ColumnComponentsBuilder
      */
-    public function label($label)
+    public function label(string $label) : ColumnComponentsBuilder
     {
         $this->label = $label;
 

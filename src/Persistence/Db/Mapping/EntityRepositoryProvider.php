@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Mapping;
 
@@ -39,7 +39,7 @@ class EntityRepositoryProvider implements IEntitySetProvider
     /**
      * @return IOrm
      */
-    public function getOrm()
+    public function getOrm() : IOrm
     {
         return $this->orm;
     }
@@ -47,7 +47,7 @@ class EntityRepositoryProvider implements IEntitySetProvider
     /**
      * @return IConnection
      */
-    public function getConnection()
+    public function getConnection() : \Dms\Core\Persistence\Db\Connection\IConnection
     {
         return $this->connection;
     }
@@ -59,7 +59,7 @@ class EntityRepositoryProvider implements IEntitySetProvider
      *
      * @return IEntitySet
      */
-    public function loadDataSourceFor($entityType)
+    public function loadDataSourceFor(string $entityType) : \Dms\Core\Model\IEntitySet
     {
         $mapper = $this->orm->getEntityMapper($entityType);
 

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Model\Object;
 
@@ -25,7 +25,7 @@ final class ReferenceComparer
      *
      * @return bool
      */
-    public static function areEqual(&$ref1, &$ref2)
+    public static function areEqual(&$ref1, &$ref2) : bool
     {
         if ($ref1 !== $ref2) {
             return false;

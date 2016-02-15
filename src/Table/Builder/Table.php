@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Table\Builder;
 
@@ -18,7 +18,7 @@ class Table
      *
      * @return ITableStructure
      */
-    public static function create(array $columns)
+    public static function create(array $columns) : \Dms\Core\Table\ITableStructure
     {
         return new TableStructure($columns);
     }

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Common\Crud\Action\Object\Mapping;
 
@@ -44,7 +44,7 @@ abstract class ObjectActionFormMapping extends StagedFormDtoMapping implements I
     /**
      * @inheritDoc
      */
-    public function getObjectForm()
+    public function getObjectForm() : \Dms\Core\Form\IForm
     {
         return $this->stagedForm->getFirstForm();
     }

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Mapping\Hierarchy;
 
@@ -114,7 +114,7 @@ class ParentObjectMapping extends ObjectMapping
      *
      * @return ITypedObject[]
      */
-    public function loadAllObjects(LoadingContext $context, array $rows)
+    public function loadAllObjects(LoadingContext $context, array $rows) : array
     {
         $objects = [];
 
@@ -133,7 +133,7 @@ class ParentObjectMapping extends ObjectMapping
      *
      * @return Row[]
      */
-    public function persistAllObjects(PersistenceContext $context, array $objects)
+    public function persistAllObjects(PersistenceContext $context, array $objects) : array
     {
         $rows = [];
 
@@ -153,7 +153,7 @@ class ParentObjectMapping extends ObjectMapping
      *
      * @return Row
      */
-    public function persistObject(PersistenceContext $context, ITypedObject $object)
+    public function persistObject(PersistenceContext $context, ITypedObject $object) : \Dms\Core\Persistence\Db\Row
     {
         return $this->persistAllObjects($context, [0 => $object])[0];
     }
@@ -161,7 +161,7 @@ class ParentObjectMapping extends ObjectMapping
     /**
      * {@inheritdoc}
      */
-    public function rowMatchesObjectType(Row $row)
+    public function rowMatchesObjectType(Row $row) : bool
     {
         return true;
     }
@@ -169,7 +169,7 @@ class ParentObjectMapping extends ObjectMapping
     /**
      * @inheritDoc
      */
-    protected function makeClassConditionExpr(Query $query)
+    protected function makeClassConditionExpr(Query $query) : \Dms\Core\Persistence\Db\Query\Expression\Expr
     {
         return Expr::true();
     }
@@ -177,7 +177,7 @@ class ParentObjectMapping extends ObjectMapping
     /**
      * @inheritDoc
      */
-    public function addSpecificLoadToQuery(Query $query, $objectType)
+    public function addSpecificLoadToQuery(Query $query, string $objectType)
     {
         if ($query instanceof Select) {
             foreach ($this->specificColumnsToLoad as $column) {

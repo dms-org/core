@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Mapping\Relation\Reference;
 
@@ -19,7 +19,7 @@ class ToManyRelationIdentityReference extends RelationIdentityReference implemen
     /**
      * @return ToManyRelationObjectReference
      */
-    public function asObjectReference()
+    public function asObjectReference() : RelationObjectReference
     {
         return new ToManyRelationObjectReference($this->mapper, $this->bidirectionalRelationProperty);
     }
@@ -29,7 +29,7 @@ class ToManyRelationIdentityReference extends RelationIdentityReference implemen
      *
      * @return ITypedCollection
      */
-    public function buildNewCollection(array $children)
+    public function buildNewCollection(array $children) : \Dms\Core\Model\ITypedCollection
     {
         return new EntityIdCollection($children);
     }
@@ -40,7 +40,7 @@ class ToManyRelationIdentityReference extends RelationIdentityReference implemen
      *
      * @return array
      */
-    public function loadCollectionValues(LoadingContext $context, array $rows)
+    public function loadCollectionValues(LoadingContext $context, array $rows) : array
     {
         $primaryKey = $this->primaryKeyColumn->getName();
         $ids        = [];
@@ -59,7 +59,7 @@ class ToManyRelationIdentityReference extends RelationIdentityReference implemen
      *
      * @return Row[]
      */
-    public function syncRelated(PersistenceContext $context, array $modifiedColumns, array $children)
+    public function syncRelated(PersistenceContext $context, array $modifiedColumns, array $children) : array
     {
         return $this->bulkUpdateForeignKeys($context, $modifiedColumns, $children);
     }

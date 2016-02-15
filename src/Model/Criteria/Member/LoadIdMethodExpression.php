@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Model\Criteria\Member;
 
@@ -35,7 +35,7 @@ class LoadIdMethodExpression extends LoadIdFromEntitySetMethodExpression
     /**
      * @inheritDoc
      */
-    public function createArrayGetterCallable()
+    public function createArrayGetterCallable() : callable
     {
         $memberGetter = $this->member->makeArrayGetterCallable();
 

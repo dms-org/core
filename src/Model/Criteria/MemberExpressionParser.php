@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Model\Criteria;
 
@@ -59,7 +59,7 @@ class MemberExpressionParser implements IMemberExpressionParser
     /**
      * @inheritDoc
      */
-    public function parse(FinalizedClassDefinition $rootCollectionType, $string)
+    public function parse(FinalizedClassDefinition $rootCollectionType, string $string) : NestedMember
     {
         try {
             $parts = $this->parseIntoParts($string);
@@ -75,7 +75,7 @@ class MemberExpressionParser implements IMemberExpressionParser
                             'Could not parse member expression string \'%s\' from type %s: %s',
                             $string, $rootCollectionType->getClassName(), $inner->getMessage()
                     ),
-                    null,
+                    0,
                     $inner
             );
         }
@@ -102,7 +102,7 @@ class MemberExpressionParser implements IMemberExpressionParser
      * @return array
      * @throws BaseException
      */
-    private function parseIntoParts($string)
+    private function parseIntoParts(string $string) : array
     {
         $parts            = [];
         $currentType      = self::TYPE_PROPERTY;

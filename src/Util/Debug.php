@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Util;
 
@@ -14,7 +14,7 @@ class Debug
      *
      * @return string
      */
-    public static function formatValues(array $array)
+    public static function formatValues(array $array) : string
     {
         return implode(', ', array_map(function ($i) {
             return var_export($i, true);
@@ -26,7 +26,7 @@ class Debug
      *
      * @return string
      */
-    public static function getType($value)
+    public static function getType($value) : string
     {
         return is_object($value) ? get_class($value) : gettype($value);
     }

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Mapping\Definition\Relation;
 
@@ -57,7 +57,7 @@ class RelationUsingDefiner
      *
      * @return RelationDefiner
      */
-    public function using(IEntityMapper $mapper)
+    public function using(IEntityMapper $mapper) : RelationDefiner
     {
         return new RelationDefiner($this->callback, function () use ($mapper) {
             return $mapper;
@@ -76,7 +76,7 @@ class RelationUsingDefiner
      *
      * @return RelationDefiner
      */
-    public function to($entityType, $tableName = null)
+    public function to(string $entityType, string $tableName = null) : RelationDefiner
     {
         return new RelationDefiner($this->callback, function () use ($entityType, $tableName) {
             return $this->orm->getEntityMapper($entityType, $tableName);
@@ -102,7 +102,7 @@ class RelationUsingDefiner
      *
      * @return EmbeddedRelationTypeDefiner
      */
-    public function asEmbedded()
+    public function asEmbedded() : EmbeddedRelationTypeDefiner
     {
         return new EmbeddedRelationTypeDefiner($this->definition, $this->orm, $this->accessor, $this->callback);
     }

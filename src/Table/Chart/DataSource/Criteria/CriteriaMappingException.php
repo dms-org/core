@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Table\Chart\DataSource\Criteria;
 
@@ -16,7 +16,7 @@ class CriteriaMappingException extends BaseException
      *
      * @return static
      */
-    public static function mustBeMappedToColumn($componentId)
+    public static function mustBeMappedToColumn(string $componentId)
     {
         return self::format(
                 'Chart criteria cannot be mapped to row criteria: chart axis component \'%s\' is not mapped to a table component',

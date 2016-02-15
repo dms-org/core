@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Table;
 
@@ -16,7 +16,7 @@ interface ITableRow extends \ArrayAccess
      *
      * @return array
      */
-    public function getData();
+    public function getData() : array;
 
     /**
      * @param IColumn|string $column
@@ -24,7 +24,7 @@ interface ITableRow extends \ArrayAccess
      * @return array
      * @throws InvalidArgumentException
      */
-    public function getCellData($column);
+    public function getCellData($column) : array;
 
     /**
      * @param IColumn|string               $column

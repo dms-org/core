@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Criteria\MemberMapping;
 
@@ -42,7 +42,7 @@ class ColumnMapping extends MemberMapping
     /**
      * @inheritDoc
      */
-    public function getWhereConditionExpr(Select $select, $tableAlias, $operator, $value)
+    public function getWhereConditionExpr(Select $select, string $tableAlias, string $operator, $value) : \Dms\Core\Persistence\Db\Query\Expression\Expr
     {
         if ($this->phpToDbValueConverter) {
             $value = call_user_func($this->phpToDbValueConverter);
@@ -54,7 +54,7 @@ class ColumnMapping extends MemberMapping
     /**
      * @inheritDoc
      */
-    protected function getSingleValueExpressionInSelect(Select $select, $tableAlias)
+    protected function getSingleValueExpressionInSelect(Select $select, string $tableAlias) : \Dms\Core\Persistence\Db\Query\Expression\Expr
     {
         return Expr::column($tableAlias, $this->column);
     }

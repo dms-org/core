@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Util\Hashing;
 
@@ -17,5 +17,5 @@ interface IHashable
      *
      * @return string
      */
-    public function getObjectHash();
+    public function getObjectHash() : string;
 }

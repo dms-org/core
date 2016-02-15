@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Table\Chart;
 
@@ -16,14 +16,14 @@ interface IChartDataSource
      *
      * @return IChartStructure
      */
-    public function getStructure();
+    public function getStructure() : IChartStructure;
 
     /**
      * Creates a new criteria for this data source.
      *
      * @return ChartCriteria
      */
-    public function criteria();
+    public function criteria() : Criteria\ChartCriteria;
 
     /**
      * Loads the chart data according to the supplied criteria
@@ -33,5 +33,5 @@ interface IChartDataSource
      *
      * @return IChartDataTable
      */
-    public function load(IChartCriteria $criteria = null);
+    public function load(IChartCriteria $criteria = null) : IChartDataTable;
 }

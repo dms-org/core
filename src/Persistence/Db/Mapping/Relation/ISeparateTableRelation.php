@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Mapping\Relation;
 
@@ -23,7 +23,7 @@ interface ISeparateTableRelation extends IRelation
      *
      * @return Select
      */
-    public function getRelationSelectFromParentRows(ParentMapBase $map, &$parentIdColumnName = null);
+    public function getRelationSelectFromParentRows(ParentMapBase $map, &$parentIdColumnName = null) : \Dms\Core\Persistence\Db\Query\Select;
 
     /**
      * Builds a select query to select the related rows as a sub select.
@@ -37,7 +37,7 @@ interface ISeparateTableRelation extends IRelation
      *
      * @return Select
      */
-    public function getRelationSubSelect(Select $outerSelect, $parentTableAlias);
+    public function getRelationSubSelect(Select $outerSelect, string $parentTableAlias) : \Dms\Core\Persistence\Db\Query\Select;
 
     /**
      * Gets the condition to join the related parent table to the child table,
@@ -48,7 +48,7 @@ interface ISeparateTableRelation extends IRelation
      *
      * @return Expr
      */
-    public function getRelationJoinCondition($parentTableAlias, $relatedTableAlias);
+    public function getRelationJoinCondition(string $parentTableAlias, string $relatedTableAlias) : \Dms\Core\Persistence\Db\Query\Expression\Expr;
 
     /**
      * Adds a join to the supplied select to the related table.
@@ -61,5 +61,5 @@ interface ISeparateTableRelation extends IRelation
      *
      * @return string The alias of the joined table
      */
-    public function joinSelectToRelatedTable($parentTableAlias, $joinType, Select $select);
+    public function joinSelectToRelatedTable(string $parentTableAlias, string $joinType, Select $select) : string;
 }

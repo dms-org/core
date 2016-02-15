@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Common\Crud\Action\Object;
 
@@ -18,14 +18,14 @@ interface IObjectActionHandler extends IParameterizedActionHandler
      *
      * @return string
      */
-    public function getObjectType();
+    public function getObjectType() : string;
 
     /**
      * Returns whether the data dto parameter is required.
      *
      * @return bool
      */
-    public function hasDataDtoType();
+    public function hasDataDtoType() : bool;
 
     /**
      * Gets the type if of the data dto parameter or NULL if no dto required.

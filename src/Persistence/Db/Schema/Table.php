@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Schema;
 
@@ -52,7 +52,7 @@ class Table
      *
      * @throws InvalidArgumentException
      */
-    public function __construct($name, array $columns, array $indexes = [], array $foreignKeys = [])
+    public function __construct(string $name, array $columns, array $indexes = [], array $foreignKeys = [])
     {
         InvalidArgumentException::verify(is_string($name), 'Table name must be a string, %s given', gettype($name));
         InvalidArgumentException::verifyAllInstanceOf(__METHOD__, 'columns', $columns, Column::class);
@@ -111,7 +111,7 @@ class Table
     /**
      * @return string
      */
-    public function getName()
+    public function getName() : string
     {
         return $this->name;
     }
@@ -135,7 +135,7 @@ class Table
     /**
      * @return bool
      */
-    public function hasPrimaryKeyColumn()
+    public function hasPrimaryKeyColumn() : bool
     {
         return $this->primaryKeyColumn !== null;
     }
@@ -143,7 +143,7 @@ class Table
     /**
      * @return Column[]
      */
-    public function getColumns()
+    public function getColumns() : array
     {
         return $this->columns;
     }
@@ -151,7 +151,7 @@ class Table
     /**
      * @return string[]
      */
-    public function getColumnNames()
+    public function getColumnNames() : array
     {
         return array_keys($this->columns);
     }
@@ -161,7 +161,7 @@ class Table
      *
      * @return bool
      */
-    public function hasColumn($name)
+    public function hasColumn(string $name) : bool
     {
         return isset($this->columns[$name]);
     }
@@ -172,7 +172,7 @@ class Table
      * @return Column
      * @throws InvalidArgumentException
      */
-    public function getColumn($name)
+    public function getColumn(string $name) : Column
     {
         $column = $this->findColumn($name);
 
@@ -192,7 +192,7 @@ class Table
      * @return Column|null
      * @throws InvalidArgumentException
      */
-    public function findColumn($name)
+    public function findColumn(string $name)
     {
         if (!is_string($name)) {
             throw InvalidArgumentException::format('Column name must be string, %s given', gettype($name));
@@ -204,7 +204,7 @@ class Table
     /**
      * @return null[]
      */
-    public function getNullColumnData()
+    public function getNullColumnData() : array
     {
         return $this->nullColumnData;
     }
@@ -212,7 +212,7 @@ class Table
     /**
      * @return Index[]
      */
-    public function getIndexes()
+    public function getIndexes() : array
     {
         return $this->indexes;
     }
@@ -220,7 +220,7 @@ class Table
     /**
      * @return ForeignKey[]
      */
-    public function getForeignKeys()
+    public function getForeignKeys() : array
     {
         return $this->foreignKeys;
     }
@@ -230,7 +230,7 @@ class Table
      *
      * @return Table
      */
-    public function withName($name)
+    public function withName(string $name) : Table
     {
         if ($this->name === $name) {
             return $this;
@@ -246,7 +246,7 @@ class Table
      *
      * @return Table
      */
-    public function withColumns(array $columns)
+    public function withColumns(array $columns) : Table
     {
         if ($this->columns === $columns) {
             return $this;
@@ -263,7 +263,7 @@ class Table
      *
      * @return Table
      */
-    public function withColumnsButIgnoringConstraints(array $columns)
+    public function withColumnsButIgnoringConstraints(array $columns) : Table
     {
         if ($this->columns === $columns) {
             return $this;
@@ -279,7 +279,7 @@ class Table
      *
      * @return Table
      */
-    public function withPrefix($prefix)
+    public function withPrefix(string $prefix) : Table
     {
         return $this
                 ->withColumnsPrefixedBy($prefix)
@@ -293,7 +293,7 @@ class Table
      *
      * @return Table
      */
-    public function withNameAndConstraintsPrefixedBy($prefix)
+    public function withNameAndConstraintsPrefixedBy(string $prefix) : Table
     {
         if ($prefix === '') {
             return $this;
@@ -324,7 +324,7 @@ class Table
      *
      * @return Table
      */
-    public function withColumnsPrefixedBy($prefix)
+    public function withColumnsPrefixedBy(string $prefix) : Table
     {
         $columns = [];
         foreach ($this->columns as $column) {
@@ -355,7 +355,7 @@ class Table
      *
      * @return Table
      */
-    public function withIndexes(array $indexes)
+    public function withIndexes(array $indexes) : Table
     {
         return new self($this->name, $this->columns, $indexes, $this->foreignKeys);
     }
@@ -365,7 +365,7 @@ class Table
      *
      * @return Table
      */
-    public function withForeignKeys(array $foreignKeys)
+    public function withForeignKeys(array $foreignKeys) : Table
     {
         return new self($this->name, $this->columns, $this->indexes, $foreignKeys);
     }

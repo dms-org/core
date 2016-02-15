@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Schema\Type;
 
@@ -35,7 +35,7 @@ class Integer extends Type
      *
      * @param string $mode
      */
-    private function __construct($mode)
+    private function __construct(string $mode)
     {
         $this->mode = $mode;
     }
@@ -43,7 +43,7 @@ class Integer extends Type
     /**
      * @return self
      */
-    public static function tiny()
+    public static function tiny() : self
     {
         return new self(self::MODE_TINY);
     }
@@ -51,7 +51,7 @@ class Integer extends Type
     /**
      * @return self
      */
-    public static function small()
+    public static function small() : self
     {
         return new self(self::MODE_SMALL);
     }
@@ -59,7 +59,7 @@ class Integer extends Type
     /**
      * @return self
      */
-    public static function medium()
+    public static function medium() : self
     {
         return new self(self::MODE_MEDIUM);
     }
@@ -67,7 +67,7 @@ class Integer extends Type
     /**
      * @return self
      */
-    public static function normal()
+    public static function normal() : self
     {
         return new self(self::MODE_NORMAL);
     }
@@ -75,7 +75,7 @@ class Integer extends Type
     /**
      * @return self
      */
-    public static function big()
+    public static function big() : self
     {
         return new self(self::MODE_BIG);
     }
@@ -83,7 +83,7 @@ class Integer extends Type
     /**
      * @return self
      */
-    public function autoIncrement()
+    public function autoIncrement() : self
     {
         $clone = clone $this;
         $clone->autoIncrement = true;
@@ -94,7 +94,7 @@ class Integer extends Type
     /**
      * @return self
      */
-    public function unsigned()
+    public function unsigned() : self
     {
         $clone = clone $this;
         $clone->unsigned = true;
@@ -105,7 +105,7 @@ class Integer extends Type
     /**
      * @return bool
      */
-    public function isAutoIncrement()
+    public function isAutoIncrement() : bool
     {
         return $this->autoIncrement;
     }
@@ -113,7 +113,7 @@ class Integer extends Type
     /**
      * @return boolean
      */
-    public function isUnsigned()
+    public function isUnsigned() : bool
     {
         return $this->unsigned;
     }
@@ -121,7 +121,7 @@ class Integer extends Type
     /**
      * @return string
      */
-    public function getMode()
+    public function getMode() : string
     {
         return $this->mode;
     }

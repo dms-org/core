@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Common\Crud\Definition\Action;
 
@@ -89,7 +89,7 @@ class ObjectActionDefiner extends ActionDefiner
      *
      * @return IForm
      */
-    protected function getObjectFormStage()
+    protected function getObjectFormStage() : \Dms\Core\Form\IForm
     {
         $objectValidationCallbacks = $this->objectValidationCallbacks;
 

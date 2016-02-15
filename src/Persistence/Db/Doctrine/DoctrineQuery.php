@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Doctrine;
 
@@ -68,7 +68,7 @@ class DoctrineQuery extends Query
     /**
      * @inheritDoc
      */
-    protected function loadAffectedRows()
+    protected function loadAffectedRows() : int
     {
         return $this->statement->rowCount();
     }
@@ -76,7 +76,7 @@ class DoctrineQuery extends Query
     /**
      * @inheritDoc
      */
-    protected function loadResults()
+    protected function loadResults() : array
     {
         return $this->statement->fetchAll(\PDO::FETCH_ASSOC);
     }

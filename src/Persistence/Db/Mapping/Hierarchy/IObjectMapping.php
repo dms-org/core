@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Mapping\Hierarchy;
 
@@ -24,12 +24,12 @@ interface IObjectMapping
     /**
      * @return string
      */
-    public function getObjectType();
+    public function getObjectType() : string;
 
     /**
      * @return FinalizedMapperDefinition
      */
-    public function getDefinition();
+    public function getDefinition() : \Dms\Core\Persistence\Db\Mapping\Definition\FinalizedMapperDefinition;
 
     /**
      * @param IObjectMapper $parentMapper
@@ -45,7 +45,7 @@ interface IObjectMapping
      *
      * @return void
      */
-    public function addLoadToSelect(Select $select, $tableAlias);
+    public function addLoadToSelect(Select $select, string $tableAlias);
 
     /**
      * Adds the required clauses to load ONLY the instances of this class
@@ -56,7 +56,7 @@ interface IObjectMapping
      *
      * @return void
      */
-    public function addSpecificLoadToQuery(Query $query, $objectType);
+    public function addSpecificLoadToQuery(Query $query, string $objectType);
 
     /**
      * Returns an expression to match only instances of this class.
@@ -66,7 +66,7 @@ interface IObjectMapping
      *
      * @return Expr
      */
-    public function getClassConditionExpr(Query $query, $objectType);
+    public function getClassConditionExpr(Query $query, string $objectType) : \Dms\Core\Persistence\Db\Query\Expression\Expr;
 
     /**
      * Constructs new objects from the supplied row.
@@ -77,7 +77,7 @@ interface IObjectMapping
      *
      * @return ITypedObject
      */
-    public function constructNewObjectFromRow(Row $row);
+    public function constructNewObjectFromRow(Row $row) : \Dms\Core\Model\ITypedObject;
 
     /**
      * Returns whether the supplied rows match the object type.
@@ -86,14 +86,14 @@ interface IObjectMapping
      *
      * @return bool
      */
-    public function rowMatchesType(Row $row);
+    public function rowMatchesType(Row $row) : bool;
 
     /**
      * Returns the columns required to load the object.
      *
      * @return string[]
      */
-    public function getAllColumnsToLoad();
+    public function getAllColumnsToLoad() : array;
 
     /**
      * Gets the dependency mode or NULL if it is the root object.
@@ -105,14 +105,14 @@ interface IObjectMapping
     /**
      * @return Table[]
      */
-    public function getMappingTables();
+    public function getMappingTables() : array;
 
     /**
      * @param string $prefix
      *
      * @return static
      */
-    public function withEmbeddedColumnsPrefixedBy($prefix);
+    public function withEmbeddedColumnsPrefixedBy(string $prefix);
 
     /**
      * Hydrates the objects by mapping the row data to the column data.
@@ -137,7 +137,7 @@ interface IObjectMapping
      *
      * @return array[]
      */
-    public function loadAllProperties(LoadingContext $context, array $rows, array $objects);
+    public function loadAllProperties(LoadingContext $context, array $rows, array $objects) : array;
 
     /**
      * @param PersistenceContext $context

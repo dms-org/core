@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Table\DataSource\Criteria;
 
@@ -16,7 +16,7 @@ class CriteriaMappingException extends BaseException
      *
      * @return static
      */
-    public static function mustBeMappedToProperty($componentId)
+    public static function mustBeMappedToProperty(string $componentId)
     {
         return self::format(
                 'Row criteria cannot be mapped to object criteria: column component \'%s\' is not mapped to a class property',

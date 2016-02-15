@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Table;
 
@@ -17,14 +17,14 @@ interface IColumnComponentType
      *
      * @return IType
      */
-    public function getPhpType();
+    public function getPhpType() : \Dms\Core\Model\Type\IType;
 
     /**
      * Gets the valid condition for the component type.
      *
      * @return IColumnComponentOperator[]
      */
-    public function getConditionOperators();
+    public function getConditionOperators() : array;
 
     /**
      * Returns whether the column component supports the operator.
@@ -35,7 +35,7 @@ interface IColumnComponentType
      *
      * @return bool
      */
-    public function hasOperator($operatorString);
+    public function hasOperator(string $operatorString) : bool;
 
     /**
      * Gets the column condition operator or throws an exception if
@@ -48,7 +48,7 @@ interface IColumnComponentType
      * @return IColumnComponentOperator
      * @throws InvalidArgumentException
      */
-    public function getOperator($operatorString);
+    public function getOperator(string $operatorString) : IColumnComponentOperator;
 
     /**
      * Returns whether the types are equal
@@ -57,7 +57,7 @@ interface IColumnComponentType
      *
      * @return bool
      */
-    public function equals(IColumnComponentType $type);
+    public function equals(IColumnComponentType $type) : bool;
 
     /**
      * Returns an equivalent type with the operator fields with the
@@ -68,5 +68,5 @@ interface IColumnComponentType
      *
      * @return static
      */
-    public function withFieldAs($name, $label);
+    public function withFieldAs(string $name, string $label);
 }

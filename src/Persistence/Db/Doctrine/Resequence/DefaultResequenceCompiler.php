@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Doctrine\Resequence;
 
@@ -22,7 +22,7 @@ class DefaultResequenceCompiler extends ResequenceCompiler
      *
      * @return CompiledQuery
      */
-    public function compileResequenceQuery(QueryBuilder $queryBuilder, ResequenceOrderIndexColumn $query)
+    public function compileResequenceQuery(QueryBuilder $queryBuilder, ResequenceOrderIndexColumn $query) : \Dms\Core\Persistence\Db\Platform\CompiledQuery
     {
         $platform         = $queryBuilder->getConnection()->getDatabasePlatform();
         $tableName        = $platform->quoteSingleIdentifier($query->getTable()->getName());

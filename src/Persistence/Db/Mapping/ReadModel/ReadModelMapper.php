@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Mapping\ReadModel;
 
@@ -56,7 +56,7 @@ class ReadModelMapper extends ObjectMapper implements IEntityMapper, IEmbeddedOb
      *
      * @return ParentObjectMapping
      */
-    protected function loadMapping(FinalizedMapperDefinition $definition)
+    protected function loadMapping(FinalizedMapperDefinition $definition) : \Dms\Core\Persistence\Db\Mapping\Hierarchy\ParentObjectMapping
     {
         return new ParentObjectMapping($definition);
     }
@@ -74,7 +74,7 @@ class ReadModelMapper extends ObjectMapper implements IEntityMapper, IEmbeddedOb
     /**
      * {@inheritDoc}
      */
-    public function getParentMapper()
+    public function getParentMapper() : IObjectMapper
     {
         return $this->parentMapper;
     }
@@ -96,7 +96,7 @@ class ReadModelMapper extends ObjectMapper implements IEntityMapper, IEmbeddedOb
      *
      * @return Table
      */
-    public function getPrimaryTable()
+    public function getPrimaryTable() : \Dms\Core\Persistence\Db\Schema\Table
     {
         return $this->getRootEntityMapper()->getPrimaryTable();
     }
@@ -104,7 +104,7 @@ class ReadModelMapper extends ObjectMapper implements IEntityMapper, IEmbeddedOb
     /**
      * @inheritDoc
      */
-    public function getPrimaryTableName()
+    public function getPrimaryTableName() : string
     {
         return $this->getRootEntityMapper()->getPrimaryTableName();
     }
@@ -114,7 +114,7 @@ class ReadModelMapper extends ObjectMapper implements IEntityMapper, IEmbeddedOb
      *
      * @return Table[]
      */
-    public function getTables()
+    public function getTables() : array
     {
         return $this->getMapping()->getMappingTables();
     }
@@ -122,7 +122,7 @@ class ReadModelMapper extends ObjectMapper implements IEntityMapper, IEmbeddedOb
     /**
      * @return Select
      */
-    public function getSelect()
+    public function getSelect() : \Dms\Core\Persistence\Db\Query\Select
     {
         $select = Select::from($this->getPrimaryTable());
         $this->getMapping()->addLoadToSelect($select, $select->getTableAlias());
@@ -135,7 +135,7 @@ class ReadModelMapper extends ObjectMapper implements IEntityMapper, IEmbeddedOb
      *
      * @return RowSet
      */
-    public function rowSet(array $rows)
+    public function rowSet(array $rows) : \Dms\Core\Persistence\Db\RowSet
     {
         return new RowSet($this->getPrimaryTable());
     }
@@ -152,12 +152,12 @@ class ReadModelMapper extends ObjectMapper implements IEntityMapper, IEmbeddedOb
 
     // NOT REQUIRED
 
-    public function persist(PersistenceContext $context, IEntity $entity)
+    public function persist(PersistenceContext $context, IEntity $entity) : \Dms\Core\Persistence\Db\Row
     {
         throw NotImplementedException::method(__METHOD__);
     }
 
-    public function persistAll(PersistenceContext $context, array $entities)
+    public function persistAll(PersistenceContext $context, array $entities) : array
     {
         throw NotImplementedException::method(__METHOD__);
     }
@@ -202,12 +202,12 @@ class ReadModelMapper extends ObjectMapper implements IEntityMapper, IEmbeddedOb
         throw NotImplementedException::method(__METHOD__);
     }
 
-    public function withColumnsPrefixedBy($prefix)
+    public function withColumnsPrefixedBy(string $prefix) : \Dms\Core\Persistence\Db\Mapping\IEmbeddedObjectMapper
     {
         throw NotImplementedException::method(__METHOD__);
     }
 
-    public function asSeparateTable($name, array $extraColumns = [], array $extraIndexes = [], array $extraForeignKeys = [])
+    public function asSeparateTable(string $name, array $extraColumns = [], array $extraIndexes = [], array $extraForeignKeys = []) : \Dms\Core\Persistence\Db\Mapping\IEmbeddedObjectMapper
     {
         throw NotImplementedException::method(__METHOD__);
     }

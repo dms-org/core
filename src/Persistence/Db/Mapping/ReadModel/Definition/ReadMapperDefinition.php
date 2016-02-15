@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Mapping\ReadModel\Definition;
 
@@ -77,7 +77,7 @@ class ReadMapperDefinition
     /**
      * @return IObjectMapper
      */
-    public function getParentMapper()
+    public function getParentMapper() : \Dms\Core\Persistence\Db\Mapping\IObjectMapper
     {
         return $this->mapper;
     }
@@ -85,7 +85,7 @@ class ReadMapperDefinition
     /**
      * @return FinalizedMapperDefinition
      */
-    public function getDefinition()
+    public function getDefinition() : \Dms\Core\Persistence\Db\Mapping\Definition\FinalizedMapperDefinition
     {
         return $this->definition;
     }
@@ -93,7 +93,7 @@ class ReadMapperDefinition
     /**
      * @return MapperDefinition
      */
-    public function getReadDefinition()
+    public function getReadDefinition() : \Dms\Core\Persistence\Db\Mapping\Definition\MapperDefinition
     {
         return $this->readDefinition;
     }
@@ -106,7 +106,7 @@ class ReadMapperDefinition
      * @return void
      * @throws InvalidArgumentException
      */
-    public function type($readModelType)
+    public function type(string $readModelType)
     {
         if (!is_subclass_of($readModelType, IReadModel::class, true)) {
             throw InvalidArgumentException::format(
@@ -148,7 +148,7 @@ class ReadMapperDefinition
      *
      * @return void
      */
-    public function fromType($entityClass, $tableName = null)
+    public function fromType(string $entityClass, string $tableName = null)
     {
         $this->from($this->orm->getEntityMapper($entityClass, $tableName));
     }
@@ -161,7 +161,7 @@ class ReadMapperDefinition
      *
      * @return void
      */
-    public function entityTo($propertyName)
+    public function entityTo(string $propertyName)
     {
         $idString = implode(':', [$this->definition->getClassName(), __CLASS__, $this->relationCount++]);
         $this->readDefinition->relation($propertyName)
@@ -298,7 +298,7 @@ class ReadMapperDefinition
      * @return RelationAliasDefiner
      * @throws InvalidArgumentException
      */
-    public function relation($propertyName)
+    public function relation(string $propertyName) : RelationAliasDefiner
     {
         $this->verifyClassDefined(__METHOD__);
         $this->verifyMapperDefined(__METHOD__);
@@ -341,7 +341,7 @@ class ReadMapperDefinition
      *
      * @return EmbeddedReadModelAliasDefiner
      */
-    public function embedded(GenericReadModelMapper $readModelMapper)
+    public function embedded(GenericReadModelMapper $readModelMapper) : EmbeddedReadModelAliasDefiner
     {
         $this->verifyClassDefined(__METHOD__);
         $this->verifyMapperDefined(__METHOD__);
@@ -357,7 +357,7 @@ class ReadMapperDefinition
      * @return FinalizedMapperDefinition
      * @throws IncompleteMapperDefinitionException
      */
-    public function finalize()
+    public function finalize() : \Dms\Core\Persistence\Db\Mapping\Definition\FinalizedMapperDefinition
     {
         $this->verifyClassDefined(__METHOD__);
         $this->verifyMapperDefined(__METHOD__);

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Common\Crud\Table;
 
@@ -27,7 +27,7 @@ class SummaryTable extends TableDisplay implements ISummaryTable
      * @param ITableView[]     $views
      * @param IReorderAction[] $viewNameReorderActionMap
      */
-    public function __construct($name, ITableDataSource $dataSource, array $views, array $viewNameReorderActionMap = [])
+    public function __construct(string $name, ITableDataSource $dataSource, array $views, array $viewNameReorderActionMap = [])
     {
         parent::__construct($name, $dataSource, $views);
 
@@ -48,7 +48,7 @@ class SummaryTable extends TableDisplay implements ISummaryTable
     /**
      * @inheritdoc
      */
-    public function getReorderActions()
+    public function getReorderActions() : array
     {
         return $this->reorderActions;
     }
@@ -56,7 +56,7 @@ class SummaryTable extends TableDisplay implements ISummaryTable
     /**
      * @inheritdoc
      */
-    public function hasReorderAction($viewName)
+    public function hasReorderAction(string $viewName) : bool
     {
         return isset($this->reorderActions[$viewName]);
     }
@@ -64,7 +64,7 @@ class SummaryTable extends TableDisplay implements ISummaryTable
     /**
      * @inheritdoc
      */
-    public function getReorderAction($viewName)
+    public function getReorderAction(string $viewName) : \Dms\Core\Common\Crud\Action\Table\IReorderAction
     {
         if (!isset($this->reorderActions[$viewName])) {
             throw InvalidArgumentException::format(

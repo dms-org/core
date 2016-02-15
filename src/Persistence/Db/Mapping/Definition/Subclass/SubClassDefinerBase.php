@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Mapping\Definition\Subclass;
 
@@ -44,7 +44,7 @@ abstract class SubClassDefinerBase
     /**
      * @return MapperDefinition
      */
-    protected function constructSubclassDefinition()
+    protected function constructSubclassDefinition() : \Dms\Core\Persistence\Db\Mapping\Definition\MapperDefinition
     {
         return new MapperDefinition($this->orm, $this->parentDefinition);
     }

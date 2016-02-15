@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Form\Object\Stage;
 
@@ -45,7 +45,7 @@ class FormStageCallback
      *
      * @return FinalizedFormObjectDefinition
      */
-    public function defineFormStage(StagedFormObject $instance)
+    public function defineFormStage(StagedFormObject $instance) : \Dms\Core\Form\Object\FinalizedFormObjectDefinition
     {
         return call_user_func($this->defineFormStageCallback, $instance);
     }
@@ -61,7 +61,7 @@ class FormStageCallback
     /**
      * @return string[]
      */
-    public function getFieldsDefinedWithinStage()
+    public function getFieldsDefinedWithinStage() : array
     {
         return $this->fieldsDefinedWithinStage;
     }

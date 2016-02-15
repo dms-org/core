@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Mapping\Relation;
 
@@ -41,7 +41,7 @@ class ToOneRelation extends ToOneRelationBase
      *
      * @throws InvalidRelationException
      */
-    public function __construct($idString, IToOneRelationReference $reference, $foreignKeyToParent, IRelationMode $mode)
+    public function __construct(string $idString, IToOneRelationReference $reference, string $foreignKeyToParent, IRelationMode $mode)
     {
         parent::__construct($idString, $reference, $mode, self::DEPENDENT_CHILDREN);
         $this->foreignKeyToParent = $foreignKeyToParent;
@@ -175,7 +175,7 @@ class ToOneRelation extends ToOneRelationBase
     /**
      * @inheritDoc
      */
-    public function getRelationSelectFromParentRows(ParentMapBase $map, &$parentIdColumnName = null)
+    public function getRelationSelectFromParentRows(ParentMapBase $map, &$parentIdColumnName = null) : \Dms\Core\Persistence\Db\Query\Select
     {
         $primaryKey = $map->getPrimaryKeyColumn();
         $parentIds  = [];
@@ -196,7 +196,7 @@ class ToOneRelation extends ToOneRelationBase
     /**
      * @inheritDoc
      */
-    public function loadFromSelect(LoadingContext $context, ParentChildMap $map, Select $select, $relatedTableAlias, $parentIdColumnName)
+    public function loadFromSelect(LoadingContext $context, ParentChildMap $map, Select $select, string $relatedTableAlias, string $parentIdColumnName)
     {
         $primaryKey = $map->getPrimaryKeyColumn();
         $this->reference->addLoadToSelect($select, $relatedTableAlias);
@@ -219,7 +219,7 @@ class ToOneRelation extends ToOneRelationBase
     /**
      * @inheritDoc
      */
-    public function joinSelectToRelatedTable($parentTableAlias, $joinType, Select $select)
+    public function joinSelectToRelatedTable(string $parentTableAlias, string $joinType, Select $select) : string
     {
         $relatedTableAlias = $select->generateUniqueAliasFor($this->relatedTable->getName());
 
@@ -233,7 +233,7 @@ class ToOneRelation extends ToOneRelationBase
     /**
      * @inheritDoc
      */
-    public function getRelationJoinCondition($parentTableAlias, $relatedTableAlias)
+    public function getRelationJoinCondition(string $parentTableAlias, string $relatedTableAlias) : \Dms\Core\Persistence\Db\Query\Expression\Expr
     {
         return Expr::equal(
                 Expr::column($parentTableAlias, $this->relatedPrimaryKey),

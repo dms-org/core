@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Mapping\Hook;
 
@@ -19,7 +19,7 @@ abstract class PersistHook implements IPersistHook
      *
      * @param string $idString
      */
-    public function __construct($idString)
+    public function __construct(string $idString)
     {
         $this->idString = $idString;
     }
@@ -27,7 +27,7 @@ abstract class PersistHook implements IPersistHook
     /**
      * @return string
      */
-    final public function getIdString()
+    final public function getIdString() : string
     {
         return $this->idString;
     }

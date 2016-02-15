@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Module\Definition\Table;
 
@@ -27,7 +27,7 @@ abstract class TableDefinerBase
      * @param string   $name
      * @param callable $callback
      */
-    public function __construct($name, callable $callback)
+    public function __construct(string $name, callable $callback)
     {
         $this->name     = $name;
         $this->callback = $callback;

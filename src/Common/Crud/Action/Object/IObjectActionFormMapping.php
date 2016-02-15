@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Common\Crud\Action\Object;
 
@@ -20,7 +20,7 @@ interface IObjectActionFormMapping extends IStagedFormDtoMapping
      *
      * @return IForm
      */
-    public function getObjectForm();
+    public function getObjectForm() : \Dms\Core\Form\IForm;
 
     /**
      * Gets the mapped data dto type or NULL if no type is mapped.

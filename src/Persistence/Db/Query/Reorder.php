@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Query;
 
@@ -62,7 +62,7 @@ class Reorder implements IQuery
      *
      * @return static
      */
-    public function withPrimaryKey($primaryKey)
+    public function withPrimaryKey(int $primaryKey)
     {
         $this->primaryKey = $primaryKey;
 
@@ -77,7 +77,7 @@ class Reorder implements IQuery
      * @return static
      * @throws InvalidArgumentException If the index is invalid
      */
-    public function toNewIndex($newIndex)
+    public function toNewIndex(int $newIndex)
     {
         if ($newIndex <= 0) {
             throw InvalidArgumentException::format(
@@ -99,7 +99,7 @@ class Reorder implements IQuery
      * @return static
      * @throws InvalidArgumentException
      */
-    public function groupedBy($groupingColumnName)
+    public function groupedBy(string $groupingColumnName)
     {
         $this->groupingColumn = $this->table->getColumn($groupingColumnName);
 

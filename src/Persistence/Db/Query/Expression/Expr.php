@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Query\Expression;
 
@@ -22,14 +22,14 @@ abstract class Expr
      *
      * @return Type
      */
-    abstract public function getResultingType();
+    abstract public function getResultingType() : \Dms\Core\Persistence\Db\Schema\Type\Type;
 
     /**
      * Gets an array of the expressions contained within this expression.
      *
      * @return Expr[]
      */
-    abstract public function getChildren();
+    abstract public function getChildren() : array;
 
     /**
      * Walks the current expression and the children expressions.
@@ -68,7 +68,7 @@ abstract class Expr
      *
      * @return ColumnExpr
      */
-    public static function column($table, Column $column)
+    public static function column(string $table, Column $column) : ColumnExpr
     {
         return new ColumnExpr($table, $column);
     }
@@ -80,7 +80,7 @@ abstract class Expr
      * @return ColumnExpr
      * @throws InvalidArgumentException
      */
-    public static function tableColumn(Table $table, $columnName)
+    public static function tableColumn(Table $table, string $columnName) : ColumnExpr
     {
         if (!$table->hasColumn($columnName)) {
             throw InvalidArgumentException::format(
@@ -97,7 +97,7 @@ abstract class Expr
      *
      * @return ColumnExpr
      */
-    public static function primaryKey(Table $table)
+    public static function primaryKey(Table $table) : ColumnExpr
     {
         return new ColumnExpr($table->getName(), $table->getPrimaryKeyColumn());
     }
@@ -107,7 +107,7 @@ abstract class Expr
      *
      * @return Parameter
      */
-    public static function idParam($value)
+    public static function idParam($value) : Parameter
     {
         return new Parameter(Integer::normal()->nullable(), $value);
     }
@@ -118,7 +118,7 @@ abstract class Expr
      *
      * @return Parameter
      */
-    public static function param(Type $type, $value)
+    public static function param(Type $type, $value) : Parameter
     {
         return new Parameter($type, $value);
     }
@@ -126,7 +126,7 @@ abstract class Expr
     /**
      * @return Parameter
      */
-    public static function true()
+    public static function true() : Parameter
     {
         return self::param(Integer::tiny(), 1);
     }
@@ -134,7 +134,7 @@ abstract class Expr
     /**
      * @return Parameter
      */
-    public static function false()
+    public static function false() : Parameter
     {
         return self::param(Integer::tiny(), 0);
     }
@@ -144,7 +144,7 @@ abstract class Expr
      *
      * @return Tuple
      */
-    public static function tuple(array $expressions)
+    public static function tuple(array $expressions) : Tuple
     {
         return new Tuple($expressions);
     }
@@ -155,7 +155,7 @@ abstract class Expr
      *
      * @return Tuple
      */
-    public static function tupleParams(Type $type, array $params)
+    public static function tupleParams(Type $type, array $params) : Tuple
     {
         $expressions = [];
 
@@ -172,7 +172,7 @@ abstract class Expr
      *
      * @return BinOp
      */
-    public static function equal(Expr $left, Expr $right)
+    public static function equal(Expr $left, Expr $right) : BinOp
     {
         return new BinOp($left, BinOp::EQUAL, $right);
     }
@@ -183,7 +183,7 @@ abstract class Expr
      *
      * @return BinOp
      */
-    public static function notEqual(Expr $left, Expr $right)
+    public static function notEqual(Expr $left, Expr $right) : BinOp
     {
         return new BinOp($left, BinOp::NOT_EQUAL, $right);
     }
@@ -195,7 +195,7 @@ abstract class Expr
      *
      * @return BinOp
      */
-    public static function in(Expr $left, Tuple $right)
+    public static function in(Expr $left, Tuple $right) : BinOp
     {
         return new BinOp($left, BinOp::IN, $right);
     }
@@ -206,7 +206,7 @@ abstract class Expr
      *
      * @return BinOp
      */
-    public static function notIn(Expr $left, Tuple $right)
+    public static function notIn(Expr $left, Tuple $right) : BinOp
     {
         return new BinOp($left, BinOp::NOT_IN, $right);
     }
@@ -217,7 +217,7 @@ abstract class Expr
      *
      * @return BinOp
      */
-    public static function and_(Expr $left, Expr $right)
+    public static function and_(Expr $left, Expr $right) : BinOp
     {
         return new BinOp($left, BinOp::AND_, $right);
     }
@@ -228,7 +228,7 @@ abstract class Expr
      *
      * @return BinOp
      */
-    public static function or_(Expr $left, Expr $right)
+    public static function or_(Expr $left, Expr $right) : BinOp
     {
         return new BinOp($left, BinOp::OR_, $right);
     }
@@ -239,7 +239,7 @@ abstract class Expr
      *
      * @return BinOp
      */
-    public static function greaterThan(Expr $left, Expr $right)
+    public static function greaterThan(Expr $left, Expr $right) : BinOp
     {
         return new BinOp($left, BinOp::GREATER_THAN, $right);
     }
@@ -250,7 +250,7 @@ abstract class Expr
      *
      * @return BinOp
      */
-    public static function greaterThanOrEqual(Expr $left, Expr $right)
+    public static function greaterThanOrEqual(Expr $left, Expr $right) : BinOp
     {
         return new BinOp($left, BinOp::GREATER_THAN_OR_EQUAL, $right);
     }
@@ -261,7 +261,7 @@ abstract class Expr
      *
      * @return BinOp
      */
-    public static function lessThan(Expr $left, Expr $right)
+    public static function lessThan(Expr $left, Expr $right) : BinOp
     {
         return new BinOp($left, BinOp::LESS_THAN, $right);
     }
@@ -272,7 +272,7 @@ abstract class Expr
      *
      * @return BinOp
      */
-    public static function lessThanOrEqual(Expr $left, Expr $right)
+    public static function lessThanOrEqual(Expr $left, Expr $right) : BinOp
     {
         return new BinOp($left, BinOp::LESS_THAN_OR_EQUAL, $right);
     }
@@ -283,7 +283,7 @@ abstract class Expr
      *
      * @return BinOp
      */
-    public static function strContains(Expr $left, Expr $right)
+    public static function strContains(Expr $left, Expr $right) : BinOp
     {
         return new BinOp($left, BinOp::STR_CONTAINS, $right);
     }
@@ -294,7 +294,7 @@ abstract class Expr
      *
      * @return BinOp
      */
-    public static function strContainsCaseInsensitive(Expr $left, Expr $right)
+    public static function strContainsCaseInsensitive(Expr $left, Expr $right) : BinOp
     {
         return new BinOp($left, BinOp::STR_CONTAINS_CASE_INSENSITIVE, $right);
     }
@@ -305,7 +305,7 @@ abstract class Expr
      *
      * @return BinOp
      */
-    public static function add(Expr $left, Expr $right)
+    public static function add(Expr $left, Expr $right) : BinOp
     {
         return new BinOp($left, BinOp::ADD, $right);
     }
@@ -316,7 +316,7 @@ abstract class Expr
      *
      * @return BinOp
      */
-    public static function subtract(Expr $left, Expr $right)
+    public static function subtract(Expr $left, Expr $right) : BinOp
     {
         return new BinOp($left, BinOp::SUBTRACT, $right);
     }
@@ -326,7 +326,7 @@ abstract class Expr
      *
      * @return UnaryOp
      */
-    public static function isNull(Expr $operand)
+    public static function isNull(Expr $operand) : UnaryOp
     {
         return UnaryOp::isNull($operand);
     }
@@ -336,7 +336,7 @@ abstract class Expr
      *
      * @return UnaryOp
      */
-    public static function isNotNull(Expr $operand)
+    public static function isNotNull(Expr $operand) : UnaryOp
     {
         return UnaryOp::isNotNull($operand);
     }
@@ -346,7 +346,7 @@ abstract class Expr
      *
      * @return Expr
      */
-    public static function not(Expr $operand)
+    public static function not(Expr $operand) : Expr
     {
         if ($operand instanceof BinOp && $operand->getOperator() === BinOp::EQUAL) {
             return self::notEqual($operand->getLeft(), $operand->getRight());
@@ -361,7 +361,7 @@ abstract class Expr
      * @return Expr
      * @throws InvalidArgumentException
      */
-    public static function compoundOr(array $expressions)
+    public static function compoundOr(array $expressions) : Expr
     {
         return self::compoundBinOp($expressions, BinOp::OR_);
     }
@@ -372,7 +372,7 @@ abstract class Expr
      * @return Expr
      * @throws InvalidArgumentException
      */
-    public static function compoundAnd(array $expressions)
+    public static function compoundAnd(array $expressions) : Expr
     {
         return self::compoundBinOp($expressions, BinOp::AND_);
     }
@@ -396,7 +396,7 @@ abstract class Expr
     /**
      * @return Count
      */
-    public static function count()
+    public static function count() : Count
     {
         return new Count();
     }
@@ -406,7 +406,7 @@ abstract class Expr
      *
      * @return SimpleAggregate
      */
-    public static function max(Expr $argument)
+    public static function max(Expr $argument) : SimpleAggregate
     {
         return new SimpleAggregate(SimpleAggregate::MAX, $argument);
     }
@@ -416,7 +416,7 @@ abstract class Expr
      *
      * @return SimpleAggregate
      */
-    public static function min(Expr $argument)
+    public static function min(Expr $argument) : SimpleAggregate
     {
         return new SimpleAggregate(SimpleAggregate::MIN, $argument);
     }
@@ -426,7 +426,7 @@ abstract class Expr
      *
      * @return SimpleAggregate
      */
-    public static function avg(Expr $argument)
+    public static function avg(Expr $argument) : SimpleAggregate
     {
         return new SimpleAggregate(SimpleAggregate::AVG, $argument);
     }
@@ -436,7 +436,7 @@ abstract class Expr
      *
      * @return SimpleAggregate
      */
-    public static function sum(Expr $argument)
+    public static function sum(Expr $argument) : SimpleAggregate
     {
         return new SimpleAggregate(SimpleAggregate::SUM, $argument);
     }
@@ -446,7 +446,7 @@ abstract class Expr
      *
      * @return SubSelect
      */
-    public static function subSelect(Select $select)
+    public static function subSelect(Select $select) : SubSelect
     {
         return new SubSelect($select);
     }

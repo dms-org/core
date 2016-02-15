@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Doctrine\Migration\Type;
 
@@ -20,7 +20,7 @@ class MediumIntType extends Type
      *
      * @return string
      */
-    public function getName()
+    public function getName() : string
     {
         return self::MEDIUMINT;
     }
@@ -33,7 +33,7 @@ class MediumIntType extends Type
      *
      * @return string
      */
-    public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform)
+    public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform) : string
     {
         return 'MEDIUMINT(10)';
     }

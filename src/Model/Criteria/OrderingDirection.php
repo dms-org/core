@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Model\Criteria;
 
@@ -27,7 +27,7 @@ final class OrderingDirection
     /**
      * @return string[]
      */
-    public static function getAll()
+    public static function getAll() : array
     {
         return array_keys(self::$directions);
     }
@@ -37,7 +37,7 @@ final class OrderingDirection
      *
      * @return bool
      */
-    public static function isValid($direction)
+    public static function isValid(string $direction) : bool
     {
         return isset(self::$directions[$direction]);
     }
@@ -48,7 +48,7 @@ final class OrderingDirection
      * @return void
      * @throws InvalidArgumentException
      */
-    public static function validate($direction)
+    public static function validate(string $direction)
     {
         if (!isset(self::$directions[$direction])) {
             throw InvalidArgumentException::format(

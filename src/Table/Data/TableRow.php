@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Table\Data;
 
@@ -42,7 +42,7 @@ class TableRow implements ITableRow
     /**
      * @inheritDoc
      */
-    public function getData()
+    public function getData() : array
     {
         return $this->data;
     }
@@ -50,7 +50,7 @@ class TableRow implements ITableRow
     /**
      * @inheritDoc
      */
-    public function getCellData($column)
+    public function getCellData($column) : array
     {
         $columnName = $column instanceof IColumn ? $column->getName() : $column;
 
@@ -100,7 +100,7 @@ class TableRow implements ITableRow
      * @return bool
      * @throws InvalidArgumentException
      */
-    public function offsetExists($componentId)
+    public function offsetExists($componentId) : bool
     {
         list($columnName, $componentName) = explode('.', $componentId) + [1 => null];
 

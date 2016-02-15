@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Common\Crud\Action\Object;
 
@@ -24,14 +24,14 @@ interface IObjectAction extends IParameterizedAction
      *
      * @return IObjectActionHandler
      */
-    public function getHandler();
+    public function getHandler() : \Dms\Core\Module\IActionHandler;
 
     /**
      * Gets the expected type of object.
      *
      * @return string
      */
-    public function getObjectType();
+    public function getObjectType() : string;
 
     /**
      * Gets the first stage of the action. This contains the object field.
@@ -41,7 +41,7 @@ interface IObjectAction extends IParameterizedAction
      *
      * @return IForm
      */
-    public function getObjectForm();
+    public function getObjectForm() : \Dms\Core\Form\IForm;
 
     /**
      * Returns an array containing the objects from the supplied array objects
@@ -52,7 +52,7 @@ interface IObjectAction extends IParameterizedAction
      * @return object[]
      * @throws TypeMismatchException if the array contains a value of the incorrect type.
      */
-    public function getSupportedObjects(array $objects);
+    public function getSupportedObjects(array $objects) : array;
 
     /**
      * Returns whether the supplied object is supported in this action.
@@ -62,7 +62,7 @@ interface IObjectAction extends IParameterizedAction
      * @return bool
      * @throws TypeMismatchException if the value is of the incorrect type.
      */
-    public function isSupported($object);
+    public function isSupported($object) : bool;
 
     /**
      * Runs the action on the supplied object.

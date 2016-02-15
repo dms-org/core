@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Form\Field\Processor;
 
@@ -38,7 +38,7 @@ abstract class FieldValidator implements IFieldProcessor
     /**
      * @return IType
      */
-    public function getInputType()
+    public function getInputType() : \Dms\Core\Model\Type\IType
     {
         return $this->inputType;
     }
@@ -46,7 +46,7 @@ abstract class FieldValidator implements IFieldProcessor
     /**
      * {@inheritDoc}
      */
-    public function getProcessedType()
+    public function getProcessedType() : \Dms\Core\Model\Type\IType
     {
         return $this->inputType;
     }

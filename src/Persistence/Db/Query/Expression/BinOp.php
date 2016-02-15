@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Query\Expression;
 
@@ -52,7 +52,7 @@ class BinOp extends Expr
      * @param string $operator
      * @param Expr   $right
      */
-    public function __construct(Expr $left, $operator, Expr $right)
+    public function __construct(Expr $left, string $operator, Expr $right)
     {
         $this->left     = $left;
         $this->operator = $operator;
@@ -62,7 +62,7 @@ class BinOp extends Expr
     /**
      * @return Expr
      */
-    public function getLeft()
+    public function getLeft() : Expr
     {
         return $this->left;
     }
@@ -70,7 +70,7 @@ class BinOp extends Expr
     /**
      * @return string
      */
-    public function getOperator()
+    public function getOperator() : string
     {
         return $this->operator;
     }
@@ -78,7 +78,7 @@ class BinOp extends Expr
     /**
      * @return Expr
      */
-    public function getRight()
+    public function getRight() : Expr
     {
         return $this->right;
     }
@@ -86,7 +86,7 @@ class BinOp extends Expr
     /**
      * @inheritDoc
      */
-    public function getChildren()
+    public function getChildren() : array
     {
         return [$this->left, $this->right];
     }
@@ -96,7 +96,7 @@ class BinOp extends Expr
      *
      * @return Type
      */
-    public function getResultingType()
+    public function getResultingType() : \Dms\Core\Persistence\Db\Schema\Type\Type
     {
         if (in_array($this->operator, [self::ADD, self::SUBTRACT])) {
             return $this->left->getResultingType();

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Table;
 
@@ -17,14 +17,14 @@ interface ITableDataSource
      *
      * @return ITableStructure
      */
-    public function getStructure();
+    public function getStructure() : ITableStructure;
 
     /**
      * Creates a new criteria for this data source.
      *
      * @return RowCriteria
      */
-    public function criteria();
+    public function criteria() : Criteria\RowCriteria;
 
     /**
      * Loads the table sections according to the supplied row criteria
@@ -34,7 +34,7 @@ interface ITableDataSource
      *
      * @return IDataTable
      */
-    public function load(IRowCriteria $criteria = null);
+    public function load(IRowCriteria $criteria = null) : IDataTable;
 
     /**
      * Returns the number of rows matching the supplied criteria
@@ -44,7 +44,7 @@ interface ITableDataSource
      *
      * @return int
      */
-    public function count(IRowCriteria $criteria = null);
+    public function count(IRowCriteria $criteria = null) : int;
 
     /**
      * Creates a chart data source that will load the data
@@ -64,5 +64,5 @@ interface ITableDataSource
      *
      * @return IChartDataSource
      */
-    public function asChart(callable $chartMappingCallback);
+    public function asChart(callable $chartMappingCallback) : Chart\IChartDataSource;
 }

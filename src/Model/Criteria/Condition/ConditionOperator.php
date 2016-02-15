@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Model\Criteria\Condition;
 
@@ -47,7 +47,7 @@ final class ConditionOperator
     /**
      * @return string[]
      */
-    public static function getAll()
+    public static function getAll() : array
     {
         return array_keys(self::$operators);
     }
@@ -57,7 +57,7 @@ final class ConditionOperator
      *
      * @return bool
      */
-    public static function isValid($operator)
+    public static function isValid(string $operator) : bool
     {
         return isset(self::$operators[$operator]);
     }
@@ -68,7 +68,7 @@ final class ConditionOperator
      * @return void
      * @throws InvalidArgumentException
      */
-    public static function validate($operator)
+    public static function validate(string $operator)
     {
         if (!isset(self::$operators[$operator])) {
             throw InvalidArgumentException::format(
@@ -86,7 +86,7 @@ final class ConditionOperator
      * @return \Closure
      * @throws NotImplementedException
      */
-    public static function makeOperatorCallable(callable $left, $operator, callable $right)
+    public static function makeOperatorCallable(callable $left, string $operator, callable $right)
     {
         switch ($operator) {
             case ConditionOperator::EQUALS:

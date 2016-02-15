@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Module\Chart;
 
@@ -37,7 +37,7 @@ class ChartDisplay implements IChartDisplay
      * @param IChartDataSource $dataSource
      * @param IChartView[]     $views
      */
-    public function __construct($name, IChartDataSource $dataSource, array $views)
+    public function __construct(string $name, IChartDataSource $dataSource, array $views)
     {
         InvalidArgumentException::verifyAllInstanceOf(__METHOD__, 'views', $views, IChartView::class);
 
@@ -52,7 +52,7 @@ class ChartDisplay implements IChartDisplay
     /**
      * @return string
      */
-    public function getName()
+    public function getName() : string
     {
         return $this->name;
     }
@@ -60,7 +60,7 @@ class ChartDisplay implements IChartDisplay
     /**
      * @return IChartDataSource
      */
-    public function getDataSource()
+    public function getDataSource() : \Dms\Core\Table\Chart\IChartDataSource
     {
         return $this->dataSource;
     }
@@ -68,7 +68,7 @@ class ChartDisplay implements IChartDisplay
     /**
      * @return IChartView|null
      */
-    public function getDefaultView()
+    public function getDefaultView() : \Dms\Core\Module\IChartView
     {
         foreach ($this->views as $view) {
             if ($view->isDefault()) {
@@ -82,7 +82,7 @@ class ChartDisplay implements IChartDisplay
     /**
      * @return IChartView[]
      */
-    public function getViews()
+    public function getViews() : array
     {
         return $this->views;
     }
@@ -92,7 +92,7 @@ class ChartDisplay implements IChartDisplay
      *
      * @return bool
      */
-    public function hasView($name)
+    public function hasView(string $name) : bool
     {
         return isset($this->views[$name]);
     }
@@ -103,7 +103,7 @@ class ChartDisplay implements IChartDisplay
      * @return IChartView
      * @throws InvalidArgumentException
      */
-    public function getView($name)
+    public function getView(string $name) : \Dms\Core\Module\IChartView
     {
         if (isset($this->views[$name])) {
             return $this->views[$name];

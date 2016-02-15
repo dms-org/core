@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Mapping\Definition\Relation;
 
@@ -41,7 +41,7 @@ class ManyToOneRelationDefiner extends RelationTypeDefinerBase
      *
      * @return static
      */
-    public function withBidirectionalRelation($propertyOnRelatedEntity)
+    public function withBidirectionalRelation(string $propertyOnRelatedEntity)
     {
         $this->bidirectionalRelationProperty = $propertyOnRelatedEntity;
 
@@ -102,7 +102,7 @@ class ManyToOneRelationDefiner extends RelationTypeDefinerBase
      *
      * @return void
      */
-    public function withRelatedIdAs($columnName)
+    public function withRelatedIdAs(string $columnName)
     {
         call_user_func($this->callback,
                 function ($idString, Table $parentTable) use ($columnName) {

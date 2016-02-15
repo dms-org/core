@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Table\DataSource\Definition;
 
@@ -66,7 +66,7 @@ class ObjectTableDefinition
      * @return ColumnMappingDefiner
      * @throws InvalidArgumentException
      */
-    public function property($memberExpression)
+    public function property(string $memberExpression) : ColumnMappingDefiner
     {
         $this->memberParser->parse($this->class, $memberExpression);
 
@@ -100,7 +100,7 @@ class ObjectTableDefinition
      *
      * @return ColumnMappingDefiner
      */
-    public function computed(callable $dataCallback)
+    public function computed(callable $dataCallback) : ColumnMappingDefiner
     {
         return new ColumnMappingDefiner(
                 function (IColumn $column) use ($dataCallback) {
@@ -136,7 +136,7 @@ class ObjectTableDefinition
     /**
      * @return FinalizedObjectTableDefinition
      */
-    public function finalize()
+    public function finalize() : FinalizedObjectTableDefinition
     {
         return new FinalizedObjectTableDefinition(
                 $this->class,

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Model;
 
@@ -17,5 +17,5 @@ interface ITypedCollection extends \IteratorAggregate
      *
      * @return IType
      */
-    public function getElementType();
+    public function getElementType() : IType;
 }

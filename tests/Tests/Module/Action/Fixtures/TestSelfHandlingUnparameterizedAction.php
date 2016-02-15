@@ -18,7 +18,7 @@ class TestSelfHandlingUnparameterizedAction extends SelfHandlingUnparameterizedA
      *
      * @return string
      */
-    protected function name()
+    protected function name() : string
     {
         return 'test-unparameterized-action';
     }
@@ -28,7 +28,7 @@ class TestSelfHandlingUnparameterizedAction extends SelfHandlingUnparameterizedA
      *
      * @return IPermission[]
      */
-    protected function permissions()
+    protected function permissions() : array
     {
         return [
                 Permission::named('test-permission')

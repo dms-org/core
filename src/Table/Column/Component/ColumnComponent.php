@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Table\Column\Component;
 
@@ -36,7 +36,7 @@ class ColumnComponent implements IColumnComponent
      * @param string               $label
      * @param IColumnComponentType $type
      */
-    public function __construct($name, $label, IColumnComponentType $type)
+    public function __construct(string $name, string $label, IColumnComponentType $type)
     {
         $this->name  = $name;
         $this->label = $label;
@@ -48,7 +48,7 @@ class ColumnComponent implements IColumnComponent
      *
      * @return ColumnComponent
      */
-    public static function forField(IField $field)
+    public static function forField(IField $field) : ColumnComponent
     {
         return new self($field->getName(), $field->getLabel(), ColumnComponentType::forField($field));
     }
@@ -56,7 +56,7 @@ class ColumnComponent implements IColumnComponent
     /**
      * {@inheritDoc}
      */
-    final public function getName()
+    final public function getName() : string
     {
         return $this->name;
     }
@@ -64,7 +64,7 @@ class ColumnComponent implements IColumnComponent
     /**
      * @return string
      */
-    final public function getLabel()
+    final public function getLabel() : string
     {
         return $this->label;
     }
@@ -72,7 +72,7 @@ class ColumnComponent implements IColumnComponent
     /**
      * {@inheritDoc}
      */
-    final public function getType()
+    final public function getType() : \Dms\Core\Table\IColumnComponentType
     {
         return $this->type;
     }

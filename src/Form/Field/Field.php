@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Form\Field;
 
@@ -52,7 +52,7 @@ class Field implements IField
      *
      * @throws InvalidArgumentException
      */
-    public function __construct($name, $label, IFieldType $type, array $processors)
+    public function __construct(string $name, string $label, IFieldType $type, array $processors)
     {
         InvalidArgumentException::verifyAllInstanceOf(__METHOD__, 'processors', $processors, IFieldProcessor::class);
         InvalidArgumentException::verifyNotNull(__METHOD__, 'name', $name);
@@ -89,7 +89,7 @@ class Field implements IField
      *
      * @return string
      */
-    public function getName()
+    public function getName() : string
     {
         return $this->name;
     }
@@ -97,7 +97,7 @@ class Field implements IField
     /**
      * {@inheritDoc}
      */
-    public function getLabel()
+    public function getLabel() : string
     {
         return $this->label;
     }
@@ -105,7 +105,7 @@ class Field implements IField
     /**
      * {@inheritDoc}
      */
-    public function getType()
+    public function getType() : \Dms\Core\Form\IFieldType
     {
         return $this->type;
     }
@@ -113,7 +113,7 @@ class Field implements IField
     /**
      * {@inheritDoc}
      */
-    public function getProcessors()
+    public function getProcessors() : array
     {
         return $this->processors;
     }
@@ -121,7 +121,7 @@ class Field implements IField
     /**
      * {@inheritDoc}
      */
-    public function getProcessedType()
+    public function getProcessedType() : \Dms\Core\Model\Type\IType
     {
         return $this->processedType;
     }
@@ -189,7 +189,7 @@ class Field implements IField
     /**
      * {@inheritDoc}
      */
-    public function withName($name, $label = null)
+    public function withName(string $name, string $label = null) : \Dms\Core\Form\IField
     {
         $clone        = clone $this;
         $clone->name  = $name;
@@ -201,7 +201,7 @@ class Field implements IField
     /**
      * {@inheritDoc}
      */
-    public function withInitialValue($value)
+    public function withInitialValue($value) : \Dms\Core\Form\IField
     {
         $clone = clone $this;
         $clone->validateInitialValue($value);

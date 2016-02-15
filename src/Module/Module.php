@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Module;
 
@@ -129,7 +129,7 @@ abstract class Module implements IModule
     /**
      * @return IAuthSystem
      */
-    final public function getAuthSystem()
+    final public function getAuthSystem() : \Dms\Core\Auth\IAuthSystem
     {
         return $this->authSystem;
     }
@@ -137,7 +137,7 @@ abstract class Module implements IModule
     /**
      * {@inheritDoc}
      */
-    final public function getName()
+    final public function getName() : string
     {
         return $this->name;
     }
@@ -153,7 +153,7 @@ abstract class Module implements IModule
     /**
      * @inheritDoc
      */
-    public function setPackageName($packageName)
+    public function setPackageName(string $packageName)
     {
         if ($this->packageName) {
             throw InvalidOperationException::methodCall(__METHOD__, 'package name has already been set');
@@ -171,7 +171,7 @@ abstract class Module implements IModule
     /**
      * {@inheritDoc}
      */
-    final public function getPermissions()
+    final public function getPermissions() : array
     {
         return $this->permissions;
     }
@@ -179,7 +179,7 @@ abstract class Module implements IModule
     /**
      * {@inheritDoc}
      */
-    final public function getActions()
+    final public function getActions() : array
     {
         return $this->definition->getActions();
     }
@@ -187,7 +187,7 @@ abstract class Module implements IModule
     /**
      * @inheritDoc
      */
-    final public function getAction($name)
+    final public function getAction(string $name) : IAction
     {
         if (isset($this->unparameterizedActions[$name])) {
             return $this->unparameterizedActions[$name];
@@ -204,7 +204,7 @@ abstract class Module implements IModule
     /**
      * @inheritDoc
      */
-    final public function hasAction($name)
+    final public function hasAction(string $name) : bool
     {
         return isset($this->parameterizedActions[$name]) || isset($this->unparameterizedActions[$name]);
     }
@@ -212,7 +212,7 @@ abstract class Module implements IModule
     /**
      * @inheritDoc
      */
-    final public function getParameterizedActions()
+    final public function getParameterizedActions() : array
     {
         return $this->parameterizedActions;
     }
@@ -220,7 +220,7 @@ abstract class Module implements IModule
     /**
      * @inheritDoc
      */
-    final public function getParameterizedAction($name)
+    final public function getParameterizedAction(string $name) : IParameterizedAction
     {
         if (isset($this->parameterizedActions[$name])) {
             return $this->parameterizedActions[$name];
@@ -235,7 +235,7 @@ abstract class Module implements IModule
     /**
      * @inheritDoc
      */
-    final public function hasParameterizedAction($name)
+    final public function hasParameterizedAction(string $name) : bool
     {
         return isset($this->parameterizedActions[$name]);
     }
@@ -243,7 +243,7 @@ abstract class Module implements IModule
     /**
      * @inheritDoc
      */
-    final public function getUnparameterizedActions()
+    final public function getUnparameterizedActions() : array
     {
         return $this->unparameterizedActions;
     }
@@ -251,7 +251,7 @@ abstract class Module implements IModule
     /**
      * @inheritDoc
      */
-    final public function getUnparameterizedAction($name)
+    final public function getUnparameterizedAction(string $name) : IUnparameterizedAction
     {
         if (isset($this->unparameterizedActions[$name])) {
             return $this->unparameterizedActions[$name];
@@ -266,7 +266,7 @@ abstract class Module implements IModule
     /**
      * @inheritDoc
      */
-    final public function hasUnparameterizedAction($name)
+    final public function hasUnparameterizedAction(string $name) : bool
     {
         return isset($this->unparameterizedActions[$name]);
     }
@@ -274,7 +274,7 @@ abstract class Module implements IModule
     /**
      * {@inheritDoc}
      */
-    final public function getTables()
+    final public function getTables() : array
     {
         return $this->tables;
     }
@@ -282,7 +282,7 @@ abstract class Module implements IModule
     /**
      * @inheritDoc
      */
-    final public function getTable($name)
+    final public function getTable(string $name) : ITableDisplay
     {
         if (isset($this->tables[$name])) {
             return $this->tables[$name];
@@ -297,7 +297,7 @@ abstract class Module implements IModule
     /**
      * @inheritDoc
      */
-    final public function hasTable($name)
+    final public function hasTable(string $name) : bool
     {
         return isset($this->tables[$name]);
     }
@@ -305,7 +305,7 @@ abstract class Module implements IModule
     /**
      * {@inheritDoc}
      */
-    final public function getCharts()
+    final public function getCharts() : array
     {
         return $this->charts;
     }
@@ -313,7 +313,7 @@ abstract class Module implements IModule
     /**
      * @inheritDoc
      */
-    final public function getChart($name)
+    final public function getChart(string $name) : IChartDisplay
     {
         if (isset($this->charts[$name])) {
             return $this->charts[$name];
@@ -328,7 +328,7 @@ abstract class Module implements IModule
     /**
      * @inheritDoc
      */
-    final public function hasChart($name)
+    final public function hasChart(string $name) : bool
     {
         return isset($this->charts[$name]);
     }
@@ -336,7 +336,7 @@ abstract class Module implements IModule
     /**
      * {@inheritDoc}
      */
-    final public function getWidgets()
+    final public function getWidgets() : array
     {
         return $this->widgets;
     }
@@ -344,7 +344,7 @@ abstract class Module implements IModule
     /**
      * @inheritDoc
      */
-    final public function getWidget($name)
+    final public function getWidget(string $name) : \Dms\Core\Widget\IWidget
     {
         if (isset($this->widgets[$name])) {
             return $this->widgets[$name];
@@ -359,7 +359,7 @@ abstract class Module implements IModule
     /**
      * @inheritDoc
      */
-    final public function hasWidget($name)
+    final public function hasWidget(string $name) : bool
     {
         return isset($this->widgets[$name]);
     }

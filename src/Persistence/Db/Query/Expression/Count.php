@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Query\Expression;
 
@@ -17,7 +17,7 @@ class Count extends Aggregate
      *
      * @return Expr[]
      */
-    public function getChildren()
+    public function getChildren() : array
     {
         return [];
     }
@@ -27,7 +27,7 @@ class Count extends Aggregate
      *
      * @return Type
      */
-    public function getResultingType()
+    public function getResultingType() : \Dms\Core\Persistence\Db\Schema\Type\Type
     {
         return Integer::normal();
     }

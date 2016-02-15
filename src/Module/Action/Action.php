@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Module\Action;
 
@@ -63,7 +63,7 @@ abstract class Action implements IAction
      * @param IPermission[]  $requiredPermissions
      * @param IActionHandler $handler
      */
-    public function __construct($name, IAuthSystem $auth, array $requiredPermissions, IActionHandler $handler)
+    public function __construct(string $name, IAuthSystem $auth, array $requiredPermissions, IActionHandler $handler)
     {
         InvalidArgumentException::verifyAllInstanceOf(__METHOD__, 'requiredPermissions', $requiredPermissions, IPermission::class);
 
@@ -80,7 +80,7 @@ abstract class Action implements IAction
     /**
      * {@inheritdoc}
      */
-    final public function getName()
+    final public function getName() : string
     {
         return $this->name;
     }
@@ -104,7 +104,7 @@ abstract class Action implements IAction
     /**
      * {@inheritdoc}
      */
-    public function setPackageAndModuleName($packageName, $moduleName)
+    public function setPackageAndModuleName(string $packageName, string $moduleName)
     {
         if ($this->packageName || $this->moduleName) {
             throw InvalidOperationException::methodCall(__METHOD__, 'package/module name already set');
@@ -118,7 +118,7 @@ abstract class Action implements IAction
     /**
      * {@inheritdoc}
      */
-    final public function getRequiredPermissions()
+    final public function getRequiredPermissions() : array
     {
         return $this->requiredPermissions;
     }
@@ -126,7 +126,7 @@ abstract class Action implements IAction
     /**
      * {@inheritdoc}
      */
-    public function requiresPermission($name)
+    public function requiresPermission(string $name) : bool
     {
         return isset($this->requiredPermissions[$name]);
     }
@@ -134,7 +134,7 @@ abstract class Action implements IAction
     /**
      * {@inheritdoc}
      */
-    public function getRequiredPermission($name)
+    public function getRequiredPermission(string $name) : \Dms\Core\Auth\IPermission
     {
         if (!isset($this->requiredPermissions[$name])) {
             throw InvalidArgumentException::format(
@@ -150,7 +150,7 @@ abstract class Action implements IAction
     /**
      * {@inheritdoc}
      */
-    final public function isAuthorized()
+    final public function isAuthorized() : bool
     {
         return $this->auth->isAuthorized($this->requiredPermissions);
     }
@@ -158,7 +158,7 @@ abstract class Action implements IAction
     /**
      * @return IActionHandler
      */
-    public function getHandler()
+    public function getHandler() : \Dms\Core\Module\IActionHandler
     {
         return $this->handler;
     }
@@ -166,7 +166,7 @@ abstract class Action implements IAction
     /**
      * {@inheritdoc}
      */
-    final public function hasReturnType()
+    final public function hasReturnType() : bool
     {
         return $this->returnType !== null;
     }

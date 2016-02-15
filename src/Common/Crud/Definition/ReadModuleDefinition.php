@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Common\Crud\Definition;
 
@@ -94,7 +94,7 @@ class ReadModuleDefinition extends ModuleDefinition
      *
      * @return ObjectActionDefiner
      */
-    public function objectAction($name)
+    public function objectAction(string $name) : Action\ObjectActionDefiner
     {
         return new ObjectActionDefiner(
                 $this->dataSource,
@@ -112,7 +112,7 @@ class ReadModuleDefinition extends ModuleDefinition
      *
      * @return LabelObjectStrategyDefiner
      */
-    public function labelObjects()
+    public function labelObjects() : LabelObjectStrategyDefiner
     {
         return new LabelObjectStrategyDefiner($this->classType, function (callable $labelObjectCallback) {
             $this->labelObjectCallback = $labelObjectCallback;
@@ -238,7 +238,7 @@ class ReadModuleDefinition extends ModuleDefinition
      * @return FinalizedReadModuleDefinition
      * @throws InvalidOperationException
      */
-    public function finalize()
+    public function finalize() : \Dms\Core\Module\Definition\FinalizedModuleDefinition
     {
         $this->verifyCanBeFinalized();
 

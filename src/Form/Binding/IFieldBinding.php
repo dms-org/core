@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Form\Binding;
 
@@ -16,14 +16,14 @@ interface IFieldBinding
      *
      * @return string
      */
-    public function getFieldName();
+    public function getFieldName() : string;
 
     /**
      * Gets the expected object type.
      *
      * @return string
      */
-    public function getObjectType();
+    public function getObjectType() : string;
 
     /**
      * Gets processed field value from the supplied object.

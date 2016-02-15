@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Model;
 
@@ -18,7 +18,7 @@ interface ITypedObject
      *
      * @return array
      */
-    public function toArray();
+    public function toArray() : array;
 
     /**
      * Sets the properties of the object.

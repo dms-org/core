@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Common\Crud\Definition\Form;
 
@@ -47,7 +47,7 @@ class FormFieldBindingDefiner
      *
      * @return FormFieldBindingDefinition
      */
-    public function bindTo(IFieldBinding $binding)
+    public function bindTo(IFieldBinding $binding) : FormFieldBindingDefinition
     {
         return new FormFieldBindingDefinition($this->field, $binding);
     }
@@ -61,7 +61,7 @@ class FormFieldBindingDefiner
      * @throws TypeMismatchException
      * @throws InvalidArgumentException
      */
-    public function bindToProperty($name)
+    public function bindToProperty(string $name) : FormFieldBindingDefinition
     {
         if (!$this->field->getProcessedType()->isSubsetOf($this->class->getProperty($name)->getType())) {
             throw TypeMismatchException::format(
@@ -82,7 +82,7 @@ class FormFieldBindingDefiner
      *
      * @return FormFieldBindingDefinition
      */
-    public function bindToGetSetMethods($getterMethodName, $setterMethodName)
+    public function bindToGetSetMethods(string $getterMethodName, string $setterMethodName) : FormFieldBindingDefinition
     {
         return $this->bindTo(new GetterSetterMethodBinding(
                 $this->field->getName(),
@@ -109,7 +109,7 @@ class FormFieldBindingDefiner
      *
      * @return FormFieldBindingDefinition
      */
-    public function bindToCallbacks(callable $getterCallback, callable $setterCallback)
+    public function bindToCallbacks(callable $getterCallback, callable $setterCallback) : FormFieldBindingDefinition
     {
         return $this->bindTo(new CustomFieldBinding(
                 $this->field->getName(),
@@ -124,7 +124,7 @@ class FormFieldBindingDefiner
      *
      * @return FormFieldBindingDefinition
      */
-    public function withoutBinding()
+    public function withoutBinding() : FormFieldBindingDefinition
     {
         return new FormFieldBindingDefinition($this->field);
     }

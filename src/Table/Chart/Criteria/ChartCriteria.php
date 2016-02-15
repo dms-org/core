@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Table\Chart\Criteria;
 
@@ -44,7 +44,7 @@ class ChartCriteria implements IChartCriteria
      *
      * @return ChartCriteria
      */
-    public static function fromExisting(IChartCriteria $criteria)
+    public static function fromExisting(IChartCriteria $criteria) : ChartCriteria
     {
         $self = new self($criteria->getStructure());
 
@@ -57,7 +57,7 @@ class ChartCriteria implements IChartCriteria
     /**
      * {@inheritDoc}
      */
-    public function getStructure()
+    public function getStructure() : \Dms\Core\Table\Chart\IChartStructure
     {
         return $this->structure;
     }
@@ -65,7 +65,7 @@ class ChartCriteria implements IChartCriteria
     /**
      * {@inheritDoc}
      */
-    public function getConditions()
+    public function getConditions() : array
     {
         return $this->conditions;
     }
@@ -79,7 +79,7 @@ class ChartCriteria implements IChartCriteria
      *
      * @return static
      */
-    public function where($axisName, $operator, $value)
+    public function where(string $axisName, string $operator, $value)
     {
         $axis = $this->structure->getAxis($axisName);
 
@@ -96,7 +96,7 @@ class ChartCriteria implements IChartCriteria
     /**
      * {@inheritDoc}
      */
-    public function getOrderings()
+    public function getOrderings() : array
     {
         return $this->orderings;
     }
@@ -109,7 +109,7 @@ class ChartCriteria implements IChartCriteria
      *
      * @return static
      */
-    public function orderBy($axisName, $direction)
+    public function orderBy(string $axisName, string $direction)
     {
         $axis = $this->structure->getAxis($axisName);
 
@@ -125,7 +125,7 @@ class ChartCriteria implements IChartCriteria
      *
      * @return static
      */
-    public function orderByAsc($axisName)
+    public function orderByAsc(string $axisName)
     {
         return $this->orderBy($axisName, OrderingDirection::ASC);
     }
@@ -137,7 +137,7 @@ class ChartCriteria implements IChartCriteria
      *
      * @return static
      */
-    public function orderByDesc($axisName)
+    public function orderByDesc(string $axisName)
     {
         return $this->orderBy($axisName, OrderingDirection::DESC);
     }
@@ -145,7 +145,7 @@ class ChartCriteria implements IChartCriteria
     /**
      * @inheritDoc
      */
-    public function asNewCriteria()
+    public function asNewCriteria() : ChartCriteria
     {
         return clone $this;
     }

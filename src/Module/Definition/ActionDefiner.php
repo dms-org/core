@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Module\Definition;
 
@@ -69,7 +69,7 @@ class ActionDefiner
      * @param string      $name
      * @param callable    $callback
      */
-    public function __construct(IAuthSystem $authSystem, $name, callable $callback)
+    public function __construct(IAuthSystem $authSystem, string $name, callable $callback)
     {
         $this->name       = $name;
         $this->callback   = $callback;
@@ -209,7 +209,7 @@ class ActionDefiner
      *
      * @return static
      */
-    public function returns($returnDtoType)
+    public function returns(string $returnDtoType)
     {
         $this->returnDtoType = $returnDtoType;
 

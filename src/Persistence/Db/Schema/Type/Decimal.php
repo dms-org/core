@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Schema\Type;
 
@@ -25,7 +25,7 @@ class Decimal extends Type
      * @param int $precision
      * @param int $decimalPoints
      */
-    public function __construct($precision, $decimalPoints)
+    public function __construct(int $precision, int $decimalPoints)
     {
         $this->precision     = $precision;
         $this->decimalPoints = $decimalPoints;
@@ -34,7 +34,7 @@ class Decimal extends Type
     /**
      * @return int
      */
-    public function getPrecision()
+    public function getPrecision() : int
     {
         return $this->precision;
     }
@@ -42,7 +42,7 @@ class Decimal extends Type
     /**
      * @return int
      */
-    public function getDecimalPoints()
+    public function getDecimalPoints() : int
     {
         return $this->decimalPoints;
     }

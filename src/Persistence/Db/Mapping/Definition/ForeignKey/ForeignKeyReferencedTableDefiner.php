@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Mapping\Definition\ForeignKey;
 
@@ -14,7 +14,7 @@ class ForeignKeyReferencedTableDefiner extends ForeignKeyDefinerBase
      *
      * @return ForeignKeyOnDeleteModeDefiner
      */
-    public function on($referencedTableName)
+    public function on(string $referencedTableName) : ForeignKeyOnDeleteModeDefiner
     {
         return new ForeignKeyOnDeleteModeDefiner(
                 $this->callback,

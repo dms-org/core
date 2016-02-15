@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Form;
 
@@ -16,14 +16,14 @@ interface IForm
      *
      * @return IFormProcessor[]
      */
-    public function getProcessors();
+    public function getProcessors() : array;
 
     /**
      * Gets the form field sections.
      *
      * @return IFormSection[]
      */
-    public function getSections();
+    public function getSections() : array;
 
     /**
      * Processes the forms submission.
@@ -36,7 +36,7 @@ interface IForm
      * @return array The processed form submission
      * @throws InvalidFormSubmissionException If the submitted data is invalid
      */
-    public function process(array $submission);
+    public function process(array $submission) : array;
 
     /**
      * Returns whether the supplied array contains the expected types
@@ -56,21 +56,21 @@ interface IForm
      *
      * @return array
      */
-    public function unprocess(array $processedSubmission);
+    public function unprocess(array $processedSubmission) : array;
 
     /**
      * Gets all the fields within the form.
      *
      * @return IField[]
      */
-    public function getFields();
+    public function getFields() : array;
 
     /**
      * Gets the names of the fields within the form.
      *
      * @return string[]
      */
-    public function getFieldNames();
+    public function getFieldNames() : array;
 
     /**
      * Returns whether the field with the supplied name exists.
@@ -79,7 +79,7 @@ interface IForm
      *
      * @return bool
      */
-    public function hasField($fieldName);
+    public function hasField(string $fieldName) : bool;
 
     /**
      * Gets the field with the supplied name or null if it does not exist.
@@ -89,14 +89,14 @@ interface IForm
      * @return IField
      * @throws InvalidArgumentException
      */
-    public function getField($fieldName);
+    public function getField(string $fieldName) : IField;
 
     /**
      * Returns the form as a single-stage form.
      *
      * @return IStagedForm
      */
-    public function asStagedForm();
+    public function asStagedForm() : IStagedForm;
 
     /**
      * Gets the array of initial values indexed by the respective field
@@ -104,7 +104,7 @@ interface IForm
      *
      * @return array[]
      */
-    public function getInitialValues();
+    public function getInitialValues() : array;
 
     /**
      * Returns an equivalent form with the supplied initial processed field values.
@@ -114,7 +114,7 @@ interface IForm
      * @return IForm
      * @throws InvalidArgumentException
      */
-    public function withInitialValues(array $initialProcessedValues);
+    public function withInitialValues(array $initialProcessedValues) : IForm;
 
     /**
      * Returns an equivalent form with the field names updated
@@ -126,5 +126,5 @@ interface IForm
      * @return IForm
      * @throws InvalidArgumentException
      */
-    public function withFieldNames(array $fieldNameMap);
+    public function withFieldNames(array $fieldNameMap) : IForm;
 }

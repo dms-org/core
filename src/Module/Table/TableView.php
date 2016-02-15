@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Module\Table;
 
@@ -41,7 +41,7 @@ class TableView implements ITableView
      * @param bool              $default
      * @param IRowCriteria|null $criteria
      */
-    public function __construct($name, $label, $default, IRowCriteria $criteria = null)
+    public function __construct(string $name, string $label, bool $default, IRowCriteria $criteria = null)
     {
         $this->name     = $name;
         $this->label    = $label;
@@ -52,7 +52,7 @@ class TableView implements ITableView
     /**
      * @return TableView
      */
-    public static function createDefault()
+    public static function createDefault() : TableView
     {
         return new self('default', 'Default', true);
     }
@@ -60,7 +60,7 @@ class TableView implements ITableView
     /**
      * @return string
      */
-    public function getName()
+    public function getName() : string
     {
         return $this->name;
     }
@@ -68,7 +68,7 @@ class TableView implements ITableView
     /**
      * @return string
      */
-    public function getLabel()
+    public function getLabel() : string
     {
         return $this->label;
     }
@@ -76,7 +76,7 @@ class TableView implements ITableView
     /**
      * @return boolean
      */
-    public function isDefault()
+    public function isDefault() : bool
     {
         return $this->default;
     }
@@ -84,7 +84,7 @@ class TableView implements ITableView
     /**
      * @return bool
      */
-    public function hasCriteria()
+    public function hasCriteria() : bool
     {
         return $this->criteria !== null;
     }

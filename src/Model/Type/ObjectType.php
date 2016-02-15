@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Model\Type;
 
@@ -37,7 +37,7 @@ class ObjectType extends BaseType
     /**
      * @inheritDoc
      */
-    protected function loadValidOperatorTypes()
+    protected function loadValidOperatorTypes() : array
     {
         $operators = parent::loadValidOperatorTypes();
 
@@ -60,7 +60,7 @@ class ObjectType extends BaseType
     /**
      * @inheritDoc
      */
-    protected function checkThisIsSubsetOf(IType $type)
+    protected function checkThisIsSubsetOf(IType $type) : bool
     {
         if ($type instanceof self) {
             if (!$type->class) {
@@ -88,7 +88,7 @@ class ObjectType extends BaseType
     /**
      * {@inheritDoc}
      */
-    public function isOfType($value)
+    public function isOfType($value) : bool
     {
         $class = $this->class;
 

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Package\Definition;
 
@@ -31,7 +31,7 @@ class FinalizedPackageDefinition
      * @param string[] $nameModuleClassMap
      * @param string[] $dashboardWidgetNames
      */
-    public function __construct($name, array $nameModuleClassMap, array $dashboardWidgetNames)
+    public function __construct(string $name, array $nameModuleClassMap, array $dashboardWidgetNames)
     {
         $this->name                 = $name;
         $this->nameModuleClassMap   = $nameModuleClassMap;
@@ -41,7 +41,7 @@ class FinalizedPackageDefinition
     /**
      * @return string
      */
-    public function getName()
+    public function getName() : string
     {
         return $this->name;
     }
@@ -49,7 +49,7 @@ class FinalizedPackageDefinition
     /**
      * @return \string[]
      */
-    public function getNameModuleClassMap()
+    public function getNameModuleClassMap() : array
     {
         return $this->nameModuleClassMap;
     }
@@ -57,7 +57,7 @@ class FinalizedPackageDefinition
     /**
      * @return string[]
      */
-    public function getDashboardWidgetNames()
+    public function getDashboardWidgetNames() : array
     {
         return $this->dashboardWidgetNames;
     }

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Auth;
 
@@ -21,7 +21,7 @@ interface IAuthSystem
      * @throws InvalidCredentialsException
      * @throws UserBannedException
      */
-    public function login($username, $password);
+    public function login(string $username, string $password);
 
     /**
      * Attempts to logout the currently authenticated user.
@@ -42,14 +42,14 @@ interface IAuthSystem
      * @throws InvalidCredentialsException
      * @throws UserBannedException
      */
-    public function resetPassword($username, $oldPassword, $newPassword);
+    public function resetPassword(string $username, string $oldPassword, string $newPassword);
 
     /**
      * Returns whether there is an authenticated user.
      *
      * @return boolean
      */
-    public function isAuthenticated();
+    public function isAuthenticated() : bool;
 
     /**
      * Returns the currently authenticated user.
@@ -57,7 +57,7 @@ interface IAuthSystem
      * @return IUser
      * @throws UserNotAuthenticatedException
      */
-    public function getAuthenticatedUser();
+    public function getAuthenticatedUser() : IUser;
 
     /**
      * Returns whether the currently authenticated user has the
@@ -67,7 +67,7 @@ interface IAuthSystem
      *
      * @return boolean
      */
-    public function isAuthorized(array $permissions);
+    public function isAuthorized(array $permissions) : bool;
 
     /**
      * Verifies whether the currently authenticated user has the supplied

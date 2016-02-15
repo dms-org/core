@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Query\Expression;
 
@@ -29,7 +29,7 @@ class ColumnExpr extends Expr
      * @param string $table
      * @param Column $column
      */
-    public function __construct($table, Column $column)
+    public function __construct(string $table, Column $column)
     {
         InvalidArgumentException::verify(is_string($table), 'Table must be string, %s given', gettype($table));
 
@@ -40,7 +40,7 @@ class ColumnExpr extends Expr
     /**
      * @return string
      */
-    public function getTable()
+    public function getTable() : string
     {
         return $this->table;
     }
@@ -48,7 +48,7 @@ class ColumnExpr extends Expr
     /**
      * @return string
      */
-    public function getName()
+    public function getName() : string
     {
         return $this->column->getName();
     }
@@ -56,7 +56,7 @@ class ColumnExpr extends Expr
     /**
      * @return Column
      */
-    public function getColumn()
+    public function getColumn() : \Dms\Core\Persistence\Db\Schema\Column
     {
         return $this->column;
     }
@@ -66,7 +66,7 @@ class ColumnExpr extends Expr
      *
      * @return Expr[]
      */
-    public function getChildren()
+    public function getChildren() : array
     {
         return [];
     }
@@ -76,7 +76,7 @@ class ColumnExpr extends Expr
      *
      * @return Type
      */
-    public function getResultingType()
+    public function getResultingType() : \Dms\Core\Persistence\Db\Schema\Type\Type
     {
         return $this->column->getType();
     }

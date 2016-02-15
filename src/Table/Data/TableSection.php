@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Table\Data;
 
@@ -54,7 +54,7 @@ class TableSection implements ITableSection
     /**
      * @return ITableStructure
      */
-    public function getStructure()
+    public function getStructure() : \Dms\Core\Table\ITableStructure
     {
         return $this->structure;
     }
@@ -62,7 +62,7 @@ class TableSection implements ITableSection
     /**
      * @inheritDoc
      */
-    public function hasGroupData()
+    public function hasGroupData() : bool
     {
         return $this->groupData !== null;
     }
@@ -78,7 +78,7 @@ class TableSection implements ITableSection
     /**
      * @return ITableRow[]
      */
-    public function getRows()
+    public function getRows() : array
     {
         return $this->rows;
     }

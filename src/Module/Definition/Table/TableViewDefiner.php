@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Module\Definition\Table;
 
@@ -40,7 +40,7 @@ class TableViewDefiner extends RowCriteria
      * @param string           $name
      * @param string           $label
      */
-    public function __construct(ITableDataSource $dataSource, $name, $label)
+    public function __construct(ITableDataSource $dataSource, string $name, string $label)
     {
         parent::__construct($dataSource->getStructure());
 
@@ -64,7 +64,7 @@ class TableViewDefiner extends RowCriteria
     /**
      * @return TableView
      */
-    public function finalize()
+    public function finalize() : \Dms\Core\Module\Table\TableView
     {
         return new TableView(
                 $this->name,

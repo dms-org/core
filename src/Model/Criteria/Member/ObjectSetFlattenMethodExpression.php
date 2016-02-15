@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Model\Criteria\Member;
 
@@ -71,7 +71,7 @@ class ObjectSetFlattenMethodExpression extends ObjectSetMethodExpression
     /**
      * @return NestedMember
      */
-    public function getMember()
+    public function getMember() : \Dms\Core\Model\Criteria\NestedMember
     {
         return $this->member;
     }
@@ -79,7 +79,7 @@ class ObjectSetFlattenMethodExpression extends ObjectSetMethodExpression
     /**
      * @inheritDoc
      */
-    public function isPropertyValue()
+    public function isPropertyValue() : bool
     {
         return $this->member->isPropertyValue();
     }
@@ -95,7 +95,7 @@ class ObjectSetFlattenMethodExpression extends ObjectSetMethodExpression
     /**
      * @return \Closure
      */
-    public function createArrayGetterCallable()
+    public function createArrayGetterCallable() : callable
     {
         $memberGetter = $this->member->makeArrayGetterCallable();
 

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Form\Field\Type;
 
@@ -36,7 +36,7 @@ class CustomType extends FieldType
     /**
      * {@inheritdoc}
      */
-    public function buildPhpTypeOfInput()
+    public function buildPhpTypeOfInput() : \Dms\Core\Model\Type\IType
     {
         return $this->inputType;
     }
@@ -44,7 +44,7 @@ class CustomType extends FieldType
     /**
      * @return IFieldProcessor[]
      */
-    protected function buildProcessors()
+    protected function buildProcessors() : array
     {
         return $this->customProcessors;
     }

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Mapping\Definition\Relation;
 
@@ -14,10 +14,10 @@ interface IToManyRelationMapping
     /**
      * @return IAccessor
      */
-    public function getAccessor();
+    public function getAccessor() : IAccessor;
 
     /**
      * @return IRelation
      */
-    public function getRelation();
+    public function getRelation() : \Dms\Core\Persistence\Db\Mapping\Relation\IRelation;
 }

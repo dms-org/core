@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Form\Object;
 
@@ -21,7 +21,7 @@ class FormObjectFieldNameBuilder extends FieldNameBuilder
      *
      * @return self
      */
-    public static function callback(callable $nameCallback)
+    public static function callback(callable $nameCallback) : self
     {
         $self               = new self();
         $self->nameCallback = $nameCallback;
@@ -32,7 +32,7 @@ class FormObjectFieldNameBuilder extends FieldNameBuilder
     /**
      * {@inheritDoc}
      */
-    public function name($name)
+    public function name($name) : \Dms\Core\Form\Field\Builder\FieldLabelBuilder
     {
         call_user_func($this->nameCallback, $name);
 

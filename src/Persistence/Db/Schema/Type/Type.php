@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Schema\Type;
 
@@ -17,7 +17,7 @@ abstract class Type
     /**
      * @return bool
      */
-    public function isNullable()
+    public function isNullable() : bool
     {
         return $this->nullable;
     }

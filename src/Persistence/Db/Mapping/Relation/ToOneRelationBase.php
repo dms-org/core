@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Mapping\Relation;
 
@@ -50,7 +50,7 @@ abstract class ToOneRelationBase extends EntityRelation implements ISeparateToOn
     /**
      * @inheritDoc
      */
-    public function getRelationSubSelect(Select $outerSelect, $parentTableAlias)
+    public function getRelationSubSelect(Select $outerSelect, string $parentTableAlias) : \Dms\Core\Persistence\Db\Query\Select
     {
         $subSelect = $outerSelect->buildSubSelect($this->relatedTable);
 

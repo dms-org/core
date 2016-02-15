@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Form\Object\Type;
 
@@ -35,7 +35,7 @@ class InnerFormObjectType extends InnerFormType
     /**
      * @return FormObject
      */
-    public function getFormObject()
+    public function getFormObject() : \Dms\Core\Form\Object\FormObject
     {
         return $this->attributes[self::ATTR_FORM_OBJECT];
     }
@@ -43,7 +43,7 @@ class InnerFormObjectType extends InnerFormType
     /**
      * @return IPhpType
      */
-    protected function buildPhpTypeOfInput()
+    protected function buildPhpTypeOfInput() : \Dms\Core\Model\Type\IType
     {
         return new ArrayType(new MixedType());
     }
@@ -51,7 +51,7 @@ class InnerFormObjectType extends InnerFormType
     /**
      * @inheritDoc
      */
-    protected function buildProcessors()
+    protected function buildProcessors() : array
     {
         return [
                 new InnerFormObjectProcessor($this->getFormObject())

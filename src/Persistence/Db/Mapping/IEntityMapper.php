@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Mapping;
 
@@ -42,31 +42,31 @@ interface IEntityMapper extends IObjectMapper
      *
      * @return Table
      */
-    public function getPrimaryTable();
+    public function getPrimaryTable() : \Dms\Core\Persistence\Db\Schema\Table;
 
     /**
      * Gets the table name where the primary key of the parent entity is stored.
      *
      * @return string
      */
-    public function getPrimaryTableName();
+    public function getPrimaryTableName() : string;
 
     /**
      * Gets all the tables that store this entity hierarchy.
      *
      * @return Table[]
      */
-    public function getTables();
+    public function getTables() : array;
 
     /**
      * @return FinalizedMapperDefinition
      */
-    public function getDefinition();
+    public function getDefinition() : Definition\FinalizedMapperDefinition;
 
     /**
      * @return Select
      */
-    public function getSelect();
+    public function getSelect() : \Dms\Core\Persistence\Db\Query\Select;
 
     /**
      * Adds a foreign key to the primary table of the entity mapper.
@@ -91,7 +91,7 @@ interface IEntityMapper extends IObjectMapper
      *
      * @return RowSet
      */
-    public function rowSet(array $rows);
+    public function rowSet(array $rows) : \Dms\Core\Persistence\Db\RowSet;
 
     /**
      * @param PersistenceContext $context
@@ -100,7 +100,7 @@ interface IEntityMapper extends IObjectMapper
      * @return Row
      * @throws InvalidArgumentException
      */
-    public function persist(PersistenceContext $context, IEntity $entity);
+    public function persist(PersistenceContext $context, IEntity $entity) : \Dms\Core\Persistence\Db\Row;
 
     /**
      * NOTE: indexes are maintained
@@ -111,7 +111,7 @@ interface IEntityMapper extends IObjectMapper
      * @return Row[]
      * @throws InvalidArgumentException
      */
-    public function persistAll(PersistenceContext $context, array $entities);
+    public function persistAll(PersistenceContext $context, array $entities) : array;
 
     /**
      * @param PersistenceContext $context

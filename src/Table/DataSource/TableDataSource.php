@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Table\DataSource;
 
@@ -42,7 +42,7 @@ abstract class TableDataSource implements ITableDataSource
     /**
      * @inheritDoc
      */
-    final public function getStructure()
+    final public function getStructure() : \Dms\Core\Table\ITableStructure
     {
         return $this->structure;
     }
@@ -50,7 +50,7 @@ abstract class TableDataSource implements ITableDataSource
     /**
      * @inheritDoc
      */
-    final public function criteria()
+    final public function criteria() : \Dms\Core\Table\Criteria\RowCriteria
     {
         return new RowCriteria($this->structure);
     }
@@ -58,7 +58,7 @@ abstract class TableDataSource implements ITableDataSource
     /**
      * @inheritDoc
      */
-    public function asChart(callable $chartMappingCallback)
+    public function asChart(callable $chartMappingCallback) : \Dms\Core\Table\Chart\IChartDataSource
     {
         $definition = new ChartTableMapperDefinition($this);
         $chartMappingCallback($definition);
@@ -69,7 +69,7 @@ abstract class TableDataSource implements ITableDataSource
     /**
      * @return RowCriteria
      */
-    protected function defaultLoadCriteria()
+    protected function defaultLoadCriteria() : \Dms\Core\Table\Criteria\RowCriteria
     {
         return $this->criteria()->loadAll();
     }
@@ -77,7 +77,7 @@ abstract class TableDataSource implements ITableDataSource
     /**
      * @inheritDoc
      */
-    final public function load(IRowCriteria $criteria = null)
+    final public function load(IRowCriteria $criteria = null) : \Dms\Core\Table\IDataTable
     {
         $this->verifyCriteria($criteria);
 
@@ -92,12 +92,12 @@ abstract class TableDataSource implements ITableDataSource
      *
      * @return ITableRow[]
      */
-    abstract protected function loadRows(IRowCriteria $criteria = null);
+    abstract protected function loadRows(IRowCriteria $criteria = null) : array;
 
     /**
      * @inheritDoc
      */
-    final public function count(IRowCriteria $criteria = null)
+    final public function count(IRowCriteria $criteria = null) : int
     {
         $this->verifyCriteria($criteria);
 
@@ -109,7 +109,7 @@ abstract class TableDataSource implements ITableDataSource
      *
      * @return int
      */
-    abstract protected function loadCount(IRowCriteria $criteria = null);
+    abstract protected function loadCount(IRowCriteria $criteria = null) : int;
 
     /**
      * @param ITableRow[]       $rows
@@ -117,7 +117,7 @@ abstract class TableDataSource implements ITableDataSource
      *
      * @return ITableSection[]
      */
-    protected function performRowGrouping(array $rows, IRowCriteria $criteria = null)
+    protected function performRowGrouping(array $rows, IRowCriteria $criteria = null) : array
     {
         $collection = new Collection($rows);
 

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Module\Definition\Widget;
 
@@ -31,7 +31,7 @@ class ChartWidgetDefiner extends WidgetDefinerBase
      * @param IChartDataSource $chart
      * @param callable         $callback
      */
-    public function __construct($name, $label, IChartDataSource $chart, callable $callback)
+    public function __construct(string $name, string $label, IChartDataSource $chart, callable $callback)
     {
         parent::__construct($name, null, null, null, $callback);
         $this->label = $label;

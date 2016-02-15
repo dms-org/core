@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Auth;
 
@@ -14,47 +14,47 @@ interface IRoleRepository extends IRepository
      *
      * @return IRole[]
      */
-    public function getAll();
+    public function getAll() : array;
 
     /**
      * {@inheritDoc}
      *
      * @return IRole
      */
-    public function get($id);
+    public function get(int $id) : \Dms\Core\Model\IEntity;
 
     /**
      * {@inheritDoc}
      *
      * @return IRole[]
      */
-    public function getAllById(array $ids);
+    public function getAllById(array $ids) : array;
 
     /**
      * {@inheritDoc}
      *
      * @return IRole|null
      */
-    public function tryGet($id);
+    public function tryGet(int $id);
 
     /**
      * {@inheritDoc}
      *
      * @return IRole[]
      */
-    public function tryGetAll(array $ids);
+    public function tryGetAll(array $ids) : array;
 
     /**
      * {@inheritDoc}
      *
      * @return IRole[]
      */
-    public function matching(ICriteria $criteria);
+    public function matching(ICriteria $criteria) : array;
 
     /**
      * {@inheritDoc}
      *
      * @return IRole[]
      */
-    public function satisfying(ISpecification $specification);
+    public function satisfying(ISpecification $specification) : array;
 }

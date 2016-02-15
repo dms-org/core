@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Model;
 
@@ -26,7 +26,7 @@ interface ILoadCriteria extends ICriteria
      *
      * @return NestedMember[]
      */
-    public function getAliasNestedMemberMap();
+    public function getAliasNestedMemberMap() : array;
 
     /**
      * Gets the nested member strings names to load.
@@ -41,7 +41,7 @@ interface ILoadCriteria extends ICriteria
      *
      * @return string[]
      */
-    public function getAliasNestedMemberStringMap();
+    public function getAliasNestedMemberStringMap() : array;
 
     /**
      * Returns a tree structure containing a tree of
@@ -85,5 +85,5 @@ interface ILoadCriteria extends ICriteria
      *
      * @return MemberExpressionNode[]
      */
-    public function getAliasMemberTree();
+    public function getAliasMemberTree() : array;
 }

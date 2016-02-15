@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Auth;
 
@@ -16,7 +16,7 @@ class InvalidCredentialsException extends BaseException
      *
      * @return static
      */
-    public static function defaultMessage($username)
+    public static function defaultMessage(string $username)
     {
         return static::format('Could not authenticate user \'%s\': credentials are invalid', $username);
     }

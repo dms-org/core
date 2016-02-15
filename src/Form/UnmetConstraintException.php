@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Form;
 
@@ -46,7 +46,7 @@ class UnmetConstraintException extends BaseException
     /**
      * @return IFormProcessor
      */
-    public function getProcessor()
+    public function getProcessor() : IFormProcessor
     {
         return $this->processor;
     }
@@ -54,7 +54,7 @@ class UnmetConstraintException extends BaseException
     /**
      * @return Message[]
      */
-    public function getMessages()
+    public function getMessages() : array
     {
         return $this->messages;
     }

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Model\Type;
 
@@ -23,28 +23,28 @@ interface IType
      *
      * @return IType
      */
-    public function union(IType $type);
+    public function union(IType $type) : IType;
 
     /**
      * Returns an equivalent nullable type
      *
      * @return IType
      */
-    public function nullable();
+    public function nullable() : IType;
 
     /**
      * Returns whether the type is nullable.
      *
      * @return bool
      */
-    public function isNullable();
+    public function isNullable() : bool;
 
     /**
      * Returns the type as non nullable if it was nullable.
      *
      * @return IType
      */
-    public function nonNullable();
+    public function nonNullable() : IType;
 
     /**
      * Returns the whether the type is a superset of the supplied type.
@@ -55,7 +55,7 @@ interface IType
      *
      * @return bool
      */
-    public function isSupersetOf(IType $type);
+    public function isSupersetOf(IType $type) : bool;
 
     /**
      * Returns the whether the type is a subset of the supplied type.
@@ -66,7 +66,7 @@ interface IType
      *
      * @return bool
      */
-    public function isSubsetOf(IType $type);
+    public function isSubsetOf(IType $type) : bool;
 
     /**
      * Returns the intersection between the two types
@@ -83,7 +83,7 @@ interface IType
      *
      * @return string
      */
-    public function asTypeString();
+    public function asTypeString() : string;
 
     /**
      * Returns whether the types are equal.
@@ -92,7 +92,7 @@ interface IType
      *
      * @return bool
      */
-    public function equals(IType $type);
+    public function equals(IType $type) : bool;
 
     /**
      * Returns whether the supplied value is of this type.
@@ -101,19 +101,19 @@ interface IType
      *
      * @return bool
      */
-    public function isOfType($value);
+    public function isOfType($value) : bool;
 
     /**
      * Returns the valid condition operator types for the supplied property.
      *
      * @return ConditionOperatorType[]
      */
-    public function getConditionOperatorTypes();
+    public function getConditionOperatorTypes() : array;
 
     /**
      * Returns the valid condition operator strings for the supplied property.
      *
      * @return string[]
      */
-    public function getConditionOperators();
+    public function getConditionOperators() : array;
 }

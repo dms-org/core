@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Model\Object;
 
@@ -27,7 +27,7 @@ final class TypedObjectAccessibilityAssertion
      *
      * @return void
      */
-    public static function enable($flag = true)
+    public static function enable(bool $flag = true)
     {
         self::$enabled = $flag;
     }
@@ -35,7 +35,7 @@ final class TypedObjectAccessibilityAssertion
     /**
      * @return bool
      */
-    public static function isEnabled()
+    public static function isEnabled() : bool
     {
         return self::$enabled;
     }

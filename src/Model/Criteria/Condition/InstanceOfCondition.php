@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Model\Criteria\Condition;
 
@@ -23,7 +23,7 @@ class InstanceOfCondition extends Condition
     /**
      * @return string
      */
-    public function getClass()
+    public function getClass() : string
     {
         return $this->class;
     }
@@ -31,7 +31,7 @@ class InstanceOfCondition extends Condition
     /**
      * @inheritdoc
      */
-    protected function makeArrayFilterCallable()
+    protected function makeArrayFilterCallable() : callable
     {
         $class = $this->class;
 

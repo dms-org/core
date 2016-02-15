@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Table\Criteria;
 
@@ -39,7 +39,7 @@ abstract class ColumnCriterion
     /**
      * @return IColumn
      */
-    final public function getColumn()
+    final public function getColumn() : \Dms\Core\Table\IColumn
     {
         return $this->column;
     }
@@ -47,7 +47,7 @@ abstract class ColumnCriterion
     /**
      * @return IColumnComponent
      */
-    final public function getColumnComponent()
+    final public function getColumnComponent() : \Dms\Core\Table\IColumnComponent
     {
         return $this->component;
     }
@@ -60,7 +60,7 @@ abstract class ColumnCriterion
     /**
      * @return callable
      */
-    final public function makeComponentGetterCallable()
+    final public function makeComponentGetterCallable() : callable
     {
         $column    = $this->column;
         $component = $this->component;

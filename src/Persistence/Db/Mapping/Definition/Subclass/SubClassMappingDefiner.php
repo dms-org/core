@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Mapping\Definition\Subclass;
 
@@ -62,7 +62,7 @@ class SubClassMappingDefiner extends SubClassDefinerBase
      *
      * @return SubClassDefinitionDefiner
      */
-    public function withTypeInColumn($columnName, $classTypeValue)
+    public function withTypeInColumn(string $columnName, $classTypeValue) : SubClassDefinitionDefiner
     {
         return new SubClassDefinitionDefiner(
                 $this->orm,
@@ -130,7 +130,7 @@ class SubClassMappingDefiner extends SubClassDefinerBase
      *
      * @return void
      */
-    public function withTypeInColumnMap($columnName, array $columnValueClassTypeMap)
+    public function withTypeInColumnMap(string $columnName, array $columnValueClassTypeMap)
     {
         foreach ($columnValueClassTypeMap as $columnValue => $classType) {
             $this->withTypeInColumn($columnName, $columnValue)->asType($classType);
@@ -200,7 +200,7 @@ class SubClassMappingDefiner extends SubClassDefinerBase
      *
      * @return SubClassDefinitionDefiner
      */
-    public function asSeparateTable($tableName)
+    public function asSeparateTable(string $tableName) : SubClassDefinitionDefiner
     {
         return new SubClassDefinitionDefiner(
                 $this->orm,

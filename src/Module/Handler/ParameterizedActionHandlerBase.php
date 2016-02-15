@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Module\Handler;
 
@@ -24,7 +24,7 @@ abstract class ParameterizedActionHandlerBase extends ActionHandler implements I
      * @param string      $dtoType
      * @param string|null $returnType
      */
-    public function __construct($dtoType, $returnType = null)
+    public function __construct(string $dtoType, string $returnType = null)
     {
         parent::__construct($returnType);
         $this->dtoType = $dtoType;
@@ -33,7 +33,7 @@ abstract class ParameterizedActionHandlerBase extends ActionHandler implements I
     /**
      * {@inheritDoc}
      */
-    final public function getParameterTypeClass()
+    final public function getParameterTypeClass() : string
     {
         return $this->dtoType;
     }

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Mapping;
 
@@ -62,7 +62,7 @@ abstract class EntityMapperBase extends ObjectMapper implements IEntityMapper
     /**
      * {@inheritDoc}
      */
-    final protected function loadMapping(FinalizedMapperDefinition $definition)
+    final protected function loadMapping(FinalizedMapperDefinition $definition) : Hierarchy\ParentObjectMapping
     {
         return new ParentObjectMapping($definition);
     }
@@ -87,7 +87,7 @@ abstract class EntityMapperBase extends ObjectMapper implements IEntityMapper
     /**
      * {@inheritDoc}
      */
-    final public function getPrimaryTable()
+    final public function getPrimaryTable() : \Dms\Core\Persistence\Db\Schema\Table
     {
         return $this->primaryTable;
     }
@@ -95,7 +95,7 @@ abstract class EntityMapperBase extends ObjectMapper implements IEntityMapper
     /**
      * {@inheritDoc}
      */
-    final public function getPrimaryTableName()
+    final public function getPrimaryTableName() : string
     {
         return $this->primaryTable->getName();
     }
@@ -103,7 +103,7 @@ abstract class EntityMapperBase extends ObjectMapper implements IEntityMapper
     /**
      * @return Table[]
      */
-    final public function getTables()
+    final public function getTables() : array
     {
         return $this->tables;
     }
@@ -119,7 +119,7 @@ abstract class EntityMapperBase extends ObjectMapper implements IEntityMapper
     /**
      * @inheritDoc
      */
-    final public function getSelect()
+    final public function getSelect() : \Dms\Core\Persistence\Db\Query\Select
     {
         $select = Select::from($this->primaryTable);
 
@@ -133,7 +133,7 @@ abstract class EntityMapperBase extends ObjectMapper implements IEntityMapper
      *
      * @return RowSet
      */
-    final public function rowSet(array $rows)
+    final public function rowSet(array $rows) : \Dms\Core\Persistence\Db\RowSet
     {
         return new RowSet($this->primaryTable, $rows);
     }
@@ -182,7 +182,7 @@ abstract class EntityMapperBase extends ObjectMapper implements IEntityMapper
     /**
      * {@inheritDoc}
      */
-    final public function persist(PersistenceContext $context, IEntity $entity)
+    final public function persist(PersistenceContext $context, IEntity $entity) : \Dms\Core\Persistence\Db\Row
     {
         return $this->persistAll($context, [$entity])[0];
     }
@@ -190,7 +190,7 @@ abstract class EntityMapperBase extends ObjectMapper implements IEntityMapper
     /**
      * {@inheritDoc}
      */
-    final public function persistAll(PersistenceContext $context, array $entities)
+    final public function persistAll(PersistenceContext $context, array $entities) : array
     {
         InvalidArgumentException::verifyAllInstanceOf(__METHOD__, 'entities', $entities, $this->entityType);
 

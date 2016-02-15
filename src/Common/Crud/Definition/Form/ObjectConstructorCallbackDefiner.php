@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Common\Crud\Definition\Form;
 
@@ -71,7 +71,7 @@ class ObjectConstructorCallbackDefiner
      * @return void
      * @throws InvalidArgumentException
      */
-    public function asClass($className)
+    public function asClass(string $className)
     {
         if (!is_a($className, $this->class->getClassName(), true)) {
             throw InvalidArgumentException::format(

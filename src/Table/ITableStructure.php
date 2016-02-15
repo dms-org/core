@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Table;
 
@@ -14,19 +14,19 @@ interface ITableStructure
     /**
      * @return IColumn[]
      */
-    public function getColumns();
+    public function getColumns() : array;
 
     /**
      * @return string[]
      */
-    public function getColumnNames();
+    public function getColumnNames() : array;
 
     /**
      * @param string|null $name
      *
      * @return bool
      */
-    public function hasColumn($name);
+    public function hasColumn($name) : bool;
 
     /**
      * @param string $name
@@ -34,7 +34,7 @@ interface ITableStructure
      * @return IColumn
      * @throws InvalidArgumentException
      */
-    public function getColumn($name);
+    public function getColumn(string $name) : IColumn;
 
     /**
      * Gets the column and component for the given component id.
@@ -54,7 +54,7 @@ interface ITableStructure
      * @return array
      * @throws InvalidArgumentException
      */
-    public function getColumnAndComponent($componentId);
+    public function getColumnAndComponent(string $componentId) : array;
 
     /**
      * Gets the column component for the given component id.
@@ -64,7 +64,7 @@ interface ITableStructure
      * @return IColumnComponent
      * @throws InvalidArgumentException
      */
-    public function getComponent($componentId);
+    public function getComponent(string $componentId) : IColumnComponent;
 
     /**
      * Returns a new table structure with only the supplied columns.

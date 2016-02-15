@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Common\Crud\Definition;
 
@@ -68,7 +68,7 @@ class CrudModuleDefinition extends ReadModuleDefinition
      *
      * @return RemoveActionDefiner
      */
-    public function removeAction()
+    public function removeAction() : Action\RemoveActionDefiner
     {
         return new RemoveActionDefiner($this->dataSource, $this->authSystem, function (IObjectAction $action) {
             $this->actions[$action->getName()] = $action;
@@ -78,7 +78,7 @@ class CrudModuleDefinition extends ReadModuleDefinition
     /**
      * @inheritDoc
      */
-    public function finalize()
+    public function finalize() : \Dms\Core\Module\Definition\FinalizedModuleDefinition
     {
         $this->verifyCanBeFinalized();
 

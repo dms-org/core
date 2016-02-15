@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Model\Object;
 
@@ -46,7 +46,7 @@ class ArrayDataObject extends ValueObject implements IDataTransferObject, \Array
      *
      * @return array
      */
-    public function getArray()
+    public function getArray() : array
     {
         return $this->data;
     }
@@ -58,7 +58,7 @@ class ArrayDataObject extends ValueObject implements IDataTransferObject, \Array
      *
      * @return bool
      */
-    public function offsetExists($index)
+    public function offsetExists($index) : bool
     {
         return isset($this->data[$index]);
     }
@@ -155,7 +155,7 @@ class ArrayDataObject extends ValueObject implements IDataTransferObject, \Array
      *
      * @return array
      */
-    public function jsonSerialize()
+    public function jsonSerialize() : array
     {
         return $this->data;
     }

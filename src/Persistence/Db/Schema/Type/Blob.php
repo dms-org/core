@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Schema\Type;
 
@@ -24,7 +24,7 @@ class Blob extends Type
      *
      * @param string $mode
      */
-    private function __construct($mode)
+    private function __construct(string $mode)
     {
         $this->mode = $mode;
     }
@@ -32,7 +32,7 @@ class Blob extends Type
     /**
      * @return Blob
      */
-    public static function small()
+    public static function small() : Blob
     {
         return new self(self::MODE_SMALL);
     }
@@ -40,7 +40,7 @@ class Blob extends Type
     /**
      * @return Blob
      */
-    public static function normal()
+    public static function normal() : Blob
     {
         return new self(self::MODE_NORMAL);
     }
@@ -48,7 +48,7 @@ class Blob extends Type
     /**
      * @return Blob
      */
-    public static function medium()
+    public static function medium() : Blob
     {
         return new self(self::MODE_MEDIUM);
     }
@@ -56,7 +56,7 @@ class Blob extends Type
     /**
      * @return Blob
      */
-    public static function long()
+    public static function long() : Blob
     {
         return new self(self::MODE_LONG);
     }
@@ -64,7 +64,7 @@ class Blob extends Type
     /**
      * @return string
      */
-    public function getMode()
+    public function getMode() : string
     {
         return $this->mode;
     }

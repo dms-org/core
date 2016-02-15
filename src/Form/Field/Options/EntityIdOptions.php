@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Form\Field\Options;
 
@@ -36,7 +36,7 @@ class EntityIdOptions implements IFieldOptions
      * @param callable|null $labelCallback
      * @param string|null   $labelMemberExpression
      */
-    public function __construct(IEntitySet $entities, callable $labelCallback = null, $labelMemberExpression = null)
+    public function __construct(IEntitySet $entities, callable $labelCallback = null, string $labelMemberExpression = null)
     {
         $this->entities              = $entities;
         $this->labelCallback         = $labelCallback;
@@ -46,7 +46,7 @@ class EntityIdOptions implements IFieldOptions
     /**
      * @return IEntitySet
      */
-    public function getEntities()
+    public function getEntities() : \Dms\Core\Model\IEntitySet
     {
         return $this->entities;
     }
@@ -54,7 +54,7 @@ class EntityIdOptions implements IFieldOptions
     /**
      * {@inheritDoc}
      */
-    public function getAll()
+    public function getAll() : array
     {
         if ($this->entities instanceof IObjectSetWithLoadCriteriaSupport && !$this->labelCallback) {
             return $this->loadOptionsViaOptimizedLoadCriteria($this->entities, $this->labelMemberExpression);
@@ -78,7 +78,7 @@ class EntityIdOptions implements IFieldOptions
      *
      * @return IFieldOption[]
      */
-    private function loadOptionsViaOptimizedLoadCriteria(IObjectSetWithLoadCriteriaSupport $entities, $labelMemberExpression = null)
+    private function loadOptionsViaOptimizedLoadCriteria(IObjectSetWithLoadCriteriaSupport $entities, $labelMemberExpression = null) : array
     {
         $criteria = $entities->loadCriteria();
 

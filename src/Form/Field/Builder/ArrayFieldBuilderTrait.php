@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Form\Field\Builder;
 
@@ -22,7 +22,7 @@ trait ArrayFieldBuilderTrait
      *
      * @return static
      */
-    public function minLength($length)
+    public function minLength(int $length)
     {
         return $this->attr(ArrayOfType::ATTR_MIN_ELEMENTS, $length);
     }
@@ -34,7 +34,7 @@ trait ArrayFieldBuilderTrait
      *
      * @return static
      */
-    public function maxLength($length)
+    public function maxLength(int $length)
     {
         return $this->attr(ArrayOfType::ATTR_MAX_ELEMENTS, $length);
     }
@@ -46,7 +46,7 @@ trait ArrayFieldBuilderTrait
      *
      * @return static
      */
-    public function exactLength($length)
+    public function exactLength(int $length)
     {
         return $this->attr(ArrayOfType::ATTR_EXACT_ELEMENTS, $length);
     }
@@ -70,7 +70,7 @@ trait ArrayFieldBuilderTrait
      *
      * @return static
      */
-    public function allUniqueIn(IObjectSet $objects, $propertyName)
+    public function allUniqueIn(IObjectSet $objects, string $propertyName)
     {
         return $this
                 ->validate(new AllUniquePropertyValidator($this->getCurrentProcessedType(__FUNCTION__), $objects, $propertyName));
@@ -81,7 +81,7 @@ trait ArrayFieldBuilderTrait
      *
      * @return ArrayType
      */
-    abstract protected function getCurrentProcessedType($function = __FUNCTION__);
+    abstract protected function getCurrentProcessedType(string $function = __FUNCTION__) : \Dms\Core\Model\Type\IType;
 
     /**
      * @param $name
@@ -89,7 +89,7 @@ trait ArrayFieldBuilderTrait
      *
      * @return static
      */
-    abstract protected function attr($name, $value);
+    abstract protected function attr(string $name, $value);
 
     /**
      * @param FieldValidator $validator

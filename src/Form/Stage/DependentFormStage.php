@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Form\Stage;
 
@@ -62,7 +62,7 @@ class DependentFormStage extends FormStage
     /**
      * @inheritDoc
      */
-    public function getDefinedFieldNames()
+    public function getDefinedFieldNames() : array
     {
         return $this->definedFieldNames;
     }

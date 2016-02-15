@@ -4,6 +4,7 @@ namespace Dms\Core\Tests\Module\Table;
 
 use Dms\Common\Testing\CmsTestCase;
 use Dms\Core\Module\Table\TableView;
+use Dms\Core\Table\Criteria\RowCriteria;
 use Dms\Core\Table\IRowCriteria;
 
 /**
@@ -13,7 +14,7 @@ class TableViewTest extends CmsTestCase
 {
     public function testWithCriteria()
     {
-        $criteria = $this->getMockForAbstractClass(IRowCriteria::class);
+        $criteria = $this->getMockForAbstractClass(RowCriteria::class, [], '', false);
 
         $criteria->method('asNewCriteria')
                 ->willReturn(clone $criteria);

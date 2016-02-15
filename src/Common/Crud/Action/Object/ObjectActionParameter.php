@@ -1,11 +1,9 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Common\Crud\Action\Object;
 
-use Dms\Core\Exception\InvalidArgumentException;
 use Dms\Core\Model\Object\ClassDefinition;
 use Dms\Core\Model\Object\DataTransferObject;
-use Dms\Core\Util\Debug;
 
 /**
  * The object action dto class.
@@ -53,7 +51,7 @@ class ObjectActionParameter extends DataTransferObject
     /**
      * @return bool
      */
-    public function hasData()
+    public function hasData() : bool
     {
         return $this->data !== null;
     }

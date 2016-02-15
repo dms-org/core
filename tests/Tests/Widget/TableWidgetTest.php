@@ -3,6 +3,7 @@
 namespace Dms\Core\Tests\Widget;
 
 use Dms\Common\Testing\CmsTestCase;
+use Dms\Core\Table\IDataTable;
 use Dms\Core\Table\IRowCriteria;
 use Dms\Core\Table\ITableDataSource;
 use Dms\Core\Widget\TableWidget;
@@ -29,9 +30,9 @@ class TableWidgetTest extends CmsTestCase
         $table->expects(self::once())
                 ->method('load')
                 ->with($criteria)
-                ->willReturn(true);
+                ->willReturn($mock = $this->getMock(IDataTable::class));
 
-        $this->assertSame(true, $widget->loadData());
+        $this->assertSame($mock, $widget->loadData());
     }
 
     public function testNewWithoutCriteria()
@@ -49,8 +50,8 @@ class TableWidgetTest extends CmsTestCase
         $table->expects(self::once())
                 ->method('load')
                 ->with(null)
-                ->willReturn(true);
+                ->willReturn($mock = $this->getMock(IDataTable::class));
 
-        $this->assertSame(true, $widget->loadData());
+        $this->assertSame($mock, $widget->loadData());
     }
 }

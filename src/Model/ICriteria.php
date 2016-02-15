@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Model;
 
@@ -19,7 +19,7 @@ interface ICriteria
      *
      * @return FinalizedClassDefinition
      */
-    public function getClass();
+    public function getClass() : Object\FinalizedClassDefinition;
 
     /**
      * Throws an exception if the criteria of not for the supplied class.
@@ -29,14 +29,14 @@ interface ICriteria
      * @return void
      * @throws Exception\TypeMismatchException
      */
-    public function verifyOfClass($class);
+    public function verifyOfClass(string $class);
 
     /**
      * Returns whether the criteria has a condition.
      *
      * @return bool
      */
-    public function hasCondition();
+    public function hasCondition() : bool;
 
     /**
      * Gets the condition defining which objects to load.
@@ -50,28 +50,28 @@ interface ICriteria
      *
      * @return bool
      */
-    public function hasOrderings();
+    public function hasOrderings() : bool;
 
     /**
      * Gets the orderings of the object.
      *
      * @return MemberOrdering[]
      */
-    public function getOrderings();
+    public function getOrderings() : array;
 
     /**
      * Gets the amount of objects to skip
      *
      * @return int
      */
-    public function getStartOffset();
+    public function getStartOffset() : int;
 
     /**
      * Returns whether the criteria has a limit set.
      *
      * @return bool
      */
-    public function hasLimitAmount();
+    public function hasLimitAmount() : bool;
 
     /**
      * Gets the maximum amount of objects to return or null

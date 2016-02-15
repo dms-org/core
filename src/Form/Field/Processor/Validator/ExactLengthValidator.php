@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Form\Field\Processor\Validator;
 
@@ -18,7 +18,7 @@ class ExactLengthValidator extends ComparisonValidator
      */
     protected function validate($input, array &$messages)
     {
-        if (strlen($input) !== $this->value) {
+        if (strlen((string)$input) !== $this->value) {
             $messages[] = new Message(self::MESSAGE, ['length' => $this->value]);
         }
     }

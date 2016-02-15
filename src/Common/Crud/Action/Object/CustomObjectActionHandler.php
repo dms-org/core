@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Common\Crud\Action\Object;
 
@@ -25,7 +25,7 @@ class CustomObjectActionHandler extends ObjectActionHandler
      *
      * @throws InvalidHandlerClassException
      */
-    public function __construct(callable $handler, $returnType = null, $objectType = null, $dataParameterType = null)
+    public function __construct(callable $handler, string $returnType = null, string $objectType = null, string $dataParameterType = null)
     {
         if (!$objectType) {
             list($objectType, $dataParameterType) = $this->loadTypeHintsFromCallable($handler);

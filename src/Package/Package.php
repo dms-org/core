@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Package;
 
@@ -77,7 +77,7 @@ abstract class Package implements IPackage
     /**
      * @inheritDoc
      */
-    final public function getName()
+    final public function getName() : string
     {
         return $this->name;
     }
@@ -85,7 +85,7 @@ abstract class Package implements IPackage
     /**
      * @inheritDoc
      */
-    public function hasDashboard()
+    public function hasDashboard() : bool
     {
         return count($this->dashboardWidgetNames) > 0;
     }
@@ -93,7 +93,7 @@ abstract class Package implements IPackage
     /**
      * @inheritDoc
      */
-    public function loadDashboard()
+    public function loadDashboard() : IDashboard
     {
         if (!$this->hasDashboard()) {
             throw InvalidOperationException::methodCall(__METHOD__, 'no dashboard widgets defined');
@@ -130,7 +130,7 @@ abstract class Package implements IPackage
     /**
      * @inheritDoc
      */
-    final public function getModuleNames()
+    final public function getModuleNames() : array
     {
         return array_keys($this->nameModuleClassMap);
     }
@@ -138,7 +138,7 @@ abstract class Package implements IPackage
     /**
      * @inheritDoc
      */
-    final public function loadModule($name)
+    final public function loadModule(string $name) : \Dms\Core\Module\IModule
     {
         if (!isset($this->nameModuleClassMap[$name])) {
             throw ModuleNotFoundException::format(
@@ -163,7 +163,7 @@ abstract class Package implements IPackage
      * @return IModule
      * @throws InvalidArgumentException
      */
-    private function loadModuleFromClass($name, $moduleClass)
+    private function loadModuleFromClass(string $name, string $moduleClass) : \Dms\Core\Module\IModule
     {
         if (!is_subclass_of($moduleClass, IModule::class, true)) {
             throw InvalidArgumentException::format(
@@ -190,7 +190,7 @@ abstract class Package implements IPackage
     /**
      * @inheritDoc
      */
-    final public function loadModules()
+    final public function loadModules() : array
     {
         foreach ($this->nameModuleClassMap as $name => $moduleClass) {
             $this->loadModule($name);
@@ -202,7 +202,7 @@ abstract class Package implements IPackage
     /**
      * @inheritDoc
      */
-    final public function hasModule($name)
+    final public function hasModule(string $name) : bool
     {
         return isset($this->nameModuleClassMap[$name]);
     }
@@ -210,7 +210,7 @@ abstract class Package implements IPackage
     /**
      * @inheritDoc
      */
-    final public function loadPermissions()
+    final public function loadPermissions() : array
     {
         $namespacedPermissions = [];
 
@@ -226,7 +226,7 @@ abstract class Package implements IPackage
     /**
      * @inheritDoc
      */
-    final public function getIocContainer()
+    final public function getIocContainer() : \Interop\Container\ContainerInterface
     {
         return $this->container;
     }

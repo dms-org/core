@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Auth;
 
@@ -14,47 +14,47 @@ interface IUserRepository extends IRepository
      *
      * @return IUser[]
      */
-    public function getAll();
+    public function getAll() : array;
 
     /**
      * {@inheritDoc}
      *
      * @return IUser
      */
-    public function get($id);
+    public function get(int $id) : \Dms\Core\Model\IEntity;
 
     /**
      * {@inheritDoc}
      *
      * @return IUser[]
      */
-    public function getAllById(array $ids);
+    public function getAllById(array $ids) : array;
 
     /**
      * {@inheritDoc}
      *
      * @return IUser|null
      */
-    public function tryGet($id);
+    public function tryGet(int $id);
 
     /**
      * {@inheritDoc}
      *
      * @return IUser[]
      */
-    public function tryGetAll(array $ids);
+    public function tryGetAll(array $ids) : array;
 
     /**
      * {@inheritDoc}
      *
      * @return IUser[]
      */
-    public function matching(ICriteria $criteria);
+    public function matching(ICriteria $criteria) : array;
 
     /**
      * {@inheritDoc}
      *
      * @return IUser[]
      */
-    public function satisfying(ISpecification $specification);
+    public function satisfying(ISpecification $specification) : array;
 }

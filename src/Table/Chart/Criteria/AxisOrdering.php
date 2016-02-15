@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Table\Chart\Criteria;
 
@@ -26,7 +26,7 @@ class AxisOrdering extends AxisCriterion
      *
      * @throws Exception\InvalidArgumentException
      */
-    public function __construct(IChartAxis $axis, $direction)
+    public function __construct(IChartAxis $axis, string $direction)
     {
         OrderingDirection::validate($direction);
         parent::__construct($axis);
@@ -37,7 +37,7 @@ class AxisOrdering extends AxisCriterion
     /**
      * @return string
      */
-    public function getDirection()
+    public function getDirection() : string
     {
         return $this->direction;
     }
@@ -45,7 +45,7 @@ class AxisOrdering extends AxisCriterion
     /**
      * @return bool
      */
-    public function isAsc()
+    public function isAsc() : bool
     {
         return $this->direction === OrderingDirection::ASC;
     }

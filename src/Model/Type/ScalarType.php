@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Model\Type;
 
@@ -50,7 +50,7 @@ class ScalarType extends BaseType
     /**
      * @inheritDoc
      */
-    protected function loadValidOperatorTypes()
+    protected function loadValidOperatorTypes() : array
     {
         $operators = parent::loadValidOperatorTypes();
 
@@ -77,7 +77,7 @@ class ScalarType extends BaseType
     /**
      * @return string
      */
-    public function getType()
+    public function getType() : string
     {
         return $this->type;
     }
@@ -85,7 +85,7 @@ class ScalarType extends BaseType
     /**
      * {@inheritDoc}
      */
-    public function isOfType($value)
+    public function isOfType($value) : bool
     {
         return gettype($value) === self::$scalarTypes[$this->type];
     }

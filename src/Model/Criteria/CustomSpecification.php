@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Model\Criteria;
 
@@ -27,7 +27,7 @@ class CustomSpecification extends Specification
      * @param string   $type
      * @param callable $definitionCallback
      */
-    public function __construct($type, callable $definitionCallback)
+    public function __construct(string $type, callable $definitionCallback)
     {
         $this->type               = $type;
         $this->definitionCallback = $definitionCallback;
@@ -39,7 +39,7 @@ class CustomSpecification extends Specification
      *
      * @return string
      */
-    protected function type()
+    protected function type() : string
     {
         return $this->type;
     }

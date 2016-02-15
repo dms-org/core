@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Common\Crud\Definition\Table;
 
@@ -51,7 +51,7 @@ class TableViewAndReorderDefiner extends TableViewDefiner
      *
      * @return static
      */
-    public function withReorder(callable $callback, array $permissions = [], $actionName = null)
+    public function withReorder(callable $callback, array $permissions = [], string $actionName = null)
     {
         call_user_func($this->reorderActionCallback, $callback, $permissions, $actionName);
 

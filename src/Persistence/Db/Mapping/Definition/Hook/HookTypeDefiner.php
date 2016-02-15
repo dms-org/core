@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Mapping\Definition\Hook;
 
@@ -40,7 +40,7 @@ class HookTypeDefiner
      *
      * @return void
      */
-    public function saveOrderIndexTo($columnName, $groupingColumnName = null)
+    public function saveOrderIndexTo(string $columnName, string $groupingColumnName = null)
     {
         call_user_func($this->callback, function (Table $table, $uniqueKey, array $propertyColumnMap, $objectType) use ($columnName, $groupingColumnName) {
             return new OrderIndexPropertyLoaderHook(

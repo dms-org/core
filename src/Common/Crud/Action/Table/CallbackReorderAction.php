@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Common\Crud\Action\Table;
 
@@ -33,7 +33,7 @@ class CallbackReorderAction extends ObjectAction implements IReorderAction
      */
     public function __construct(
             IEntitySet $dataSource,
-            $name,
+            string $name,
             IAuthSystem $auth,
             array $requiredPermissions,
             callable $reorderCallback
@@ -61,7 +61,7 @@ class CallbackReorderAction extends ObjectAction implements IReorderAction
     /**
      * @inheritdoc
      */
-    public function runReorder($object, $newIndex)
+    public function runReorder($object, int $newIndex)
     {
         $this->runOnObject($object, [self::NEW_INDEX_FIELD_NAME => $newIndex]);
     }

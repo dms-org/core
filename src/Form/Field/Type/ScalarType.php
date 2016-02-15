@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Form\Field\Type;
 
@@ -33,7 +33,7 @@ abstract class ScalarType extends FieldType
      *
      * @throws InvalidArgumentException
      */
-    public function __construct($type)
+    public function __construct(string $type)
     {
         if (!in_array($type, [self::STRING, self::INT, self::FLOAT, self::BOOL])) {
             throw InvalidArgumentException::format('Unknown scalar type: %s', $type);
@@ -47,7 +47,7 @@ abstract class ScalarType extends FieldType
     /**
      * @return string
      */
-    public function getType()
+    public function getType() : string
     {
         return $this->attributes[self::ATTR_TYPE];
     }
@@ -55,7 +55,7 @@ abstract class ScalarType extends FieldType
     /**
      * {@inheritDoc}
      */
-    protected function buildPhpTypeOfInput()
+    protected function buildPhpTypeOfInput() : IType
     {
         // Scalar inputs can be of mixed type
         // as they will be validated and coerced
@@ -67,7 +67,7 @@ abstract class ScalarType extends FieldType
     /**
      * @return IType
      */
-    protected function getProcessedScalarType()
+    protected function getProcessedScalarType() : IType
     {
         $type = Type::scalar($this->attributes[self::ATTR_TYPE]);
 
@@ -77,7 +77,7 @@ abstract class ScalarType extends FieldType
     /**
      * @inheritDoc
      */
-    protected function hasTypeSpecificRequiredValidator()
+    protected function hasTypeSpecificRequiredValidator() : bool
     {
         return $this->getType() === self::BOOL;
     }
@@ -85,7 +85,7 @@ abstract class ScalarType extends FieldType
     /**
      * @inheritDoc
      */
-    protected function buildProcessors()
+    protected function buildProcessors() : array
     {
         $processors = [];
 

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Mapping\Definition\ForeignKey;
 
@@ -15,7 +15,7 @@ class ForeignKeyOnDeleteModeDefiner extends ForeignKeyDefinerBase
      *
      * @return ForeignKeyOnUpdateModeDefiner
      */
-    public function onDeleteCascade()
+    public function onDeleteCascade() : ForeignKeyOnUpdateModeDefiner
     {
         return $this->onDelete(ForeignKeyMode::CASCADE);
     }
@@ -26,7 +26,7 @@ class ForeignKeyOnDeleteModeDefiner extends ForeignKeyDefinerBase
      *
      * @return ForeignKeyOnUpdateModeDefiner
      */
-    public function onDeleteSetNull()
+    public function onDeleteSetNull() : ForeignKeyOnUpdateModeDefiner
     {
         return $this->onDelete(ForeignKeyMode::SET_NULL);
     }
@@ -37,7 +37,7 @@ class ForeignKeyOnDeleteModeDefiner extends ForeignKeyDefinerBase
      *
      * @return ForeignKeyOnUpdateModeDefiner
      */
-    public function onDeleteDoNothing()
+    public function onDeleteDoNothing() : ForeignKeyOnUpdateModeDefiner
     {
         return $this->onDelete(ForeignKeyMode::DO_NOTHING);
     }
@@ -47,7 +47,7 @@ class ForeignKeyOnDeleteModeDefiner extends ForeignKeyDefinerBase
      *
      * @return ForeignKeyOnUpdateModeDefiner
      */
-    protected function onDelete($mode)
+    protected function onDelete(string $mode) : ForeignKeyOnUpdateModeDefiner
     {
         return new ForeignKeyOnUpdateModeDefiner(
                 $this->callback,

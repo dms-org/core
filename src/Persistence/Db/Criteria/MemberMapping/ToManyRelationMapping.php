@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Criteria\MemberMapping;
 
@@ -40,7 +40,7 @@ class ToManyRelationMapping extends RelationMapping implements IFinalRelationMem
     /**
      * @return IToManyRelation
      */
-    public function getRelation()
+    public function getRelation() : \Dms\Core\Persistence\Db\Mapping\Relation\IToManyRelation
     {
         return $this->relation;
     }
@@ -48,7 +48,7 @@ class ToManyRelationMapping extends RelationMapping implements IFinalRelationMem
     /**
      * @return MemberRelation
      */
-    public function asMemberRelation()
+    public function asMemberRelation() : \Dms\Core\Persistence\Db\Mapping\ReadModel\Relation\MemberRelation
     {
         return new ToManyMemberRelation($this);
     }
@@ -56,7 +56,7 @@ class ToManyRelationMapping extends RelationMapping implements IFinalRelationMem
     /**
      * @inheritDoc
      */
-    public function getWhereConditionExpr(Select $select, $tableAlias, $operator, $value)
+    public function getWhereConditionExpr(Select $select, string $tableAlias, string $operator, $value) : \Dms\Core\Persistence\Db\Query\Expression\Expr
     {
         throw MemberExpressionMappingException::format(
                 'Cannot perform condition with operator \'%s\' on collection of related %s',
@@ -67,7 +67,7 @@ class ToManyRelationMapping extends RelationMapping implements IFinalRelationMem
     /**
      * @inheritDoc
      */
-    public function addOrderByToSelect(Select $select, $tableAlias, $isAsc)
+    public function addOrderByToSelect(Select $select, string $tableAlias, bool $isAsc)
     {
         throw MemberExpressionMappingException::format('Cannot order by collection of related %s', $this->getRelatedObjectType());
     }
@@ -75,7 +75,7 @@ class ToManyRelationMapping extends RelationMapping implements IFinalRelationMem
     /**
      * @inheritDoc
      */
-    public function addSelectColumn(Select $select, $tableAlias, $alias)
+    public function addSelectColumn(Select $select, string $tableAlias, string $alias)
     {
         throw MemberExpressionMappingException::format('Cannot select a collection of related %s as a column', $this->getRelatedObjectType());
     }
@@ -83,7 +83,7 @@ class ToManyRelationMapping extends RelationMapping implements IFinalRelationMem
     /**
      * @inheritDoc
      */
-    protected function getSingleValueExpressionInSelect(Select $select, $tableAlias)
+    protected function getSingleValueExpressionInSelect(Select $select, string $tableAlias) : \Dms\Core\Persistence\Db\Query\Expression\Expr
     {
         throw NotImplementedException::method(__METHOD__);
     }

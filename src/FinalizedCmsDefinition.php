@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core;
 
@@ -27,7 +27,7 @@ class FinalizedCmsDefinition
     /**
      * @return string[]
      */
-    public function getNamePackageMap()
+    public function getNamePackageMap() : array
     {
         return $this->namePackageMap;
     }

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Table\DataSource\Definition;
 
@@ -69,7 +69,7 @@ class FinalizedObjectTableDefinition
      *
      * @return FinalizedObjectTableDefinition
      */
-    public function forColumns(array $columnNames)
+    public function forColumns(array $columnNames) : FinalizedObjectTableDefinition
     {
         $columns = [];
 
@@ -111,7 +111,7 @@ class FinalizedObjectTableDefinition
      *
      * @return string
      */
-    private function getColumnNameFromComponentId($componentId)
+    private function getColumnNameFromComponentId(string $componentId) : string
     {
         return explode('.', $componentId)[0];
     }
@@ -121,7 +121,7 @@ class FinalizedObjectTableDefinition
      *
      * @return bool
      */
-    public function requiresObjectInstanceForMapping()
+    public function requiresObjectInstanceForMapping() : bool
     {
         return !empty($this->componentIdCallableMap) || !empty($this->customCallableMappers);
     }
@@ -129,7 +129,7 @@ class FinalizedObjectTableDefinition
     /**
      * @return FinalizedClassDefinition
      */
-    public function getClass()
+    public function getClass() : \Dms\Core\Model\Object\FinalizedClassDefinition
     {
         return $this->class;
     }
@@ -137,7 +137,7 @@ class FinalizedObjectTableDefinition
     /**
      * @return ITableStructure
      */
-    public function getStructure()
+    public function getStructure() : \Dms\Core\Table\ITableStructure
     {
         return $this->structure;
     }
@@ -145,7 +145,7 @@ class FinalizedObjectTableDefinition
     /**
      * @return string[]
      */
-    public function getPropertyComponentIdMap()
+    public function getPropertyComponentIdMap() : array
     {
         return $this->propertyComponentIdMap;
     }
@@ -153,7 +153,7 @@ class FinalizedObjectTableDefinition
     /**
      * @return callable[]
      */
-    public function getComponentIdCallableMap()
+    public function getComponentIdCallableMap() : array
     {
         return $this->componentIdCallableMap;
     }
@@ -161,7 +161,7 @@ class FinalizedObjectTableDefinition
     /**
      * @return \callable[]
      */
-    public function getCustomCallableMappers()
+    public function getCustomCallableMappers() : array
     {
         return $this->customCallableMappers;
     }
@@ -171,7 +171,7 @@ class FinalizedObjectTableDefinition
      *
      * @return string[]
      */
-    public function getPropertiesRequiredFor($columnName)
+    public function getPropertiesRequiredFor(string $columnName) : array
     {
         $propertyNames = [];
 

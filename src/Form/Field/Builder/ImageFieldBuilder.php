@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Form\Field\Builder;
 
@@ -18,7 +18,7 @@ class ImageFieldBuilder extends FileFieldBuilder
      *
      * @return static
      */
-    public function minWidth($pixels)
+    public function minWidth(int $pixels)
     {
         return $this->attr(ImageType::ATTR_MIN_WIDTH, $pixels);
     }
@@ -30,7 +30,7 @@ class ImageFieldBuilder extends FileFieldBuilder
      *
      * @return static
      */
-    public function maxWidth($pixels)
+    public function maxWidth(int $pixels)
     {
         return $this->attr(ImageType::ATTR_MAX_WIDTH, $pixels);
     }
@@ -42,7 +42,7 @@ class ImageFieldBuilder extends FileFieldBuilder
      *
      * @return static
      */
-    public function minHeight($pixels)
+    public function minHeight(int $pixels)
     {
         return $this->attr(ImageType::ATTR_MIN_HEIGHT, $pixels);
     }
@@ -54,7 +54,7 @@ class ImageFieldBuilder extends FileFieldBuilder
      *
      * @return static
      */
-    public function maxHeight($pixels)
+    public function maxHeight(int $pixels)
     {
         return $this->attr(ImageType::ATTR_MAX_HEIGHT, $pixels);
     }

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Mapping\Hook;
 
@@ -55,7 +55,7 @@ class OrderIndexPropertyLoaderHook extends PersistHook
      * @param string|null $groupingColumn
      * @param string|null $orderPropertyName
      */
-    public function __construct($idString, Table $table, $orderColumn, $groupingColumn = null, $orderPropertyName = null)
+    public function __construct(string $idString, Table $table, string $orderColumn, string $groupingColumn = null, string $orderPropertyName = null)
     {
         parent::__construct($idString);
 
@@ -225,7 +225,7 @@ class OrderIndexPropertyLoaderHook extends PersistHook
      *
      * @return static
      */
-    public function withColumnNamesPrefixedBy($prefix)
+    public function withColumnNamesPrefixedBy(string $prefix)
     {
         $clone                 = clone $this;
         $clone->table          = $clone->table->withColumnsPrefixedBy($prefix);

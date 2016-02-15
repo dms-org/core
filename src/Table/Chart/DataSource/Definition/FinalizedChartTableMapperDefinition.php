@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Table\Chart\DataSource\Definition;
 
@@ -63,7 +63,7 @@ class FinalizedChartTableMapperDefinition
     /**
      * @return ITableDataSource
      */
-    public function getTableDataSource()
+    public function getTableDataSource() : \Dms\Core\Table\ITableDataSource
     {
         return $this->tableDataSource;
     }
@@ -71,7 +71,7 @@ class FinalizedChartTableMapperDefinition
     /**
      * @return string[]
      */
-    public function getTableColumnNamesToLoad()
+    public function getTableColumnNamesToLoad() : array
     {
         return $this->tableColumnsToLoad;
     }
@@ -79,7 +79,7 @@ class FinalizedChartTableMapperDefinition
     /**
      * @return IChartStructure
      */
-    public function getStructure()
+    public function getStructure() : \Dms\Core\Table\Chart\IChartStructure
     {
         return $this->structure;
     }
@@ -87,7 +87,7 @@ class FinalizedChartTableMapperDefinition
     /**
      * @return string[]
      */
-    public function getTableToChartComponentIdMap()
+    public function getTableToChartComponentIdMap() : array
     {
         return $this->tableToChartComponentIdMap;
     }
@@ -95,7 +95,7 @@ class FinalizedChartTableMapperDefinition
     /**
      * @return callable[]
      */
-    public function getComponentIdCallableMap()
+    public function getComponentIdCallableMap() : array
     {
         return $this->componentIdCallableMap;
     }

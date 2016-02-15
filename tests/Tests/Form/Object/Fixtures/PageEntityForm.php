@@ -31,7 +31,7 @@ class PageEntityForm extends EntityFormObject
      *
      * @return string
      */
-    protected function entityType()
+    protected function entityType() : string
     {
         return PageEntity::class;
     }
@@ -58,7 +58,7 @@ class PageEntityForm extends EntityFormObject
      *
      * @param IEntity $entity
      *
-     * @return string
+     * @return void
      */
     protected function populateFormWithEntity(IEntity $entity)
     {
@@ -73,7 +73,7 @@ class PageEntityForm extends EntityFormObject
      *
      * @param IEntity $entity
      *
-     * @return string
+     * @return void
      */
     protected function populateEntityWithForm(IEntity $entity)
     {

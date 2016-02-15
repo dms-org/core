@@ -17,7 +17,6 @@ class ForeignKeyModeTest extends CmsTestCase
         $this->assertTrue(ForeignKeyMode::isValid(ForeignKeyMode::SET_NULL));
         $this->assertTrue(ForeignKeyMode::isValid(ForeignKeyMode::DO_NOTHING));
 
-        $this->assertFalse(ForeignKeyMode::isValid(null));
         $this->assertFalse(ForeignKeyMode::isValid('foobar'));
     }
 
@@ -26,10 +25,6 @@ class ForeignKeyModeTest extends CmsTestCase
         ForeignKeyMode::validate(ForeignKeyMode::CASCADE);
         ForeignKeyMode::validate(ForeignKeyMode::SET_NULL);
         ForeignKeyMode::validate(ForeignKeyMode::DO_NOTHING);
-
-        $this->assertThrows(function () {
-            ForeignKeyMode::validate(null);
-        }, InvalidArgumentException::class);
 
         $this->assertThrows(function () {
             ForeignKeyMode::validate('foobar');

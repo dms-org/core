@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Widget;
 
@@ -25,7 +25,7 @@ abstract class Widget implements IWidget
      * @param string $name
      * @param string $label
      */
-    public function __construct($name, $label)
+    public function __construct(string $name, string $label)
     {
         $this->name  = $name;
         $this->label = $label;
@@ -34,7 +34,7 @@ abstract class Widget implements IWidget
     /**
      * @return string
      */
-    final public function getName()
+    final public function getName() : string
     {
         return $this->name;
     }
@@ -42,7 +42,7 @@ abstract class Widget implements IWidget
     /**
      * @return string
      */
-    final public function getLabel()
+    final public function getLabel() : string
     {
         return $this->label;
     }

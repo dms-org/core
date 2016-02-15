@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Mapping\Relation\Embedded;
 
@@ -40,7 +40,7 @@ class EmbeddedObjectRelation extends EmbeddedRelation implements IEmbeddedToOneR
      * @param IEmbeddedObjectMapper $mapper
      * @param string|null           $objectIssetColumnName
      */
-    public function __construct($idString, IEmbeddedObjectMapper $mapper, $objectIssetColumnName = null)
+    public function __construct(string $idString, IEmbeddedObjectMapper $mapper, string $objectIssetColumnName = null)
     {
         $mapper->initializeRelations();
 
@@ -95,7 +95,7 @@ class EmbeddedObjectRelation extends EmbeddedRelation implements IEmbeddedToOneR
     /**
      * @inheritDoc
      */
-    final public function withEmbeddedColumnsPrefixedBy($prefix)
+    final public function withEmbeddedColumnsPrefixedBy(string $prefix)
     {
         return new self(
                 $this->idString,
@@ -172,7 +172,7 @@ class EmbeddedObjectRelation extends EmbeddedRelation implements IEmbeddedToOneR
      *
      * @return array
      */
-    protected function getDataFromMap(ParentChildMap $map)
+    protected function getDataFromMap(ParentChildMap $map) : array
     {
         /** @var Row[] $parentRows */
         $parentRows = [];

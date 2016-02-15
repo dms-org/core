@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Criteria;
 
@@ -71,7 +71,7 @@ class MemberExpressionMapper
      * @return MemberMapping
      * @throws MemberExpressionMappingException
      */
-    public function mapMemberExpression(NestedMember $member)
+    public function mapMemberExpression(NestedMember $member) : MemberMapping
     {
         try {
             $nestedRelations = $this->mapMemberExpressionsToRelations(
@@ -121,7 +121,7 @@ class MemberExpressionMapper
      * @return MemberMapping
      * @throws InvalidArgumentException
      */
-    protected function mapFinalMember(IObjectMapper $mapper, array $nestedRelations, IMemberExpression $lastPart)
+    protected function mapFinalMember(IObjectMapper $mapper, array $nestedRelations, IMemberExpression $lastPart) : MemberMapping
     {
         switch (true) {
             case $lastPart instanceof SelfExpression:
@@ -162,7 +162,7 @@ class MemberExpressionMapper
      *
      * @return IEntityMapper
      */
-    protected function getFinalEntityMapper(array $nestedRelations)
+    protected function getFinalEntityMapper(array $nestedRelations) : IEntityMapper
     {
         $entityMapper = null;
 
@@ -210,7 +210,7 @@ class MemberExpressionMapper
      *
      * @return MemberMapping
      */
-    protected function mapFinalRelationToMapping(array $nestedRelations, $lastRelation)
+    protected function mapFinalRelationToMapping(array $nestedRelations, IRelation $lastRelation) : MemberMapping
     {
         if ($lastRelation instanceof IToManyRelation) {
             return new ToManyRelationMapping($this->rootEntityMapper, $nestedRelations, $lastRelation);
@@ -239,7 +239,7 @@ class MemberExpressionMapper
             array $nestedRelations,
             IToManyRelation $lastRelation,
             ObjectSetAggregateMethodExpression $lastPart
-    ) {
+    ) : MemberMapping {
         switch (true) {
             case $lastPart instanceof ObjectSetAverageMethodExpression:
                 $aggregateType = SimpleAggregate::AVG;
@@ -286,7 +286,7 @@ class MemberExpressionMapper
      * @throws BaseException
      * @throws InvalidArgumentException
      */
-    protected function mapMemberExpressionsToRelations(IObjectMapper $mapper, array $memberExpressions, &$finalMapper = null)
+    protected function mapMemberExpressionsToRelations(IObjectMapper $mapper, array $memberExpressions, IObjectMapper &$finalMapper = null) : array
     {
         $nestedRelations = [];
 
@@ -324,7 +324,7 @@ class MemberExpressionMapper
      * @return IRelation[]
      * @throws InvalidArgumentException
      */
-    protected function mapLoadExpressionToRelations(IObjectMapper $mapper, LoadIdFromEntitySetMethodExpression $part, &$finalMapper = null)
+    protected function mapLoadExpressionToRelations(IObjectMapper $mapper, LoadIdFromEntitySetMethodExpression $part, IObjectMapper &$finalMapper = null) : array
     {
         /** @var EntityRelation $relationToLoadAsObject */
         $innerRelations         = $this->mapMemberExpressionsToRelations($mapper, $part->getIdMember()->getParts(), $finalMapper);
@@ -343,7 +343,7 @@ class MemberExpressionMapper
      * @return IRelation
      * @throws BaseException
      */
-    private function mapPropertyToRelation(IObjectMapper $mapper, MemberPropertyExpression $part)
+    private function mapPropertyToRelation(IObjectMapper $mapper, MemberPropertyExpression $part) : IRelation
     {
         $definition = $mapper->getDefinition();
 
@@ -366,7 +366,7 @@ class MemberExpressionMapper
      *
      * @return MemberMapping
      */
-    protected function mapFinalSelfRelation(IEntityMapper $mapper)
+    protected function mapFinalSelfRelation(IEntityMapper $mapper) : MemberMapping
     {
         return $this->mapFinalRelationToMapping(
                 [],

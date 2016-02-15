@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Model;
 
@@ -19,23 +19,23 @@ class EntityCollection extends ObjectCollection implements IEntityCollection
     protected $identityMap;
 
     /**
-     * @param string               $entityType
-     * @param IEntity[]            $entities
-     * @param IIteratorScheme|null $scheme
-     * @param Collection|null      $source
+     * @param string                 $entityType
+     * @param \Traversable|IEntity[] $entities
+     * @param IIteratorScheme|null   $scheme
+     * @param Collection|null        $source
      *
      * @throws Exception\InvalidArgumentException
      */
     public function __construct(
-            $entityType,
-            $entities = [],
-            IIteratorScheme $scheme = null,
-            Collection $source = null
+        string $entityType,
+        $entities = [],
+        IIteratorScheme $scheme = null,
+        Collection $source = null
     ) {
         if (!is_a($entityType, IEntity::class, true)) {
             throw Exception\InvalidArgumentException::format(
-                    'Invalid entity class: expecting instance of %s, %s given',
-                    IEntity::class, $entityType
+                'Invalid entity class: expecting instance of %s, %s given',
+                IEntity::class, $entityType
             );
         }
 
@@ -73,7 +73,7 @@ class EntityCollection extends ObjectCollection implements IEntityCollection
     /**
      * {@inheritDoc}
      */
-    public function getEntityType()
+    public function getEntityType() : string
     {
         return $this->elementType->getClass();
     }
@@ -85,7 +85,7 @@ class EntityCollection extends ObjectCollection implements IEntityCollection
      *
      * @return bool
      */
-    protected function doesContainsObjects(array $objects)
+    protected function doesContainsObjects(array $objects) : bool
     {
         $this->toOrderedMap();
 
@@ -111,7 +111,7 @@ class EntityCollection extends ObjectCollection implements IEntityCollection
     /**
      * {@inheritDoc}
      */
-    public function has($id)
+    public function has(int $id) : bool
     {
         $this->toOrderedMap();
 
@@ -121,7 +121,7 @@ class EntityCollection extends ObjectCollection implements IEntityCollection
     /**
      * {@inheritDoc}
      */
-    public function hasAll(array $ids)
+    public function hasAll(array $ids) : bool
     {
         $this->toOrderedMap();
 
@@ -137,7 +137,7 @@ class EntityCollection extends ObjectCollection implements IEntityCollection
     /**
      * {@inheritDoc}
      */
-    public function get($id)
+    public function get(int $id) : IEntity
     {
         $this->toOrderedMap();
 
@@ -151,7 +151,7 @@ class EntityCollection extends ObjectCollection implements IEntityCollection
     /**
      * {@inheritDoc}
      */
-    public function getAllById(array $ids)
+    public function getAllById(array $ids) : array
     {
         $this->toOrderedMap();
 
@@ -170,7 +170,7 @@ class EntityCollection extends ObjectCollection implements IEntityCollection
     /**
      * {@inheritDoc}
      */
-    public function tryGet($id)
+    public function tryGet(int $id)
     {
         $this->toOrderedMap();
 
@@ -180,7 +180,7 @@ class EntityCollection extends ObjectCollection implements IEntityCollection
     /**
      * {@inheritDoc}
      */
-    public function tryGetAll(array $ids)
+    public function tryGetAll(array $ids) : array
     {
         $this->toOrderedMap();
 

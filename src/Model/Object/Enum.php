@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Model\Object;
 
@@ -69,7 +69,7 @@ abstract class Enum extends TypedObject implements IHashable
     /**
      * @inheritDoc
      */
-    final public function getObjectHash()
+    final public function getObjectHash() : string
     {
         return is_scalar($this->value)
                 ? (string)$this->value
@@ -99,7 +99,7 @@ abstract class Enum extends TypedObject implements IHashable
     /**
      * @return IType
      */
-    final public static function getEnumType()
+    final public static function getEnumType() : \Dms\Core\Model\Type\IType
     {
         return static::definition()->getPropertyType('value');
     }
@@ -109,7 +109,7 @@ abstract class Enum extends TypedObject implements IHashable
      *
      * @return array
      */
-    final public static function getOptions()
+    final public static function getOptions() : array
     {
         return static::loadEnumConstants();
     }
@@ -119,7 +119,7 @@ abstract class Enum extends TypedObject implements IHashable
      *
      * @return static[]
      */
-    final public static function getAll()
+    final public static function getAll() : array
     {
         $enums = [];
 
@@ -134,11 +134,11 @@ abstract class Enum extends TypedObject implements IHashable
      * Returns whether the supplied enum is a valid option
      * for the called enum class.
      *
-     * @param string $value
+     * @param mixed $value
      *
      * @return bool
      */
-    final public static function isValid($value)
+    final public static function isValid($value) : bool
     {
         $constants = static::loadEnumConstants();
 
@@ -164,7 +164,7 @@ abstract class Enum extends TypedObject implements IHashable
      *
      * @return bool
      */
-    final public function is($value)
+    final public function is($value) : bool
     {
         return $this == $value || $this->value === $value;
     }

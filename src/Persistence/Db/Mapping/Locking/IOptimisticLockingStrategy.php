@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Mapping\Locking;
 
@@ -16,7 +16,7 @@ interface IOptimisticLockingStrategy
     /**
      * @return string[]
      */
-    public function getLockingColumnNames();
+    public function getLockingColumnNames() : array;
 
     /**
      * @param PersistenceContext $context
@@ -41,5 +41,5 @@ interface IOptimisticLockingStrategy
      *
      * @return static
      */
-    public function withColumnNamesPrefixedBy($prefix);
+    public function withColumnNamesPrefixedBy(string $prefix);
 }

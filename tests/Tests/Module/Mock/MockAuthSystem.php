@@ -46,7 +46,7 @@ class MockAuthSystem implements IAuthSystem
      * @throws InvalidCredentialsException
      * @throws UserBannedException
      */
-    public function login($username, $password)
+    public function login(string $username, string $password)
     {
 
     }
@@ -73,7 +73,7 @@ class MockAuthSystem implements IAuthSystem
      * @throws InvalidCredentialsException
      * @throws UserBannedException
      */
-    public function resetPassword($username, $oldPassword, $newPassword)
+    public function resetPassword(string $username, string $oldPassword, string $newPassword)
     {
 
     }
@@ -83,7 +83,7 @@ class MockAuthSystem implements IAuthSystem
      *
      * @return boolean
      */
-    public function isAuthenticated()
+    public function isAuthenticated() : bool
     {
         return true;
     }
@@ -94,7 +94,7 @@ class MockAuthSystem implements IAuthSystem
      * @return IUser
      * @throws UserNotAuthenticatedException
      */
-    public function getAuthenticatedUser()
+    public function getAuthenticatedUser() : IUser
     {
         return $this->mockUser;
     }
@@ -107,7 +107,7 @@ class MockAuthSystem implements IAuthSystem
      *
      * @return boolean
      */
-    public function isAuthorized(array $permissions)
+    public function isAuthorized(array $permissions) : bool
     {
         return $this->authorized;
     }
@@ -117,7 +117,7 @@ class MockAuthSystem implements IAuthSystem
      *
      * @return void
      */
-    public function setIsAuthorized($flag)
+    public function setIsAuthorized(bool $flag)
     {
         $this->authorized = $flag;
     }

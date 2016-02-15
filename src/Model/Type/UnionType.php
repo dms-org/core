@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Model\Type;
 
@@ -38,7 +38,7 @@ class UnionType extends BaseType
      *
      * @return IType
      */
-    public static function create(array $types)
+    public static function create(array $types) : IType
     {
         InvalidArgumentException::verifyAllInstanceOf(__METHOD__, 'types', $types, IType::class);
 
@@ -95,7 +95,7 @@ class UnionType extends BaseType
     /**
      * @inheritDoc
      */
-    protected function loadValidOperatorTypes()
+    protected function loadValidOperatorTypes() : array
     {
         $operatorTypes = parent::loadValidOperatorTypes();
         $types         = $this->types;
@@ -139,7 +139,7 @@ class UnionType extends BaseType
      *
      * @return bool
      */
-    public function hasUnionedType(IType $type)
+    public function hasUnionedType(IType $type) : bool
     {
         return isset($this->types[$type->asTypeString()]);
     }
@@ -149,7 +149,7 @@ class UnionType extends BaseType
      *
      * @return IType[]
      */
-    public function getTypes()
+    public function getTypes() : array
     {
         return $this->types;
     }
@@ -157,7 +157,7 @@ class UnionType extends BaseType
     /**
      * {@inheritDoc}
      */
-    public function isOfType($value)
+    public function isOfType($value) : bool
     {
         foreach ($this->types as $type) {
             if ($type->isOfType($value)) {

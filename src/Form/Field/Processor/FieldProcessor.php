@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Form\Field\Processor;
 
@@ -30,7 +30,7 @@ abstract class FieldProcessor implements IFieldProcessor
     /**
      * {@inheritDoc}
      */
-    final public function getProcessedType()
+    final public function getProcessedType() : \Dms\Core\Model\Type\IType
     {
         return $this->processedType;
     }

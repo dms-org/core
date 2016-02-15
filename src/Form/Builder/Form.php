@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Form\Builder;
 
@@ -64,7 +64,7 @@ class Form
     /**
      * @return IForm
      */
-    final public function build()
+    final public function build() : \Dms\Core\Form\IForm
     {
         return new ActualForm($this->sections, $this->processors);
     }
@@ -76,7 +76,7 @@ class Form
      * @return static
      * @throws ConflictingFieldNameException
      */
-    public function section($title, array $fields)
+    public function section(string $title, array $fields)
     {
         $fields = $this->buildAllFields($fields);
 
@@ -160,7 +160,7 @@ class Form
      * @return static
      * @throws InvalidArgumentException If the fields dont exist
      */
-    public function fieldsMatch($fieldName, $otherFieldName)
+    public function fieldsMatch(string $fieldName, string $otherFieldName)
     {
         $this->validateFieldsExist(__METHOD__, $fieldName, $otherFieldName);
 
@@ -176,7 +176,7 @@ class Form
      * @return static
      * @throws InvalidArgumentException If the fields dont exist
      */
-    public function fieldLessThanAnother($fieldName, $otherFieldName)
+    public function fieldLessThanAnother(string $fieldName, string $otherFieldName)
     {
         $this->validateFieldsExist(__METHOD__, $fieldName, $otherFieldName);
 
@@ -192,7 +192,7 @@ class Form
      * @return static
      * @throws InvalidArgumentException If the fields dont exist
      */
-    public function fieldLessThanOrEqualAnother($fieldName, $otherFieldName)
+    public function fieldLessThanOrEqualAnother(string $fieldName, string $otherFieldName)
     {
         $this->validateFieldsExist(__METHOD__, $fieldName, $otherFieldName);
 
@@ -208,7 +208,7 @@ class Form
      * @return static
      * @throws InvalidArgumentException If the fields dont exist
      */
-    public function fieldGreaterThanAnother($fieldName, $otherFieldName)
+    public function fieldGreaterThanAnother(string $fieldName, string $otherFieldName)
     {
         $this->validateFieldsExist(__METHOD__, $fieldName, $otherFieldName);
 
@@ -224,7 +224,7 @@ class Form
      * @return static
      * @throws InvalidArgumentException If the fields dont exist
      */
-    public function fieldGreaterThanOrEqualAnother($fieldName, $otherFieldName)
+    public function fieldGreaterThanOrEqualAnother(string $fieldName, string $otherFieldName)
     {
         $this->validateFieldsExist(__METHOD__, $fieldName, $otherFieldName);
 
@@ -238,7 +238,7 @@ class Form
      *
      * @throws InvalidArgumentException
      */
-    protected function validateFieldsExist($method, $fieldName, $otherFieldName)
+    protected function validateFieldsExist(string $method, string $fieldName, string $otherFieldName)
     {
         foreach ([$fieldName, $otherFieldName] as $name) {
             if (!isset($this->fields[$fieldName])) {
@@ -257,7 +257,7 @@ class Form
      *
      * @return static
      */
-    public function assert(callable $validation, $messageId = null, array $parameters = [])
+    public function assert(callable $validation, string $messageId = null, array $parameters = [])
     {
         return $this->validate(new CustomFormValidator($validation, $messageId, $parameters));
     }
@@ -280,7 +280,7 @@ class Form
      *
      * @return IField[]
      */
-    protected function buildAllFields(array $fields)
+    protected function buildAllFields(array $fields) : array
     {
         foreach ($fields as $key => $field) {
             if ($field instanceof FieldBuilderBase) {

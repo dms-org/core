@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Language;
 
@@ -28,7 +28,7 @@ class Message
     /**
      * @return string
      */
-    public function getId()
+    public function getId() : string
     {
         return $this->id;
     }
@@ -36,7 +36,7 @@ class Message
     /**
      * @return string[]
      */
-    public function getParameters()
+    public function getParameters() : array
     {
         return $this->parameters;
     }
@@ -46,7 +46,7 @@ class Message
      *
      * @return Message
      */
-    public function withParameters(array $parameters)
+    public function withParameters(array $parameters) : Message
     {
         return new self($this->id, $parameters + $this->parameters);
     }

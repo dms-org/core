@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Model\Criteria\Member;
 
@@ -32,7 +32,7 @@ abstract class MemberExpression implements IMemberExpression
      * @param IType  $resultType
      * @param string $expressionString
      */
-    public function __construct(IType $sourceType, IType $resultType, $expressionString)
+    public function __construct(IType $sourceType, IType $resultType, string $expressionString)
     {
         $this->sourceType = $sourceType;
 
@@ -46,7 +46,7 @@ abstract class MemberExpression implements IMemberExpression
     /**
      * @inheritDoc
      */
-    public function getSourceType()
+    public function getSourceType() : \Dms\Core\Model\Type\IType
     {
         return $this->sourceType;
     }
@@ -54,7 +54,7 @@ abstract class MemberExpression implements IMemberExpression
     /**
      * @inheritDoc
      */
-    public function getResultingType()
+    public function getResultingType() : \Dms\Core\Model\Type\IType
     {
         return $this->resultType;
     }
@@ -62,7 +62,7 @@ abstract class MemberExpression implements IMemberExpression
     /**
      * @inheritDoc
      */
-    public function asString()
+    public function asString() : string
     {
         return $this->expressionString;
     }
@@ -70,7 +70,7 @@ abstract class MemberExpression implements IMemberExpression
     /**
      * @inheritDoc
      */
-    public function createGetterCallable()
+    public function createGetterCallable() : callable
     {
         $arrayGetter = $this->createArrayGetterCallable();
 

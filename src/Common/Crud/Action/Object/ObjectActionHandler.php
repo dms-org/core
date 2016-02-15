@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Common\Crud\Action\Object;
 
@@ -29,7 +29,7 @@ abstract class ObjectActionHandler extends ParameterizedActionHandlerBase implem
      * @param string|null $dataType
      * @param string|null $returnType
      */
-    public function __construct($objectType, $dataType, $returnType = null)
+    public function __construct(string $objectType, $dataType, string $returnType = null)
     {
         parent::__construct(ObjectActionParameter::class, $returnType);
 
@@ -40,7 +40,7 @@ abstract class ObjectActionHandler extends ParameterizedActionHandlerBase implem
     /**
      * @inheritDoc
      */
-    final public function getObjectType()
+    final public function getObjectType() : string
     {
         return $this->objectType;
     }
@@ -48,7 +48,7 @@ abstract class ObjectActionHandler extends ParameterizedActionHandlerBase implem
     /**
      * @inheritDoc
      */
-    final public function hasDataDtoType()
+    final public function hasDataDtoType() : bool
     {
         return $this->dataDtoType !== null;
     }

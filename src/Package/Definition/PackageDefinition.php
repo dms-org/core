@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Package\Definition;
 
@@ -40,7 +40,7 @@ class PackageDefinition
      *
      * @return void
      */
-    public function name($name)
+    public function name(string $name)
     {
         $this->name = $name;
     }
@@ -58,7 +58,7 @@ class PackageDefinition
      *
      * @return DashboardWidgetDefiner
      */
-    public function dashboard()
+    public function dashboard() : DashboardWidgetDefiner
     {
         return new DashboardWidgetDefiner(function (array $widgetNames) {
             $this->dashboardWidgetNames = array_merge($this->dashboardWidgetNames, $widgetNames);
@@ -88,7 +88,7 @@ class PackageDefinition
      * @return FinalizedPackageDefinition
      * @throws InvalidOperationException
      */
-    public function finalize()
+    public function finalize() : FinalizedPackageDefinition
     {
         if (!$this->name) {
             throw InvalidOperationException::format(

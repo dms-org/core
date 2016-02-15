@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Mapping\Definition\Relation;
 
@@ -36,7 +36,7 @@ abstract class RelationMapping
     /**
      * @return IAccessor
      */
-    public function getAccessor()
+    public function getAccessor() : IAccessor
     {
         return $this->accessor;
     }
@@ -44,7 +44,7 @@ abstract class RelationMapping
     /**
      * @return IRelation
      */
-    public function getRelation()
+    public function getRelation() : \Dms\Core\Persistence\Db\Mapping\Relation\IRelation
     {
         return $this->relation;
     }
@@ -54,7 +54,7 @@ abstract class RelationMapping
      *
      * @return static
      */
-    public function withEmbeddedColumnsPrefixedBy($prefix)
+    public function withEmbeddedColumnsPrefixedBy(string $prefix)
     {
         $clone = clone $this;
 

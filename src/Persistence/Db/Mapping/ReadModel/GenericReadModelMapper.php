@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Mapping\ReadModel;
 
@@ -31,7 +31,7 @@ abstract class GenericReadModelMapper
      *
      * @return ReadModelMapper
      */
-    final public function loadMapperFor(IObjectMapper $sourceObjectMapper)
+    final public function loadMapperFor(IObjectMapper $sourceObjectMapper) : ReadModelMapper
     {
         $map = new ReadMapperDefinition($sourceObjectMapper->getDefinition()->getOrm());
         $map->from($sourceObjectMapper);

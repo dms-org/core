@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Form\Field\Processor\Validator;
 
@@ -32,7 +32,7 @@ class TypeValidator extends FieldValidator
     /**
      * @inheritDoc
      */
-    public function getProcessedType()
+    public function getProcessedType() : \Dms\Core\Model\Type\IType
     {
         return $this->expectedType;
     }

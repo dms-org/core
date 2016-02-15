@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Form;
 
@@ -68,7 +68,7 @@ class Form implements IForm
     /**
      * {@inheritDoc}
      */
-    final public function getSections()
+    final public function getSections() : array
     {
         return $this->sections;
     }
@@ -76,7 +76,7 @@ class Form implements IForm
     /**
      * {@inheritDoc}
      */
-    final public function getProcessors()
+    final public function getProcessors() : array
     {
         return $this->processors;
     }
@@ -84,7 +84,7 @@ class Form implements IForm
     /**
      * {@inheritdoc}
      */
-    final public function getFields()
+    final public function getFields() : array
     {
         return $this->fields;
     }
@@ -92,7 +92,7 @@ class Form implements IForm
     /**
      * {@inheritdoc}
      */
-    final public function getFieldNames()
+    final public function getFieldNames() : array
     {
         return array_keys($this->fields);
     }
@@ -100,7 +100,7 @@ class Form implements IForm
     /**
      * {@inheritdoc}
      */
-    final public function hasField($fieldName)
+    final public function hasField(string $fieldName) : bool
     {
         return isset($this->fields[$fieldName]);
     }
@@ -108,7 +108,7 @@ class Form implements IForm
     /**
      * {@inheritdoc}
      */
-    final public function getField($fieldName)
+    final public function getField(string $fieldName) : IField
     {
         if (!isset($this->fields[$fieldName])) {
             throw InvalidArgumentException::format(
@@ -123,7 +123,7 @@ class Form implements IForm
     /**
      * {@inheritDoc}
      */
-    final public function asStagedForm()
+    final public function asStagedForm() : IStagedForm
     {
         return new StagedForm(new IndependentFormStage($this), []);
     }
@@ -131,7 +131,7 @@ class Form implements IForm
     /**
      * {@inheritDoc}
      */
-    final public function getInitialValues()
+    final public function getInitialValues() : array
     {
         return $this->initialValues;
     }
@@ -139,7 +139,7 @@ class Form implements IForm
     /**
      * {@inheritDoc}
      */
-    public function process(array $submission)
+    public function process(array $submission) : array
     {
         $processed                   = [];
         $invalidInputExceptions      = [];
@@ -212,7 +212,7 @@ class Form implements IForm
     /**
      * {@inheritDoc}
      */
-    public function unprocess(array $processedSubmission)
+    public function unprocess(array $processedSubmission) : array
     {
         $this->validateProcessedValues($processedSubmission);
 
@@ -235,7 +235,7 @@ class Form implements IForm
     /**
      * @inheritDoc
      */
-    public function withInitialValues(array $initialProcessedValues)
+    public function withInitialValues(array $initialProcessedValues) : IForm
     {
         $newFields = [];
 
@@ -267,7 +267,7 @@ class Form implements IForm
     /**
      * @inheritDoc
      */
-    public function withFieldNames(array $fieldNameMap)
+    public function withFieldNames(array $fieldNameMap) : IForm
     {
         $newSections   = [];
         $newProcessors = [];

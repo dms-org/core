@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Table\Criteria;
 
@@ -51,7 +51,7 @@ class ColumnCondition extends ColumnCriterion
     /**
      * @return IColumnComponentOperator
      */
-    public function getOperator()
+    public function getOperator() : \Dms\Core\Table\IColumnComponentOperator
     {
         return $this->operator;
     }
@@ -67,7 +67,7 @@ class ColumnCondition extends ColumnCriterion
     /**
      * @return callable
      */
-    public function makeRowFilterCallable()
+    public function makeRowFilterCallable() : callable
     {
         $value = $this->value;
 

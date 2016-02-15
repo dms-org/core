@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Model\Criteria\Condition;
 
@@ -30,7 +30,7 @@ class MemberCondition extends OperatorCondition
      * @throws InvalidArgumentException
      * @throws TypeMismatchException
      */
-    final public function __construct(NestedMember $member, $conditionOperator, $value)
+    final public function __construct(NestedMember $member, string $conditionOperator, $value)
     {
         $this->member = $member;
         parent::__construct($member->getResultingType(), $conditionOperator, $value);
@@ -39,7 +39,7 @@ class MemberCondition extends OperatorCondition
     /**
      * @return string
      */
-    protected function debugExpressionString()
+    protected function debugExpressionString() : string
     {
         return sprintf('member \'%s\'', $this->member->asString());
     }
@@ -47,7 +47,7 @@ class MemberCondition extends OperatorCondition
     /**
      * @return NestedMember
      */
-    final public function getNestedMember()
+    final public function getNestedMember() : \Dms\Core\Model\Criteria\NestedMember
     {
         return $this->member;
     }
@@ -55,7 +55,7 @@ class MemberCondition extends OperatorCondition
     /**
      * @return callable
      */
-    protected function makeArrayGetterCallback()
+    protected function makeArrayGetterCallback() : callable
     {
         return $this->member->makeArrayGetterCallable();
     }

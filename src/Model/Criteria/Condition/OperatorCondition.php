@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Model\Criteria\Condition;
 
@@ -35,7 +35,7 @@ abstract class OperatorCondition extends Condition
      * @throws InvalidArgumentException
      * @throws TypeMismatchException
      */
-    public function __construct(IType $expressionType, $conditionOperator, $value)
+    public function __construct(IType $expressionType, string $conditionOperator, $value)
     {
         $operators = $expressionType->getConditionOperatorTypes();
 
@@ -75,12 +75,12 @@ abstract class OperatorCondition extends Condition
     /**
      * @return string
      */
-    abstract protected function debugExpressionString();
+    abstract protected function debugExpressionString() : string;
 
     /**
      * @return string
      */
-    final public function getOperator()
+    final public function getOperator() : string
     {
         return $this->conditionOperator;
     }
@@ -96,9 +96,9 @@ abstract class OperatorCondition extends Condition
     /**
      * @return callable
      */
-    abstract protected function makeArrayGetterCallback();
+    abstract protected function makeArrayGetterCallback() : callable;
 
-    protected function makeArrayFilterCallable()
+    protected function makeArrayFilterCallable() : callable
     {
         $getter = $this->makeArrayGetterCallback();
         $value  = $this->value;

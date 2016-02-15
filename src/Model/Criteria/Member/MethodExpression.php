@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Model\Criteria\Member;
 
@@ -29,7 +29,7 @@ abstract class MethodExpression extends MemberExpression
      * @param string[] $arguments
      * @param IType    $returnType
      */
-    public function __construct(IType $sourceType, $name, array $arguments, IType $returnType)
+    public function __construct(IType $sourceType, string $name, array $arguments, IType $returnType)
     {
         $expressionString = $name . '(' . implode(',', $arguments) . ')';
 
@@ -48,7 +48,7 @@ abstract class MethodExpression extends MemberExpression
     /**
      * @return string
      */
-    public function getName()
+    public function getName() : string
     {
         return $this->name;
     }
@@ -56,7 +56,7 @@ abstract class MethodExpression extends MemberExpression
     /**
      * @return string[]
      */
-    public function getArguments()
+    public function getArguments() : array
     {
         return $this->arguments;
     }

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Form\Field\Processor;
 
@@ -23,7 +23,7 @@ class EnumProcessor extends FieldProcessor
      *
      * @throws InvalidArgumentException
      */
-    public function __construct($enumClass)
+    public function __construct(string $enumClass)
     {
         parent::__construct(new ObjectType($enumClass));
 

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 namespace Dms\Core\Form;
 
 /**
@@ -20,5 +20,5 @@ interface IFieldOption
      *
      * @return string
      */
-    public function getLabel();
+    public function getLabel() : string;
 }

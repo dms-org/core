@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Form\Field\Builder;
 
@@ -64,7 +64,7 @@ abstract class FieldBuilderBase
      *
      * @return ActualField
      */
-    public function build()
+    public function build() : \Dms\Core\Form\Field\Field
     {
         return new ActualField(
                 $this->name,
@@ -121,7 +121,7 @@ abstract class FieldBuilderBase
      * @return static
      * @throws InvalidOperationException
      */
-    public function attr($typeAttribute, $value)
+    public function attr(string $typeAttribute, $value)
     {
         $this->attributes[$typeAttribute] = $value;
 
@@ -208,7 +208,7 @@ abstract class FieldBuilderBase
      *
      * @return static
      */
-    public function uniqueIn(IObjectSet $objects, $propertyName)
+    public function uniqueIn(IObjectSet $objects, string $propertyName)
     {
         return $this->validate(new UniquePropertyValidator($this->getCurrentProcessedType(__FUNCTION__), $objects, $propertyName));
     }
@@ -262,7 +262,7 @@ abstract class FieldBuilderBase
      *
      * @return static
      */
-    public function assert(callable $validation, $messageId = null, array $parameters = [])
+    public function assert(callable $validation, string $messageId = null, array $parameters = [])
     {
         return $this->validate(new CustomValidator($this->getCurrentProcessedType(__FUNCTION__), $validation, $messageId, $parameters));
     }
@@ -294,7 +294,7 @@ abstract class FieldBuilderBase
      * @return IType
      * @throws InvalidOperationException
      */
-    protected function getCurrentProcessedType($function = __FUNCTION__)
+    protected function getCurrentProcessedType(string $function = __FUNCTION__) : \Dms\Core\Model\Type\IType
     {
         /** @var IFieldProcessor|null $processor */
         $processor = end($this->processors);

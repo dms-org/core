@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Mapping\Hierarchy;
 
@@ -91,7 +91,7 @@ class JoinedSubClassObjectMapping extends SubClassObjectMapping
     /**
      * {@inheritDoc}
      */
-    public function withEmbeddedColumnsPrefixedBy($prefix)
+    public function withEmbeddedColumnsPrefixedBy(string $prefix)
     {
         $clone = parent::withEmbeddedColumnsPrefixedBy($prefix);
 
@@ -115,7 +115,7 @@ class JoinedSubClassObjectMapping extends SubClassObjectMapping
     /**
      * {@inheritdoc}
      */
-    public function rowMatchesObjectType(Row $row)
+    public function rowMatchesObjectType(Row $row) : bool
     {
         return $row->getColumn($this->classTablePrefix . $this->classTablePrimaryKeyName) !== null;
     }
@@ -123,7 +123,7 @@ class JoinedSubClassObjectMapping extends SubClassObjectMapping
     /**
      * {@inheritdoc}
      */
-    public function makeClassConditionExpr(Query $query)
+    public function makeClassConditionExpr(Query $query) : \Dms\Core\Persistence\Db\Query\Expression\Expr
     {
         // TODO: verify alias safe
         return Expr::isNotNull(
@@ -134,7 +134,7 @@ class JoinedSubClassObjectMapping extends SubClassObjectMapping
     /**
      * {@inheritdoc}
      */
-    public function addSpecificLoadToQuery(Query $query, $objectType)
+    public function addSpecificLoadToQuery(Query $query, string $objectType)
     {
         // To only load these classes we can just perform an
         // inner join which will only load rows with the correct
@@ -159,7 +159,7 @@ class JoinedSubClassObjectMapping extends SubClassObjectMapping
     /**
      * {@inheritdoc}
      */
-    protected function addLoadClausesToSelect(Select $select, $parentAlias)
+    protected function addLoadClausesToSelect(Select $select, string $parentAlias) : string
     {
         $joinAlias = $select->generateUniqueAliasFor($this->classTable->getName());
 
@@ -193,7 +193,7 @@ class JoinedSubClassObjectMapping extends SubClassObjectMapping
      *
      * @return \Dms\Core\Persistence\Db\Query\Expression\BinOp
      */
-    protected function foreignKeyCondition($parentAlias, $classTableAlias)
+    protected function foreignKeyCondition(string $parentAlias, string $classTableAlias)
     {
         return Expr::equal(
                 Expr::column($parentAlias, $this->parentTable->getPrimaryKeyColumn()),

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Criteria;
 
@@ -79,7 +79,7 @@ class CriteriaMapper
     /**
      * @return IEntityMapper
      */
-    final public function getMapper()
+    final public function getMapper() : \Dms\Core\Persistence\Db\Mapping\IEntityMapper
     {
         return $this->mapper;
     }
@@ -95,7 +95,7 @@ class CriteriaMapper
     /**
      * @return MemberExpressionParser
      */
-    public function buildMemberExpressionParser()
+    public function buildMemberExpressionParser() : \Dms\Core\Model\Criteria\MemberExpressionParser
     {
         $orm = $this->definition->getOrm();
 
@@ -110,7 +110,7 @@ class CriteriaMapper
     /**
      * @return FinalizedClassDefinition
      */
-    final public function getMappedObjectType()
+    final public function getMappedObjectType() : \Dms\Core\Model\Object\FinalizedClassDefinition
     {
         return $this->mapper->getDefinition()->getClass();
     }
@@ -118,7 +118,7 @@ class CriteriaMapper
     /**
      * @return Criteria
      */
-    public function newCriteria()
+    public function newCriteria() : \Dms\Core\Model\Criteria\Criteria
     {
         $memberExpressionParser = $this->buildMemberExpressionParser();
 
@@ -135,7 +135,7 @@ class CriteriaMapper
      * @return Select
      * @throws InvalidArgumentException
      */
-    public function mapCriteriaToSelect(ICriteria $criteria, array &$memberMappings = null, array $extraRequiredMembers = [])
+    public function mapCriteriaToSelect(ICriteria $criteria, array &$memberMappings = null, array $extraRequiredMembers = []) : \Dms\Core\Persistence\Db\Query\Select
     {
         InvalidArgumentException::verifyAllInstanceOf(__METHOD__, 'extraRequiredMembers', $extraRequiredMembers, NestedMember::class);
         $criteria->verifyOfClass($this->getMappedObjectType()->getClassName());
@@ -184,7 +184,7 @@ class CriteriaMapper
      * @return MemberMappingWithTableAlias[]
      * @throws MemberExpressionMappingException
      */
-    private function mapAllRequiredMembersFor(ICriteria $criteria, $tableAlias, array $extraRequiredMembers)
+    private function mapAllRequiredMembersFor(ICriteria $criteria, string $tableAlias, array $extraRequiredMembers) : array
     {
         /** @var NestedMember[] $memberExpressions */
         $memberExpressions = [];
@@ -227,7 +227,7 @@ class CriteriaMapper
      *
      * @return MemberMappingWithTableAlias[]
      */
-    private function optimizeOneToOneRelationsAsLeftJoins(Select $select, array $memberMappings)
+    private function optimizeOneToOneRelationsAsLeftJoins(Select $select, array $memberMappings) : array
     {
         $joinedRelationTableAliasMap = [];
 
@@ -306,7 +306,7 @@ class CriteriaMapper
      * @return Expr
      * @throws InvalidArgumentException
      */
-    private function mapCondition(Condition $condition, Select $select, array $memberMappings)
+    private function mapCondition(Condition $condition, Select $select, array $memberMappings) : \Dms\Core\Persistence\Db\Query\Expression\Expr
     {
         /** @var MemberMappingWithTableAlias[] $memberMappings */
 
@@ -359,7 +359,7 @@ class CriteriaMapper
      *
      * @return Expr
      */
-    private function mapMemberCondition(MemberCondition $condition, Select $select, array $memberMappings)
+    private function mapMemberCondition(MemberCondition $condition, Select $select, array $memberMappings) : \Dms\Core\Persistence\Db\Query\Expression\Expr
     {
         $mapping = $memberMappings[$condition->getNestedMember()->asString()];
 
