@@ -6,6 +6,7 @@ use Dms\Core\Exception\InvalidArgumentException;
 use Dms\Core\Form\Builder\Form;
 use Dms\Core\Form\Field\Builder\Field;
 use Dms\Core\Form\IField;
+use Dms\Core\Form\InvalidFormSubmissionException;
 use Dms\Core\Form\IStagedForm;
 
 /**
@@ -230,54 +231,70 @@ class FormTest extends FormBuilderTestBase
     public function testValidateProcessedSubmission()
     {
         $form = Form::create()
-                ->section('Details', [
-                        Field::name('name')->label('Name')->string()->value('abc'),
-                        Field::name('foo')->label('Foo')->int()->required(),
-                        Field::name('bar')->label('Bar')->decimal()->value(10.0),
-                ])
-                ->build();
+            ->section('Details', [
+                Field::name('name')->label('Name')->string()->value('abc'),
+                Field::name('foo')->label('Foo')->int()->required(),
+                Field::name('bar')->label('Bar')->decimal()->value(10.0),
+            ])
+            ->build();
 
         $form->validateProcessedValues([
+            'name' => '123',
+            'foo' => 123,
+            'bar' => 0.0,
+        ]);
+
+        $form->validateProcessedValues([
+            'name' => 'aaaa',
+            'foo' => -343,
+            'bar' => 0.1,
+        ]);
+
+        $form->validateProcessedValues([
+            'name' => null,
+            'foo' => 0,
+            'bar' => null,
+        ]);
+
+        $this->assertThrows(function () use ($form) {
+            $form->validateProcessedValues([
+                'name' => '',
+                'foo' => null, // Wrong
+                'bar' => 11.0,
+            ]);
+        }, InvalidArgumentException::class);
+
+        $this->assertThrows(function () use ($form) {
+            $form->validateProcessedValues([
+                'name' => 100, // Wrong
+                'foo' => 1,
+                'bar' => 11.0,
+            ]);
+        }, InvalidArgumentException::class);
+
+        $this->assertThrows(function () use ($form) {
+            $form->validateProcessedValues([
                 'name' => '123',
                 'foo' => 123,
                 'bar' => 0.0,
-        ]);
-
-        $form->validateProcessedValues([
-                'name' => 'aaaa',
-                'foo' => -343,
-                'bar' => 0.1,
-        ]);
-
-        $form->validateProcessedValues([
-                'name' => null,
-                'foo' => 0,
-                'bar' => null,
-        ]);
-
-        $this->assertThrows(function () use ($form) {
-            $form->validateProcessedValues([
-                    'name' => '',
-                    'foo' => null, // Wrong
-                    'bar' => 11.0,
+                'non-existent' => true // Wrong
             ]);
         }, InvalidArgumentException::class);
+    }
 
-        $this->assertThrows(function () use ($form) {
-            $form->validateProcessedValues([
-                    'name' => 100, // Wrong
-                    'foo' => 1,
-                    'bar' => 11.0,
-            ]);
-        }, InvalidArgumentException::class);
-
-        $this->assertThrows(function () use ($form) {
-            $form->validateProcessedValues([
-                    'name' => '123',
-                    'foo' => 123,
-                    'bar' => 0.0,
-                    'non-existent' => true // Wrong
-            ]);
-        }, InvalidArgumentException::class);
+    public function testConstraintValidationAfterFailedFieldValidation()
+    {
+        $this->assertThrows(function () {
+            Form::create()->section('Section', [
+                Field::name('password')->label('Password')->string()->minLength(5)->required(),
+                Field::name('password_confirm')->label('Confirm Password')->string()->required(),
+            ])
+                ->fieldsMatch('password', 'password_confirm')
+                ->build()
+                ->process([
+                    'password'         => 'abc',
+                    'password_confirm' => '123ffddf',
+                ]);
+        }, InvalidFormSubmissionException::class);
     }
 }

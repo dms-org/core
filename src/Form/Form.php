@@ -148,6 +148,7 @@ class Form implements IForm
 
         foreach ($this->fields as $name => $field) {
             try {
+                $processed[$name] = null;
                 $processed[$name] = $field->process(isset($submission[$name]) ? $submission[$name] : null);
             } catch (InvalidInputException $e) {
                 $invalidInputExceptions[] = $e;
