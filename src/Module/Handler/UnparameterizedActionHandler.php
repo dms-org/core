@@ -39,7 +39,7 @@ abstract class UnparameterizedActionHandler extends ActionHandler implements IUn
     /**
      * Runs the action handler
      *
-     * @return IDataTransferObject|null
+     * @return object|null
      */
     abstract public function handle();
 }
