@@ -30,7 +30,7 @@ PHP;
     public static function generate(array $values) : string
     {
         $namespace = '__CustomDoctrineEnums';
-        $className = 'CustomEnum__' . implode('__', $values);
+        $className = 'CustomEnum__' . preg_replace('/[^a-zA-Z0-9_]/', '_', implode('__', $values));
 
         /** @var string|BaseEnumType $fullClassName */
         $fullClassName = $namespace . '\\' . $className;

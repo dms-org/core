@@ -27,4 +27,19 @@ class CustomEnumTypeGeneratorTest extends CmsTestCase
         $this->assertSame($typeName, CustomEnumTypeGenerator::generate(['a', 'b', 'c']));
         $this->assertNotEquals($typeName, CustomEnumTypeGenerator::generate(['abc']));
     }
+
+    public function testGenerateEnumWithOtherCharacters()
+    {
+        $typeName = CustomEnumTypeGenerator::generate(['a-b vsdvsd', 'c']);
+        /** @var BaseEnumType $type */
+        $type = Type::getType($typeName);
+
+        $this->assertSame('enum(a-b vsdvsd,c)', $typeName);
+        $this->assertInstanceOf(BaseEnumType::class, $type);
+        $this->assertSame('enum(a-b vsdvsd,c)', $type->getName());
+        $this->assertSame(['a-b vsdvsd', 'c'], $type->getValues());
+        $this->assertSame('ENUM(\'a-b vsdvsd\',\'c\')', $type->getSQLDeclaration([], new MySqlPlatform()));
+        $this->assertSame($typeName, CustomEnumTypeGenerator::generate(['a-b vsdvsd', 'c']));
+        $this->assertNotEquals($typeName, CustomEnumTypeGenerator::generate(['abc']));
+    }
 }
