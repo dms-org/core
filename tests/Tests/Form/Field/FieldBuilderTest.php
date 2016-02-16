@@ -200,6 +200,8 @@ class FieldBuilderTest extends FieldBuilderTestBase
         /** @var ArrayOfEntityIdsType $type */
         $type = $field->getType();
         $this->assertInstanceOf(ArrayOfEntityIdsType::class, $type);
+        $this->assertSame(true, $type->get(ArrayOfEntityIdsType::ATTR_UNIQUE_ELEMENTS));
+
         $this->assertInstanceOf(EntityIdType::class, $type->getElementType());
         $this->assertInstanceOf(EntityIdOptions::class, $type->getElementType()->getOptions());
         $this->assertSame($entities, $type->getElementType()->getOptions()->getEntities());
@@ -216,6 +218,8 @@ class FieldBuilderTest extends FieldBuilderTestBase
         /** @var ArrayOfEntityIdsType $type */
         $type = $field->getType();
         $this->assertInstanceOf(ArrayOfEntityIdsType::class, $type);
+        $this->assertSame(true, $type->get(ArrayOfEntityIdsType::ATTR_UNIQUE_ELEMENTS));
+
         $this->assertInstanceOf(EntityIdType::class, $type->getElementType());
         $this->assertInstanceOf(EntityIdOptions::class, $type->getElementType()->getOptions());
         $this->assertSame($entities, $type->getElementType()->getOptions()->getEntities());

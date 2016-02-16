@@ -11,6 +11,7 @@ use Dms\Core\Form\IField;
 use Dms\Core\Form\IFieldProcessor;
 use Dms\Core\Form\IFieldType;
 use Dms\Core\Model\Type\Builder\Type;
+use Dms\Core\Model\Type\IType;
 
 /**
  * The array type class.
@@ -42,7 +43,7 @@ class ArrayOfType extends FieldType
     /**
      * @return IFieldType
      */
-    public function getElementType() : \Dms\Core\Form\IFieldType
+    public function getElementType() : IFieldType
     {
         return $this->get(self::ATTR_ELEMENT_TYPE);
     }
@@ -100,12 +101,11 @@ class ArrayOfType extends FieldType
 
     /**
      * @param array $processors
-     *
-     * @return void
+     * @param IType $elementType
      */
-    protected function buildArrayElementsValidators(array &$processors)
+    protected function buildArrayElementsValidators(array &$processors, IType $elementType = null)
     {
-        $inputType = Type::arrayOf($this->getElementType()->getProcessedPhpType())->nullable();
+        $inputType = Type::arrayOf($elementType ?? $this->getElementType()->getProcessedPhpType())->nullable();
 
         if ($this->get(self::ATTR_UNIQUE_ELEMENTS)) {
             $processors[] = new ArrayUniqueValidator($inputType);

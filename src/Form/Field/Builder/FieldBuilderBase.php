@@ -64,7 +64,7 @@ abstract class FieldBuilderBase
      *
      * @return ActualField
      */
-    public function build() : \Dms\Core\Form\Field\Field
+    public function build() : ActualField
     {
         return new ActualField(
                 $this->name,
@@ -294,7 +294,7 @@ abstract class FieldBuilderBase
      * @return IType
      * @throws InvalidOperationException
      */
-    protected function getCurrentProcessedType(string $function = __FUNCTION__) : \Dms\Core\Model\Type\IType
+    protected function getCurrentProcessedType(string $function = __FUNCTION__) : IType
     {
         /** @var IFieldProcessor|null $processor */
         $processor = end($this->processors);

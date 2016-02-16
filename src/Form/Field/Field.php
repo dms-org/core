@@ -64,8 +64,8 @@ class Field implements IField
         $this->type       = $type;
 
         $this->processedType = $processors
-                ? end($processors)->getProcessedType()
-                : $type->getProcessedPhpType();
+            ? end($processors)->getProcessedType()
+            : $type->getProcessedPhpType();
 
         $this->validateInitialValue($type->get(FieldType::ATTR_INITIAL_VALUE));
     }
@@ -77,8 +77,8 @@ class Field implements IField
 
             if (!$processedPhpType->isOfType($initialValue)) {
                 throw InvalidArgumentException::format(
-                        'Invalid initial value for form field \'%s\': expecting type of %s, %s given',
-                        $this->name, $processedPhpType->asTypeString(), Debug::getType($initialValue)
+                    'Invalid initial value for form field \'%s\': expecting type of %s, %s given',
+                    $this->name, $processedPhpType->asTypeString(), Debug::getType($initialValue)
                 );
             }
         }
@@ -159,8 +159,8 @@ class Field implements IField
             if (!empty($messages)) {
                 foreach ($messages as $key => $message) {
                     $messages[$key] = $message->withParameters([
-                            'field' => $this->label,
-                            'input' => $oldInput,
+                        'field' => $this->label,
+                        'input' => $oldInput,
                     ]);
                 }
 
@@ -189,7 +189,7 @@ class Field implements IField
     /**
      * {@inheritDoc}
      */
-    public function withName(string $name, string $label = null) : \Dms\Core\Form\IField
+    public function withName(string $name, string $label = null) : IField
     {
         $clone        = clone $this;
         $clone->name  = $name;
@@ -201,7 +201,7 @@ class Field implements IField
     /**
      * {@inheritDoc}
      */
-    public function withInitialValue($value) : \Dms\Core\Form\IField
+    public function withInitialValue($value) : IField
     {
         $clone = clone $this;
         $clone->validateInitialValue($value);

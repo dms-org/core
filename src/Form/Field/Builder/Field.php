@@ -242,12 +242,12 @@ class Field extends FieldBuilderBase
      */
     public function entityIdsFrom(IEntitySet $entities) : EntityArrayFieldBuilder
     {
-        return new EntityArrayFieldBuilder($this
+        return (new EntityArrayFieldBuilder($this
                 ->type(new ArrayOfEntityIdsType(
                         $entities,
                         Field::element()->entityIdFrom($entities)->required()->build()
                 ))
-        );
+        ))->containsNoDuplicates();
     }
 
     /**
@@ -260,13 +260,13 @@ class Field extends FieldBuilderBase
      */
     public function entitiesFrom(IEntitySet $entities) : EntityArrayFieldBuilder
     {
-        return new EntityArrayFieldBuilder($this
+        return (new EntityArrayFieldBuilder($this
                 ->type(new ArrayOfEntityIdsType(
                         $entities,
                         Field::element()->entityIdFrom($entities)->required()->build(),
                         $loadAsObjects = true
                 ))
-        );
+        ))->containsNoDuplicates();
     }
 
     /**

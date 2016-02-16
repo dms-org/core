@@ -58,18 +58,21 @@ class ArrayOfEntityIdsType extends ArrayOfType
         $this->buildArrayLengthValidators($processors);
 
         $processors[] = new ArrayAllProcessor([
-                new IntValidator($this->getElementType()->getPhpTypeOfInput()),
-                new TypeProcessor('int'),
-                new RequiredValidator(Type::int()->nullable())
+            new IntValidator($this->getElementType()->getPhpTypeOfInput()),
+            new TypeProcessor('int'),
+            new RequiredValidator(Type::int()->nullable()),
         ]);
 
         $processors[] = new EntityIdArrayValidator(Type::arrayOf(Type::int())->nullable(), $this->entities);
 
         if ($this->loadAsObjects) {
             $processors[] = new EntityArrayLoaderProcessor($this->entities);
+            $elementType  = $this->entities->getElementType();
+        } else {
+            $elementType = Type::int();
         }
 
-        $this->buildArrayElementsValidators($processors);
+        $this->buildArrayElementsValidators($processors, $elementType);
 
         return $processors;
     }

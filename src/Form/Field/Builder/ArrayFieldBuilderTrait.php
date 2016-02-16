@@ -6,7 +6,7 @@ use Dms\Core\Form\Field\Processor\FieldValidator;
 use Dms\Core\Form\Field\Processor\Validator\AllUniquePropertyValidator;
 use Dms\Core\Form\Field\Type\ArrayOfType;
 use Dms\Core\Model\IObjectSet;
-use Dms\Core\Model\Type\ArrayType;
+use Dms\Core\Model\Type\IType;
 
 /**
  * The array field builder class.
@@ -73,15 +73,15 @@ trait ArrayFieldBuilderTrait
     public function allUniqueIn(IObjectSet $objects, string $propertyName)
     {
         return $this
-                ->validate(new AllUniquePropertyValidator($this->getCurrentProcessedType(__FUNCTION__), $objects, $propertyName));
+            ->validate(new AllUniquePropertyValidator($this->getCurrentProcessedType(__FUNCTION__), $objects, $propertyName));
     }
 
     /**
      * @param string $function
      *
-     * @return ArrayType
+     * @return IType
      */
-    abstract protected function getCurrentProcessedType(string $function = __FUNCTION__) : \Dms\Core\Model\Type\IType;
+    abstract protected function getCurrentProcessedType(string $function = __FUNCTION__) : IType;
 
     /**
      * @param $name
