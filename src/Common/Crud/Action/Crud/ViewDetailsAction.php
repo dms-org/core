@@ -124,9 +124,7 @@ class ViewDetailsAction extends SelfHandlingObjectAction
         $form->embed($stagedForm->getFirstForm()->withInitialValues($knownData));
 
         foreach ($stages->getAllStages() as $stage) {
-            /** @var FormWithBinding $currentStageForm */
             $currentStageForm = $stage->loadForm($knownData);
-            $currentStageForm = $currentStageForm->getBinding()->getForm($object);
 
             $form->embed($currentStageForm);
             $knownData += $currentStageForm->getInitialValues();

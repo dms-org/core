@@ -77,7 +77,7 @@ class FinalizedCrudFormDefinition
     /**
      * @return IStagedForm
      */
-    public function getStagedForm() : \Dms\Core\Form\IStagedForm
+    public function getStagedForm() : IStagedForm
     {
         return $this->stagedForm;
     }

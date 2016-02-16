@@ -73,7 +73,7 @@ class CreateAction extends SelfHandlingParameterizedAction
      *
      * @return IStagedFormDtoMapping
      */
-    protected function formMapping() : \Dms\Core\Module\IStagedFormDtoMapping
+    protected function formMapping() : IStagedFormDtoMapping
     {
         return new ArrayDataObjectFormMapping(
                 $this->form->getStagedForm()

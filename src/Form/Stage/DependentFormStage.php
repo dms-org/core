@@ -38,7 +38,7 @@ class DependentFormStage extends FormStage
     public function __construct(callable $loadFormCallback, array $definedFieldNames, array $requiredFieldNames = null)
     {
         InvalidArgumentException::verify(
-                $requiredFieldNames === null || !empty($requiredFieldNames),
+                $requiredFieldNames !== [],
                 'Required field names cannot be empty'
         );
 

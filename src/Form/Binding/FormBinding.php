@@ -5,7 +5,6 @@ namespace Dms\Core\Form\Binding;
 use Dms\Core\Exception\InvalidArgumentException;
 use Dms\Core\Exception\TypeMismatchException;
 use Dms\Core\Form\IForm;
-use Dms\Core\Form\InvalidFormSubmissionException;
 use Dms\Core\Util\Debug;
 
 /**
@@ -78,7 +77,7 @@ class FormBinding implements IFormBinding
     /**
      * @inheritDoc
      */
-    public function getForm($object = null) : \Dms\Core\Form\IForm
+    public function getForm($object = null) : IForm
     {
         if ($object) {
             if (!($object instanceof $this->objectType)) {

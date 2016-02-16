@@ -3,7 +3,6 @@
 namespace Dms\Core\Form\Binding\Field;
 
 use Dms\Core\Exception\InvalidArgumentException;
-use Dms\Core\Form\IField;
 
 /**
  * The getter and setter method property binding class.

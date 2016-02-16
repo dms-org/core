@@ -38,7 +38,7 @@ abstract class StagedFormDtoMapping implements IStagedFormDtoMapping
     /**
      * {@inheritdoc}
      */
-    final public function getStagedForm() : \Dms\Core\Form\IStagedForm
+    final public function getStagedForm() : IStagedForm
     {
         return $this->stagedForm;
     }

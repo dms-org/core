@@ -5,9 +5,12 @@ namespace Dms\Core\Tests\Common\Crud\Modules;
 use Dms\Core\Auth\IPermission;
 use Dms\Core\Auth\Permission;
 use Dms\Core\Common\Crud\Action\Object\IObjectAction;
+use Dms\Core\Common\Crud\Form\FormWithBinding;
 use Dms\Core\Common\Crud\ICrudModule;
 use Dms\Core\Common\Crud\IReadModule;
 use Dms\Core\Form\InvalidFormSubmissionException;
+use Dms\Core\Form\Stage\DependentFormStage;
+use Dms\Core\Form\Stage\IndependentFormStage;
 use Dms\Core\Module\IParameterizedAction;
 use Dms\Core\Persistence\ArrayRepository;
 use Dms\Core\Persistence\IRepository;
@@ -101,6 +104,21 @@ class SimpleCrudModuleTest extends CrudModuleTest
         }, InvalidFormSubmissionException::class);
     }
 
+    public function testEditInitialFormData()
+    {
+        $this->assertTrue($this->module->allowsEdit());
+
+        $action = $this->module->getEditAction();
+
+        /** @var FormWithBinding $form */
+        $form   = $action
+            ->withSubmittedFirstStage([IObjectAction::OBJECT_FIELD_NAME => $this->dataSource->get(1)])
+            ->getStagedForm()
+            ->getFirstForm();
+
+        $this->assertSame(['data' => 'abc'], $form->getInitialValues());
+    }
+
     public function testEditAction()
     {
         $this->assertTrue($this->module->allowsEdit());
@@ -129,6 +147,25 @@ class SimpleCrudModuleTest extends CrudModuleTest
                     'data'                           => 'aa'
             ]);
         }, InvalidFormSubmissionException::class);
+    }
+
+    public function testEditFormStagesBecomeIndependentWithObjectSubmitted()
+    {
+        $this->assertTrue($this->module->allowsEdit());
+
+        $action = $this->module->getEditAction();
+
+        $stagedForm   = $action            ->getStagedForm();
+
+        $this->assertSame(2, $stagedForm->getAmountOfStages());
+        $this->assertInstanceOf(DependentFormStage::class, $stagedForm->getStage(2));
+
+        $stagedForm   = $action
+            ->withSubmittedFirstStage([IObjectAction::OBJECT_FIELD_NAME => $this->dataSource->get(1)])
+            ->getStagedForm();
+
+        $this->assertSame(1, $stagedForm->getAmountOfStages());
+        $this->assertInstanceOf(IndependentFormStage::class, $stagedForm->getStage(1));
     }
 
     public function testRemoveAction()

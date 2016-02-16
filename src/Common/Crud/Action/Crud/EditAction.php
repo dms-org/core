@@ -74,7 +74,7 @@ class EditAction extends SelfHandlingObjectAction
      *
      * @return IObjectActionFormMapping
      */
-    protected function formMapping() : \Dms\Core\Common\Crud\Action\Object\IObjectActionFormMapping
+    protected function formMapping() : IObjectActionFormMapping
     {
         return new ArrayObjectActionFormMapping(
                 $this->form->getStagedForm()

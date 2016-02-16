@@ -17,7 +17,7 @@ interface IFieldProcessor
      *
      * @return IType
      */
-    public function getProcessedType() : \Dms\Core\Model\Type\IType;
+    public function getProcessedType() : IType;
 
     /**
      * Processes the supplied input and adds any error messages

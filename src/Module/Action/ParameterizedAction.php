@@ -6,6 +6,7 @@ use Dms\Core\Auth\IAuthSystem;
 use Dms\Core\Exception\TypeMismatchException;
 use Dms\Core\Form;
 use Dms\Core\Form\IStagedForm;
+use Dms\Core\Module\IActionHandler;
 use Dms\Core\Module\IParameterizedAction;
 use Dms\Core\Module\IParameterizedActionHandler;
 use Dms\Core\Module\IStagedFormDtoMapping;
@@ -54,7 +55,7 @@ class ParameterizedAction extends Action implements IParameterizedAction
     /**
      * @return IParameterizedActionHandler
      */
-    final public function getHandler() : \Dms\Core\Module\IActionHandler
+    final public function getHandler() : IActionHandler
     {
         return $this->handler;
     }
@@ -62,7 +63,7 @@ class ParameterizedAction extends Action implements IParameterizedAction
     /**
      * {@inheritDoc}
      */
-    final public function getStagedForm() : \Dms\Core\Form\IStagedForm
+    final public function getStagedForm() : IStagedForm
     {
         return $this->stagedForm;
     }
@@ -70,7 +71,7 @@ class ParameterizedAction extends Action implements IParameterizedAction
     /**
      * @return IStagedFormDtoMapping
      */
-    final public function getFormDtoMapping() : \Dms\Core\Module\IStagedFormDtoMapping
+    final public function getFormDtoMapping() : IStagedFormDtoMapping
     {
         return $this->formDtoMapping;
     }

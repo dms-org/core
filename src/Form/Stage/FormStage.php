@@ -34,7 +34,7 @@ abstract class FormStage implements IFormStage
     /**
      * @inheritDoc
      */
-    final public function loadForm(array $previousSubmission = null) : \Dms\Core\Form\IForm
+    final public function loadForm(array $previousSubmission = null) : IForm
     {
         if ($this->requiresPreviousSubmission() && $previousSubmission === null) {
             throw InvalidArgumentException::format(

@@ -105,7 +105,7 @@ abstract class ObjectStagedFormObject extends StagedFormObject
     /**
      * @return IEntitySet
      */
-    public function getDataSource() : \Dms\Core\Model\IEntitySet
+    public function getDataSource() : IEntitySet
     {
         return $this->dataSource;
     }

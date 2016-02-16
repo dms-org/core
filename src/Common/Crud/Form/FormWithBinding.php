@@ -42,8 +42,25 @@ class FormWithBinding extends Form
      *
      * @return IFormBinding
      */
-    public function getBinding() : \Dms\Core\Form\Binding\IFormBinding
+    public function getBinding() : IFormBinding
     {
         return $this->binding;
+    }
+
+    /**
+     * @param object $object
+     *
+     * @return FormWithBinding
+     */
+    public function withInitialValuesFrom($object) : FormWithBinding
+    {
+        $form = $this->binding->getForm($object);
+
+        return new self(
+            $form->getSections(),
+            $form->getProcessors(),
+            $this->binding->getObjectType(),
+            $this->binding->getFieldBindings()
+        );
     }
 }
