@@ -8,6 +8,7 @@ use Dms\Core\Common\Crud\Action\Crud\EditAction;
 use Dms\Core\Common\Crud\Action\Object\IObjectAction;
 use Dms\Core\Common\Crud\Definition\Action\RemoveActionDefiner;
 use Dms\Core\Common\Crud\Definition\Form\CrudFormDefinition;
+use Dms\Core\Module\Definition\FinalizedModuleDefinition;
 use Dms\Core\Persistence\IRepository;
 
 /**
@@ -78,7 +79,7 @@ class CrudModuleDefinition extends ReadModuleDefinition
     /**
      * @inheritDoc
      */
-    public function finalize() : \Dms\Core\Module\Definition\FinalizedModuleDefinition
+    public function finalize() : FinalizedModuleDefinition
     {
         $this->verifyCanBeFinalized();
 

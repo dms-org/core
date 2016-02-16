@@ -56,7 +56,7 @@ interface IReadModule extends IModule
      *
      * @return ISummaryTable
      */
-    public function getSummaryTable() : Table\ISummaryTable;
+    public function getSummaryTable() : ISummaryTable;
 
     /**
      * Gets the defined object actions.

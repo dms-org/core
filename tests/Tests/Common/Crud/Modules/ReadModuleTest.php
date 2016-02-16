@@ -83,6 +83,7 @@ abstract class ReadModuleTest extends ModuleTestBase
         );
     }
 
+
     public function testSummaryTableAction()
     {
         $this->assertSame($this->module->getSummaryTable(), $this->module->getSummaryTableAction()->run());

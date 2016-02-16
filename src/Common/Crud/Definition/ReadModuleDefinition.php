@@ -18,6 +18,7 @@ use Dms\Core\Model\IEntity;
 use Dms\Core\Model\IEntitySet;
 use Dms\Core\Model\Object\FinalizedClassDefinition;
 use Dms\Core\Model\Object\TypedObject;
+use Dms\Core\Module\Definition\FinalizedModuleDefinition;
 use Dms\Core\Module\Definition\ModuleDefinition;
 
 /**
@@ -224,7 +225,7 @@ class ReadModuleDefinition extends ModuleDefinition
                 ->to(Field::name(IReadModule::SUMMARY_TABLE_ID_COLUMN)->label('Id')->int()->required());
         $summaryTableDefinitionCallback($definition);
 
-        $this->summaryTable = $definition->finalize();
+        $this->tables[IReadModule::SUMMARY_TABLE] = $this->summaryTable = $definition->finalize();
 
         $this->action(IReadModule::SUMMARY_TABLE_ACTION)
                 ->authorize(IReadModule::VIEW_PERMISSION)
@@ -235,10 +236,10 @@ class ReadModuleDefinition extends ModuleDefinition
     }
 
     /**
-     * @return FinalizedReadModuleDefinition
+     * @return FinalizedModuleDefinition
      * @throws InvalidOperationException
      */
-    public function finalize() : \Dms\Core\Module\Definition\FinalizedModuleDefinition
+    public function finalize() : FinalizedModuleDefinition
     {
         $this->verifyCanBeFinalized();
 
