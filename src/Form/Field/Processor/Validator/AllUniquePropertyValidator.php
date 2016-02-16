@@ -4,6 +4,7 @@ namespace Dms\Core\Form\Field\Processor\Validator;
 
 use Dms\Core\Exception\InvalidArgumentException;
 use Dms\Core\Form\Field\Processor\FieldValidator;
+use Dms\Core\Form\Field\Processor\IFieldProcessorDependentOnInitialValue;
 use Dms\Core\Language\Message;
 use Dms\Core\Model\IObjectSet;
 use Dms\Core\Model\Type\ArrayType;
@@ -15,7 +16,7 @@ use Dms\Core\Util\Hashing\ValueHasher;
  *
  * @author Elliot Levin <elliotlevin@hotmail.com>
  */
-class AllUniquePropertyValidator extends FieldValidator
+class AllUniquePropertyValidator extends FieldValidator implements IFieldProcessorDependentOnInitialValue
 {
     const MESSAGE = 'validation.all-unique';
 
@@ -64,6 +65,18 @@ class AllUniquePropertyValidator extends FieldValidator
                 $this->initialValueHashes[ValueHasher::hash($element)] = true;
             }
         }
+    }
+
+    /**
+     * Returns an equivalent processor with the updated initial value
+     *
+     * @param mixed $initialValue
+     *
+     * @return static
+     */
+    public function withInitialValue($initialValue)
+    {
+        return new self($this->inputType, $this->objects, $this->propertyName, $initialValue);
     }
 
     /**

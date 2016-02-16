@@ -154,6 +154,14 @@ class ArrayOfFieldBuilderTest extends FieldBuilderTestBase
                 'property_name' => 'id',
             ]),
         ]);
+
+        $newField = $field->withInitialValue([100]);
+
+        $this->assertEquals([
+            new TypeValidator(Type::arrayOf(Type::mixed())->nullable()),
+            new ArrayAllProcessor([new IntValidator(Type::mixed()), new TypeProcessor('int')]),
+            new AllUniquePropertyValidator(Type::arrayOf(Type::int()->nullable())->nullable(), $entities, 'id', [100]),
+        ], $newField->getProcessors());
     }
 
     public function testArrayOfDates()

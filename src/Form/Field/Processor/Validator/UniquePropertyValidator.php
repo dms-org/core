@@ -3,6 +3,7 @@
 namespace Dms\Core\Form\Field\Processor\Validator;
 
 use Dms\Core\Form\Field\Processor\FieldValidator;
+use Dms\Core\Form\Field\Processor\IFieldProcessorDependentOnInitialValue;
 use Dms\Core\Language\Message;
 use Dms\Core\Model\IObjectSet;
 use Dms\Core\Model\Type\IType;
@@ -13,7 +14,7 @@ use Dms\Core\Util\Hashing\ValueHasher;
  *
  * @author Elliot Levin <elliotlevin@hotmail.com>
  */
-class UniquePropertyValidator extends FieldValidator
+class UniquePropertyValidator extends FieldValidator implements IFieldProcessorDependentOnInitialValue
 {
     const MESSAGE = 'validation.unique';
 
@@ -46,6 +47,18 @@ class UniquePropertyValidator extends FieldValidator
         $this->objects      = $objects;
         $this->propertyName = $propertyName;
         $this->initialValue = $initialValue;
+    }
+
+    /**
+     * Returns an equivalent processor with the updated initial value
+     *
+     * @param mixed $initialValue
+     *
+     * @return static
+     */
+    public function withInitialValue($initialValue)
+    {
+        return new self($this->inputType, $this->objects, $this->propertyName, $initialValue);
     }
 
     /**

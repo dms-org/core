@@ -112,5 +112,13 @@ class IntFieldBuilderTest extends FieldBuilderTestBase
                         'property_name' => 'id',
                 ])
         ]);
+
+        $newField = $field->withInitialValue(100);
+
+        $this->assertEquals([
+            new IntValidator(Type::mixed()),
+            new TypeProcessor('int'),
+            new UniquePropertyValidator(Type::int()->nullable(), $entities, 'id', 100),
+        ], $newField->getProcessors());
     }
 }

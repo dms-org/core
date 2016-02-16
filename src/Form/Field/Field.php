@@ -3,6 +3,7 @@
 namespace Dms\Core\Form\Field;
 
 use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Form\Field\Processor\IFieldProcessorDependentOnInitialValue;
 use Dms\Core\Form\Field\Type\FieldType;
 use Dms\Core\Form\IField;
 use Dms\Core\Form\IFieldProcessor;
@@ -206,6 +207,12 @@ class Field implements IField
         $clone = clone $this;
         $clone->validateInitialValue($value);
         $clone->type = $clone->type->with(FieldType::ATTR_INITIAL_VALUE, $value);
+
+        foreach ($clone->processors as $key => $processor) {
+            if ($processor instanceof IFieldProcessorDependentOnInitialValue) {
+                $clone->processors[$key] = $processor->withInitialValue($value);
+            }
+        }
 
         return $clone;
     }
