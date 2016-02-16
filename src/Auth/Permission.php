@@ -5,6 +5,7 @@ namespace Dms\Core\Auth;
 use Dms\Core\Exception\InvalidArgumentException;
 use Dms\Core\Model\Object\ClassDefinition;
 use Dms\Core\Model\Object\ValueObject;
+use Dms\Core\Model\ValueObjectCollection;
 
 class Permission extends ValueObject implements IPermission
 {
@@ -61,6 +62,22 @@ class Permission extends ValueObject implements IPermission
         }
 
         return self::$permissionCache[$name];
+    }
+
+    /**
+     * @param string[] $names
+     *
+     * @return ValueObjectCollection
+     */
+    public static function collectionFromNames(array $names) : ValueObjectCollection
+    {
+        $permissions = [];
+
+        foreach ($names as $name) {
+            $permissions[] = self::named($name);
+        }
+
+        return self::collection($permissions);
     }
 
     /**

@@ -46,4 +46,13 @@ class PermissionTest extends CmsTestCase
         $this->assertSame('qwerty.abc', $namespaced->getName());
         $this->assertSame('123.qwerty.abc', $namespacedAgain->getName());
     }
+
+    public function testCollectionFromNames()
+    {
+        $this->assertEquals(Permission::collection([
+            Permission::named('a'),
+            Permission::named('b'),
+            Permission::named('c'),
+        ]), Permission::collectionFromNames(['a', 'b', 'c']));
+    }
 }
