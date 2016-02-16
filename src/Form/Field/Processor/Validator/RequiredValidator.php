@@ -32,7 +32,7 @@ class RequiredValidator extends FieldValidator
     /**
      * @inheritDoc
      */
-    public function getProcessedType() : \Dms\Core\Model\Type\IType
+    public function getProcessedType() : IType
     {
         return $this->processedType;
     }

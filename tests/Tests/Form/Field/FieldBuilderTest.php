@@ -143,7 +143,7 @@ class FieldBuilderTest extends FieldBuilderTestBase
         $field = $this->field()->bool()->build();
         $this->assertScalarType(ScalarType::BOOL, $field);
         $this->assertHasProcessor(new BoolProcessor(), $field);
-        $this->assertEquals(PhpType::bool()->nullable(), $field->getProcessedType());
+        $this->assertEquals(PhpType::bool(), $field->getProcessedType());
     }
 
     public function testDecimalField()
@@ -164,8 +164,12 @@ class FieldBuilderTest extends FieldBuilderTestBase
         $this->assertInstanceOf(ScalarType::class, $type->getElementType());
         $this->assertSame(ScalarType::BOOL, $type->getElementType()->getType());
         $this->assertHasProcessor(new TypeValidator(PhpType::arrayOf(PhpType::mixed())->nullable()), $field);
-        $this->assertHasProcessor(new ArrayAllProcessor([new BoolValidator(PhpType::mixed()), new BoolProcessor()]), $field);
-        $this->assertEquals(PhpType::arrayOf(PhpType::bool()->nullable())->nullable(), $field->getProcessedType());
+        $this->assertHasProcessor(new ArrayAllProcessor([
+            new BoolValidator(PhpType::mixed()),
+            new BoolProcessor(),
+            new DefaultValueProcessor(PhpType::bool(), false),
+        ]), $field);
+        $this->assertEquals(PhpType::arrayOf(PhpType::bool())->nullable(), $field->getProcessedType());
     }
 
     public function testEntityField()

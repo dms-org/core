@@ -12,5 +12,7 @@ class BoolType extends ScalarType
     public function __construct()
     {
         parent::__construct(self::BOOL);
+
+        $this->attributes[self::ATTR_DEFAULT] = false;
     }
 }
