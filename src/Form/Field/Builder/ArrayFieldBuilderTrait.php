@@ -7,6 +7,8 @@ use Dms\Core\Form\Field\Processor\CustomProcessor;
 use Dms\Core\Form\Field\Processor\FieldValidator;
 use Dms\Core\Form\Field\Processor\Validator\AllUniquePropertyValidator;
 use Dms\Core\Form\Field\Type\ArrayOfType;
+use Dms\Core\Form\Field\Type\FieldType;
+use Dms\Core\Form\IFieldType;
 use Dms\Core\Model\EntityIdCollection;
 use Dms\Core\Model\IObjectSet;
 use Dms\Core\Model\ITypedCollection;
@@ -80,8 +82,8 @@ trait ArrayFieldBuilderTrait
      */
     public function allUniqueIn(IObjectSet $objects, string $propertyName)
     {
-        $this->customProcessorCallbacks[] = function (IType $currentType) use ($objects, $propertyName) {
-            return new AllUniquePropertyValidator($currentType, $objects, $propertyName);
+        $this->customProcessorCallbacks[] = function (IType $currentType, IFieldType $fieldType) use ($objects, $propertyName) {
+            return new AllUniquePropertyValidator($currentType, $objects, $propertyName, $fieldType->get(FieldType::ATTR_INITIAL_VALUE));
         };
 
         return $this;

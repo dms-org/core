@@ -12,6 +12,19 @@ use Pinq\Iterators\Common\Identity;
 class ValueHasher
 {
     /**
+     * Returns whether the supplied values are value-wise equal.
+     *
+     * @param mixed $value1
+     * @param mixed $value2
+     *
+     * @return bool
+     */
+    public static function areEqual($value1, $value2) : bool
+    {
+        return $value1 === $value2 || self::hash($value1) === self::hash($value2);
+    }
+
+    /**
      * Gets a unique string for the supplied value.
      *
      * @param mixed $value

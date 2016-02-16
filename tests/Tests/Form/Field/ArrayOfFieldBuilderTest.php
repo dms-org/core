@@ -128,26 +128,29 @@ class ArrayOfFieldBuilderTest extends FieldBuilderTestBase
         $entities = new EntityCollection(TestEntity::class, [
             new TestEntity(1),
             new TestEntity(2),
+            new TestEntity(3),
         ]);
 
         $field = Field::name('number')
             ->label('Number')
             ->arrayOf(Field::element()->int())
             ->allUniqueIn($entities, 'id')
+            ->value([2, 3])
             ->build();
 
         $this->assertEquals([
             new TypeValidator(Type::arrayOf(Type::mixed())->nullable()),
             new ArrayAllProcessor([new IntValidator(Type::mixed()), new TypeProcessor('int')]),
-            new AllUniquePropertyValidator(Type::arrayOf(Type::int()->nullable())->nullable(), $entities, 'id'),
+            new AllUniquePropertyValidator(Type::arrayOf(Type::int()->nullable())->nullable(), $entities, 'id', [2, 3]),
         ], $field->getProcessors());
 
         $this->assertSame([5, 9], $field->process(['5', '9']));
+        $this->assertSame([2, 3], $field->process(['2', '3']));
 
-        $this->assertFieldThrows($field, [2, 4, 5, 6, 5, 4], [
+        $this->assertFieldThrows($field, [1], [
             new Message(AllUniquePropertyValidator::MESSAGE, [
                 'field'         => 'Number',
-                'input'         => [2, 4, 5, 6, 5, 4],
+                'input'         => [1],
                 'property_name' => 'id',
             ]),
         ]);

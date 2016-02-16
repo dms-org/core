@@ -88,19 +88,22 @@ class IntFieldBuilderTest extends FieldBuilderTestBase
         $entities = new EntityCollection(TestEntity::class, [
                 new TestEntity(1),
                 new TestEntity(2),
+                new TestEntity(123),
         ]);
 
         $field = $this->field()
                 ->uniqueIn($entities, 'id')
+                ->value(123)
                 ->build();
 
         $this->assertEquals([
                 new IntValidator(Type::mixed()),
                 new TypeProcessor('int'),
-                new UniquePropertyValidator(Type::int()->nullable(), $entities, 'id'),
+                new UniquePropertyValidator(Type::int()->nullable(), $entities, 'id', 123),
         ], $field->getProcessors());
 
         $this->assertSame(5, $field->process('5'));
+        $this->assertSame(123, $field->process('123'));
 
         $this->assertFieldThrows($field, '2', [
                 new Message(UniquePropertyValidator::MESSAGE, [

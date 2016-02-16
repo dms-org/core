@@ -72,7 +72,7 @@ abstract class FieldBuilderBase
 
         foreach ($this->customProcessorCallbacks as $callback) {
             /** @var IFieldProcessor $processor */
-            $processor            = $callback($currentProcessedType);
+            $processor            = $callback($currentProcessedType, $type);
 
             $customerProcessors[] = $processor;
             $currentProcessedType = $processor->getProcessedType();
@@ -226,8 +226,13 @@ abstract class FieldBuilderBase
      */
     public function uniqueIn(IObjectSet $objects, string $propertyName)
     {
-        $this->customProcessorCallbacks[] = function (IType $currentType) use ($objects, $propertyName) {
-            return new UniquePropertyValidator($currentType, $objects, $propertyName);
+        $this->customProcessorCallbacks[] = function (IType $currentType, IFieldType $fieldType) use ($objects, $propertyName) {
+            return new UniquePropertyValidator(
+                $currentType,
+                $objects,
+                $propertyName,
+                $fieldType->get(FieldType::ATTR_INITIAL_VALUE)
+            );
         };
 
         return $this;
