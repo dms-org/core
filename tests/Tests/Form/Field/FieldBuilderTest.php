@@ -40,9 +40,11 @@ use Dms\Core\Form\Field\Type\StringType;
 use Dms\Core\Form\Field\Type\TimeOfDayType;
 use Dms\Core\Form\IForm;
 use Dms\Core\Model\EntityCollection;
+use Dms\Core\Model\EntityIdCollection;
 use Dms\Core\Model\IEntity;
-use Dms\Core\Model\Type\Builder\Type as PhpType;
+use Dms\Core\Model\Object\Entity;
 use Dms\Core\Model\Type\Builder\Type;
+use Dms\Core\Model\Type\Builder\Type as PhpType;
 use Dms\Core\Model\Type\IType;
 use Dms\Core\Model\Type\ObjectType;
 use Dms\Core\Tests\Form\Field\Processor\Fixtures\StatusEnum;
@@ -110,8 +112,11 @@ class FieldBuilderTest extends FieldBuilderTestBase
         $field = $this->field()->string()->oneOf(['hi' => 'Hi', 'bye' => 'Bye'])->build();
 
         $this->assertAttributes(
-                [ScalarType::ATTR_TYPE => IType::STRING, FieldType::ATTR_OPTIONS => $fieldOptions = ArrayFieldOptions::fromAssocArray(['hi' => 'Hi', 'bye' => 'Bye'])],
-                $field
+            [
+                ScalarType::ATTR_TYPE   => IType::STRING,
+                FieldType::ATTR_OPTIONS => $fieldOptions = ArrayFieldOptions::fromAssocArray(['hi' => 'Hi', 'bye' => 'Bye']),
+            ],
+            $field
         );
         $this->assertHasProcessor(new OneOfValidator(PhpType::string()->nullable(), $fieldOptions), $field);
         $this->assertEquals(PhpType::string()->nullable(), $field->getProcessedType());
@@ -210,6 +215,24 @@ class FieldBuilderTest extends FieldBuilderTestBase
         $this->assertEquals(PhpType::arrayOf(PhpType::object(IEntity::class))->nullable(), $field->getProcessedType());
     }
 
+    public function testEntityFieldMappedToObjectCollection()
+    {
+        $entity = $this->getMock(Entity::class);
+        $entity->hydrate(['id' => 1]);
+
+        $entities = new EntityCollection(Entity::class, [$entity]);
+        $field    = $this->field()
+            ->entitiesFrom($entities)
+            ->mapToCollection(Entity::collectionType())
+            ->build();
+
+        /** @var ArrayOfEntityIdsType $type */
+        $this->assertEquals(Entity::collectionType()->nullable(), $field->getProcessedType());
+
+        $this->assertEquals(Entity::collection([$entity]), $field->process(['1']));
+        $this->assertEquals([1], $field->unprocess(Entity::collection([$entity])));
+    }
+
     public function testEntityIdsFromField()
     {
         $entities = new EntityCollection(IEntity::class);
@@ -225,6 +248,44 @@ class FieldBuilderTest extends FieldBuilderTestBase
         $this->assertSame($entities, $type->getElementType()->getOptions()->getEntities());
         $this->assertHasProcessor(new EntityIdArrayValidator(PhpType::arrayOf(PhpType::int())->nullable(), $entities), $field);
         $this->assertEquals(PhpType::arrayOf(PhpType::int())->nullable(), $field->getProcessedType());
+    }
+
+    public function testEntityIdFieldMappedToCollection()
+    {
+        $entity = $this->getMock(IEntity::class);
+        $entity->method('getId')->willReturn(1);
+
+        $entities = new EntityCollection(IEntity::class, [$entity]);
+        $field    = $this->field()->entityIdsFrom($entities)->mapToCollection(EntityIdCollection::type())->build();
+
+        /** @var ArrayOfEntityIdsType $type */
+        $this->assertEquals(PhpType::collectionOf(PhpType::int(), EntityIdCollection::class)->nullable(), $field->getProcessedType());
+
+        $this->assertEquals(new EntityIdCollection([1]), $field->process(['1']));
+        $this->assertEquals([1], $field->unprocess(new EntityIdCollection([1])));
+    }
+
+    public function testEntityIdsFieldMappedToObjectCollection()
+    {
+        $entity = $this->getMock(Entity::class);
+        $entity->hydrate(['id' => 1]);
+
+        $entities = new EntityCollection(Entity::class, [$entity]);
+        $field    = $this->field()->entityIdsFrom($entities)->mapToCollection(
+            Entity::collectionType(),
+            function (int $id) use ($entities) {
+                return $entities->get($id);
+            },
+            function (Entity $entity) {
+                return $entity->getId();
+            }
+        )->build();
+
+        /** @var ArrayOfEntityIdsType $type */
+        $this->assertEquals(Entity::collectionType()->nullable(), $field->getProcessedType());
+
+        $this->assertEquals(Entity::collection([$entity]), $field->process(['1']));
+        $this->assertEquals([1], $field->unprocess(Entity::collection([$entity])));
     }
 
     public function testDateField()
@@ -303,16 +364,16 @@ class FieldBuilderTest extends FieldBuilderTestBase
     public function testEnum()
     {
         $field = $this->field()->enum(StatusEnum::class, [
-                StatusEnum::INACTIVE => 'Inactive',
-                StatusEnum::ACTIVE   => 'Active',
+            StatusEnum::INACTIVE => 'Inactive',
+            StatusEnum::ACTIVE   => 'Active',
         ])->build();
 
         /** @var StringType $type */
         $type = $field->getType();
         $this->assertInstanceOf(EnumType::class, $type);
         $this->assertEquals($fieldOptions = [
-                new FieldOption(StatusEnum::INACTIVE, 'Inactive'),
-                new FieldOption(StatusEnum::ACTIVE, 'Active'),
+            new FieldOption(StatusEnum::INACTIVE, 'Inactive'),
+            new FieldOption(StatusEnum::ACTIVE, 'Active'),
         ], $type->getOptions()->getAll());
 
         $this->assertHasProcessor(new OneOfValidator(PhpType::string()->nullable(), new ArrayFieldOptions($fieldOptions)), $field);

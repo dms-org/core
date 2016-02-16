@@ -5,6 +5,7 @@ namespace Dms\Core\Model\Object;
 use Dms\Core\Exception;
 use Dms\Core\Model\IValueObject;
 use Dms\Core\Model\Type\Builder\Type;
+use Dms\Core\Model\Type\CollectionType;
 use Dms\Core\Model\Type\IType;
 use Dms\Core\Model\ValueObjectCollection;
 use Dms\Core\Util\Hashing\IHashable;
@@ -32,9 +33,9 @@ abstract class ValueObject extends TypedObject implements IValueObject, IHashabl
     /**
      * Returns the type of the collection for this typed object.
      *
-     * @return IType
+     * @return CollectionType
      */
-    public static function collectionType() : \Dms\Core\Model\Type\IType
+    public static function collectionType() : CollectionType
     {
         return Type::collectionOf(Type::object(get_called_class()), ValueObjectCollection::class);
     }

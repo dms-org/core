@@ -4,6 +4,7 @@ namespace Dms\Core\Model;
 
 use Dms\Core\Exception;
 use Dms\Core\Model\Type\Builder\Type;
+use Dms\Core\Model\Type\CollectionType;
 use Pinq\Collection as PinqCollection;
 use Pinq\Iterators\IIteratorScheme;
 
@@ -25,5 +26,15 @@ class EntityIdCollection extends TypedCollection
     protected function constructScopedSelf($elements)
     {
         return new TypedCollection(Type::mixed(), $elements, $this->scheme, $this->source ?: $this);
+    }
+
+    /**
+     * Returns the type of the collection
+     *
+     * @return CollectionType
+     */
+    final public static function type() : CollectionType
+    {
+        return new CollectionType(Type::int(), get_called_class());
     }
 }

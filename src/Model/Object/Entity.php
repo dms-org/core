@@ -6,6 +6,7 @@ use Dms\Core\Exception;
 use Dms\Core\Model\EntityCollection;
 use Dms\Core\Model\IEntity;
 use Dms\Core\Model\Type\Builder\Type;
+use Dms\Core\Model\Type\CollectionType;
 use Dms\Core\Model\Type\IType;
 use Dms\Core\Util\Hashing\IHashable;
 
@@ -48,9 +49,9 @@ abstract class Entity extends TypedObject implements IEntity, IHashable
     /**
      * Returns the type of the collection for this typed object.
      *
-     * @return IType
+     * @return CollectionType
      */
-    public static function collectionType() : \Dms\Core\Model\Type\IType
+    public static function collectionType() : CollectionType
     {
         return Type::collectionOf(Type::object(get_called_class()), EntityCollection::class);
     }

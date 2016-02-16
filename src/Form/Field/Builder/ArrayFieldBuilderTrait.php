@@ -2,11 +2,20 @@
 
 namespace Dms\Core\Form\Field\Builder;
 
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Form\Field\Processor\CustomProcessor;
 use Dms\Core\Form\Field\Processor\FieldValidator;
 use Dms\Core\Form\Field\Processor\Validator\AllUniquePropertyValidator;
 use Dms\Core\Form\Field\Type\ArrayOfType;
+use Dms\Core\Form\IFieldProcessor;
+use Dms\Core\Model\EntityIdCollection;
 use Dms\Core\Model\IObjectSet;
+use Dms\Core\Model\ITypedCollection;
+use Dms\Core\Model\Object\TypedObject;
+use Dms\Core\Model\Type\CollectionType;
 use Dms\Core\Model\Type\IType;
+use Dms\Core\Model\TypedCollection;
+use Dms\Core\Util\Debug;
 
 /**
  * The array field builder class.
@@ -77,6 +86,60 @@ trait ArrayFieldBuilderTrait
     }
 
     /**
+     * Validates that all the array elements are unique within the supplied
+     * set of object properties.
+     *
+     * @param CollectionType $collectionType
+     * @param callable|null  $mapperCallback
+     * @param callable|null  $reverseMapperCallback
+     *
+     * @return static
+     * @throws InvalidArgumentException
+     */
+    public function mapToCollection(CollectionType $collectionType, callable $mapperCallback = null, callable $reverseMapperCallback = null)
+    {
+        $collectionClass = $collectionType->getCollectionClass();
+
+        if ($collectionClass === TypedCollection::class || $collectionClass === ITypedCollection::class) {
+            $collectionFactory = function (array $input) use ($collectionType) {
+                return new TypedCollection($collectionType->getElementType(), $input);
+            };
+        } elseif ($collectionClass === EntityIdCollection::class) {
+            $collectionFactory = function (array $input) use ($collectionType) {
+                return new EntityIdCollection($input);
+            };
+        } elseif ($collectionType->isSubsetOf(TypedObject::collectionType())) {
+            $objectType        = $collectionType->getElementType()->asTypeString();
+            $collectionFactory = function (array $input) use ($objectType) {
+                /** @var string|TypedObject $objectType */
+                return $objectType::collection($input);
+            };
+        } else {
+            throw InvalidArgumentException::format(
+                'Invalid collection type supplied to %s: expecting one of (%s), %s given',
+                get_class($this) . '::' . __FUNCTION__,
+                Debug::formatValues([TypedCollection::class, EntityIdCollection::class, TypedObject::collectionType()->asTypeString()]),
+                $collectionType->asTypeString()
+            );
+        }
+
+        return $this
+            ->process(new CustomProcessor(
+                $collectionType->nullable(),
+                function (array $elements) use ($collectionFactory, $mapperCallback) {
+                    $elements = $mapperCallback ? array_map($mapperCallback, $elements) : $elements;
+
+                    return $collectionFactory($elements);
+                },
+                function (ITypedCollection $collection) use ($collectionType, $reverseMapperCallback) {
+                    $elements = iterator_to_array($collection);
+
+                    return $reverseMapperCallback ? array_map($reverseMapperCallback, $elements) : $elements;
+                }
+            ));
+    }
+
+    /**
      * @param string $function
      *
      * @return IType
@@ -97,4 +160,11 @@ trait ArrayFieldBuilderTrait
      * @return static
      */
     abstract protected function validate(FieldValidator $validator);
+
+    /**
+     * @param IFieldProcessor $processor
+     *
+     * @return static
+     */
+    abstract protected function process(IFieldProcessor $processor);
 }
