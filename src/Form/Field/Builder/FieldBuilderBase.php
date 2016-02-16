@@ -44,18 +44,18 @@ abstract class FieldBuilderBase
     protected $attributes = [];
 
     /**
-     * @var IFieldProcessor[]
+     * @var callable[]
      */
-    protected $processors = [];
+    protected $customProcessorCallbacks = [];
 
     public function __construct(FieldBuilderBase $previous = null)
     {
         if ($previous) {
-            $this->name       = $previous->name;
-            $this->label      = $previous->label;
-            $this->attributes = $previous->attributes;
-            $this->type       = $previous->type;
-            $this->processors = $previous->processors;
+            $this->name                     = $previous->name;
+            $this->label                    = $previous->label;
+            $this->attributes               = $previous->attributes;
+            $this->type                     = $previous->type;
+            $this->customProcessorCallbacks = $previous->customProcessorCallbacks;
         }
     }
 
@@ -66,11 +66,23 @@ abstract class FieldBuilderBase
      */
     public function build() : ActualField
     {
+        $type                 = $this->type->withAll($this->attributes);
+        $currentProcessedType = $type->getProcessedPhpType();
+        $customerProcessors   = [];
+
+        foreach ($this->customProcessorCallbacks as $callback) {
+            /** @var IFieldProcessor $processor */
+            $processor            = $callback($currentProcessedType);
+
+            $customerProcessors[] = $processor;
+            $currentProcessedType = $processor->getProcessedType();
+        }
+
         return new ActualField(
-                $this->name,
-                $this->label,
-                $this->type->withAll($this->attributes),
-                $this->processors
+            $this->name,
+            $this->label,
+            $type,
+            $customerProcessors
         );
     }
 
@@ -81,7 +93,9 @@ abstract class FieldBuilderBase
      */
     public function validate(FieldValidator $validator)
     {
-        $this->processors[] = $validator;
+        $this->customProcessorCallbacks[] = function () use ($validator) {
+            return $validator;
+        };
 
         return $this;
     }
@@ -93,7 +107,9 @@ abstract class FieldBuilderBase
      */
     public function process(IFieldProcessor $processor)
     {
-        $this->processors[] = $processor;
+        $this->customProcessorCallbacks[] = function () use ($processor) {
+            return $processor;
+        };
 
         return $this;
     }
@@ -210,7 +226,11 @@ abstract class FieldBuilderBase
      */
     public function uniqueIn(IObjectSet $objects, string $propertyName)
     {
-        return $this->validate(new UniquePropertyValidator($this->getCurrentProcessedType(__FUNCTION__), $objects, $propertyName));
+        $this->customProcessorCallbacks[] = function (IType $currentType) use ($objects, $propertyName) {
+            return new UniquePropertyValidator($currentType, $objects, $propertyName);
+        };
+
+        return $this;
     }
 
     /**
@@ -264,7 +284,11 @@ abstract class FieldBuilderBase
      */
     public function assert(callable $validation, string $messageId = null, array $parameters = [])
     {
-        return $this->validate(new CustomValidator($this->getCurrentProcessedType(__FUNCTION__), $validation, $messageId, $parameters));
+        $this->customProcessorCallbacks[] = function (IType $currentType) use ($validation, $messageId, $parameters) {
+            return new CustomValidator($currentType, $validation, $messageId, $parameters);
+        };
+
+        return $this;
     }
 
     /**
@@ -286,28 +310,5 @@ abstract class FieldBuilderBase
     public function map(callable $mapper, callable $reverseMapper, IType $processedType)
     {
         return $this->process(new CustomProcessor($processedType, $mapper, $reverseMapper));
-    }
-
-    /**
-     * @param string $function
-     *
-     * @return IType
-     * @throws InvalidOperationException
-     */
-    protected function getCurrentProcessedType(string $function = __FUNCTION__) : IType
-    {
-        /** @var IFieldProcessor|null $processor */
-        $processor = end($this->processors);
-
-        if ($processor) {
-            return $processor->getProcessedType();
-        } elseif ($this->type) {
-            return $this->type->getProcessedPhpType();
-        } else {
-            throw InvalidOperationException::format(
-                    'Invalid call to method \'%s\': field type has not been set on field \'%s\'',
-                    $function, $this->name
-            );
-        }
     }
 }

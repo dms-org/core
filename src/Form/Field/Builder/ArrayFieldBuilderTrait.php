@@ -7,7 +7,6 @@ use Dms\Core\Form\Field\Processor\CustomProcessor;
 use Dms\Core\Form\Field\Processor\FieldValidator;
 use Dms\Core\Form\Field\Processor\Validator\AllUniquePropertyValidator;
 use Dms\Core\Form\Field\Type\ArrayOfType;
-use Dms\Core\Form\IFieldProcessor;
 use Dms\Core\Model\EntityIdCollection;
 use Dms\Core\Model\IObjectSet;
 use Dms\Core\Model\ITypedCollection;
@@ -81,8 +80,11 @@ trait ArrayFieldBuilderTrait
      */
     public function allUniqueIn(IObjectSet $objects, string $propertyName)
     {
-        return $this
-            ->validate(new AllUniquePropertyValidator($this->getCurrentProcessedType(__FUNCTION__), $objects, $propertyName));
+        $this->customProcessorCallbacks[] = function (IType $currentType) use ($objects, $propertyName) {
+            return new AllUniquePropertyValidator($currentType, $objects, $propertyName);
+        };
+
+        return $this;
     }
 
     /**
@@ -109,7 +111,7 @@ trait ArrayFieldBuilderTrait
                 return new EntityIdCollection($input);
             };
         } elseif ($collectionType->isSubsetOf(TypedObject::collectionType())) {
-            $objectType        = $collectionType->getElementType()->asTypeString();
+            $objectType = $collectionType->getElementType()->asTypeString();
             $collectionFactory = function (array $input) use ($objectType) {
                 /** @var string|TypedObject $objectType */
                 return $objectType::collection($input);
@@ -123,9 +125,14 @@ trait ArrayFieldBuilderTrait
             );
         }
 
-        return $this
-            ->process(new CustomProcessor(
-                $collectionType->nullable(),
+        $this->customProcessorCallbacks[] = function (IType $currentType) use (
+            $collectionType,
+            $collectionFactory,
+            $mapperCallback,
+            $reverseMapperCallback
+        ) {
+            return new CustomProcessor(
+                $currentType->isNullable() ? $collectionType->nullable() : $collectionType,
                 function (array $elements) use ($collectionFactory, $mapperCallback) {
                     $elements = $mapperCallback ? array_map($mapperCallback, $elements) : $elements;
 
@@ -136,15 +143,11 @@ trait ArrayFieldBuilderTrait
 
                     return $reverseMapperCallback ? array_map($reverseMapperCallback, $elements) : $elements;
                 }
-            ));
-    }
+            );
+        };
 
-    /**
-     * @param string $function
-     *
-     * @return IType
-     */
-    abstract protected function getCurrentProcessedType(string $function = __FUNCTION__) : IType;
+        return $this;
+    }
 
     /**
      * @param $name
@@ -160,11 +163,4 @@ trait ArrayFieldBuilderTrait
      * @return static
      */
     abstract protected function validate(FieldValidator $validator);
-
-    /**
-     * @param IFieldProcessor $processor
-     *
-     * @return static
-     */
-    abstract protected function process(IFieldProcessor $processor);
 }

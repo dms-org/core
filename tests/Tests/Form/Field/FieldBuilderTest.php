@@ -265,6 +265,18 @@ class FieldBuilderTest extends FieldBuilderTestBase
         $this->assertEquals([1], $field->unprocess(new EntityIdCollection([1])));
     }
 
+    public function testEntityIdFieldMappedToCollectionWithRequired()
+    {
+        $entities = new EntityCollection(IEntity::class, []);
+        $field    = $this->field()->entityIdsFrom($entities)
+            ->mapToCollection(EntityIdCollection::type())
+            ->required()
+            ->build();
+
+        /** @var ArrayOfEntityIdsType $type */
+        $this->assertEquals(PhpType::collectionOf(PhpType::int(), EntityIdCollection::class), $field->getProcessedType());
+    }
+
     public function testEntityIdsFieldMappedToObjectCollection()
     {
         $entity = $this->getMock(Entity::class);
