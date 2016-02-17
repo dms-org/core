@@ -12,7 +12,7 @@ class DateTimeClock implements IClock
     /**
      * {@inheritDoc}
      */
-    public function now()
+    public function now() : \DateTimeImmutable
     {
         return new \DateTimeImmutable();
     }
@@ -20,7 +20,7 @@ class DateTimeClock implements IClock
     /**
      * {@inheritDoc}
      */
-    public function utcNow()
+    public function utcNow() : \DateTimeImmutable
     {
         return new \DateTimeImmutable('now', new \DateTimeZone('UTC'));
     }

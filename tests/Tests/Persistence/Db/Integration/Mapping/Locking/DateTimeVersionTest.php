@@ -32,6 +32,8 @@ class DateTimeVersionTest extends DbIntegrationTest
     {
         parent::setUp();
 
+        $this->mockedCurrentTime = new \DateTimeImmutable();
+
         /** @var IClock|\PHPUnit_Framework_MockObject_MockObject $clock */
         $clock = $this->getMockForAbstractClass(IClock::class);
         $clock

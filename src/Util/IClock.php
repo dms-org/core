@@ -9,12 +9,12 @@ interface IClock
      *
      * @return \DateTimeImmutable
      */
-    public function now();
+    public function now() : \DateTimeImmutable;
 
     /**
      * Gets the current time in UTC.
      *
      * @return \DateTimeImmutable
      */
-    public function utcNow();
+    public function utcNow() : \DateTimeImmutable;
 }
