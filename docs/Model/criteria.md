@@ -274,4 +274,49 @@ $criteria = $spec->asCriteria();
 You can also use the specification within an existing criteria using the
 `whereStatifies($specification)` method.
 
+
+Another method to define specifications can be defining them on the classes themselves.
+`Dms\Core\Model\TypedObject` provides a static `specification` method which accepts
+a callback to define the specification. So another way of implementing the `PersonIsOld`
+specification as above could be as follows:
+
+```php
+<?php
+
+namespace Some\Name\Space;
+
+use Dms\Core\Model\Object\ClassDefinition;
+use Dms\Core\Model\Object\Entity;
+use Dms\Core\Model\Criteria\Specification;
+use Dms\Core\Model\Criteria\SpecificationDefinition;
+
+class Person extends Entity
+{
+    const AGE = 'age';
+
+    /**
+     * @var int
+     */
+    public $age;
+
+    public function __construct($age)
+    {
+        parent::__construct();
+        $this->age = $age;
+    }
+    
+    public static isOldSpecification()
+    {
+        return self::specification(function (SpecificationDefinition $match) {
+            $match->where(Person::AGE, '>=', 50);
+        });
+    }
+
+    // ...
+}
+
+// Accessing the specification
+$spec = Person::isOldSpecification();
+```
+
 [spec-pattern]: https://en.wikipedia.org/wiki/Specification_pattern
