@@ -518,7 +518,7 @@ class MapperDefinition extends MapperDefinitionBase
                     $subClassDefinition->verifyDefinedClass();
                     $subClassName = $subClassDefinition->class->getClassName();
 
-                    if (!is_subclass_of($subClassName, $this->class->getClassName(), true)) {
+                    if (!is_a($subClassName, $this->class->getClassName(), true)) {
                         throw IncompleteMapperDefinitionException::format(
                                 'Invalid subclass mapper definition for: defined type must be a subclass of %s, %s given',
                                 $this->class->getClassName(),
