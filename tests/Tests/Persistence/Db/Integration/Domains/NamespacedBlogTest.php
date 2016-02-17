@@ -25,6 +25,7 @@ class NamespacedBlogTest extends BlogTest
     {
         return 'blog_';
     }
+
     /**
      * @inheritDoc
      */
@@ -32,7 +33,7 @@ class NamespacedBlogTest extends BlogTest
     {
         parent::buildDatabase($db, $orm);
 
-        $this->userMapper           = $db->getTable('blog_users');
+        $this->userTable            = $db->getTable('blog_users');
         $this->aliasTable           = $db->getTable('blog_aliases');
         $this->postTable            = $db->getTable('blog_posts');
         $this->commentTable         = $db->getTable('blog_comments');
