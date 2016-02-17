@@ -14,6 +14,7 @@ use Dms\Core\Persistence\Db\Mapping\NullObjectMapper;
 use Dms\Core\Persistence\Db\Mapping\Relation\Embedded\EmbeddedCollectionRelation;
 use Dms\Core\Persistence\Db\Mapping\Relation\Embedded\EmbeddedObjectRelation;
 use Dms\Core\Persistence\Db\Schema\Column;
+use Dms\Core\Persistence\Db\Schema\PrimaryKeyBuilder;
 use Dms\Core\Persistence\Db\Schema\Table;
 use Dms\Core\Persistence\Db\Schema\Type\Boolean;
 use Dms\Core\Persistence\Db\Schema\Type\Integer;
@@ -74,7 +75,7 @@ class EmbeddedRelationTypeDefiner
      * @return EnumPropertyColumnDefiner
      * @throws InvalidArgumentException
      */
-    public function enum(string $class, bool $isNullable = false) : \Dms\Core\Persistence\Db\Mapping\Definition\Embedded\EnumPropertyColumnDefiner
+    public function enum(string $class, bool $isNullable = false) : EnumPropertyColumnDefiner
     {
         return new EnumPropertyColumnDefiner(function ($columnName, array $valueMap = null) use ($class, $isNullable) {
             $enumMapper = new EnumMapper($this->orm, $isNullable, $columnName, $class, $valueMap);
@@ -92,7 +93,7 @@ class EmbeddedRelationTypeDefiner
      * @return EmbeddedValueObjectDefiner
      * @throws InvalidArgumentException
      */
-    public function object() : \Dms\Core\Persistence\Db\Mapping\Definition\Embedded\EmbeddedValueObjectDefiner
+    public function object() : EmbeddedValueObjectDefiner
     {
         return new EmbeddedValueObjectDefiner($this->orm, function (callable $mapperLoader, $issetColumnName = null) {
             if ($issetColumnName) {
@@ -124,7 +125,7 @@ class EmbeddedRelationTypeDefiner
      * @return EmbeddedCollectionDefiner
      * @throws InvalidArgumentException
      */
-    public function collection() : \Dms\Core\Persistence\Db\Mapping\Definition\Embedded\EmbeddedCollectionDefiner
+    public function collection() : EmbeddedCollectionDefiner
     {
         return new EmbeddedCollectionDefiner(
                 $this->orm,
@@ -141,7 +142,7 @@ class EmbeddedRelationTypeDefiner
                                 $parentTable->getName(),
                                 $this->orm->getNamespace() . $tableName,
                                 $parentTable->getPrimaryKeyColumn()->withName($primaryKeyName),
-                                new Column($foreignKeyName, Integer::normal()),
+                                new Column($foreignKeyName, PrimaryKeyBuilder::primaryKeyType()),
                                 $parentTable->getPrimaryKeyColumn()
                         );
                     });

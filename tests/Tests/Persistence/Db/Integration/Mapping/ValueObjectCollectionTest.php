@@ -46,12 +46,20 @@ class ValueObjectCollectionTest extends DbIntegrationTest
         return EntityWithEmailsMapper::orm();
     }
 
+    public function testForeignKeyIsCompatibleWithReferencedColumn()
+    {
+        $this->assertEquals(
+            $this->entities->getPrimaryKeyColumn()->getType(),
+            $this->emails->getColumn('entity_id')->getType()->autoIncrement()
+        );
+    }
+
     public function testBuildsTableForEmbeddedObjectsWithForeignKey()
     {
         $this->assertEquals(
                 new Table('emails', [
                         PrimaryKeyBuilder::incrementingInt('id'),
-                        new Column('entity_id', Integer::normal()),
+                        new Column('entity_id', PrimaryKeyBuilder::primaryKeyType()),
                         new Column('email', new Varchar(255))
                 ], [], [
                         new ForeignKey(
