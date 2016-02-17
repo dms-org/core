@@ -2,8 +2,6 @@
 
 namespace Dms\Core\Model\Criteria\Condition;
 
-use Dms\Core\Model\ITypedObject;
-
 /**
  * The not condition class.
  *
@@ -40,7 +38,7 @@ class NotCondition extends Condition
      */
     protected function makeArrayFilterCallable() : callable
     {
-        $innerCondition = $this->condition->getFilterCallable();
+        $innerCondition = $this->condition->getArrayFilterCallable();
 
         return function (array $objects) use ($innerCondition) {
             return array_diff_key($objects, $innerCondition($objects));
