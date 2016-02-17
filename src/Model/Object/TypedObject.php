@@ -4,6 +4,8 @@ namespace Dms\Core\Model\Object;
 
 use Dms\Core\Exception\InvalidOperationException;
 use Dms\Core\Model\Criteria\Criteria;
+use Dms\Core\Model\Criteria\CustomSpecification;
+use Dms\Core\Model\ISpecification;
 use Dms\Core\Model\ITypedObject;
 use Dms\Core\Model\ObjectCollection;
 use Dms\Core\Model\Type\Builder\Type;
@@ -99,6 +101,28 @@ abstract class TypedObject implements ITypedObject, \Serializable
     final public static function type() : ObjectType
     {
         return Type::object(get_called_class());
+    }
+
+    /**
+     * Creates a specification for the current class according to the
+     * supplied callback.
+     *
+     * Example:
+     * <code>
+     * self::specification(function (SpecificationDefinition $match) {
+     *      $match->where(self::PROPERTY, '=', 'some-value');
+     * });
+     * </code>
+     *
+     * @see SpecificationDefinition
+     *
+     * @param callable $definitionCallback
+     *
+     * @return ISpecification
+     */
+    final protected static function specification(callable $definitionCallback) : ISpecification
+    {
+        return new CustomSpecification(get_called_class(), $definitionCallback);
     }
 
     /**
