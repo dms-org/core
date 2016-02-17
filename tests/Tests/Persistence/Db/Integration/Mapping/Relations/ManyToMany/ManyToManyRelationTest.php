@@ -56,6 +56,19 @@ class ManyToManyRelationTest extends DbIntegrationTest
         $this->anotherTable = $db->getTable('anothers')->getStructure();
     }
 
+    public function testJoinTableForeignKeysAreCompatibleWithReferencedPrimaryKeys()
+    {
+        $this->assertEquals(
+            $this->oneTable->getPrimaryKeyColumn()->getType(),
+            $this->joinTable->getColumn('one_id')->getType()->autoIncrement()
+        );
+
+        $this->assertEquals(
+            $this->anotherTable->getPrimaryKeyColumn()->getType(),
+            $this->joinTable->getColumn('another_id')->getType()->autoIncrement()
+        );
+    }
+
     public function testCreatesForeignKeys()
     {
         $this->assertEquals(

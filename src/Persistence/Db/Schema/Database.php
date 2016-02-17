@@ -20,7 +20,7 @@ class Database
     /**
      * Database constructor.
      *
-     * @param Table[]     $tables
+     * @param Table[] $tables
      *
      * @throws InvalidArgumentException
      */
@@ -31,8 +31,8 @@ class Database
         foreach ($tables as $table) {
             if (isset($this->tables[$table->getName()])) {
                 throw InvalidArgumentException::format(
-                        'Could not construct %s: duplicate tables found for name %s',
-                        get_class($this), $table->getName()
+                    'Could not construct %s: duplicate tables found for name %s',
+                    get_class($this), $table->getName()
                 );
             }
 
@@ -76,8 +76,8 @@ class Database
     {
         if (!$this->hasTable($name)) {
             throw InvalidArgumentException::format(
-                    'Could not find table: expecting one of (%s), %s given',
-                    Debug::formatValues($this->getTableNames()), $name
+                'Could not find table: expecting one of (%s), %s given',
+                Debug::formatValues($this->getTableNames()), $name
             );
         }
 

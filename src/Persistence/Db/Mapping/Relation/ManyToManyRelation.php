@@ -18,6 +18,7 @@ use Dms\Core\Persistence\Db\RowSet;
 use Dms\Core\Persistence\Db\Schema\Column;
 use Dms\Core\Persistence\Db\Schema\ForeignKey;
 use Dms\Core\Persistence\Db\Schema\ForeignKeyMode;
+use Dms\Core\Persistence\Db\Schema\PrimaryKeyBuilder;
 use Dms\Core\Persistence\Db\Schema\Table;
 use Dms\Core\Persistence\Db\Schema\Type\Integer;
 use Pinq\Iterators\Common\Identity;
@@ -98,11 +99,11 @@ class ManyToManyRelation extends ToManyRelationBase
         $orm                          = $mapper->getDefinition()->getOrm();
         $this->parentTableName        = $parentTableName;
         $this->parentTablePrimaryKey  = $parentTablePrimaryKey;
-        $this->parentForeignKeyColumn = new Column($parentForeignKeyColumnName, Integer::normal());
+        $this->parentForeignKeyColumn = new Column($parentForeignKeyColumnName, PrimaryKeyBuilder::primaryKeyType());
 
         $this->relatedTableName        = $mapper->getPrimaryTableName();
         $this->relatedTablePrimaryKey  = $mapper->getPrimaryTable()->getPrimaryKeyColumn();
-        $this->relatedForeignKeyColumn = new Column($relatedForeignKeyColumnName, Integer::normal());
+        $this->relatedForeignKeyColumn = new Column($relatedForeignKeyColumnName, PrimaryKeyBuilder::primaryKeyType());
 
         $inverseRelation = $reference->getBidirectionalRelation();
         if ($inverseRelation) {

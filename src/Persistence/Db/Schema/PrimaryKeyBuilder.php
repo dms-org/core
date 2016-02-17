@@ -3,6 +3,7 @@
 namespace Dms\Core\Persistence\Db\Schema;
 
 use Dms\Core\Persistence\Db\Schema\Type\Integer;
+use Dms\Core\Persistence\Db\Schema\Type\Type;
 
 /**
  * The static primary key column factory
@@ -18,6 +19,16 @@ class PrimaryKeyBuilder
      */
     public static function incrementingInt(string $name) : Column
     {
-        return new Column($name, Integer::normal()->unsigned()->autoIncrement(), true);
+        return new Column($name, self::primaryKeyType()->autoIncrement(), true);
+    }
+
+    /**
+     * Gets the column type for primary keys.
+     *
+     * @return Integer
+     */
+    public static function primaryKeyType() : Integer
+    {
+        return Integer::normal()->unsigned();
     }
 }

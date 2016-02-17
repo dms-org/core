@@ -41,8 +41,8 @@ class OrmRelationsTest extends OrmTestBase
                         PrimaryKeyBuilder::incrementingInt('id'),
                 ]),
                 new Table($namespace . 'one_anothers', [
-                        new Column('one_id', Integer::normal()),
-                        new Column('another_id', Integer::normal()),
+                        new Column('one_id', PrimaryKeyBuilder::primaryKeyType()),
+                        new Column('another_id', PrimaryKeyBuilder::primaryKeyType()),
                 ], [], [
                         new ForeignKey(
                                 "fk_{$namespace}one_anothers_one_id_{$namespace}ones",
