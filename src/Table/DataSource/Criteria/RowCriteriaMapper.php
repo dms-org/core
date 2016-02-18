@@ -48,7 +48,7 @@ class RowCriteriaMapper
      *
      * @return ILoadCriteria
      */
-    public function mapCriteria(IRowCriteria $criteria) : \Dms\Core\Model\ILoadCriteria
+    public function mapCriteria(IRowCriteria $criteria) : ILoadCriteria
     {
         $objectCriteria = new LoadCriteria($this->definition->getClass());
 

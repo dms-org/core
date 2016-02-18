@@ -62,6 +62,10 @@ class FinalizedObjectTableDefinition
         foreach (array_merge($propertyComponentIdMap, array_keys($componentIdCallableMap)) as $componentId) {
             $this->structure->getColumnAndComponent($componentId);
         }
+
+        foreach ($this->propertyComponentIdMap as $memberExpression => $componentId) {
+
+        }
     }
 
     /**
@@ -129,7 +133,7 @@ class FinalizedObjectTableDefinition
     /**
      * @return FinalizedClassDefinition
      */
-    public function getClass() : \Dms\Core\Model\Object\FinalizedClassDefinition
+    public function getClass() : FinalizedClassDefinition
     {
         return $this->class;
     }
@@ -137,7 +141,7 @@ class FinalizedObjectTableDefinition
     /**
      * @return ITableStructure
      */
-    public function getStructure() : \Dms\Core\Table\ITableStructure
+    public function getStructure() : ITableStructure
     {
         return $this->structure;
     }

@@ -2,8 +2,8 @@
 
 namespace Dms\Core\Table\DataSource;
 
+use Dms\Core\Exception\InvalidArgumentException;
 use Dms\Core\Model\Criteria\IMemberExpressionParser;
-use Dms\Core\Model\Criteria\NestedMember;
 use Dms\Core\Model\IObjectSet;
 use Dms\Core\Model\IObjectSetWithLoadCriteriaSupport;
 use Dms\Core\Model\ITypedObject;
@@ -57,12 +57,32 @@ class ObjectTableDataSource extends TableDataSource
         $this->memberParser   = $objectSource->criteria()->getMemberExpressionParser();
         $this->criteriaMapper = new RowCriteriaMapper($definition);
         $this->definition     = $definition;
+
+        $this->validateMapping();
+    }
+
+    protected function validateMapping()
+    {
+        foreach ($this->definition->getPropertyComponentIdMap() as $memberExpression => $componentId) {
+            $member = $this->memberParser->parse($this->definition->getClass(), $memberExpression);
+
+            $columnType = $this->structure->getComponent($componentId)->getType()->getPhpType()->nullable();
+            $memberType = $member->getResultingType();
+
+            if (!$columnType->isSupersetOf($memberType)) {
+                throw InvalidArgumentException::format(
+                    'Invalid object property to column mapping: could not map member \'%s\' of type %s on class %s to column component \'%s\' of type %s as the types are incompatible',
+                    $memberExpression, $memberType->asTypeString(), $this->definition->getClass()->getClassName(),
+                    $componentId, $columnType->asTypeString()
+                );
+            }
+        }
     }
 
     /**
      * @return IObjectSet
      */
-    final public function getObjectDataSource() : \Dms\Core\Model\IObjectSet
+    final public function getObjectDataSource() : IObjectSet
     {
         return $this->objectSource;
     }
@@ -70,7 +90,7 @@ class ObjectTableDataSource extends TableDataSource
     /**
      * @return FinalizedObjectTableDefinition
      */
-    final public function getDefinition() : Definition\FinalizedObjectTableDefinition
+    final public function getDefinition() : FinalizedObjectTableDefinition
     {
         return $this->definition;
     }

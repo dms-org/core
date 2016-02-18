@@ -2,6 +2,7 @@
 
 namespace Dms\Core\Tests\Table\DataSource;
 
+use Dms\Core\Exception\InvalidArgumentException;
 use Dms\Core\Form\Field\Builder\Field;
 use Dms\Core\Model\ObjectCollection;
 use Dms\Core\Table\Builder\Column;
@@ -57,5 +58,16 @@ class ObjectTableDataSourceTest extends PeopleTableDataSourceTest
                 new TestPerson('Joe', 'Java', 32),
                 new TestPerson('Kelly', 'Rust', 18),
         ]));
+    }
+
+    public function testIncompatiblePropertyColumnMapping()
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        $map = new ObjectTableDefinition(TestPerson::definition());
+        $map->property('firstName')->to(Field::name('age')->label('Age')->int());
+
+        $this->definition = $map->finalize();
+        $this->buildDataSource($this->definition->getStructure());
     }
 }

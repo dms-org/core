@@ -91,7 +91,7 @@ class SummaryTableDefinition
      * @return ObjectTableDefinition
      * @throws InvalidOperationException
      */
-    public function map() : \Dms\Core\Table\DataSource\Definition\ObjectTableDefinition
+    public function map() : ObjectTableDefinition
     {
         if ($this->isFinishedStructure) {
             throw InvalidOperationException::format(
@@ -110,7 +110,7 @@ class SummaryTableDefinition
      *
      * @return ColumnMappingDefiner
      */
-    public function mapProperty(string $memberExpression) : \Dms\Core\Table\DataSource\Definition\ColumnMappingDefiner
+    public function mapProperty(string $memberExpression) : ColumnMappingDefiner
     {
         return $this->map()->property($memberExpression);
     }
@@ -131,7 +131,7 @@ class SummaryTableDefinition
      *
      * @return ColumnMappingDefiner
      */
-    public function mapCallback(callable $callback) : \Dms\Core\Table\DataSource\Definition\ColumnMappingDefiner
+    public function mapCallback(callable $callback) : ColumnMappingDefiner
     {
         return $this->map()->computed($callback);
     }
@@ -228,7 +228,7 @@ class SummaryTableDefinition
      *
      * @return ISummaryTable
      */
-    public function finalize() : \Dms\Core\Common\Crud\Table\ISummaryTable
+    public function finalize() : ISummaryTable
     {
         $dataSource = $this->finalizeTableStructure();
         $views      = [];
