@@ -21,7 +21,13 @@ class FieldOption implements IFieldOption
      */
     private $label;
 
-    public function __construct($value, $label)
+    /**
+     * FieldOption constructor.
+     *
+     * @param mixed  $value
+     * @param string $label
+     */
+    public function __construct($value, string $label)
     {
         $this->value = $value;
         $this->label = $label;
