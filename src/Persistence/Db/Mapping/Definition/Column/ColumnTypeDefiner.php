@@ -31,6 +31,11 @@ class ColumnTypeDefiner
     /**
      * @var string
      */
+    protected $tableName;
+
+    /**
+     * @var string
+     */
     protected $name;
 
     /**
@@ -62,12 +67,13 @@ class ColumnTypeDefiner
      * @param bool             $nullable
      */
     public function __construct(
-            MapperDefinition $definition,
-            callable $callback,
-            string $name,
-            bool $nullable = false
+        MapperDefinition $definition,
+        callable $callback,
+        string $name,
+        bool $nullable = false
     ) {
         $this->definition = $definition;
+        $this->tableName  = $definition->getTableName();
         $this->callback   = $callback;
         $this->name       = $name;
         $this->nullable   = $nullable;
@@ -94,7 +100,7 @@ class ColumnTypeDefiner
      */
     public function index(string $indexName = null)
     {
-        $this->indexName = $indexName ?: $this->name . '_index';
+        $this->indexName = $indexName ?? $this->tableName . '_' . $this->name . '_index';
 
         return $this;
     }
@@ -108,7 +114,7 @@ class ColumnTypeDefiner
      */
     public function unique(string $indexName = null)
     {
-        $this->indexName = $indexName ?: $this->name . '_unique_index';
+        $this->indexName = $indexName ?? $this->tableName . '_' . $this->name . '_unique_index';
         $this->isUnique  = true;
 
         return $this;

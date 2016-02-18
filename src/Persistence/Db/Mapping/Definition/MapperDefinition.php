@@ -736,6 +736,14 @@ class MapperDefinition extends MapperDefinitionBase
     }
 
     /**
+     * @return string|null
+     */
+    public function getTableName()
+    {
+        return $this->tableName;
+    }
+
+    /**
      * @return Column[]
      */
     public function getColumns() : array
