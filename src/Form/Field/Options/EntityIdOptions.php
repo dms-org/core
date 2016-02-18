@@ -46,7 +46,7 @@ class EntityIdOptions implements IFieldOptions
     /**
      * @return IEntitySet
      */
-    public function getEntities() : \Dms\Core\Model\IEntitySet
+    public function getEntities() : IEntitySet
     {
         return $this->entities;
     }
@@ -65,7 +65,7 @@ class EntityIdOptions implements IFieldOptions
         foreach ($this->entities->getAll() as $entity) {
             $options[] = new FieldOption(
                     $entity->getId(),
-                    $this->labelCallback ? call_user_func($this->labelCallback, $entity) : $entity->getId()
+                    $this->labelCallback ? call_user_func($this->labelCallback, $entity) : (string)$entity->getId()
             );
         }
 
