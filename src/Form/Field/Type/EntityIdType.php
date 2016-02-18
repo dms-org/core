@@ -46,7 +46,7 @@ class EntityIdType extends FieldType
     /**
      * @return IPhpType
      */
-    protected function buildPhpTypeOfInput() : \Dms\Core\Model\Type\IType
+    protected function buildPhpTypeOfInput() : IPhpType
     {
         return Type::mixed();
     }

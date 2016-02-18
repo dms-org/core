@@ -201,6 +201,41 @@ class FieldBuilderTest extends FieldBuilderTestBase
         $this->assertEquals(PhpType::int()->nullable(), $field->getProcessedType());
     }
 
+    public function testEntityLabelledByCallback()
+    {
+        $entity = $this->getMock(IEntity::class);
+        $entity->method('getId')->willReturn(5);
+
+        $entities = new EntityCollection(IEntity::class, [$entity]);
+        $field    = $this->field()->entityIdFrom($entities)
+            ->labelledByCallback(function (IEntity $entity) {
+                return 'ID: ' . $entity->getId();
+            })
+            ->build();
+
+        /** @var EntityIdType $type */
+        $type = $field->getType();
+
+        $this->assertEquals([new FieldOption(5, 'ID: 5')], $type->getOptions()->getAll());
+    }
+
+    public function testEntityLabelledByMemberExpression()
+    {
+        $entity = $this->getMock(Entity::class);
+        $entity->setId(5);
+
+        $entities = new EntityCollection(Entity::class, [$entity]);
+        $field    = $this->field()->entityFrom($entities)
+            ->labelledBy(Entity::ID)
+            ->build();
+
+        /** @var ArrayOfType $type */
+        $type = $field->getType();
+
+        $this->assertEquals([new FieldOption(5, '5')], $type->getOptions()->getAll());
+    }
+
+
     public function testEntityArrayField()
     {
         $entities = new EntityCollection(IEntity::class);
@@ -217,6 +252,40 @@ class FieldBuilderTest extends FieldBuilderTestBase
         $this->assertHasProcessor(new EntityIdArrayValidator(PhpType::arrayOf(PhpType::int())->nullable(), $entities), $field);
         $this->assertHasProcessor(new EntityArrayLoaderProcessor($entities), $field);
         $this->assertEquals(PhpType::arrayOf(PhpType::object(IEntity::class))->nullable(), $field->getProcessedType());
+    }
+
+    public function testEntityArrayLabelledByMemberExpression()
+    {
+        $entity = $this->getMock(Entity::class);
+        $entity->setId(5);
+
+        $entities = new EntityCollection(Entity::class, [$entity]);
+        $field    = $this->field()->entityIdsFrom($entities)
+            ->labelledBy(Entity::ID)
+            ->build();
+
+        /** @var ArrayOfEntityIdsType $type */
+        $type = $field->getType();
+
+        $this->assertEquals([new FieldOption(5, '5')], $type->getElementType()->getOptions()->getAll());
+    }
+
+    public function testEntityArrayLabelledByCallback()
+    {
+        $entity = $this->getMock(IEntity::class);
+        $entity->method('getId')->willReturn(5);
+
+        $entities = new EntityCollection(IEntity::class, [$entity]);
+        $field    = $this->field()->entityIdsFrom($entities)
+            ->labelledByCallback(function (IEntity $entity) {
+                return 'ID: ' . $entity->getId();
+            })
+            ->build();
+
+        /** @var ArrayOfEntityIdsType $type */
+        $type = $field->getType();
+
+        $this->assertEquals([new FieldOption(5, 'ID: 5')], $type->getElementType()->getOptions()->getAll());
     }
 
     public function testEntityFieldMappedToObjectCollection()

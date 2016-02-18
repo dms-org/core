@@ -64,8 +64,8 @@ class EntityIdOptions implements IFieldOptions
 
         foreach ($this->entities->getAll() as $entity) {
             $options[] = new FieldOption(
-                    $entity->getId(),
-                    $this->labelCallback ? call_user_func($this->labelCallback, $entity) : (string)$entity->getId()
+                $entity->getId(),
+                (string)($this->labelCallback ? call_user_func($this->labelCallback, $entity) : $entity->getId())
             );
         }
 
@@ -91,8 +91,8 @@ class EntityIdOptions implements IFieldOptions
 
         foreach ($entities->loadMatching($criteria) as $item) {
             $options[] = new FieldOption(
-                    $item['id'],
-                    isset($item['label']) ? $item['label'] : (string)$item['id']
+                $item['id'],
+                (string)(isset($item['label']) ? $item['label'] : $item['id'])
             );
         }
 
@@ -106,10 +106,10 @@ class EntityIdOptions implements IFieldOptions
     {
         if ($this->entities instanceof IObjectSetWithLoadCriteriaSupport) {
             return array_column(
-                    $this->entities->loadMatching(
-                            $this->entities->loadCriteria()->load('id')
-                    ),
-                    'id'
+                $this->entities->loadMatching(
+                    $this->entities->loadCriteria()->load('id')
+                ),
+                'id'
             );
         }
 

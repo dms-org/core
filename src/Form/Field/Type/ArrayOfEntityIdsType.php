@@ -2,6 +2,7 @@
 
 namespace Dms\Core\Form\Field\Type;
 
+use Dms\Core\Form\Field\Builder\Field;
 use Dms\Core\Form\Field\Processor\ArrayAllProcessor;
 use Dms\Core\Form\Field\Processor\EntityArrayLoaderProcessor;
 use Dms\Core\Form\Field\Processor\TypeProcessor;
@@ -10,6 +11,7 @@ use Dms\Core\Form\Field\Processor\Validator\IntValidator;
 use Dms\Core\Form\Field\Processor\Validator\RequiredValidator;
 use Dms\Core\Form\IField;
 use Dms\Core\Form\IFieldProcessor;
+use Dms\Core\Form\IFieldType;
 use Dms\Core\Model\IEntitySet;
 use Dms\Core\Model\Type\Builder\Type;
 
@@ -46,6 +48,20 @@ class ArrayOfEntityIdsType extends ArrayOfType
         $this->entities      = $entities;
         $this->loadAsObjects = $loadAsObjects;
         parent::__construct($entityIdField);
+    }
+
+    /**
+     * @param IFieldType $entityIdFieldType
+     *
+     * @return static
+     */
+    public function withElementFieldType(IFieldType $entityIdFieldType)
+    {
+        $clone               = clone $this;
+        $clone->elementField = Field::element()->type($entityIdFieldType)->build();
+        $clone->initializeFromCurrentAttributes();
+
+        return $clone;
     }
 
     /**

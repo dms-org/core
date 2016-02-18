@@ -20,8 +20,6 @@ use Dms\Core\Model\Type\IType;
  */
 class ArrayOfType extends FieldType
 {
-    const ATTR_ELEMENT_TYPE = 'element-type';
-
     const ATTR_MIN_ELEMENTS = 'min-elements';
     const ATTR_MAX_ELEMENTS = 'max-elements';
     const ATTR_EXACT_ELEMENTS = 'exact-elements';
@@ -31,12 +29,11 @@ class ArrayOfType extends FieldType
     /**
      * @var IField
      */
-    private $elementField;
+    protected $elementField;
 
     public function __construct(IField $elementField)
     {
-        $this->attributes[self::ATTR_ELEMENT_TYPE] = $elementField->getType();
-        $this->elementField                        = $elementField;
+        $this->elementField = $elementField;
         parent::__construct();
     }
 
@@ -45,13 +42,13 @@ class ArrayOfType extends FieldType
      */
     public function getElementType() : IFieldType
     {
-        return $this->get(self::ATTR_ELEMENT_TYPE);
+        return $this->elementField->getType();
     }
 
     /**
      * {@inheritdoc}
      */
-    public function buildPhpTypeOfInput() : \Dms\Core\Model\Type\IType
+    public function buildPhpTypeOfInput() : IType
     {
         return Type::arrayOf($this->getElementType()->getPhpTypeOfInput());
     }
@@ -67,8 +64,8 @@ class ArrayOfType extends FieldType
 
         if (count($this->elementField->getProcessors()) > 0) {
             $processors[] = new ArrayAllProcessor(
-                    $this->elementField->getProcessors(),
-                    $this->getElementType()->getProcessedPhpType()
+                $this->elementField->getProcessors(),
+                $this->getElementType()->getProcessedPhpType()
             );
         }
 

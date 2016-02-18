@@ -10,7 +10,7 @@ use Dms\Core\Form\Field\Type\FieldType;
  *
  * @author Elliot Levin <elliotlevin@hotmail.com>
  */
-class EntityFieldBuilderBase extends FieldBuilderBase
+abstract class EntityFieldBuilderBase extends FieldBuilderBase
 {
     /**
      * Labels the entity options with values of the supplied member expression.
@@ -19,17 +19,7 @@ class EntityFieldBuilderBase extends FieldBuilderBase
      *
      * @return static
      */
-    public function labelledBy(string $memberExpression)
-    {
-        /** @var EntityIdOptions $options */
-        $options = $this->type->get(FieldType::ATTR_OPTIONS);
-
-        return $this->attr(FieldType::ATTR_OPTIONS, new EntityIdOptions(
-                $options->getEntities(),
-                null,
-                $memberExpression
-        ));
-    }
+    abstract public function labelledBy(string $memberExpression);
 
     /**
      * Labels the entity options with the returned values of the supplied callback.
@@ -38,14 +28,5 @@ class EntityFieldBuilderBase extends FieldBuilderBase
      *
      * @return static
      */
-    public function labelledByCallback(callable $labelCallback)
-    {
-        /** @var EntityIdOptions $options */
-        $options = $this->type->get(FieldType::ATTR_OPTIONS);
-
-        return $this->attr(FieldType::ATTR_OPTIONS, new EntityIdOptions(
-                $options->getEntities(),
-                $labelCallback
-        ));
-    }
+    abstract public function labelledByCallback(callable $labelCallback);
 }
