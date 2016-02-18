@@ -92,7 +92,7 @@ class EntityIdOptions implements IFieldOptions
         foreach ($entities->loadMatching($criteria) as $item) {
             $options[] = new FieldOption(
                     $item['id'],
-                    isset($item['label']) ? $item['label'] : $item['id']
+                    isset($item['label']) ? $item['label'] : (string)$item['id']
             );
         }
 
