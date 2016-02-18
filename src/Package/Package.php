@@ -48,6 +48,15 @@ abstract class Package implements IPackage
     protected $loadedModules = [];
 
     /**
+     * The array of currently loading modules.
+     *
+     * This prevents infinite recursion when referencing other modules.
+     *
+     * @var array
+     */
+    protected $loadingModules = [];
+
+    /**
      * Package constructor.
      *
      * @param ContainerInterface $container
@@ -113,8 +122,8 @@ abstract class Package implements IPackage
         foreach ($widgetNames as $name) {
             if (strpos($name, '.') === false) {
                 throw InvalidArgumentException::format(
-                        'Invalid dashboard widget name: must be in format "module-name.widget-name", \'%s\' given',
-                        $name
+                    'Invalid dashboard widget name: must be in format "module-name.widget-name", \'%s\' given',
+                    $name
                 );
             }
 
@@ -138,12 +147,13 @@ abstract class Package implements IPackage
     /**
      * @inheritDoc
      */
-    final public function loadModule(string $name) : \Dms\Core\Module\IModule
+    final public function loadModule(string $name) : IModule
     {
+
         if (!isset($this->nameModuleClassMap[$name])) {
             throw ModuleNotFoundException::format(
-                    'Invalid module name supplied to %s: expecting one of (%s), \'%s\' given',
-                    get_class($this) . '::' . __FUNCTION__, Debug::formatValues($this->getModuleNames()), $name
+                'Invalid module name supplied to %s: expecting one of (%s), \'%s\' given',
+                get_class($this) . '::' . __FUNCTION__, Debug::formatValues($this->getModuleNames()), $name
             );
         }
 
@@ -163,22 +173,26 @@ abstract class Package implements IPackage
      * @return IModule
      * @throws InvalidArgumentException
      */
-    private function loadModuleFromClass(string $name, string $moduleClass) : \Dms\Core\Module\IModule
+    private function loadModuleFromClass(string $name, string $moduleClass) : IModule
     {
         if (!is_subclass_of($moduleClass, IModule::class, true)) {
             throw InvalidArgumentException::format(
-                    'Invalid module class defined within package \'%s\': expecting subclass of %s, %s given',
-                    $this->name, IModule::class, $moduleClass
+                'Invalid module class defined within package \'%s\': expecting subclass of %s, %s given',
+                $this->name, IModule::class, $moduleClass
             );
         }
+
+        $this->loadingModules[$name] = true;
 
         /** @var IModule $module */
         $module = $this->container->get($moduleClass);
 
+        unset($this->loadingModules[$name]);
+
         if ($module->getName() !== $name) {
             throw InvalidArgumentException::format(
-                    'Invalid module class defined within package \'%s\': defined module name \'%s\' does not match module name \'%s\' from instance of %s',
-                    $this->name, $name, $module->getName(), get_class($module)
+                'Invalid module class defined within package \'%s\': defined module name \'%s\' does not match module name \'%s\' from instance of %s',
+                $this->name, $name, $module->getName(), get_class($module)
             );
         }
 
@@ -193,7 +207,9 @@ abstract class Package implements IPackage
     final public function loadModules() : array
     {
         foreach ($this->nameModuleClassMap as $name => $moduleClass) {
-            $this->loadModule($name);
+            if (!isset($this->loadingModules[$name])) {
+                $this->loadModule($name);
+            }
         }
 
         return $this->loadedModules;
@@ -226,7 +242,7 @@ abstract class Package implements IPackage
     /**
      * @inheritDoc
      */
-    final public function getIocContainer() : \Interop\Container\ContainerInterface
+    final public function getIocContainer() : ContainerInterface
     {
         return $this->container;
     }

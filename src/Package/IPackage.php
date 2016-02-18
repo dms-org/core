@@ -70,7 +70,7 @@ interface IPackage
      * @return IModule
      * @throws ModuleNotFoundException if the module name is invalid
      */
-    public function loadModule(string $name) : \Dms\Core\Module\IModule;
+    public function loadModule(string $name) : IModule;
 
     /**
      * Loads the namespaced permissions.
@@ -86,5 +86,5 @@ interface IPackage
      *
      * @return ContainerInterface
      */
-    public function getIocContainer() : \Interop\Container\ContainerInterface;
+    public function getIocContainer() : ContainerInterface;
 }
