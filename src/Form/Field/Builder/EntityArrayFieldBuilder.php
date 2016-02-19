@@ -5,7 +5,6 @@ namespace Dms\Core\Form\Field\Builder;
 use Dms\Core\Form\Field\Options\EntityIdOptions;
 use Dms\Core\Form\Field\Type\ArrayOfEntityIdsType;
 use Dms\Core\Form\Field\Type\ArrayOfType;
-use Dms\Core\Form\IField;
 
 /**
  * The entity array field builder class.
@@ -26,12 +25,13 @@ class EntityArrayFieldBuilder extends EntityFieldBuilderBase
     public function labelledBy(string $memberExpression)
     {
         /** @var ArrayOfEntityIdsType $fieldType */
-        $fieldType       = $this->type;
+        $fieldType = $this->type;
 
         /** @var EntityIdOptions $options */
-        $options         = $fieldType->getElementType()->getOptions();
+        $elementType = $fieldType->getElementType();
+        $options     = $elementType->getOptions();
 
-        $entityFieldType = $fieldType->with(ArrayOfType::ATTR_OPTIONS, new EntityIdOptions(
+        $entityFieldType = $elementType->with(ArrayOfType::ATTR_OPTIONS, new EntityIdOptions(
             $options->getEntities(),
             null,
             $memberExpression
@@ -52,12 +52,13 @@ class EntityArrayFieldBuilder extends EntityFieldBuilderBase
     public function labelledByCallback(callable $labelCallback)
     {
         /** @var ArrayOfEntityIdsType $fieldType */
-        $fieldType       = $this->type;
+        $fieldType = $this->type;
 
         /** @var EntityIdOptions $options */
-        $options         = $fieldType->getElementType()->getOptions();
+        $elementType = $fieldType->getElementType();
+        $options     = $elementType->getOptions();
 
-        $entityFieldType = $fieldType->with(ArrayOfType::ATTR_OPTIONS, new EntityIdOptions(
+        $entityFieldType = $elementType->with(ArrayOfType::ATTR_OPTIONS, new EntityIdOptions(
             $options->getEntities(),
             $labelCallback,
             null

@@ -217,6 +217,7 @@ class FieldBuilderTest extends FieldBuilderTestBase
         $type = $field->getType();
 
         $this->assertEquals([new FieldOption(5, 'ID: 5')], $type->getOptions()->getAll());
+        $this->assertEquals(Type::mixed(), $type->getPhpTypeOfInput());
     }
 
     public function testEntityLabelledByMemberExpression()
@@ -233,6 +234,7 @@ class FieldBuilderTest extends FieldBuilderTestBase
         $type = $field->getType();
 
         $this->assertEquals([new FieldOption(5, '5')], $type->getOptions()->getAll());
+        $this->assertEquals(Type::mixed(), $type->getPhpTypeOfInput());
     }
 
 
@@ -268,6 +270,7 @@ class FieldBuilderTest extends FieldBuilderTestBase
         $type = $field->getType();
 
         $this->assertEquals([new FieldOption(5, '5')], $type->getElementType()->getOptions()->getAll());
+        $this->assertEquals(Type::arrayOf(Type::mixed())->nullable(), $type->getPhpTypeOfInput());
     }
 
     public function testEntityArrayLabelledByCallback()
@@ -286,6 +289,7 @@ class FieldBuilderTest extends FieldBuilderTestBase
         $type = $field->getType();
 
         $this->assertEquals([new FieldOption(5, 'ID: 5')], $type->getElementType()->getOptions()->getAll());
+        $this->assertEquals(Type::arrayOf(Type::mixed())->nullable(), $type->getPhpTypeOfInput());
     }
 
     public function testEntityFieldMappedToObjectCollection()
