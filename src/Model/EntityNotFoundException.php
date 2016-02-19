@@ -13,7 +13,7 @@ class EntityNotFoundException extends BaseException
 {
     public function __construct($entityType, $id, $idProperty = IEntity::ID)
     {
-        parent::__construct("Could not find an entity of type {$entityType} with property \'{$idProperty}\' = {$id}");
+        parent::__construct("Could not find an entity of type {$entityType} with property '{$idProperty}' = {$id}");
     }
 
 }
