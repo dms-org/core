@@ -127,14 +127,14 @@ class RecursiveManyToManyRelationTest extends DbIntegrationTest
                         ['id' => 6],
                 ],
                 'parents'            => [
-                        ['parent_id' => 1, 'child_id' => 4],
-                        ['parent_id' => 1, 'child_id' => 5],
-                        ['parent_id' => 1, 'child_id' => 6],
-                        ['parent_id' => 1, 'child_id' => 1],
-                        ['parent_id' => 2, 'child_id' => 4],
-                        ['parent_id' => 2, 'child_id' => 6],
-                        ['parent_id' => 3, 'child_id' => 5],
-                        ['parent_id' => 3, 'child_id' => 6],
+                        ['id' => 1, 'parent_id' => 1, 'child_id' => 4],
+                        ['id' => 2, 'parent_id' => 1, 'child_id' => 5],
+                        ['id' => 3, 'parent_id' => 1, 'child_id' => 6],
+                        ['id' => 4, 'parent_id' => 1, 'child_id' => 1],
+                        ['id' => 5, 'parent_id' => 2, 'child_id' => 4],
+                        ['id' => 6, 'parent_id' => 2, 'child_id' => 6],
+                        ['id' => 7, 'parent_id' => 3, 'child_id' => 5],
+                        ['id' => 8, 'parent_id' => 3, 'child_id' => 6],
                 ],
         ]);
 
@@ -160,14 +160,14 @@ class RecursiveManyToManyRelationTest extends DbIntegrationTest
                         ['id' => 6],
                 ],
                 'parents'            => [
-                        ['parent_id' => 1, 'child_id' => 4],
-                        ['parent_id' => 1, 'child_id' => 5],
-                        ['parent_id' => 1, 'child_id' => 6],
-                        ['parent_id' => 1, 'child_id' => 1],
-                        ['parent_id' => 2, 'child_id' => 4],
-                        ['parent_id' => 2, 'child_id' => 6],
-                        ['parent_id' => 3, 'child_id' => 5],
-                        ['parent_id' => 3, 'child_id' => 6],
+                        ['id' => 1, 'parent_id' => 1, 'child_id' => 4],
+                        ['id' => 2, 'parent_id' => 1, 'child_id' => 5],
+                        ['id' => 3, 'parent_id' => 1, 'child_id' => 6],
+                        ['id' => 4, 'parent_id' => 1, 'child_id' => 1],
+                        ['id' => 5, 'parent_id' => 2, 'child_id' => 4],
+                        ['id' => 6, 'parent_id' => 2, 'child_id' => 6],
+                        ['id' => 7, 'parent_id' => 3, 'child_id' => 5],
+                        ['id' => 8, 'parent_id' => 3, 'child_id' => 6],
                 ],
         ]);
 
@@ -229,14 +229,14 @@ class RecursiveManyToManyRelationTest extends DbIntegrationTest
                         ['id' => 6],
                 ],
                 'parents'            => [
-                        ['parent_id' => 1, 'child_id' => 4],
-                        ['parent_id' => 1, 'child_id' => 5],
-                        ['parent_id' => 1, 'child_id' => 6],
-                        ['parent_id' => 1, 'child_id' => 1],
-                        ['parent_id' => 2, 'child_id' => 4],
-                        ['parent_id' => 2, 'child_id' => 6],
-                        ['parent_id' => 3, 'child_id' => 5],
-                        ['parent_id' => 3, 'child_id' => 6],
+                        ['id' => 1, 'parent_id' => 1, 'child_id' => 4],
+                        ['id' => 2, 'parent_id' => 1, 'child_id' => 5],
+                        ['id' => 3, 'parent_id' => 1, 'child_id' => 6],
+                        ['id' => 4, 'parent_id' => 1, 'child_id' => 1],
+                        ['id' => 5, 'parent_id' => 2, 'child_id' => 4],
+                        ['id' => 6, 'parent_id' => 2, 'child_id' => 6],
+                        ['id' => 7, 'parent_id' => 3, 'child_id' => 5],
+                        ['id' => 8, 'parent_id' => 3, 'child_id' => 6],
                 ],
         ]);
 
@@ -250,7 +250,7 @@ class RecursiveManyToManyRelationTest extends DbIntegrationTest
                         ['id' => 6],
                 ],
                 'parents'            => [
-                        ['parent_id' => 2, 'child_id' => 6],
+                        ['id' => 6, 'parent_id' => 2, 'child_id' => 6],
                 ],
         ]);
 
@@ -277,10 +277,10 @@ class RecursiveManyToManyRelationTest extends DbIntegrationTest
                         ['id' => 2],
                 ],
                 'parents'            => [
-                        ['parent_id' => 1, 'child_id' => 1],
-                        ['parent_id' => 1, 'child_id' => 2],
-                        ['parent_id' => 2, 'child_id' => 1],
-                        ['parent_id' => 2, 'child_id' => 2],
+                        ['id' => 1, 'parent_id' => 1, 'child_id' => 1],
+                        ['id' => 2, 'parent_id' => 1, 'child_id' => 2],
+                        ['id' => 3, 'parent_id' => 2, 'child_id' => 1],
+                        ['id' => 4, 'parent_id' => 2, 'child_id' => 2],
                 ],
         ]);
 

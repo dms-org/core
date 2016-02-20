@@ -246,12 +246,19 @@ class DoctrinePlatform extends Platform
     private function compileAsSubSelectPrimaryKey(Query $query)
     {
         $fromTable = $query->getTable();
-        $subSelect = Select::copyFrom($query);
-        $subSelect->copyFrom($query);
 
-        $subSelect->setColumns([
-                $fromTable->getPrimaryKeyColumnName() => Expr::column($subSelect->getTableAlias(), $fromTable->getPrimaryKeyColumn())
-        ]);
+        $subSelect = Select::copyFrom($query);
+
+        if ($fromTable->hasPrimaryKeyColumn()) {
+            $subSelect->setColumns([
+                    $fromTable->getPrimaryKeyColumnName() => Expr::column($subSelect->getTableAlias(), $fromTable->getPrimaryKeyColumn())
+            ]);
+        } else {
+            throw InvalidArgumentException::format(
+                    'Cannot select primary key from table \'%s\' for update/delete query: table has no primary key defined',
+                    $fromTable->getName()
+            );
+        }
 
         return $this->compileSelect($subSelect);
     }

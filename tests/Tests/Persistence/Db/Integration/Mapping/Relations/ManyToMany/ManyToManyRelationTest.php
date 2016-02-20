@@ -148,13 +148,13 @@ class ManyToManyRelationTest extends DbIntegrationTest
                         ['id' => 3, 'val' => 3],
                 ],
                 'one_anothers' => [
-                        ['one_id' => 1, 'another_id' => 1],
-                        ['one_id' => 1, 'another_id' => 2],
-                        ['one_id' => 1, 'another_id' => 3],
-                        ['one_id' => 2, 'another_id' => 1],
-                        ['one_id' => 2, 'another_id' => 3],
-                        ['one_id' => 3, 'another_id' => 2],
-                        ['one_id' => 3, 'another_id' => 3],
+                        ['id' => 1, 'one_id' => 1, 'another_id' => 1],
+                        ['id' => 2, 'one_id' => 1, 'another_id' => 2],
+                        ['id' => 3, 'one_id' => 1, 'another_id' => 3],
+                        ['id' => 4, 'one_id' => 2, 'another_id' => 1],
+                        ['id' => 5, 'one_id' => 2, 'another_id' => 3],
+                        ['id' => 6, 'one_id' => 3, 'another_id' => 2],
+                        ['id' => 7, 'one_id' => 3, 'another_id' => 3],
                 ],
         ]);
 
@@ -177,9 +177,9 @@ class ManyToManyRelationTest extends DbIntegrationTest
                         ['id' => 3, 'val' => 3],
                 ],
                 'one_anothers' => [
-                        ['one_id' => 1, 'another_id' => 1],
-                        ['one_id' => 1, 'another_id' => 2],
-                        ['one_id' => 1, 'another_id' => 3],
+                        ['id' => 1, 'one_id' => 1, 'another_id' => 1],
+                        ['id' => 2, 'one_id' => 1, 'another_id' => 2],
+                        ['id' => 3, 'one_id' => 1, 'another_id' => 3],
                 ],
         ]);
 
@@ -203,9 +203,9 @@ class ManyToManyRelationTest extends DbIntegrationTest
                         ['id' => 5, 'val' => 2],
                 ],
                 'one_anothers' => [
-                        ['one_id' => 1, 'another_id' => 4],
-                        ['one_id' => 1, 'another_id' => 5],
-                        ['one_id' => 1, 'another_id' => 2],
+                        ['id' => 4, 'one_id' => 1, 'another_id' => 4],
+                        ['id' => 5, 'one_id' => 1, 'another_id' => 5],
+                        ['id' => 6, 'one_id' => 1, 'another_id' => 2],
                 ],
         ]);
 
@@ -255,8 +255,8 @@ class ManyToManyRelationTest extends DbIntegrationTest
                         ['id' => 1, 'val' => 1],
                 ],
                 'one_anothers' => [
-                        ['one_id' => 1, 'another_id' => 1],
-                        ['one_id' => 1, 'another_id' => 1],
+                        ['id' => 1, 'one_id' => 1, 'another_id' => 1],
+                        ['id' => 2, 'one_id' => 1, 'another_id' => 1],
                 ],
         ]);
 
@@ -291,13 +291,13 @@ class ManyToManyRelationTest extends DbIntegrationTest
                         ['id' => 3, 'val' => 3],
                 ],
                 'one_anothers' => [
-                        ['one_id' => 1, 'another_id' => 1],
-                        ['one_id' => 1, 'another_id' => 2],
-                        ['one_id' => 1, 'another_id' => 3],
-                        ['one_id' => 2, 'another_id' => 1],
-                        ['one_id' => 2, 'another_id' => 3],
-                        ['one_id' => 3, 'another_id' => 2],
-                        ['one_id' => 3, 'another_id' => 3],
+                        ['id' => 1, 'one_id' => 1, 'another_id' => 1],
+                        ['id' => 2, 'one_id' => 1, 'another_id' => 2],
+                        ['id' => 3, 'one_id' => 1, 'another_id' => 3],
+                        ['id' => 4, 'one_id' => 2, 'another_id' => 1],
+                        ['id' => 5, 'one_id' => 2, 'another_id' => 3],
+                        ['id' => 6, 'one_id' => 3, 'another_id' => 2],
+                        ['id' => 7, 'one_id' => 3, 'another_id' => 3],
                 ],
         ]);
 
@@ -359,13 +359,13 @@ class ManyToManyRelationTest extends DbIntegrationTest
                         ['id' => 3, 'val' => 3],
                 ],
                 'one_anothers' => [
-                        ['one_id' => 1, 'another_id' => 1],
-                        ['one_id' => 1, 'another_id' => 2],
-                        ['one_id' => 1, 'another_id' => 3],
-                        ['one_id' => 2, 'another_id' => 1],
-                        ['one_id' => 2, 'another_id' => 3],
-                        ['one_id' => 3, 'another_id' => 2],
-                        ['one_id' => 3, 'another_id' => 3],
+                        ['id' => 1, 'one_id' => 1, 'another_id' => 1],
+                        ['id' => 2, 'one_id' => 1, 'another_id' => 2],
+                        ['id' => 3, 'one_id' => 1, 'another_id' => 3],
+                        ['id' => 4, 'one_id' => 2, 'another_id' => 1],
+                        ['id' => 5, 'one_id' => 2, 'another_id' => 3],
+                        ['id' => 6, 'one_id' => 3, 'another_id' => 2],
+                        ['id' => 7, 'one_id' => 3, 'another_id' => 3],
                 ],
         ]);
 
@@ -382,8 +382,8 @@ class ManyToManyRelationTest extends DbIntegrationTest
                         ['id' => 3, 'val' => 3],
                 ],
                 'one_anothers' => [
-                        ['one_id' => 2, 'another_id' => 1],
-                        ['one_id' => 2, 'another_id' => 3],
+                        ['id' => 4, 'one_id' => 2, 'another_id' => 1],
+                        ['id' => 5, 'one_id' => 2, 'another_id' => 3],
                 ],
         ]);
 
@@ -407,13 +407,13 @@ class ManyToManyRelationTest extends DbIntegrationTest
                         ['id' => 3, 'val' => 3],
                 ],
                 'one_anothers' => [
-                        ['one_id' => 1, 'another_id' => 1],
-                        ['one_id' => 1, 'another_id' => 2],
-                        ['one_id' => 1, 'another_id' => 3],
-                        ['one_id' => 2, 'another_id' => 1],
-                        ['one_id' => 2, 'another_id' => 3],
-                        ['one_id' => 3, 'another_id' => 2],
-                        ['one_id' => 3, 'another_id' => 3],
+                        ['id' => 1, 'one_id' => 1, 'another_id' => 1],
+                        ['id' => 2, 'one_id' => 1, 'another_id' => 2],
+                        ['id' => 3, 'one_id' => 1, 'another_id' => 3],
+                        ['id' => 4, 'one_id' => 2, 'another_id' => 1],
+                        ['id' => 5, 'one_id' => 2, 'another_id' => 3],
+                        ['id' => 6, 'one_id' => 3, 'another_id' => 2],
+                        ['id' => 7, 'one_id' => 3, 'another_id' => 3],
                 ],
         ]);
 

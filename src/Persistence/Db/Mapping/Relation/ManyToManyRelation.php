@@ -20,7 +20,6 @@ use Dms\Core\Persistence\Db\Schema\ForeignKey;
 use Dms\Core\Persistence\Db\Schema\ForeignKeyMode;
 use Dms\Core\Persistence\Db\Schema\PrimaryKeyBuilder;
 use Dms\Core\Persistence\Db\Schema\Table;
-use Dms\Core\Persistence\Db\Schema\Type\Integer;
 use Pinq\Iterators\Common\Identity;
 
 /**
@@ -144,22 +143,30 @@ class ManyToManyRelation extends ToManyRelationBase
 
     private function buildJoinTable($name)
     {
-        return new Table($name, [$this->parentForeignKeyColumn, $this->relatedForeignKeyColumn], [], [
-                ForeignKey::createWithNamingConvention(
-                        $name,
-                        [$this->parentForeignKeyColumn->getName()],
-                        $this->parentTableName,
-                        [$this->parentTablePrimaryKey->getName()],
-                        ForeignKeyMode::CASCADE, ForeignKeyMode::CASCADE
-                ),
-                ForeignKey::createWithNamingConvention(
-                        $name,
-                        [$this->relatedForeignKeyColumn->getName()],
-                        $this->relatedTableName,
-                        [$this->relatedTablePrimaryKey->getName()],
-                        ForeignKeyMode::CASCADE, ForeignKeyMode::CASCADE
-                ),
-        ]);
+        return new Table(
+                $name,
+                [
+                        PrimaryKeyBuilder::incrementingInt('id'),
+                        $this->parentForeignKeyColumn,
+                        $this->relatedForeignKeyColumn
+                ],
+                [],
+                [
+                        ForeignKey::createWithNamingConvention(
+                                $name,
+                                [$this->parentForeignKeyColumn->getName()],
+                                $this->parentTableName,
+                                [$this->parentTablePrimaryKey->getName()],
+                                ForeignKeyMode::CASCADE, ForeignKeyMode::CASCADE
+                        ),
+                        ForeignKey::createWithNamingConvention(
+                                $name,
+                                [$this->relatedForeignKeyColumn->getName()],
+                                $this->relatedTableName,
+                                [$this->relatedTablePrimaryKey->getName()],
+                                ForeignKeyMode::CASCADE, ForeignKeyMode::CASCADE
+                        ),
+                ]);
     }
 
     /**
@@ -399,7 +406,10 @@ class ManyToManyRelation extends ToManyRelationBase
     /**
      * @inheritDoc
      */
-    public function getRelationJoinCondition(string $parentTableAlias, string $relatedTableAlias) : \Dms\Core\Persistence\Db\Query\Expression\Expr
+    public function getRelationJoinCondition(
+            string $parentTableAlias,
+            string $relatedTableAlias
+    ) : \Dms\Core\Persistence\Db\Query\Expression\Expr
     {
         $joinTableAlias = $relatedTableAlias;
 
