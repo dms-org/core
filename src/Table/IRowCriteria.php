@@ -15,6 +15,9 @@ use Dms\Core\Table\Criteria\RowCriteria;
  */
 interface IRowCriteria
 {
+    const CONDITION_MODE_AND = 'and';
+    const CONDITION_MODE_OR = 'or';
+
     /**
      * Gets the table structure interface.
      *
@@ -44,8 +47,21 @@ interface IRowCriteria
     public function getWhetherLoadsAllColumns() : bool;
 
     /**
+     * Gets the condition mode of the criteria
+     *
+     * @return string
+     */
+    public function getConditionMode() : string;
+
+    /**
      * Gets the conditions which the rows must match
      * to load the rows.
+     *
+     * If the condition mode === 'and' then all conditions
+     * must be satisfied by the row.
+     *
+     * If the condition mode === 'or' then one of the conditions
+     * must be satisfied by the row.
      *
      * @return ColumnCondition[]
      */

@@ -51,7 +51,7 @@ class ColumnCondition extends ColumnCriterion
     /**
      * @return IColumnComponentOperator
      */
-    public function getOperator() : \Dms\Core\Table\IColumnComponentOperator
+    public function getOperator() : IColumnComponentOperator
     {
         return $this->operator;
     }

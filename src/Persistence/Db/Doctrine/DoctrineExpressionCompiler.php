@@ -200,7 +200,6 @@ class DoctrineExpressionCompiler
         throw InvalidArgumentException::format('Unknown aggregate type: ' . $expr->getType());
     }
 
-
     private function compileSubSelect(QueryBuilder $queryBuilder, Expression\SubSelect $expr, bool $subSelectAlias)
     {
         $subSelect = $this->platform->compileSelect($expr->getSelect());

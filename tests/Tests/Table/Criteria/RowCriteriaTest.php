@@ -13,6 +13,7 @@ use Dms\Core\Table\Criteria\ColumnGrouping;
 use Dms\Core\Table\Criteria\ColumnOrdering;
 use Dms\Core\Table\Criteria\RowCriteria;
 use Dms\Core\Table\IColumnComponent;
+use Dms\Core\Table\IRowCriteria;
 use Dms\Core\Table\ITableStructure;
 
 /**
@@ -127,6 +128,15 @@ class RowCriteriaTest extends CmsTestCase
         $this->assertEquals([
                 new ColumnCondition($column, $component, $component->getType()->getOperator('='), 'foo')
         ], $this->criteria->getConditions());
+    }
+
+    public function testConditionMode()
+    {
+        $this->assertSame(IRowCriteria::CONDITION_MODE_AND, $this->criteria->getConditionMode());
+
+        $this->criteria->setConditionMode(IRowCriteria::CONDITION_MODE_OR);
+        
+        $this->assertSame(IRowCriteria::CONDITION_MODE_OR, $this->criteria->getConditionMode());
     }
 
     public function testOrderBy()

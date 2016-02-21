@@ -8,6 +8,7 @@ use Dms\Core\Table\IColumn;
 use Dms\Core\Table\IColumnComponent;
 use Dms\Core\Table\IRowCriteria;
 use Dms\Core\Table\ITableStructure;
+use Dms\Core\Util\Debug;
 
 /**
  * The row search criteria interface.
@@ -25,6 +26,11 @@ class RowCriteria implements IRowCriteria
      * @var IColumn[]
      */
     protected $columnsToLoad = [];
+
+    /**
+     * @var string
+     */
+    protected $conditionMode = self::CONDITION_MODE_AND;
 
     /**
      * @var ColumnCondition[]
@@ -71,6 +77,7 @@ class RowCriteria implements IRowCriteria
         $self = new self($criteria->getStructure());
 
         $self->columnsToLoad = $criteria->getColumnsToLoad();
+        $self->conditionMode = $criteria->getConditionMode();
         $self->conditions    = $criteria->getConditions();
         $self->orderings     = $criteria->getOrderings();
         $self->groupings     = $criteria->getGroupings();
@@ -83,9 +90,17 @@ class RowCriteria implements IRowCriteria
     /**
      * {@inheritDoc}
      */
-    public function getStructure() : \Dms\Core\Table\ITableStructure
+    public function getStructure() : ITableStructure
     {
         return $this->structure;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getConditionMode() : string
+    {
+        return $this->conditionMode;
     }
 
     /**
@@ -150,6 +165,28 @@ class RowCriteria implements IRowCriteria
     public function load(string $columnName)
     {
         $this->columnsToLoad[$columnName] = $this->structure->getColumn($columnName);
+
+        return $this;
+    }
+
+    /**
+     * Sets the condition mode of the criteria.
+     *
+     * @param string $conditionMode
+     *
+     * @return static
+     * @throws Exception\InvalidArgumentException
+     */
+    public function setConditionMode(string $conditionMode)
+    {
+        if (!in_array($conditionMode, [self::CONDITION_MODE_AND, self::CONDITION_MODE_OR], true)) {
+            throw Exception\InvalidArgumentException::format(
+                    'Invalid condition mode supplied to %s: expecting one of (%s), \'%s\' given',
+                    __METHOD__, Debug::formatValues([self::CONDITION_MODE_AND, self::CONDITION_MODE_OR]), $conditionMode
+            );
+        }
+
+        $this->conditionMode = $conditionMode;
 
         return $this;
     }

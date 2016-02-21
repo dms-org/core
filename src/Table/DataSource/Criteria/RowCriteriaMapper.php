@@ -2,9 +2,8 @@
 
 namespace Dms\Core\Table\DataSource\Criteria;
 
-use Dms\Core\Model\Criteria\Criteria;
 use Dms\Core\Model\Criteria\LoadCriteria;
-use Dms\Core\Model\ICriteria;
+use Dms\Core\Model\Criteria\SpecificationDefinition;
 use Dms\Core\Model\ILoadCriteria;
 use Dms\Core\Table\Criteria\ColumnCriterion;
 use Dms\Core\Table\DataSource\Definition\FinalizedObjectTableDefinition;
@@ -56,12 +55,20 @@ class RowCriteriaMapper
             $objectCriteria->loadAll($this->definition->getPropertiesRequiredFor($column->getName()));
         }
 
-        foreach ($criteria->getConditions() as $condition) {
-            $objectCriteria->where(
-                    $this->mapColumnToPropertyName($condition),
-                    $condition->getOperator()->getOperator(),
-                    $condition->getValue()
-            );
+        $mapConditions = function (SpecificationDefinition $objectCriteria) use ($criteria) {
+            foreach ($criteria->getConditions() as $condition) {
+                $objectCriteria->where(
+                        $this->mapColumnToPropertyName($condition),
+                        $condition->getOperator()->getOperator(),
+                        $condition->getValue()
+                );
+            }
+        };
+
+        if ($criteria->getConditionMode() === IRowCriteria::CONDITION_MODE_AND) {
+            $mapConditions($objectCriteria);
+        } else {
+            $objectCriteria->whereAny($mapConditions);
         }
 
         foreach ($criteria->getOrderings() as $ordering) {

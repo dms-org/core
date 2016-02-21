@@ -4,6 +4,7 @@ namespace Dms\Core\Table\DataSource;
 
 use Dms\Core\Exception\InvalidArgumentException;
 use Dms\Core\Model\Traversable;
+use Dms\Core\Table\Criteria\ColumnCondition;
 use Dms\Core\Table\Criteria\ColumnOrdering;
 use Dms\Core\Table\Data\TableRow;
 use Dms\Core\Table\IRowCriteria;
@@ -115,8 +116,26 @@ class ArrayTableDataSource extends TableDataSource
 
         $collection = Traversable::from($this->rows);
 
-        foreach ($criteria->getConditions() as $condition) {
-            $collection = $collection->where($condition->makeRowFilterCallable());
+        /** @var ColumnCondition[] $columnConditions */
+        $columnConditions = $criteria->getConditions();
+
+        if ($columnConditions) {
+            if ($criteria->getConditionMode() === IRowCriteria::CONDITION_MODE_AND) {
+                foreach ($columnConditions as $condition) {
+                    $collection = $collection->where($condition->makeRowFilterCallable());
+                }
+            } else {
+                $filterCallback = array_shift($columnConditions)->makeRowFilterCallable();
+
+                foreach ($columnConditions as $condition) {
+                    $conditionFilter = $condition->makeRowFilterCallable();
+                    $filterCallback = function ($row) use ($conditionFilter, $filterCallback) {
+                        return $conditionFilter($row) || $filterCallback($row);
+                    };
+                }
+
+                $collection = $collection->where($filterCallback);
+            }
         }
 
         $orderings = $criteria->getOrderings();

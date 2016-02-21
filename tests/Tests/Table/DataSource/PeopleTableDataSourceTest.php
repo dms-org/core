@@ -4,6 +4,7 @@ namespace Dms\Core\Tests\Table\DataSource;
 
 use Dms\Core\Model\Criteria\Condition\ConditionOperator;
 use Dms\Core\Model\Criteria\OrderingDirection;
+use Dms\Core\Table\IRowCriteria;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>
@@ -45,6 +46,23 @@ abstract class PeopleTableDataSourceTest extends TableDataSourceTest
         ], $this->dataSource->criteria()->loadAll()
                 ->orderBy('name.first_name', OrderingDirection::ASC)
                 ->orderBy('name.last_name', OrderingDirection::ASC)
+        );
+    }
+
+    public function testCriteriaWithOrConditionMode()
+    {
+        $this->assertLoadsSections([
+                [
+                        ['name' => ['first_name' => 'Kelly', 'last_name' => 'Rust'], 'age' => ['age' => 18]],
+                        ['name' => ['first_name' => 'Samantha', 'last_name' => 'Sharp'], 'age' => ['age' => 20]],
+                        ['name' => ['first_name' => 'Harold', 'last_name' => 'Php'], 'age' => ['age' => 38]],
+                ]
+        ], $this->dataSource->criteria()
+                ->loadAll()
+                ->setConditionMode(IRowCriteria::CONDITION_MODE_OR)
+                ->where('age', '>', 35)
+                ->where('age', '<', 25)
+                ->orderBy('age', OrderingDirection::ASC)
         );
     }
 
@@ -153,7 +171,7 @@ abstract class PeopleTableDataSourceTest extends TableDataSourceTest
                         'group_data' => ['name' => ['first_name' => 'Harold']],
                         ['name' => ['first_name' => 'Harold', 'last_name' => 'Php']],
                 ],
-        ],  $this->dataSource->criteria()
+        ], $this->dataSource->criteria()
                 ->load('name')
                 ->where('name.first_name', ConditionOperator::STRING_CONTAINS_CASE_INSENSITIVE, 'O')
                 ->orderBy('name.first_name', OrderingDirection::DESC)
