@@ -14,7 +14,7 @@ interface IDashboard
     /**
      * Gets the widgets.
      *
-     * @return IWidget[]
+     * @return IDashboardWidget[]
      */
     public function getWidgets() : array;
 }

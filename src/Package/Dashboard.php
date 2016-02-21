@@ -13,7 +13,7 @@ use Dms\Core\Widget\IWidget;
 class Dashboard implements IDashboard
 {
     /**
-     * @var IWidget[]
+     * @var IDashboardWidget[]
      */
     protected $widgets;
 
@@ -24,7 +24,7 @@ class Dashboard implements IDashboard
      */
     public function __construct(array $widgets)
     {
-        InvalidArgumentException::verifyAllInstanceOf(__METHOD__, 'widgets', $widgets, IWidget::class);
+        InvalidArgumentException::verifyAllInstanceOf(__METHOD__, 'widgets', $widgets, IDashboardWidget::class);
 
         $this->widgets = $widgets;
     }

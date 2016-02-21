@@ -3,6 +3,7 @@
 namespace Dms\Core\Tests\Package;
 
 use Dms\Common\Testing\CmsTestCase;
+use Dms\Core\Package\DashboardWidget;
 use Dms\Core\Tests\Helpers\Mock\MockingIocContainer;
 use Dms\Core\Tests\Package\Fixtures\TestPackageWithDashboard;
 
@@ -26,10 +27,18 @@ class PackageWithDashboardTest extends CmsTestCase
         $this->assertSame(true, $this->package->hasDashboard());
         $dashboard = $this->package->loadDashboard();
 
-        $this->assertSame([
-                $this->package->loadModule('test-module-with-widgets')->getWidget('table-widget.with-criteria'),
-                $this->package->loadModule('test-module-with-widgets')->getWidget('action-widget'),
-                $this->package->loadModule('test-module-with-widgets')->getWidget('chart-widget.all'),
+        $this->assertEquals([
+                $this->loadDashboardWidget('test-module-with-widgets', 'table-widget.with-criteria'),
+                $this->loadDashboardWidget('test-module-with-widgets', 'action-widget'),
+                $this->loadDashboardWidget('test-module-with-widgets', 'chart-widget.all'),
         ], $dashboard->getWidgets());
+    }
+
+    protected function loadDashboardWidget(string $moduleName, string $widgetName) : DashboardWidget
+    {
+        $module = $this->package->loadModule($moduleName);
+        $widget = $module->getWidget($widgetName);
+
+        return new DashboardWidget($module, $widget);
     }
 }

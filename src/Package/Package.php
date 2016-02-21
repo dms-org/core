@@ -122,15 +122,17 @@ abstract class Package implements IPackage
         foreach ($widgetNames as $name) {
             if (strpos($name, '.') === false) {
                 throw InvalidArgumentException::format(
-                    'Invalid dashboard widget name: must be in format "module-name.widget-name", \'%s\' given',
-                    $name
+                        'Invalid dashboard widget name: must be in format "module-name.widget-name", \'%s\' given',
+                        $name
                 );
             }
 
             $moduleName = substr($name, 0, strpos($name, '.'));
             $widgetName = substr($name, strpos($name, '.') + 1);
 
-            $widgets[] = $this->loadModule($moduleName)->getWidget($widgetName);
+            $module    = $this->loadModule($moduleName);
+            $widget    = $module->getWidget($widgetName);
+            $widgets[] = new DashboardWidget($module, $widget);
         }
 
         return new Dashboard($widgets);
@@ -152,8 +154,8 @@ abstract class Package implements IPackage
 
         if (!isset($this->nameModuleClassMap[$name])) {
             throw ModuleNotFoundException::format(
-                'Invalid module name supplied to %s: expecting one of (%s), \'%s\' given',
-                get_class($this) . '::' . __FUNCTION__, Debug::formatValues($this->getModuleNames()), $name
+                    'Invalid module name supplied to %s: expecting one of (%s), \'%s\' given',
+                    get_class($this) . '::' . __FUNCTION__, Debug::formatValues($this->getModuleNames()), $name
             );
         }
 
@@ -177,8 +179,8 @@ abstract class Package implements IPackage
     {
         if (!is_subclass_of($moduleClass, IModule::class, true)) {
             throw InvalidArgumentException::format(
-                'Invalid module class defined within package \'%s\': expecting subclass of %s, %s given',
-                $this->name, IModule::class, $moduleClass
+                    'Invalid module class defined within package \'%s\': expecting subclass of %s, %s given',
+                    $this->name, IModule::class, $moduleClass
             );
         }
 
@@ -191,8 +193,8 @@ abstract class Package implements IPackage
 
         if ($module->getName() !== $name) {
             throw InvalidArgumentException::format(
-                'Invalid module class defined within package \'%s\': defined module name \'%s\' does not match module name \'%s\' from instance of %s',
-                $this->name, $name, $module->getName(), get_class($module)
+                    'Invalid module class defined within package \'%s\': defined module name \'%s\' does not match module name \'%s\' from instance of %s',
+                    $this->name, $name, $module->getName(), get_class($module)
             );
         }
 
