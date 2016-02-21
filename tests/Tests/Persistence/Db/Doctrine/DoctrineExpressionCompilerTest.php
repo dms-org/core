@@ -109,7 +109,7 @@ class DoctrineExpressionCompilerTest extends DoctrineTestBase
                     (new Select(new Table('table', [$testColumn->getColumn()])))
                             ->addRawColumn($testColumn->getName())
                             ->where($testColumn)
-            ), '(SELECT `table`.`column` AS `column` FROM `table` WHERE `table`.`column`) AS `__sub_select_0`'],
+            ), '(SELECT `table`.`column` AS `column` FROM `table` WHERE `table`.`column`)'],
         ];
     }
 

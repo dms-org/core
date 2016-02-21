@@ -360,9 +360,9 @@ class DoctrinePlatform extends Platform
 
     }
 
-    private function compileExpression(QueryBuilder $queryBuilder, Expr $expr)
+    private function compileExpression(QueryBuilder $queryBuilder, Expr $expr, bool $subselectAlias = false)
     {
-        return $this->expressionCompiler->compileExpression($queryBuilder, $expr);
+        return $this->expressionCompiler->compileExpression($queryBuilder, $expr, $subselectAlias);
     }
 
     /**

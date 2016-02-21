@@ -66,7 +66,7 @@ class DoctrineExpressionCompiler
      * @return array|string
      * @throws InvalidArgumentException
      */
-    public function compileExpression(QueryBuilder $queryBuilder, Expr $expr, bool $subSelectAlias = true)
+    public function compileExpression(QueryBuilder $queryBuilder, Expr $expr, bool $subSelectAlias = false)
     {
         switch (true) {
             case $expr instanceof Expression\Count:
@@ -102,8 +102,8 @@ class DoctrineExpressionCompiler
 
     private function compileBinOp(QueryBuilder $queryBuilder, Expression\BinOp $expr)
     {
-        $left  = $this->compileExpression($queryBuilder, $expr->getLeft(), false);
-        $right = $this->compileExpression($queryBuilder, $expr->getRight(), false);
+        $left  = $this->compileExpression($queryBuilder, $expr->getLeft());
+        $right = $this->compileExpression($queryBuilder, $expr->getRight());
 
         $expressionBuilder = $queryBuilder->expr();
 
@@ -163,7 +163,7 @@ class DoctrineExpressionCompiler
 
     private function compileUnaryOp(QueryBuilder $queryBuilder, Expression\UnaryOp $expr)
     {
-        $operand = $this->compileExpression($queryBuilder, $expr->getOperand(), false);
+        $operand = $this->compileExpression($queryBuilder, $expr->getOperand());
 
         switch ($expr->getOperator()) {
             case Expression\UnaryOp::NOT:
@@ -181,7 +181,7 @@ class DoctrineExpressionCompiler
 
     private function compileSimpleAggregate(QueryBuilder $queryBuilder, Expression\SimpleAggregate $expr)
     {
-        $argument = $this->compileExpression($queryBuilder, $expr->getArgument(), false);
+        $argument = $this->compileExpression($queryBuilder, $expr->getArgument());
 
         switch ($expr->getType()) {
             case Expression\SimpleAggregate::SUM:
