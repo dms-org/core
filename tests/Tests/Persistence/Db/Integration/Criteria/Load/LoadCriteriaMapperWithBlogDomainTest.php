@@ -248,7 +248,7 @@ class LoadCriteriaMapperWithBlogDomainTest extends LoadCriteriaMapperTestBase
                         ]))
                         ->where(Expr::strContains(
                                 $this->tableColumn('aliases', 'first_name'),
-                                Expr::param($this->tableColumnType('aliases', 'first_name'), 'a')
+                                Expr::param(null, 'a')
                         ))
                         ->orderByAsc($this->tableColumn('aliases', 'first_name'))
                         ->orderByAsc($this->tableColumn('aliases', 'last_name')),

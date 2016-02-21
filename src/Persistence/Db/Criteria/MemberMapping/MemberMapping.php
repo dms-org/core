@@ -15,6 +15,7 @@ use Dms\Core\Persistence\Db\Query\Clause\Ordering;
 use Dms\Core\Persistence\Db\Query\Expression\BinOp;
 use Dms\Core\Persistence\Db\Query\Expression\Expr;
 use Dms\Core\Persistence\Db\Query\Select;
+use Dms\Core\Persistence\Db\Schema\Type\Type;
 use Dms\Core\Util\Debug;
 
 /**
@@ -55,7 +56,7 @@ abstract class MemberMapping
     /**
      * @return IEntityMapper
      */
-    public function getRootEntityMapper() : \Dms\Core\Persistence\Db\Mapping\IEntityMapper
+    public function getRootEntityMapper() : IEntityMapper
     {
         return $this->rootEntityMapper;
     }
@@ -92,7 +93,7 @@ abstract class MemberMapping
      * @return Expr
      * @throws InvalidArgumentException
      */
-    public function getWhereConditionExpr(Select $select, string $tableAlias, string $operator, $value) : \Dms\Core\Persistence\Db\Query\Expression\Expr
+    public function getWhereConditionExpr(Select $select, string $tableAlias, string $operator, $value) : Expr
     {
         $operand = $this->getExpressionInSelect($select, $tableAlias);
 
@@ -111,13 +112,13 @@ abstract class MemberMapping
             return new BinOp(
                     $operand,
                     $this->mapConditionOperator($operator),
-                    Expr::tupleParams($operand->getResultingType(), $value)
+                    Expr::tupleParams(null, $value)
             );
         } else {
             return new BinOp(
                     $operand,
                     $this->mapConditionOperator($operator),
-                    Expr::param($operand->getResultingType(), $value)
+                    Expr::param(null, $value)
             );
         }
     }
@@ -190,7 +191,7 @@ abstract class MemberMapping
      * @return Expr
      * @throws InvalidOperationException
      */
-    protected function getExpressionInSelect(Select $select, string $tableAlias) : \Dms\Core\Persistence\Db\Query\Expression\Expr
+    protected function getExpressionInSelect(Select $select, string $tableAlias) : Expr
     {
         return $this->loadExpressionWithNecessarySubselects($select, $tableAlias, function (Select $select, $tableAlias) {
             return $this->getSingleValueExpressionInSelect($select, $tableAlias);
@@ -203,7 +204,7 @@ abstract class MemberMapping
      *
      * @return Expr
      */
-    abstract protected function getSingleValueExpressionInSelect(Select $select, string $tableAlias) : \Dms\Core\Persistence\Db\Query\Expression\Expr;
+    abstract protected function getSingleValueExpressionInSelect(Select $select, string $tableAlias) : Expr;
 
     /**
      * @return ISeparateTableRelation[]
@@ -229,7 +230,7 @@ abstract class MemberMapping
      *
      * @return Expr
      */
-    protected function loadExpressionWithNecessarySubselects(Select $select, string $tableAlias, callable $expressionCallback) : \Dms\Core\Persistence\Db\Query\Expression\Expr
+    protected function loadExpressionWithNecessarySubselects(Select $select, string $tableAlias, callable $expressionCallback) : Expr
     {
         $separateTableRelations = $this->getSeperateTableRelations();
 
@@ -253,7 +254,8 @@ abstract class MemberMapping
             string $tableAlias,
             array $separateTableRelations,
             callable $expressionLoader
-    ) : \Dms\Core\Persistence\Db\Query\Expression\Expr {
+    ) : Expr
+    {
         /** @var Select $subSelect */
         list($subSelect, $joinedTableAlias) = $this->getJoinedSubSelectAndTableAlias($select, $tableAlias, $separateTableRelations);
 

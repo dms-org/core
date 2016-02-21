@@ -136,7 +136,7 @@ class ToOneEmbeddedObjectMapping extends ToOneRelationMapping implements IFinalR
             $columnExpressions[] = new BinOp(
                     Expr::column($tableAlias, $column),
                     $dbOperator,
-                    Expr::param($column->getType(), $value)
+                    Expr::param(null, $value)
             );
         }
 

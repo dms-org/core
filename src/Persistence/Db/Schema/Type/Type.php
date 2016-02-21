@@ -2,6 +2,8 @@
 
 namespace Dms\Core\Persistence\Db\Schema\Type;
 
+use Dms\Core\Exception\InvalidArgumentException;
+
 /**
  * The db type base class.
  *
@@ -34,5 +36,39 @@ abstract class Type
         $clone->nullable = true;
 
         return $clone;
+    }
+
+    /**
+     * Gets the equivalent schema type from the supplied PHP value.
+     *
+     * @param $value
+     *
+     * @return Type
+     * @throws InvalidArgumentException
+     */
+    public static function fromValue($value) : Type
+    {
+        switch (gettype($value)) {
+            case 'string':
+                return Text::long();
+
+            case 'integer':
+                return Integer::big();
+
+            case 'double':
+                return new Decimal(30, 15);
+
+            case 'boolean':
+                return new Boolean();
+
+            case $value instanceof \DateTimeInterface:
+                return new DateTime();
+
+            default:
+                throw InvalidArgumentException::format(
+                        'Invalid call to %s: unknown value type \'%s\' given',
+                        __METHOD__, gettype($value)
+                );
+        }
     }
 }

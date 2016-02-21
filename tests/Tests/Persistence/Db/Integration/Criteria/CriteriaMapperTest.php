@@ -9,6 +9,8 @@ use Dms\Core\Persistence\Db\Criteria\CriteriaMapper;
 use Dms\Core\Persistence\Db\Mapping\CustomOrm;
 use Dms\Core\Persistence\Db\Query\Clause\Ordering;
 use Dms\Core\Persistence\Db\Query\Expression\Expr;
+use Dms\Core\Persistence\Db\Schema\Type\Decimal;
+use Dms\Core\Persistence\Db\Schema\Type\Text;
 use Dms\Core\Tests\Persistence\Db\Fixtures\MockEntity;
 use Dms\Core\Tests\Persistence\Db\Integration\Mapping\Fixtures\Types\TypesEntity;
 use Dms\Core\Tests\Persistence\Db\Integration\Mapping\Fixtures\Types\TypesMapper;
@@ -82,26 +84,26 @@ class CriteriaMapperTest extends CriteriaMapperTestBase
 
         $this->assertMappedSelect($criteria,
                 $this->selectAllColumns()
-                        ->where(Expr::equal($this->column('string'), Expr::param($this->columnType('string'), 'foo')))
+                        ->where(Expr::equal($this->column('string'), Expr::param(null, 'foo')))
                         ->where(Expr::isNull($this->column('null')))
                         ->where(Expr::isNotNull($this->column('null')))
-                        ->where(Expr::greaterThan($this->column('int'), Expr::param($this->columnType('int'), 5)))
-                        ->where(Expr::greaterThanOrEqual($this->column('float'), Expr::param($this->columnType('float'), -2.0)))
+                        ->where(Expr::greaterThan($this->column('int'), Expr::param(null, 5)))
+                        ->where(Expr::greaterThanOrEqual($this->column('float'), Expr::param(null, -2.0)))
                         ->where(Expr::lessThan($this->column('date'),
-                                Expr::param($this->columnType('date'), new \DateTimeImmutable('2000-01-01'))))
+                                Expr::param(null, new \DateTimeImmutable('2000-01-01'))))
                         ->where(Expr::lessThanOrEqual($this->column('time'),
-                                Expr::param($this->columnType('time'), new \DateTimeImmutable('15:03'))))
+                                Expr::param(null, new \DateTimeImmutable('15:03'))))
                         ->where(Expr::in($this->column('string'), Expr::tuple([
-                                Expr::param($this->columnType('string'), 'foo'),
-                                Expr::param($this->columnType('string'), 'bar'),
+                                Expr::param(null, 'foo'),
+                                Expr::param(null, 'bar'),
                         ])))
                         ->where(Expr::notIn($this->column('float'), Expr::tuple([
-                                Expr::param($this->columnType('float'), 1.0),
-                                Expr::param($this->columnType('float'), -20.0),
-                                Expr::param($this->columnType('float'), 35.5),
+                                Expr::param(null, 1.0),
+                                Expr::param(null, -20.0),
+                                Expr::param(null, 35.5),
                         ])))
-                        ->where(Expr::strContains($this->column('string'), Expr::param($this->columnType('string'), 'foo')))
-                        ->where(Expr::strContainsCaseInsensitive($this->column('string'), Expr::param($this->columnType('string'), 'bar')))
+                        ->where(Expr::strContains($this->column('string'), Expr::param(null, 'foo')))
+                        ->where(Expr::strContainsCaseInsensitive($this->column('string'), Expr::param(null, 'bar')))
         );
     }
 
@@ -112,7 +114,7 @@ class CriteriaMapperTest extends CriteriaMapperTestBase
 
         $this->assertMappedSelect($criteria,
                 $this->selectAllColumns()
-                        ->where(Expr::equal($this->column('id'), Expr::param($this->columnType('id'), 3)))
+                        ->where(Expr::equal($this->column('id'), Expr::param(null, 3)))
         );
     }
 
@@ -124,8 +126,8 @@ class CriteriaMapperTest extends CriteriaMapperTestBase
         $this->assertMappedSelect($criteria,
                 $this->selectAllColumns()
                         ->where(Expr::or_(
-                                Expr::equal($this->column('id'), Expr::param($this->columnType('id'), 3)),
-                                Expr::equal($this->column('id'), Expr::param($this->columnType('id'), 4))
+                                Expr::equal($this->column('id'), Expr::param(null, 3)),
+                                Expr::equal($this->column('id'), Expr::param(null, 4))
                         ))
         );
     }
@@ -161,18 +163,18 @@ class CriteriaMapperTest extends CriteriaMapperTestBase
 
         $this->assertMappedSelect($criteria,
                 $this->selectAllColumns()
-                        ->where(Expr::equal($this->column('string'), Expr::param($this->columnType('string'), 'foo')))
+                        ->where(Expr::equal($this->column('string'), Expr::param(null, 'foo')))
                         ->where(Expr::compoundOr([
                                 Expr::isNotNull($this->column('null')),
-                                Expr::greaterThanOrEqual($this->column('float'), Expr::param($this->columnType('float'), -2.0)),
+                                Expr::greaterThanOrEqual($this->column('float'), Expr::param(null, -2.0)),
                                 Expr::compoundAnd([
-                                        Expr::greaterThan($this->column('int'), Expr::param($this->columnType('int'), 5)),
+                                        Expr::greaterThan($this->column('int'), Expr::param(null, 5)),
                                         Expr::lessThanOrEqual(
                                                 $this->column('time'),
-                                                Expr::param($this->columnType('time'), new \DateTimeImmutable('15:03'))
+                                                Expr::param(null, new \DateTimeImmutable('15:03'))
                                         ),
                                 ]),
-                                Expr::not(Expr::equal($this->column('int'), Expr::param($this->columnType('int'), 3))),
+                                Expr::not(Expr::equal($this->column('int'), Expr::param(null, 3))),
                         ]))
         );
     }

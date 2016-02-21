@@ -113,14 +113,14 @@ abstract class Expr
     }
 
     /**
-     * @param Type  $type
-     * @param mixed $value
+     * @param Type|null $type
+     * @param mixed     $value
      *
      * @return Parameter
      */
-    public static function param(Type $type, $value) : Parameter
+    public static function param(Type $type = null, $value) : Parameter
     {
-        return new Parameter($type, $value);
+        return new Parameter($type ?? Type::fromValue($value), $value);
     }
 
     /**
@@ -150,17 +150,17 @@ abstract class Expr
     }
 
     /**
-     * @param Type  $type
-     * @param array $params
+     * @param Type|null $type
+     * @param array     $params
      *
      * @return Tuple
      */
-    public static function tupleParams(Type $type, array $params) : Tuple
+    public static function tupleParams(Type $type = null, array $params) : Tuple
     {
         $expressions = [];
 
         foreach ($params as $param) {
-            $expressions[] = new Parameter($type, $param);
+            $expressions[] = new Parameter($type ?? Type::fromValue($param), $param);
         }
 
         return new Tuple($expressions);

@@ -52,7 +52,7 @@ class CriteriaMapperWithRelatedEntityTest extends CriteriaMapperTestBase
                 $this->loadParentWithSubEntityLeftJoined()
                         ->where(Expr::greaterThanOrEqual(
                                 $this->tableColumn('sub_entities', 'val'),
-                                Expr::param($this->tableColumnType('sub_entities', 'val'), 55))
+                                Expr::param(null, 55))
                         )
         );
     }
@@ -66,7 +66,7 @@ class CriteriaMapperWithRelatedEntityTest extends CriteriaMapperTestBase
                 $this->loadParentWithSubEntityLeftJoined()
                         ->where(Expr::equal(
                                 $this->tableColumn('sub_entities', 'id'),
-                                Expr::param($this->tableColumnType('sub_entities', 'id'), 10)
+                                Expr::param(null, 10)
                         ))
         );
     }
@@ -100,15 +100,15 @@ class CriteriaMapperWithRelatedEntityTest extends CriteriaMapperTestBase
                         ->where(Expr::compoundOr([
                                 Expr::equal(
                                         $this->tableColumn('sub_entities', 'id'),
-                                        Expr::param($this->tableColumnType('sub_entities', 'id'), 1)
+                                        Expr::param(null, 1)
                                 ),
                                 Expr::equal(
                                         $this->tableColumn('sub_entities', 'id'),
-                                        Expr::param($this->tableColumnType('sub_entities', 'id'), 2)
+                                        Expr::param(null, 2)
                                 ),
                                 Expr::equal(
                                         $this->tableColumn('sub_entities', 'id'),
-                                        Expr::param($this->tableColumnType('sub_entities', 'id'), 3)
+                                        Expr::param(null, 3)
                                 ),
                         ]))
         );
@@ -124,11 +124,11 @@ class CriteriaMapperWithRelatedEntityTest extends CriteriaMapperTestBase
                         ->where(Expr::not(Expr::compoundOr([
                                 Expr::equal(
                                         $this->tableColumn('sub_entities', 'id'),
-                                        Expr::param($this->tableColumnType('sub_entities', 'id'), 1)
+                                        Expr::param(null, 1)
                                 ),
                                 Expr::equal(
                                         $this->tableColumn('sub_entities', 'id'),
-                                        Expr::param($this->tableColumnType('sub_entities', 'id'), 2)
+                                        Expr::param(null, 2)
                                 ),
                         ])))
         );

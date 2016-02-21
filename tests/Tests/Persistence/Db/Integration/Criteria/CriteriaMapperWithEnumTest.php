@@ -26,7 +26,7 @@ class CriteriaMapperWithEnumTest extends CriteriaMapperTestBase
 
         $this->assertMappedSelect($criteria,
                 $this->selectAllColumns()
-                        ->where(Expr::equal($this->column('nullable_status'), Expr::param($this->columnType('nullable_status'), 'active')))
+                        ->where(Expr::equal($this->column('nullable_status'), Expr::param(null, 'active')))
         );
     }
 
@@ -49,7 +49,7 @@ class CriteriaMapperWithEnumTest extends CriteriaMapperTestBase
         $this->assertMappedSelect($criteria,
                 $this->selectAllColumns()
                         ->where(Expr::notEqual($this->column('nullable_status'),
-                                Expr::param($this->columnType('nullable_status'), 'inactive')))
+                                Expr::param(null, 'inactive')))
         );
     }
 

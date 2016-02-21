@@ -30,7 +30,7 @@ class CriteriaMapperWithValueObjectsTest extends CriteriaMapperTestBase
         $this->assertMappedSelect($criteria,
                 $this->selectAllColumns()
                         ->where(Expr::equal($this->column('one_two_three_value'),
-                                Expr::param($this->columnType('one_two_three_value'), '123')))
+                                Expr::param(null, '123')))
         );
     }
 
@@ -51,7 +51,7 @@ class CriteriaMapperWithValueObjectsTest extends CriteriaMapperTestBase
         $this->assertMappedSelect($criteria,
                 $this->selectAllColumns()
                         ->where(Expr::notEqual($this->column('one_two_three_value'),
-                                Expr::param($this->columnType('one_two_three_value'), '123')))
+                                Expr::param(null, '123')))
         );
     }
 
@@ -63,7 +63,7 @@ class CriteriaMapperWithValueObjectsTest extends CriteriaMapperTestBase
         $this->assertMappedSelect($criteria,
                 $this->selectAllColumns()
                         ->where(Expr::equal($this->column('one_two_three_value'),
-                                Expr::param($this->columnType('one_two_three_value'), '123')))
+                                Expr::param(null, '123')))
         );
     }
 
@@ -74,8 +74,10 @@ class CriteriaMapperWithValueObjectsTest extends CriteriaMapperTestBase
 
         $this->assertMappedSelect($criteria,
                 $this->selectAllColumns()
-                        ->where(Expr::notEqual($this->column('one_two_three_value'),
-                                Expr::param($this->columnType('one_two_three_value'), '123')))
+                        ->where(Expr::notEqual(
+                                $this->column('one_two_three_value'),
+                                Expr::param(null, '123')
+                        ))
         );
     }
 

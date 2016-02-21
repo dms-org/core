@@ -56,7 +56,7 @@ class CriteriaMapperWithRelatedIdTest extends CriteriaMapperTestBase
                 $this->loadParentWithSubEntityLeftJoined()
                         ->where(Expr::equal(
                                 $this->tableColumn('sub_entities', 'id'),
-                                Expr::param($this->tableColumnType('sub_entities', 'id'), 10)
+                                Expr::param(null, 10)
                         ))
         );
     }
@@ -70,7 +70,7 @@ class CriteriaMapperWithRelatedIdTest extends CriteriaMapperTestBase
                 $this->loadParentWithSubEntityLeftJoined()
                         ->where(Expr::equal(
                                 $this->tableColumn('sub_entities', 'id'),
-                                Expr::param($this->tableColumnType('sub_entities', 'id'), 10)
+                                Expr::param(null, 10)
                         ))
         );
     }
@@ -84,7 +84,7 @@ class CriteriaMapperWithRelatedIdTest extends CriteriaMapperTestBase
                 $this->loadParentWithSubEntityLeftJoined()
                         ->where(Expr::greaterThan(
                                 $this->tableColumn('sub_entities', 'val'),
-                                Expr::param($this->tableColumnType('sub_entities', 'val'), 50)
+                                Expr::param(null, 50)
                         ))
         );
     }
@@ -136,7 +136,7 @@ class CriteriaMapperWithRelatedIdTest extends CriteriaMapperTestBase
                 $this->loadParentWithSubEntityLeftJoined()
                         ->where(Expr::in(
                                 $this->tableColumn('sub_entities', 'id'),
-                                Expr::tupleParams($this->tableColumnType('sub_entities', 'id'), [1, 2, 3])
+                                Expr::tupleParams(null, [1, 2, 3])
                         ))
         );
     }
@@ -150,7 +150,7 @@ class CriteriaMapperWithRelatedIdTest extends CriteriaMapperTestBase
                 $this->loadParentWithSubEntityLeftJoined()
                         ->where(Expr::notIn(
                                 $this->tableColumn('sub_entities', 'id'),
-                                Expr::tupleParams($this->tableColumnType('sub_entities', 'id'), [1, 2])
+                                Expr::tupleParams(null, [1, 2])
                         ))
         );
     }

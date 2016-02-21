@@ -74,7 +74,7 @@ class CriteriaMapperWithToManyRelationTest extends CriteriaMapperTestBase
                                         $this->subSelectChildEntities()
                                                 ->addColumn('__single_val', Expr::count())
                                 ),
-                                Expr::param(Integer::normal(), 2)
+                                Expr::param(null, 2)
                         ))
         );
     }
@@ -92,7 +92,7 @@ class CriteriaMapperWithToManyRelationTest extends CriteriaMapperTestBase
                                         $this->subSelectChildEntities()
                                                 ->addColumn('__single_val', Expr::sum($this->tableColumn('child_entities', 'val')))
                                 ),
-                                Expr::param($this->tableColumnType('child_entities', 'val'), 10)
+                                Expr::param(null, 10)
                         ))
         );
     }
@@ -110,7 +110,7 @@ class CriteriaMapperWithToManyRelationTest extends CriteriaMapperTestBase
                                         $this->subSelectChildEntities()
                                                 ->addColumn('__single_val', Expr::avg($this->tableColumn('child_entities', 'val')))
                                 ),
-                                Expr::param(Expr::avg($this->tableColumn('child_entities', 'val'))->getResultingType(), 10)
+                                Expr::param(null, 10)
                         ))
         );
     }
@@ -128,7 +128,7 @@ class CriteriaMapperWithToManyRelationTest extends CriteriaMapperTestBase
                                         $this->subSelectChildEntities()
                                                 ->addColumn('__single_val', Expr::max($this->tableColumn('child_entities', 'val')))
                                 ),
-                                Expr::param($this->tableColumnType('child_entities', 'val'), 10)
+                                Expr::param(null, 10)
                         ))
         );
     }
@@ -146,7 +146,7 @@ class CriteriaMapperWithToManyRelationTest extends CriteriaMapperTestBase
                                         $this->subSelectChildEntities()
                                                 ->addColumn('__single_val', Expr::min($this->tableColumn('child_entities', 'val')))
                                 ),
-                                Expr::param($this->tableColumnType('child_entities', 'val'), 10)
+                                Expr::param(null, 10)
                         ))
         );
     }

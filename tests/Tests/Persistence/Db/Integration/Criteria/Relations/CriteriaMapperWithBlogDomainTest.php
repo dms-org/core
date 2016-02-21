@@ -42,7 +42,7 @@ class CriteriaMapperWithBlogDomainTest extends CriteriaMapperTestBase
                                                         $this->tableColumn('posts', 'author_id')
                                                 ))
                                 ),
-                                Expr::param(Integer::normal(), 1))
+                                Expr::param(null, 1))
                         )
                         ->where(Expr::equal(
                                 Expr::subSelect(
@@ -60,7 +60,7 @@ class CriteriaMapperWithBlogDomainTest extends CriteriaMapperTestBase
                                                         $this->tableColumn('user_friends', 'user_id')
                                                 ))
                                 ),
-                                Expr::param(Integer::normal(), 2))
+                                Expr::param(null, 2))
                         )
         );
     }
@@ -87,7 +87,7 @@ class CriteriaMapperWithBlogDomainTest extends CriteriaMapperTestBase
                                                         $this->tableColumn('posts', 'author_id')
                                                 ))
                                 ),
-                                Expr::param(Integer::normal(), 1))
+                                Expr::param(null, 1))
                         )
         );
     }
@@ -107,7 +107,7 @@ class CriteriaMapperWithBlogDomainTest extends CriteriaMapperTestBase
                 $this->selectAllColumns()
                         ->where(Expr::equal(
                                 $this->column('first_name'),
-                                Expr::param($this->columnType('first_name'), 'foo'))
+                                Expr::param(null, 'foo'))
                         )
         );
 
@@ -138,7 +138,7 @@ class CriteriaMapperWithBlogDomainTest extends CriteriaMapperTestBase
                                                         $this->tableColumn('posts', 'author_id')
                                                 ))
                                 ),
-                                Expr::param(Integer::normal(), 1))
+                                Expr::param(null, 1))
                         )
         );
     }

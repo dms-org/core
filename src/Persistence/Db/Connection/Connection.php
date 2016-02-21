@@ -11,6 +11,7 @@ use Dms\Core\Persistence\Db\Query\ResequenceOrderIndexColumn;
 use Dms\Core\Persistence\Db\Query\Select;
 use Dms\Core\Persistence\Db\Query\Update;
 use Dms\Core\Persistence\Db\Query\Upsert;
+use Dms\Core\Persistence\Db\RowSet;
 use Dms\Core\Persistence\Db\Schema\Table;
 
 /**
@@ -38,7 +39,7 @@ abstract class Connection implements IConnection
     /**
      * @return IPlatform
      */
-    final public function getPlatform() : \Dms\Core\Persistence\Db\Platform\IPlatform
+    final public function getPlatform() : IPlatform
     {
         return $this->platform;
     }
@@ -80,7 +81,7 @@ abstract class Connection implements IConnection
     /**
      *{@inheritDoc}
      */
-    public function load(Select $query) : \Dms\Core\Persistence\Db\RowSet
+    public function load(Select $query) : RowSet
     {
         $compiled = $this->loadQueryFrom($this->platform->compileSelect($query));
         $compiled->execute();
@@ -116,7 +117,7 @@ abstract class Connection implements IConnection
     public function upsert(Upsert $query)
     {
         $this->withinTransaction(function () use ($query) {
-            $table  = $query->getTable();
+            $table = $query->getTable();
 
             $rowsWithKeys     = $query->getRowsWithPrimaryKeys();
             $rowsWithKeyArray = $rowsWithKeys->getRows();

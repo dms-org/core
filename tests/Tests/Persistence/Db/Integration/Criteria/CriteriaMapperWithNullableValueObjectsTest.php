@@ -28,11 +28,11 @@ class CriteriaMapperWithNullableValueObjectsTest extends CriteriaMapperTestBase
                         ->where(Expr::compoundAnd([
                                 Expr::equal(
                                         $this->column('nullable_cents'),
-                                        Expr::param($this->columnType('nullable_cents'), 200)
+                                        Expr::param(null, 200)
                                 ),
                                 Expr::equal(
                                         $this->column('nullable_currency'),
-                                        Expr::param($this->columnType('nullable_currency'), 'AUD')
+                                        Expr::param(null, 'AUD')
                                 ),
                         ]))
         );
@@ -62,11 +62,11 @@ class CriteriaMapperWithNullableValueObjectsTest extends CriteriaMapperTestBase
                         ->where(Expr::compoundOr([
                                 Expr::notEqual(
                                         $this->column('nullable_cents'),
-                                        Expr::param($this->columnType('nullable_cents'), 0)
+                                        Expr::param(null, 0)
                                 ),
                                 Expr::notEqual(
                                         $this->column('nullable_currency'),
-                                        Expr::param($this->columnType('nullable_currency'), 'USD')
+                                        Expr::param(null, 'USD')
                                 ),
                         ]))
         );

@@ -136,7 +136,7 @@ class ToOneEntityRelationMapping extends ToOneRelationMapping implements IFinalR
             return new BinOp(
                     Expr::column($tableAlias, $relatedPrimaryKey),
                     $this->mapConditionOperator($operator),
-                    Expr::param($relatedPrimaryKey->getType(), $idValue)
+                    Expr::param(null, $idValue)
             );
         }
     }

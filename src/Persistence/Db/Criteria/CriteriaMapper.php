@@ -79,7 +79,7 @@ class CriteriaMapper
     /**
      * @return IEntityMapper
      */
-    final public function getMapper() : \Dms\Core\Persistence\Db\Mapping\IEntityMapper
+    final public function getMapper() : IEntityMapper
     {
         return $this->mapper;
     }
@@ -95,7 +95,7 @@ class CriteriaMapper
     /**
      * @return MemberExpressionParser
      */
-    public function buildMemberExpressionParser() : \Dms\Core\Model\Criteria\MemberExpressionParser
+    public function buildMemberExpressionParser() : MemberExpressionParser
     {
         $orm = $this->definition->getOrm();
 
@@ -110,7 +110,7 @@ class CriteriaMapper
     /**
      * @return FinalizedClassDefinition
      */
-    final public function getMappedObjectType() : \Dms\Core\Model\Object\FinalizedClassDefinition
+    final public function getMappedObjectType() : FinalizedClassDefinition
     {
         return $this->mapper->getDefinition()->getClass();
     }
@@ -306,7 +306,7 @@ class CriteriaMapper
      * @return Expr
      * @throws InvalidArgumentException
      */
-    private function mapCondition(Condition $condition, Select $select, array $memberMappings) : \Dms\Core\Persistence\Db\Query\Expression\Expr
+    private function mapCondition(Condition $condition, Select $select, array $memberMappings) : Expr
     {
         /** @var MemberMappingWithTableAlias[] $memberMappings */
 
@@ -359,7 +359,7 @@ class CriteriaMapper
      *
      * @return Expr
      */
-    private function mapMemberCondition(MemberCondition $condition, Select $select, array $memberMappings) : \Dms\Core\Persistence\Db\Query\Expression\Expr
+    private function mapMemberCondition(MemberCondition $condition, Select $select, array $memberMappings) : Expr
     {
         $mapping = $memberMappings[$condition->getNestedMember()->asString()];
 
