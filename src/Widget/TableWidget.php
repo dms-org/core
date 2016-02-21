@@ -2,9 +2,9 @@
 
 namespace Dms\Core\Widget;
 
+use Dms\Core\Module\ITableDisplay;
 use Dms\Core\Table\IDataTable;
 use Dms\Core\Table\IRowCriteria;
-use Dms\Core\Table\ITableDataSource;
 
 /**
  * The table widget class.
@@ -14,9 +14,9 @@ use Dms\Core\Table\ITableDataSource;
 class TableWidget extends Widget
 {
     /**
-     * @var ITableDataSource
+     * @var ITableDisplay
      */
-    protected $tableDataSource;
+    protected $tableDisplay;
 
     /**
      * @var IRowCriteria|null
@@ -26,19 +26,19 @@ class TableWidget extends Widget
     /**
      * @inheritDoc
      */
-    public function __construct($name, $label, ITableDataSource $tableDataSource, IRowCriteria $criteria = null)
+    public function __construct($name, $label, ITableDisplay $tableDisplay, IRowCriteria $criteria = null)
     {
         parent::__construct($name, $label);
-        $this->tableDataSource = $tableDataSource;
-        $this->criteria        = $criteria;
+        $this->tableDisplay = $tableDisplay;
+        $this->criteria     = $criteria;
     }
 
     /**
-     * @return ITableDataSource
+     * @return ITableDisplay
      */
-    public function getTableDataSource() : \Dms\Core\Table\ITableDataSource
+    public function getTableDisplay() : ITableDisplay
     {
-        return $this->tableDataSource;
+        return $this->tableDisplay;
     }
 
     /**
@@ -62,7 +62,7 @@ class TableWidget extends Widget
      */
     public function loadData() : IDataTable
     {
-        return $this->tableDataSource->load($this->criteria);
+        return $this->tableDisplay->getDataSource()->load($this->criteria);
     }
 
     /**

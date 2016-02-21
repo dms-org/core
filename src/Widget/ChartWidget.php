@@ -2,8 +2,8 @@
 
 namespace Dms\Core\Widget;
 
+use Dms\Core\Module\IChartDisplay;
 use Dms\Core\Table\Chart\IChartCriteria;
-use Dms\Core\Table\Chart\IChartDataSource;
 use Dms\Core\Table\Chart\IChartDataTable;
 
 /**
@@ -14,9 +14,9 @@ use Dms\Core\Table\Chart\IChartDataTable;
 class ChartWidget extends Widget
 {
     /**
-     * @var IChartDataSource
+     * @var IChartDisplay
      */
-    protected $chartDataSource;
+    protected $chartDisplay;
 
     /**
      * @var IChartCriteria|null
@@ -26,19 +26,19 @@ class ChartWidget extends Widget
     /**
      * @inheritDoc
      */
-    public function __construct($name, $label, IChartDataSource $chartDataSource, IChartCriteria $criteria = null)
+    public function __construct($name, $label, IChartDisplay $chartDisplay, IChartCriteria $criteria = null)
     {
         parent::__construct($name, $label);
-        $this->chartDataSource = $chartDataSource;
-        $this->criteria        = $criteria;
+        $this->chartDisplay = $chartDisplay;
+        $this->criteria     = $criteria;
     }
 
     /**
-     * @return IChartDataSource
+     * @return IChartDisplay
      */
-    public function getChartDataSource() : \Dms\Core\Table\Chart\IChartDataSource
+    public function getChartDisplay() : IChartDisplay
     {
-        return $this->chartDataSource;
+        return $this->chartDisplay;
     }
 
     /**
@@ -60,9 +60,9 @@ class ChartWidget extends Widget
     /**
      * @return IChartDataTable
      */
-    public function loadData() : \Dms\Core\Table\Chart\IChartDataTable
+    public function loadData() : IChartDataTable
     {
-        return $this->chartDataSource->load($this->criteria);
+        return $this->chartDisplay->getDataSource()->load($this->criteria);
     }
 
     /**

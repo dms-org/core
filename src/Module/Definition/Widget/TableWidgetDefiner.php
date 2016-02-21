@@ -2,7 +2,7 @@
 
 namespace Dms\Core\Module\Definition\Widget;
 
-use Dms\Core\Table\ITableDataSource;
+use Dms\Core\Module\ITableDisplay;
 use Dms\Core\Widget\TableWidget;
 
 /**
@@ -18,19 +18,19 @@ class TableWidgetDefiner extends WidgetDefinerBase
     private $label;
 
     /**
-     * @var ITableDataSource
+     * @var ITableDisplay
      */
     private $table;
 
     /**
      * TableWidgetDefiner constructor.
      *
-     * @param string           $name
-     * @param string           $label
-     * @param ITableDataSource $table
-     * @param callable         $callback
+     * @param string        $name
+     * @param string        $label
+     * @param ITableDisplay $table
+     * @param callable      $callback
      */
-    public function __construct(string $name, string $label, ITableDataSource $table, callable $callback)
+    public function __construct(string $name, string $label, ITableDisplay $table, callable $callback)
     {
         parent::__construct($name, null, null, null, $callback);
         $this->label = $label;
@@ -48,13 +48,14 @@ class TableWidgetDefiner extends WidgetDefinerBase
      * </code>
      *
      * @see RowCriteria
+     *
      * @param callable $criteriaDefinitionCallback
      *
      * @return void
      */
     public function matching(callable $criteriaDefinitionCallback)
     {
-        $criteria = $this->table->criteria();
+        $criteria = $this->table->getDataSource()->criteria();
         $criteriaDefinitionCallback($criteria);
 
         call_user_func($this->callback, new TableWidget($this->name, $this->label, $this->table, $criteria));

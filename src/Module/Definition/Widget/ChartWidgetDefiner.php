@@ -2,9 +2,8 @@
 
 namespace Dms\Core\Module\Definition\Widget;
 
-use Dms\Core\Table\Chart\IChartDataSource;
+use Dms\Core\Module\IChartDisplay;
 use Dms\Core\Widget\ChartWidget;
-use Dms\Core\Widget\TableWidget;
 
 /**
  * The chart widget definer class.
@@ -19,19 +18,19 @@ class ChartWidgetDefiner extends WidgetDefinerBase
     private $label;
 
     /**
-     * @var IChartDataSource
+     * @var IChartDisplay
      */
     private $chart;
 
     /**
      * TableWidgetDefiner constructor.
      *
-     * @param string           $name
-     * @param string           $label
-     * @param IChartDataSource $chart
-     * @param callable         $callback
+     * @param string        $name
+     * @param string        $label
+     * @param IChartDisplay $chart
+     * @param callable      $callback
      */
-    public function __construct(string $name, string $label, IChartDataSource $chart, callable $callback)
+    public function __construct(string $name, string $label, IChartDisplay $chart, callable $callback)
     {
         parent::__construct($name, null, null, null, $callback);
         $this->label = $label;
@@ -56,7 +55,7 @@ class ChartWidgetDefiner extends WidgetDefinerBase
      */
     public function matching(callable $criteriaDefinitionCallback)
     {
-        $criteria = $this->chart->criteria();
+        $criteria = $this->chart->getDataSource()->criteria();
         $criteriaDefinitionCallback($criteria);
 
         call_user_func($this->callback, new ChartWidget($this->name, $this->label, $this->chart, $criteria));

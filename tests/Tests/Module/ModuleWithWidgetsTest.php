@@ -76,9 +76,9 @@ class ModuleWithWidgetsTest extends ModuleTestBase
     {
         /** @var TableWidget $widget */
         $widget    = $this->module->getWidget('table-widget.all');
-        $dataTable = $this->module->getTable('data-table')->getDataSource();
+        $dataTable = $this->module->getTable('data-table');
 
-        $this->assertSame($dataTable, $widget->getTableDataSource());
+        $this->assertSame($dataTable, $widget->getTableDisplay());
         $this->assertSame('table-widget.all', $widget->getName());
         $this->assertSame('Table Widget #1', $widget->getLabel());
         $this->assertSame(false, $widget->hasCriteria());
@@ -89,9 +89,9 @@ class ModuleWithWidgetsTest extends ModuleTestBase
     {
         /** @var TableWidget $widget */
         $widget    = $this->module->getWidget('table-widget.with-criteria');
-        $dataTable = $this->module->getTable('data-table')->getDataSource();
+        $dataTable = $this->module->getTable('data-table');
 
-        $this->assertSame($dataTable, $widget->getTableDataSource());
+        $this->assertSame($dataTable, $widget->getTableDisplay());
         $this->assertSame('table-widget.with-criteria', $widget->getName());
         $this->assertSame('Table Widget #2', $widget->getLabel());
         $this->assertSame(true, $widget->hasCriteria());
@@ -103,9 +103,9 @@ class ModuleWithWidgetsTest extends ModuleTestBase
     {
         /** @var ChartWidget $widget */
         $widget    = $this->module->getWidget('chart-widget.all');
-        $lineChart = $this->module->getChart('line-chart')->getDataSource();
+        $lineChart = $this->module->getChart('line-chart');
 
-        $this->assertSame($lineChart, $widget->getChartDataSource());
+        $this->assertSame($lineChart, $widget->getChartDisplay());
         $this->assertSame('chart-widget.all', $widget->getName());
         $this->assertSame('Chart Widget #1', $widget->getLabel());
         $this->assertSame(false, $widget->hasCriteria());
@@ -116,9 +116,9 @@ class ModuleWithWidgetsTest extends ModuleTestBase
     {
         /** @var ChartWidget $widget */
         $widget    = $this->module->getWidget('chart-widget.with-criteria');
-        $lineChart = $this->module->getChart('line-chart')->getDataSource();
+        $lineChart = $this->module->getChart('line-chart');
 
-        $this->assertSame($lineChart, $widget->getChartDataSource());
+        $this->assertSame($lineChart, $widget->getChartDisplay());
         $this->assertSame('chart-widget.with-criteria', $widget->getName());
         $this->assertSame('Chart Widget #2', $widget->getLabel());
         $this->assertSame(true, $widget->hasCriteria());
