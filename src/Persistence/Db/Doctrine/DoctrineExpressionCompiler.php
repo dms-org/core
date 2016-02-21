@@ -2,11 +2,11 @@
 
 namespace Dms\Core\Persistence\Db\Doctrine;
 
-use Doctrine\DBAL\Platforms\AbstractPlatform;
-use Doctrine\DBAL\Query\QueryBuilder;
 use Dms\Core\Exception\InvalidArgumentException;
 use Dms\Core\Persistence\Db\Query\Expression;
 use Dms\Core\Persistence\Db\Query\Expression\Expr;
+use Doctrine\DBAL\Platforms\AbstractPlatform;
+use Doctrine\DBAL\Query\QueryBuilder;
 
 /**
  * The doctrine expression compiler class
@@ -61,11 +61,12 @@ class DoctrineExpressionCompiler
     /**
      * @param QueryBuilder $queryBuilder
      * @param Expr         $expr
+     * @param bool         $subSelectAlias
      *
      * @return array|string
      * @throws InvalidArgumentException
      */
-    public function compileExpression(QueryBuilder $queryBuilder, Expr $expr)
+    public function compileExpression(QueryBuilder $queryBuilder, Expr $expr, bool $subSelectAlias = true)
     {
         switch (true) {
             case $expr instanceof Expression\Count:
@@ -93,7 +94,7 @@ class DoctrineExpressionCompiler
                 return $this->compileUnaryOp($queryBuilder, $expr);
 
             case $expr instanceof Expression\SubSelect:
-                return $this->compileSubSelect($queryBuilder, $expr);
+                return $this->compileSubSelect($queryBuilder, $expr, $subSelectAlias);
         }
 
         throw InvalidArgumentException::format('Unknown expression type: ' . get_class($expr));
@@ -101,8 +102,8 @@ class DoctrineExpressionCompiler
 
     private function compileBinOp(QueryBuilder $queryBuilder, Expression\BinOp $expr)
     {
-        $left  = $this->compileExpression($queryBuilder, $expr->getLeft());
-        $right = $this->compileExpression($queryBuilder, $expr->getRight());
+        $left  = $this->compileExpression($queryBuilder, $expr->getLeft(), false);
+        $right = $this->compileExpression($queryBuilder, $expr->getRight(), false);
 
         $expressionBuilder = $queryBuilder->expr();
 
@@ -162,7 +163,7 @@ class DoctrineExpressionCompiler
 
     private function compileUnaryOp(QueryBuilder $queryBuilder, Expression\UnaryOp $expr)
     {
-        $operand = $this->compileExpression($queryBuilder, $expr->getOperand());
+        $operand = $this->compileExpression($queryBuilder, $expr->getOperand(), false);
 
         switch ($expr->getOperator()) {
             case Expression\UnaryOp::NOT:
@@ -180,7 +181,7 @@ class DoctrineExpressionCompiler
 
     private function compileSimpleAggregate(QueryBuilder $queryBuilder, Expression\SimpleAggregate $expr)
     {
-        $argument = $this->compileExpression($queryBuilder, $expr->getArgument());
+        $argument = $this->compileExpression($queryBuilder, $expr->getArgument(), false);
 
         switch ($expr->getType()) {
             case Expression\SimpleAggregate::SUM:
@@ -200,15 +201,20 @@ class DoctrineExpressionCompiler
     }
 
 
-    private function compileSubSelect(QueryBuilder $queryBuilder, Expression\SubSelect $expr)
+    private function compileSubSelect(QueryBuilder $queryBuilder, Expression\SubSelect $expr, bool $subSelectAlias)
     {
-        $subSelect      = $this->platform->compileSelect($expr->getSelect());
-        $subSelectAlias = $this->doctrinePlatform->quoteSingleIdentifier('__sub_select_' . $this->subSelectCounter++);
+        $subSelect = $this->platform->compileSelect($expr->getSelect());
 
         foreach ($subSelect->getParameters() as $parameter) {
             $queryBuilder->createPositionalParameter($parameter);
         }
 
-        return '(' . $subSelect->getSql() . ') AS ' . $subSelectAlias;
+        if ($subSelectAlias) {
+            $subSelectAlias = $this->doctrinePlatform->quoteSingleIdentifier('__sub_select_' . $this->subSelectCounter++);
+
+            return '(' . $subSelect->getSql() . ') AS ' . $subSelectAlias;
+        } else {
+            return '(' . $subSelect->getSql() . ')';
+        }
     }
 }
