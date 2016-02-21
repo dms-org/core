@@ -34,9 +34,16 @@ class StandardConditions
                 ->arrayOfField($field)
                 ->build();
 
+        $stringField = Field::name($field->getName())
+                ->label($field->getLabel())
+                ->string()
+                ->build();
+
         foreach ($operators as $operator) {
             if ($operator === ConditionOperator::IN || $operator === ConditionOperator::NOT_IN) {
                 $conditions[] = new ColumnComponentOperator($operator, $arrayField);
+            } elseif ($operator === ConditionOperator::STRING_CONTAINS || $operator === ConditionOperator::STRING_CONTAINS_CASE_INSENSITIVE) {
+                $conditions[] = new ColumnComponentOperator($operator, $stringField);
             } else {
                 $conditions[] = new ColumnComponentOperator($operator, $field);
             }

@@ -54,15 +54,18 @@ class ScalarType extends BaseType
     {
         $operators = parent::loadValidOperatorTypes();
 
-        if ($this->type === self::STRING) {
-            $nullableString = $this->nullable();
+        if ($this->type === self::STRING || $this->type === self::INT || $this->type === self::FLOAT) {
+            $nullableString = Type::string()->nullable();
 
             $operators += [
                     ConditionOperator::STRING_CONTAINS                  => $nullableString,
                     ConditionOperator::STRING_CONTAINS_CASE_INSENSITIVE => $nullableString,
             ];
-        } elseif ($this->type === self::INT || $this->type === self::FLOAT) {
+        }
+
+        if ($this->type === self::INT || $this->type === self::FLOAT) {
             $numberType = Type::number()->nullable();
+
             $operators += [
                     ConditionOperator::GREATER_THAN          => $numberType,
                     ConditionOperator::GREATER_THAN_OR_EQUAL => $numberType,

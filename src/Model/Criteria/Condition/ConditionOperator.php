@@ -170,7 +170,7 @@ final class ConditionOperator
                         return false;
                     }
 
-                    return strpos($l, $r) !== false;
+                    return strpos((string)$l, (string)$r) !== false;
                 };
 
             case ConditionOperator::STRING_CONTAINS_CASE_INSENSITIVE:
@@ -182,7 +182,7 @@ final class ConditionOperator
                         return false;
                     }
 
-                    return stripos($l, $r) !== false;
+                    return stripos((string)$l, (string)$r) !== false;
                 };
 
             case ConditionOperator::IN:

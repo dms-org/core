@@ -28,6 +28,14 @@ class StandardConditionsTest extends CmsTestCase
                         ConditionOperator::NOT_IN,
                         Field::name($field->getName())->label($field->getLabel())->arrayOfField($field)->build()
                 ),
+                new ColumnComponentOperator(
+                        ConditionOperator::STRING_CONTAINS,
+                        Field::name($field->getName())->label($field->getLabel())->string()->build()
+                ),
+                new ColumnComponentOperator(
+                        ConditionOperator::STRING_CONTAINS_CASE_INSENSITIVE,
+                        Field::name($field->getName())->label($field->getLabel())->string()->build()
+                ),
                 new ColumnComponentOperator('>', $field),
                 new ColumnComponentOperator('>=', $field),
                 new ColumnComponentOperator('<', $field),

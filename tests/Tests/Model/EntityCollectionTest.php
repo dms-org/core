@@ -257,4 +257,32 @@ class EntityCollectionTest extends IEntitySetTest
 
         $this->assertEquals($collection, unserialize(serialize($collection)));
     }
+
+    public function testIdStringContainsCriteria()
+    {
+        $data = $this->collection->matching(
+                $this->collection->criteria()->whereStringContains('id', '1')
+        );
+
+        $this->assertEquals([
+                $this->entityMock(1),
+                $this->entityMock(10),
+                $this->entityMock(11),
+                $this->entityMock(12),
+        ], $data);
+    }
+
+    public function testIdStringContainsCaseInsensitiveCriteria()
+    {
+        $data = $this->collection->matching(
+                $this->collection->criteria()->whereStringContainsCaseInsensitive('id', '1')
+        );
+
+        $this->assertEquals([
+                $this->entityMock(1),
+                $this->entityMock(10),
+                $this->entityMock(11),
+                $this->entityMock(12),
+        ], $data);
+    }
 }

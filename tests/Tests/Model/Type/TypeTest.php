@@ -276,10 +276,12 @@ class TypeTest extends CmsTestCase
         $this->assertFalse($type->isOfType('abc'));
         $this->assertFalse($type->isOfType(null));
         $this->assertEquals($this->commonConditionTypes($type) + $this->makeConditionTypes([
-                        '>'  => Type::number()->nullable(),
-                        '>=' => Type::number()->nullable(),
-                        '<'  => Type::number()->nullable(),
-                        '<=' => Type::number()->nullable(),
+                        ConditionOperator::STRING_CONTAINS                  => Type::string()->nullable(),
+                        ConditionOperator::STRING_CONTAINS_CASE_INSENSITIVE => Type::string()->nullable(),
+                        '>'                                                 => Type::number()->nullable(),
+                        '>='                                                => Type::number()->nullable(),
+                        '<'                                                 => Type::number()->nullable(),
+                        '<='                                                => Type::number()->nullable(),
                 ]), $type->getConditionOperatorTypes());
     }
 
@@ -296,10 +298,12 @@ class TypeTest extends CmsTestCase
         $this->assertFalse($type->isOfType('abc'));
         $this->assertFalse($type->isOfType(null));
         $this->assertEquals($this->commonConditionTypes($type) + $this->makeConditionTypes([
-                        '>'  => Type::number()->nullable(),
-                        '>=' => Type::number()->nullable(),
-                        '<'  => Type::number()->nullable(),
-                        '<=' => Type::number()->nullable(),
+                        ConditionOperator::STRING_CONTAINS                  => Type::string()->nullable(),
+                        ConditionOperator::STRING_CONTAINS_CASE_INSENSITIVE => Type::string()->nullable(),
+                        '>'                                                 => Type::number()->nullable(),
+                        '>='                                                => Type::number()->nullable(),
+                        '<'                                                 => Type::number()->nullable(),
+                        '<='                                                => Type::number()->nullable(),
                 ]), $type->getConditionOperatorTypes());
     }
 
@@ -450,10 +454,12 @@ class TypeTest extends CmsTestCase
         $this->assertFalse($type->isOfType([]));
         $this->assertFalse($type->isOfType(new \stdClass()));
         $this->assertEquals($this->commonConditionTypes($type) + $this->makeConditionTypes([
-                        '>'  => Type::number()->nullable(),
-                        '>=' => Type::number()->nullable(),
-                        '<'  => Type::number()->nullable(),
-                        '<=' => Type::number()->nullable(),
+                        ConditionOperator::STRING_CONTAINS                  => Type::string()->nullable(),
+                        ConditionOperator::STRING_CONTAINS_CASE_INSENSITIVE => Type::string()->nullable(),
+                        '>'                                                 => Type::number()->nullable(),
+                        '>='                                                => Type::number()->nullable(),
+                        '<'                                                 => Type::number()->nullable(),
+                        '<='                                                => Type::number()->nullable(),
                 ]), $type->getConditionOperatorTypes());
     }
 
