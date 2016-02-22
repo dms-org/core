@@ -283,10 +283,14 @@ class PersonCrudModuleTest extends CrudModuleTest
 
         $this->assertInstanceOf(IObjectAction::class, $action);
 
-        $action->run([IObjectAction::OBJECT_FIELD_NAME => 1]);
+        $person = $action->run([IObjectAction::OBJECT_FIELD_NAME => 1]);
+        $this->assertInstanceOf(Person::class, $person);
+        $this->assertSame(1, $person->getId());
         $this->assertCount(4, $this->dataSource);
 
-        $action->run([IObjectAction::OBJECT_FIELD_NAME => 5]);
+        $person = $action->run([IObjectAction::OBJECT_FIELD_NAME => 5]);
+        $this->assertInstanceOf(Person::class, $person);
+        $this->assertSame(5, $person->getId());
         $this->assertCount(3, $this->dataSource);
     }
 

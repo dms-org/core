@@ -41,6 +41,7 @@ class RemoveActionDefiner extends ObjectActionDefiner
 
         $this->dataSource = $dataSource;
         $this->authorize(ICrudModule::REMOVE_PERMISSION);
+        $this->returns($dataSource->getObjectType());
     }
 
     /**
@@ -109,9 +110,9 @@ class RemoveActionDefiner extends ObjectActionDefiner
             $handler = new CustomObjectActionHandler($handler);
         }
 
-        $this->currentObjectType = $this->dataSource->getObjectType();
+        $this->currentObjectType  = $this->dataSource->getObjectType();
         $this->currentDataDtoType = $handler->getDataDtoType();
-        
+
         parent::handler(function (IEntity $object, $input = null) use ($handler) {
 
             foreach ($this->beforeRemoveCallbacks as $callback) {
@@ -123,6 +124,8 @@ class RemoveActionDefiner extends ObjectActionDefiner
             foreach ($this->afterRemoveCallbacks as $callback) {
                 $callback($object, $input);
             }
+
+            return $object;
         });
     }
 }

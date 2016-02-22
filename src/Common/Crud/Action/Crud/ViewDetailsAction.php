@@ -10,7 +10,6 @@ use Dms\Core\Common\Crud\Action\Object\IObjectActionFormMapping;
 use Dms\Core\Common\Crud\Action\Object\Mapping\WrapperObjectActionFormMapping;
 use Dms\Core\Common\Crud\Action\Object\SelfHandlingObjectAction;
 use Dms\Core\Common\Crud\Definition\Form\FinalizedCrudFormDefinition;
-use Dms\Core\Common\Crud\Form\FormWithBinding;
 use Dms\Core\Common\Crud\Form\ObjectForm;
 use Dms\Core\Common\Crud\IReadModule;
 use Dms\Core\Form\Builder\Form;
@@ -39,10 +38,11 @@ class ViewDetailsAction extends SelfHandlingObjectAction
      * @inheritDoc
      */
     public function __construct(
-            IEntitySet $dataSource,
-            IAuthSystem $auth,
-            FinalizedCrudFormDefinition $form
-    ) {
+        IEntitySet $dataSource,
+        IAuthSystem $auth,
+        FinalizedCrudFormDefinition $form
+    )
+    {
         $this->dataSource = $dataSource;
         $this->form       = $form;
 
@@ -68,7 +68,7 @@ class ViewDetailsAction extends SelfHandlingObjectAction
     protected function permissions() : array
     {
         return [
-                Permission::named(IReadModule::VIEW_PERMISSION),
+            Permission::named(IReadModule::VIEW_PERMISSION),
         ];
     }
 
@@ -77,10 +77,10 @@ class ViewDetailsAction extends SelfHandlingObjectAction
      *
      * @return IObjectActionFormMapping
      */
-    protected function formMapping() : \Dms\Core\Common\Crud\Action\Object\IObjectActionFormMapping
+    protected function formMapping() : IObjectActionFormMapping
     {
         return new WrapperObjectActionFormMapping(
-                ObjectForm::build($this->dataSource)
+            ObjectForm::build($this->dataSource)
         );
     }
 
@@ -117,11 +117,10 @@ class ViewDetailsAction extends SelfHandlingObjectAction
         /** @var IEntity $object */
 
         $stagedForm = $this->form->getStagedForm();
-        $knownData = [IObjectAction::OBJECT_FIELD_NAME => $object];
-        $stages    = $stagedForm->withSubmittedFirstStage($knownData);
+        $knownData  = [IObjectAction::OBJECT_FIELD_NAME => $object];
+        $stages     = $stagedForm->withSubmittedFirstStage($knownData);
 
         $form = Form::create();
-        $form->embed($stagedForm->getFirstForm()->withInitialValues($knownData));
 
         foreach ($stages->getAllStages() as $stage) {
             $currentStageForm = $stage->loadForm($knownData);

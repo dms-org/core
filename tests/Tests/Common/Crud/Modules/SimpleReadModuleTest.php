@@ -4,11 +4,8 @@ namespace Dms\Core\Tests\Common\Crud\Modules;
 
 use Dms\Core\Auth\IPermission;
 use Dms\Core\Auth\UserForbiddenException;
-use Dms\Core\Common\Crud\Action\Crud\ViewDetailsAction;
 use Dms\Core\Common\Crud\Action\Object\IObjectAction;
 use Dms\Core\Common\Crud\IReadModule;
-use Dms\Core\Common\Crud\ReadModule;
-use Dms\Core\Exception\InvalidArgumentException;
 use Dms\Core\Form\IForm;
 use Dms\Core\Form\InvalidFormSubmissionException;
 use Dms\Core\Model\IEntitySet;
@@ -36,9 +33,9 @@ class SimpleReadModuleTest extends ReadModuleTest
     protected function buildDataSource()
     {
         return SimpleEntity::collection([
-                new SimpleEntity(1, 'abc'),
-                new SimpleEntity(2, '123'),
-                new SimpleEntity(3, 'xyz'),
+            new SimpleEntity(1, 'abc'),
+            new SimpleEntity(2, '123'),
+            new SimpleEntity(3, 'xyz'),
         ]);
     }
 
@@ -67,11 +64,11 @@ class SimpleReadModuleTest extends ReadModuleTest
         $id   = IReadModule::SUMMARY_TABLE_ID_COLUMN;
 
         $this->assertDataTableEquals([
-                [
-                        [$id => [$id => 1], 'data' => ['data' => 'abc']],
-                        [$id => [$id => 2], 'data' => ['data' => '123']],
-                        [$id => [$id => 3], 'data' => ['data' => 'xyz']],
-                ],
+            [
+                [$id => [$id => 1], 'data' => ['data' => 'abc']],
+                [$id => [$id => 2], 'data' => ['data' => '123']],
+                [$id => [$id => 3], 'data' => ['data' => 'xyz']],
+            ],
         ], $data);
     }
 
@@ -83,10 +80,9 @@ class SimpleReadModuleTest extends ReadModuleTest
         $detailsForm = $this->module->getDetailsAction()->run([IObjectAction::OBJECT_FIELD_NAME => 1]);
 
         $this->assertInstanceOf(IForm::class, $detailsForm);
-        $this->assertSame([IObjectAction::OBJECT_FIELD_NAME, 'data'], $detailsForm->getFieldNames());
+        $this->assertSame(['data'], $detailsForm->getFieldNames());
         $this->assertSame([
-                IObjectAction::OBJECT_FIELD_NAME => $this->dataSource->get(1),
-                'data' => 'abc'
+            'data' => 'abc',
         ], $detailsForm->getInitialValues());
 
         $this->assertThrows(function () {
