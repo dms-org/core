@@ -2,8 +2,10 @@
 
 namespace Dms\Core\Common\Crud\Definition;
 
+use App\Dms\Demo\DemoEntity;
 use Dms\Core\Exception\InvalidArgumentException;
 use Dms\Core\Model\ITypedObject;
+use Dms\Core\Model\Object\FinalizedClassDefinition;
 
 /**
  * The label object strategy definer class.
@@ -44,7 +46,10 @@ class LabelObjectStrategyDefiner
      */
     public function fromProperty(string $propertyName)
     {
-        if (!(new \ReflectionClass($this->classType))->hasProperty($propertyName)) {
+        $classType = $this->classType;
+        /** @var FinalizedClassDefinition $definition */
+        $definition = $classType::definition();
+        if (!$definition->hasProperty($propertyName)) {
             throw InvalidArgumentException::format(
                     'Invalid call to %s: property %s::$%s does not exist',
                     __METHOD__, $this->classType, $propertyName
