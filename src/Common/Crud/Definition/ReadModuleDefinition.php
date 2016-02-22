@@ -116,7 +116,9 @@ class ReadModuleDefinition extends ModuleDefinition
     public function labelObjects() : LabelObjectStrategyDefiner
     {
         return new LabelObjectStrategyDefiner($this->classType, function (callable $labelObjectCallback) {
-            $this->labelObjectCallback = $labelObjectCallback;
+            $this->labelObjectCallback = function ($object) use ($labelObjectCallback) {
+                return (string)$labelObjectCallback($object);
+            };
         });
     }
 
