@@ -44,7 +44,7 @@ class LabelObjectStrategyDefiner
      */
     public function fromProperty(string $propertyName)
     {
-        if (!property_exists($this->classType, $propertyName)) {
+        if (!(new \ReflectionClass($this->classType))->hasProperty($propertyName)) {
             throw InvalidArgumentException::format(
                     'Invalid call to %s: property %s::$%s does not exist',
                     __METHOD__, $this->classType, $propertyName
