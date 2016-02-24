@@ -60,7 +60,7 @@ class ResequenceOrderIndexColumn implements IQuery
     /**
      * @return Table
      */
-    public function getTable() : \Dms\Core\Persistence\Db\Schema\Table
+    public function getTable() : Table
     {
         return $this->table;
     }
@@ -68,7 +68,7 @@ class ResequenceOrderIndexColumn implements IQuery
     /**
      * @return Column
      */
-    public function getColumn() : \Dms\Core\Persistence\Db\Schema\Column
+    public function getColumn() : Column
     {
         return $this->column;
     }

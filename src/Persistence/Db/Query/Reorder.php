@@ -155,7 +155,7 @@ class Reorder implements IQuery
 
             // First update: shift rows in the way of the new index
 
-            if ($this->newIndex > $this->primaryKey) {
+            if ($this->newIndex > $oldIndexValue) {
                 // UPDATE _ SET index = index - 1 WHERE index <= :new_index AND index > :old_index
                 $update = Update::from($this->table)
                         ->set($columnName, Expr::subtract($orderIndex, $one))
