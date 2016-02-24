@@ -19,9 +19,9 @@ class CustomEnumTypeGeneratorTest extends CmsTestCase
         /** @var BaseEnumType $type */
         $type = Type::getType($typeName);
 
-        $this->assertSame('enum(a,b,c)', $typeName);
+        $this->assertSame('CustomEnum__a__b__c', $typeName);
         $this->assertInstanceOf(BaseEnumType::class, $type);
-        $this->assertSame('enum(a,b,c)', $type->getName());
+        $this->assertSame('CustomEnum__a__b__c', $type->getName());
         $this->assertSame(['a', 'b', 'c'], $type->getValues());
         $this->assertSame('ENUM(\'a\',\'b\',\'c\')', $type->getSQLDeclaration([], new MySqlPlatform()));
         $this->assertSame($typeName, CustomEnumTypeGenerator::generate(['a', 'b', 'c']));
@@ -34,9 +34,9 @@ class CustomEnumTypeGeneratorTest extends CmsTestCase
         /** @var BaseEnumType $type */
         $type = Type::getType($typeName);
 
-        $this->assertSame('enum(a-b vsdvsd,c)', $typeName);
+        $this->assertSame('CustomEnum__a_b_vsdvsd__c', $typeName);
         $this->assertInstanceOf(BaseEnumType::class, $type);
-        $this->assertSame('enum(a-b vsdvsd,c)', $type->getName());
+        $this->assertSame('CustomEnum__a_b_vsdvsd__c', $type->getName());
         $this->assertSame(['a-b vsdvsd', 'c'], $type->getValues());
         $this->assertSame('ENUM(\'a-b vsdvsd\',\'c\')', $type->getSQLDeclaration([], new MySqlPlatform()));
         $this->assertSame($typeName, CustomEnumTypeGenerator::generate(['a-b vsdvsd', 'c']));
