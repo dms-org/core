@@ -25,6 +25,11 @@ interface IChartAxis extends IColumn
     public function getLabel() : string;
 
     /**
+     * @return bool
+     */
+    public function isHidden() : bool;
+
+    /**
      * @return IColumnComponentType
      */
     public function getType() : IColumnComponentType;

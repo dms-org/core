@@ -16,13 +16,15 @@ class ColumnTest extends CmsTestCase
     public function testNewColumnWithSingleComponent()
     {
         $column = new Column(
-                'name',
-                'Label',
-                [$component = ColumnComponent::forField(Field::name('component')->label('Component')->int()->build())]
+            'name',
+            'Label',
+            true,
+            [$component = ColumnComponent::forField(Field::name('component')->label('Component')->int()->build())]
         );
 
         $this->assertSame('name', $column->getName());
         $this->assertSame('Label', $column->getLabel());
+        $this->assertSame(true, $column->isHidden());
         $this->assertSame(['component'], $column->getComponentNames());
         $this->assertSame(['component' => $component], $column->getComponents());
         $this->assertSame(true, $column->hasComponent('component'));
@@ -41,16 +43,18 @@ class ColumnTest extends CmsTestCase
     public function testNewColumnWithMultipleComponent()
     {
         $column = new Column(
-                'name',
-                'Label',
-                [
-                        $string = ColumnComponent::forField(Field::name('string')->label('String')->string()->build()),
-                        $int = ColumnComponent::forField(Field::name('int')->label('Int')->int()->build()),
-                ]
+            'name',
+            'Label',
+            false,
+            [
+                $string = ColumnComponent::forField(Field::name('string')->label('String')->string()->build()),
+                $int = ColumnComponent::forField(Field::name('int')->label('Int')->int()->build()),
+            ]
         );
 
         $this->assertSame('name', $column->getName());
         $this->assertSame('Label', $column->getLabel());
+        $this->assertSame(false, $column->isHidden());
         $this->assertSame(['string', 'int'], $column->getComponentNames());
         $this->assertSame(['string' => $string, 'int' => $int], $column->getComponents());
         $this->assertSame(true, $column->hasComponent('string'));
@@ -81,6 +85,6 @@ class ColumnTest extends CmsTestCase
     public function testInvalidComponent()
     {
         $this->setExpectedException(InvalidArgumentException::class);
-        new Column('name', 'Label', [1]);
+        new Column('name', 'Label', false, [1]);
     }
 }

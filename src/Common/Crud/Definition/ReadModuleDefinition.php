@@ -224,6 +224,7 @@ class ReadModuleDefinition extends ModuleDefinition
     {
         $definition = new SummaryTableDefinition($this, $this->class, $this->dataSource);
         $definition->mapProperty(IEntity::ID)
+                ->hidden()
                 ->to(Field::name(IReadModule::SUMMARY_TABLE_ID_COLUMN)->label('Id')->int()->required());
         $summaryTableDefinitionCallback($definition);
 

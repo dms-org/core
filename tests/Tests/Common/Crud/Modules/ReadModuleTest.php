@@ -71,6 +71,7 @@ abstract class ReadModuleTest extends ModuleTestBase
 
         $this->assertInstanceOf(ObjectTableDataSource::class, $tableDataSource);
         $this->assertSame($this->dataSource, $tableDataSource->getObjectDataSource());
+        $this->assertSame(true, $tableDataSource->getStructure()->getColumn('id')->isHidden());
     }
 
     public function testSummaryTableActionRequiresViewPermission()

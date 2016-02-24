@@ -20,11 +20,12 @@ class Column extends ColumnBuilderBase
      * Create a simple column for the supplied column component or form field.
      *
      * @param IColumnComponent|FieldBuilderBase|IField $componentOrField
+     * @param bool                                     $hidden
      *
      * @return IColumn
      * @throws TypeMismatchException
      */
-    public static function from($componentOrField) : \Dms\Core\Table\IColumn
+    public static function from($componentOrField, bool $hidden = false) : IColumn
     {
         if ($componentOrField instanceof IColumnComponent) {
 
@@ -41,7 +42,10 @@ class Column extends ColumnBuilderBase
             );
         }
 
-        return self::name($componentOrField->getName())->label($componentOrField->getLabel())->components([$componentOrField]);
+        return self::name($componentOrField->getName())
+            ->label($componentOrField->getLabel())
+            ->hidden($hidden)
+            ->components([$componentOrField]);
     }
 
     /**

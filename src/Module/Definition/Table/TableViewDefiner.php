@@ -64,7 +64,7 @@ class TableViewDefiner extends RowCriteria
     /**
      * @return TableView
      */
-    public function finalize() : \Dms\Core\Module\Table\TableView
+    public function finalize() : TableView
     {
         return new TableView(
                 $this->name,

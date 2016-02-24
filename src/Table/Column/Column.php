@@ -30,6 +30,11 @@ class Column implements IColumn
     protected $label;
 
     /**
+     * @var bool
+     */
+    protected $hidden;
+
+    /**
      * @var IColumnComponent[]
      */
     protected $components = [];
@@ -39,14 +44,16 @@ class Column implements IColumn
      *
      * @param string             $name
      * @param string             $label
+     * @param bool               $hidden
      * @param IColumnComponent[] $components
      */
-    public function __construct(string $name, string $label, array $components)
+    public function __construct(string $name, string $label, bool $hidden, array $components)
     {
         InvalidArgumentException::verifyAllInstanceOf(__METHOD__, 'components', $components, IColumnComponent::class);
 
-        $this->name  = $name;
-        $this->label = $label;
+        $this->name   = $name;
+        $this->label  = $label;
+        $this->hidden = $hidden;
         foreach ($components as $component) {
             $this->components[$component->getName()] = $component;
         }
@@ -66,6 +73,14 @@ class Column implements IColumn
     final public function getLabel() : string
     {
         return $this->label;
+    }
+
+    /**
+     * @return mixed
+     */
+    final public function isHidden() : bool
+    {
+        return $this->hidden;
     }
 
     /**
@@ -115,16 +130,16 @@ class Column implements IColumn
                 return reset($this->components);
             } else {
                 throw InvalidArgumentException::format(
-                        'Must supply component name for %s \'%s\' with more than one component: expecting one of (%s), null given',
-                        static::$debugType, $this->name, Debug::formatValues(array_keys($this->components))
+                    'Must supply component name for %s \'%s\' with more than one component: expecting one of (%s), null given',
+                    static::$debugType, $this->name, Debug::formatValues(array_keys($this->components))
                 );
             }
         }
 
         if (!isset($this->components[$componentName])) {
             throw InvalidArgumentException::format(
-                    'Invalid component name for %s \'%s\': expecting one of (%s), %s given',
-                    static::$debugType, $this->name, Debug::formatValues(array_keys($this->components)), $componentName
+                'Invalid component name for %s \'%s\': expecting one of (%s), %s given',
+                static::$debugType, $this->name, Debug::formatValues(array_keys($this->components)), $componentName
             );
         }
 

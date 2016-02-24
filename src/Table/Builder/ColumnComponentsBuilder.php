@@ -23,7 +23,7 @@ class ColumnComponentsBuilder extends ColumnBuilderBase
      * @return IColumn
      * @throws TypeMismatchException
      */
-    public function components(array $components) : \Dms\Core\Table\IColumn
+    public function components(array $components) : IColumn
     {
         foreach ($components as $key => $component) {
             if ($component instanceof IColumnComponent) {

@@ -3,7 +3,6 @@
 namespace Dms\Core\Table;
 
 use Dms\Core\Exception\InvalidArgumentException;
-use Dms\Core\Model\Type\IType;
 
 /**
  * The table column interface.
@@ -25,6 +24,13 @@ interface IColumn
      * @return string
      */
     public function getLabel() : string;
+
+    /**
+     * Returns whether the column is hidden
+     *
+     * @return bool
+     */
+    public function isHidden() : bool;
 
     /**
      * Gets the column components.

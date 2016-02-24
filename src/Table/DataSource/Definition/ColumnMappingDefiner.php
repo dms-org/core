@@ -2,6 +2,7 @@
 
 namespace Dms\Core\Table\DataSource\Definition;
 
+use Dms\Core\Exception\InvalidOperationException;
 use Dms\Core\Form\Field\Builder\FieldBuilderBase;
 use Dms\Core\Form\IField;
 use Dms\Core\Table\Builder\Column;
@@ -25,10 +26,27 @@ class ColumnMappingDefiner
      */
     private $componentIdCallback;
 
+    /**
+     * @var bool
+     */
+    protected $hidden = false;
+
     public function __construct(callable $columnCallback, callable $componentIdCallback)
     {
         $this->columnCallback      = $columnCallback;
         $this->componentIdCallback = $componentIdCallback;
+    }
+
+    /**
+     * Defines the column as hidden
+     *
+     * @return static
+     */
+    public function hidden()
+    {
+        $this->hidden = true;
+
+        return $this;
     }
 
     /**
@@ -44,7 +62,7 @@ class ColumnMappingDefiner
                 $this->columnCallback,
                 $fieldOrColumnOrComponent instanceof IColumn
                         ? $fieldOrColumnOrComponent
-                        : Column::from($fieldOrColumnOrComponent)
+                        : Column::from($fieldOrColumnOrComponent, $this->hidden)
         );
     }
 
@@ -54,9 +72,14 @@ class ColumnMappingDefiner
      * @param string $componentId
      *
      * @return void
+     * @throws InvalidOperationException
      */
     public function toComponent(string $componentId)
     {
+        if ($this->hidden) {
+            throw InvalidOperationException::format('Invalid call to %s: cannot hide an existing column', __METHOD__);
+        }
+
         call_user_func($this->componentIdCallback, $componentId);
     }
 }

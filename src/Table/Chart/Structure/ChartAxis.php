@@ -55,7 +55,7 @@ class ChartAxis extends Column implements IChartAxis
             $this->components[$component->getName()] = $component;
         }
 
-        parent::__construct($name, $label, $components);
+        parent::__construct($name, $label, $hidden = false, $components);
     }
 
     /**

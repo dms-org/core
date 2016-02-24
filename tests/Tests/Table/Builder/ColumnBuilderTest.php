@@ -18,7 +18,7 @@ class ColumnBuilderTest extends CmsTestCase
     {
         $field = Field::name('field_name')->label('Field Label')->string();
 
-        $expectedColumn = new TableColumn('field_name', 'Field Label', [ColumnComponent::forField($field->build())]);
+        $expectedColumn = new TableColumn('field_name', 'Field Label', false, [ColumnComponent::forField($field->build())]);
 
         $this->assertEquals($expectedColumn, Column::from($field));
         $this->assertEquals($expectedColumn, Column::from($field->build()));
@@ -34,14 +34,14 @@ class ColumnBuilderTest extends CmsTestCase
 
     public function testChainedMethods()
     {
-        $column = Column::name('column_name')->label('Column Label')->components([
+        $column = Column::name('column_name')->label('Column Label')->hidden()->components([
                 Field::name('some_string')->label('Text')->string(),
                 Field::name('some_int')->label('Number')->int()->build(),
                 ColumnComponent::forField(Field::name('float')->label('Number')->decimal()->build())
         ]);
 
         $this->assertEquals(
-                new TableColumn('column_name', 'Column Label', [
+                new TableColumn('column_name', 'Column Label', true, [
                         ColumnComponent::forField(Field::name('some_string')->label('Text')->string()->build()),
                         ColumnComponent::forField(Field::name('some_int')->label('Number')->int()->build()),
                         ColumnComponent::forField(Field::name('float')->label('Number')->decimal()->build()),
