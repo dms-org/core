@@ -14,8 +14,8 @@ use Dms\Core\Persistence\ArrayRepository;
 use Dms\Core\Persistence\IRepository;
 use Dms\Core\Tests\Common\Crud\Modules\Fixtures\Complex\Domain\Adult;
 use Dms\Core\Tests\Common\Crud\Modules\Fixtures\Complex\Domain\Child;
-use Dms\Core\Tests\Common\Crud\Modules\Fixtures\Complex\Domain\TestColour;
 use Dms\Core\Tests\Common\Crud\Modules\Fixtures\Complex\Domain\Person;
+use Dms\Core\Tests\Common\Crud\Modules\Fixtures\Complex\Domain\TestColour;
 use Dms\Core\Tests\Common\Crud\Modules\Fixtures\Complex\PersonModule;
 use Dms\Core\Tests\Module\Mock\MockAuthSystem;
 
@@ -150,6 +150,12 @@ class PersonCrudModuleTest extends CrudModuleTest
                         })
                         ->asArray()
         );
+
+        $this->assertThrows(function () use ($reorderAction) {
+            $reorderAction->run([
+                IObjectAction::OBJECT_FIELD_NAME => 1,
+            ]);
+        }, InvalidFormSubmissionException::class);
     }
 
     public function testCreateChild()

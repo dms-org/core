@@ -53,7 +53,7 @@ class CallbackReorderAction extends ObjectAction implements IReorderAction
     {
         return StagedForm::begin(ObjectForm::build($dataSource))
                 ->then(Form::create()->section('Reorder', [
-                        Field::name(self::NEW_INDEX_FIELD_NAME)->label('New Index')->int()->min(1)
+                        Field::name(self::NEW_INDEX_FIELD_NAME)->label('New Index')->int()->min(1)->required()
                 ]))
                ->build();
     }

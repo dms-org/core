@@ -122,7 +122,7 @@ class PersonModule extends CrudModule
             $table->view('default', 'Default')
                     ->loadAll()
                     ->asDefault()
-                    ->withReorder(function (Person $person, $newIndex) {
+                    ->withReorder(function (Person $person, int $newIndex) {
                         $elements  = $this->dataSource->getAll();
                         $personKey = array_search($person, $elements);
                         unset($elements[$personKey]);
