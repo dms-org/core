@@ -24,7 +24,7 @@ abstract class BaseEnumType extends Type
      */
     public static function getTypeName() : string
     {
-        return 'enum(' . implode(',', static::$values) . ')';
+        return (new \ReflectionClass(get_called_class()))->getShortName();
     }
 
     /**

@@ -39,9 +39,9 @@ abstract class MigrationGenerator
     public function generateMigration(DoctrineConnection $connection, IOrm $orm, string $migrationName)
     {
         $doctrine = $connection->getDoctrineConnection();
-        // TODO: fix
 
         $doctrine->getDatabasePlatform()->registerDoctrineTypeMapping('enum', 'string');
+        $doctrine->getEventManager()->addEventSubscriber(new CustomColumnDefinitionEventSubscriber());
 
         $currentSchema  = $doctrine->getSchemaManager()->createSchema();
         $expectedSchema = $this->databaseConverter->convertToDoctrineSchema($orm->getDatabase());

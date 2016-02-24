@@ -3,7 +3,6 @@
 namespace Dms\Core\Persistence\Db\Doctrine\Migration\Type;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
-use Doctrine\DBAL\Types\SmallIntType;
 use Doctrine\DBAL\Types\Type;
 
 /**
