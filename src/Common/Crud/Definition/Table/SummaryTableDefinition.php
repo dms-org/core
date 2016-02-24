@@ -171,6 +171,8 @@ class SummaryTableDefinition
                 }
         );
 
+        $viewDefiner->load(IReadModule::SUMMARY_TABLE_ID_COLUMN);
+
         $this->viewDefiners[] = $viewDefiner;
 
         return $viewDefiner;

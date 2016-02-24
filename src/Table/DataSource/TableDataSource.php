@@ -6,10 +6,12 @@ use Dms\Core\Exception\InvalidArgumentException;
 use Dms\Core\Model\Collection;
 use Dms\Core\Table\Chart\DataSource\ChartTableDataSourceAdapter;
 use Dms\Core\Table\Chart\DataSource\Definition\ChartTableMapperDefinition;
+use Dms\Core\Table\Chart\IChartDataSource;
 use Dms\Core\Table\Criteria\RowCriteria;
 use Dms\Core\Table\Data\DataTable;
 use Dms\Core\Table\Data\TableRow;
 use Dms\Core\Table\Data\TableSection;
+use Dms\Core\Table\IDataTable;
 use Dms\Core\Table\IRowCriteria;
 use Dms\Core\Table\ITableDataSource;
 use Dms\Core\Table\ITableRow;
@@ -42,7 +44,7 @@ abstract class TableDataSource implements ITableDataSource
     /**
      * @inheritDoc
      */
-    final public function getStructure() : \Dms\Core\Table\ITableStructure
+    final public function getStructure() : ITableStructure
     {
         return $this->structure;
     }
@@ -50,7 +52,7 @@ abstract class TableDataSource implements ITableDataSource
     /**
      * @inheritDoc
      */
-    final public function criteria() : \Dms\Core\Table\Criteria\RowCriteria
+    final public function criteria() : RowCriteria
     {
         return new RowCriteria($this->structure);
     }
@@ -58,7 +60,7 @@ abstract class TableDataSource implements ITableDataSource
     /**
      * @inheritDoc
      */
-    public function asChart(callable $chartMappingCallback) : \Dms\Core\Table\Chart\IChartDataSource
+    public function asChart(callable $chartMappingCallback) : IChartDataSource
     {
         $definition = new ChartTableMapperDefinition($this);
         $chartMappingCallback($definition);
@@ -69,7 +71,7 @@ abstract class TableDataSource implements ITableDataSource
     /**
      * @return RowCriteria
      */
-    protected function defaultLoadCriteria() : \Dms\Core\Table\Criteria\RowCriteria
+    protected function defaultLoadCriteria() : RowCriteria
     {
         return $this->criteria()->loadAll();
     }
@@ -77,7 +79,7 @@ abstract class TableDataSource implements ITableDataSource
     /**
      * @inheritDoc
      */
-    final public function load(IRowCriteria $criteria = null) : \Dms\Core\Table\IDataTable
+    final public function load(IRowCriteria $criteria = null) : IDataTable
     {
         $this->verifyCriteria($criteria);
 

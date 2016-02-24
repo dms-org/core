@@ -58,6 +58,14 @@ class SimpleReadModuleTest extends ReadModuleTest
         return [];
     }
 
+    public function testSummaryTableStructure()
+    {
+        $tableDataSource = $this->module->getSummaryTable()->getDataSource();
+
+        $this->assertSame(false, $tableDataSource->getStructure()->getColumn('data')->isHidden());
+        $this->assertSame(true, $tableDataSource->getStructure()->getColumn('id')->isHidden());
+    }
+
     public function testSummaryTableData()
     {
         $data = $this->module->getSummaryTable()->loadView();

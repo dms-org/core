@@ -27,6 +27,8 @@ class TableViewAndReorderDefiner extends TableViewDefiner
         $this->reorderActionCallback = $reorderActionCallback;
     }
 
+
+
     /**
      * Defines that, when viewed with the this criteria, the table
      * rows can be reordered within their sections. The supplied callback
