@@ -9,6 +9,7 @@ use Dms\Core\Model\Criteria\OrderingDirection;
 use Dms\Core\Table\Builder\Column;
 use Dms\Core\Table\Builder\Table;
 use Dms\Core\Table\Criteria\ColumnCondition;
+use Dms\Core\Table\Criteria\ColumnConditionGroup;
 use Dms\Core\Table\Criteria\ColumnGrouping;
 use Dms\Core\Table\Criteria\ColumnOrdering;
 use Dms\Core\Table\Criteria\RowCriteria;
@@ -40,11 +41,11 @@ class RowCriteriaTest extends CmsTestCase
     protected function makeStructure()
     {
         return Table::create([
-                Column::name('name')->label('Name')->components([
-                        Field::name('first_name')->label('First Name')->string(),
-                        Field::name('last_name')->label('Last Name')->string(),
-                ]),
-                Column::from(Field::name('age')->label('Age')->int()),
+            Column::name('name')->label('Name')->components([
+                Field::name('first_name')->label('First Name')->string(),
+                Field::name('last_name')->label('Last Name')->string(),
+            ]),
+            Column::from(Field::name('age')->label('Age')->int()),
         ]);
     }
 
@@ -54,7 +55,7 @@ class RowCriteriaTest extends CmsTestCase
         $this->assertSame([], $this->criteria->getColumnsToLoad());
         $this->assertSame([], $this->criteria->getColumnNamesToLoad());
         $this->assertSame(false, $this->criteria->getWhetherLoadsAllColumns());
-        $this->assertSame([], $this->criteria->getConditions());
+        $this->assertSame([], $this->criteria->getConditionGroups());
         $this->assertSame([], $this->criteria->getOrderings());
         $this->assertSame([], $this->criteria->getGroupings());
         $this->assertSame(null, $this->criteria->getAmountOfRows());
@@ -101,8 +102,8 @@ class RowCriteriaTest extends CmsTestCase
         $this->criteria->load('age')->load('name');
 
         $this->assertSame(
-                ['age' => $this->structure->getColumn('age'), 'name' => $this->structure->getColumn('name')],
-                $this->criteria->getColumnsToLoad()
+            ['age' => $this->structure->getColumn('age'), 'name' => $this->structure->getColumn('name')],
+            $this->criteria->getColumnsToLoad()
         );
         $this->assertSame(['age', 'name'], $this->criteria->getColumnNamesToLoad());
         $this->assertSame(true, $this->criteria->getWhetherLoadsAllColumns());
@@ -126,8 +127,43 @@ class RowCriteriaTest extends CmsTestCase
         /** @var IColumnComponent $component */
         list($column, $component) = $this->structure->getColumnAndComponent('name.first_name');
         $this->assertEquals([
-                new ColumnCondition($column, $component, $component->getType()->getOperator('='), 'foo')
-        ], $this->criteria->getConditions());
+            new ColumnConditionGroup(
+                IRowCriteria::CONDITION_MODE_AND,
+                [new ColumnCondition($column, $component, $component->getType()->getOperator('='), 'foo')]
+            ),
+        ], $this->criteria->getConditionGroups());
+    }
+
+    public function testWhereWithGrouping()
+    {
+        $this->criteria
+            ->setConditionModeToAnd()
+            ->where('name.first_name', '=', 'foo')
+            ->where('name.last_name', '!=', 'bar')
+            ->setConditionModeToOr()
+            ->where('age', '>', 50)
+            ->where('age', '<', 10);
+
+        /** @var IColumnComponent $component */
+        list($firstNameColumn, $firstNameComponent) = $this->structure->getColumnAndComponent('name.first_name');
+        list($lastNameColumn, $lastNameComponent) = $this->structure->getColumnAndComponent('name.last_name');
+        list($ageColumn, $ageComponent) = $this->structure->getColumnAndComponent('age');
+        $this->assertEquals([
+            new ColumnConditionGroup(
+                IRowCriteria::CONDITION_MODE_AND,
+                [
+                    new ColumnCondition($firstNameColumn, $firstNameComponent, $firstNameComponent->getType()->getOperator('='), 'foo'),
+                    new ColumnCondition($lastNameColumn, $lastNameComponent, $lastNameComponent->getType()->getOperator('!='), 'bar'),
+                ]
+            ),
+            new ColumnConditionGroup(
+                IRowCriteria::CONDITION_MODE_OR,
+                [
+                    new ColumnCondition($ageColumn, $ageComponent, $ageComponent->getType()->getOperator('>'), 50),
+                    new ColumnCondition($ageColumn, $ageComponent, $ageComponent->getType()->getOperator('<'), 10),
+                ]
+            ),
+        ], $this->criteria->getConditionGroups());
     }
 
     public function testConditionMode()
@@ -135,33 +171,33 @@ class RowCriteriaTest extends CmsTestCase
         $this->assertSame(IRowCriteria::CONDITION_MODE_AND, $this->criteria->getConditionMode());
 
         $this->criteria->setConditionMode(IRowCriteria::CONDITION_MODE_OR);
-        
+
         $this->assertSame(IRowCriteria::CONDITION_MODE_OR, $this->criteria->getConditionMode());
     }
 
     public function testOrderBy()
     {
         $this->criteria
-                ->orderBy('name.first_name', OrderingDirection::ASC)
-                ->orderBy('name.last_name', OrderingDirection::DESC);
+            ->orderBy('name.first_name', OrderingDirection::ASC)
+            ->orderBy('name.last_name', OrderingDirection::DESC);
 
         $name = $this->structure->getColumn('name');
         $this->assertEquals([
-                new ColumnOrdering($name, $name->getComponent('first_name'), OrderingDirection::ASC),
-                new ColumnOrdering($name, $name->getComponent('last_name'), OrderingDirection::DESC),
+            new ColumnOrdering($name, $name->getComponent('first_name'), OrderingDirection::ASC),
+            new ColumnOrdering($name, $name->getComponent('last_name'), OrderingDirection::DESC),
         ], $this->criteria->getOrderings());
     }
 
     public function testOrderByAscAndDesc()
     {
         $this->criteria
-                ->orderByAsc('name.first_name')
-                ->orderByDesc('name.last_name');
+            ->orderByAsc('name.first_name')
+            ->orderByDesc('name.last_name');
 
         $name = $this->structure->getColumn('name');
         $this->assertEquals([
-                new ColumnOrdering($name, $name->getComponent('first_name'), OrderingDirection::ASC),
-                new ColumnOrdering($name, $name->getComponent('last_name'), OrderingDirection::DESC),
+            new ColumnOrdering($name, $name->getComponent('first_name'), OrderingDirection::ASC),
+            new ColumnOrdering($name, $name->getComponent('last_name'), OrderingDirection::DESC),
         ], $this->criteria->getOrderings());
     }
 
@@ -171,7 +207,7 @@ class RowCriteriaTest extends CmsTestCase
 
         list($column, $component) = $this->structure->getColumnAndComponent('age');
         $this->assertEquals([
-                new ColumnGrouping($column, $component)
+            new ColumnGrouping($column, $component),
         ], $this->criteria->getGroupings());
     }
 
@@ -193,12 +229,12 @@ class RowCriteriaTest extends CmsTestCase
     public function testFromExisting()
     {
         $this->criteria
-                ->loadAll()
-                ->where('name.last_name', '!=', null)
-                ->groupBy('age')
-                ->orderByAsc('name.first_name')
-                ->skipRows(10)
-                ->maxRows(25);
+            ->loadAll()
+            ->where('name.last_name', '!=', null)
+            ->groupBy('age')
+            ->orderByAsc('name.first_name')
+            ->skipRows(10)
+            ->maxRows(25);
 
         $this->assertEquals(RowCriteria::fromExisting($this->criteria), $this->criteria);
     }

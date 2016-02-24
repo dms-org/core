@@ -33,9 +33,9 @@ class RowCriteria implements IRowCriteria
     protected $conditionMode = self::CONDITION_MODE_AND;
 
     /**
-     * @var ColumnCondition[]
+     * @var ColumnConditionGroup[]
      */
-    protected $conditions = [];
+    protected $conditionGroups = [];
 
     /**
      * @var ColumnOrdering[]
@@ -76,13 +76,13 @@ class RowCriteria implements IRowCriteria
     {
         $self = new self($criteria->getStructure());
 
-        $self->columnsToLoad = $criteria->getColumnsToLoad();
-        $self->conditionMode = $criteria->getConditionMode();
-        $self->conditions    = $criteria->getConditions();
-        $self->orderings     = $criteria->getOrderings();
-        $self->groupings     = $criteria->getGroupings();
-        $self->rowsToSkip    = $criteria->getRowsToSkip();
-        $self->amountOfRows  = $criteria->getAmountOfRows();
+        $self->columnsToLoad   = $criteria->getColumnsToLoad();
+        $self->conditionMode   = $criteria->getConditionMode();
+        $self->conditionGroups = $criteria->getConditionGroups();
+        $self->orderings       = $criteria->getOrderings();
+        $self->groupings       = $criteria->getGroupings();
+        $self->rowsToSkip      = $criteria->getRowsToSkip();
+        $self->amountOfRows    = $criteria->getAmountOfRows();
 
         return $self;
     }
@@ -106,9 +106,9 @@ class RowCriteria implements IRowCriteria
     /**
      * {@inheritDoc}
      */
-    public function getConditions() : array
+    public function getConditionGroups() : array
     {
-        return $this->conditions;
+        return $this->conditionGroups;
     }
 
     /**
@@ -181,14 +181,36 @@ class RowCriteria implements IRowCriteria
     {
         if (!in_array($conditionMode, [self::CONDITION_MODE_AND, self::CONDITION_MODE_OR], true)) {
             throw Exception\InvalidArgumentException::format(
-                    'Invalid condition mode supplied to %s: expecting one of (%s), \'%s\' given',
-                    __METHOD__, Debug::formatValues([self::CONDITION_MODE_AND, self::CONDITION_MODE_OR]), $conditionMode
+                'Invalid condition mode supplied to %s: expecting one of (%s), \'%s\' given',
+                __METHOD__, Debug::formatValues([self::CONDITION_MODE_AND, self::CONDITION_MODE_OR]), $conditionMode
             );
         }
 
         $this->conditionMode = $conditionMode;
 
         return $this;
+    }
+
+    /**
+     * Sets the condition mode of the criteria to AND.
+     *
+     * @return static
+     * @throws Exception\InvalidArgumentException
+     */
+    public function setConditionModeToAnd()
+    {
+        return $this->setConditionMode(self::CONDITION_MODE_AND);
+    }
+
+    /**
+     * Sets the condition mode of the criteria to OR.
+     *
+     * @return static
+     * @throws Exception\InvalidArgumentException
+     */
+    public function setConditionModeToOr()
+    {
+        return $this->setConditionMode(self::CONDITION_MODE_OR);
     }
 
     /**
@@ -205,13 +227,28 @@ class RowCriteria implements IRowCriteria
         /** @var IColumnComponent $component */
         list($column, $component) = $this->structure->getColumnAndComponent($componentId);
 
-        $operator           = $component->getType()->getOperator($operator);
-        $this->conditions[] = new ColumnCondition(
-                $column,
-                $component,
-                $operator,
-                $operator->getField()->process($value)
+        $operator = $component->getType()->getOperator($operator);
+        /** @var ColumnConditionGroup $lastGroup */
+        $lastGroup = end($this->conditionGroups);
+
+        $condition = new ColumnCondition(
+            $column,
+            $component,
+            $operator,
+            $operator->getField()->process($value)
         );
+
+        if (!$lastGroup) {
+            $this->conditionGroups[] = new ColumnConditionGroup($this->conditionMode, [$condition]);
+        } elseif ($lastGroup->getConditionMode() !== $this->conditionMode) {
+            $this->conditionGroups[] = new ColumnConditionGroup($this->conditionMode, [$condition]);
+        } else {
+            array_pop($this->conditionGroups);
+            $this->conditionGroups[] = new ColumnConditionGroup(
+                $this->conditionMode,
+                array_merge($lastGroup->getConditions(), [$condition])
+            );
+        }
 
         return $this;
     }

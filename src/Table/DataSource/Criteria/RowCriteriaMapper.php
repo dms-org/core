@@ -5,6 +5,8 @@ namespace Dms\Core\Table\DataSource\Criteria;
 use Dms\Core\Model\Criteria\LoadCriteria;
 use Dms\Core\Model\Criteria\SpecificationDefinition;
 use Dms\Core\Model\ILoadCriteria;
+use Dms\Core\Table\Criteria\ColumnCondition;
+use Dms\Core\Table\Criteria\ColumnConditionGroup;
 use Dms\Core\Table\Criteria\ColumnCriterion;
 use Dms\Core\Table\DataSource\Definition\FinalizedObjectTableDefinition;
 use Dms\Core\Table\IRowCriteria;
@@ -55,8 +57,8 @@ class RowCriteriaMapper
             $objectCriteria->loadAll($this->definition->getPropertiesRequiredFor($column->getName()));
         }
 
-        $mapConditions = function (SpecificationDefinition $objectCriteria) use ($criteria) {
-            foreach ($criteria->getConditions() as $condition) {
+        $mapConditions = function (SpecificationDefinition $objectCriteria, ColumnConditionGroup $conditionGroup)  {
+            foreach ($conditionGroup->getConditions() as $condition) {
                 $objectCriteria->where(
                         $this->mapColumnToPropertyName($condition),
                         $condition->getOperator()->getOperator(),
@@ -65,10 +67,14 @@ class RowCriteriaMapper
             }
         };
 
-        if ($criteria->getConditionMode() === IRowCriteria::CONDITION_MODE_AND) {
-            $mapConditions($objectCriteria);
-        } else {
-            $objectCriteria->whereAny($mapConditions);
+        foreach ($criteria->getConditionGroups() as $columnConditionGroup) {
+            if ($columnConditionGroup->getConditionMode() === IRowCriteria::CONDITION_MODE_AND) {
+                $mapConditions($objectCriteria, $columnConditionGroup);
+            } else {
+                $objectCriteria->whereAny(function (SpecificationDefinition $match) use ($mapConditions, $columnConditionGroup) {
+                    $mapConditions($match, $columnConditionGroup);
+                });
+            }
         }
 
         foreach ($criteria->getOrderings() as $ordering) {

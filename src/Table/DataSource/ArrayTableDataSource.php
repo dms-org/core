@@ -4,7 +4,7 @@ namespace Dms\Core\Table\DataSource;
 
 use Dms\Core\Exception\InvalidArgumentException;
 use Dms\Core\Model\Traversable;
-use Dms\Core\Table\Criteria\ColumnCondition;
+use Dms\Core\Table\Criteria\ColumnConditionGroup;
 use Dms\Core\Table\Criteria\ColumnOrdering;
 use Dms\Core\Table\Data\TableRow;
 use Dms\Core\Table\IRowCriteria;
@@ -68,8 +68,8 @@ class ArrayTableDataSource extends TableDataSource
 
             if ($columnNames !== $rowColumns) {
                 throw InvalidArgumentException::format(
-                        'Invalid row array: expecting columns names to be (%s), (%s) given',
-                        Debug::formatValues($columnNames), Debug::formatValues($rowColumns)
+                    'Invalid row array: expecting columns names to be (%s), (%s) given',
+                    Debug::formatValues($columnNames), Debug::formatValues($rowColumns)
                 );
             }
 
@@ -82,8 +82,8 @@ class ArrayTableDataSource extends TableDataSource
                         $rowData[$columnName] = [$component->getName() => $componentData];
                     } else {
                         throw InvalidArgumentException::format(
-                                'Invalid row array: expecting columns data for column %s to be array, %s given',
-                                $columnName, Debug::getType($componentData)
+                            'Invalid row array: expecting columns data for column %s to be array, %s given',
+                            $columnName, Debug::getType($componentData)
                         );
                     }
                 } else {
@@ -92,8 +92,8 @@ class ArrayTableDataSource extends TableDataSource
 
                     if ($componentNames !== $componentNamesMap[$columnName]) {
                         throw InvalidArgumentException::format(
-                                'Invalid row array: expecting columns data for column %s to have be array with keys (%s), (%s) given',
-                                $columnName, Debug::formatValues($componentNamesMap[$columnName]), Debug::formatValues($componentNames)
+                            'Invalid row array: expecting columns data for column %s to have be array with keys (%s), (%s) given',
+                            $columnName, Debug::formatValues($componentNamesMap[$columnName]), Debug::formatValues($componentNames)
                         );
                     }
                 }
@@ -116,20 +116,21 @@ class ArrayTableDataSource extends TableDataSource
 
         $collection = Traversable::from($this->rows);
 
-        /** @var ColumnCondition[] $columnConditions */
-        $columnConditions = $criteria->getConditions();
+        /** @var ColumnConditionGroup[] $columnConditionGroups */
+        $columnConditionGroups = $criteria->getConditionGroups();
 
-        if ($columnConditions) {
-            if ($criteria->getConditionMode() === IRowCriteria::CONDITION_MODE_AND) {
-                foreach ($columnConditions as $condition) {
+        foreach ($columnConditionGroups as $columnConditionGroup) {
+            if ($columnConditionGroup->getConditionMode() === IRowCriteria::CONDITION_MODE_AND) {
+                foreach ($columnConditionGroup->getConditions() as $condition) {
                     $collection = $collection->where($condition->makeRowFilterCallable());
                 }
             } else {
-                $filterCallback = array_shift($columnConditions)->makeRowFilterCallable();
+                $columnConditions = $columnConditionGroup->getConditions();
+                $filterCallback   = array_shift($columnConditions)->makeRowFilterCallable();
 
-                foreach ($columnConditions as $condition) {
+                foreach ($columnConditionGroup->getConditions() as $condition) {
                     $conditionFilter = $condition->makeRowFilterCallable();
-                    $filterCallback = function ($row) use ($conditionFilter, $filterCallback) {
+                    $filterCallback  = function ($row) use ($conditionFilter, $filterCallback) {
                         return $conditionFilter($row) || $filterCallback($row);
                     };
                 }
@@ -138,19 +139,20 @@ class ArrayTableDataSource extends TableDataSource
             }
         }
 
+
         $orderings = $criteria->getOrderings();
         if (!empty($orderings)) {
             /** @var ColumnOrdering $firstOrdering */
             $firstOrdering = array_shift($orderings);
             $collection    = $collection->orderBy(
-                    $firstOrdering->makeComponentGetterCallable(),
-                    $firstOrdering->isAsc() ? Direction::ASCENDING : Direction::DESCENDING
+                $firstOrdering->makeComponentGetterCallable(),
+                $firstOrdering->isAsc() ? Direction::ASCENDING : Direction::DESCENDING
             );
 
             foreach ($orderings as $ordering) {
                 $collection = $collection->thenBy(
-                        $ordering->makeComponentGetterCallable(),
-                        $ordering->isAsc() ? Direction::ASCENDING : Direction::DESCENDING
+                    $ordering->makeComponentGetterCallable(),
+                    $ordering->isAsc() ? Direction::ASCENDING : Direction::DESCENDING
                 );
             }
         }

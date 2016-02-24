@@ -4,6 +4,7 @@ namespace Dms\Core\Table;
 
 use Dms\Core\Exception;
 use Dms\Core\Table\Criteria\ColumnCondition;
+use Dms\Core\Table\Criteria\ColumnConditionGroup;
 use Dms\Core\Table\Criteria\ColumnGrouping;
 use Dms\Core\Table\Criteria\ColumnOrdering;
 use Dms\Core\Table\Criteria\RowCriteria;
@@ -57,15 +58,9 @@ interface IRowCriteria
      * Gets the conditions which the rows must match
      * to load the rows.
      *
-     * If the condition mode === 'and' then all conditions
-     * must be satisfied by the row.
-     *
-     * If the condition mode === 'or' then one of the conditions
-     * must be satisfied by the row.
-     *
-     * @return ColumnCondition[]
+     * @return ColumnConditionGroup[]
      */
-    public function getConditions() : array;
+    public function getConditionGroups() : array;
 
     /**
      * Gets the order in which to load the rows

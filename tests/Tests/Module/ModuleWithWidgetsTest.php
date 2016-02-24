@@ -96,7 +96,7 @@ class ModuleWithWidgetsTest extends ModuleTestBase
         $this->assertSame('Table Widget #2', $widget->getLabel());
         $this->assertSame(true, $widget->hasCriteria());
         $this->assertInstanceOf(IRowCriteria::class, $widget->getCriteria());
-        $this->assertCount(1, $widget->getCriteria()->getConditions());
+        $this->assertCount(1, $widget->getCriteria()->getConditionGroups());
     }
 
     public function testChartWidgetWithoutCriteria()
