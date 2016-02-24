@@ -39,16 +39,18 @@ class StagedForm implements IStagedForm
      * StagedForm constructor.
      *
      * @param IndependentFormStage $firstStage
-     * @param IFormStage[]         $following
+     * @param IFormStage[]         $followingStages
+     * @param array                $knownFormData
      *
      * @throws InvalidArgumentException
      */
-    public function __construct(IndependentFormStage $firstStage, array $following)
+    public function __construct(IndependentFormStage $firstStage, array $followingStages, array $knownFormData = [])
     {
-        InvalidArgumentException::verifyAllInstanceOf(__METHOD__, 'stages', $following, IFormStage::class);
+        InvalidArgumentException::verifyAllInstanceOf(__METHOD__, 'stages', $followingStages, IFormStage::class);
 
         $this->firstStage      = $firstStage;
-        $this->followingStages = $following;
+        $this->followingStages = $followingStages;
+        $this->knownFormData   = $knownFormData;
 
         $stageNumber       = 1;
         $definedFieldNames = array_fill_keys($this->firstStage->getDefinedFieldNames(), $stageNumber);
@@ -56,10 +58,10 @@ class StagedForm implements IStagedForm
         foreach ($this->followingStages as $stage) {
             if (!$stage->areAllFieldsRequired()) {
                 foreach ($stage->getRequiredFieldNames() as $requiredFieldName) {
-                    if (!isset($definedFieldNames[$requiredFieldName])) {
+                    if (!isset($definedFieldNames[$requiredFieldName]) && !array_key_exists($requiredFieldName, $this->knownFormData)) {
                         throw InvalidArgumentException::format(
-                                'Invalid required field in stage %d: expecting one of previously defined fields (%s), \'%s\' given',
-                                $stageNumber, Debug::formatValues(array_keys($definedFieldNames)), $requiredFieldName
+                            'Invalid required field in stage %d: expecting one of previously defined fields (%s), \'%s\' given',
+                            $stageNumber, Debug::formatValues(array_keys($definedFieldNames)), $requiredFieldName
                         );
                     }
                 }
@@ -89,8 +91,8 @@ class StagedForm implements IStagedForm
     public function getStage(int $stageNumber) : IFormStage
     {
         InvalidArgumentException::verify(
-                $stageNumber > 0 && $stageNumber <= $this->getAmountOfStages(),
-                'Stage number must be between %s and %s, %s given', 1, $this->getAmountOfStages(), $stageNumber
+            $stageNumber > 0 && $stageNumber <= $this->getAmountOfStages(),
+            'Stage number must be between %s and %s, %s given', 1, $this->getAmountOfStages(), $stageNumber
         );
 
         if ($stageNumber === 1) {
@@ -118,8 +120,8 @@ class StagedForm implements IStagedForm
         }
 
         throw InvalidArgumentException::format(
-                'Invalid call to %s: invalid field name, expecting one of (%s), \'%s\' given',
-                __METHOD__, Debug::formatValues($allFieldNames), $fieldName
+            'Invalid call to %s: invalid field name, expecting one of (%s), \'%s\' given',
+            __METHOD__, Debug::formatValues($allFieldNames), $fieldName
         );
     }
 
@@ -180,9 +182,9 @@ class StagedForm implements IStagedForm
                 $previousStage = $this->getStage($previousStageNumber);
 
                 $requiredFields[$previousStageNumber] =
-                        $previousStage instanceof IndependentFormStage
-                                ? $previousStage->getDefinedFieldNames()
-                                : '*';
+                    $previousStage instanceof IndependentFormStage
+                        ? $previousStage->getDefinedFieldNames()
+                        : '*';
             }
         } else {
             foreach ($stage->getRequiredFieldNames() as $requiredFieldName) {
@@ -190,7 +192,7 @@ class StagedForm implements IStagedForm
 
                 if (isset($requiredFields[$previousStageNumber])) {
                     if ($requiredFields[$previousStageNumber] !== '*'
-                            && !in_array($requiredFieldName, $requiredFields[$previousStageNumber], true)
+                        && !in_array($requiredFieldName, $requiredFields[$previousStageNumber], true)
                     ) {
                         $requiredFields[$previousStageNumber][] = $requiredFieldName;
                     }
@@ -230,16 +232,16 @@ class StagedForm implements IStagedForm
 
             if ($missingFields = array_diff($requiredFieldNames, array_keys($previousStagesSubmission))) {
                 throw InvalidArgumentException::format(
-                        'Invalid call to %s: cannot load form for stage %d, missing required form fields (%s)',
-                        __METHOD__, $previousStageNumber, Debug::formatValues($missingFields)
+                    'Invalid call to %s: cannot load form for stage %d, missing required form fields (%s)',
+                    __METHOD__, $previousStageNumber, Debug::formatValues($missingFields)
                 );
             }
 
             foreach ($formForStage->getFieldNames() as $fieldName) {
                 if (isset($previousStagesSubmission[$fieldName])) {
                     $processedSubmission[$fieldName] = $formForStage
-                            ->getField($fieldName)
-                            ->process($previousStagesSubmission[$fieldName]);
+                        ->getField($fieldName)
+                        ->process($previousStagesSubmission[$fieldName]);
                 }
             }
         }
@@ -253,7 +255,7 @@ class StagedForm implements IStagedForm
     public function submitFirstStage(array $firstStageSubmission)
     {
         return $this->withSubmittedFirstStage(
-                $this->firstStage->loadForm()->process($firstStageSubmission)
+            $this->firstStage->loadForm()->process($firstStageSubmission)
         );
     }
 
@@ -264,13 +266,13 @@ class StagedForm implements IStagedForm
     {
         if ($this->getAmountOfStages() === 1) {
             throw InvalidOperationException::format(
-                    'Invalid call to %s: staged form only contains one stage',
-                    __METHOD__
+                'Invalid call to %s: staged form only contains one stage',
+                __METHOD__
             );
         }
 
         $this->firstStage->loadForm()
-                ->validateProcessedValues($processedFirstStageData);
+            ->validateProcessedValues($processedFirstStageData);
 
         $processedFirstStageData += $this->knownFormData;
 
@@ -289,8 +291,7 @@ class StagedForm implements IStagedForm
             }
         }
 
-        $stagedForm                = new StagedForm($newFirstStage, $newFollowingStages);
-        $stagedForm->knownFormData = $processedFirstStageData;
+        $stagedForm = new StagedForm($newFirstStage, $newFollowingStages, $processedFirstStageData);
 
         return $stagedForm;
     }
@@ -302,7 +303,7 @@ class StagedForm implements IStagedForm
     {
         $processed = $this->knownFormData;
         $processed += $this->firstStage->loadForm()->process($submission);
-        
+
         foreach ($this->followingStages as $stage) {
             $currentProcessedStage = $stage->loadForm($processed)->process($submission);
 
@@ -341,8 +342,8 @@ class StagedForm implements IStagedForm
         $form = $stage->loadForm($processedSubmission);
 
         return $form->unprocess(array_intersect_key(
-                $processedSubmission,
-                $form->getFields()
+            $processedSubmission,
+            $form->getFields()
         ));
     }
 }
