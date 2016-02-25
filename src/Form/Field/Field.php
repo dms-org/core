@@ -38,7 +38,7 @@ class Field implements IField
     /**
      * @var IFieldProcessor[]
      */
-    private $processors;
+    private $customProcessors;
 
     /**
      * @var IType
@@ -59,10 +59,10 @@ class Field implements IField
         InvalidArgumentException::verifyNotNull(__METHOD__, 'name', $name);
         InvalidArgumentException::verifyNotNull(__METHOD__, 'label', $label);
 
-        $this->name       = $name;
-        $this->label      = $label;
-        $this->processors = array_merge($type->getProcessors(), $processors);
-        $this->type       = $type;
+        $this->name             = $name;
+        $this->label            = $label;
+        $this->customProcessors = $processors;
+        $this->type             = $type;
 
         $this->processedType = $processors
             ? end($processors)->getProcessedType()
@@ -110,7 +110,7 @@ class Field implements IField
     /**
      * {@inheritDoc}
      */
-    public function getType() : \Dms\Core\Form\IFieldType
+    public function getType() : IFieldType
     {
         return $this->type;
     }
@@ -120,13 +120,13 @@ class Field implements IField
      */
     public function getProcessors() : array
     {
-        return $this->processors;
+        return array_merge($this->type->getProcessors(), $this->customProcessors);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getProcessedType() : \Dms\Core\Model\Type\IType
+    public function getProcessedType() : IType
     {
         return $this->processedType;
     }
@@ -158,7 +158,7 @@ class Field implements IField
         /** @var Message[] $messages */
         $messages = [];
 
-        foreach ($this->processors as $processor) {
+        foreach ($this->getProcessors() as $processor) {
             $input = $processor->process($input, $messages);
 
             if (!empty($messages)) {
@@ -184,7 +184,7 @@ class Field implements IField
         $input = $processedInput;
 
         /** @var IFieldProcessor $processor */
-        foreach (array_reverse($this->processors) as $processor) {
+        foreach (array_reverse($this->getProcessors()) as $processor) {
             $input = $processor->unprocess($input);
         }
 
@@ -212,9 +212,9 @@ class Field implements IField
         $clone->validateInitialValue($value);
         $clone->type = $clone->type->with(FieldType::ATTR_INITIAL_VALUE, $value);
 
-        foreach ($clone->processors as $key => $processor) {
+        foreach ($clone->customProcessors as $key => $processor) {
             if ($processor instanceof IFieldProcessorDependentOnInitialValue) {
-                $clone->processors[$key] = $processor->withInitialValue($value);
+                $clone->customProcessors[$key] = $processor->withInitialValue($value);
             }
         }
 

@@ -3,10 +3,10 @@
 namespace Dms\Core\Form\Field\Type;
 
 use Dms\Core\Form\Field\Processor\InnerFormProcessor;
-use Dms\Core\Form\FormSection;
 use Dms\Core\Form\IFieldProcessor;
 use Dms\Core\Form\IForm;
 use Dms\Core\Model\Type\Builder\Type;
+use Dms\Core\Model\Type\IType;
 
 /**
  * The inner form type class.
@@ -26,7 +26,7 @@ class InnerFormType extends FieldType
     /**
      * @return IForm
      */
-    public function getForm() : \Dms\Core\Form\IForm
+    public function getForm() : IForm
     {
         return $this->get(self::ATTR_FORM);
     }
@@ -34,7 +34,7 @@ class InnerFormType extends FieldType
     /**
      * {@inheritdoc}
      */
-    protected function buildPhpTypeOfInput() : \Dms\Core\Model\Type\IType
+    protected function buildPhpTypeOfInput() : IType
     {
         return Type::arrayOf(Type::mixed());
     }
@@ -45,7 +45,7 @@ class InnerFormType extends FieldType
     protected function buildProcessors() : array
     {
         return [
-                new InnerFormProcessor($this->getForm())
+            new InnerFormProcessor($this->getForm()),
         ];
     }
 
@@ -54,9 +54,9 @@ class InnerFormType extends FieldType
      *
      * @return IForm
      */
-    public function getInnerArrayForm(string $arrayFieldName) : \Dms\Core\Form\IForm
+    public function getInnerArrayForm(string $arrayFieldName) : IForm
     {
-        $form         = $this->getForm();
+        $form = $this->getForm();
 
         $currentValue = $this->get(self::ATTR_INITIAL_VALUE);
 

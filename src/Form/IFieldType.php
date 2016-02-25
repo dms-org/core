@@ -69,7 +69,7 @@ interface IFieldType
      *
      * @return IPhpType
      */
-    public function getPhpTypeOfInput() : \Dms\Core\Model\Type\IType;
+    public function getPhpTypeOfInput() : IPhpType;
 
     /**
      * Gets the field processors of the type.
@@ -83,5 +83,5 @@ interface IFieldType
      *
      * @return IPhpType
      */
-    public function getProcessedPhpType() : \Dms\Core\Model\Type\IType;
+    public function getProcessedPhpType() : IPhpType;
 }
