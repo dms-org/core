@@ -68,6 +68,10 @@ class Field implements IField
             ? end($processors)->getProcessedType()
             : $type->getProcessedPhpType();
 
+        if ($this->type->get(FieldType::ATTR_REQUIRED)) {
+            $this->processedType = $this->processedType->nonNullable();
+        }
+
         $this->validateInitialValue($type->get(FieldType::ATTR_INITIAL_VALUE));
     }
 

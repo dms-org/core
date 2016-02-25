@@ -81,16 +81,28 @@ interface IStagedForm
     public function getRequiredFieldGroupedByStagesForStage(int $stageNumber);
 
     /**
+     * Attempts to load the form for the supplied form stage.
+     *
+     * @param int   $stageNumber
+     * @param array $previousStagesSubmission
+     * @param bool  $isProcessed
+     *
+     * @return IForm|null
+     */
+    public function tryLoadFormForStage(int $stageNumber, array $previousStagesSubmission, bool $isProcessed = false);
+
+    /**
      * Gets the form the the stage using the previous stages submission data.
      *
      * @param int   $stageNumber
      * @param array $previousStagesSubmission
+     * @param bool  $isProcessed
      *
      * @return IForm
      * @throws InvalidArgumentException If the stage number is out of the range
      * @throws InvalidFormSubmissionException
      */
-    public function getFormForStage(int $stageNumber, array $previousStagesSubmission) : IForm;
+    public function getFormForStage(int $stageNumber, array $previousStagesSubmission, bool $isProcessed = false) : IForm;
 
     /**
      * Creates a new staged form without the first stage.

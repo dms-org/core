@@ -19,7 +19,7 @@ class FileMoverProcessorTest extends FieldProcessorTest
      */
     protected function processor()
     {
-        return FileMoverProcessor::withClientFileName($isImage = false, '/some/dir');
+        return FileMoverProcessor::withClientFileName(IFile::class, '/some/dir');
     }
 
     /**
@@ -89,7 +89,7 @@ class FileMoverProcessorTest extends FieldProcessorTest
 
     public function testRandomFileName()
     {
-        $processor = FileMoverProcessor::withRandomFileName($isImage = false, '/some/dir', 6);
+        $processor = FileMoverProcessor::withRandomFileName(IFile::class, '/some/dir', 6);
         $messages  = [];
 
         $return1 = $processor->process($this->mockUploadedFile('foo', null, $file1 = $this->mockFile(), $filePath1), $messages);
@@ -104,7 +104,7 @@ class FileMoverProcessorTest extends FieldProcessorTest
 
     public function testImage()
     {
-        $processor = FileMoverProcessor::withClientFileName($isImage = true, '/some/dir');
+        $processor = FileMoverProcessor::withClientFileName(IImage::class, '/some/dir');
 
         $this->assertEquals(Type::object(IImage::class)->nullable(), $processor->getProcessedType());
     }

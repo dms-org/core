@@ -2,6 +2,7 @@
 
 namespace Dms\Core\Form\Field\Builder;
 
+use Dms\Core\File\IFile;
 use Dms\Core\Form\Field\Processor\FileMoverProcessor;
 use Dms\Core\Form\Field\Type\FileType;
 
@@ -69,7 +70,7 @@ class FileFieldBuilder extends FieldBuilderBase
      */
     public function moveToPathWithClientsFileName(string $path)
     {
-        return $this->process(FileMoverProcessor::withClientFileName($this->isImage(), $path));
+        return $this->process(FileMoverProcessor::withClientFileName($this->movedClassName(), $path));
     }
 
     /**
@@ -82,11 +83,11 @@ class FileFieldBuilder extends FieldBuilderBase
      */
     public function moveToPathWithRandomFileName(string $path, int $fileNameLength = 16)
     {
-        return $this->process(FileMoverProcessor::withRandomFileName($this->isImage(), $path, $fileNameLength));
+        return $this->process(FileMoverProcessor::withRandomFileName($this->movedClassName(), $path, $fileNameLength));
     }
 
-    protected function isImage()
+    protected function movedClassName() : string
     {
-        return false;
+        return IFile::class;
     }
 }

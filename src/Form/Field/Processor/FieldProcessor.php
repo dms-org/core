@@ -30,7 +30,7 @@ abstract class FieldProcessor implements IFieldProcessor
     /**
      * {@inheritDoc}
      */
-    final public function getProcessedType() : \Dms\Core\Model\Type\IType
+    final public function getProcessedType() : IType
     {
         return $this->processedType;
     }

@@ -115,7 +115,7 @@ abstract class StagedFormObject extends TypedObject implements IDataTransferObje
     /**
      * @return IndependentFormStage
      */
-    final public function getFirstStage() : \Dms\Core\Form\Stage\IndependentFormStage
+    final public function getFirstStage() : IndependentFormStage
     {
         return $this->stagedFormForClone->getFirstStage();
     }
@@ -147,7 +147,7 @@ abstract class StagedFormObject extends TypedObject implements IDataTransferObje
     /**
      * @return IForm
      */
-    final public function getFirstForm() : \Dms\Core\Form\IForm
+    final public function getFirstForm() : IForm
     {
         return $this->stagedFormForClone->getFirstForm();
     }
@@ -155,7 +155,7 @@ abstract class StagedFormObject extends TypedObject implements IDataTransferObje
     /**
      * @inheritDoc
      */
-    final public function getStageWithFieldName(string $fieldName) : \Dms\Core\Form\IFormStage
+    final public function getStageWithFieldName(string $fieldName) : IFormStage
     {
         return $this->stagedFormForClone->getStageWithFieldName($fieldName);
     }
@@ -174,7 +174,7 @@ abstract class StagedFormObject extends TypedObject implements IDataTransferObje
      * @return IFormStage
      * @throws InvalidArgumentException If it is out of range
      */
-    final public function getStage(int $stageNumber) : \Dms\Core\Form\IFormStage
+    final public function getStage(int $stageNumber) : IFormStage
     {
         return $this->stagedFormForClone->getStage($stageNumber);
     }
@@ -182,9 +182,17 @@ abstract class StagedFormObject extends TypedObject implements IDataTransferObje
     /**
      * @inheritDoc
      */
-    final public function getFormForStage(int $stageNumber, array $previousStagesSubmission) : \Dms\Core\Form\IForm
+    public function tryLoadFormForStage(int $stageNumber, array $previousStagesSubmission, bool $isProcessed = false)
     {
-        return $this->stagedFormForClone->getFormForStage($stageNumber, $previousStagesSubmission);
+        return $this->stagedFormForClone->tryLoadFormForStage($stageNumber, $previousStagesSubmission, $isProcessed);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    final public function getFormForStage(int $stageNumber, array $previousStagesSubmission, bool $isProcessed = false) : IForm
+    {
+        return $this->stagedFormForClone->getFormForStage($stageNumber, $previousStagesSubmission, $isProcessed);
     }
 
     /**

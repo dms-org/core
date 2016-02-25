@@ -4,6 +4,7 @@ namespace Dms\Core\Form;
 
 use Dms\Core\Exception\InvalidArgumentException;
 use Dms\Core\Exception\InvalidOperationException;
+use Dms\Core\Form\Builder\Form as FormBuilder;
 use Dms\Core\Form\Stage\DependentFormStage;
 use Dms\Core\Form\Stage\IndependentFormStage;
 use Dms\Core\Util\Debug;
@@ -188,6 +189,10 @@ class StagedForm implements IStagedForm
             }
         } else {
             foreach ($stage->getRequiredFieldNames() as $requiredFieldName) {
+                if (array_key_exists($requiredFieldName, $this->knownFormData)) {
+                    continue;
+                }
+
                 $previousStageNumber = $this->fieldNameStageNumberMap[$requiredFieldName];
 
                 if (isset($requiredFields[$previousStageNumber])) {
@@ -217,8 +222,25 @@ class StagedForm implements IStagedForm
     /**
      * @inheritDoc
      */
-    public function getFormForStage(int $stageNumber, array $previousStagesSubmission) : IForm
+    public function tryLoadFormForStage(int $stageNumber, array $previousStagesSubmission, bool $isProcessed = false)
     {
+        try {
+            return $this->getFormForStage($stageNumber, $previousStagesSubmission, $isProcessed);
+        } catch (InvalidArgumentException $e) {
+            return null;
+        }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getFormForStage(int $stageNumber, array $previousStagesSubmission, bool $isProcessed = false) : IForm
+    {
+        $finalStage = $this->getStage($stageNumber);
+        if ($finalStage instanceof IndependentFormStage) {
+            return $finalStage->loadForm();
+        }
+
         $requiredFields      = $this->getRequiredFieldGroupedByStagesForStage($stageNumber);
         $processedSubmission = $this->knownFormData;
 
@@ -237,12 +259,21 @@ class StagedForm implements IStagedForm
                 );
             }
 
-            foreach ($formForStage->getFieldNames() as $fieldName) {
-                if (isset($previousStagesSubmission[$fieldName])) {
-                    $processedSubmission[$fieldName] = $formForStage
-                        ->getField($fieldName)
-                        ->process($previousStagesSubmission[$fieldName]);
+            $fieldsToProcess = [];
+
+            foreach ($formForStage->getFields() as $field) {
+                if (isset($previousStagesSubmission[$field->getName()])) {
+                    $fieldsToProcess[] = $field;
                 }
+            }
+
+            $formToProcess = FormBuilder::create()->section('Data', $fieldsToProcess)->build();
+
+            if (!$isProcessed) {
+                $processedSubmission += $formToProcess->process($previousStagesSubmission);
+            } else {
+                $formToProcess->validateProcessedValues($previousStagesSubmission);
+                $processedSubmission += array_intersect_key($previousStagesSubmission, $formForStage->getFields());
             }
         }
 

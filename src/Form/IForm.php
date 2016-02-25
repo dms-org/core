@@ -99,10 +99,10 @@ interface IForm
     public function asStagedForm() : IStagedForm;
 
     /**
-     * Gets the array of initial values indexed by the respective field
+     * Gets the array of initial (processed) values indexed by the respective field
      * name.
      *
-     * @return array[]
+     * @return array
      */
     public function getInitialValues() : array;
 

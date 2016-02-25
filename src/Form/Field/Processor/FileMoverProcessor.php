@@ -2,8 +2,6 @@
 
 namespace Dms\Core\Form\Field\Processor;
 
-use Dms\Core\File\IFile;
-use Dms\Core\File\IImage;
 use Dms\Core\File\IUploadedFile;
 use Dms\Core\Model\Type\Builder\Type;
 
@@ -25,31 +23,31 @@ class FileMoverProcessor extends FieldProcessor
     private $fileNameCallback;
 
     /**
-     * @param bool     $isImage
+     * @param string   $processedFileClass
      * @param string   $path
      * @param callable $fileNameCallback
      */
-    public function __construct(bool $isImage, string $path, callable $fileNameCallback)
+    public function __construct(string $processedFileClass, string $path, callable $fileNameCallback)
     {
-        parent::__construct(Type::object($isImage ? IImage::class : IFile::class));
+        parent::__construct(Type::object($processedFileClass));
 
         $this->path             = $path;
         $this->fileNameCallback = $fileNameCallback;
     }
 
-    public static function withClientFileName($isImage, $path)
+    public static function withClientFileName(string $processedFileClass, string $path)
     {
-        return new self($isImage, $path, function (IUploadedFile $file) {
+        return new self($processedFileClass, $path, function (IUploadedFile $file) {
             return $file->getClientFileName() ?: $file->getName();
         });
     }
 
-    public static function withRandomFileName($isImage, $path, $fileNameLength = 16)
+    public static function withRandomFileName(string $processedFileClass, string $path, int $fileNameLength = 16)
     {
-        return new self($isImage, $path, function (IUploadedFile $file) use ($fileNameLength) {
-            $alphaNumeric = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        return new self($processedFileClass, $path, function (IUploadedFile $file) use ($fileNameLength) {
+            $randomName = substr(str_replace(['+', '=', '/'], '', base64_encode(openssl_random_pseudo_bytes($fileNameLength * 2))), 0, $fileNameLength);
 
-            return substr(str_shuffle($alphaNumeric), 0, $fileNameLength) . '.' . $file->getExtension();
+            return $randomName . '.' . $file->getExtension();
         });
     }
 

@@ -2,6 +2,7 @@
 
 namespace Dms\Core\Form\Field\Builder;
 
+use Dms\Core\File\IImage;
 use Dms\Core\Form\Field\Type\ImageType;
 
 /**
@@ -59,8 +60,8 @@ class ImageFieldBuilder extends FileFieldBuilder
         return $this->attr(ImageType::ATTR_MAX_HEIGHT, $pixels);
     }
 
-    protected function isImage()
+    protected function movedClassName() : string
     {
-        return true;
+        return IImage::class;
     }
 }
