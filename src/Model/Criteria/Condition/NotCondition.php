@@ -22,7 +22,7 @@ class NotCondition extends Condition
     public function __construct(Condition $condition)
     {
         $this->condition = $condition;
-        parent::__construct();
+        parent::__construct([$condition]);
     }
 
     /**

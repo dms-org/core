@@ -5,6 +5,8 @@ namespace Dms\Core\Tests\Form\Field\Processor;
 use Dms\Core\File\IFile;
 use Dms\Core\File\IImage;
 use Dms\Core\File\IUploadedFile;
+use Dms\Core\File\UploadedFileProxy;
+use Dms\Core\File\UploadedImageProxy;
 use Dms\Core\Form\Field\Processor\FileMoverProcessor;
 use Dms\Core\Form\IFieldProcessor;
 use Dms\Core\Model\Type\Builder\Type;
@@ -49,8 +51,9 @@ class FileMoverProcessorTest extends FieldProcessorTest
     {
         return [
                 [null, null],
-                [$file = $this->mockFile(), $file],
-                [$file = $this->mockFile(), $file],
+                [$file = $this->mockFile(), new UploadedFileProxy($file)],
+                [$file = $this->mockFile(), new UploadedFileProxy($file)],
+                [$image = $this->mockImage(), new UploadedImageProxy($image)],
         ];
     }
 
@@ -83,6 +86,13 @@ class FileMoverProcessorTest extends FieldProcessorTest
     protected function mockFile()
     {
         $mock = $this->getMockForAbstractClass(IFile::class);
+
+        return $mock;
+    }
+
+    protected function mockImage()
+    {
+        $mock = $this->getMockForAbstractClass(IImage::class);
 
         return $mock;
     }

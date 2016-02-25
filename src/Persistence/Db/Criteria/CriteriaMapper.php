@@ -135,7 +135,7 @@ class CriteriaMapper
      * @return Select
      * @throws InvalidArgumentException
      */
-    public function mapCriteriaToSelect(ICriteria $criteria, array &$memberMappings = null, array $extraRequiredMembers = []) : \Dms\Core\Persistence\Db\Query\Select
+    public function mapCriteriaToSelect(ICriteria $criteria, array &$memberMappings = null, array $extraRequiredMembers = []) : Select
     {
         InvalidArgumentException::verifyAllInstanceOf(__METHOD__, 'extraRequiredMembers', $extraRequiredMembers, NestedMember::class);
         $criteria->verifyOfClass($this->getMappedObjectType()->getClassName());

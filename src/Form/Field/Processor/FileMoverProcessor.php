@@ -2,7 +2,12 @@
 
 namespace Dms\Core\Form\Field\Processor;
 
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\File\IFile;
+use Dms\Core\File\IImage;
 use Dms\Core\File\IUploadedFile;
+use Dms\Core\File\UploadedFileProxy;
+use Dms\Core\File\UploadedImageProxy;
 use Dms\Core\Model\Type\Builder\Type;
 
 /**
@@ -59,6 +64,12 @@ class FileMoverProcessor extends FieldProcessor
 
     protected function doUnprocess($input)
     {
-        return $input;
+        if ($input instanceof IImage) {
+            return new UploadedImageProxy($input);
+        } elseif ($input instanceof IFile) {
+            return new UploadedFileProxy($input);
+        }
+
+        throw InvalidArgumentException::format('Unknown file class: %s', get_class($input));
     }
 }
