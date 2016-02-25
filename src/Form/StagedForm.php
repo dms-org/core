@@ -272,8 +272,9 @@ class StagedForm implements IStagedForm
             if (!$isProcessed) {
                 $processedSubmission += $formToProcess->process($previousStagesSubmission);
             } else {
-                $formToProcess->validateProcessedValues($previousStagesSubmission);
-                $processedSubmission += array_intersect_key($previousStagesSubmission, $formForStage->getFields());
+                $processedSubmissionForForm = array_intersect_key($previousStagesSubmission, $formToProcess->getFields());
+                $formToProcess->validateProcessedValues($processedSubmissionForForm);
+                $processedSubmission += $processedSubmissionForForm;
             }
         }
 
