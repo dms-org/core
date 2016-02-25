@@ -16,13 +16,20 @@ class UploadedFileProxy implements IUploadedFile
     protected $file;
 
     /**
+     * @var bool
+     */
+    private $actuallyMove;
+
+    /**
      * UploadedFileProxy constructor.
      *
      * @param IFile $file
+     * @param bool  $actuallyMove
      */
-    public function __construct(IFile $file)
+    public function __construct(IFile $file, bool $actuallyMove = false)
     {
         $this->file = $file;
+        $this->actuallyMove = $actuallyMove;
     }
 
     /**
@@ -148,6 +155,10 @@ class UploadedFileProxy implements IUploadedFile
      */
     public function moveTo(string $fullPath) : IFile
     {
+        if ($this->actuallyMove) {
+            return $this->file->moveTo($fullPath);
+        }
+
         return $this->file;
     }
 }

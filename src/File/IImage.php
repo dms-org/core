@@ -33,4 +33,11 @@ interface IImage extends IFile
      * @throws InvalidOperationException if the file is not a valid image
      */
     public function getHeight() : int;
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return IImage
+     */
+    public function moveTo(string $fullPath) : IFile;
 }

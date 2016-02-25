@@ -1,6 +1,7 @@
 <?php
 
 namespace Dms\Core\File;
+
 use Dms\Core\Exception\InvalidOperationException;
 
 /**
@@ -19,10 +20,11 @@ class UploadedImageProxy extends UploadedFileProxy implements IUploadedImage
      * UploadedFileProxy constructor.
      *
      * @param IImage $file
+     * @param bool   $actuallyMove
      */
-    public function __construct(IImage $file)
+    public function __construct(IImage $file, bool $actuallyMove = false)
     {
-        parent::__construct($file);
+        parent::__construct($file, $actuallyMove);
     }
 
     /**

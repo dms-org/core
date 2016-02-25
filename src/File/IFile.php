@@ -68,4 +68,13 @@ interface IFile
      * @return \SplFileInfo
      */
     public function getInfo();
+
+    /**
+     * Moves the file to the supplied path
+     *
+     * @param string $fullPath The file path including the file name
+     *
+     * @return IFile
+     */
+    public function moveTo(string $fullPath) : IFile;
 }
