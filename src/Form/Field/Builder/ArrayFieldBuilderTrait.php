@@ -141,7 +141,11 @@ trait ArrayFieldBuilderTrait
                     return $collectionFactory($elements);
                 },
                 function (ITypedCollection $collection) use ($collectionType, $reverseMapperCallback) {
-                    $elements = iterator_to_array($collection);
+                    $elements = [];
+
+                    foreach ($collection as $key => $element) {
+                        $elements[$key] = $element;
+                    }
 
                     return $reverseMapperCallback ? array_map($reverseMapperCallback, $elements) : $elements;
                 }

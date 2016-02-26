@@ -67,7 +67,7 @@ class ArrayAllProcessor extends FieldProcessor
         /** @var IFieldProcessor[] $reversedProcessors */
         $reversedProcessors = array_reverse($this->elementProcessors);
         $unprocessedInput   = [];
-
+dd($input);
         foreach ($input as $key => $element) {
             foreach ($reversedProcessors as $processor) {
                 $element = $processor->unprocess($element);
