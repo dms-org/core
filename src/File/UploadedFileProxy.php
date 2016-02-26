@@ -1,6 +1,7 @@
 <?php
 
 namespace Dms\Core\File;
+
 use Dms\Core\Exception\InvalidOperationException;
 
 /**
@@ -28,7 +29,7 @@ class UploadedFileProxy implements IUploadedFile
      */
     public function __construct(IFile $file, bool $actuallyMove = false)
     {
-        $this->file = $file;
+        $this->file         = $file;
         $this->actuallyMove = $actuallyMove;
     }
 

@@ -50,9 +50,9 @@ class FileMoverProcessor extends FieldProcessor
     public static function withRandomFileName(string $processedFileClass, string $path, int $fileNameLength = 16)
     {
         return new self($processedFileClass, $path, function (IUploadedFile $file) use ($fileNameLength) {
-            $randomName = substr(str_replace(['+', '=', '/'], '', base64_encode(openssl_random_pseudo_bytes($fileNameLength * 2))), 0, $fileNameLength);
+            $randomName = substr(str_replace(['+', '=', '/', '.'], '', base64_encode(openssl_random_pseudo_bytes($fileNameLength * 2))), 0, $fileNameLength);
 
-            return $randomName . '.' . $file->getExtension();
+            return $randomName;
         });
     }
 
