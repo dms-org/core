@@ -17,7 +17,6 @@ use Dms\Core\Persistence\Db\Schema\Column;
 use Dms\Core\Persistence\Db\Schema\PrimaryKeyBuilder;
 use Dms\Core\Persistence\Db\Schema\Table;
 use Dms\Core\Persistence\Db\Schema\Type\Boolean;
-use Dms\Core\Persistence\Db\Schema\Type\Integer;
 use InvalidArgumentException;
 
 /**
@@ -70,7 +69,7 @@ class EmbeddedRelationTypeDefiner
      * @see \Dms\Core\Model\Object\Enum
      *
      * @param string $class
-     * @param bool $isNullable
+     * @param bool   $isNullable
      *
      * @return EnumPropertyColumnDefiner
      * @throws InvalidArgumentException
@@ -95,28 +94,36 @@ class EmbeddedRelationTypeDefiner
      */
     public function object() : EmbeddedValueObjectDefiner
     {
-        return new EmbeddedValueObjectDefiner($this->orm, function (callable $mapperLoader, $issetColumnName = null) {
-            if ($issetColumnName) {
-                $this->definition->addColumn(new Column($issetColumnName, new Boolean()));
-                $isNullable = $issetColumnName !== null;
-            } else {
-                $isNullable = false;
-            }
+        return new EmbeddedValueObjectDefiner($this->orm,
+                function (callable $mapperLoader, string $issetColumnName = null, bool $isUnique) {
+                    if ($issetColumnName) {
+                        $this->definition->addColumn(new Column($issetColumnName, new Boolean()));
+                        $isNullable = $issetColumnName !== null;
+                    } else {
+                        $isNullable = false;
+                    }
 
-            // Use null object mapper as parent to load the columns
-            /** @var IEmbeddedObjectMapper $tempMapper */
-            $tempMapper = $mapperLoader(new NullObjectMapper());
-            foreach ($tempMapper->getDefinition()->getTable()->getColumns() as $column) {
-                $this->definition->addColumn($isNullable ? $column->asNullable() : $column);
-            }
+                    // Use null object mapper as parent to load the columns
+                    /** @var IEmbeddedObjectMapper $tempMapper */
+                    $tempMapper  = $mapperLoader(new NullObjectMapper());
+                    $columnNames = [];
+                    foreach ($tempMapper->getDefinition()->getTable()->getColumns() as $column) {
+                        $this->definition->addColumn($isNullable ? $column->asNullable() : $column);
+                        $columnNames[] = $column->getName();
+                    }
 
-            call_user_func($this->callback, function ($idString, Table $parentTable, IObjectMapper $parentMapper) use (
-                    $mapperLoader,
-                    $issetColumnName
-            ) {
-                return new EmbeddedObjectRelation($idString, $mapperLoader($parentMapper), $issetColumnName);
-            });
-        });
+                    if ($isUnique) {
+                        $this->definition->unique($this->definition->getTableName() . '_' . implode('_', $columnNames) . '_unique_index')
+                                ->on($columnNames);
+                    }
+
+                    call_user_func($this->callback, function ($idString, Table $parentTable, IObjectMapper $parentMapper) use (
+                            $mapperLoader,
+                            $issetColumnName
+                    ) {
+                        return new EmbeddedObjectRelation($idString, $mapperLoader($parentMapper), $issetColumnName);
+                    });
+                });
     }
 
     /**

@@ -24,6 +24,11 @@ class EmbeddedValueObjectDefiner extends EmbeddedRelationDefiner
     private $issetColumnName;
 
     /**
+     * @var bool
+     */
+    protected $isUnique = false;
+
+    /**
      * Sets the embedded object columns to be prefixed
      * by the supplied string.
      *
@@ -49,6 +54,19 @@ class EmbeddedValueObjectDefiner extends EmbeddedRelationDefiner
     public function withIssetColumn(string $columnName)
     {
         $this->issetColumnName = $columnName;
+
+        return $this;
+    }
+
+    /**
+     * Defines a unique constraint across all the columns from the
+     * embedded value object mapper.
+     *
+     * @return static
+     */
+    public function unique()
+    {
+        $this->isUnique = true;
 
         return $this;
     }
@@ -108,6 +126,6 @@ class EmbeddedValueObjectDefiner extends EmbeddedRelationDefiner
             /** @var IEmbeddedObjectMapper $mapper */
             $mapper = $mapperLoader($parentMapper);
             return $this->prefix ? $mapper->withColumnsPrefixedBy($this->prefix) : $mapper;
-        }, $this->issetColumnName);
+        }, $this->issetColumnName, $this->isUnique);
     }
 }
