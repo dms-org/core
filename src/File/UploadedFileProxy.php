@@ -31,6 +31,7 @@ class UploadedFileProxy implements IUploadedFile
      *
      * @param IFile    $file
      * @param callable $moveCallback
+     * @param callable $copyCallback
      */
     public function __construct(IFile $file, callable $moveCallback = null, callable $copyCallback = null)
     {
