@@ -46,14 +46,20 @@ class Field implements IField
     private $processedType;
 
     /**
+     * @var mixed
+     */
+    private $initialValue;
+
+    /**
      * @param string            $name
      * @param string            $label
      * @param IFieldType        $type
      * @param IFieldProcessor[] $processors
+     * @param mixed             $initialValue
      *
      * @throws InvalidArgumentException
      */
-    public function __construct(string $name, string $label, IFieldType $type, array $processors)
+    public function __construct(string $name, string $label, IFieldType $type, array $processors, $initialValue = null)
     {
         InvalidArgumentException::verifyAllInstanceOf(__METHOD__, 'processors', $processors, IFieldProcessor::class);
         InvalidArgumentException::verifyNotNull(__METHOD__, 'name', $name);
@@ -72,21 +78,39 @@ class Field implements IField
             $this->processedType = $this->processedType->nonNullable();
         }
 
-        $this->validateInitialValue($type->get(FieldType::ATTR_INITIAL_VALUE));
+        $this->setInitialValue($initialValue);
     }
 
     private function validateInitialValue($initialValue)
     {
-        if ($initialValue !== null) {
-            $processedPhpType = $this->getProcessedType();
+        $processedPhpType = $this->getProcessedType();
 
-            if (!$processedPhpType->isOfType($initialValue)) {
-                throw InvalidArgumentException::format(
-                    'Invalid initial value for form field \'%s\': expecting type of %s, %s given',
-                    $this->name, $processedPhpType->asTypeString(), Debug::getType($initialValue)
-                );
-            }
+        if (!$processedPhpType->isOfType($initialValue)) {
+            throw InvalidArgumentException::format(
+                'Invalid initial value for form field \'%s\': expecting type of %s, %s given',
+                $this->name, $processedPhpType->asTypeString(), Debug::getType($initialValue)
+            );
         }
+    }
+
+    private function setInitialValue($initialValue)
+    {
+        if ($initialValue === null) {
+            $this->initialValue = null;
+            $this->type = $this->type->with(FieldType::ATTR_INITIAL_VALUE, null);
+            return;
+        }
+
+        $this->validateInitialValue($initialValue);
+        $this->initialValue = $initialValue;
+
+        $unprocessedInitialValue = $initialValue;
+        foreach (array_reverse($this->customProcessors) as $processor) {
+            /** @var IFieldProcessor $processor */
+            $unprocessedInitialValue = $processor->unprocess($unprocessedInitialValue);
+        }
+
+        $this->type = $this->type->with(FieldType::ATTR_INITIAL_VALUE, $unprocessedInitialValue);
     }
 
     /**
@@ -136,7 +160,7 @@ class Field implements IField
      */
     public function getInitialValue()
     {
-        return $this->type->get(FieldType::ATTR_INITIAL_VALUE);
+        return $this->initialValue;
     }
 
     /**
@@ -209,8 +233,7 @@ class Field implements IField
     public function withInitialValue($value) : IField
     {
         $clone = clone $this;
-        $clone->validateInitialValue($value);
-        $clone->type = $clone->type->with(FieldType::ATTR_INITIAL_VALUE, $value);
+        $clone->setInitialValue($value);
 
         foreach ($clone->customProcessors as $key => $processor) {
             if ($processor instanceof IFieldProcessorDependentOnInitialValue) {

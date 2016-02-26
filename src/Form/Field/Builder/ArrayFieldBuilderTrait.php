@@ -82,8 +82,8 @@ trait ArrayFieldBuilderTrait
      */
     public function allUniqueIn(IObjectSet $objects, string $propertyName)
     {
-        $this->customProcessorCallbacks[] = function (IType $currentType, IFieldType $fieldType) use ($objects, $propertyName) {
-            return new AllUniquePropertyValidator($currentType, $objects, $propertyName, $fieldType->get(FieldType::ATTR_INITIAL_VALUE));
+        $this->customProcessorCallbacks[] = function (IType $currentType, IFieldType $fieldType, $initialValue) use ($objects, $propertyName) {
+            return new AllUniquePropertyValidator($currentType, $objects, $propertyName, $initialValue);
         };
 
         return $this;

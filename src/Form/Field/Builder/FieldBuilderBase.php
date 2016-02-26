@@ -39,6 +39,11 @@ abstract class FieldBuilderBase
     protected $type;
 
     /**
+     * @var mixed
+     */
+    protected $initialValue;
+
+    /**
      * @var array
      */
     protected $attributes = [];
@@ -55,6 +60,7 @@ abstract class FieldBuilderBase
             $this->label                    = $previous->label;
             $this->attributes               = $previous->attributes;
             $this->type                     = $previous->type;
+            $this->initialValue             = $previous->initialValue;
             $this->customProcessorCallbacks = $previous->customProcessorCallbacks;
         }
     }
@@ -72,7 +78,7 @@ abstract class FieldBuilderBase
 
         foreach ($this->customProcessorCallbacks as $callback) {
             /** @var IFieldProcessor $processor */
-            $processor            = $callback($currentProcessedType, $type);
+            $processor = $callback($currentProcessedType, $type, $this->initialValue);
 
             $customerProcessors[] = $processor;
             $currentProcessedType = $processor->getProcessedType();
@@ -82,7 +88,8 @@ abstract class FieldBuilderBase
             $this->name,
             $this->label,
             $type,
-            $customerProcessors
+            $customerProcessors,
+            $this->initialValue
         );
     }
 
@@ -171,7 +178,9 @@ abstract class FieldBuilderBase
      */
     public function value($value)
     {
-        return $this->attr(FieldType::ATTR_INITIAL_VALUE, $value);
+        $this->initialValue = $value;
+
+        return $this;
     }
 
     /**
@@ -226,12 +235,12 @@ abstract class FieldBuilderBase
      */
     public function uniqueIn(IObjectSet $objects, string $propertyName)
     {
-        $this->customProcessorCallbacks[] = function (IType $currentType, IFieldType $fieldType) use ($objects, $propertyName) {
+        $this->customProcessorCallbacks[] = function (IType $currentType, IFieldType $fieldType, $initialValue) use ($objects, $propertyName) {
             return new UniquePropertyValidator(
                 $currentType,
                 $objects,
                 $propertyName,
-                $fieldType->get(FieldType::ATTR_INITIAL_VALUE)
+                $initialValue
             );
         };
 

@@ -67,9 +67,7 @@ class ArrayOfType extends FieldType
             $processors[] = new ArrayAllProcessor(
                 $this->elementField,
                 $this->getElementType()->getProcessedPhpType(),
-                is_object($this->get(self::ATTR_INITIAL_VALUE))
-                    ? iterator_to_array($this->get(self::ATTR_INITIAL_VALUE))
-                    : $this->get(self::ATTR_INITIAL_VALUE)
+                $this->get(self::ATTR_INITIAL_VALUE)
             );
         }
 
