@@ -132,22 +132,23 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
      * @param Table|null                   $entityTable
      */
     public function __construct(
-            IOrm $orm,
-            FinalizedClassDefinition $class,
-            Table $table,
-            array $propertyColumnNameMap,
-            array $columnGetterMap,
-            array $columnSetterMap,
-            array $phpToDbPropertyConverterMap,
-            array $dbToPhpPropertyConverterMap,
-            array $methodColumnNameMap,
-            array $lockingStrategies,
-            array $persistHooks,
-            array $subClassMappings,
-            callable $relationMappingsFactory,
-            callable $foreignKeysFactory,
-            Table $entityTable = null
-    ) {
+        IOrm $orm,
+        FinalizedClassDefinition $class,
+        Table $table,
+        array $propertyColumnNameMap,
+        array $columnGetterMap,
+        array $columnSetterMap,
+        array $phpToDbPropertyConverterMap,
+        array $dbToPhpPropertyConverterMap,
+        array $methodColumnNameMap,
+        array $lockingStrategies,
+        array $persistHooks,
+        array $subClassMappings,
+        callable $relationMappingsFactory,
+        callable $foreignKeysFactory,
+        Table $entityTable = null
+    )
+    {
         $this->orm                         = $orm;
         $this->class                       = $class;
         $this->table                       = $table;
@@ -167,9 +168,30 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
             $this->subClassMappings[$mapping->getObjectType()] = $mapping;
         }
 
+        $this->orderSubclassMappingsBySpecificity();
+
         $this->relationMappingsFactory = $relationMappingsFactory;
         $this->foreignKeysFactory      = $foreignKeysFactory;
         $this->entityTable             = $entityTable ?: $table;
+    }
+
+    protected function orderSubclassMappingsBySpecificity()
+    {
+        /** @var IObjectMapping[][] $orderedSubClasses */
+        $orderedSubClasses = [];
+
+        foreach ($this->subClassMappings as $subclass => $mapping) {
+            $orderedSubClasses[count(class_parents($subclass))][] = $mapping;
+        }
+
+        ksort($orderedSubClasses);
+
+        $this->subClassMappings = [];
+        foreach ($orderedSubClasses as $mappingGroup) {
+            foreach ($mappingGroup as $mapping) {
+                $this->subClassMappings[$mapping->getObjectType()] = $mapping;
+            }
+        }
     }
 
     /**
@@ -202,8 +224,8 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
         }
 
         $this->table = $this->table->withForeignKeys(array_merge(
-                $this->table->getForeignKeys(),
-                call_user_func($this->foreignKeysFactory, $this->table)
+            $this->table->getForeignKeys(),
+            call_user_func($this->foreignKeysFactory, $this->table)
         ));
 
         foreach ($this->subClassMappings as $mapping) {
@@ -221,7 +243,7 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
     public function addForeignKey(ForeignKey $foreignKey)
     {
         $this->table = $this->table->withForeignKeys(
-                array_merge($this->table->getForeignKeys(), [$foreignKey])
+            array_merge($this->table->getForeignKeys(), [$foreignKey])
         );
     }
 
@@ -338,21 +360,21 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
         }
 
         $self = new self(
-                $this->orm,
-                $this->class,
-                $table,
-                $propertyColumnNameMap,
-                $columnGetterMap,
-                $columnSetterMap,
-                $this->phpToDbPropertyConverterMap,
-                $this->dbToPhpPropertyConverterMap,
-                $methodColumnNameMap,
-                $lockingStrategies,
-                $persistHooks,
-                $subClassMappings,
-                $relationMappingsFactory,
-                $foreignKeyFactory,
-                $entityTable
+            $this->orm,
+            $this->class,
+            $table,
+            $propertyColumnNameMap,
+            $columnGetterMap,
+            $columnSetterMap,
+            $this->phpToDbPropertyConverterMap,
+            $this->dbToPhpPropertyConverterMap,
+            $methodColumnNameMap,
+            $lockingStrategies,
+            $persistHooks,
+            $subClassMappings,
+            $relationMappingsFactory,
+            $foreignKeyFactory,
+            $entityTable
         );
 
         if ($this->hasInitializedRelations) {
@@ -509,7 +531,7 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
 
             if ($accessor instanceof PropertyAccessor) {
                 if ($accessor->getPropertyName() === $property) {
-                    
+
                     return $mapping->getRelation();
                 }
             }
