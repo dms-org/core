@@ -40,4 +40,11 @@ interface IImage extends IFile
      * @return IImage
      */
     public function moveTo(string $fullPath) : IFile;
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return IImage
+     */
+    public function copyTo(string $fullPath) : IFile;
 }
