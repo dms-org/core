@@ -77,4 +77,13 @@ interface IFile
      * @return IFile
      */
     public function moveTo(string $fullPath) : IFile;
+
+    /**
+     * Copies the file to the supplied path
+     *
+     * @param string $fullPath The file path including the file name
+     *
+     * @return IFile
+     */
+    public function copyTo(string $fullPath) : IFile;
 }
