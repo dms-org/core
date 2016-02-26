@@ -17,9 +17,14 @@ class UploadedFileProxy implements IUploadedFile
     protected $file;
 
     /**
-     * @var callable
+     * @var callable|null
      */
     protected $moveCallback;
+
+    /**
+     * @var callable|null
+     */
+    protected $copyCallback;
 
     /**
      * UploadedFileProxy constructor.
@@ -27,10 +32,11 @@ class UploadedFileProxy implements IUploadedFile
      * @param IFile    $file
      * @param callable $moveCallback
      */
-    public function __construct(IFile $file, callable $moveCallback = null)
+    public function __construct(IFile $file, callable $moveCallback = null, callable $copyCallback = null)
     {
         $this->file         = $file;
         $this->moveCallback = $moveCallback;
+        $this->copyCallback = $copyCallback;
     }
 
     /**
@@ -158,6 +164,22 @@ class UploadedFileProxy implements IUploadedFile
     {
         if ($this->moveCallback) {
             return call_user_func($this->moveCallback, $fullPath);
+        }
+
+        return $this->file;
+    }
+
+    /**
+     * Copies the file to the supplied path
+     *
+     * @param string $fullPath The file path including the file name
+     *
+     * @return IFile
+     */
+    public function copyTo(string $fullPath) : IFile
+    {
+        if ($this->copyCallback) {
+            return call_user_func($this->copyCallback, $fullPath);
         }
 
         return $this->file;
