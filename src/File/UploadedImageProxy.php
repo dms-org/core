@@ -17,14 +17,15 @@ class UploadedImageProxy extends UploadedFileProxy implements IUploadedImage
     protected $file;
 
     /**
-     * UploadedFileProxy constructor.
+     * UploadedImageProxy constructor.
      *
-     * @param IImage $file
-     * @param bool   $actuallyMove
+     * @param IImage   $file
+     * @param callable $moveCallback
+     * @param callable $copyCallback
      */
-    public function __construct(IImage $file, bool $actuallyMove = false)
+    public function __construct(IImage $file, callable $moveCallback = null, callable $copyCallback = null)
     {
-        parent::__construct($file, $actuallyMove);
+        parent::__construct($file, $moveCallback, $copyCallback);
     }
 
     /**
