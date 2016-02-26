@@ -5,7 +5,6 @@ namespace Dms\Core\Form\Field\Processor;
 use Dms\Core\Exception\InvalidArgumentException;
 use Dms\Core\Form\IFieldProcessor;
 use Dms\Core\Language\Message;
-use Dms\Core\Model\Type\ArrayType;
 use Dms\Core\Model\Type\Builder\Type;
 use Dms\Core\Model\Type\IType;
 
@@ -23,7 +22,7 @@ class ArrayAllProcessor extends FieldProcessor
 
     /**
      * @param IFieldProcessor[] $elementProcessors
-     * @param IType|null             $elementType
+     * @param IType|null        $elementType
      */
     public function __construct(array $elementProcessors, IType $elementType = null)
     {
@@ -44,12 +43,12 @@ class ArrayAllProcessor extends FieldProcessor
             foreach ($this->elementProcessors as $processor) {
                 /** @var Message[] $newMessages */
                 $newMessages = [];
-                $element = $processor->process($element, $newMessages);
+                $element     = $processor->process($element, $newMessages);
 
                 if (!empty($newMessages)) {
                     foreach ($newMessages as $newMessage) {
                         $messages[] = $newMessage->withParameters([
-                                'key' => $key
+                            'key' => $key,
                         ]);
                     }
 
@@ -67,15 +66,18 @@ class ArrayAllProcessor extends FieldProcessor
     {
         /** @var IFieldProcessor[] $reversedProcessors */
         $reversedProcessors = array_reverse($this->elementProcessors);
+        $unprocessedInput   = [];
 
-        foreach ($input as &$element) {
+        foreach ($input as $key => $element) {
             foreach ($reversedProcessors as $processor) {
                 $element = $processor->unprocess($element);
             }
+
+            $unprocessedInput[$key] = $element;
         }
         unset($element);
 
 
-        return $input;
+        return $unprocessedInput;
     }
 }
