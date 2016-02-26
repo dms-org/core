@@ -17,20 +17,20 @@ class UploadedFileProxy implements IUploadedFile
     protected $file;
 
     /**
-     * @var bool
+     * @var callable
      */
-    private $actuallyMove;
+    protected $moveCallback;
 
     /**
      * UploadedFileProxy constructor.
      *
-     * @param IFile $file
-     * @param bool  $actuallyMove
+     * @param IFile    $file
+     * @param callable $moveCallback
      */
-    public function __construct(IFile $file, bool $actuallyMove = false)
+    public function __construct(IFile $file, callable $moveCallback = null)
     {
         $this->file         = $file;
-        $this->actuallyMove = $actuallyMove;
+        $this->moveCallback = $moveCallback;
     }
 
     /**
@@ -156,8 +156,8 @@ class UploadedFileProxy implements IUploadedFile
      */
     public function moveTo(string $fullPath) : IFile
     {
-        if ($this->actuallyMove) {
-            return $this->file->moveTo($fullPath);
+        if ($this->moveCallback) {
+            return call_user_func($this->moveCallback, $fullPath);
         }
 
         return $this->file;
