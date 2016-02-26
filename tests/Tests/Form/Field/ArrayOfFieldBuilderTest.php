@@ -5,6 +5,7 @@ namespace Dms\Core\Tests\Form\Field;
 use Dms\Core\Form\Field\Builder\ArrayOfFieldBuilder;
 use Dms\Core\Form\Field\Builder\Field as Field;
 use Dms\Core\Form\Field\Processor\ArrayAllProcessor;
+use Dms\Core\Form\Field\Processor\DefaultValueProcessor;
 use Dms\Core\Form\Field\Processor\TypeProcessor;
 use Dms\Core\Form\Field\Processor\Validator\AllUniquePropertyValidator;
 use Dms\Core\Form\Field\Processor\Validator\ArrayUniqueValidator;
@@ -45,7 +46,8 @@ class ArrayOfFieldBuilderTest extends FieldBuilderTestBase
         $this->assertEquals([
             new TypeValidator(Type::arrayOf(Type::mixed())->nullable()),
             new ExactArrayLengthValidator(Type::arrayOf(Type::mixed())->nullable(), 3),
-            new ArrayAllProcessor([new TypeProcessor('string')]),
+            new ArrayAllProcessor(Field::element()->string()->build()),
+            new DefaultValueProcessor(Type::arrayOf(Type::string()->nullable()), []),
         ], $field->getProcessors());
 
         $this->assertSame(3, $field->getType()->get(ArrayOfType::ATTR_EXACT_ELEMENTS));
@@ -60,7 +62,7 @@ class ArrayOfFieldBuilderTest extends FieldBuilderTestBase
             ]),
         ]);
 
-        $this->assertEquals(Type::arrayOf(Type::string()->nullable())->nullable(), $field->getProcessedType());
+        $this->assertEquals(Type::arrayOf(Type::string()->nullable()), $field->getProcessedType());
     }
 
     public function testArrayContainsNoDuplications()
@@ -71,8 +73,9 @@ class ArrayOfFieldBuilderTest extends FieldBuilderTestBase
 
         $this->assertEquals([
             new TypeValidator(Type::arrayOf(Type::mixed())->nullable()),
-            new ArrayAllProcessor([new TypeProcessor('string')]),
+            new ArrayAllProcessor(Field::element()->string()->build()),
             new ArrayUniqueValidator(Type::arrayOf(Type::string()->nullable())->nullable(), 3),
+            new DefaultValueProcessor(Type::arrayOf(Type::string()->nullable()), []),
         ], $field->getProcessors());
 
         $this->assertSame(true, $field->getType()->get(ArrayOfType::ATTR_UNIQUE_ELEMENTS));
@@ -98,7 +101,8 @@ class ArrayOfFieldBuilderTest extends FieldBuilderTestBase
             new TypeValidator(Type::arrayOf(Type::mixed())->nullable()),
             new MinArrayLengthValidator(Type::arrayOf(Type::mixed())->nullable(), 2),
             new MaxArrayLengthValidator(Type::arrayOf(Type::mixed())->nullable(), 5),
-            new ArrayAllProcessor([new TypeProcessor('string')]),
+            new ArrayAllProcessor(Field::element()->string()->build()),
+            new DefaultValueProcessor(Type::arrayOf(Type::string()->nullable()), []),
         ], $field->getProcessors());
 
         $this->assertSame(2, $field->getType()->get(ArrayOfType::ATTR_MIN_ELEMENTS));
@@ -140,8 +144,9 @@ class ArrayOfFieldBuilderTest extends FieldBuilderTestBase
 
         $this->assertEquals([
             new TypeValidator(Type::arrayOf(Type::mixed())->nullable()),
-            new ArrayAllProcessor([new IntValidator(Type::mixed()), new TypeProcessor('int')]),
-            new AllUniquePropertyValidator(Type::arrayOf(Type::int()->nullable())->nullable(), $entities, 'id', [2, 3]),
+            new ArrayAllProcessor(Field::element()->int()->build(), null, [2, 3]),
+            new DefaultValueProcessor(Type::arrayOf(Type::int()->nullable()), []),
+            new AllUniquePropertyValidator(Type::arrayOf(Type::int()->nullable()), $entities, 'id', [2, 3]),
         ], $field->getProcessors());
 
         $this->assertSame([5, 9], $field->process(['5', '9']));
@@ -159,8 +164,9 @@ class ArrayOfFieldBuilderTest extends FieldBuilderTestBase
 
         $this->assertEquals([
             new TypeValidator(Type::arrayOf(Type::mixed())->nullable()),
-            new ArrayAllProcessor([new IntValidator(Type::mixed()), new TypeProcessor('int')]),
-            new AllUniquePropertyValidator(Type::arrayOf(Type::int()->nullable())->nullable(), $entities, 'id', [100]),
+            new ArrayAllProcessor(Field::element()->int()->build(), null, [100]),
+            new DefaultValueProcessor(Type::arrayOf(Type::int()->nullable()), []),
+            new AllUniquePropertyValidator(Type::arrayOf(Type::int()->nullable()), $entities, 'id', [100]),
         ], $newField->getProcessors());
     }
 
@@ -197,7 +203,7 @@ class ArrayOfFieldBuilderTest extends FieldBuilderTestBase
         );
 
         $this->assertEquals(
-            Type::collectionOf(Type::string())->nullable(),
+            Type::collectionOf(Type::string()),
             $field->getProcessedType()
         );
     }

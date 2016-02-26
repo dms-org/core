@@ -164,12 +164,8 @@ class FieldBuilderTest extends FieldBuilderTestBase
         $this->assertInstanceOf(ScalarType::class, $type->getElementType());
         $this->assertSame(ScalarType::BOOL, $type->getElementType()->getType());
         $this->assertHasProcessor(new TypeValidator(PhpType::arrayOf(PhpType::mixed())->nullable()), $field);
-        $this->assertHasProcessor(new ArrayAllProcessor([
-            new BoolValidator(PhpType::mixed()),
-            new BoolProcessor(),
-            new DefaultValueProcessor(PhpType::bool(), false),
-        ]), $field);
-        $this->assertEquals(PhpType::arrayOf(PhpType::bool())->nullable(), $field->getProcessedType());
+        $this->assertHasProcessor(new ArrayAllProcessor(Field::element()->bool()->build()), $field);
+        $this->assertEquals(PhpType::arrayOf(PhpType::bool()), $field->getProcessedType());
     }
 
     public function testEntityField()
@@ -253,7 +249,7 @@ class FieldBuilderTest extends FieldBuilderTestBase
         $this->assertSame($entities, $type->getElementType()->getOptions()->getEntities());
         $this->assertHasProcessor(new EntityIdArrayValidator(PhpType::arrayOf(PhpType::int())->nullable(), $entities), $field);
         $this->assertHasProcessor(new EntityArrayLoaderProcessor($entities), $field);
-        $this->assertEquals(PhpType::arrayOf(PhpType::object(IEntity::class))->nullable(), $field->getProcessedType());
+        $this->assertEquals(PhpType::arrayOf(PhpType::object(IEntity::class)), $field->getProcessedType());
     }
 
     public function testEntityArrayLabelledByMemberExpression()
@@ -304,7 +300,7 @@ class FieldBuilderTest extends FieldBuilderTestBase
             ->build();
 
         /** @var ArrayOfEntityIdsType $type */
-        $this->assertEquals(Entity::collectionType()->nullable(), $field->getProcessedType());
+        $this->assertEquals(Entity::collectionType(), $field->getProcessedType());
 
         $this->assertEquals(Entity::collection([$entity]), $field->process(['1']));
         $this->assertEquals([1], $field->unprocess(Entity::collection([$entity])));
@@ -324,7 +320,7 @@ class FieldBuilderTest extends FieldBuilderTestBase
         $this->assertInstanceOf(EntityIdOptions::class, $type->getElementType()->getOptions());
         $this->assertSame($entities, $type->getElementType()->getOptions()->getEntities());
         $this->assertHasProcessor(new EntityIdArrayValidator(PhpType::arrayOf(PhpType::int())->nullable(), $entities), $field);
-        $this->assertEquals(PhpType::arrayOf(PhpType::int())->nullable(), $field->getProcessedType());
+        $this->assertEquals(PhpType::arrayOf(PhpType::int()), $field->getProcessedType());
     }
 
     public function testEntityIdFieldMappedToCollection()
@@ -336,7 +332,7 @@ class FieldBuilderTest extends FieldBuilderTestBase
         $field    = $this->field()->entityIdsFrom($entities)->mapToCollection(EntityIdCollection::type())->build();
 
         /** @var ArrayOfEntityIdsType $type */
-        $this->assertEquals(PhpType::collectionOf(PhpType::int(), EntityIdCollection::class)->nullable(), $field->getProcessedType());
+        $this->assertEquals(PhpType::collectionOf(PhpType::int(), EntityIdCollection::class), $field->getProcessedType());
 
         $this->assertEquals(new EntityIdCollection([1]), $field->process(['1']));
         $this->assertEquals([1], $field->unprocess(new EntityIdCollection([1])));
@@ -371,7 +367,7 @@ class FieldBuilderTest extends FieldBuilderTestBase
         )->build();
 
         /** @var ArrayOfEntityIdsType $type */
-        $this->assertEquals(Entity::collectionType()->nullable(), $field->getProcessedType());
+        $this->assertEquals(Entity::collectionType(), $field->getProcessedType());
 
         $this->assertEquals(Entity::collection([$entity]), $field->process(['1']));
         $this->assertEquals([1], $field->unprocess(Entity::collection([$entity])));

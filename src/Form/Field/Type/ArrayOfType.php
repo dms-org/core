@@ -33,7 +33,8 @@ class ArrayOfType extends FieldType
 
     public function __construct(IField $elementField)
     {
-        $this->elementField = $elementField;
+        $this->elementField                   = $elementField;
+        $this->attributes[self::ATTR_DEFAULT] = [];
         parent::__construct();
     }
 
@@ -64,8 +65,11 @@ class ArrayOfType extends FieldType
 
         if (count($this->elementField->getProcessors()) > 0) {
             $processors[] = new ArrayAllProcessor(
-                $this->elementField->getProcessors(),
-                $this->getElementType()->getProcessedPhpType()
+                $this->elementField,
+                $this->getElementType()->getProcessedPhpType(),
+                is_object($this->get(self::ATTR_INITIAL_VALUE))
+                    ? iterator_to_array($this->get(self::ATTR_INITIAL_VALUE))
+                    : $this->get(self::ATTR_INITIAL_VALUE)
             );
         }
 
