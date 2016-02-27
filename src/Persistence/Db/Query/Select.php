@@ -84,7 +84,7 @@ class Select extends Query
      *
      * @return Table
      */
-    public function getResultSetTableStructure() : \Dms\Core\Persistence\Db\Schema\Table
+    public function getResultSetTableStructure() : Table
     {
         $columns = [];
 

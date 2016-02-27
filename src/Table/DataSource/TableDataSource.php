@@ -155,9 +155,19 @@ abstract class TableDataSource implements ITableDataSource
 
     final protected function verifyCriteria(IRowCriteria $criteria = null)
     {
-        if ($criteria && $criteria->getStructure() !== $this->structure) {
+        if (!$criteria) {
+            return;
+        }
+
+        if ($criteria->getStructure() !== $this->structure) {
             throw InvalidArgumentException::format(
-                    'Invalid criteria: table structure does not match data source table structure'
+                'Invalid criteria: table structure does not match data source table structure'
+            );
+        }
+
+        if (empty($criteria->getColumnsToLoad())) {
+            throw InvalidArgumentException::format(
+                'Invalid criteria: no columns have been specified to load'
             );
         }
     }

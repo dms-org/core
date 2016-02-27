@@ -2,6 +2,7 @@
 
 namespace Dms\Core\Tests\Table\DataSource;
 
+use Dms\Core\Exception\InvalidArgumentException;
 use Dms\Core\Model\Criteria\Condition\ConditionOperator;
 use Dms\Core\Model\Criteria\OrderingDirection;
 use Dms\Core\Table\IRowCriteria;
@@ -148,15 +149,8 @@ abstract class PeopleTableDataSourceTest extends TableDataSourceTest
 
     public function testLoadEmpty()
     {
-        $this->assertLoadsSections([
-                [
-                        [],
-                        [],
-                        [],
-                        [],
-                        [],
-                ]
-        ], $this->dataSource->criteria());
+        $this->expectException(InvalidArgumentException::class);
+        $this->dataSource->load($this->dataSource->criteria());
     }
 
     public function testLoadPartialWithComplexCriteria()

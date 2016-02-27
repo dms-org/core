@@ -204,6 +204,10 @@ abstract class Platform implements IPlatform
      */
     public function compileSelect(Select $query) : CompiledQuery
     {
+        if (empty($query->getAliasColumnMap())) {
+            throw InvalidArgumentException::format('Cannot compile select: no columns have been specified');
+        }
+
         $compiled = new CompiledQueryBuilder();
         $this->compileSelectQuery($query, $compiled);
 
