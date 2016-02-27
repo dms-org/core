@@ -64,7 +64,7 @@ class PersonModule extends CrudModule
             ]);
 
             $form->dependentOnObject(function (CrudFormDefinition $form, Person $object = null) {
-                $form->section('Age', [
+                $form->continueSection([
                         $form->field(
                                 Field::name('age')
                                         ->label('Age')

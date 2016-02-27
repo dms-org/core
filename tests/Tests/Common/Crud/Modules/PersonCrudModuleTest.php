@@ -75,6 +75,33 @@ class PersonCrudModuleTest extends CrudModuleTest
         ];
     }
 
+    public function testContinuedSectionsInDependentStagesOnCreateForm()
+    {
+        $form = $this->module->getCreateAction()
+                ->getStagedForm();
+
+        $firstStageForm = $form->getStage(1)->loadForm();
+
+        $this->assertCount(1, $firstStageForm->getSections());
+        $this->assertSame(['first_name', 'last_name', 'age'], $firstStageForm->getFieldNames());
+    }
+
+    public function testContinuedSectionsInDependentStagesOnEditForm()
+    {
+        $form = $this->module->getEditAction()
+                ->submitFirstStage([IObjectAction::OBJECT_FIELD_NAME => 1])
+                ->getStagedForm();
+
+        $firstStageForm = $form->getStage(1)->loadForm();
+        $secondStageForm = $form->getStage(2)->loadForm([]);
+
+        $this->assertCount(1, $firstStageForm->getSections());
+        $this->assertCount(1, $secondStageForm->getSections());
+
+        $this->assertSame(false, $firstStageForm->getSections()[0]->doesContinuePreviousSection());
+        $this->assertSame(true, $secondStageForm->getSections()[0]->doesContinuePreviousSection());
+    }
+
     public function testSummaryTableData()
     {
         $data = $this->module->getSummaryTable()->loadView();

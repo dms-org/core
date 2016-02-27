@@ -211,14 +211,43 @@ class CrudFormDefinition
                 $fields[] = $fieldBinding;
             } else {
                 throw InvalidArgumentException::format(
-                    'Invalid call to %s: parameter $fieldBindings must only contain instances of %s, %s found',
-                    __METHOD__, implode('|', [FormFieldBindingDefinition::class, FieldBuilderBase::class, IField::class]),
-                    Debug::getType($fieldBinding)
+                        'Invalid call to %s: parameter $fieldBindings must only contain instances of %s, %s found',
+                        __METHOD__, implode('|', [FormFieldBindingDefinition::class, FieldBuilderBase::class, IField::class]),
+                        Debug::getType($fieldBinding)
                 );
             }
         }
 
         $this->currentStageSections[] = new FormSection($title, $fields);
+    }
+
+    /**
+     * Defines continues the preview form section with the supplied form field bindings.
+     *
+     * Standard fields can be passed if there is no binding.
+     *
+     * Example:
+     * <code>
+     * $form->section('Details', [
+     *      $form->field(Field::name('name')->label('Name')->string()->required())
+     *              ->bindToProperty('name'),
+     *      Field::name('age')->label('Age')->int(), // Field without binding
+     * ]);
+     * </code>
+     *
+     * @param FormFieldBindingDefinition[]|IField[]|FieldBuilderBase[] $fieldBindings
+     *
+     * @return void
+     * @throws InvalidArgumentException
+     * @throws InvalidOperationException
+     */
+    public function continueSection(array $fieldBindings)
+    {
+        if (empty($this->stages) && empty($this->currentStageSections)) {
+            throw InvalidOperationException::format('Invalid call to %s: no previous sections have been defined', __METHOD__);
+        }
+
+        $this->section('', $fieldBindings);
     }
 
     /**

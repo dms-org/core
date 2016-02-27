@@ -46,7 +46,20 @@ class Form implements IForm
         InvalidArgumentException::verifyAllInstanceOf(__METHOD__, 'sections', $sections, IFormSection::class);
         InvalidArgumentException::verifyAllInstanceOf(__METHOD__, 'processors', $processors, IFormProcessor::class);
 
-        $this->sections   = $sections;
+        $this->sections = [];
+
+        foreach ($sections as $section) {
+            if (!empty($this->sections) && $section->doesContinuePreviousSection()) {
+                /** @var IFormSection $lastSection */
+                $lastSection      = array_pop($this->sections);
+                $this->sections[] = new FormSection(
+                        $lastSection->getTitle(), array_merge($lastSection->getFields(), $section->getFields())
+                );
+            } else {
+                $this->sections[] = $section;
+            }
+        }
+
         $this->processors = $processors;
 
         foreach ($sections as $section) {

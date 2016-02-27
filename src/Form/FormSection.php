@@ -21,7 +21,7 @@ class FormSection implements IFormSection
      */
     private $fields;
 
-    public function __construct($title, array $fields)
+    public function __construct(string $title, array $fields)
     {
         InvalidArgumentException::verifyAllInstanceOf(__METHOD__, 'fields', $fields, IField::class);
 
@@ -35,6 +35,14 @@ class FormSection implements IFormSection
     public function getTitle() : string
     {
         return $this->title;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function doesContinuePreviousSection() : bool
+    {
+        return $this->title === '';
     }
 
     /**

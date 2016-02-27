@@ -167,4 +167,42 @@ class FormBuilderTest extends FormBuilderTestBase
 
         $this->assertEquals($expected, $form);
     }
+
+    public function testContinuedSection()
+    {
+        $form = Form::create()
+                ->section('Fields', [
+                        Field::name('field1')->label('Field 1')->int(),
+                ])
+                ->continueSection([
+                        Field::name('field2')->label('Field 2')->int(),
+                ])
+                ->build();
+
+
+        $this->assertEquals(
+                Form::create()
+                        ->section('Fields', [
+                                Field::name('field1')->label('Field 1')->int(),
+                                Field::name('field2')->label('Field 2')->int(),
+                        ])
+                        ->build(),
+                $form
+        );
+    }
+
+    public function testContinuedSectionAsFirstSection()
+    {
+        // This must work due to staged forms continuing between stages
+        $form = Form::create()
+                ->continueSection([
+                        Field::name('field2')->label('Field 2')->int(),
+                ])
+                ->build();
+
+        $this->assertCount(1, $form->getSections());
+        $this->assertEquals([Field::name('field2')->label('Field 2')->int()->build()], $form->getSections()[0]->getFields());
+        $this->assertSame(true, $form->getSections()[0]->doesContinuePreviousSection());
+        $this->assertSame('', $form->getSections()[0]->getTitle());
+    }
 }

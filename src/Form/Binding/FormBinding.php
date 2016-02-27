@@ -90,6 +90,12 @@ class FormBinding implements IFormBinding
                 $formValues[$fieldName] = $binding->getFieldValueFromObject($object);
             }
 
+            foreach ($this->form->getInitialValues() as $fieldName => $value) {
+                if ($value !== null) {
+                    unset($formValues[$fieldName]);
+                }
+            }
+
             return $this->form->withInitialValues($formValues);
         }
 

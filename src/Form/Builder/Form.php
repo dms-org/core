@@ -45,9 +45,9 @@ class Form
     public function __construct(Form $previous = null)
     {
         if ($previous) {
-            $this->fields        = $previous->fields;
-            $this->sections      = $previous->sections;
-            $this->processors    = $previous->processors;
+            $this->fields     = $previous->fields;
+            $this->sections   = $previous->sections;
+            $this->processors = $previous->processors;
         }
     }
 
@@ -64,7 +64,7 @@ class Form
     /**
      * @return IForm
      */
-    final public function build() : \Dms\Core\Form\IForm
+    final public function build() : IForm
     {
         return new ActualForm($this->sections, $this->processors);
     }
@@ -96,6 +96,17 @@ class Form
     }
 
     /**
+     * @param FieldBuilderBase[]|IField[] $fields
+     *
+     * @return static
+     * @throws ConflictingFieldNameException
+     */
+    public function continueSection(array $fields)
+    {
+        return $this->section('', $fields);
+    }
+
+    /**
      * Adds an existing form section to the form.
      *
      * @param IFormSection $section
@@ -119,7 +130,7 @@ class Form
         foreach ($embeddedForm->getSections() as $section) {
             $this->addSection($section);
         }
-        
+
         foreach ($embeddedForm->getProcessors() as $processor) {
             $this->process($processor);
         }

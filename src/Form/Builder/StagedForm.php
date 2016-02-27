@@ -46,7 +46,7 @@ class StagedForm
     /**
      * @return ActualStagedForm
      */
-    public function build() : \Dms\Core\Form\StagedForm
+    public function build() : ActualStagedForm
     {
         return new ActualStagedForm($this->firstStage, $this->followingStages);
     }
@@ -73,7 +73,7 @@ class StagedForm
      * @return ActualStagedForm
      * @throws InvalidArgumentException
      */
-    public static function generator(int $numberOfStages, callable $formStagesGeneratorFunction) : \Dms\Core\Form\StagedForm
+    public static function generator(int $numberOfStages, callable $formStagesGeneratorFunction) : ActualStagedForm
     {
         $generator = $formStagesGeneratorFunction();
 
