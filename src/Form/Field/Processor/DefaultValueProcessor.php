@@ -27,10 +27,12 @@ class DefaultValueProcessor extends FieldProcessor
     {
         parent::__construct($processedType);
 
-        $this->default       = $default;
-        $this->processedType = $processedType->nonNullable()->isOfType($default)
-            ? $processedType->nonNullable()
-            : $processedType->nonNullable()->union(Type::from($default));
+        $this->default            = $default;
+        
+        $nonNullableProcessedType = $processedType->nonNullable();
+        $this->processedType      = $nonNullableProcessedType->isOfType($default)
+            ? $nonNullableProcessedType
+            : $nonNullableProcessedType->union(Type::from($default));
     }
 
     public function process($input, array &$messages)

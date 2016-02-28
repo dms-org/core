@@ -10,6 +10,7 @@ use Dms\Core\Form\IFieldProcessor;
 use Dms\Core\Form\IFieldType;
 use Dms\Core\Form\InvalidInputException;
 use Dms\Core\Language\Message;
+use Dms\Core\Model\Type\Builder\Type;
 use Dms\Core\Model\Type\IType;
 use Dms\Core\Util\Debug;
 
@@ -74,7 +75,7 @@ class Field implements IField
             ? end($processors)->getProcessedType()
             : $type->getProcessedPhpType();
 
-        if ($this->type->get(FieldType::ATTR_REQUIRED)) {
+        if ($this->type->get(FieldType::ATTR_REQUIRED) || $this->type->has(FieldType::ATTR_DEFAULT)) {
             $this->processedType = $this->processedType->nonNullable();
         }
 

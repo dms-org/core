@@ -203,7 +203,7 @@ class ArrayOfFieldBuilderTest extends FieldBuilderTestBase
         );
 
         $this->assertEquals(
-            Type::collectionOf(Type::string())->nullable(),
+            Type::collectionOf(Type::string()),
             $field->getProcessedType()
         );
     }
