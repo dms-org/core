@@ -21,7 +21,7 @@ class ArrayAllProcessorTest extends FieldProcessorTest
     protected function processor()
     {
         return new ArrayAllProcessor(
-            Field::element()->string()->process(
+            Field::element()->string()->required()->process(
                 new CustomProcessor(Type::string(), function ($value) {
                     return "Hi {$value}!";
                 }, function ($value) {

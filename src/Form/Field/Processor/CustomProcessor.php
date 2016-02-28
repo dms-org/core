@@ -24,7 +24,6 @@ class CustomProcessor extends FieldProcessor
     public function __construct(IType $processedType, callable $processCallback, callable $unprocessCallback)
     {
         parent::__construct($processedType);
-        $this->processedType     = $processedType;
         $this->processCallback   = $processCallback;
         $this->unprocessCallback = $unprocessCallback;
     }

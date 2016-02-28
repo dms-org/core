@@ -29,7 +29,7 @@ class CustomProcessorTest extends FieldProcessorTest
      */
     protected function processedType()
     {
-        return Type::string();
+        return Type::string()->nullable();
     }
 
     /**
