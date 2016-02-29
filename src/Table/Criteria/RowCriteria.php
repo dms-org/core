@@ -219,10 +219,11 @@ class RowCriteria implements IRowCriteria
      * @param string $componentId
      * @param string $operator
      * @param mixed  $value
+     * @param bool   $processed
      *
      * @return static
      */
-    public function where(string $componentId, string $operator, $value)
+    public function where(string $componentId, string $operator, $value, bool $processed = false)
     {
         /** @var IColumnComponent $component */
         list($column, $component) = $this->structure->getColumnAndComponent($componentId);
@@ -235,7 +236,7 @@ class RowCriteria implements IRowCriteria
             $column,
             $component,
             $operator,
-            $operator->getField()->process($value)
+            $processed ? $value : $operator->getField()->process($value)
         );
 
         if (!$lastGroup) {

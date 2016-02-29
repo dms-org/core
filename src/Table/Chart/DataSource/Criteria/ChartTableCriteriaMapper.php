@@ -55,7 +55,7 @@ class ChartTableCriteriaMapper
             foreach ($axis->getComponents() as $component) {
                 $chartComponentId = $axisName . '.' . $component->getName();
                 $tableComponentId = $this->getTableComponentIdFromChartComponentId($chartComponentId);
-                $rowCriteria->where($tableComponentId, $operator, $value);
+                $rowCriteria->where($tableComponentId, $operator, $value, true);
             }
         }
 
