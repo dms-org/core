@@ -12,6 +12,16 @@ use Dms\Core\Form\Field\Type\StringType;
 class StringFieldBuilder extends FieldBuilderBase
 {
     /**
+     * Converts empty strings ('') to nulls.
+     *
+     * @return static
+     */
+    public function withEmptyStringAsNull()
+    {
+        return $this->attr(StringType::ATTR_EMPTY_STRING_AS_NULL, true);
+    }
+
+    /**
      * Trims the input string of the supplied characters.
      *
      * @param string $characters

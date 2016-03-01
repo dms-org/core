@@ -4,6 +4,7 @@ namespace Dms\Core\Tests\Form\Field;
 
 use Dms\Core\Form\Field\Builder\Field as Field;
 use Dms\Core\Form\Field\Builder\StringFieldBuilder;
+use Dms\Core\Form\Field\Processor\EmptyStringToNullProcessor;
 use Dms\Core\Form\Field\Processor\TrimProcessor;
 use Dms\Core\Form\Field\Processor\TypeProcessor;
 use Dms\Core\Form\Field\Processor\Validator\EmailValidator;
@@ -164,5 +165,21 @@ class StringFieldBuilderTest extends FieldBuilderTestBase
         ]);
 
         $this->assertEquals(Type::string(), $field->getProcessedType());
+    }
+
+    public function testEmptyStringAsNull()
+    {
+        $field = $this->field()
+            ->trim()
+            ->withEmptyStringAsNull()
+            ->build();
+
+        $this->assertEquals([
+            new TypeProcessor('string'),
+            new TrimProcessor(" \t\n\r\0\x0B"),
+            new EmptyStringToNullProcessor(),
+        ], $field->getProcessors());
+
+        $this->assertEquals(Type::string()->nullable(), $field->getProcessedType());
     }
 }

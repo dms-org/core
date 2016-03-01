@@ -2,6 +2,7 @@
 
 namespace Dms\Core\Form\Field\Type;
 
+use Dms\Core\Form\Field\Processor\EmptyStringToNullProcessor;
 use Dms\Core\Form\Field\Processor\TrimProcessor;
 use Dms\Core\Form\Field\Processor\Validator\EmailValidator;
 use Dms\Core\Form\Field\Processor\Validator\ExactLengthValidator;
@@ -31,6 +32,7 @@ class StringType extends ScalarType
     const TYPE_URL = 'url';
     const TYPE_HTML = 'html';
     const TYPE_IP_ADDRESS = 'ip-address';
+    const ATTR_EMPTY_STRING_AS_NULL = 'empty-string-as-null';
 
     public function __construct()
     {
@@ -60,6 +62,10 @@ class StringType extends ScalarType
             if ($this->get(self::ATTR_REQUIRED)) {
                 $processors[] = new RequiredValidator($inputType);
             }
+        }
+
+        if ($this->get(self::ATTR_EMPTY_STRING_AS_NULL)) {
+            $processors[] = new EmptyStringToNullProcessor($inputType);
         }
 
         if ($this->has(self::ATTR_MIN_LENGTH)) {
