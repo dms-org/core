@@ -99,7 +99,7 @@ abstract class DateTimeTypeBase extends FieldType implements IComparableFieldCon
     {
         return array_merge(
             [
-                new EmptyStringToNullProcessor(),
+                new EmptyStringToNullProcessor(Type::string()),
                 new DateFormatValidator($this->inputType, $this->getFormat()),
                 new DateTimeProcessor($this->getFormat(), $this->getTimezone(), $this->mode),
             ],

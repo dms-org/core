@@ -2,7 +2,7 @@
 
 namespace Dms\Core\Form\Field\Processor;
 
-use Dms\Core\Model\Type\Builder\Type;
+use Dms\Core\Model\Type\IType;
 
 /**
  * The empty string as null process processor.
@@ -14,9 +14,9 @@ class EmptyStringToNullProcessor extends FieldProcessor
     /**
      * @inheritDoc
      */
-    public function __construct()
+    public function __construct(IType $inputType)
     {
-        parent::__construct(Type::string()->nullable());
+        parent::__construct($inputType);
     }
 
     protected function doProcess($input, array &$messages)

@@ -3,6 +3,7 @@
 namespace Dms\Core\Form\Field\Type;
 
 use Dms\Core\Form\Field\Processor\ArrayAllProcessor;
+use Dms\Core\Form\Field\Processor\ArrayFillWithNullsProcessor;
 use Dms\Core\Form\Field\Processor\Validator\ArrayUniqueValidator;
 use Dms\Core\Form\Field\Processor\Validator\ExactArrayLengthValidator;
 use Dms\Core\Form\Field\Processor\Validator\MaxArrayLengthValidator;
@@ -23,6 +24,7 @@ class ArrayOfType extends FieldType
     const ATTR_MIN_ELEMENTS = 'min-elements';
     const ATTR_MAX_ELEMENTS = 'max-elements';
     const ATTR_EXACT_ELEMENTS = 'exact-elements';
+    const ATTR_FILL_KEYS_WITH_NULLS = 'fill-keys-with-nulls';
 
     const ATTR_UNIQUE_ELEMENTS = 'unique-elements';
 
@@ -84,6 +86,10 @@ class ArrayOfType extends FieldType
     protected function buildArrayLengthValidators(array &$processors)
     {
         $inputType = Type::arrayOf(Type::mixed())->nullable();
+
+        if ($this->has(self::ATTR_FILL_KEYS_WITH_NULLS)) {
+            $processors[] = new ArrayFillWithNullsProcessor($inputType, $this->get(self::ATTR_FILL_KEYS_WITH_NULLS));
+        }
 
         if ($this->has(self::ATTR_MIN_ELEMENTS)) {
             $processors[] = new MinArrayLengthValidator($inputType, $this->get(self::ATTR_MIN_ELEMENTS));

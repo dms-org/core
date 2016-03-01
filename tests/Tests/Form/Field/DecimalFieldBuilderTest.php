@@ -5,6 +5,7 @@ namespace Dms\Core\Tests\Form\Field;
 use Dms\Core\Form\Field\Builder\DecimalFieldBuilder;
 use Dms\Core\Form\Field\Builder\Field as Field;
 use Dms\Core\Form\Field\Processor\DefaultValueProcessor;
+use Dms\Core\Form\Field\Processor\EmptyStringToNullProcessor;
 use Dms\Core\Form\Field\Processor\TypeProcessor;
 use Dms\Core\Form\Field\Processor\Validator\MaxDecimalPointsValidator;
 use Dms\Core\Form\Field\Processor\Validator\FloatValidator;

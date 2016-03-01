@@ -207,4 +207,28 @@ class ArrayOfFieldBuilderTest extends FieldBuilderTestBase
             $field->getProcessedType()
         );
     }
+
+    public function testDefaultArrayKeysWithNull()
+    {
+        $field = Field::name('data')
+            ->label('Data')
+            ->arrayOf(Field::element()->string())
+            ->defaultKeysToNull([1, 2])
+            ->build();
+
+        $this->assertEquals(
+            ['abc', 1 => null, 2 => null],
+            $field->process(['abc'])
+        );
+
+        $this->assertEquals(
+            ['a', 1 => 'b', 2 => 'c'],
+            $field->process(['a', 'b', 'c'])
+        );
+
+        $this->assertEquals(
+            ['a', 1 => 'b', 2 => 'c'],
+            $field->unprocess(['a', 'b', 'c'])
+        );
+    }
 }

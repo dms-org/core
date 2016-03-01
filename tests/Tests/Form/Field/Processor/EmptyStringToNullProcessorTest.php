@@ -17,7 +17,7 @@ class EmptyStringToNullProcessorTest extends FieldProcessorTest
      */
     protected function processor()
     {
-        return new EmptyStringToNullProcessor();
+        return new EmptyStringToNullProcessor(Type::string()->nullable());
     }
 
     /**

@@ -177,7 +177,7 @@ class StringFieldBuilderTest extends FieldBuilderTestBase
         $this->assertEquals([
             new TypeProcessor('string'),
             new TrimProcessor(" \t\n\r\0\x0B"),
-            new EmptyStringToNullProcessor(),
+            new EmptyStringToNullProcessor(Type::string()->nullable()),
         ], $field->getProcessors());
 
         $this->assertEquals(Type::string()->nullable(), $field->getProcessedType());

@@ -63,7 +63,7 @@ class TimeFieldBuilderTest extends FieldBuilderTestBase
 
         $this->assertEquals([
                 new TypeValidator(Type::string()->nullable()),
-                new EmptyStringToNullProcessor(),
+                new EmptyStringToNullProcessor(Type::string()->nullable()),
                 new DateFormatValidator(Type::string()->nullable(), 'H:i:s'),
                 new DateTimeProcessor('H:i:s', null, DateTimeProcessor::MODE_ZERO_DATE),
                 new GreaterThanOrEqualValidator(Type::object(\DateTimeImmutable::class)->nullable(), $this->buildTime('01:30:00')),

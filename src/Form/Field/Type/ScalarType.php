@@ -4,6 +4,7 @@ namespace Dms\Core\Form\Field\Type;
 
 use Dms\Core\Exception\InvalidArgumentException;
 use Dms\Core\Form\Field\Processor\BoolProcessor;
+use Dms\Core\Form\Field\Processor\EmptyStringToNullProcessor;
 use Dms\Core\Form\Field\Processor\TypeProcessor;
 use Dms\Core\Form\Field\Processor\Validator\BoolValidator;
 use Dms\Core\Form\Field\Processor\Validator\FloatValidator;
@@ -85,9 +86,21 @@ abstract class ScalarType extends FieldType
     /**
      * @inheritDoc
      */
+    protected function shouldDefaultEmptyStringsToNulls() : bool
+    {
+        return $this->getType() !== self::STRING;
+    }
+
+    /**
+     * @inheritDoc
+     */
     protected function buildProcessors() : array
     {
         $processors = [];
+
+        if (!$this->get(self::ATTR_REQUIRED) && $this->shouldDefaultEmptyStringsToNulls()) {
+            $processors[] = new EmptyStringToNullProcessor(Type::mixed());
+        }
 
         switch ($this->getType()) {
             case self::STRING:

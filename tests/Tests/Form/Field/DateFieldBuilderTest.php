@@ -64,7 +64,7 @@ class DateFieldBuilderTest extends FieldBuilderTestBase
 
         $this->assertEquals([
                 new TypeValidator(Type::string()->nullable()),
-                new EmptyStringToNullProcessor(),
+                new EmptyStringToNullProcessor(Type::string()->nullable()),
                 new DateFormatValidator(Type::string()->nullable(), 'Y-m-d'),
                 new DateTimeProcessor('Y-m-d', null, DateTimeProcessor::MODE_ZERO_TIME),
                 new GreaterThanOrEqualValidator(Type::object(\DateTimeImmutable::class)->nullable(), new \DateTime('1970-01-01')),

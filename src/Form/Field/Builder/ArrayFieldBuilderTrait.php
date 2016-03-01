@@ -72,6 +72,18 @@ trait ArrayFieldBuilderTrait
     }
 
     /**
+     * Defaults the supplied array keys to nulls.
+     *
+     * @param array $keys
+     *
+     * @return static
+     */
+    public function defaultKeysToNull(array $keys)
+    {
+        return $this->attr(ArrayOfType::ATTR_FILL_KEYS_WITH_NULLS, $keys);
+    }
+
+    /**
      * Validates that all the array elements are unique within the supplied
      * set of object properties.
      *
