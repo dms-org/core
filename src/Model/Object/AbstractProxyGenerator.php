@@ -62,24 +62,40 @@ PHP;
         $parameters = [];
         foreach ($method->getParameters() as $parameter) {
             $parameters[] = implode(' ', [
-                    $parameter->isArray() ? 'array' : '',
-                    $parameter->isCallable() ? 'callable' : '',
-                    $parameter->getClass() ? '\\' . $parameter->getClass()->getName() : '',
-                    $parameter->isPassedByReference() ? '&' : '',
-                    '$' . $parameter->getName(),
-                    $parameter->isOptional() ? '=' : '',
-                    $parameter->isOptional() ? var_export($parameter->getDefaultValue(), true) : '',
+                $parameter->isArray() ? 'array' : '',
+                $parameter->isCallable() ? 'callable' : '',
+                $parameter->getClass() ? '\\' . $parameter->getClass()->getName() : '',
+                $parameter->isPassedByReference() ? '&' : '',
+                '$' . $parameter->getName(),
+                $parameter->isOptional() ? '=' : '',
+                $parameter->isOptional() ? var_export($parameter->getDefaultValue(), true) : '',
             ]);
         }
 
         return implode(' ', [
-                $method->isProtected() ? 'protected' : '',
-                $method->isPublic() ? 'public' : '',
-                $method->returnsReference() ? '&' : '',
-                'function',
-                $method->getName(),
-                '(' . implode(', ', $parameters) . ')',
-                '{}'
+            $method->isProtected() ? 'protected' : '',
+            $method->isPublic() ? 'public' : '',
+            $method->returnsReference() ? '&' : '',
+            'function',
+            $method->getName(),
+            '(' . implode(', ', $parameters) . ')',
+            $method->hasReturnType() ? ' : ' . self::getReturnType($method) : '',
+            '{}',
         ]);
+    }
+
+    /**
+     * @param \ReflectionMethod $method
+     *
+     * @return string
+     */
+    protected static function getReturnType(\ReflectionMethod $method) : string
+    {
+        if ($method->getReturnType()->isBuiltin()) {
+            return (string)$method->getReturnType();
+        } else {
+            $type = (string)$method->getReturnType();
+            return '\\' . ($type === 'self' ? $method->getDeclaringClass()->getName() : $type);
+        }
     }
 }

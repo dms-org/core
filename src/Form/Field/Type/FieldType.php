@@ -90,18 +90,17 @@ abstract class FieldType implements IFieldType
 
         $processors = [];
 
-        if ($this->get(self::ATTR_READ_ONLY)) {
-            $processors = [
-                new NotSuppliedValidator(Type::mixed()),
-                new DefaultValueProcessor($this->processedType, $this->get(self::ATTR_INITIAL_VALUE))
-            ];
+
+        $isReadonly = $this->get(self::ATTR_READ_ONLY);
+        if ($isReadonly) {
+            $processors[] = new NotSuppliedValidator(Type::mixed());
         }
 
         if (!($this->inputType instanceof MixedType)) {
             $processors[] = new TypeValidator($this->inputType);
         }
 
-        if ($this->get(self::ATTR_REQUIRED) && !$this->hasTypeSpecificRequiredValidator()) {
+        if (!$isReadonly && $this->get(self::ATTR_REQUIRED) && !$this->hasTypeSpecificRequiredValidator()) {
             $processors[] = new RequiredValidator($this->inputType);
         }
 
@@ -116,11 +115,15 @@ abstract class FieldType implements IFieldType
             $processors[] = new OneOfValidator($currentProcessedType, $options);
         }
 
-        if ($this->has(self::ATTR_DEFAULT)) {
+        if (!$isReadonly && $this->has(self::ATTR_DEFAULT)) {
             $processors[] = new DefaultValueProcessor(
                     $currentProcessedType,
                     $this->get(self::ATTR_DEFAULT)
             );
+        }
+
+        if ($isReadonly) {
+            $processors[] = new DefaultValueProcessor($this->processedType, $this->get(self::ATTR_INITIAL_VALUE));
         }
 
         $this->processors = $processors;

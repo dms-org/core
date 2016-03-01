@@ -45,8 +45,8 @@ class FieldTest extends CmsTestCase
 
         $this->assertEquals([
             new NotSuppliedValidator(Type::mixed()),
+            new TypeProcessor('string'),
             new DefaultValueProcessor(Type::string()->nullable(), 'abc'),
-            new TypeProcessor('string')
         ], $testField->getType()->getProcessors());
 
         $this->assertSame('abc', $testField->process(null));

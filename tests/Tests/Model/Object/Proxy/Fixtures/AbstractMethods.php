@@ -21,11 +21,11 @@ abstract class AbstractMethods
 
     abstract protected function abstractMethod();
 
-    abstract public function abstractPublicMethod();
+    abstract public function abstractPublicMethod() : int;
 
-    abstract public function abstractMethodWithParams($a, $b, $c);
+    abstract public function abstractMethodWithParams($a, $b, $c) : self;
 
-    abstract public function abstractMethodWithComplexParams(array &$a = null, callable $b = null, self $c, $foo = \PDO::ATTR_AUTOCOMMIT);
+    abstract public function abstractMethodWithComplexParams(array &$a = null, callable $b = null, self $c, $foo = \PDO::ATTR_AUTOCOMMIT) : \PDO;
 
-    abstract protected function abstractMethodWithMoreComplexParams(\DateTime &$foo = null, AbstractMethods &$self);
+    abstract protected function abstractMethodWithMoreComplexParams(\DateTime &$foo = null, AbstractMethods &$self) : string;
 }

@@ -40,7 +40,7 @@ interface IReadModule extends IModule
      *
      * @return IObjectSet
      */
-    public function getDataSource() : \Dms\Core\Model\IObjectSet;
+    public function getDataSource() : IObjectSet;
 
     /**
      * Gets a label string for the supplied typed object.
@@ -83,14 +83,14 @@ interface IReadModule extends IModule
      * @return IObjectAction
      * @throws ActionNotFoundException
      */
-    public function getObjectAction(string $name) : Action\Object\IObjectAction;
+    public function getObjectAction(string $name) : IObjectAction;
 
     /**
      * Gets the action to view the summary table.
      *
      * @return IUnparameterizedAction
      */
-    public function getSummaryTableAction() : \Dms\Core\Module\IUnparameterizedAction;
+    public function getSummaryTableAction() : IUnparameterizedAction;
 
     /**
      * Returns whether the modules allows view in details.
@@ -105,5 +105,5 @@ interface IReadModule extends IModule
      * @return IObjectAction
      * @throws UnsupportedActionException
      */
-    public function getDetailsAction() : Action\Object\IObjectAction;
+    public function getDetailsAction() : IObjectAction;
 }
