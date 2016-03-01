@@ -6,6 +6,7 @@ use Dms\Core\Form\Field\Builder\Field as Field;
 use Dms\Core\Form\Field\Builder\DateFieldBuilder;
 use Dms\Core\Form\Field\Processor\DateTimeProcessor;
 use Dms\Core\Form\Field\Processor\DefaultValueProcessor;
+use Dms\Core\Form\Field\Processor\EmptyStringToNullProcessor;
 use Dms\Core\Form\Field\Processor\Validator\DateFormatValidator;
 use Dms\Core\Form\Field\Processor\Validator\GreaterThanOrEqualValidator;
 use Dms\Core\Form\Field\Processor\Validator\LessThanOrEqualValidator;
@@ -63,6 +64,7 @@ class DateFieldBuilderTest extends FieldBuilderTestBase
 
         $this->assertEquals([
                 new TypeValidator(Type::string()->nullable()),
+                new EmptyStringToNullProcessor(),
                 new DateFormatValidator(Type::string()->nullable(), 'Y-m-d'),
                 new DateTimeProcessor('Y-m-d', null, DateTimeProcessor::MODE_ZERO_TIME),
                 new GreaterThanOrEqualValidator(Type::object(\DateTimeImmutable::class)->nullable(), new \DateTime('1970-01-01')),

@@ -3,6 +3,7 @@
 namespace Dms\Core\Form\Field\Type;
 
 use Dms\Core\Form\Field\Processor\DateTimeProcessor;
+use Dms\Core\Form\Field\Processor\EmptyStringToNullProcessor;
 use Dms\Core\Form\Field\Processor\Validator\DateFormatValidator;
 use Dms\Core\Model\Type\Builder\Type as PhpType;
 use Dms\Core\Model\Type\Builder\Type;
@@ -97,11 +98,12 @@ abstract class DateTimeTypeBase extends FieldType implements IComparableFieldCon
     protected function buildProcessors() : array
     {
         return array_merge(
-                [
-                        new DateFormatValidator($this->inputType, $this->getFormat()),
-                        new DateTimeProcessor($this->getFormat(), $this->getTimezone(), $this->mode),
-                ],
-                $this->buildComparisonProcessors()
+            [
+                new EmptyStringToNullProcessor(),
+                new DateFormatValidator($this->inputType, $this->getFormat()),
+                new DateTimeProcessor($this->getFormat(), $this->getTimezone(), $this->mode),
+            ],
+            $this->buildComparisonProcessors()
         );
     }
 }
