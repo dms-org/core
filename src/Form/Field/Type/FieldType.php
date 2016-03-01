@@ -90,6 +90,13 @@ abstract class FieldType implements IFieldType
 
         $processors = [];
 
+        if ($this->get(self::ATTR_READ_ONLY)) {
+            $processors = [
+                new NotSuppliedValidator(Type::mixed()),
+                new DefaultValueProcessor($this->processedType, $this->get(self::ATTR_INITIAL_VALUE))
+            ];
+        }
+
         if (!($this->inputType instanceof MixedType)) {
             $processors[] = new TypeValidator($this->inputType);
         }
@@ -125,13 +132,6 @@ abstract class FieldType implements IFieldType
 
         if ($this->get(self::ATTR_REQUIRED)) {
             $this->processedType = $this->processedType->nonNullable();
-        }
-
-        if ($this->get(self::ATTR_READ_ONLY)) {
-            $this->processors = [
-                    new NotSuppliedValidator(Type::mixed()),
-                    new DefaultValueProcessor($this->processedType, $this->get(self::ATTR_INITIAL_VALUE))
-            ];
         }
     }
 

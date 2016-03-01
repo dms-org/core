@@ -5,6 +5,7 @@ namespace Dms\Core\Tests\Form\Field;
 use Dms\Common\Testing\CmsTestCase;
 use Dms\Core\Form\Field\Builder\Field;
 use Dms\Core\Form\Field\Processor\DefaultValueProcessor;
+use Dms\Core\Form\Field\Processor\TypeProcessor;
 use Dms\Core\Form\Field\Processor\Validator\NotSuppliedValidator;
 use Dms\Core\Form\Field\Type\FieldType;
 use Dms\Core\Form\InvalidInputException;
@@ -45,6 +46,7 @@ class FieldTest extends CmsTestCase
         $this->assertEquals([
             new NotSuppliedValidator(Type::mixed()),
             new DefaultValueProcessor(Type::string()->nullable(), 'abc'),
+            new TypeProcessor('string')
         ], $testField->getType()->getProcessors());
 
         $this->assertSame('abc', $testField->process(null));
