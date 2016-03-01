@@ -4,6 +4,7 @@ namespace Dms\Core\Persistence\Db\Mapping\Relation\Reference;
 
 use Dms\Core\Model\EntityIdCollection;
 use Dms\Core\Model\ITypedCollection;
+use Dms\Core\Model\Type\IType;
 use Dms\Core\Persistence\Db\LoadingContext;
 use Dms\Core\Persistence\Db\PersistenceContext;
 use Dms\Core\Persistence\Db\Row;
@@ -29,9 +30,17 @@ class ToManyRelationIdentityReference extends RelationIdentityReference implemen
      *
      * @return ITypedCollection
      */
-    public function buildNewCollection(array $children) : \Dms\Core\Model\ITypedCollection
+    public function buildNewCollection(array $children) : ITypedCollection
     {
         return new EntityIdCollection($children);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getCollectionType() : IType
+    {
+        return EntityIdCollection::type();
     }
 
     /**

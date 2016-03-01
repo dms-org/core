@@ -2,6 +2,7 @@
 
 namespace Dms\Core\Persistence\Db\Mapping\Definition\Relation;
 
+use Dms\Core\Persistence\Db\Mapping\Definition\IncompatiblePropertyMappingException;
 use Dms\Core\Persistence\Db\Mapping\Relation\IRelation;
 
 /**
@@ -26,9 +27,31 @@ abstract class RelationMapping
      *
      * @param IAccessor $accessor
      * @param IRelation $relation
+     * @param bool      $ignoreNullabilityMismatch
+     *
+     * @throws IncompatiblePropertyMappingException
      */
-    public function __construct(IAccessor $accessor, IRelation $relation)
+    public function __construct(IAccessor $accessor, IRelation $relation, bool $ignoreNullabilityMismatch = false)
     {
+        $accessorType = $accessor->getCompatibleType();
+        $relationType = $relation->getValueType();
+
+        if ($accessorType !== null) {
+            if ($ignoreNullabilityMismatch) {
+                $accessorType = $accessorType->nonNullable();
+                $relationType = $relationType->nonNullable();
+            }
+
+            if (!$accessorType->equals($relationType)) {
+                throw IncompatiblePropertyMappingException::format(
+                        'Invalid property to relation mapping: cannot bind %s to relation of type %s as the types are incompatible, '
+                        . 'property type %s must match the relation type %s',
+                        $accessor->getDebugName(), get_class($relation),
+                        $accessorType->asTypeString(), $relationType->asTypeString()
+                );
+            }
+        }
+
         $this->accessor = $accessor;
         $this->relation = $relation;
     }
@@ -44,7 +67,7 @@ abstract class RelationMapping
     /**
      * @return IRelation
      */
-    public function getRelation() : \Dms\Core\Persistence\Db\Mapping\Relation\IRelation
+    public function getRelation() : IRelation
     {
         return $this->relation;
     }

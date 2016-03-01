@@ -2,6 +2,9 @@
 
 namespace Dms\Core\Persistence\Db\Schema\Type;
 
+use Dms\Core\Model\Type\Builder\Type as PhpType;
+use Dms\Core\Model\Type\IType;
+
 /**
  * The db boolean type
  *
@@ -9,5 +12,11 @@ namespace Dms\Core\Persistence\Db\Schema\Type;
  */
 class Boolean extends Type
 {
-
+    /**
+     * @inheritDoc
+     */
+    protected function loadPhpType() : IType
+    {
+        return PhpType::bool();
+    }
 }

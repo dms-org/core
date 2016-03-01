@@ -3,7 +3,9 @@
 namespace Dms\Core\Persistence\Db\Mapping\ReadModel\Relation;
 
 use Dms\Core\Exception\NotImplementedException;
+use Dms\Core\Model\ITypedCollection;
 use Dms\Core\Model\Type\Builder\Type;
+use Dms\Core\Model\Type\IType;
 use Dms\Core\Model\TypedCollection;
 use Dms\Core\Persistence\Db\LoadingContext;
 use Dms\Core\Persistence\Db\Mapping\ReadModel\ReadModelMapper;
@@ -31,6 +33,22 @@ class RelationReadModelReference extends RelationObjectReference implements IToO
     }
 
     /**
+     * @inheritDoc
+     */
+    public function getCollectionType() : IType
+    {
+        return $this->mapper->getCollectionType();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getValueType() : IType
+    {
+        return Type::object($this->mapper->getObjectType());
+    }
+
+    /**
      * {@inheritDoc}
      */
     public function loadValues(LoadingContext $context, array $rows) : array
@@ -41,7 +59,7 @@ class RelationReadModelReference extends RelationObjectReference implements IToO
     /**
      * {@inheritDoc}
      */
-    public function buildNewCollection(array $children) : \Dms\Core\Model\ITypedCollection
+    public function buildNewCollection(array $children) : ITypedCollection
     {
         return $this->mapper->buildCollection($children);
     }

@@ -178,7 +178,7 @@ abstract class BaseType implements IType
     final public function equals(IType $type) : bool
     {
         // Value-wise equality
-        return $this == $type;
+        return $this->asTypeString() === $type->asTypeString();
     }
 
     /**

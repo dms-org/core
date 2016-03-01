@@ -26,7 +26,7 @@ class EntitySubclass extends RootEntity
     public function __construct($id, array $children)
     {
         parent::__construct($id);
-        $this->children = new EntityCollection(ChildEntity::class, $children);
+        $this->children = ChildEntity::collection($children);
     }
 
 
@@ -37,6 +37,6 @@ class EntitySubclass extends RootEntity
      */
     protected function defineEntity(ClassDefinition $class)
     {
-        $class->property($this->children)->asCollectionOf(Type::object(ChildEntity::class));
+        $class->property($this->children)->asType(ChildEntity::collectionType());
     }
 }

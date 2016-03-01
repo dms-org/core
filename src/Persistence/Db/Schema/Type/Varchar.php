@@ -2,6 +2,9 @@
 
 namespace Dms\Core\Persistence\Db\Schema\Type;
 
+use Dms\Core\Model\Type\Builder\Type as PhpType;
+use Dms\Core\Model\Type\IType;
+
 /**
  * The db varchar type
  *
@@ -22,6 +25,14 @@ class Varchar extends Type
     public function __construct(int $length)
     {
         $this->length = $length;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function loadPhpType() : IType
+    {
+        return PhpType::string();
     }
 
     /**

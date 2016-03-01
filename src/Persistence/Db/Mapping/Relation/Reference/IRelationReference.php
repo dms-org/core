@@ -16,7 +16,7 @@ interface IRelationReference
     /**
      * @return IEntityMapper
      */
-    public function getMapper() : \Dms\Core\Persistence\Db\Mapping\IEntityMapper;
+    public function getMapper() : IEntityMapper;
 
     /**
      * @param Select $select

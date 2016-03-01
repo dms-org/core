@@ -46,6 +46,11 @@ class ColumnTypeDefiner
     /**
      * @var bool
      */
+    protected $ignoreNullabilityMismatch;
+
+    /**
+     * @var bool
+     */
     protected $nullable;
 
     /**
@@ -64,19 +69,22 @@ class ColumnTypeDefiner
      * @param MapperDefinition $definition
      * @param callable         $callback
      * @param string           $name
+     * @param bool             $ignoreNullabilityMismatch
      * @param bool             $nullable
      */
     public function __construct(
-        MapperDefinition $definition,
-        callable $callback,
-        string $name,
-        bool $nullable = false
+            MapperDefinition $definition,
+            callable $callback,
+            string $name,
+            bool $ignoreNullabilityMismatch = false,
+            bool $nullable = false
     ) {
-        $this->definition = $definition;
-        $this->tableName  = $definition->getTableName();
-        $this->callback   = $callback;
-        $this->name       = $name;
-        $this->nullable   = $nullable;
+        $this->definition                = $definition;
+        $this->tableName                 = $definition->getTableName();
+        $this->callback                  = $callback;
+        $this->name                      = $name;
+        $this->ignoreNullabilityMismatch = $ignoreNullabilityMismatch;
+        $this->nullable                  = $nullable;
     }
 
     /**
@@ -419,6 +427,6 @@ class ColumnTypeDefiner
      */
     protected function invokeCallback(Type $type)
     {
-        call_user_func($this->callback, new Column($this->name, $type));
+        call_user_func($this->callback, new Column($this->name, $type), $this->ignoreNullabilityMismatch);
     }
 }

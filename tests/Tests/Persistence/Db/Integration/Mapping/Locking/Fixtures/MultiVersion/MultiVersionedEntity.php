@@ -26,8 +26,14 @@ class MultiVersionedEntity extends Entity
     public function __construct($id = null, $intVersion = null, \DateTimeImmutable $dateVersion = null)
     {
         parent::__construct($id);
-        $this->intVersion  = $intVersion;
-        $this->dateVersion = $dateVersion;
+
+        if ($intVersion !== null) {
+            $this->intVersion = $intVersion;
+        }
+
+        if ($dateVersion !== null) {
+            $this->dateVersion = $dateVersion;
+        }
     }
 
     /**
@@ -37,7 +43,7 @@ class MultiVersionedEntity extends Entity
      */
     protected function defineEntity(ClassDefinition $class)
     {
-        $class->property($this->intVersion)->nullable()->asInt();
-        $class->property($this->dateVersion)->nullable()->asObject(\DateTimeImmutable::class);
+        $class->property($this->intVersion)->asInt();
+        $class->property($this->dateVersion)->asObject(\DateTimeImmutable::class);
     }
 }

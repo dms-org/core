@@ -33,7 +33,7 @@ class OrderedEntityMapper extends EntityMapper
         $map->idToPrimaryKey('id');
 
         $map->property('group')->to('group')->asVarchar(255);
-        $map->property('orderIndex')->to('order_index')->asInt();
+        $map->property('orderIndex')->ignoreNullabilityTypeMismatch()->to('order_index')->asInt();
 
         $map->hook()->saveOrderIndexTo('order_index', 'group');
     }

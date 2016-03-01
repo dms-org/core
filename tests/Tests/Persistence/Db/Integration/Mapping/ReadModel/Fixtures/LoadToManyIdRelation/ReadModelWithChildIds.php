@@ -5,8 +5,6 @@ namespace Dms\Core\Tests\Persistence\Db\Integration\Mapping\ReadModel\Fixtures\L
 use Dms\Core\Model\EntityIdCollection;
 use Dms\Core\Model\Object\ClassDefinition;
 use Dms\Core\Model\Object\ReadModel;
-use Dms\Core\Model\Type\Builder\Type;
-use Dms\Core\Tests\Persistence\Db\Integration\Mapping\Relations\Fixtures\ToOneIdRelation\SubEntity;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>
@@ -23,7 +21,7 @@ class ReadModelWithChildIds extends ReadModel
      *
      * @param int[] $childIds
      */
-    public function __construct(array $childIds =[])
+    public function __construct(array $childIds = [])
     {
         parent::__construct();
         $this->childIds = new EntityIdCollection($childIds);
@@ -36,6 +34,6 @@ class ReadModelWithChildIds extends ReadModel
      */
     protected function define(ClassDefinition $class)
     {
-        $class->property($this->childIds)->asCollectionOf(Type::int());
+        $class->property($this->childIds)->asType(EntityIdCollection::type());
     }
 }

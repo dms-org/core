@@ -2,6 +2,9 @@
 
 namespace Dms\Core\Persistence\Db\Schema\Type;
 
+use Dms\Core\Model\Type\Builder\Type as PhpType;
+use Dms\Core\Model\Type\IType;
+
 /**
  * The db enum type
  *
@@ -22,6 +25,14 @@ class Enum extends Type
     public function __construct(array $options)
     {
         $this->options = $options;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function loadPhpType() : IType
+    {
+        return PhpType::string();
     }
 
     /**

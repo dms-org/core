@@ -2,6 +2,7 @@
 
 namespace Dms\Core\Persistence\Db\Mapping\Relation;
 
+use Dms\Core\Model\Type\IType;
 use Dms\Core\Persistence\Db\Mapping\IEntityMapper;
 use Dms\Core\Persistence\Db\Mapping\Relation\Mode\IRelationMode;
 use Dms\Core\Persistence\Db\Mapping\Relation\Reference\IRelationReference;
@@ -55,6 +56,7 @@ abstract class EntityRelation extends Relation implements ISeparateTableRelation
      * EntityRelation constructor.
      *
      * @param string             $idString
+     * @param IType              $valueType
      * @param IRelationReference $reference
      * @param IRelationMode|null $mode
      * @param string             $dependencyMode
@@ -63,13 +65,21 @@ abstract class EntityRelation extends Relation implements ISeparateTableRelation
      */
     public function __construct(
             string $idString,
+            IType $valueType,
             IRelationReference $reference,
             IRelationMode $mode = null,
             string $dependencyMode,
             array $relationshipTables = [],
             array $parentColumnsToLoad = []
     ) {
-        parent::__construct($idString, $reference->getMapper(), $dependencyMode, $relationshipTables, $parentColumnsToLoad);
+        parent::__construct(
+                $idString,
+                $valueType,
+                $reference->getMapper(),
+                $dependencyMode,
+                $relationshipTables,
+                $parentColumnsToLoad
+        );
 
         $this->reference = $reference;
         $this->mapper    = $reference->getMapper();
@@ -109,7 +119,7 @@ abstract class EntityRelation extends Relation implements ISeparateTableRelation
     /**
      * @return IEntityMapper
      */
-    final public function getEntityMapper() : \Dms\Core\Persistence\Db\Mapping\IEntityMapper
+    final public function getEntityMapper() : IEntityMapper
     {
         return $this->mapper;
     }
@@ -117,7 +127,7 @@ abstract class EntityRelation extends Relation implements ISeparateTableRelation
     /**
      * @return Column
      */
-    final public function getRelatedPrimaryKey() : \Dms\Core\Persistence\Db\Schema\Column
+    final public function getRelatedPrimaryKey() : Column
     {
         return $this->mapper->getPrimaryTable()->getPrimaryKeyColumn();
     }
@@ -135,7 +145,7 @@ abstract class EntityRelation extends Relation implements ISeparateTableRelation
      *
      * @return RowSet
      */
-    final protected function rowSet(array $rows = []) : \Dms\Core\Persistence\Db\RowSet
+    final protected function rowSet(array $rows = []) : RowSet
     {
         return new RowSet(
                 $this->relatedTable,
@@ -146,7 +156,7 @@ abstract class EntityRelation extends Relation implements ISeparateTableRelation
     /**
      * @return Select
      */
-    final protected function select() : \Dms\Core\Persistence\Db\Query\Select
+    final protected function select() : Select
     {
         return Select::from($this->relatedTable);
     }
@@ -166,7 +176,7 @@ abstract class EntityRelation extends Relation implements ISeparateTableRelation
      *
      * @return ColumnExpr
      */
-    protected function column(Column $column) : \Dms\Core\Persistence\Db\Query\Expression\ColumnExpr
+    protected function column(Column $column) : ColumnExpr
     {
         return Expr::column($this->relatedTable->getName(), $column);
     }

@@ -2,6 +2,7 @@
 
 namespace Dms\Core\Persistence\Db\Mapping\Relation;
 
+use Dms\Core\Model\Type\IType;
 use Dms\Core\Persistence\Db\Mapping\IObjectMapper;
 use Dms\Core\Persistence\Db\PersistenceContext;
 use Dms\Core\Persistence\Db\Query\Delete;
@@ -30,6 +31,13 @@ interface IRelation
     public function getDependencyMode() : string;
 
     /**
+     * Gets the php value type of the relation value.
+     *
+     * @return IType
+     */
+    public function getValueType() : IType;
+
+    /**
      * Gets the columns on the parent table required to load the relation.
      *
      * @return string[]
@@ -44,7 +52,7 @@ interface IRelation
     /**
      * @return IObjectMapper
      */
-    public function getMapper() : \Dms\Core\Persistence\Db\Mapping\IObjectMapper;
+    public function getMapper() : IObjectMapper;
 
     /**
      * @param string $prefix

@@ -80,8 +80,12 @@ class EmbeddedRelationTypeDefiner
             $enumMapper = new EnumMapper($this->orm, $isNullable, $columnName, $class, $valueMap);
             $this->definition->addColumn($enumMapper->getEnumValueColumn());
 
-            call_user_func($this->callback, function ($idString) use ($enumMapper) {
-                return new EmbeddedObjectRelation($idString, $enumMapper, $enumMapper->getEnumValueColumn()->getName());
+            call_user_func($this->callback, function ($idString) use ($enumMapper, $isNullable) {
+                return new EmbeddedObjectRelation(
+                        $idString,
+                        $enumMapper,
+                        $enumMapper->getEnumValueColumn()->getName()
+                );
             });
         });
     }

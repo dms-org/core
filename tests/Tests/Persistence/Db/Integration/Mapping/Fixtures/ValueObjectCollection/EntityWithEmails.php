@@ -26,7 +26,7 @@ class EntityWithEmails extends Entity
     {
         parent::__construct($id);
 
-        $this->emails = new ValueObjectCollection(EmbeddedEmailAddress::class, $emails);
+        $this->emails = EmbeddedEmailAddress::collection($emails);
     }
 
     /**
@@ -36,6 +36,6 @@ class EntityWithEmails extends Entity
      */
     protected function defineEntity(ClassDefinition $class)
     {
-        $class->property($this->emails)->asCollectionOf(Type::object(EmbeddedEmailAddress::class));
+        $class->property($this->emails)->asType(EmbeddedEmailAddress::collectionType());
     }
 }

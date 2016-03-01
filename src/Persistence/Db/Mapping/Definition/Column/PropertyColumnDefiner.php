@@ -22,6 +22,11 @@ class PropertyColumnDefiner
     private $propertyName;
 
     /**
+     * @var bool
+     */
+    private $ignoreNullabilityTypeMismatch = false;
+
+    /**
      * @var callable
      */
     private $callback;
@@ -43,7 +48,7 @@ class PropertyColumnDefiner
      * @param string|null      $propertyName
      * @param callable         $callback
      */
-    public function __construct(MapperDefinition $definition, $propertyName, callable $callback)
+    public function __construct(MapperDefinition $definition, string $propertyName = null, callable $callback)
     {
         $this->definition   = $definition;
         $this->propertyName = $propertyName;
@@ -68,6 +73,19 @@ class PropertyColumnDefiner
     }
 
     /**
+     * Defines that a type mismatch between the column nullability
+     * and the property nullability should be ignored.
+     *
+     * @return static
+     */
+    public function ignoreNullabilityTypeMismatch()
+    {
+        $this->ignoreNullabilityTypeMismatch = true;
+
+        return $this;
+    }
+
+    /**
      * Maps the property to the supplied column name.
      *
      * @param string $columnName
@@ -82,7 +100,8 @@ class PropertyColumnDefiner
                 $this->phpToDbConverter,
                 $this->dbToPhpConverter,
                 $this->propertyName,
-                $columnName
+                $columnName,
+                $this->ignoreNullabilityTypeMismatch
         );
     }
 }

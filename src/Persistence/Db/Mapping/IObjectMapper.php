@@ -5,7 +5,7 @@ namespace Dms\Core\Persistence\Db\Mapping;
 use Dms\Core\Exception\InvalidArgumentException;
 use Dms\Core\Model\ITypedCollection;
 use Dms\Core\Model\ITypedObject;
-use Dms\Core\Model\TypedCollection;
+use Dms\Core\Model\Type\IType;
 use Dms\Core\Persistence\Db\LoadingContext;
 use Dms\Core\Persistence\Db\Mapping\Definition\FinalizedMapperDefinition;
 use Dms\Core\Persistence\Db\Mapping\Hierarchy\ParentObjectMapping;
@@ -68,7 +68,7 @@ interface IObjectMapper
      * @return ITypedObject
      * @throws InvalidArgumentException
      */
-    public function load(LoadingContext $context, Row $row) : \Dms\Core\Model\ITypedObject;
+    public function load(LoadingContext $context, Row $row) : ITypedObject;
 
     /**
      * Loads an array of objects from the supplied rows.
@@ -98,5 +98,12 @@ interface IObjectMapper
      *
      * @return ITypedCollection
      */
-    public function buildCollection(array $objects) : \Dms\Core\Model\ITypedCollection;
+    public function buildCollection(array $objects) : ITypedCollection;
+
+    /**
+     * Gets type type of the collection
+     *
+     * @return IType
+     */
+    public function getCollectionType() : IType;
 }

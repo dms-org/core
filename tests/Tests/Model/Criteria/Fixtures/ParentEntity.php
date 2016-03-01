@@ -69,10 +69,10 @@ class ParentEntity extends Entity
 
         $class->property($this->relatedId)->nullable()->asInt();
 
-        $class->property($this->relatedIds)->asCollectionOf(Type::int());
+        $class->property($this->relatedIds)->asType(EntityIdCollection::type());
 
         $class->property($this->relatedEntity)->nullable()->asObject(RelatedEntity::class);
 
-        $class->property($this->relatedEntities)->asCollectionOf(RelatedEntity::type());
+        $class->property($this->relatedEntities)->asType(RelatedEntity::collectionType());
     }
 }

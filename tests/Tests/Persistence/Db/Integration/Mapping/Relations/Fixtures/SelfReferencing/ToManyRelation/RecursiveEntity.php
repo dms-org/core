@@ -27,7 +27,7 @@ class RecursiveEntity extends Entity
     public function __construct($id = null, array $parents = [])
     {
         parent::__construct($id);
-        $this->parents = new EntityCollection(__CLASS__, $parents);
+        $this->parents = self::collection($parents);
     }
 
 
@@ -38,6 +38,6 @@ class RecursiveEntity extends Entity
      */
     protected function defineEntity(ClassDefinition $class)
     {
-        $class->property($this->parents)->asCollectionOf(Type::object(__CLASS__));
+        $class->property($this->parents)->asType(self::collectionType());
     }
 }

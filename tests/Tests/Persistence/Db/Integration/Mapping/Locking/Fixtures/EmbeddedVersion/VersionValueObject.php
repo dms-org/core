@@ -18,10 +18,12 @@ class VersionValueObject extends ValueObject
     /**
      * @inheritDoc
      */
-    public function __construct($number = null)
+    public function __construct(int $number = null)
     {
         parent::__construct();
-        $this->number = $number;
+        if ($number !== null) {
+            $this->number = $number;
+        }
     }
 
     /**
@@ -31,6 +33,6 @@ class VersionValueObject extends ValueObject
      */
     protected function define(ClassDefinition $class)
     {
-        $class->property($this->number)->nullable()->asInt();
+        $class->property($this->number)->asInt();
     }
 }

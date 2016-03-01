@@ -133,6 +133,10 @@ class EnumMapper extends ValueObjectMapper
                     );
         }
 
+        if ($this->nullable) {
+            $valueProperty = $valueProperty->ignoreNullabilityTypeMismatch();
+        }
+
         $valueProperty = $valueProperty->to($this->columnName);
 
         if ($this->nullable) {

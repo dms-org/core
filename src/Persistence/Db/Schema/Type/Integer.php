@@ -2,6 +2,9 @@
 
 namespace Dms\Core\Persistence\Db\Schema\Type;
 
+use Dms\Core\Model\Type\Builder\Type as PhpType;
+use Dms\Core\Model\Type\IType;
+
 /**
  * The db integer type
  *
@@ -38,6 +41,14 @@ class Integer extends Type
     private function __construct(string $mode)
     {
         $this->mode = $mode;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function loadPhpType() : IType
+    {
+        return PhpType::int();
     }
 
     /**

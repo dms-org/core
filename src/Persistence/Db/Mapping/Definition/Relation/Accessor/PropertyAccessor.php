@@ -3,6 +3,7 @@
 namespace Dms\Core\Persistence\Db\Mapping\Definition\Relation\Accessor;
 
 use Dms\Core\Model\ITypedObject;
+use Dms\Core\Model\Object\FinalizedPropertyDefinition;
 use Dms\Core\Persistence\Db\Mapping\Definition\Relation\IAccessor;
 
 /**
@@ -15,16 +16,45 @@ class PropertyAccessor implements IAccessor
     /**
      * @var string
      */
+    private $className;
+
+    /**
+     * @var FinalizedPropertyDefinition
+     */
+    protected $property;
+
+    /**
+     * @var string
+     */
     protected $propertyName;
 
     /**
      * PropertyAccessor constructor.
      *
-     * @param string $propertyName
+     * @param string                      $className
+     * @param FinalizedPropertyDefinition $property
      */
-    public function __construct(string $propertyName)
+    public function __construct(string $className, FinalizedPropertyDefinition $property)
     {
-        $this->propertyName = $propertyName;
+        $this->className = $className;
+        $this->property     = $property;
+        $this->propertyName = $property->getName();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getDebugName() : string
+    {
+        return $this->className . '::$' . $this->propertyName;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getCompatibleType()
+    {
+        return $this->property->getType();
     }
 
     /**

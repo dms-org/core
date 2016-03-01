@@ -3,6 +3,8 @@
 namespace Dms\Core\Persistence\Db\Mapping\Relation\Reference;
 
 use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Model\Type\Builder\Type;
+use Dms\Core\Model\Type\IType;
 use Dms\Core\Persistence\Db\LoadingContext;
 use Dms\Core\Persistence\Db\PersistenceContext;
 use Dms\Core\Persistence\Db\Row;
@@ -15,6 +17,13 @@ use Dms\Core\Persistence\Db\Schema\Column;
  */
 class ToOneRelationIdentityReference extends RelationIdentityReference implements IToOneRelationReference
 {
+    /**
+     * @inheritDoc
+     */
+    public function getValueType() : IType
+    {
+        return Type::int();
+    }
     /**
      * @return ToOneRelationObjectReference
      */

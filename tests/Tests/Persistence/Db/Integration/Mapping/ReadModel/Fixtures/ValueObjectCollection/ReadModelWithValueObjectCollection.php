@@ -26,7 +26,7 @@ class ReadModelWithValueObjectCollection extends ReadModel
     public function __construct(array $emails)
     {
         parent::__construct();
-        $this->emails = new ValueObjectCollection(EmbeddedEmailAddress::class, $emails);
+        $this->emails = EmbeddedEmailAddress::collection($emails);
     }
 
     /**
@@ -34,6 +34,6 @@ class ReadModelWithValueObjectCollection extends ReadModel
      */
     protected function define(ClassDefinition $class)
     {
-        $class->property($this->emails)->asCollectionOf(Type::object(EmbeddedEmailAddress::class));
+        $class->property($this->emails)->asType(EmbeddedEmailAddress::collectionType());
     }
 }

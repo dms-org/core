@@ -27,7 +27,7 @@ class OneEntity extends Entity
     public function __construct($id = null, array $others = [])
     {
         parent::__construct($id);
-        $this->others = new EntityCollection(AnotherEntity::class, $others);
+        $this->others = AnotherEntity::collection($others);
     }
 
     /**
@@ -37,6 +37,6 @@ class OneEntity extends Entity
      */
     protected function defineEntity(ClassDefinition $class)
     {
-        $class->property($this->others)->asCollectionOf(Type::object(AnotherEntity::class));
+        $class->property($this->others)->asType(AnotherEntity::collectionType());
     }
 }

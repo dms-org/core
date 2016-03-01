@@ -3,12 +3,23 @@
 namespace Dms\Core\Persistence\Db\Mapping\Definition\Relation;
 
 use Dms\Core\Model\ITypedObject;
+use Dms\Core\Model\Type\IType;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>
  */
 interface IAccessor
 {
+    /**
+     * @return IType|null
+     */
+    public function getCompatibleType();
+
+    /**
+     * @return string
+     */
+    public function getDebugName() : string;
+
     /**
      * @param ITypedObject $object
      * @param array        $properties

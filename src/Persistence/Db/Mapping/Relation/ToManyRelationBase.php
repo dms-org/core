@@ -30,7 +30,15 @@ abstract class ToManyRelationBase extends EntityRelation implements ISeparateToM
             array $relationshipTables = [],
             array $parentColumnsToLoad = []
     ) {
-        parent::__construct($idString, $reference, $mode, $dependencyMode, $relationshipTables, $parentColumnsToLoad);
+        parent::__construct(
+                $idString,
+                $reference->getCollectionType(),
+                $reference,
+                $mode,
+                $dependencyMode,
+                $relationshipTables,
+                $parentColumnsToLoad
+        );
     }
 
     /**

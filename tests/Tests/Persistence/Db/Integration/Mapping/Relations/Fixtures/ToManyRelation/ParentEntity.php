@@ -21,7 +21,7 @@ class ParentEntity extends Entity
     public function __construct($id = null, array $children = [])
     {
         parent::__construct($id);
-        $this->children = new EntityCollection(ChildEntity::class, $children);
+        $this->children = ChildEntity::collection($children);
     }
 
     /**
@@ -31,6 +31,6 @@ class ParentEntity extends Entity
      */
     protected function defineEntity(ClassDefinition $class)
     {
-        $class->property($this->children)->asCollectionOf(Type::object(ChildEntity::class));
+        $class->property($this->children)->asType(ChildEntity::collectionType());
     }
 }

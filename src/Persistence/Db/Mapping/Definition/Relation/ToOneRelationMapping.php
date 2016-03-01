@@ -2,6 +2,7 @@
 
 namespace Dms\Core\Persistence\Db\Mapping\Definition\Relation;
 
+use Dms\Core\Persistence\Db\Mapping\Relation\IRelation;
 use Dms\Core\Persistence\Db\Mapping\Relation\IToOneRelation;
 
 /**
@@ -19,13 +20,13 @@ class ToOneRelationMapping extends RelationMapping
      */
     public function __construct(IAccessor $accessor, IToOneRelation $relation)
     {
-        parent::__construct($accessor, $relation);
+        parent::__construct($accessor, $relation, true);
     }
 
     /**
      * @return IToOneRelation
      */
-    public function getRelation() : \Dms\Core\Persistence\Db\Mapping\Relation\IRelation
+    public function getRelation() : IRelation
     {
         return parent::getRelation();
     }

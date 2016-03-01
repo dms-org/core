@@ -42,6 +42,7 @@ abstract class MemberRelation extends Relation
 
         parent::__construct(
                 $firstRelation->getIdString() . ':' . $memberMapping->getRelation()->getIdString(),
+                $memberMapping->getRelation()->getValueType(),
                 $memberMapping->getRelation()->getMapper(),
                 self::DEPENDENT_CHILDREN,
                 [],
@@ -54,7 +55,7 @@ abstract class MemberRelation extends Relation
     /**
      * @return IRelation
      */
-    public function getFirstRelation() : \Dms\Core\Persistence\Db\Mapping\Relation\IRelation
+    public function getFirstRelation() : IRelation
     {
         return $this->memberMapping->getFirstRelation();
     }
@@ -63,7 +64,7 @@ abstract class MemberRelation extends Relation
      * @param PersistenceContext $context
      * @param Delete             $parentDelete
      *
-     * @throws \Dms\Core\Exception\InvalidOperationException
+     * @throws NotImplementedException
      */
     final public function delete(PersistenceContext $context, Delete $parentDelete)
     {

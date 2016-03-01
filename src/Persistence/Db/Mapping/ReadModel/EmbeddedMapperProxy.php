@@ -6,6 +6,7 @@ use Dms\Core\Exception\NotImplementedException;
 use Dms\Core\Model\IEntity;
 use Dms\Core\Model\ITypedCollection;
 use Dms\Core\Model\ITypedObject;
+use Dms\Core\Model\Type\IType;
 use Dms\Core\Persistence\Db\LoadingContext;
 use Dms\Core\Persistence\Db\Mapping\IEmbeddedObjectMapper;
 use Dms\Core\Persistence\Db\Mapping\IObjectMapper;
@@ -126,9 +127,17 @@ class EmbeddedMapperProxy implements IEmbeddedObjectMapper
     /**
      * @inheritDoc
      */
-    public function buildCollection(array $objects) : \Dms\Core\Model\ITypedCollection
+    public function buildCollection(array $objects) : ITypedCollection
     {
         return $this->mapper->buildCollection($objects);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getCollectionType() : IType
+    {
+        return $this->mapper->getCollectionType();
     }
 
     // NOT REQUIRED

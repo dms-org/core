@@ -24,7 +24,7 @@ class TestPost extends Entity
     public $content;
 
     /**
-     * @var IEntityCollection|TestComment[]
+     * @var EntityCollection|TestComment[]
      */
     public $comments;
 
@@ -36,7 +36,7 @@ class TestPost extends Entity
     protected function defineEntity(ClassDefinition $class)
     {
         $class->property($this->authorId)->asInt();
-        $class->property($this->comments)->asCollectionOf(Type::object(TestComment::class));
+        $class->property($this->comments)->asType(TestComment::collectionType());
         $class->property($this->content)->asString();
     }
 

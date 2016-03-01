@@ -35,6 +35,22 @@ class CustomAccessor implements IAccessor
     }
 
     /**
+     * @inheritDoc
+     */
+    public function getCompatibleType()
+    {
+        return null;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getDebugName() : string
+    {
+        return '<getter/setter>';
+    }
+
+    /**
      * @param ITypedObject $object
      * @param array        $properties
      *

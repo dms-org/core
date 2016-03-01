@@ -29,6 +29,6 @@ class ParentEntity extends Entity
      */
     protected function defineEntity(ClassDefinition $class)
     {
-        $class->property($this->children)->asCollectionOf(ChildEntity::type());
+        $class->property($this->children)->asType(ChildEntity::collectionType());
     }
 }

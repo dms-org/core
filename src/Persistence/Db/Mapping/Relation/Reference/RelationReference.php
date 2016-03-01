@@ -38,7 +38,7 @@ abstract class RelationReference implements IRelationReference
     /**
      * {@inheritDoc}
      */
-    final public function getMapper() : \Dms\Core\Persistence\Db\Mapping\IEntityMapper
+    final public function getMapper() : IEntityMapper
     {
         return $this->mapper;
     }

@@ -81,9 +81,9 @@ class TestUser extends Entity
         $class->property($this->dateOfBirth)->asObject(\DateTimeImmutable::class);
         $class->property($this->gender)->asObject(UserGender::class);
         $class->property($this->status)->asObject(UserStatus::class);
-        $class->property($this->postIds)->asCollectionOf(Type::int());
-        $class->property($this->friendIds)->asCollectionOf(Type::int());
-        $class->property($this->commentIds)->asCollectionOf(Type::int());
+        $class->property($this->postIds)->asType(EntityIdCollection::type());
+        $class->property($this->friendIds)->asType(EntityIdCollection::type());
+        $class->property($this->commentIds)->asType(EntityIdCollection::type());
         $class->property($this->alias)->asObject(TestAlias::class);
     }
 

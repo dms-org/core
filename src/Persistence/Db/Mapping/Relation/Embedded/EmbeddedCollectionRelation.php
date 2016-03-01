@@ -90,7 +90,7 @@ class EmbeddedCollectionRelation extends EmbeddedRelation implements ISeparateTo
         $this->childrenTable      = $mapper->getDefinition()->getTable();
 
 
-        parent::__construct($idString, $mapper, self::DEPENDENT_CHILDREN, [$this->childrenTable], [$parentPrimaryKey->getName()]);
+        parent::__construct($idString, $mapper->getCollectionType(), $mapper, self::DEPENDENT_CHILDREN, [$this->childrenTable], [$parentPrimaryKey->getName()]);
 
         // Embedded values objects are always identifying
         // They must have be associated with a parent object

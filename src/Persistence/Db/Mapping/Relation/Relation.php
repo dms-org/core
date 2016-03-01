@@ -2,6 +2,7 @@
 
 namespace Dms\Core\Persistence\Db\Mapping\Relation;
 
+use Dms\Core\Model\Type\IType;
 use Dms\Core\Persistence\Db\Mapping\IObjectMapper;
 use Dms\Core\Persistence\Db\Row;
 use Dms\Core\Persistence\Db\Schema\Column;
@@ -18,6 +19,11 @@ abstract class Relation implements IRelation
      * @var string
      */
     protected $idString;
+
+    /**
+     * @var IType
+     */
+    protected $valueType;
 
     /**
      * @var IObjectMapper
@@ -43,14 +49,22 @@ abstract class Relation implements IRelation
      * Relation constructor.
      *
      * @param string        $idString
+     * @param IType         $valueType
      * @param IObjectMapper $mapper
      * @param string        $dependencyMode
      * @param Table[]       $relationshipTables
      * @param Column[]      $parentColumnsToLoad
      */
-    public function __construct(string $idString, IObjectMapper $mapper, string $dependencyMode, array $relationshipTables, array $parentColumnsToLoad)
-    {
+    public function __construct(
+            string $idString,
+            IType $valueType,
+            IObjectMapper $mapper,
+            string $dependencyMode,
+            array $relationshipTables,
+            array $parentColumnsToLoad
+    ) {
         $this->idString            = $idString;
+        $this->valueType           = $valueType;
         $this->mapper              = $mapper;
         $this->dependencyMode      = $dependencyMode;
         $this->relationshipTables  = $relationshipTables;
@@ -66,9 +80,17 @@ abstract class Relation implements IRelation
     }
 
     /**
+     * @inheritDoc
+     */
+    public function getValueType() : IType
+    {
+        return $this->valueType;
+    }
+
+    /**
      * @return IObjectMapper
      */
-    final public function getMapper() : \Dms\Core\Persistence\Db\Mapping\IObjectMapper
+    final public function getMapper() : IObjectMapper
     {
         return $this->mapper;
     }

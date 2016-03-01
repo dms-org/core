@@ -21,7 +21,9 @@ class IntegerVersionedEntity extends Entity
     public function __construct($id = null, $version = null)
     {
         parent::__construct($id);
-        $this->version = $version;
+        if ($version !== null) {
+            $this->version = $version;
+        }
     }
 
     /**
@@ -31,6 +33,6 @@ class IntegerVersionedEntity extends Entity
      */
     protected function defineEntity(ClassDefinition $class)
     {
-        $class->property($this->version)->nullable()->asInt();
+        $class->property($this->version)->asInt();
     }
 }

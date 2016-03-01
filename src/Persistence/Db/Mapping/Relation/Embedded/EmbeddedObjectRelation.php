@@ -4,6 +4,7 @@ namespace Dms\Core\Persistence\Db\Mapping\Relation\Embedded;
 
 use Dms\Core\Exception\NotImplementedException;
 use Dms\Core\Exception\TypeMismatchException;
+use Dms\Core\Model\Type\Builder\Type;
 use Dms\Core\Persistence\Db\LoadingContext;
 use Dms\Core\Persistence\Db\Mapping\IEmbeddedObjectMapper;
 use Dms\Core\Persistence\Db\Mapping\ParentChildItem;
@@ -49,16 +50,26 @@ class EmbeddedObjectRelation extends EmbeddedRelation implements IEmbeddedToOneR
             $parentColumnsToLoad[] = $objectIssetColumnName;
         }
 
-        parent::__construct($idString, $mapper, self::DEPENDENT_PARENTS, [], $parentColumnsToLoad);
-
         $this->objectIssetColumnName = $objectIssetColumnName;
+        $parentTable                 = $mapper->getDefinition()->getTable();
         if ($objectIssetColumnName) {
             // If the column is mapped within the value object
             // then if this column is null, the value object is null
             // If it is withing the parent, it is a boolean column determining
             // whether the object is set or null.
-            $this->isWithinValueObject = $mapper->getDefinition()->getTable()->hasColumn($objectIssetColumnName);
+            $this->isWithinValueObject = $parentTable->hasColumn($objectIssetColumnName);
         }
+
+        $valueType = Type::object($mapper->getObjectType());
+
+        if ($objectIssetColumnName) {
+            if ($this->isWithinValueObject && $parentTable->getColumn($objectIssetColumnName)->getType()->isNullable() || !$this->isWithinValueObject) {
+                $valueType = $valueType->nullable();
+            }
+        }
+
+        parent::__construct($idString, $valueType, $mapper, self::DEPENDENT_PARENTS, [], $parentColumnsToLoad);
+
     }
 
     /**

@@ -279,15 +279,31 @@ class MapperDefinition extends MapperDefinitionBase
         return new PropertyColumnDefiner($this, $propertyName, function (
                 Column $column,
                 callable $phpToDbPropertyConverter = null,
-                callable $dbToPhpPropertyConverter = null
+                callable $dbToPhpPropertyConverter = null,
+                bool $ignoreNullabilityMismatch = false
         ) use ($propertyName) {
             $this->propertyColumnMap[$propertyName] = $column->getName();
             $this->addColumn($column);
             $this->mappedProperties[$propertyName] = true;
 
+            $propertyType = $this->class->getProperty($propertyName)->getType();
+            $columnType   = $column->getType()->getPhpType();
+
+            if ($ignoreNullabilityMismatch) {
+                $propertyType = $propertyType->nonNullable();
+                $columnType = $columnType->nonNullable();
+            }
+
             if ($phpToDbPropertyConverter && $dbToPhpPropertyConverter) {
                 $this->phpToDbPropertyConverterMap[$propertyName] = $phpToDbPropertyConverter;
                 $this->dbToPhpPropertyConverterMap[$propertyName] = $dbToPhpPropertyConverter;
+            } elseif (!$propertyType->equals($columnType)) {
+                throw IncompatiblePropertyMappingException::format(
+                        'Invalid property to column mapping: cannot bind %s to column \'%s\' as the types are incompatible, '
+                        . 'property type %s must match the column type %s',
+                        $this->class->getClassName() . '::$' . $propertyName, $column->getName(),
+                        $propertyType->asTypeString(), $columnType->asTypeString()
+                );
             }
         });
     }
@@ -445,7 +461,9 @@ class MapperDefinition extends MapperDefinitionBase
     {
         $this->verifyProperty(__METHOD__, $property);
 
-        return $this->defineRelationVia(new PropertyAccessor($property), function () use ($property) {
+        $accessor = new PropertyAccessor($this->class->getClassName(), $this->class->getProperty($property));
+
+        return $this->defineRelationVia($accessor, function () use ($property) {
             $this->mappedProperties[$property] = true;
         });
     }

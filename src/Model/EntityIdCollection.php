@@ -35,6 +35,6 @@ class EntityIdCollection extends TypedCollection
      */
     final public static function type() : CollectionType
     {
-        return new CollectionType(Type::int(), get_called_class());
+        return Type::collectionOf(Type::int(), get_called_class());
     }
 }

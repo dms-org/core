@@ -2,6 +2,9 @@
 
 namespace Dms\Core\Persistence\Db\Schema\Type;
 
+use Dms\Core\Model\Type\Builder\Type as PhpType;
+use Dms\Core\Model\Type\IType;
+
 /**
  * The db date type
  *
@@ -9,5 +12,11 @@ namespace Dms\Core\Persistence\Db\Schema\Type;
  */
 class Date extends Type
 {
-
+    /**
+     * @inheritDoc
+     */
+    protected function loadPhpType() : IType
+    {
+        return PhpType::object(\DateTimeImmutable::class);
+    }
 }

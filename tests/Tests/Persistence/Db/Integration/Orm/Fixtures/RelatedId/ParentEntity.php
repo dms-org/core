@@ -36,6 +36,6 @@ class ParentEntity extends Entity
      */
     protected function defineEntity(ClassDefinition $class)
     {
-        $class->property($this->childIds)->asCollectionOf(Type::int());
+        $class->property($this->childIds)->asType(EntityIdCollection::type());
     }
 }

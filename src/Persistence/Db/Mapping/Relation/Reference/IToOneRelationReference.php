@@ -2,6 +2,7 @@
 
 namespace Dms\Core\Persistence\Db\Mapping\Relation\Reference;
 
+use Dms\Core\Model\Type\IType;
 use Dms\Core\Persistence\Db\LoadingContext;
 use Dms\Core\Persistence\Db\PersistenceContext;
 use Dms\Core\Persistence\Db\Row;
@@ -14,6 +15,11 @@ use Dms\Core\Persistence\Db\Schema\Column;
  */
 interface IToOneRelationReference extends IRelationReference
 {
+    /**
+     * @return IType
+     */
+    public function getValueType() : IType;
+
     /**
      * @param LoadingContext $context
      * @param Row[]          $rows

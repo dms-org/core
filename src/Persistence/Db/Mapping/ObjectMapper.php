@@ -4,8 +4,10 @@ namespace Dms\Core\Persistence\Db\Mapping;
 
 use Dms\Core\Exception\InvalidArgumentException;
 use Dms\Core\Exception\InvalidOperationException;
+use Dms\Core\Model\ITypedCollection;
 use Dms\Core\Model\ITypedObject;
 use Dms\Core\Model\Object\TypedObject;
+use Dms\Core\Model\Type\IType;
 use Dms\Core\Persistence\Db\LoadingContext;
 use Dms\Core\Persistence\Db\Mapping\Definition\FinalizedMapperDefinition;
 use Dms\Core\Persistence\Db\Mapping\Hierarchy\ParentObjectMapping;
@@ -96,12 +98,23 @@ abstract class ObjectMapper implements IObjectMapper
     /**
      * @inheritDoc
      */
-    public function buildCollection(array $objects) : \Dms\Core\Model\ITypedCollection
+    public function buildCollection(array $objects) : ITypedCollection
     {
         /** @var string|TypedObject $objectType */
         $objectType = $this->objectType;
 
         return $objectType::collection($objects);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getCollectionType() : IType
+    {
+        /** @var string|TypedObject $objectType */
+        $objectType = $this->objectType;
+
+        return $objectType::collectionType();
     }
 
     /**

@@ -3,6 +3,7 @@
 namespace Dms\Core\Persistence\Db\Schema\Type;
 
 use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Model\Type\IType;
 
 /**
  * The db type base class.
@@ -15,6 +16,21 @@ abstract class Type
      * @var bool
      */
     private $nullable = false;
+
+    /**
+     * @return IType
+     */
+    final public function getPhpType() : IType
+    {
+        return $this->nullable
+                ? $this->loadPhpType()->nullable()
+                : $this->loadPhpType();
+    }
+
+    /**
+     * @return IType
+     */
+    abstract protected function loadPhpType() : IType;
 
     /**
      * @return bool

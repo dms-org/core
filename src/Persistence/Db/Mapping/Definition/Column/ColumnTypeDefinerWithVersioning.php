@@ -7,17 +7,7 @@ use Dms\Core\Persistence\Db\Mapping\Definition\MapperDefinition;
 use Dms\Core\Persistence\Db\Mapping\Locking\DateTimeVersionLockingStrategy;
 use Dms\Core\Persistence\Db\Mapping\Locking\IntegerVersionLockingStrategy;
 use Dms\Core\Persistence\Db\Schema\Column;
-use Dms\Core\Persistence\Db\Schema\Type\Blob;
-use Dms\Core\Persistence\Db\Schema\Type\Boolean;
-use Dms\Core\Persistence\Db\Schema\Type\Date;
-use Dms\Core\Persistence\Db\Schema\Type\DateTime;
-use Dms\Core\Persistence\Db\Schema\Type\Decimal;
-use Dms\Core\Persistence\Db\Schema\Type\Enum;
-use Dms\Core\Persistence\Db\Schema\Type\Integer;
-use Dms\Core\Persistence\Db\Schema\Type\Text;
-use Dms\Core\Persistence\Db\Schema\Type\Time;
 use Dms\Core\Persistence\Db\Schema\Type\Type;
-use Dms\Core\Persistence\Db\Schema\Type\Varchar;
 
 /**
  * The column type definer class.
@@ -50,6 +40,7 @@ class ColumnTypeDefinerWithVersioning extends ColumnTypeDefiner
      * @param callable         $dbToPhpConverter
      * @param string|null      $propertyName
      * @param string           $name
+     * @param bool             $ignoreNullabilityMismatch
      * @param bool             $nullable
      */
     public function __construct(
@@ -57,11 +48,12 @@ class ColumnTypeDefinerWithVersioning extends ColumnTypeDefiner
             callable $callback,
             callable $phpToDbConverter = null,
             callable $dbToPhpConverter = null,
-            $propertyName,
+            string $propertyName = null,
             string $name,
+            bool $ignoreNullabilityMismatch,
             bool $nullable = false
     ) {
-        parent::__construct($definition, $callback, $name, $nullable);
+        parent::__construct($definition, $callback, $name, $ignoreNullabilityMismatch, $nullable);
 
         $this->phpToDbConverter = $phpToDbConverter;
         $this->dbToPhpConverter = $dbToPhpConverter;
@@ -117,7 +109,13 @@ class ColumnTypeDefinerWithVersioning extends ColumnTypeDefiner
      */
     protected function invokeCallback(Type $type)
     {
-        call_user_func($this->callback, new Column($this->name, $type), $this->phpToDbConverter, $this->dbToPhpConverter);
+        call_user_func(
+                $this->callback,
+                new Column($this->name, $type),
+                $this->phpToDbConverter,
+                $this->dbToPhpConverter,
+                $this->ignoreNullabilityMismatch
+        );
     }
 
 }

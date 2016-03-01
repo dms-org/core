@@ -58,7 +58,7 @@ class TypesEntity extends Entity
      */
     protected function defineEntity(ClassDefinition $class)
     {
-        $class->property($this->null)->asType(Type::null());
+        $class->property($this->null)->nullable()->asInt();
 
         $class->property($this->int)->asInt();
 

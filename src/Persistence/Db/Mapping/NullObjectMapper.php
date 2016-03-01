@@ -4,6 +4,7 @@ namespace Dms\Core\Persistence\Db\Mapping;
 
 use Dms\Core\Model\IEntity;
 use Dms\Core\Model\ITypedCollection;
+use Dms\Core\Model\Type\IType;
 use Dms\Core\Persistence\Db\LoadingContext;
 use Dms\Core\Persistence\Db\Mapping\Hook\IPersistHook;
 use Dms\Core\Persistence\Db\PersistenceContext;
@@ -115,7 +116,12 @@ class NullObjectMapper implements IEntityMapper
 
     }
 
-    public function buildCollection(array $objects) : \Dms\Core\Model\ITypedCollection
+    public function buildCollection(array $objects) : ITypedCollection
+    {
+
+    }
+
+    public function getCollectionType() : IType
     {
 
     }

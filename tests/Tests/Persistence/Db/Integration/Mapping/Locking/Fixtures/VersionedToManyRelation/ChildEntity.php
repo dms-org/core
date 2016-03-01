@@ -19,12 +19,15 @@ class ChildEntity extends Entity
      * SubEntity constructor.
      *
      * @param int|null $id
-     * @param int  $version
+     * @param int      $version
      */
     public function __construct($id = null, $version = null)
     {
         parent::__construct($id);
-        $this->version = $version;
+
+        if ($version !== null) {
+            $this->version = $version;
+        }
     }
 
     /**
@@ -34,6 +37,6 @@ class ChildEntity extends Entity
      */
     protected function defineEntity(ClassDefinition $class)
     {
-        $class->property($this->version)->nullable()->asInt();
+        $class->property($this->version)->asInt();
     }
 }

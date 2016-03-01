@@ -59,7 +59,7 @@ class Type
     /**
      * @return MixedType
      */
-    public static function mixed() : \Dms\Core\Model\Type\MixedType
+    public static function mixed() : MixedType
     {
         if (!self::$mixed) {
             self::$mixed = new MixedType();
@@ -158,7 +158,7 @@ class Type
      *
      * @return ObjectType
      */
-    public static function object(string $class = null) : \Dms\Core\Model\Type\ObjectType
+    public static function object(string $class = null) : ObjectType
     {
         if (!isset(self::$objects[$class])) {
             self::$objects[$class] = new ObjectType($class);
@@ -174,7 +174,7 @@ class Type
      *
      * @return ArrayType
      */
-    public static function arrayOf(IType $elementType) : \Dms\Core\Model\Type\ArrayType
+    public static function arrayOf(IType $elementType) : ArrayType
     {
         $elementTypeString = $elementType->asTypeString();
 
@@ -196,7 +196,7 @@ class Type
      *
      * @return CollectionType
      */
-    public static function collectionOf(IType $elementType, string $collectionClass = ITypedCollection::class) : \Dms\Core\Model\Type\CollectionType
+    public static function collectionOf(IType $elementType, string $collectionClass = ITypedCollection::class) : CollectionType
     {
         $elementTypeString = $elementType->asTypeString();
 
@@ -215,7 +215,7 @@ class Type
      * @return IType
      * @throws InvalidArgumentException
      */
-    public static function from($default) : \Dms\Core\Model\Type\IType
+    public static function from($default) : IType
     {
         switch (gettype($default)) {
             case 'NULL':

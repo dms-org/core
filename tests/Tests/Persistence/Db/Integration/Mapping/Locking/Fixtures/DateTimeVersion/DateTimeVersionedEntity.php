@@ -21,7 +21,9 @@ class DateTimeVersionedEntity extends Entity
     public function __construct($id = null, \DateTimeImmutable $version = null)
     {
         parent::__construct($id);
-        $this->version = $version;
+        if ($version) {
+            $this->version = $version;
+        }
     }
 
     /**
@@ -31,6 +33,6 @@ class DateTimeVersionedEntity extends Entity
      */
     protected function defineEntity(ClassDefinition $class)
     {
-        $class->property($this->version)->nullable()->asObject(\DateTimeImmutable::class);
+        $class->property($this->version)->asObject(\DateTimeImmutable::class);
     }
 }

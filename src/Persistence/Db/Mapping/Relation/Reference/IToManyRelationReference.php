@@ -3,6 +3,7 @@
 namespace Dms\Core\Persistence\Db\Mapping\Relation\Reference;
 
 use Dms\Core\Model\ITypedCollection;
+use Dms\Core\Model\Type\IType;
 use Dms\Core\Persistence\Db\LoadingContext;
 use Dms\Core\Persistence\Db\PersistenceContext;
 use Dms\Core\Persistence\Db\Row;
@@ -16,11 +17,16 @@ use Dms\Core\Persistence\Db\Schema\Column;
 interface IToManyRelationReference extends IRelationReference
 {
     /**
+     * @return IType
+     */
+    public function getCollectionType() : IType;
+
+    /**
      * @param array $children
      *
      * @return ITypedCollection
      */
-    public function buildNewCollection(array $children) : \Dms\Core\Model\ITypedCollection;
+    public function buildNewCollection(array $children) : ITypedCollection;
 
     /**
      * @param LoadingContext $context

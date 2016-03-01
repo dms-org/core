@@ -26,7 +26,7 @@ class EmbeddedObject extends ValueObject
     public function __construct(array $children)
     {
         parent::__construct();
-        $this->children = new EntityCollection(ChildEntity::class, $children);
+        $this->children = ChildEntity::collection($children);
     }
 
 
@@ -37,6 +37,6 @@ class EmbeddedObject extends ValueObject
      */
     protected function define(ClassDefinition $class)
     {
-        $class->property($this->children)->asCollectionOf(Type::object(ChildEntity::class));
+        $class->property($this->children)->asType(ChildEntity::collectionType());
     }
 }

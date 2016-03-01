@@ -4,6 +4,7 @@ namespace Dms\Core\Persistence\Db\Mapping\Relation\Reference;
 
 use Dms\Core\Model\EntityCollection;
 use Dms\Core\Model\ITypedCollection;
+use Dms\Core\Model\Type\IType;
 use Dms\Core\Persistence\Db\LoadingContext;
 use Dms\Core\Persistence\Db\PersistenceContext;
 use Dms\Core\Persistence\Db\Row;
@@ -16,6 +17,14 @@ use Dms\Core\Persistence\Db\Schema\Column;
  */
 class ToManyRelationObjectReference extends RelationObjectReference implements IToManyRelationReference
 {
+    /**
+     * @inheritDoc
+     */
+    public function getCollectionType() : IType
+    {
+        return $this->mapper->getCollectionType();
+    }
+
     /**
      * @param array $children
      *

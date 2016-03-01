@@ -26,7 +26,7 @@ class ReadModelWithChildEntities extends ReadModel
     public function __construct(array $children = [])
     {
         parent::__construct();
-        $this->children = new EntityCollection(ChildEntity::class, $children);
+        $this->children = ChildEntity::collection($children);
     }
 
     /**
@@ -36,6 +36,6 @@ class ReadModelWithChildEntities extends ReadModel
      */
     protected function define(ClassDefinition $class)
     {
-        $class->property($this->children)->asCollectionOf(Type::object(ChildEntity::class));
+        $class->property($this->children)->asType(ChildEntity::collectionType());
     }
 }

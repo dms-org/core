@@ -2,6 +2,9 @@
 
 namespace Dms\Core\Persistence\Db\Schema\Type;
 
+use Dms\Core\Model\Type\Builder\Type as PhpType;
+use Dms\Core\Model\Type\IType;
+
 /**
  * The db text type
  *
@@ -27,6 +30,14 @@ class Text extends Type
     private function __construct(string $mode)
     {
         $this->mode = $mode;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function loadPhpType() : IType
+    {
+        return PhpType::string();
     }
 
     /**

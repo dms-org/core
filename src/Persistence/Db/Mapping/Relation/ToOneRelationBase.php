@@ -31,7 +31,15 @@ abstract class ToOneRelationBase extends EntityRelation implements ISeparateToOn
             array $relationshipTables = [],
             array $parentColumnsToLoad = []
     ) {
-        parent::__construct($idString, $reference, $mode, $dependencyMode, $relationshipTables, $parentColumnsToLoad);
+        parent::__construct(
+                $idString,
+                $reference->getValueType(),
+                $reference,
+                $mode,
+                $dependencyMode,
+                $relationshipTables,
+                $parentColumnsToLoad
+        );
     }
 
     /**
@@ -50,7 +58,7 @@ abstract class ToOneRelationBase extends EntityRelation implements ISeparateToOn
     /**
      * @inheritDoc
      */
-    public function getRelationSubSelect(Select $outerSelect, string $parentTableAlias) : \Dms\Core\Persistence\Db\Query\Select
+    public function getRelationSubSelect(Select $outerSelect, string $parentTableAlias) : Select
     {
         $subSelect = $outerSelect->buildSubSelect($this->relatedTable);
 

@@ -2,6 +2,7 @@
 
 namespace Dms\Core\Persistence\Db\Mapping\Relation\Embedded;
 
+use Dms\Core\Model\Type\IType;
 use Dms\Core\Persistence\Db\Mapping\IEmbeddedObjectMapper;
 use Dms\Core\Persistence\Db\Mapping\Relation\IRelation;
 use Dms\Core\Persistence\Db\Mapping\Relation\Relation;
@@ -22,26 +23,28 @@ abstract class EmbeddedRelation extends Relation implements IRelation
     /**
      * EmbeddedRelation constructor.
      *
-     * @param string $idString
+     * @param string                $idString
+     * @param IType                 $valueType
      * @param IEmbeddedObjectMapper $mapper
-     * @param string $dependencyMode
-     * @param Table[] $relationshipTables
-     * @param array $parentColumnsToLoad
+     * @param string                $dependencyMode
+     * @param Table[]               $relationshipTables
+     * @param array                 $parentColumnsToLoad
      */
     public function __construct(
             string $idString,
+            IType $valueType,
             IEmbeddedObjectMapper $mapper,
             string $dependencyMode,
             array $relationshipTables,
             array $parentColumnsToLoad
     ) {
-        parent::__construct($idString, $mapper, $dependencyMode, $relationshipTables, $parentColumnsToLoad);
+        parent::__construct($idString, $valueType, $mapper, $dependencyMode, $relationshipTables, $parentColumnsToLoad);
     }
 
     /**
      * @return IEmbeddedObjectMapper
      */
-    final public function getEmbeddedObjectMapper() : \Dms\Core\Persistence\Db\Mapping\IEmbeddedObjectMapper
+    final public function getEmbeddedObjectMapper() : IEmbeddedObjectMapper
     {
         return $this->mapper;
     }

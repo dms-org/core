@@ -2,6 +2,9 @@
 
 namespace Dms\Core\Persistence\Db\Schema\Type;
 
+use Dms\Core\Model\Type\Builder\Type as PhpType;
+use Dms\Core\Model\Type\IType;
+
 /**
  * The db decimal type
  *
@@ -29,6 +32,14 @@ class Decimal extends Type
     {
         $this->precision     = $precision;
         $this->decimalPoints = $decimalPoints;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function loadPhpType() : IType
+    {
+        return PhpType::float();
     }
 
     /**
