@@ -69,7 +69,9 @@ abstract class Platform implements IPlatform
                 Blob::class    => 'string',
                 Text::class    => 'string',
                 Decimal::class => 'double',
-                Enum::class    => 'string',
+                Enum::class    => function (Enum $type) {
+                    return $type->getPhpVariableType();
+                },
                 Integer::class => 'integer',
                 Boolean::class => 'boolean',
         ];
@@ -101,7 +103,11 @@ abstract class Platform implements IPlatform
                     ? $value->format($this->typeFormatMap[$typeClass])
                     : null;
         } elseif (isset($this->typePhpTypeMap[$typeClass]) && !($type->isNullable() && $value === null)) {
-            settype($value, $this->typePhpTypeMap[$typeClass]);
+            $phpType = $this->typePhpTypeMap[$typeClass] instanceof \Closure
+                    ? $this->typePhpTypeMap[$typeClass]($type)
+                    : $this->typePhpTypeMap[$typeClass];
+
+            settype($value, $phpType);
         }
 
         return $value;
@@ -192,7 +198,9 @@ abstract class Platform implements IPlatform
             $class = get_class($type);
 
             if (isset($typeMap[$class])) {
-                $columnMap[$column->getName()] = $typeMap[$class];
+                $columnMap[$column->getName()] = $typeMap[$class] instanceof \Closure
+                        ? $typeMap[$class]($type)
+                        : $typeMap[$class];
             }
         }
 
