@@ -3,6 +3,7 @@
 namespace Dms\Core\Persistence;
 
 use Dms\Core\Exception;
+use Dms\Core\Model\Criteria\Criteria;
 use Dms\Core\Model\EntityCollection;
 use Dms\Core\Model\ICriteria;
 use Dms\Core\Model\IEntity;
@@ -92,6 +93,14 @@ class ArrayRepository implements IRepository
     }
 
     /**
+     * @inheritDoc
+     */
+    public function getObjectId(ITypedObject $object) : int
+    {
+        return $this->collection->getObjectId($object);
+    }
+
+    /**
      * {@inheritDoc}
      */
     public function has(int $id) : bool
@@ -126,7 +135,7 @@ class ArrayRepository implements IRepository
     /**
      * {@inheritDoc}
      */
-    public function get(int $id) : IEntity
+    public function get(int $id)
     {
         return $this->collection->get($id);
     }
@@ -158,7 +167,7 @@ class ArrayRepository implements IRepository
     /**
      * {@inheritDoc}
      */
-    public function save(IEntity $entity)
+    public function save(ITypedObject $entity)
     {
         $this->saveAll([$entity]);
     }
@@ -183,7 +192,7 @@ class ArrayRepository implements IRepository
     /**
      * {@inheritDoc}
      */
-    public function remove(IEntity $entity)
+    public function remove($entity)
     {
         $this->removeAll([$entity]);
     }
@@ -211,7 +220,7 @@ class ArrayRepository implements IRepository
      */
     public function removeById(int $id)
     {
-        $this->removeAllById([$id]);
+        $this->collection->removeById($id);
     }
 
     /**
@@ -219,10 +228,7 @@ class ArrayRepository implements IRepository
      */
     public function removeAllById(array $ids)
     {
-        $ids = array_flip($ids);
-        $this->collection->removeWhere(function (IEntity $other) use ($ids) {
-            return isset($ids[$other->getId()]);
-        });
+        $this->collection->removeAllById($ids);
     }
 
     /**
@@ -236,7 +242,7 @@ class ArrayRepository implements IRepository
     /**
      * {@inheritDoc}
      */
-    public function criteria() : \Dms\Core\Model\Criteria\Criteria
+    public function criteria() : Criteria
     {
         return $this->collection->criteria();
     }

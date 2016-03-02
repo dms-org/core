@@ -21,6 +21,7 @@ use Dms\Core\Form\IStagedForm;
 use Dms\Core\Form\Object\FormObject;
 use Dms\Core\Form\Object\Stage\StagedFormObject;
 use Dms\Core\Model\IEntitySet;
+use Dms\Core\Model\IIdentifiableObjectSet;
 use Dms\Core\Module\Definition\ActionDefiner;
 use Dms\Core\Module\IStagedFormDtoMapping;
 
@@ -32,7 +33,7 @@ use Dms\Core\Module\IStagedFormDtoMapping;
 class ObjectActionDefiner extends ActionDefiner
 {
     /**
-     * @var IEntitySet
+     * @var IIdentifiableObjectSet
      */
     protected $dataSource;
 
@@ -54,7 +55,7 @@ class ObjectActionDefiner extends ActionDefiner
     /**
      * @inheritDoc
      */
-    public function __construct(IEntitySet $dataSource, IAuthSystem $authSystem, $name, callable $callback)
+    public function __construct(IIdentifiableObjectSet $dataSource, IAuthSystem $authSystem, $name, callable $callback)
     {
         parent::__construct($authSystem, $name, $callback);
 
@@ -89,7 +90,7 @@ class ObjectActionDefiner extends ActionDefiner
      *
      * @return IForm
      */
-    protected function getObjectFormStage() : \Dms\Core\Form\IForm
+    protected function getObjectFormStage() : IForm
     {
         $objectValidationCallbacks = $this->objectValidationCallbacks;
 

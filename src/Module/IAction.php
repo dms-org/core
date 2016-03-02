@@ -85,7 +85,7 @@ interface IAction
      * @return IPermission
      * @throws InvalidArgumentException
      */
-    public function getRequiredPermission(string $name) : \Dms\Core\Auth\IPermission;
+    public function getRequiredPermission(string $name) : IPermission;
 
     /**
      * Returns whether the currently authenticated user is authorized.

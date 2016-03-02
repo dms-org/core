@@ -3,6 +3,8 @@
 namespace Dms\Core\Model;
 
 use Dms\Core\Exception;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Exception\TypeMismatchException;
 use Pinq\Iterators\IIteratorScheme;
 use Pinq\Iterators\IOrderedMap;
 
@@ -109,6 +111,45 @@ class EntityCollection extends ObjectCollection implements IEntityCollection
     }
 
     /**
+     * @inheritDoc
+     */
+    public function getObjectId(ITypedObject $object) : int
+    {
+        $objectType = $this->getObjectType();
+
+        if (!($object instanceof $objectType)) {
+            throw TypeMismatchException::argument(__METHOD__, 'object', $objectType, $object);
+        }
+
+        /** @var IEntity $object */
+        if (!$object->hasId()) {
+            throw InvalidArgumentException::format('The supplied entity of type %s does not have an id', get_class($object));
+        }
+
+        return $object->getId();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function removeById(int $id)
+    {
+        $this->removeAllById([$id]);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function removeAllById(array $ids)
+    {
+        $ids = array_flip($ids);
+
+        $this->removeWhere(function (IEntity $other) use ($ids) {
+            return isset($ids[$other->getId()]);
+        });
+    }
+
+    /**
      * {@inheritDoc}
      */
     public function has(int $id) : bool
@@ -137,7 +178,7 @@ class EntityCollection extends ObjectCollection implements IEntityCollection
     /**
      * {@inheritDoc}
      */
-    public function get(int $id) : IEntity
+    public function get(int $id)
     {
         $this->toOrderedMap();
 

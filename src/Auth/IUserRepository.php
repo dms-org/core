@@ -21,7 +21,7 @@ interface IUserRepository extends IRepository
      *
      * @return IUser
      */
-    public function get(int $id) : \Dms\Core\Model\IEntity;
+    public function get(int $id);
 
     /**
      * {@inheritDoc}

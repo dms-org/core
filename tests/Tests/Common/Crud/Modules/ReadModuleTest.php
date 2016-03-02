@@ -8,6 +8,7 @@ use Dms\Core\Auth\UserForbiddenException;
 use Dms\Core\Common\Crud\Action\Crud\ViewDetailsAction;
 use Dms\Core\Common\Crud\IReadModule;
 use Dms\Core\Model\IEntitySet;
+use Dms\Core\Model\IIdentifiableObjectSet;
 use Dms\Core\Module\ActionNotFoundException;
 use Dms\Core\Table\DataSource\ObjectTableDataSource;
 use Dms\Core\Tests\Module\Mock\MockAuthSystem;
@@ -19,7 +20,7 @@ use Dms\Core\Tests\Module\ModuleTestBase;
 abstract class ReadModuleTest extends ModuleTestBase
 {
     /**
-     * @var IEntitySet
+     * @var IIdentifiableObjectSet
      */
     protected $dataSource;
 
@@ -44,12 +45,12 @@ abstract class ReadModuleTest extends ModuleTestBase
     }
 
     /**
-     * @param IEntitySet     $dataSource
+     * @param IIdentifiableObjectSet     $dataSource
      * @param MockAuthSystem $authSystem
      *
      * @return IReadModule
      */
-    abstract protected function buildReadModule(IEntitySet $dataSource, MockAuthSystem $authSystem);
+    abstract protected function buildReadModule(IIdentifiableObjectSet $dataSource, MockAuthSystem $authSystem) : IReadModule;
 
     /**
      * @return IPermission[]

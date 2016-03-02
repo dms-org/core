@@ -7,8 +7,8 @@ use Dms\Core\Common\Crud\Action\Object\CustomObjectActionHandler;
 use Dms\Core\Common\Crud\Action\Object\IObjectActionHandler;
 use Dms\Core\Common\Crud\ICrudModule;
 use Dms\Core\Model\IEntity;
-use Dms\Core\Model\IEntitySet;
-use Dms\Core\Persistence\IRepository;
+use Dms\Core\Model\IMutableObjectSet;
+use Dms\Core\Model\ITypedObject;
 
 /**
  * The remove object action definer class.
@@ -18,7 +18,7 @@ use Dms\Core\Persistence\IRepository;
 class RemoveActionDefiner extends ObjectActionDefiner
 {
     /**
-     * @var IEntitySet
+     * @var IMutableObjectSet
      */
     protected $dataSource;
 
@@ -35,7 +35,7 @@ class RemoveActionDefiner extends ObjectActionDefiner
     /**
      * @inheritDoc
      */
-    public function __construct(IRepository $dataSource, IAuthSystem $authSystem, callable $callback)
+    public function __construct(IMutableObjectSet $dataSource, IAuthSystem $authSystem, callable $callback)
     {
         parent::__construct($dataSource, $authSystem, ICrudModule::REMOVE_ACTION, $callback);
 
@@ -89,14 +89,13 @@ class RemoveActionDefiner extends ObjectActionDefiner
     }
 
     /**
-     * Defines the handler to delete the object from the
-     * underlying data source.
+     * Defines the handler to delete the object from the underlying data source.
      *
      * @return void
      */
-    public function deleteFromRepository()
+    public function deleteFromDataSource()
     {
-        $this->handler(function (IEntity $object) {
+        $this->handler(function (ITypedObject $object) {
             $this->dataSource->remove($object);
         });
     }
@@ -113,7 +112,7 @@ class RemoveActionDefiner extends ObjectActionDefiner
         $this->currentObjectType  = $this->dataSource->getObjectType();
         $this->currentDataDtoType = $handler->getDataDtoType();
 
-        parent::handler(function (IEntity $object, $input = null) use ($handler) {
+        parent::handler(function (ITypedObject $object, $input = null) use ($handler) {
 
             foreach ($this->beforeRemoveCallbacks as $callback) {
                 $callback($object, $input);

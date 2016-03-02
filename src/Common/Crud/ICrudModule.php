@@ -3,6 +3,8 @@
 namespace Dms\Core\Common\Crud;
 
 use Dms\Core\Common\Crud\Action\Object\IObjectAction;
+use Dms\Core\Model\IIdentifiableObjectSet;
+use Dms\Core\Model\IMutableObjectSet;
 use Dms\Core\Module\IParameterizedAction;
 
 /**
@@ -22,6 +24,13 @@ interface ICrudModule extends IReadModule
     const CREATE_ACTION = 'create';
     const EDIT_ACTION = 'edit';
     const REMOVE_ACTION = 'remove';
+
+    /**
+     * Gets the underlying object data source.
+     *
+     * @return IMutableObjectSet
+     */
+    public function getDataSource() : IIdentifiableObjectSet;
 
     /**
      * Returns whether the modules allows objects to be created.

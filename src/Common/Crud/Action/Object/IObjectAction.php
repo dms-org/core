@@ -6,7 +6,7 @@ use Dms\Core\Auth\UserForbiddenException;
 use Dms\Core\Exception\TypeMismatchException;
 use Dms\Core\Form\IForm;
 use Dms\Core\Form\InvalidFormSubmissionException;
-use Dms\Core\Model\IDataTransferObject;
+use Dms\Core\Module\IActionHandler;
 use Dms\Core\Module\IParameterizedAction;
 
 /**
@@ -24,7 +24,7 @@ interface IObjectAction extends IParameterizedAction
      *
      * @return IObjectActionHandler
      */
-    public function getHandler() : \Dms\Core\Module\IActionHandler;
+    public function getHandler() : IActionHandler;
 
     /**
      * Gets the expected type of object.
@@ -37,11 +37,12 @@ interface IObjectAction extends IParameterizedAction
      * Gets the first stage of the action. This contains the object field.
      *
      * The form will be equivalent to the form defined in the object from class.
+     *
      * @see ObjectForm
      *
      * @return IForm
      */
-    public function getObjectForm() : \Dms\Core\Form\IForm;
+    public function getObjectForm() : IForm;
 
     /**
      * Returns an array containing the objects from the supplied array objects

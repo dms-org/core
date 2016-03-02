@@ -9,6 +9,7 @@ use Dms\Core\Common\Crud\Action\Table\IReorderAction;
 use Dms\Core\Common\Crud\ICrudModule;
 use Dms\Core\Common\Crud\IReadModule;
 use Dms\Core\Form\InvalidFormSubmissionException;
+use Dms\Core\Model\IMutableObjectSet;
 use Dms\Core\Module\IParameterizedAction;
 use Dms\Core\Persistence\ArrayRepository;
 use Dms\Core\Persistence\IRepository;
@@ -38,9 +39,9 @@ class PersonCrudModuleTest extends CrudModuleTest
     }
 
     /**
-     * @return IRepository
+     * @return IMutableObjectSet
      */
-    protected function buildRepositoryDataSource()
+    protected function buildRepositoryDataSource() : IMutableObjectSet
     {
         return new ArrayRepository(Person::collection([
                 new Child(1, 'Jack', 'Baz', 15, TestColour::blue()),
@@ -53,12 +54,12 @@ class PersonCrudModuleTest extends CrudModuleTest
     }
 
     /**
-     * @param IRepository    $dataSource
+     * @param IMutableObjectSet    $dataSource
      * @param MockAuthSystem $authSystem
      *
-     * @return IReadModule
+     * @return ICrudModule
      */
-    protected function buildCrudModule(IRepository $dataSource, MockAuthSystem $authSystem)
+    protected function buildCrudModule(IMutableObjectSet $dataSource, MockAuthSystem $authSystem) : ICrudModule
     {
         return new PersonModule($dataSource, $authSystem);
     }
@@ -344,7 +345,7 @@ class PersonCrudModuleTest extends CrudModuleTest
                 $this->dataSource->matching(
                         $this->dataSource->criteria()->whereInstanceOf(Adult::class)
                 ),
-                array_values($action->getSupportedObjects($this->dataSource->getAll()))
+                $action->getSupportedObjects($this->dataSource->getAll())
         );
 
         $action->run([

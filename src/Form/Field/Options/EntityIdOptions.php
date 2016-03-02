@@ -3,31 +3,22 @@
 namespace Dms\Core\Form\Field\Options;
 
 use Dms\Core\Form\IFieldOption;
-use Dms\Core\Form\IFieldOptions;
+use Dms\Core\Model\IEntity;
 use Dms\Core\Model\IEntitySet;
 use Dms\Core\Model\IObjectSetWithLoadCriteriaSupport;
+use Dms\Core\Model\Object\Entity;
 
 /**
  * The entity options class
  *
  * @author Elliot Levin <elliotlevin@hotmail.com>
  */
-class EntityIdOptions implements IFieldOptions
+class EntityIdOptions extends ObjectIdentityOptions
 {
     /**
      * @var IEntitySet
      */
-    private $entities;
-
-    /**
-     * @var callable
-     */
-    private $labelCallback;
-
-    /**
-     * @var string|null
-     */
-    private $labelMemberExpression;
+    protected $objects;
 
     /**
      * EntityIdOptions constructor.
@@ -38,17 +29,7 @@ class EntityIdOptions implements IFieldOptions
      */
     public function __construct(IEntitySet $entities, callable $labelCallback = null, string $labelMemberExpression = null)
     {
-        $this->entities              = $entities;
-        $this->labelCallback         = $labelCallback;
-        $this->labelMemberExpression = $labelMemberExpression;
-    }
-
-    /**
-     * @return IEntitySet
-     */
-    public function getEntities() : IEntitySet
-    {
-        return $this->entities;
+        parent::__construct($entities, $labelCallback, $labelMemberExpression);
     }
 
     /**
@@ -56,20 +37,11 @@ class EntityIdOptions implements IFieldOptions
      */
     public function getAll() : array
     {
-        if ($this->entities instanceof IObjectSetWithLoadCriteriaSupport && !$this->labelCallback) {
-            return $this->loadOptionsViaOptimizedLoadCriteria($this->entities, $this->labelMemberExpression);
+        if ($this->objects instanceof IObjectSetWithLoadCriteriaSupport && $this->labelMemberExpression) {
+            return $this->loadOptionsViaOptimizedLoadCriteria($this->objects, $this->labelMemberExpression);
         }
 
-        $options = [];
-
-        foreach ($this->entities->getAll() as $entity) {
-            $options[] = new FieldOption(
-                $entity->getId(),
-                (string)($this->labelCallback ? call_user_func($this->labelCallback, $entity) : $entity->getId())
-            );
-        }
-
-        return $options;
+        return parent::getAll();
     }
 
     /**
@@ -82,7 +54,7 @@ class EntityIdOptions implements IFieldOptions
     {
         $criteria = $entities->loadCriteria();
 
-        $criteria->load('id');
+        $criteria->load(Entity::ID, 'id');
         if ($labelMemberExpression) {
             $criteria->load($labelMemberExpression, 'label');
         }
@@ -104,22 +76,27 @@ class EntityIdOptions implements IFieldOptions
      */
     public function getAllValues()
     {
-        if ($this->entities instanceof IObjectSetWithLoadCriteriaSupport) {
+        if ($this->objects instanceof IObjectSetWithLoadCriteriaSupport) {
             return array_column(
-                $this->entities->loadMatching(
-                    $this->entities->loadCriteria()->load('id')
+                $this->objects->loadMatching(
+                    $this->objects->loadCriteria()->load(Entity::ID)
                 ),
-                'id'
+                Entity::ID
             );
         }
 
-        $ids      = [];
-        $entities = $this->entities->getAll();
+        return parent::getAllValues();
+    }
 
-        foreach ($entities as $entity) {
-            $ids[] = $entity->getId();
-        }
-
-        return $ids;
+    /**
+     * @param int    $index
+     * @param object $object
+     *
+     * @return int
+     */
+    protected function getObjectIdentity(int $index, $object) : int
+    {
+        /** @var IEntity $object */
+        return $object->getId();
     }
 }

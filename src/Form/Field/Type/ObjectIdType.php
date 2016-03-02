@@ -2,27 +2,27 @@
 
 namespace Dms\Core\Form\Field\Type;
 
-use Dms\Core\Form\Field\Options\EntityIdOptions;
-use Dms\Core\Form\Field\Processor\EntityLoaderProcessor;
+use Dms\Core\Form\Field\Options\ObjectIdentityOptions;
+use Dms\Core\Form\Field\Processor\ObjectLoaderProcessor;
 use Dms\Core\Form\Field\Processor\TypeProcessor;
-use Dms\Core\Form\Field\Processor\Validator\EntityIdValidator;
 use Dms\Core\Form\Field\Processor\Validator\IntValidator;
+use Dms\Core\Form\Field\Processor\Validator\ObjectIdValidator;
 use Dms\Core\Form\IFieldProcessor;
-use Dms\Core\Model\IEntitySet;
+use Dms\Core\Model\IIdentifiableObjectSet;
 use Dms\Core\Model\Type\Builder\Type;
 use Dms\Core\Model\Type\IType as IPhpType;
 
 /**
- * The entity id type class.
+ * The object id type class.
  *
  * @author Elliot Levin <elliotlevin@hotmail.com>
  */
-class EntityIdType extends FieldType
+class ObjectIdType extends FieldType
 {
     /**
-     * @var IEntitySet
+     * @var IIdentifiableObjectSet
      */
-    private $entities;
+    private $objects;
 
     /**
      * @var bool
@@ -30,15 +30,15 @@ class EntityIdType extends FieldType
     private $loadAsObjects;
 
     /**
-     * EntityIdType constructor.
+     * ObjectIdType constructor.
      *
-     * @param IEntitySet $entities
-     * @param bool       $loadAsObjects
+     * @param ObjectIdentityOptions $options
+     * @param bool                  $loadAsObjects
      */
-    public function __construct(IEntitySet $entities, bool $loadAsObjects = false)
+    public function __construct(ObjectIdentityOptions $options, bool $loadAsObjects = false)
     {
-        $this->entities                       = $entities;
-        $this->attributes[self::ATTR_OPTIONS] = new EntityIdOptions($entities);
+        $this->objects                        = $options->getObjects();
+        $this->attributes[self::ATTR_OPTIONS] = $options;
         $this->loadAsObjects                  = $loadAsObjects;
         parent::__construct();
     }
@@ -57,13 +57,13 @@ class EntityIdType extends FieldType
     protected function buildProcessors() : array
     {
         $processors = [
-                new IntValidator($this->inputType),
-                new TypeProcessor('int'),
-                new EntityIdValidator(Type::int()->nullable(), $this->entities),
+            new IntValidator($this->inputType),
+            new TypeProcessor('int'),
+            new ObjectIdValidator(Type::int()->nullable(), $this->objects),
         ];
 
         if ($this->loadAsObjects) {
-            $processors[] = new EntityLoaderProcessor($this->entities);
+            $processors[] = new ObjectLoaderProcessor($this->objects);
         }
 
         return $processors;

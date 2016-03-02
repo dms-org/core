@@ -10,7 +10,7 @@ use Dms\Core\Model\Criteria\Criteria;
  *
  * @author Elliot Levin <elliot@aanet.com.au>
  */
-interface IEntitySet extends IObjectSet
+interface IEntitySet extends IIdentifiableObjectSet
 {
     /**
      * Returns the entity type of the entity set.
@@ -63,7 +63,7 @@ interface IEntitySet extends IObjectSet
      * @return IEntity
      * @throws EntityNotFoundException
      */
-    public function get(int $id) : IEntity;
+    public function get(int $id);
 
     /**
      * Returns the entities with the given ids.

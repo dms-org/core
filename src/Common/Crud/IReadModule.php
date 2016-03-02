@@ -4,6 +4,7 @@ namespace Dms\Core\Common\Crud;
 
 use Dms\Core\Common\Crud\Action\Object\IObjectAction;
 use Dms\Core\Common\Crud\Table\ISummaryTable;
+use Dms\Core\Model\IIdentifiableObjectSet;
 use Dms\Core\Model\IObjectSet;
 use Dms\Core\Model\ITypedObject;
 use Dms\Core\Module\ActionNotFoundException;
@@ -38,9 +39,9 @@ interface IReadModule extends IModule
     /**
      * Gets the underlying object data source.
      *
-     * @return IObjectSet
+     * @return IIdentifiableObjectSet
      */
-    public function getDataSource() : IObjectSet;
+    public function getDataSource() : IIdentifiableObjectSet;
 
     /**
      * Gets a label string for the supplied typed object.

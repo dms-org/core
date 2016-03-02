@@ -41,7 +41,8 @@ class ObjectCollection extends TypedCollection implements ITypedObjectCollection
         $objects = [],
         IIteratorScheme $scheme = null,
         Collection $source = null
-    ) {
+    )
+    {
         if (!is_a($objectType, ITypedObject::class, true)) {
             throw Exception\InvalidArgumentException::format(
                 'Invalid object class: expecting instance of %s, %s given',
@@ -132,6 +133,54 @@ class ObjectCollection extends TypedCollection implements ITypedObjectCollection
     }
 
     /**
+     * {@inheritDoc}
+     */
+    public function save(ITypedObject $object)
+    {
+        $this->saveAll([$object]);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function saveAll(array $objects)
+    {
+        foreach ($objects as $key => $object) {
+            if ($this->contains($object)) {
+                unset($objects[$key]);
+            }
+        }
+
+        $this->addRange($objects);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function remove($object)
+    {
+        return $this->removeAll([$object]);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function removeAll(array $objects)
+    {
+        Exception\InvalidArgumentException::verifyAllInstanceOf(__METHOD__, 'objects', $objects, $this->getObjectType());
+
+        $lookup = [];
+
+        foreach ($objects as $object) {
+            $lookup[spl_object_hash($object)] = true;
+        }
+
+        $this->removeWhere(function (ITypedObject $other) use ($lookup) {
+            return isset($lookup[spl_object_hash($other)]);
+        });
+    }
+
+    /**
      * @inheritDoc
      */
     public function criteria() : Criteria\Criteria
@@ -150,7 +199,9 @@ class ObjectCollection extends TypedCollection implements ITypedObjectCollection
         return new LoadCriteria($this->classDefinition);
     }
 
-
+    /**
+     * @inheritdoc
+     */
     public function countMatching(ICriteria $criteria) : int
     {
         return count($this->matching($criteria));
@@ -184,7 +235,7 @@ class ObjectCollection extends TypedCollection implements ITypedObjectCollection
             call_user_func_array('array_multisort', $multisortArgs);
         }
 
-        return array_slice($objects, $criteria->getStartOffset(), $criteria->getLimitAmount());
+        return array_slice($objects, $criteria->getStartOffset(), $criteria->getLimitAmount(), true);
     }
 
     /**

@@ -52,6 +52,16 @@ class EntityCollectionTest extends IEntitySetTest
         $this->assertEquals([1, 5, 10, 11, 12, 20], $this->getEntityIds($entities));
     }
 
+    public function testGetObjectId()
+    {
+        $entity = $this->entityMock(5);
+        $this->assertSame(5, $this->collection->getObjectId($entity));
+
+        $this->assertThrows(function () {
+            $this->collection->getObjectId($this->entityMock(null));
+        }, InvalidArgumentException::class);
+    }
+
     public function testProjectionReturnsTypedCollection()
     {
         $ids = $this->collection->select(function (IEntity $entity) {
@@ -248,7 +258,7 @@ class EntityCollectionTest extends IEntitySetTest
                 $this->collection->criteria()->whereIn('this', [$this->entityMock(1), $this->entityMock(10)])
         );
 
-        $this->assertEquals([$this->entityMock(1), $this->entityMock(10)], $data);
+        $this->assertEquals([$this->entityMock(1), $this->entityMock(10)], array_values($data));
     }
 
     public function testIsSerializable()
@@ -269,7 +279,7 @@ class EntityCollectionTest extends IEntitySetTest
                 $this->entityMock(10),
                 $this->entityMock(11),
                 $this->entityMock(12),
-        ], $data);
+        ], array_values($data));
     }
 
     public function testIdStringContainsCaseInsensitiveCriteria()
@@ -283,6 +293,6 @@ class EntityCollectionTest extends IEntitySetTest
                 $this->entityMock(10),
                 $this->entityMock(11),
                 $this->entityMock(12),
-        ], $data);
+        ], array_values($data));
     }
 }

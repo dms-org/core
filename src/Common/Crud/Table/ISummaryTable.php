@@ -39,5 +39,5 @@ interface ISummaryTable extends ITableDisplay
      * @return IReorderAction
      * @throws InvalidArgumentException
      */
-    public function getReorderAction(string $viewName) : \Dms\Core\Common\Crud\Action\Table\IReorderAction;
+    public function getReorderAction(string $viewName) : IReorderAction;
 }

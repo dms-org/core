@@ -4,27 +4,27 @@ namespace Dms\Core\Form\Field\Processor\Validator;
 
 use Dms\Core\Form\Field\Processor\FieldValidator;
 use Dms\Core\Language\Message;
-use Dms\Core\Model\IEntitySet;
+use Dms\Core\Model\IIdentifiableObjectSet;
 use Dms\Core\Model\Type\IType;
 
 /**
- * The entity id array validator.
+ * The object id array validator.
  *
  * @author Elliot Levin <elliotlevin@hotmail.com>
  */
-class EntityIdArrayValidator extends FieldValidator
+class ObjectIdArrayValidator extends FieldValidator
 {
-    const MESSAGE = 'validation.entity-id-array';
+    const MESSAGE = 'validation.object-id-array';
 
     /**
-     * @var IEntitySet
+     * @var IIdentifiableObjectSet
      */
-    private $entities;
+    private $objects;
 
-    public function __construct(IType $inputType, IEntitySet $entities)
+    public function __construct(IType $inputType, IIdentifiableObjectSet $objects)
     {
         parent::__construct($inputType);
-        $this->entities = $entities;
+        $this->objects = $objects;
     }
 
     /**
@@ -32,10 +32,10 @@ class EntityIdArrayValidator extends FieldValidator
      */
     protected function validate($input, array &$messages)
     {
-        if (!$this->entities->hasAll($input)) {
+        if (!$this->objects->hasAll($input)) {
             $messages[] = new Message(
-                    self::MESSAGE,
-                    ['entity_type' => $this->entities->getEntityType()]
+                self::MESSAGE,
+                ['object_type' => $this->objects->getObjectType()]
             );
         }
     }

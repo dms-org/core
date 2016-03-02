@@ -39,7 +39,7 @@ class SimpleCrudModule extends CrudModule
             ]);
         });
 
-        $module->removeAction()->deleteFromRepository();
+        $module->removeAction()->deleteFromDataSource();
 
         $module->summaryTable(function (SummaryTableDefinition $table) {
             $table->mapProperty(SimpleEntity::DATA)->to(Field::name('data')->label('Data')->string());

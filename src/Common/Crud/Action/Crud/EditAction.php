@@ -11,8 +11,11 @@ use Dms\Core\Common\Crud\Action\Object\SelfHandlingObjectAction;
 use Dms\Core\Common\Crud\Definition\Form\FinalizedCrudFormDefinition;
 use Dms\Core\Common\Crud\ICrudModule;
 use Dms\Core\Model\IEntity;
+use Dms\Core\Model\IMutableObjectSet;
+use Dms\Core\Model\ITypedObject;
+use Dms\Core\Model\IValueObject;
+use Dms\Core\Model\IValueObjectCollection;
 use Dms\Core\Model\Object\ArrayDataObject;
-use Dms\Core\Persistence\IRepository;
 
 /**
  * The edit object action
@@ -22,7 +25,7 @@ use Dms\Core\Persistence\IRepository;
 class EditAction extends SelfHandlingObjectAction
 {
     /**
-     * @var IRepository
+     * @var IMutableObjectSet
      */
     protected $dataSource;
 
@@ -35,10 +38,11 @@ class EditAction extends SelfHandlingObjectAction
      * @inheritDoc
      */
     public function __construct(
-            IRepository $dataSource,
-            IAuthSystem $auth,
-            FinalizedCrudFormDefinition $form
-    ) {
+        IMutableObjectSet $dataSource,
+        IAuthSystem $auth,
+        FinalizedCrudFormDefinition $form
+    )
+    {
         $this->dataSource = $dataSource;
         $this->form       = $form;
 
@@ -64,8 +68,8 @@ class EditAction extends SelfHandlingObjectAction
     protected function permissions() : array
     {
         return [
-                Permission::named(ICrudModule::VIEW_PERMISSION),
-                Permission::named(ICrudModule::EDIT_PERMISSION),
+            Permission::named(ICrudModule::VIEW_PERMISSION),
+            Permission::named(ICrudModule::EDIT_PERMISSION),
         ];
     }
 
@@ -77,7 +81,7 @@ class EditAction extends SelfHandlingObjectAction
     protected function formMapping() : IObjectActionFormMapping
     {
         return new ArrayObjectActionFormMapping(
-                $this->form->getStagedForm()
+            $this->form->getStagedForm()
         );
     }
 
@@ -111,16 +115,28 @@ class EditAction extends SelfHandlingObjectAction
      */
     protected function runHandler($object, $data = null)
     {
-        /** @var IEntity $object */
+        /** @var ITypedObject $object */
         /** @var ArrayDataObject $data */
         $input = $data->getArray();
 
-        $this->form->bindToObject($object, $input);
-        $this->form->invokeOnSubmitCallbacks($object, $input);
+        if ($this->dataSource instanceof IValueObjectCollection) {
+            /** @var IValueObject $object */
+            /** @var IValueObject $newObject */
+            $newObject = $this->form->createNewObjectFromInput($input);
+            $this->form->bindToObject($newObject, $input);
+            $this->form->invokeOnSubmitCallbacks($newObject, $input);
 
-        $this->dataSource->save($object);
+            $this->dataSource->update($object, $newObject);
 
-        $this->form->invokeOnSaveCallbacks($object, $input);
+            $this->form->invokeOnSaveCallbacks($object, $input);
+        } else {
+            $this->form->bindToObject($object, $input);
+            $this->form->invokeOnSubmitCallbacks($object, $input);
+
+            $this->dataSource->save($object);
+
+            $this->form->invokeOnSaveCallbacks($object, $input);
+        }
 
         return $object;
     }

@@ -29,7 +29,7 @@ interface IParameterizedAction extends IAction
      *
      * @return IStagedForm
      */
-    public function getStagedForm() : \Dms\Core\Form\IStagedForm;
+    public function getStagedForm() : IStagedForm;
 
     /**
      * Runs the action.

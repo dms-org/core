@@ -2,6 +2,7 @@
 
 namespace Dms\Core\Tests\Persistence\Db\Integration\Mapping;
 
+use Dms\Core\Exception\InvalidArgumentException;
 use Dms\Core\Exception\TypeMismatchException;
 use Dms\Core\Model\Criteria\SpecificationDefinition;
 use Dms\Core\Model\EntityNotFoundException;
@@ -63,6 +64,16 @@ class DbRepositoryTest extends DbIntegrationTest
     public function testGetAllEmpty()
     {
         $this->assertSame([], $this->repo->getAll());
+    }
+
+    public function testGetObjectId()
+    {
+        $entity = new EmptyEntity(5);
+        $this->assertSame(5, $this->repo->getObjectId($entity));
+
+        $this->assertThrows(function () {
+            $this->repo->getObjectId(new EmptyEntity());
+        }, InvalidArgumentException::class);
     }
 
     public function testCountEmpty()
@@ -266,17 +277,17 @@ class DbRepositoryTest extends DbIntegrationTest
         $this->repo->saveAll($entities);
 
         $entities = $this->repo->matching(
-                EmptyEntity::criteria()
-                        ->where('id', '<=', 15)
-                        ->orderByDesc('id')
-                        ->skip(5)
-                        ->limit(3)
+            EmptyEntity::criteria()
+                ->where('id', '<=', 15)
+                ->orderByDesc('id')
+                ->skip(5)
+                ->limit(3)
         );
 
         $this->assertEquals([
-                new EmptyEntity(10),
-                new EmptyEntity(9),
-                new EmptyEntity(8),
+            new EmptyEntity(10),
+            new EmptyEntity(9),
+            new EmptyEntity(8),
         ], $entities);
     }
 
@@ -287,10 +298,10 @@ class DbRepositoryTest extends DbIntegrationTest
         $this->repo->saveAll($count);
 
         $count = $this->repo->countMatching(
-                EmptyEntity::criteria()
-                        ->where('id', '<=', 15)
-                        ->orderByDesc('id')
-                        ->skip(5)
+            EmptyEntity::criteria()
+                ->where('id', '<=', 15)
+                ->orderByDesc('id')
+                ->skip(5)
         );
 
         $this->assertSame(10, $count);
@@ -307,11 +318,11 @@ class DbRepositoryTest extends DbIntegrationTest
         });
 
         $this->assertEquals([
-                new EmptyEntity(1),
-                new EmptyEntity(2),
-                new EmptyEntity(3),
-                new EmptyEntity(4),
-                new EmptyEntity(5),
+            new EmptyEntity(1),
+            new EmptyEntity(2),
+            new EmptyEntity(3),
+            new EmptyEntity(4),
+            new EmptyEntity(5),
         ], $this->repo->satisfying($spec));
     }
 
@@ -319,9 +330,9 @@ class DbRepositoryTest extends DbIntegrationTest
     {
         $this->setDataInDb([
             'data' => [
-                    ['id' => 1],
-                    ['id' => 2],
-            ]
+                ['id' => 1],
+                ['id' => 2],
+            ],
         ]);
 
         $this->assertSame(true, $this->repo->contains(new EmptyEntity(1)));
@@ -338,10 +349,10 @@ class DbRepositoryTest extends DbIntegrationTest
     public function testContainsAll()
     {
         $this->setDataInDb([
-                'data' => [
-                        ['id' => 1],
-                        ['id' => 2],
-                ]
+            'data' => [
+                ['id' => 1],
+                ['id' => 2],
+            ],
         ]);
 
         $this->assertSame(true, $this->repo->containsAll([]));

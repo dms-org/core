@@ -37,6 +37,11 @@ class ObjectTableDefinition
     protected $propertyComponentIdMap = [];
 
     /**
+     * @var string[]
+     */
+    protected $indexComponentIdMap = [];
+
+    /**
      * @var callable[]
      */
     protected $componentIdCallableMap = [];
@@ -71,13 +76,32 @@ class ObjectTableDefinition
         $this->memberParser->parse($this->class, $memberExpression);
 
         return new ColumnMappingDefiner(
-                function (IColumn $column) use ($memberExpression) {
-                    $this->column($column);
-                    $this->propertyComponentIdMap[$memberExpression] = $column->getComponentId();
-                },
-                function ($componentId) use ($memberExpression) {
-                    $this->propertyComponentIdMap[$memberExpression] = $componentId;
-                }
+            function (IColumn $column) use ($memberExpression) {
+                $this->column($column);
+                $this->propertyComponentIdMap[$memberExpression] = $column->getComponentId();
+            },
+            function ($componentId) use ($memberExpression) {
+                $this->propertyComponentIdMap[$memberExpression] = $componentId;
+            }
+        );
+    }
+
+    /**
+     * Defines a mapping between the object index and the column component
+     *
+     * @return ColumnMappingDefiner
+     * @throws InvalidArgumentException
+     */
+    public function index() : ColumnMappingDefiner
+    {
+        return new ColumnMappingDefiner(
+            function (IColumn $column) {
+                $this->column($column);
+                $this->indexComponentIdMap[] = $column->getComponentId();
+            },
+            function (string $componentId) {
+                $this->indexComponentIdMap[] = $componentId;
+            }
         );
     }
 
@@ -103,13 +127,13 @@ class ObjectTableDefinition
     public function computed(callable $dataCallback) : ColumnMappingDefiner
     {
         return new ColumnMappingDefiner(
-                function (IColumn $column) use ($dataCallback) {
-                    $this->column($column);
-                    $this->componentIdCallableMap[$column->getComponentId()] = $dataCallback;
-                },
-                function ($componentId) use ($dataCallback) {
-                    $this->componentIdCallableMap[$componentId] = $dataCallback;
-                }
+            function (IColumn $column) use ($dataCallback) {
+                $this->column($column);
+                $this->componentIdCallableMap[$column->getComponentId()] = $dataCallback;
+            },
+            function ($componentId) use ($dataCallback) {
+                $this->componentIdCallableMap[$componentId] = $dataCallback;
+            }
         );
     }
 
@@ -139,11 +163,12 @@ class ObjectTableDefinition
     public function finalize() : FinalizedObjectTableDefinition
     {
         return new FinalizedObjectTableDefinition(
-                $this->class,
-                new TableStructure($this->columns),
-                $this->propertyComponentIdMap,
-                $this->componentIdCallableMap,
-                $this->customCallableMappers
+            $this->class,
+            new TableStructure($this->columns),
+            $this->propertyComponentIdMap,
+            $this->indexComponentIdMap,
+            $this->componentIdCallableMap,
+            $this->customCallableMappers
         );
     }
 }

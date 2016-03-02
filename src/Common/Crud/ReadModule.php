@@ -6,11 +6,15 @@ use Dms\Core\Auth\IAuthSystem;
 use Dms\Core\Common\Crud\Action\Object\IObjectAction;
 use Dms\Core\Common\Crud\Definition\FinalizedReadModuleDefinition;
 use Dms\Core\Common\Crud\Definition\ReadModuleDefinition;
+use Dms\Core\Common\Crud\Table\ISummaryTable;
 use Dms\Core\Exception\TypeMismatchException;
 use Dms\Core\Model\IEntitySet;
+use Dms\Core\Model\IIdentifiableObjectSet;
+use Dms\Core\Model\IObjectSet;
 use Dms\Core\Model\ITypedObject;
 use Dms\Core\Module\ActionNotFoundException;
 use Dms\Core\Module\Definition\ModuleDefinition;
+use Dms\Core\Module\IUnparameterizedAction;
 use Dms\Core\Module\Module;
 use Dms\Core\Util\Debug;
 
@@ -27,7 +31,7 @@ abstract class ReadModule extends Module implements IReadModule
     protected $definition;
 
     /**
-     * @var IEntitySet
+     * @var IIdentifiableObjectSet
      */
     protected $dataSource;
 
@@ -44,7 +48,7 @@ abstract class ReadModule extends Module implements IReadModule
     /**
      * @inheritDoc
      */
-    public function __construct(IEntitySet $dataSource, IAuthSystem $authSystem)
+    public function __construct(IIdentifiableObjectSet $dataSource, IAuthSystem $authSystem)
     {
         $this->dataSource = $dataSource;
         parent::__construct($authSystem);
@@ -93,7 +97,7 @@ abstract class ReadModule extends Module implements IReadModule
     /**
      * @inheritDoc
      */
-    final public function getDataSource() : \Dms\Core\Model\IObjectSet
+    final public function getDataSource() : IIdentifiableObjectSet
     {
         return $this->dataSource;
     }
@@ -118,7 +122,7 @@ abstract class ReadModule extends Module implements IReadModule
     /**
      * @inheritDoc
      */
-    final public function getSummaryTable() : Table\ISummaryTable
+    final public function getSummaryTable() : ISummaryTable
     {
         return $this->getTable(self::SUMMARY_TABLE);
     }
@@ -134,7 +138,7 @@ abstract class ReadModule extends Module implements IReadModule
     /**
      * @inheritDoc
      */
-    final  public function hasObjectAction(string $name) : bool
+    final public function hasObjectAction(string $name) : bool
     {
         return isset($this->objectActions[$name]);
     }
@@ -142,7 +146,7 @@ abstract class ReadModule extends Module implements IReadModule
     /**
      * @inheritDoc
      */
-    final public function getObjectAction(string $name) : Action\Object\IObjectAction
+    final public function getObjectAction(string $name) : IObjectAction
     {
         if (!isset($this->objectActions[$name])) {
             throw ActionNotFoundException::format(
@@ -157,7 +161,7 @@ abstract class ReadModule extends Module implements IReadModule
     /**
      * @inheritDoc
      */
-    final public function getSummaryTableAction() : \Dms\Core\Module\IUnparameterizedAction
+    final public function getSummaryTableAction() : IUnparameterizedAction
     {
         return $this->getUnparameterizedAction(self::SUMMARY_TABLE_ACTION);
     }
@@ -173,7 +177,7 @@ abstract class ReadModule extends Module implements IReadModule
     /**
      * @inheritDoc
      */
-    final public function getDetailsAction() : Action\Object\IObjectAction
+    final public function getDetailsAction() : IObjectAction
     {
         if (!isset($this->objectActions[self::DETAILS_ACTION])) {
             throw UnsupportedActionException::format(

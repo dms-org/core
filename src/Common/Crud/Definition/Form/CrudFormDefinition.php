@@ -19,7 +19,7 @@ use Dms\Core\Form\IFormStage;
 use Dms\Core\Form\Stage\DependentFormStage;
 use Dms\Core\Form\Stage\IndependentFormStage;
 use Dms\Core\Form\StagedForm;
-use Dms\Core\Model\IEntitySet;
+use Dms\Core\Model\IIdentifiableObjectSet;
 use Dms\Core\Model\Object\FinalizedClassDefinition;
 use Dms\Core\Model\Object\TypedObject;
 use Dms\Core\Util\Debug;
@@ -101,19 +101,19 @@ class CrudFormDefinition
     /**
      * CrudFormDefinition constructor.
      *
-     * @param IEntitySet               $dataSource
+     * @param IIdentifiableObjectSet   $dataSource
      * @param FinalizedClassDefinition $class
      * @param string                   $mode
      * @param bool                     $isDependent
      *
      * @throws InvalidArgumentException
      */
-    public function __construct(IEntitySet $dataSource, FinalizedClassDefinition $class, string $mode, bool $isDependent = false)
+    public function __construct(IIdentifiableObjectSet $dataSource, FinalizedClassDefinition $class, string $mode, bool $isDependent = false)
     {
         if (!in_array($mode, self::$modes, true)) {
             throw InvalidArgumentException::format(
-                    'Mode must must be one of (%s), \'%s\' given',
-                    Debug::formatValues(self::$modes), $mode
+                'Mode must must be one of (%s), \'%s\' given',
+                Debug::formatValues(self::$modes), $mode
             );
         }
 
@@ -131,8 +131,8 @@ class CrudFormDefinition
         $this->createObjectCallback = function () {
             if ($this->class->isAbstract()) {
                 throw InvalidOperationException::format(
-                        'Cannot instantiate object of type %s in crud form mode \'%s\': the class is abstract, did you forget to specify a subclass via %s?',
-                        $this->class->getClassName(), $this->mode, '->createObjectType() or ->mapToSubClass()'
+                    'Cannot instantiate object of type %s in crud form mode \'%s\': the class is abstract, did you forget to specify a subclass via %s?',
+                    $this->class->getClassName(), $this->mode, '->createObjectType() or ->mapToSubClass()'
                 );
             }
 
@@ -209,9 +209,9 @@ class CrudFormDefinition
                 $fields[] = $fieldBinding;
             } else {
                 throw InvalidArgumentException::format(
-                        'Invalid call to %s: parameter $fieldBindings must only contain instances of %s, %s found',
-                        __METHOD__, implode('|', [FormFieldBindingDefinition::class, FieldBuilderBase::class, IField::class]),
-                        Debug::getType($fieldBinding)
+                    'Invalid call to %s: parameter $fieldBindings must only contain instances of %s, %s found',
+                    __METHOD__, implode('|', [FormFieldBindingDefinition::class, FieldBuilderBase::class, IField::class]),
+                    Debug::getType($fieldBinding)
                 );
             }
         }
@@ -293,7 +293,7 @@ class CrudFormDefinition
     {
         if ($this->isDependent) {
             throw InvalidOperationException::format(
-                    'Invalid call to %s: cannot nest dependent form sections'
+                'Invalid call to %s: cannot nest dependent form sections'
             );
         }
 
@@ -306,8 +306,8 @@ class CrudFormDefinition
         $this->stages[] = new DependentFormStage(function (array $previousData) use ($dependentStageDefineCallback) {
             $this->isDependent = true;
             $objectInstance    = isset($previousData[IObjectAction::OBJECT_FIELD_NAME])
-                    ? $previousData[IObjectAction::OBJECT_FIELD_NAME]
-                    : null;
+                ? $previousData[IObjectAction::OBJECT_FIELD_NAME]
+                : null;
 
             if ($objectInstance) {
                 /** @var TypedObject $objectInstance */
@@ -316,9 +316,9 @@ class CrudFormDefinition
             }
 
             $dependentStageDefineCallback(
-                    $this,
-                    $previousData,
-                    $objectInstance
+                $this,
+                $previousData,
+                $objectInstance
             );
             $this->isDependent = false;
 
@@ -388,13 +388,13 @@ class CrudFormDefinition
                 $formWithBinding = $this->buildFormForCurrentStage();
 
                 $this->stages[] = new DependentFormStage(
-                        function (array $input) use ($formWithBinding) {
-                            $object = $input[IObjectAction::OBJECT_FIELD_NAME];
+                    function (array $input) use ($formWithBinding) {
+                        $object = $input[IObjectAction::OBJECT_FIELD_NAME];
 
-                            return $formWithBinding->withInitialValuesFrom($object);
-                        },
-                        $formWithBinding->getFieldNames(),
-                        [IObjectAction::OBJECT_FIELD_NAME]
+                        return $formWithBinding->withInitialValuesFrom($object);
+                    },
+                    $formWithBinding->getFieldNames(),
+                    [IObjectAction::OBJECT_FIELD_NAME]
                 );
             }
             $this->exitStage();
@@ -404,10 +404,10 @@ class CrudFormDefinition
     protected function buildFormForCurrentStage() : FormWithBinding
     {
         return new FormWithBinding(
-                $this->currentStageSections,
-                [],
-                $this->class->getClassName(),
-                $this->currentStageFieldBindings
+            $this->currentStageSections,
+            [],
+            $this->class->getClassName(),
+            $this->currentStageFieldBindings
         );
     }
 
@@ -430,16 +430,16 @@ class CrudFormDefinition
         if ($this->isEditForm() && $this->currentEditedObjectType) {
             if ($this->currentEditedObjectType !== $classType) {
                 throw InvalidArgumentException::format(
-                        'Invalid class type supplied to %s: cannot map to subclass %s, as the current object being edited is of type %s',
-                        __METHOD__, $classType, $this->currentEditedObjectType
+                    'Invalid class type supplied to %s: cannot map to subclass %s, as the current object being edited is of type %s',
+                    __METHOD__, $classType, $this->currentEditedObjectType
                 );
             }
         }
 
         if (!is_a($classType, $this->class->getClassName(), true)) {
             throw InvalidArgumentException::format(
-                    'Invalid class type supplied to %s: expecting subclass of %s, %s given',
-                    __METHOD__, $this->class->getClassName(), $classType
+                'Invalid class type supplied to %s: expecting subclass of %s, %s given',
+                __METHOD__, $this->class->getClassName(), $classType
             );
         }
 
@@ -472,8 +472,8 @@ class CrudFormDefinition
 
                 if (!($instanceOrType instanceof $className)) {
                     throw InvalidReturnValueException::format(
-                            'Invalid create object callback return value: expecting class compatible with %s, %s given',
-                            $className, is_string($instanceOrType) ? $instanceOrType : Debug::getType($instanceOrType)
+                        'Invalid create object callback return value: expecting class compatible with %s, %s given',
+                        $className, is_string($instanceOrType) ? $instanceOrType : Debug::getType($instanceOrType)
                     );
                 }
 
@@ -538,8 +538,8 @@ class CrudFormDefinition
     {
         if ($this->isCreateForm() && !$this->createObjectCallback) {
             throw InvalidArgumentException::format(
-                    'Cannot finalize crud form definition for class %s in mode \'%s\': object constructor has not been defined, use ->%s()',
-                    $this->class->getClassName(), $this->mode, 'createObjectType'
+                'Cannot finalize crud form definition for class %s in mode \'%s\': object constructor has not been defined, use ->%s()',
+                $this->class->getClassName(), $this->mode, 'createObjectType'
             );
         }
 
@@ -551,11 +551,11 @@ class CrudFormDefinition
         $stagedForm = new StagedForm($firstStage, $stages);
 
         return new FinalizedCrudFormDefinition(
-                $this->mode,
-                $stagedForm,
-                $this->createObjectCallback,
-                $this->onSubmitCallbacks,
-                $this->onSaveCallbacks
+            $this->mode,
+            $stagedForm,
+            $this->createObjectCallback,
+            $this->onSubmitCallbacks,
+            $this->onSaveCallbacks
         );
     }
 }

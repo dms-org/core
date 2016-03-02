@@ -2,25 +2,27 @@
 
 namespace Dms\Core\Persistence;
 
+use Dms\Core\Exception;
 use Dms\Core\Model\ICriteria;
 use Dms\Core\Model\IEntity;
 use Dms\Core\Model\IEntitySet;
-use Dms\Core\Exception;
+use Dms\Core\Model\IMutableObjectSet;
 use Dms\Core\Model\ISpecification;
+use Dms\Core\Model\ITypedObject;
 
 /**
  * The API for a repository.
- * 
+ *
  * The repository acts as an abstraction over the data source for
  * a set of entities.
- * 
+ *
  * @author Elliot Levin <elliot@aanet.com.au>
  */
-interface IRepository extends IEntitySet
+interface IRepository extends IMutableObjectSet, IEntitySet
 {
     /**
      * Returns the entity type of the repository.
-     * 
+     *
      * @return string
      */
     public function getEntityType() : string;
@@ -43,7 +45,7 @@ interface IRepository extends IEntitySet
     /**
      * {@inheritDoc}
      */
-    public function get(int $id) : \Dms\Core\Model\IEntity;
+    public function get(int $id);
 
     /**
      * {@inheritDoc}
@@ -69,19 +71,25 @@ interface IRepository extends IEntitySet
      * {@inheritDoc}
      */
     public function satisfying(ISpecification $specification) : array;
-    
+
     /**
      * Saves the supplied entity to the underlying data source.
-     * 
+     *
+     * This will set the id property of the entity if it is null.
+     *
      * @param IEntity $entity
+     *
      * @return void
      */
-    public function save(IEntity $entity);
-    
+    public function save(ITypedObject $entity);
+
     /**
      * Saves the supplied entities to the underlying data source.
-     * 
+     *
+     * This will set the id property of the entity if it is null.
+     *
      * @param IEntity[] $entities
+     *
      * @return void
      */
     public function saveAll(array $entities);
@@ -90,22 +98,25 @@ interface IRepository extends IEntitySet
      * Removes the supplied entity from the underlying data source.
      *
      * @param IEntity $entity
+     *
      * @return void
      */
-    public function remove(IEntity $entity);
+    public function remove($entity);
 
     /**
      * Removes the entity with the supplied id from the underlying data source.
      *
      * @param int $id
+     *
      * @return void
      */
     public function removeById(int $id);
-    
+
     /**
      * Removes the supplied entities from the underlying data source.
-     * 
+     *
      * @param IEntity[] $entities
+     *
      * @return void
      */
     public function removeAll(array $entities);
@@ -114,6 +125,7 @@ interface IRepository extends IEntitySet
      * Removes the entities with the supplied ids from the underlying data source.
      *
      * @param int[] $ids
+     *
      * @return void
      */
     public function removeAllById(array $ids);

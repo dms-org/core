@@ -9,7 +9,7 @@ use Dms\Core\Exception;
  *
  * @author Elliot Levin <elliot@aanet.com.au>
  */
-interface IEntityCollection extends ITypedObjectCollection, IEntitySet
+interface IEntityCollection extends ITypedObjectCollection, IEntitySet, IMutableObjectSet
 {
 
 }

@@ -25,7 +25,7 @@ interface ITableDisplay
      *
      * @return ITableDataSource
      */
-    public function getDataSource() : \Dms\Core\Table\ITableDataSource;
+    public function getDataSource() : ITableDataSource;
 
     /**
      * Gets the default view.
@@ -64,11 +64,10 @@ interface ITableDisplay
      * Loads the data the view with the supplied name.
      *
      * @param string|null $name null if default
-     *
-     * @param int    $skipRows
-     * @param int|null   $limitRows
+     * @param int         $skipRows
+     * @param int|null    $limitRows
      *
      * @return IDataTable
      */
-    public function loadView(string $name = null, int $skipRows = 0, int $limitRows = null) : \Dms\Core\Table\IDataTable;
+    public function loadView(string $name = null, int $skipRows = 0, int $limitRows = null) : IDataTable;
 }

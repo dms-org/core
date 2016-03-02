@@ -10,7 +10,6 @@ use Dms\Core\Form\IFieldProcessor;
 use Dms\Core\Form\IFieldType;
 use Dms\Core\Form\InvalidInputException;
 use Dms\Core\Language\Message;
-use Dms\Core\Model\Type\Builder\Type;
 use Dms\Core\Model\Type\IType;
 use Dms\Core\Util\Debug;
 
@@ -98,7 +97,7 @@ class Field implements IField
     {
         if ($initialValue === null) {
             $this->initialValue = null;
-            $this->type = $this->type->with(FieldType::ATTR_INITIAL_VALUE, null);
+            $this->type         = $this->type->with(FieldType::ATTR_INITIAL_VALUE, null);
             return;
         }
 

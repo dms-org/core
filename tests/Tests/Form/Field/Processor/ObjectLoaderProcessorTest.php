@@ -2,29 +2,28 @@
 
 namespace Dms\Core\Tests\Form\Field\Processor;
 
-use Dms\Core\Form\Field\Processor\EntityLoaderProcessor;
-use Dms\Core\Form\Field\Processor\FieldValidator;
+use Dms\Core\Form\Field\Processor\ObjectLoaderProcessor;
 use Dms\Core\Form\IFieldProcessor;
 use Dms\Core\Model\IEntity;
-use Dms\Core\Model\IEntitySet;
+use Dms\Core\Model\IIdentifiableObjectSet;
 use Dms\Core\Model\Type\Builder\Type;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>
  */
-class EntityLoaderProcessorTest extends FieldProcessorTest
+class ObjectLoaderProcessorTest extends FieldProcessorTest
 {
     /**
      * @return IFieldProcessor
      */
     protected function processor()
     {
-        /** @var \PHPUnit_Framework_MockObject_MockObject|IEntitySet $entitiesMock */
-        $entitiesMock = $this->getMockForAbstractClass(IEntitySet::class);
+        /** @var \PHPUnit_Framework_MockObject_MockObject|IIdentifiableObjectSet $entitiesMock */
+        $entitiesMock = $this->getMockForAbstractClass(IIdentifiableObjectSet::class);
 
         $entitiesMock->expects($this->any())
-                ->method('getElementType')
-                ->willReturn(Type::object(\stdClass::class));
+            ->method('getElementType')
+            ->willReturn(Type::object(\stdClass::class));
 
         $entitiesMock->expects($this->any())
             ->method('get')
@@ -32,7 +31,13 @@ class EntityLoaderProcessorTest extends FieldProcessorTest
                 return $this->mockEntity($id);
             }));
 
-        return new EntityLoaderProcessor($entitiesMock);
+        $entitiesMock->expects($this->any())
+            ->method('getObjectId')
+            ->will($this->returnCallback(function (IEntity $entity) {
+                return $entity->getId();
+            }));
+
+        return new ObjectLoaderProcessor($entitiesMock);
     }
 
     protected function mockEntity($id) : IEntity

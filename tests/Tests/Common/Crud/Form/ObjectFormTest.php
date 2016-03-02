@@ -5,7 +5,7 @@ namespace Dms\Core\Tests\Common\Crud\Form;
 use Dms\Common\Testing\CmsTestCase;
 use Dms\Core\Common\Crud\Action\Object\IObjectAction;
 use Dms\Core\Common\Crud\Form\ObjectForm;
-use Dms\Core\Form\Field\Type\EntityIdType;
+use Dms\Core\Form\Field\Type\ObjectIdType;
 use Dms\Core\Form\IForm;
 use Dms\Core\Form\InvalidFormSubmissionException;
 use Dms\Core\Model\Type\Builder\Type;
@@ -25,9 +25,9 @@ class ObjectFormTest extends CmsTestCase
         $this->assertCount(1, $form->getSections());
         $this->assertSame(true, $form->hasField(IObjectAction::OBJECT_FIELD_NAME));
         $this->assertSame([IObjectAction::OBJECT_FIELD_NAME], $form->getFieldNames());
-        $this->assertInstanceOf(EntityIdType::class, $form->getField(IObjectAction::OBJECT_FIELD_NAME)->getType());
+        $this->assertInstanceOf(ObjectIdType::class, $form->getField(IObjectAction::OBJECT_FIELD_NAME)->getType());
         $this->assertEquals(Type::mixed(), $form->getField(IObjectAction::OBJECT_FIELD_NAME)->getType()->getPhpTypeOfInput());
-        $this->assertSame(true, $form->getField(IObjectAction::OBJECT_FIELD_NAME)->getType()->get(EntityIdType::ATTR_REQUIRED));
+        $this->assertSame(true, $form->getField(IObjectAction::OBJECT_FIELD_NAME)->getType()->get(ObjectIdType::ATTR_REQUIRED));
         $this->assertEquals(TestEntity::type(), $form->getField(IObjectAction::OBJECT_FIELD_NAME)->getType()->getProcessedPhpType());
         $this->assertEquals(TestEntity::type(), $form->getField(IObjectAction::OBJECT_FIELD_NAME)->getProcessedType());
 

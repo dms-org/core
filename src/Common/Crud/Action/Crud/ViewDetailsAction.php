@@ -15,7 +15,8 @@ use Dms\Core\Common\Crud\IReadModule;
 use Dms\Core\Form\Builder\Form;
 use Dms\Core\Form\IForm;
 use Dms\Core\Model\IEntity;
-use Dms\Core\Model\IEntitySet;
+use Dms\Core\Model\IIdentifiableObjectSet;
+use Dms\Core\Model\ITypedObject;
 
 /**
  * The view details object action
@@ -25,7 +26,7 @@ use Dms\Core\Model\IEntitySet;
 class ViewDetailsAction extends SelfHandlingObjectAction
 {
     /**
-     * @var IEntitySet
+     * @var IIdentifiableObjectSet
      */
     protected $dataSource;
 
@@ -38,7 +39,7 @@ class ViewDetailsAction extends SelfHandlingObjectAction
      * @inheritDoc
      */
     public function __construct(
-        IEntitySet $dataSource,
+        IIdentifiableObjectSet $dataSource,
         IAuthSystem $auth,
         FinalizedCrudFormDefinition $form
     )
@@ -114,7 +115,7 @@ class ViewDetailsAction extends SelfHandlingObjectAction
      */
     protected function runHandler($object, $data = null)
     {
-        /** @var IEntity $object */
+        /** @var ITypedObject $object */
 
         $stagedForm = $this->form->getStagedForm();
         $knownData  = [IObjectAction::OBJECT_FIELD_NAME => $object];

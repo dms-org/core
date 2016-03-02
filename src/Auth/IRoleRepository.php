@@ -21,7 +21,7 @@ interface IRoleRepository extends IRepository
      *
      * @return IRole
      */
-    public function get(int $id) : \Dms\Core\Model\IEntity;
+    public function get(int $id);
 
     /**
      * {@inheritDoc}

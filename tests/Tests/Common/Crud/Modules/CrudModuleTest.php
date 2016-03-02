@@ -5,6 +5,8 @@ namespace Dms\Core\Tests\Common\Crud\Modules;
 use Dms\Core\Common\Crud\ICrudModule;
 use Dms\Core\Common\Crud\IReadModule;
 use Dms\Core\Model\IEntitySet;
+use Dms\Core\Model\IIdentifiableObjectSet;
+use Dms\Core\Model\IMutableObjectSet;
 use Dms\Core\Persistence\IRepository;
 use Dms\Core\Tests\Module\Mock\MockAuthSystem;
 
@@ -24,35 +26,35 @@ abstract class CrudModuleTest extends ReadModuleTest
     protected $module;
 
     /**
-     * @return IEntitySet
+     * @return IIdentifiableObjectSet
      */
-    final protected function buildDataSource()
+    final protected function buildDataSource() : IIdentifiableObjectSet
     {
         return $this->buildRepositoryDataSource();
     }
 
     /**
-     * @return IRepository
+     * @return IMutableObjectSet
      */
-    abstract protected function buildRepositoryDataSource();
+    abstract protected function buildRepositoryDataSource() : IMutableObjectSet;
 
     /**
-     * @param IEntitySet     $dataSource
-     * @param MockAuthSystem $authSystem
+     * @param IIdentifiableObjectSet $dataSource
+     * @param MockAuthSystem         $authSystem
      *
      * @return IReadModule
      */
-    final protected function buildReadModule(IEntitySet $dataSource, MockAuthSystem $authSystem)
+    final protected function buildReadModule(IIdentifiableObjectSet $dataSource, MockAuthSystem $authSystem) : IReadModule
     {
-        /** @var IRepository $dataSource */
+        /** @var IMutableObjectSet $dataSource */
         return $this->buildCrudModule($dataSource, $authSystem);
     }
 
     /**
-     * @param IRepository    $dataSource
+     * @param IMutableObjectSet    $dataSource
      * @param MockAuthSystem $authSystem
      *
      * @return ICrudModule
      */
-    abstract protected function buildCrudModule(IRepository $dataSource, MockAuthSystem $authSystem);
+    abstract protected function buildCrudModule(IMutableObjectSet $dataSource, MockAuthSystem $authSystem) : ICrudModule;
 }

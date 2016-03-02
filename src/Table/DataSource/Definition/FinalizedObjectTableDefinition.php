@@ -28,6 +28,11 @@ class FinalizedObjectTableDefinition
     protected $propertyComponentIdMap;
 
     /**
+     * @var string[]
+     */
+    protected $indexComponentIdMap;
+
+    /**
      * @var callable[]
      */
     protected $componentIdCallableMap;
@@ -43,28 +48,28 @@ class FinalizedObjectTableDefinition
      * @param FinalizedClassDefinition $class
      * @param ITableStructure          $structure
      * @param string[]                 $propertyComponentIdMap
+     * @param string[]                 $indexComponentIdMap
      * @param callable[]               $componentIdCallableMap
      * @param callable[]               $customCallableMappers
      */
     public function __construct(
-            FinalizedClassDefinition $class,
-            ITableStructure $structure,
-            array $propertyComponentIdMap,
-            array $componentIdCallableMap,
-            array $customCallableMappers
-    ) {
+        FinalizedClassDefinition $class,
+        ITableStructure $structure,
+        array $propertyComponentIdMap,
+        array $indexComponentIdMap,
+        array $componentIdCallableMap,
+        array $customCallableMappers
+    )
+    {
         $this->class                  = $class;
         $this->structure              = $structure;
         $this->propertyComponentIdMap = $propertyComponentIdMap;
+        $this->indexComponentIdMap    = $indexComponentIdMap;
         $this->componentIdCallableMap = $componentIdCallableMap;
         $this->customCallableMappers  = $customCallableMappers;
 
         foreach (array_merge($propertyComponentIdMap, array_keys($componentIdCallableMap)) as $componentId) {
             $this->structure->getColumnAndComponent($componentId);
-        }
-
-        foreach ($this->propertyComponentIdMap as $memberExpression => $componentId) {
-
         }
     }
 
@@ -83,6 +88,7 @@ class FinalizedObjectTableDefinition
 
         $columnNames            = array_fill_keys($columnNames, true);
         $propertyComponentIdMap = [];
+        $indexComponentIdMap    = [];
         $componentIdCallableMap = [];
 
         foreach ($this->propertyComponentIdMap as $property => $componentId) {
@@ -90,6 +96,14 @@ class FinalizedObjectTableDefinition
 
             if (isset($columnNames[$column])) {
                 $propertyComponentIdMap[$property] = $componentId;
+            }
+        }
+
+        foreach ($this->indexComponentIdMap as $componentId) {
+            $column = $this->getColumnNameFromComponentId($componentId);
+
+            if (isset($columnNames[$column])) {
+                $indexComponentIdMap[] = $componentId;
             }
         }
 
@@ -102,11 +116,12 @@ class FinalizedObjectTableDefinition
         }
 
         return new self(
-                $this->class,
-                $this->structure->withColumns($columns),
-                $propertyComponentIdMap,
-                $componentIdCallableMap,
-                $this->customCallableMappers
+            $this->class,
+            $this->structure->withColumns($columns),
+            $propertyComponentIdMap,
+            $indexComponentIdMap,
+            $componentIdCallableMap,
+            $this->customCallableMappers
         );
     }
 
@@ -152,6 +167,14 @@ class FinalizedObjectTableDefinition
     public function getPropertyComponentIdMap() : array
     {
         return $this->propertyComponentIdMap;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getIndexComponentIdMap()
+    {
+        return $this->indexComponentIdMap;
     }
 
     /**

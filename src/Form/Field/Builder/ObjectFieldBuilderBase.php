@@ -2,18 +2,15 @@
 
 namespace Dms\Core\Form\Field\Builder;
 
-use Dms\Core\Form\Field\Options\EntityIdOptions;
-use Dms\Core\Form\Field\Type\FieldType;
-
 /**
- * The entity field builder base class.
+ * The object field builder base class.
  *
  * @author Elliot Levin <elliotlevin@hotmail.com>
  */
-abstract class EntityFieldBuilderBase extends FieldBuilderBase
+abstract class ObjectFieldBuilderBase extends FieldBuilderBase
 {
     /**
-     * Labels the entity options with values of the supplied member expression.
+     * Labels the object options with values of the supplied member expression.
      *
      * @param string $memberExpression
      *
@@ -22,7 +19,7 @@ abstract class EntityFieldBuilderBase extends FieldBuilderBase
     abstract public function labelledBy(string $memberExpression);
 
     /**
-     * Labels the entity options with the returned values of the supplied callback.
+     * Labels the object options with the returned values of the supplied callback.
      *
      * @param callable $labelCallback
      *

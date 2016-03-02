@@ -49,15 +49,16 @@ class FinalizedCrudFormDefinition
      * @param callable[]    $onSaveCallbacks
      */
     public function __construct(
-            string $mode,
-            IStagedForm $stagedForm,
-            callable $createObjectCallback = null,
-            array $onSubmitCallbacks,
-            array $onSaveCallbacks
-    ) {
+        string $mode,
+        IStagedForm $stagedForm,
+        callable $createObjectCallback = null,
+        array $onSubmitCallbacks,
+        array $onSaveCallbacks
+    )
+    {
         InvalidArgumentException::verify(
-                $createObjectCallback || $mode !== CrudFormDefinition::MODE_CREATE,
-                'create callback cannot be null for create form'
+            $createObjectCallback || $mode !== CrudFormDefinition::MODE_CREATE,
+            'create callback cannot be null for create form'
         );
         $this->mode                 = $mode;
         $this->stagedForm           = $stagedForm;
@@ -104,6 +105,16 @@ class FinalizedCrudFormDefinition
     public function getOnSaveCallbacks() : array
     {
         return $this->onSaveCallbacks;
+    }
+
+    /**
+     * @param array $input
+     *
+     * @return ITypedObject
+     */
+    public function createNewObjectFromInput(array $input) : ITypedObject
+    {
+        return call_user_func($this->createObjectCallback, $input);
     }
 
     /**

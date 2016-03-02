@@ -8,7 +8,7 @@ use Dms\Core\Common\Crud\Action\Object\IObjectAction;
 use Dms\Core\Common\Crud\IReadModule;
 use Dms\Core\Form\IForm;
 use Dms\Core\Form\InvalidFormSubmissionException;
-use Dms\Core\Model\IEntitySet;
+use Dms\Core\Model\IIdentifiableObjectSet;
 use Dms\Core\Tests\Common\Crud\Modules\Fixtures\Simple\SimpleEntity;
 use Dms\Core\Tests\Common\Crud\Modules\Fixtures\Simple\SimpleReadModule;
 use Dms\Core\Tests\Module\Mock\MockAuthSystem;
@@ -28,9 +28,9 @@ class SimpleReadModuleTest extends ReadModuleTest
     }
 
     /**
-     * @return IEntitySet
+     * @return IIdentifiableObjectSet
      */
-    protected function buildDataSource()
+    protected function buildDataSource() : IIdentifiableObjectSet
     {
         return SimpleEntity::collection([
             new SimpleEntity(1, 'abc'),
@@ -40,12 +40,12 @@ class SimpleReadModuleTest extends ReadModuleTest
     }
 
     /**
-     * @param IEntitySet     $dataSource
-     * @param MockAuthSystem $authSystem
+     * @param IIdentifiableObjectSet $dataSource
+     * @param MockAuthSystem         $authSystem
      *
      * @return IReadModule
      */
-    protected function buildReadModule(IEntitySet $dataSource, MockAuthSystem $authSystem)
+    protected function buildReadModule(IIdentifiableObjectSet $dataSource, MockAuthSystem $authSystem) : IReadModule
     {
         return new SimpleReadModule($dataSource, $authSystem);
     }

@@ -161,13 +161,15 @@ class ObjectTableDataSource extends TableDataSource
     private function mapObjectsToRows(FinalizedObjectTableDefinition $definition, array $objectProperties, array $objects = null) : array
     {
         $propertyComponentIdMap = $definition->getPropertyComponentIdMap();
+        $indexComponentIdMap    = $definition->getIndexComponentIdMap();
         $componentIdCallableMap = $definition->getComponentIdCallableMap();
         $customCallables        = $definition->getCustomCallableMappers();
         $rows                   = [];
 
         $componentIdMap = [];
 
-        foreach (array_merge($propertyComponentIdMap, array_keys($componentIdCallableMap)) as $componentId) {
+        $allComponentIds = array_merge($propertyComponentIdMap, $indexComponentIdMap, array_keys($componentIdCallableMap));
+        foreach ($allComponentIds as $componentId) {
             /** @var IColumn $column */
             /** @var IColumnComponent $component */
             list($column, $component) = $this->structure->getColumnAndComponent($componentId);
@@ -181,6 +183,11 @@ class ObjectTableDataSource extends TableDataSource
             foreach ($propertyComponentIdMap as $property => $componentId) {
                 list($columnName, $componentName) = $componentIdMap[$componentId];
                 $row[$columnName][$componentName] = $properties[$property];
+            }
+
+            foreach ($indexComponentIdMap as $componentId) {
+                list($columnName, $componentName) = $componentIdMap[$componentId];
+                $row[$columnName][$componentName] = $key;
             }
 
             if ($objects) {

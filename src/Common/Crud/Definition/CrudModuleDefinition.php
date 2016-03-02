@@ -8,8 +8,8 @@ use Dms\Core\Common\Crud\Action\Crud\EditAction;
 use Dms\Core\Common\Crud\Action\Object\IObjectAction;
 use Dms\Core\Common\Crud\Definition\Action\RemoveActionDefiner;
 use Dms\Core\Common\Crud\Definition\Form\CrudFormDefinition;
+use Dms\Core\Model\IMutableObjectSet;
 use Dms\Core\Module\Definition\FinalizedModuleDefinition;
-use Dms\Core\Persistence\IRepository;
 
 /**
  * The crud module definition class.
@@ -19,14 +19,14 @@ use Dms\Core\Persistence\IRepository;
 class CrudModuleDefinition extends ReadModuleDefinition
 {
     /**
-     * @var IRepository
+     * @var IMutableObjectSet
      */
     protected $dataSource;
 
     /**
      * @inheritDoc
      */
-    public function __construct(IRepository $dataSource, IAuthSystem $authSystem)
+    public function __construct(IMutableObjectSet $dataSource, IAuthSystem $authSystem)
     {
         parent::__construct($dataSource, $authSystem);
     }
@@ -84,15 +84,13 @@ class CrudModuleDefinition extends ReadModuleDefinition
         $this->verifyCanBeFinalized();
 
         return new FinalizedCrudModuleDefinition(
-                $this->name,
-                $this->labelObjectCallback,
-                $this->summaryTable,
-                $this->actions,
-                $this->tables,
-                $this->charts,
-                $this->widgets
+            $this->name,
+            $this->labelObjectCallback,
+            $this->summaryTable,
+            $this->actions,
+            $this->tables,
+            $this->charts,
+            $this->widgets
         );
     }
-
-
 }

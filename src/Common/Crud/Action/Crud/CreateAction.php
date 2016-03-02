@@ -7,11 +7,11 @@ use Dms\Core\Auth\IPermission;
 use Dms\Core\Auth\Permission;
 use Dms\Core\Common\Crud\Definition\Form\FinalizedCrudFormDefinition;
 use Dms\Core\Common\Crud\ICrudModule;
+use Dms\Core\Model\IMutableObjectSet;
 use Dms\Core\Model\Object\ArrayDataObject;
 use Dms\Core\Module\Action\SelfHandlingParameterizedAction;
 use Dms\Core\Module\IStagedFormDtoMapping;
 use Dms\Core\Module\Mapping\ArrayDataObjectFormMapping;
-use Dms\Core\Persistence\IRepository;
 
 /**
  * The create object action
@@ -21,7 +21,7 @@ use Dms\Core\Persistence\IRepository;
 class CreateAction extends SelfHandlingParameterizedAction
 {
     /**
-     * @var IRepository
+     * @var IMutableObjectSet
      */
     private $dataSource;
 
@@ -34,10 +34,11 @@ class CreateAction extends SelfHandlingParameterizedAction
      * @inheritDoc
      */
     public function __construct(
-            IRepository $dataSource,
-            IAuthSystem $auth,
-            FinalizedCrudFormDefinition $form
-    ) {
+        IMutableObjectSet $dataSource,
+        IAuthSystem $auth,
+        FinalizedCrudFormDefinition $form
+    )
+    {
         $this->dataSource = $dataSource;
         $this->form       = $form;
 
@@ -63,8 +64,8 @@ class CreateAction extends SelfHandlingParameterizedAction
     protected function permissions() : array
     {
         return [
-                Permission::named(ICrudModule::VIEW_PERMISSION),
-                Permission::named(ICrudModule::CREATE_PERMISSION)
+            Permission::named(ICrudModule::VIEW_PERMISSION),
+            Permission::named(ICrudModule::CREATE_PERMISSION),
         ];
     }
 
@@ -76,7 +77,7 @@ class CreateAction extends SelfHandlingParameterizedAction
     protected function formMapping() : IStagedFormDtoMapping
     {
         return new ArrayDataObjectFormMapping(
-                $this->form->getStagedForm()
+            $this->form->getStagedForm()
         );
     }
 
@@ -100,9 +101,8 @@ class CreateAction extends SelfHandlingParameterizedAction
     protected function runHandler($data)
     {
         /** @var ArrayDataObject $data */
-        $input       = $data->getArray();
-        $constructor = $this->form->getCreateObjectCallback();
-        $newObject   = $constructor($input);
+        $input     = $data->getArray();
+        $newObject = $this->form->createNewObjectFromInput($input);
 
         $this->form->bindToObject($newObject, $input);
         $this->form->invokeOnSubmitCallbacks($newObject, $input);

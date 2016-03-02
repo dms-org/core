@@ -3,25 +3,25 @@
 namespace Dms\Core\Tests\Form\Field\Processor\Validator;
 
 use Dms\Core\Form\Field\Processor\FieldValidator;
-use Dms\Core\Form\Field\Processor\Validator\EntityIdValidator;
+use Dms\Core\Form\Field\Processor\Validator\ObjectIdValidator;
 use Dms\Core\Language\Message;
-use Dms\Core\Model\IEntitySet;
+use Dms\Core\Model\IIdentifiableObjectSet;
 use Dms\Core\Model\Type\Builder\Type;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>
  */
-class EntityIdValidatorTest extends FieldValidatorTest
+class ObjectIdValidatorTest extends FieldValidatorTest
 {
     /**
      * @return FieldValidator
      */
     protected function validator()
     {
-        /** @var \PHPUnit_Framework_MockObject_MockObject|IEntitySet $entitiesMock */
-        $entitiesMock = $this->getMockForAbstractClass(IEntitySet::class);
+        /** @var \PHPUnit_Framework_MockObject_MockObject|IIdentifiableObjectSet $entitiesMock */
+        $entitiesMock = $this->getMockForAbstractClass(IIdentifiableObjectSet::class);
         $entitiesMock->expects($this->any())
-            ->method('getEntityType')
+            ->method('getObjectType')
             ->willReturn('Entity');
 
         $entitiesMock->expects($this->any())
@@ -30,7 +30,7 @@ class EntityIdValidatorTest extends FieldValidatorTest
                 return $id % 3 === 0;
             }));
 
-        return new EntityIdValidator($this->processedType(), $entitiesMock);
+        return new ObjectIdValidator($this->processedType(), $entitiesMock);
     }
 
     /**
@@ -61,10 +61,10 @@ class EntityIdValidatorTest extends FieldValidatorTest
     public function failTests()
     {
         return [
-            [1, new Message(EntityIdValidator::MESSAGE, ['entity_type' => 'Entity'])],
-            [2, new Message(EntityIdValidator::MESSAGE, ['entity_type' => 'Entity'])],
-            [4, new Message(EntityIdValidator::MESSAGE, ['entity_type' => 'Entity'])],
-            [5, new Message(EntityIdValidator::MESSAGE, ['entity_type' => 'Entity'])],
+            [1, new Message(ObjectIdValidator::MESSAGE, ['object_type' => 'Entity'])],
+            [2, new Message(ObjectIdValidator::MESSAGE, ['object_type' => 'Entity'])],
+            [4, new Message(ObjectIdValidator::MESSAGE, ['object_type' => 'Entity'])],
+            [5, new Message(ObjectIdValidator::MESSAGE, ['object_type' => 'Entity'])],
         ];
     }
 }

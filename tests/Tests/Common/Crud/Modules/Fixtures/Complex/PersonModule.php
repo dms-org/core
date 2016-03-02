@@ -103,7 +103,7 @@ class PersonModule extends CrudModule
         });
 
 
-        $module->removeAction()->deleteFromRepository();
+        $module->removeAction()->deleteFromDataSource();
 
         $module->summaryTable(function (SummaryTableDefinition $table) {
             $table->mapCallback(function (Person $person) {

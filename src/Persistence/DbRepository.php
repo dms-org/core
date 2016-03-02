@@ -2,6 +2,7 @@
 
 namespace Dms\Core\Persistence;
 
+use Dms\Core\Exception;
 use Dms\Core\Exception\InvalidArgumentException;
 use Dms\Core\Exception\TypeMismatchException;
 use Dms\Core\Model\EntityNotFoundException;
@@ -104,6 +105,25 @@ class DbRepository extends DbRepositoryBase implements IRepository
     /**
      * @inheritDoc
      */
+    public function getObjectId(ITypedObject $object) : int
+    {
+        $objectType = $this->getObjectType();
+
+        if (!($object instanceof $objectType)) {
+            throw TypeMismatchException::argument(__METHOD__, 'object', $objectType, $object);
+        }
+
+        /** @var IEntity $object */
+        if (!$object->hasId()) {
+            throw InvalidArgumentException::format('The supplied entity of type %s does not have an id', get_class($object));
+        }
+
+        return $object->getId();
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function count()
     {
         return $this->loadCount($this->select());
@@ -180,7 +200,7 @@ class DbRepository extends DbRepositoryBase implements IRepository
     /**
      * {@inheritDoc}
      */
-    public function get(int $id) : \Dms\Core\Model\IEntity
+    public function get(int $id) : IEntity
     {
         $entity = $this->tryGet($id);
 
@@ -239,7 +259,7 @@ class DbRepository extends DbRepositoryBase implements IRepository
     /**
      * {@inheritDoc}
      */
-    public function save(IEntity $entity)
+    public function save(ITypedObject $entity)
     {
         $this->saveAll([$entity]);
     }
@@ -311,7 +331,7 @@ class DbRepository extends DbRepositoryBase implements IRepository
     /**
      * {@inheritDoc}
      */
-    public function remove(IEntity $entity)
+    public function remove($entity)
     {
         $this->removeAll([$entity]);
     }

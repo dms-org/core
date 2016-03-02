@@ -3,9 +3,12 @@
 namespace Dms\Core\Common\Crud;
 
 use Dms\Core\Auth\IAuthSystem;
+use Dms\Core\Common\Crud\Action\Object\IObjectAction;
 use Dms\Core\Common\Crud\Definition\CrudModuleDefinition;
 use Dms\Core\Common\Crud\Definition\FinalizedCrudModuleDefinition;
 use Dms\Core\Common\Crud\Definition\ReadModuleDefinition;
+use Dms\Core\Model\IMutableObjectSet;
+use Dms\Core\Module\IParameterizedAction;
 use Dms\Core\Persistence\IRepository;
 
 /**
@@ -21,14 +24,14 @@ abstract class CrudModule extends ReadModule implements ICrudModule
     protected $definition;
 
     /**
-     * @var IRepository
+     * @var IMutableObjectSet
      */
     protected $dataSource;
 
     /**
      * @inheritDoc
      */
-    public function __construct(IRepository $dataSource, IAuthSystem $authSystem)
+    public function __construct(IMutableObjectSet $dataSource, IAuthSystem $authSystem)
     {
         parent::__construct($dataSource, $authSystem);
     }
@@ -63,7 +66,7 @@ abstract class CrudModule extends ReadModule implements ICrudModule
     /**
      * @inheritDoc
      */
-    final public function getCreateAction() : \Dms\Core\Module\IParameterizedAction
+    final public function getCreateAction() : IParameterizedAction
     {
         if (!$this->hasParameterizedAction(self::CREATE_ACTION)) {
             throw UnsupportedActionException::format(
@@ -86,7 +89,7 @@ abstract class CrudModule extends ReadModule implements ICrudModule
     /**
      * @inheritDoc
      */
-    final public function getEditAction() : Action\Object\IObjectAction
+    final public function getEditAction() : IObjectAction
     {
         if (!$this->hasObjectAction(self::EDIT_ACTION)) {
             throw UnsupportedActionException::format(
@@ -109,7 +112,7 @@ abstract class CrudModule extends ReadModule implements ICrudModule
     /**
      * @inheritDoc
      */
-    final  public function getRemoveAction() : Action\Object\IObjectAction
+    final  public function getRemoveAction() : IObjectAction
     {
         if (!$this->hasObjectAction(self::REMOVE_ACTION)) {
             throw UnsupportedActionException::format(

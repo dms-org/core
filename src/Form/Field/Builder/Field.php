@@ -2,21 +2,25 @@
 
 namespace Dms\Core\Form\Field\Builder;
 
+use Dms\Core\Common\Crud\IReadModule;
 use Dms\Core\Exception\InvalidArgumentException;
-use Dms\Core\Form\Field\Type\ArrayOfEntityIdsType;
+use Dms\Core\Form\Field\Options\EntityIdOptions;
+use Dms\Core\Form\Field\Options\ObjectIndexOptions;
+use Dms\Core\Form\Field\Type\ArrayOfObjectIdsType;
 use Dms\Core\Form\Field\Type\ArrayOfType;
 use Dms\Core\Form\Field\Type\BoolType;
 use Dms\Core\Form\Field\Type\CustomType;
 use Dms\Core\Form\Field\Type\DateTimeType;
 use Dms\Core\Form\Field\Type\DateTimeTypeBase;
 use Dms\Core\Form\Field\Type\DateType;
-use Dms\Core\Form\Field\Type\EntityIdType;
 use Dms\Core\Form\Field\Type\EnumType;
 use Dms\Core\Form\Field\Type\FileType;
 use Dms\Core\Form\Field\Type\FloatType;
 use Dms\Core\Form\Field\Type\ImageType;
+use Dms\Core\Form\Field\Type\InnerCrudModuleType;
 use Dms\Core\Form\Field\Type\InnerFormType;
 use Dms\Core\Form\Field\Type\IntType;
+use Dms\Core\Form\Field\Type\ObjectIdType;
 use Dms\Core\Form\Field\Type\StringType;
 use Dms\Core\Form\Field\Type\TimeOfDayType;
 use Dms\Core\Form\IField;
@@ -26,6 +30,7 @@ use Dms\Core\Form\Object\FormObject;
 use Dms\Core\Form\Object\InnerFormObjectFieldBuilder;
 use Dms\Core\Form\Object\Type\InnerFormObjectType;
 use Dms\Core\Model\IEntitySet;
+use Dms\Core\Model\IObjectSetWithIdentityByIndex;
 use Dms\Core\Model\Type\IType;
 
 /**
@@ -212,12 +217,12 @@ class Field extends FieldBuilderBase
      *
      * @param IEntitySet $entities
      *
-     * @return EntityFieldBuilder
+     * @return ObjectFieldBuilder
      */
-    public function entityFrom(IEntitySet $entities) : EntityFieldBuilder
+    public function entityFrom(IEntitySet $entities) : ObjectFieldBuilder
     {
-        return new EntityFieldBuilder(
-                $this->type(new EntityIdType($entities, $loadAsObjects = true))
+        return new ObjectFieldBuilder(
+            $this->type(new ObjectIdType(new EntityIdOptions($entities), $loadAsObjects = true))
         );
     }
 
@@ -226,11 +231,11 @@ class Field extends FieldBuilderBase
      *
      * @param IEntitySet $entities
      *
-     * @return EntityFieldBuilder
+     * @return ObjectFieldBuilder
      */
-    public function entityIdFrom(IEntitySet $entities) : EntityFieldBuilder
+    public function entityIdFrom(IEntitySet $entities) : ObjectFieldBuilder
     {
-        return new EntityFieldBuilder($this->type(new EntityIdType($entities)));
+        return new ObjectFieldBuilder($this->type(new ObjectIdType(new EntityIdOptions($entities))));
     }
 
     /**
@@ -238,15 +243,15 @@ class Field extends FieldBuilderBase
      *
      * @param IEntitySet $entities
      *
-     * @return EntityArrayFieldBuilder
+     * @return ObjectArrayFieldBuilder
      */
-    public function entityIdsFrom(IEntitySet $entities) : EntityArrayFieldBuilder
+    public function entityIdsFrom(IEntitySet $entities) : ObjectArrayFieldBuilder
     {
-        return (new EntityArrayFieldBuilder($this
-                ->type(new ArrayOfEntityIdsType(
-                        $entities,
-                        Field::element()->entityIdFrom($entities)->required()->build()
-                ))
+        return (new ObjectArrayFieldBuilder($this
+            ->type(new ArrayOfObjectIdsType(
+                $entities,
+                Field::element()->entityIdFrom($entities)->required()->build()
+            ))
         ))->containsNoDuplicates();
     }
 
@@ -256,17 +261,51 @@ class Field extends FieldBuilderBase
      *
      * @param IEntitySet $entities
      *
-     * @return EntityArrayFieldBuilder
+     * @return ObjectArrayFieldBuilder
      */
-    public function entitiesFrom(IEntitySet $entities) : EntityArrayFieldBuilder
+    public function entitiesFrom(IEntitySet $entities) : ObjectArrayFieldBuilder
     {
-        return (new EntityArrayFieldBuilder($this
-                ->type(new ArrayOfEntityIdsType(
-                        $entities,
-                        Field::element()->entityIdFrom($entities)->required()->build(),
-                        $loadAsObjects = true
-                ))
+        return (new ObjectArrayFieldBuilder($this
+            ->type(new ArrayOfObjectIdsType(
+                $entities,
+                Field::element()->entityIdFrom($entities)->required()->build(),
+                $loadAsObjects = true
+            ))
         ))->containsNoDuplicates();
+    }
+
+    /**
+     * Validates the input as the index of an object and will load
+     * the object instance at the index.
+     *
+     * @param IObjectSetWithIdentityByIndex $objects
+     *
+     * @return ObjectFieldBuilder
+     */
+    public function objectFromIndex(IObjectSetWithIdentityByIndex $objects) : ObjectFieldBuilder
+    {
+        return new ObjectFieldBuilder(
+            $this->type(new ObjectIdType(new ObjectIndexOptions($objects), $loadAsObjects = true))
+        );
+    }
+
+    /**
+     * Validates the input as an array of indexes from the supplied object set
+     * and will load the object instances.
+     *
+     * @param IObjectSetWithIdentityByIndex $objects
+     *
+     * @return ObjectArrayFieldBuilder
+     */
+    public function objectsFromIndexes(IObjectSetWithIdentityByIndex $objects) : ObjectArrayFieldBuilder
+    {
+        return (new ObjectArrayFieldBuilder($this
+            ->type(new ArrayOfObjectIdsType(
+                $objects,
+                Field::element()->objectFromIndex($objects)->required()->build(),
+                $loadAsObjects = true
+            ))
+        ));
     }
 
     /**
@@ -322,6 +361,20 @@ class Field extends FieldBuilderBase
     public function enum(string $enumClass, array $valueLabelMap) : FieldBuilderBase
     {
         return $this->type(new EnumType($enumClass, $valueLabelMap));
+    }
+
+    /**
+     * Defines an inner crud module field.
+     *
+     * @param IReadModule $module
+     *
+     * @return FieldBuilderBase
+     */
+    public function module(IReadModule $module) : FieldBuilderBase
+    {
+        $this->type(new InnerCrudModuleType($module))->value($module->getDataSource());
+
+        return $this;
     }
 
     /**
