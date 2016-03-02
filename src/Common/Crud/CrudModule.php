@@ -7,9 +7,10 @@ use Dms\Core\Common\Crud\Action\Object\IObjectAction;
 use Dms\Core\Common\Crud\Definition\CrudModuleDefinition;
 use Dms\Core\Common\Crud\Definition\FinalizedCrudModuleDefinition;
 use Dms\Core\Common\Crud\Definition\ReadModuleDefinition;
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Model\IIdentifiableObjectSet;
 use Dms\Core\Model\IMutableObjectSet;
 use Dms\Core\Module\IParameterizedAction;
-use Dms\Core\Persistence\IRepository;
 
 /**
  * The crud module base class.
@@ -122,5 +123,26 @@ abstract class CrudModule extends ReadModule implements ICrudModule
         }
 
         return $this->getObjectAction(self::REMOVE_ACTION);
+    }
+
+    final protected function loadModuleWithDataSource(IIdentifiableObjectSet $dataSource) : IReadModule
+    {
+        if (!($dataSource instanceof IMutableObjectSet)) {
+            throw InvalidArgumentException::format(
+                    'Invalid data source supplied to %s: data source must be an instance of %s, %s given',
+                    __METHOD__, IMutableObjectSet::class, get_class($dataSource)
+            );
+        }
+
+        return $this->loadCrudModuleWithDataSource($dataSource);
+    }
+
+    protected function loadCrudModuleWithDataSource(IMutableObjectSet $dataSource) : ICrudModule
+    {
+        $clone = clone $this;
+
+        $clone->dataSource = $dataSource;
+
+        return $clone;
     }
 }

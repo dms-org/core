@@ -7,10 +7,9 @@ use Dms\Core\Common\Crud\Action\Object\IObjectAction;
 use Dms\Core\Common\Crud\Definition\FinalizedReadModuleDefinition;
 use Dms\Core\Common\Crud\Definition\ReadModuleDefinition;
 use Dms\Core\Common\Crud\Table\ISummaryTable;
+use Dms\Core\Exception\InvalidArgumentException;
 use Dms\Core\Exception\TypeMismatchException;
-use Dms\Core\Model\IEntitySet;
 use Dms\Core\Model\IIdentifiableObjectSet;
-use Dms\Core\Model\IObjectSet;
 use Dms\Core\Model\ITypedObject;
 use Dms\Core\Module\ActionNotFoundException;
 use Dms\Core\Module\Definition\ModuleDefinition;
@@ -111,8 +110,8 @@ abstract class ReadModule extends Module implements IReadModule
 
         if (!($object instanceof $objectType)) {
             throw TypeMismatchException::format(
-                'Invalid object supplied to %s: expecting type %s, %s given',
-                __METHOD__, $objectType, Debug::getType($object)
+                    'Invalid object supplied to %s: expecting type %s, %s given',
+                    __METHOD__, $objectType, Debug::getType($object)
             );
         }
 
@@ -150,8 +149,8 @@ abstract class ReadModule extends Module implements IReadModule
     {
         if (!isset($this->objectActions[$name])) {
             throw ActionNotFoundException::format(
-                'Invalid name supplied to %s: expecting one of (%s), \'%s\' given',
-                __METHOD__, Debug::formatValues(array_keys($this->objectActions)), $name
+                    'Invalid name supplied to %s: expecting one of (%s), \'%s\' given',
+                    __METHOD__, Debug::formatValues(array_keys($this->objectActions)), $name
             );
         }
 
@@ -181,11 +180,35 @@ abstract class ReadModule extends Module implements IReadModule
     {
         if (!isset($this->objectActions[self::DETAILS_ACTION])) {
             throw UnsupportedActionException::format(
-                'Cannot get details action in crud module for \'%s\': action is not supported',
-                $this->getObjectType()
+                    'Cannot get details action in crud module for \'%s\': action is not supported',
+                    $this->getObjectType()
             );
         }
 
         return $this->objectActions[self::DETAILS_ACTION];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    final public function withDataSource(IIdentifiableObjectSet $dataSource) : IReadModule
+    {
+        if ($dataSource->getObjectType() !== $this->getObjectType()) {
+            throw InvalidArgumentException::format(
+                    'Invalid data source supplied to %s: object type %s does not match required type %s',
+                    __METHOD__, $dataSource->getObjectType(), $this->getObjectType()
+            );
+        }
+
+        return $this->loadModuleWithDataSource($dataSource);
+    }
+
+    protected function loadModuleWithDataSource(IIdentifiableObjectSet $dataSource) : IReadModule
+    {
+        $clone = clone $this;
+
+        $clone->dataSource = $dataSource;
+
+        return $clone;
     }
 }

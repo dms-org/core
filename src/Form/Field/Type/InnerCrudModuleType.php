@@ -6,6 +6,7 @@ use Dms\Core\Common\Crud\ICrudModule;
 use Dms\Core\Common\Crud\IReadModule;
 use Dms\Core\Form\Field\Processor\InnerCrudModuleProcessor;
 use Dms\Core\Form\IFieldProcessor;
+use Dms\Core\Model\Object\TypedObject;
 use Dms\Core\Model\Type\Builder\Type;
 use Dms\Core\Model\Type\IType as IPhpType;
 
@@ -34,8 +35,25 @@ class InnerCrudModuleType extends FieldType
             $this->attributes[self::ATTR_READ_ONLY] = true;
         }
 
+        /** @var TypedObject|string $objectType */
+        $objectType                           = $readModule->getObjectType();
+        $this->attributes[self::ATTR_DEFAULT] = $objectType::collection();
+
         parent::__construct();
     }
+
+    /**
+     * @inheritDoc
+     */
+    protected function initializeFromCurrentAttributes()
+    {
+        if ($this->has(self::ATTR_INITIAL_VALUE)) {
+            $this->module = $this->module->withDataSource($this->get(self::ATTR_INITIAL_VALUE));
+        }
+
+        parent::initializeFromCurrentAttributes();
+    }
+
 
     /**
      * @return IReadModule
@@ -67,7 +85,7 @@ class InnerCrudModuleType extends FieldType
     protected function buildProcessors() : array
     {
         return $this->module instanceof ICrudModule
-            ? [new InnerCrudModuleProcessor($this->module)]
-            : [];
+                ? [new InnerCrudModuleProcessor($this->module)]
+                : [];
     }
 }

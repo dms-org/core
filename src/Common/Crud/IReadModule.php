@@ -107,4 +107,13 @@ interface IReadModule extends IModule
      * @throws UnsupportedActionException
      */
     public function getDetailsAction() : IObjectAction;
+
+    /**
+     * Returns an equivalent module with the supplied data source.
+     *
+     * @param IIdentifiableObjectSet $dataSource
+     *
+     * @return IReadModule
+     */
+    public function withDataSource(IIdentifiableObjectSet $dataSource) : IReadModule;
 }
