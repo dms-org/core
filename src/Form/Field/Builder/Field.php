@@ -372,7 +372,7 @@ class Field extends FieldBuilderBase
      */
     public function module(IReadModule $module) : FieldBuilderBase
     {
-        $this->type(new InnerCrudModuleType($module))->value($module->getDataSource());
+        $this->type(new InnerCrudModuleType($module));
 
         return $this;
     }
