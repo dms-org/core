@@ -21,7 +21,7 @@ interface IRoleRepository extends IRepository
      *
      * @return IRole
      */
-    public function get(int $id);
+    public function get($id);
 
     /**
      * {@inheritDoc}
@@ -35,7 +35,7 @@ interface IRoleRepository extends IRepository
      *
      * @return IRole|null
      */
-    public function tryGet(int $id);
+    public function tryGet($id);
 
     /**
      * {@inheritDoc}

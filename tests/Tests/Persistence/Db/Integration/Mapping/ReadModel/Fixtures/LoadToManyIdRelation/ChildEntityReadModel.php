@@ -23,7 +23,7 @@ class ChildEntityReadModel extends ReadModel
     /**
      * SubEntityReadModel constructor.
      *
-     * @param int $id
+     * @param $id
      * @param int $val
      */
     public function __construct($id, $val)

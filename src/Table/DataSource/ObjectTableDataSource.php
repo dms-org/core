@@ -61,6 +61,18 @@ class ObjectTableDataSource extends TableDataSource
         $this->validateMapping();
     }
 
+    /**
+     * @inheritDoc
+     */
+    public function canUseColumnComponentInCriteria(string $componentId) : bool
+    {
+        /** @var IColumn $column */
+        /** @var IColumnComponent $component */
+        list($column, $component) = $this->structure->getColumnAndComponent($componentId);
+
+        return in_array($column->getName() . '.' . $component->getName(), $this->definition->getPropertyComponentIdMap(), true);
+    }
+
     protected function validateMapping()
     {
         foreach ($this->definition->getPropertyComponentIdMap() as $memberExpression => $componentId) {

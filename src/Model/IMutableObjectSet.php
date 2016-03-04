@@ -39,10 +39,10 @@ interface IMutableObjectSet extends IIdentifiableObjectSet
     /**
      * Removes the object with the supplied id from the object set.
      *
-     * @param int $id
+     * @param $id
      * @return void
      */
-    public function removeById(int $id);
+    public function removeById($id);
 
     /**
      * Removes the supplied objects from the object set.

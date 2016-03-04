@@ -5,12 +5,10 @@ namespace Dms\Core\Table\DataSource\Criteria;
 use Dms\Core\Model\Criteria\LoadCriteria;
 use Dms\Core\Model\Criteria\SpecificationDefinition;
 use Dms\Core\Model\ILoadCriteria;
-use Dms\Core\Table\Criteria\ColumnCondition;
 use Dms\Core\Table\Criteria\ColumnConditionGroup;
 use Dms\Core\Table\Criteria\ColumnCriterion;
 use Dms\Core\Table\DataSource\Definition\FinalizedObjectTableDefinition;
 use Dms\Core\Table\IRowCriteria;
-use Table\DataSource\Criteria\CriteriaMappingException;
 
 /**
  * The row criteria mapper class that maps row criteria to an equivalent

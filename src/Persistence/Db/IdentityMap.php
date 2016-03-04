@@ -53,7 +53,7 @@ class IdentityMap
     }
 
     /**
-     * @param int $id
+     * @param $id
      *
      * @return IEntity|null
      */
@@ -80,7 +80,7 @@ class IdentityMap
     }
 
     /**
-     * @param int $id
+     * @param $id
      *
      * @return bool
      */
@@ -90,7 +90,7 @@ class IdentityMap
     }
 
     /**
-     * @param int $id
+     * @param $id
      *
      * @return bool
      */

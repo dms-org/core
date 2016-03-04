@@ -62,6 +62,17 @@ class EntityCollectionTest extends IEntitySetTest
         }, InvalidArgumentException::class);
     }
 
+    public function testGetObjectIdWithEntityWithoutIds()
+    {
+        $entity1             = $this->entityMock(null);
+        $entity2             = $this->entityMock(null);
+        $this->collection[] = $entity1;
+        $this->collection[] = $entity2;
+
+        $this->assertSame(EntityCollection::ENTITY_WITHOUT_ID_PREFIX . 0, $this->collection->getObjectId($entity1));
+        $this->assertSame(EntityCollection::ENTITY_WITHOUT_ID_PREFIX . 1, $this->collection->getObjectId($entity2));
+    }
+
     public function testProjectionReturnsTypedCollection()
     {
         $ids = $this->collection->select(function (IEntity $entity) {
@@ -294,5 +305,30 @@ class EntityCollectionTest extends IEntitySetTest
                 $this->entityMock(11),
                 $this->entityMock(12),
         ], array_values($data));
+    }
+
+    public function testObjectIdWithEntityWithoutId()
+    {
+        $this->collection = new EntityCollection(IEntity::class);
+
+        $entity             = $this->entityMock(null);
+        $this->collection[] = $entity;
+
+        $id = $this->collection->getObjectId($entity);
+
+        $this->assertSame(1, $this->collection->count());
+        $this->assertSame(true, $this->collection->contains($entity));
+        $this->assertSame(true, $this->collection->has($id));
+        $this->assertSame($entity, $this->collection->get($id));
+        $this->assertSame($entity, $this->collection->tryGet($id));
+        $this->assertSame([$id => $entity], $this->collection->getAllById([$id]));
+        $this->assertSame([$id => $entity], $this->collection->tryGetAll([$id]));
+
+        $this->collection->removeById($id);
+
+        $this->assertSame(false, $this->collection->contains($entity));
+        $this->assertSame(false, $this->collection->has($id));
+        $this->assertSame(null, $this->collection->tryGet($id));
+        $this->assertSame([], $this->collection->tryGetAll([$id]));
     }
 }

@@ -14,11 +14,11 @@ interface IObjectSetWithIdentityByIndex extends IIdentifiableObjectSet
     /**
      * Returns whether the object with the given id is within this collection.
      *
-     * @param int $index
+     * @param $index
      *
      * @return bool
      */
-    public function has(int $index) : bool;
+    public function has($index) : bool;
 
     /**
      * Returns whether the objects with the given ids are within this collection.
@@ -32,12 +32,12 @@ interface IObjectSetWithIdentityByIndex extends IIdentifiableObjectSet
     /**
      * Returns the object with the given id.
      *
-     * @param int $index
+     * @param $index
      *
      * @return ITypedObject
      * @throws ObjectNotFoundException
      */
-    public function get(int $index);
+    public function get($index);
 
     /**
      * Returns the objects with the given ids.
@@ -52,11 +52,11 @@ interface IObjectSetWithIdentityByIndex extends IIdentifiableObjectSet
     /**
      * Returns the object with the given id or null if does not exist.
      *
-     * @param int $index
+     * @param $index
      *
      * @return ITypedObject|null
      */
-    public function tryGet(int $index);
+    public function tryGet($index);
 
     /**
      * Returns the objects with the given ids.

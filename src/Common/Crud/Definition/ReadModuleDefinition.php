@@ -14,6 +14,7 @@ use Dms\Core\Common\Crud\UnsupportedActionException;
 use Dms\Core\Exception\InvalidArgumentException;
 use Dms\Core\Exception\InvalidOperationException;
 use Dms\Core\Form\Field\Builder\Field;
+use Dms\Core\Model\EntityCollection;
 use Dms\Core\Model\IEntity;
 use Dms\Core\Model\IEntitySet;
 use Dms\Core\Model\IIdentifiableObjectSet;
@@ -77,8 +78,8 @@ class ReadModuleDefinition extends ModuleDefinition
 
         if (!is_a($this->classType, TypedObject::class, true)) {
             throw InvalidArgumentException::format(
-                'Class type from data source must be an instance of %s, %s given',
-                TypedObject::class, $this->classType
+                    'Class type from data source must be an instance of %s, %s given',
+                    TypedObject::class, $this->classType
             );
         }
 
@@ -100,12 +101,12 @@ class ReadModuleDefinition extends ModuleDefinition
     public function objectAction(string $name) : Action\ObjectActionDefiner
     {
         return new ObjectActionDefiner(
-            $this->dataSource,
-            $this->authSystem,
-            $name,
-            function (IObjectAction $action) {
-                $this->actions[$action->getName()] = $action;
-            }
+                $this->dataSource,
+                $this->authSystem,
+                $name,
+                function (IObjectAction $action) {
+                    $this->actions[$action->getName()] = $action;
+                }
         );
     }
 
@@ -227,16 +228,24 @@ class ReadModuleDefinition extends ModuleDefinition
     {
         $definition = new SummaryTableDefinition($this, $this->class, $this->dataSource);
 
-        $idField = Field::name(IReadModule::SUMMARY_TABLE_ID_COLUMN)->label('Id')->int()->required();
+        $idField = Field::name(IReadModule::SUMMARY_TABLE_ID_COLUMN)->label('Id')
+                ->int()
+                ->required();
 
-        if ($this->dataSource instanceof IEntitySet) {
+        if ($this->dataSource instanceof EntityCollection) {
+            $definition->mapCallback(function (IEntity $entity) {
+                return $this->dataSource->getObjectId($entity);
+            })
+                    ->hidden()
+                    ->to($idField);
+        } elseif ($this->dataSource instanceof IEntitySet) {
             $definition->mapProperty(IEntity::ID)
-                ->hidden()
-                ->to($idField);
+                    ->hidden()
+                    ->to($idField);
         } elseif ($this->dataSource instanceof IObjectSetWithIdentityByIndex) {
             $definition->map()->index()
-                ->hidden()
-                ->to($idField);
+                    ->hidden()
+                    ->to($idField);
         } else {
             throw InvalidArgumentException::format('Unknown data source type: %s', get_class($this->dataSource));
         }
@@ -246,11 +255,11 @@ class ReadModuleDefinition extends ModuleDefinition
         $this->tables[IReadModule::SUMMARY_TABLE] = $this->summaryTable = $definition->finalize();
 
         $this->action(IReadModule::SUMMARY_TABLE_ACTION)
-            ->authorize(IReadModule::VIEW_PERMISSION)
-            ->returns(ISummaryTable::class)
-            ->handler(function () {
-                return $this->summaryTable;
-            });
+                ->authorize(IReadModule::VIEW_PERMISSION)
+                ->returns(ISummaryTable::class)
+                ->handler(function () {
+                    return $this->summaryTable;
+                });
     }
 
     /**
@@ -262,13 +271,13 @@ class ReadModuleDefinition extends ModuleDefinition
         $this->verifyCanBeFinalized();
 
         return new FinalizedReadModuleDefinition(
-            $this->name,
-            $this->labelObjectCallback,
-            $this->summaryTable,
-            $this->actions,
-            $this->tables,
-            $this->charts,
-            $this->widgets
+                $this->name,
+                $this->labelObjectCallback,
+                $this->summaryTable,
+                $this->actions,
+                $this->tables,
+                $this->charts,
+                $this->widgets
         );
     }
 
@@ -281,15 +290,15 @@ class ReadModuleDefinition extends ModuleDefinition
 
         if (!$this->labelObjectCallback) {
             throw InvalidOperationException::format(
-                'Cannot finalize definition for module \'%s\': label objects callback has not been defined',
-                $this->name
+                    'Cannot finalize definition for module \'%s\': label objects callback has not been defined',
+                    $this->name
             );
         }
 
         if (!$this->summaryTable) {
             throw InvalidOperationException::format(
-                'Cannot finalize definition for module \'%s\': summary table has not been defined',
-                $this->name
+                    'Cannot finalize definition for module \'%s\': summary table has not been defined',
+                    $this->name
             );
         }
     }

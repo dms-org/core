@@ -61,7 +61,7 @@ class ValueObjectCollection extends ObjectCollection implements IValueObjectColl
     /**
      * @inheritDoc
      */
-    public function getObjectId(ITypedObject $object) : int
+    public function getObjectId(ITypedObject $object)
     {
         Exception\TypeMismatchException::verifyInstanceOf(__METHOD__, 'object', $object, $this->getObjectType());
 
@@ -80,7 +80,7 @@ class ValueObjectCollection extends ObjectCollection implements IValueObjectColl
     /**
      * @inheritDoc
      */
-    public function removeById(int $id)
+    public function removeById($id)
     {
         $this->removeAllById([$id]);
     }
@@ -100,7 +100,7 @@ class ValueObjectCollection extends ObjectCollection implements IValueObjectColl
     /**
      * @inheritDoc
      */
-    public function has(int $index) : bool
+    public function has($index) : bool
     {
         return $this->offsetExists($index);
     }
@@ -122,7 +122,7 @@ class ValueObjectCollection extends ObjectCollection implements IValueObjectColl
     /**
      * @inheritDoc
      */
-    public function get(int $index)
+    public function get($index)
     {
         if (!$this->offsetExists($index)) {
             throw new ObjectNotFoundException($this->getObjectType(), $index);
@@ -152,7 +152,7 @@ class ValueObjectCollection extends ObjectCollection implements IValueObjectColl
     /**
      * @inheritDoc
      */
-    public function tryGet(int $index)
+    public function tryGet($index)
     {
         return $this->offsetGet($index);
     }

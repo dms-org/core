@@ -20,6 +20,15 @@ interface ITableDataSource
     public function getStructure() : ITableStructure;
 
     /**
+     * Returns whether the supplied component can be used within row criteria
+     *
+     * @param string $componentId
+     *
+     * @return bool
+     */
+    public function canUseColumnComponentInCriteria(string $componentId) : bool;
+
+    /**
      * Creates a new criteria for this data source.
      *
      * @return RowCriteria

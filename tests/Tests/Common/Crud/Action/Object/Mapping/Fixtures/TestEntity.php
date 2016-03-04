@@ -23,7 +23,7 @@ class TestEntity extends Entity
     }
 
     /**
-     * @param int $id
+     * @param $id
      *
      * @return TestEntity
      */

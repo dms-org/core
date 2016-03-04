@@ -12,23 +12,23 @@ use Dms\Core\Exception;
 interface IIdentifiableObjectSet extends IObjectSet
 {
     /**
-     * Returns the id for the supplied object
+     * Returns a id which is unique within the object set for the supplied object
      *
      * @param ITypedObject $object
      *
-     * @return int
-     * @throws Exception\InvalidArgumentException
+     * @return mixed
+     * @throws Exception\InvalidArgumentException if the object is not within the collection
      */
-    public function getObjectId(ITypedObject $object) : int;
+    public function getObjectId(ITypedObject $object);
 
     /**
      * Returns whether the object with the given id is within this collection.
      *
-     * @param int $id
+     * @param $id
      *
      * @return bool
      */
-    public function has(int $id) : bool;
+    public function has($id) : bool;
 
     /**
      * Returns whether the objects with the given ids are within this collection.
@@ -42,12 +42,12 @@ interface IIdentifiableObjectSet extends IObjectSet
     /**
      * Returns the object with the given id.
      *
-     * @param int $id
+     * @param $id
      *
      * @return ITypedObject
      * @throws ObjectNotFoundException
      */
-    public function get(int $id);
+    public function get($id);
 
     /**
      * Returns the objects with the given ids.
@@ -62,11 +62,11 @@ interface IIdentifiableObjectSet extends IObjectSet
     /**
      * Returns the object with the given id or null if does not exist.
      *
-     * @param int $id
+     * @param $id
      *
      * @return ITypedObject|null
      */
-    public function tryGet(int $id);
+    public function tryGet($id);
 
     /**
      * Returns the objects with the given ids.

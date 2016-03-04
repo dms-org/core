@@ -121,7 +121,7 @@ abstract class IEntitySetTest extends CmsTestCase
     public function testGetAllEntityById()
     {
         $entities = $this->collection->getAllById([1, 5, 10]);
-        $this->assertEquals([$this->entityMock(1), $this->entityMock(5), $this->entityMock(10)], $entities);
+        $this->assertEquals([$this->entityMock(1), $this->entityMock(5), $this->entityMock(10)], array_values($entities));
 
         $this->assertThrows(function () {
             $this->collection->getAllById([1, 5, 9]);

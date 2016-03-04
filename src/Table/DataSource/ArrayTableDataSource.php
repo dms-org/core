@@ -41,6 +41,16 @@ class ArrayTableDataSource extends TableDataSource
     }
 
     /**
+     * @inheritDoc
+     */
+    public function canUseColumnComponentInCriteria(string $componentId) : bool
+    {
+        $this->structure->getColumnAndComponent($componentId);
+
+        return true;
+    }
+
+    /**
      * @param ITableStructure $structure
      * @param array           $array
      *

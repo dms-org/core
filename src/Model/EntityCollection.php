@@ -15,10 +15,18 @@ use Pinq\Iterators\IOrderedMap;
  */
 class EntityCollection extends ObjectCollection implements IEntityCollection
 {
+    const ENTITY_WITHOUT_ID_PREFIX = '__new_';
+
     /**
      * @var IEntity[]|null
      */
     protected $identityMap;
+
+
+    /**
+     * @var \SplObjectStorage|null
+     */
+    protected $instanceMap;
 
     /**
      * @param string                 $entityType
@@ -29,15 +37,15 @@ class EntityCollection extends ObjectCollection implements IEntityCollection
      * @throws Exception\InvalidArgumentException
      */
     public function __construct(
-        string $entityType,
-        $entities = [],
-        IIteratorScheme $scheme = null,
-        Collection $source = null
+            string $entityType,
+            $entities = [],
+            IIteratorScheme $scheme = null,
+            Collection $source = null
     ) {
         if (!is_a($entityType, IEntity::class, true)) {
             throw Exception\InvalidArgumentException::format(
-                'Invalid entity class: expecting instance of %s, %s given',
-                IEntity::class, $entityType
+                    'Invalid entity class: expecting instance of %s, %s given',
+                    IEntity::class, $entityType
             );
         }
 
@@ -48,7 +56,7 @@ class EntityCollection extends ObjectCollection implements IEntityCollection
     {
         parent::updateElements($elements);
 
-        $this->loadIdentityMap($this->elements);
+        $this->loadIdentityMap($this->toOrderedMap());
     }
 
     protected function toOrderedMap()
@@ -65,10 +73,19 @@ class EntityCollection extends ObjectCollection implements IEntityCollection
     protected function loadIdentityMap(IOrderedMap $elements)
     {
         $this->identityMap = [];
+        $this->instanceMap = new \SplObjectStorage();
 
         /** @var IEntity $entity */
+        $entityWithIdIndex = 0;
         foreach ($elements->values() as $entity) {
-            $this->identityMap[$entity->getId() ?: spl_object_hash($entity)] = $entity;
+            if ($entity->hasId()) {
+                $id = $entity->getId();
+            } else {
+                $id = self::ENTITY_WITHOUT_ID_PREFIX . $entityWithIdIndex++;
+            }
+
+            $this->identityMap[$id]     = $entity;
+            $this->instanceMap[$entity] = $id;
         }
     }
 
@@ -91,17 +108,13 @@ class EntityCollection extends ObjectCollection implements IEntityCollection
     {
         $this->toOrderedMap();
 
-        $objectsLookup = new \SplObjectStorage();
-
-        foreach ($this->elements as $object) {
-            $objectsLookup[$object] = true;
-        }
-
         foreach ($objects as $object) {
-            if (!isset($objectsLookup[$object])) {
-                $id = $object->getId();
-
-                if ($id === null || !isset($this->identityMap[$id])) {
+            if ($object->hasId()) {
+                if (!isset($this->identityMap[$object->getId()])) {
+                    return false;
+                }
+            } else {
+                if (!isset($this->instanceMap[$object])) {
                     return false;
                 }
             }
@@ -113,8 +126,9 @@ class EntityCollection extends ObjectCollection implements IEntityCollection
     /**
      * @inheritDoc
      */
-    public function getObjectId(ITypedObject $object) : int
+    public function getObjectId(ITypedObject $object)
     {
+        $this->toOrderedMap();
         $objectType = $this->getObjectType();
 
         if (!($object instanceof $objectType)) {
@@ -122,17 +136,36 @@ class EntityCollection extends ObjectCollection implements IEntityCollection
         }
 
         /** @var IEntity $object */
-        if (!$object->hasId()) {
-            throw InvalidArgumentException::format('The supplied entity of type %s does not have an id', get_class($object));
+        if (!$this->doesContainsObjects([$object])) {
+            throw InvalidArgumentException::format(
+                    'The supplied entity of type %s is not contained within the collection',
+                    get_class($object)
+            );
         }
 
-        return $object->getId();
+        return $this->getObjectIdInternal($object);
+    }
+
+    protected function getObjectIdInternal(IEntity $object)
+    {
+        /** @var IEntity $object */
+        if ($object->hasId()) {
+            return $object->getId();
+        } else {
+            return $this->instanceMap[$object];
+        }
+    }
+
+    public function offsetSet($index, $value)
+    {
+        parent::offsetSet($index, $value);
+        $this->loadIdentityMap($this->toOrderedMap());
     }
 
     /**
      * {@inheritDoc}
      */
-    public function removeById(int $id)
+    public function removeById($id)
     {
         $this->removeAllById([$id]);
     }
@@ -145,14 +178,15 @@ class EntityCollection extends ObjectCollection implements IEntityCollection
         $ids = array_flip($ids);
 
         $this->removeWhere(function (IEntity $other) use ($ids) {
-            return isset($ids[$other->getId()]);
+            return isset($ids[$this->getObjectIdInternal($other)]);
         });
+        $this->loadIdentityMap($this->toOrderedMap());
     }
 
     /**
      * {@inheritDoc}
      */
-    public function has(int $id) : bool
+    public function has($id) : bool
     {
         $this->toOrderedMap();
 
@@ -178,7 +212,7 @@ class EntityCollection extends ObjectCollection implements IEntityCollection
     /**
      * {@inheritDoc}
      */
-    public function get(int $id)
+    public function get($id)
     {
         $this->toOrderedMap();
 
@@ -199,7 +233,7 @@ class EntityCollection extends ObjectCollection implements IEntityCollection
         $entities = [];
         foreach ($ids as $id) {
             if (isset($this->identityMap[$id])) {
-                $entities[] = $this->identityMap[$id];
+                $entities[$id] = $this->identityMap[$id];
             } else {
                 throw new EntityNotFoundException($this->elementType->getClass(), $id);
             }
@@ -211,7 +245,7 @@ class EntityCollection extends ObjectCollection implements IEntityCollection
     /**
      * {@inheritDoc}
      */
-    public function tryGet(int $id)
+    public function tryGet($id)
     {
         $this->toOrderedMap();
 

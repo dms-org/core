@@ -3,11 +3,13 @@
 namespace Dms\Core\Form\Field\Type;
 
 use Dms\Core\Form\Field\Options\ObjectIdentityOptions;
+use Dms\Core\Form\Field\Processor\CustomProcessor;
+use Dms\Core\Form\Field\Processor\ObjectIdProcessor;
 use Dms\Core\Form\Field\Processor\ObjectLoaderProcessor;
-use Dms\Core\Form\Field\Processor\TypeProcessor;
-use Dms\Core\Form\Field\Processor\Validator\IntValidator;
 use Dms\Core\Form\Field\Processor\Validator\ObjectIdValidator;
 use Dms\Core\Form\IFieldProcessor;
+use Dms\Core\Language\Message;
+use Dms\Core\Model\EntityCollection;
 use Dms\Core\Model\IIdentifiableObjectSet;
 use Dms\Core\Model\Type\Builder\Type;
 use Dms\Core\Model\Type\IType as IPhpType;
@@ -44,6 +46,14 @@ class ObjectIdType extends FieldType
     }
 
     /**
+     * @return IIdentifiableObjectSet
+     */
+    public function getObjects() : IIdentifiableObjectSet
+    {
+        return $this->objects;
+    }
+
+    /**
      * @return IPhpType
      */
     protected function buildPhpTypeOfInput() : IPhpType
@@ -57,9 +67,8 @@ class ObjectIdType extends FieldType
     protected function buildProcessors() : array
     {
         $processors = [
-            new IntValidator($this->inputType),
-            new TypeProcessor('int'),
-            new ObjectIdValidator(Type::int()->nullable(), $this->objects),
+                new ObjectIdProcessor(Type::mixed()),
+                new ObjectIdValidator(Type::string()->union(Type::int())->nullable(), $this->objects),
         ];
 
         if ($this->loadAsObjects) {

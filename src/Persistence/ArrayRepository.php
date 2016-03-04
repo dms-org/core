@@ -95,7 +95,7 @@ class ArrayRepository implements IRepository
     /**
      * @inheritDoc
      */
-    public function getObjectId(ITypedObject $object) : int
+    public function getObjectId(ITypedObject $object)
     {
         return $this->collection->getObjectId($object);
     }
@@ -103,7 +103,7 @@ class ArrayRepository implements IRepository
     /**
      * {@inheritDoc}
      */
-    public function has(int $id) : bool
+    public function has($id) : bool
     {
         return $this->collection->has($id);
     }
@@ -135,7 +135,7 @@ class ArrayRepository implements IRepository
     /**
      * {@inheritDoc}
      */
-    public function get(int $id)
+    public function get($id)
     {
         return $this->collection->get($id);
     }
@@ -151,7 +151,7 @@ class ArrayRepository implements IRepository
     /**
      * {@inheritDoc}
      */
-    public function tryGet(int $id)
+    public function tryGet($id)
     {
         return $this->collection->tryGet($id);
     }
@@ -218,7 +218,7 @@ class ArrayRepository implements IRepository
     /**
      * {@inheritDoc}
      */
-    public function removeById(int $id)
+    public function removeById($id)
     {
         $this->collection->removeById($id);
     }

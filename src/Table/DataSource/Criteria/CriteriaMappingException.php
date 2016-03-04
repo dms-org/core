@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-namespace Table\DataSource\Criteria;
+namespace Dms\Core\Table\DataSource\Criteria;
 
 use Dms\Core\Exception\BaseException;
 

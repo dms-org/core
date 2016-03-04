@@ -33,6 +33,7 @@ class EntityCrudModuleFieldTest extends FieldBuilderTestBase
     {
         return Field::create()->name('data')->label('Data')
             ->module($this->module)
+            ->value($this->module->getDataSource())
             ->build();
     }
 

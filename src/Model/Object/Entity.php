@@ -27,7 +27,7 @@ abstract class Entity extends TypedObject implements IEntity, IHashable
      *
      * @param int|null $id
      */
-    public function __construct(int $id = null)
+    public function __construct($id = null)
     {
         parent::__construct();
         $this->id = $id;

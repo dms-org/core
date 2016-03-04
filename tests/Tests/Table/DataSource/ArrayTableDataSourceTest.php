@@ -2,6 +2,7 @@
 
 namespace Dms\Core\Tests\Table\DataSource;
 
+use Dms\Core\Exception\InvalidArgumentException;
 use Dms\Core\Form\Field\Builder\Field;
 use Dms\Core\Table\Builder\Column;
 use Dms\Core\Table\Builder\Table;
@@ -42,5 +43,16 @@ class ArrayTableDataSourceTest extends PeopleTableDataSourceTest
                 ['name' => ['first_name' => 'Joe', 'last_name' => 'Java'], 'age' => 32],
                 ['name' => ['first_name' => 'Kelly', 'last_name' => 'Rust'], 'age' => 18],
         ]);
+    }
+
+    public function testCanUseComponentInCriteria()
+    {
+        $this->assertSame(true, $this->dataSource->canUseColumnComponentInCriteria('name.first_name'));
+        $this->assertSame(true, $this->dataSource->canUseColumnComponentInCriteria('name.last_name'));
+        $this->assertSame(true, $this->dataSource->canUseColumnComponentInCriteria('age'));
+
+        $this->assertThrows(function () {
+            $this->dataSource->canUseColumnComponentInCriteria('non_existent');
+        }, InvalidArgumentException::class);
     }
 }

@@ -30,7 +30,7 @@ interface IRepository extends IMutableObjectSet, IEntitySet
     /**
      * {@inheritDoc}
      */
-    public function has(int $id) : bool;
+    public function has($id) : bool;
 
     /**
      * {@inheritDoc}
@@ -45,7 +45,7 @@ interface IRepository extends IMutableObjectSet, IEntitySet
     /**
      * {@inheritDoc}
      */
-    public function get(int $id);
+    public function get($id);
 
     /**
      * {@inheritDoc}
@@ -55,7 +55,7 @@ interface IRepository extends IMutableObjectSet, IEntitySet
     /**
      * {@inheritDoc}
      */
-    public function tryGet(int $id);
+    public function tryGet($id);
 
     /**
      * {@inheritDoc}
@@ -106,11 +106,11 @@ interface IRepository extends IMutableObjectSet, IEntitySet
     /**
      * Removes the entity with the supplied id from the underlying data source.
      *
-     * @param int $id
+     * @param $id
      *
      * @return void
      */
-    public function removeById(int $id);
+    public function removeById($id);
 
     /**
      * Removes the supplied entities from the underlying data source.

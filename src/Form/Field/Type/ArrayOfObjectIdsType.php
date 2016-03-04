@@ -5,6 +5,7 @@ namespace Dms\Core\Form\Field\Type;
 use Dms\Core\Form\Field\Builder\Field;
 use Dms\Core\Form\Field\Processor\ArrayAllProcessor;
 use Dms\Core\Form\Field\Processor\ObjectArrayLoaderProcessor;
+use Dms\Core\Form\Field\Processor\ObjectIdProcessor;
 use Dms\Core\Form\Field\Processor\Validator\ObjectIdArrayValidator;
 use Dms\Core\Form\IField;
 use Dms\Core\Form\IFieldProcessor;
@@ -66,7 +67,9 @@ class ArrayOfObjectIdsType extends ArrayOfType
 
         $this->buildArrayLengthValidators($processors);
 
-        $processors[] = new ArrayAllProcessor(Field::element()->int()->required()->build());
+        $processors[] = new ArrayAllProcessor(Field::element()->string()->process(
+                new ObjectIdProcessor(Type::mixed())
+        )->build());
 
         $processors[] = new ObjectIdArrayValidator(Type::arrayOf(Type::int())->nullable(), $this->objects);
 

@@ -105,7 +105,7 @@ class DbRepository extends DbRepositoryBase implements IRepository
     /**
      * @inheritDoc
      */
-    public function getObjectId(ITypedObject $object) : int
+    public function getObjectId(ITypedObject $object)
     {
         $objectType = $this->getObjectType();
 
@@ -132,7 +132,7 @@ class DbRepository extends DbRepositoryBase implements IRepository
     /**
      * {@inheritDoc}
      */
-    public function has(int $id) : bool
+    public function has($id) : bool
     {
         return $this->hasAll([$id]);
     }
@@ -200,7 +200,7 @@ class DbRepository extends DbRepositoryBase implements IRepository
     /**
      * {@inheritDoc}
      */
-    public function get(int $id) : IEntity
+    public function get($id) : IEntity
     {
         $entity = $this->tryGet($id);
 
@@ -238,7 +238,7 @@ class DbRepository extends DbRepositoryBase implements IRepository
     /**
      * {@inheritDoc}
      */
-    public function tryGet(int $id)
+    public function tryGet($id)
     {
         $entities = $this->tryGetAll([$id]);
 
@@ -360,7 +360,7 @@ class DbRepository extends DbRepositoryBase implements IRepository
     /**
      * {@inheritDoc}
      */
-    public function removeById(int $id)
+    public function removeById($id)
     {
         $this->removeAllById([$id]);
     }

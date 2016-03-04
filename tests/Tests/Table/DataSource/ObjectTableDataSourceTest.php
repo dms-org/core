@@ -60,6 +60,17 @@ class ObjectTableDataSourceTest extends PeopleTableDataSourceTest
         ]));
     }
 
+    public function testCanUseComponentInCriteria()
+    {
+        $this->assertSame(true, $this->dataSource->canUseColumnComponentInCriteria('name.first_name'));
+        $this->assertSame(true, $this->dataSource->canUseColumnComponentInCriteria('name.last_name'));
+        $this->assertSame(true, $this->dataSource->canUseColumnComponentInCriteria('age'));
+
+        $this->assertThrows(function () {
+            $this->dataSource->canUseColumnComponentInCriteria('non_existent');
+        }, InvalidArgumentException::class);
+    }
+
     public function testIncompatiblePropertyColumnMapping()
     {
         $this->expectException(InvalidArgumentException::class);

@@ -21,7 +21,7 @@ interface IUserRepository extends IRepository
      *
      * @return IUser
      */
-    public function get(int $id);
+    public function get($id);
 
     /**
      * {@inheritDoc}
@@ -35,7 +35,7 @@ interface IUserRepository extends IRepository
      *
      * @return IUser|null
      */
-    public function tryGet(int $id);
+    public function tryGet($id);
 
     /**
      * {@inheritDoc}

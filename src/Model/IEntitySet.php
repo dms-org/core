@@ -43,10 +43,10 @@ interface IEntitySet extends IIdentifiableObjectSet
     /**
      * Returns whether the entity with the given id is within this collection.
      *
-     * @param int $id
+     * @param $id
      * @return bool
      */
-    public function has(int $id) : bool;
+    public function has($id) : bool;
 
     /**
      * Returns whether the entities with the given ids are within this collection.
@@ -59,11 +59,11 @@ interface IEntitySet extends IIdentifiableObjectSet
     /**
      * Returns the entity with the given id.
      *
-     * @param int $id
+     * @param $id
      * @return IEntity
      * @throws EntityNotFoundException
      */
-    public function get(int $id);
+    public function get($id);
 
     /**
      * Returns the entities with the given ids.
@@ -77,10 +77,10 @@ interface IEntitySet extends IIdentifiableObjectSet
     /**
      * Returns the entity with the given id or null if does not exist.
      *
-     * @param int $id
+     * @param $id
      * @return IEntity|null
      */
-    public function tryGet(int $id);
+    public function tryGet($id);
 
     /**
      * Returns the entities with the given ids.
