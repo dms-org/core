@@ -4,6 +4,7 @@ namespace Dms\Core\Form\Field\Processor;
 
 use Dms\Core\Common\Crud\Action\Object\IObjectAction;
 use Dms\Core\Common\Crud\ICrudModule;
+use Dms\Core\Exception\InvalidArgumentException;
 use Dms\Core\Model\IMutableObjectSet;
 use Dms\Core\Model\Type\Builder\Type;
 
@@ -14,6 +15,8 @@ use Dms\Core\Model\Type\Builder\Type;
  */
 class InnerCrudModuleProcessor extends FieldProcessor
 {
+    const NEW_OBJECT_ID_PREFIX = '__new:';
+
     /**
      * @var ICrudModule
      */
@@ -33,7 +36,7 @@ class InnerCrudModuleProcessor extends FieldProcessor
         $newObjects      = [];
 
         foreach ($input as $item) {
-            if (isset($item[IObjectAction::OBJECT_FIELD_NAME])) {
+            if (isset($item[IObjectAction::OBJECT_FIELD_NAME]) && strpos($item[IObjectAction::OBJECT_FIELD_NAME], self::NEW_OBJECT_ID_PREFIX) !== 0) {
                 $newObjects[] = $this->module->getEditAction()->run($item);
             } else {
                 $newObjects[] = $this->module->getCreateAction()->run($item);
@@ -55,11 +58,19 @@ class InnerCrudModuleProcessor extends FieldProcessor
     {
         $stagedForm         = $this->module->getEditAction()->getStagedForm();
         $unprocessedObjects = [];
+        $newObjectIndex     = 0;
 
         /** @var IMutableObjectSet $input */
         foreach ($input->getAll() as $object) {
-            $stages     = $stagedForm->withSubmittedFirstStage([IObjectAction::OBJECT_FIELD_NAME => $object]);
-            $objectData = [IObjectAction::OBJECT_FIELD_NAME => $this->module->getDataSource()->getObjectId($object)];
+            $stages = $stagedForm->withSubmittedFirstStage([IObjectAction::OBJECT_FIELD_NAME => $object]);
+
+            try {
+                $objectId = $this->module->getDataSource()->getObjectId($object);
+            } catch (InvalidArgumentException $e) {
+                $objectId = self::NEW_OBJECT_ID_PREFIX . $newObjectIndex++;
+            }
+
+            $objectData = [IObjectAction::OBJECT_FIELD_NAME => $objectId];
 
             foreach ($stages->getAllStages() as $stage) {
                 $currentStageForm = $stage->loadForm($objectData);

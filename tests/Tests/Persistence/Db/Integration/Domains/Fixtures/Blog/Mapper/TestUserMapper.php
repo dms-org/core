@@ -48,7 +48,7 @@ class TestUserMapper extends EntityMapper
                 ->withParentIdAs('author_id');
 
         $map->relation('friendIds')
-                ->using($this)
+                ->to(TestUser::class)
                 ->toManyIds()
                 ->throughJoinTable('user_friends')
                 ->withParentIdAs('user_id')
