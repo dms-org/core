@@ -63,10 +63,10 @@ class InnerCrudModuleProcessor extends FieldProcessor
             $objectId = $this->module->getDataSource()->getObjectId($object);
 
             if (strpos((string)$objectId, EntityCollection::ENTITY_WITHOUT_ID_PREFIX) === 0) {
-                $objectId = null;
+                $objectData = [];
+            } else {
+                $objectData = [IObjectAction::OBJECT_FIELD_NAME => $objectId];
             }
-
-            $objectData = [IObjectAction::OBJECT_FIELD_NAME => $objectId];
 
             foreach ($stages->getAllStages() as $stage) {
                 $currentStageForm = $stage->loadForm($objectData);

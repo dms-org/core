@@ -13,8 +13,9 @@ use Dms\Core\Common\Crud\Definition\Form\FinalizedCrudFormDefinition;
 use Dms\Core\Common\Crud\Form\ObjectForm;
 use Dms\Core\Common\Crud\IReadModule;
 use Dms\Core\Form\Builder\Form;
+use Dms\Core\Form\Builder\StagedForm;
 use Dms\Core\Form\IForm;
-use Dms\Core\Model\IEntity;
+use Dms\Core\Form\IStagedForm;
 use Dms\Core\Model\IIdentifiableObjectSet;
 use Dms\Core\Model\ITypedObject;
 
@@ -92,7 +93,7 @@ class ViewDetailsAction extends SelfHandlingObjectAction
      */
     protected function returnType()
     {
-        return IForm::class;
+        return IStagedForm::class;
     }
 
     /**
@@ -111,7 +112,7 @@ class ViewDetailsAction extends SelfHandlingObjectAction
      * @param object      $object
      * @param object|null $data
      *
-     * @return IForm
+     * @return IStagedForm
      */
     protected function runHandler($object, $data = null)
     {
@@ -121,12 +122,12 @@ class ViewDetailsAction extends SelfHandlingObjectAction
         $knownData  = [IObjectAction::OBJECT_FIELD_NAME => $object];
         $stages     = $stagedForm->withSubmittedFirstStage($knownData);
 
-        $form = Form::create();
+        $form = StagedForm::begin(ObjectForm::build($this->dataSource)->withInitialValues($knownData));
 
         foreach ($stages->getAllStages() as $stage) {
             $currentStageForm = $stage->loadForm($knownData);
 
-            $form->embed($currentStageForm);
+            $form->then($currentStageForm);
             $knownData += $currentStageForm->getInitialValues();
         }
 
