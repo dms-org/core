@@ -11,5 +11,25 @@ use Dms\Core\Exception;
  */
 interface ITypedObjectCollection extends ITypedCollection, IObjectSetWithLoadCriteriaSupport
 {
+    /**
+     * Moves the object to the new position in the collection.
+     *
+     * @param ITypedObject $object
+     * @param int          $newPosition 1-based
+     *
+     * @return void
+     * @throws Exception\InvalidArgumentException
+     */
+    public function move(ITypedObject $object, int $newPosition);
 
+    /**
+     * Moves the object at the supplied index to the new position in the collection.
+     *
+     * @param $index
+     * @param int $newPosition 1-based
+     *
+     * @return void
+     * @throws Exception\InvalidArgumentException
+     */
+    public function moveAtIndex($index, int $newPosition);
 }

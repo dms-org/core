@@ -105,8 +105,8 @@ class ObjectCollection extends TypedCollection implements ITypedObjectCollection
     {
         $this->instanceMap = new \SplObjectStorage();
 
-        foreach ($elements->values() as $entity) {
-            $this->instanceMap[$entity] = true;
+        foreach ($elements as $key => $entity) {
+            $this->instanceMap[$entity] = $key;
         }
     }
 
@@ -151,14 +151,10 @@ class ObjectCollection extends TypedCollection implements ITypedObjectCollection
      */
     protected function doesContainsObjects(array $objects) : bool
     {
-        $objectsLookup = new \SplObjectStorage();
-
-        foreach ($this->elements as $object) {
-            $objectsLookup[$object] = true;
-        }
+        $this->toOrderedMap();
 
         foreach ($objects as $object) {
-            if (!isset($objectsLookup[$object])) {
+            if (!isset($this->instanceMap[$object])) {
                 return false;
             }
         }
@@ -217,6 +213,66 @@ class ObjectCollection extends TypedCollection implements ITypedObjectCollection
         $this->removeWhere(function (ITypedObject $other) use ($lookup) {
             return isset($lookup[spl_object_hash($other)]);
         });
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function move(ITypedObject $object, int $newPosition)
+    {
+        $this->toOrderedMap();
+
+        if (!$this->containsInstance($object)) {
+            throw Exception\InvalidArgumentException::format(
+                'Invalid call to %s: the collection does not contain the supplied object of type %s',
+                __METHOD__, get_class($object)
+            );
+        }
+
+        $this->moveAtIndex($this->instanceMap[$object], $newPosition);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function moveAtIndex($index, int $newPosition)
+    {
+        $currentElements = $this->toOrderedMap();
+
+        if ($newPosition < 1 || $newPosition > $this->count()) {
+            throw Exception\InvalidArgumentException::format(
+                'Invalid call to %s: the position must be between 1 and %d, %d given',
+                __METHOD__, $this->count(), $newPosition
+            );
+        }
+
+        if (!$currentElements->contains($index)) {
+            throw Exception\InvalidArgumentException::format(
+                'Invalid call to %s: the collection does not contain a value with the \'%s\' index.',
+                __METHOD__, $index
+            );
+        }
+
+        $currentPosition = 1;
+        $newOrderedMap = $this->scheme->createOrderedMap();
+
+        foreach ($currentElements as $key => $value) {
+            if ($currentPosition === $newPosition) {
+                $newOrderedMap->set($index, $currentElements->get($index));
+                $currentPosition++;
+            }
+
+            if ($key !== $index) {
+                $newOrderedMap->set($key, $value);
+                $currentPosition++;
+            }
+        }
+
+        if ($currentPosition === $newPosition) {
+            $newOrderedMap->set($index, $currentElements->get($index));
+        }
+
+        $this->updateElements($newOrderedMap);
     }
 
     /**
