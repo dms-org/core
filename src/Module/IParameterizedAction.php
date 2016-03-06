@@ -36,7 +36,7 @@ interface IParameterizedAction extends IAction
      *
      * @param array $data
      *
-     * @return IDataTransferObject|null
+     * @return object|null
      * @throws UserForbiddenException if the authenticated user does not have the required permissions.
      * @throws InvalidFormSubmissionException if the form data is invalid
      */

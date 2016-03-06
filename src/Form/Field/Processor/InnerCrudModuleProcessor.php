@@ -6,6 +6,7 @@ use Dms\Core\Common\Crud\Action\Object\IObjectAction;
 use Dms\Core\Common\Crud\ICrudModule;
 use Dms\Core\Model\EntityCollection;
 use Dms\Core\Model\IMutableObjectSet;
+use Dms\Core\Model\ITypedObjectCollection;
 use Dms\Core\Model\Object\ValueObject;
 use Dms\Core\Model\Type\Builder\Type;
 
@@ -30,16 +31,25 @@ class InnerCrudModuleProcessor extends FieldProcessor
 
     protected function doProcess($input, array &$messages)
     {
-        $originalObjects = $this->module->getDataSource()->getAll();
+        $dataSource      = $this->module->getDataSource();
+        $originalObjects = $dataSource->getAll();
         $objectsToRemove = [];
         $newObjects      = [];
 
+        $currentPosition = 1;
         foreach ($input as $item) {
             if (isset($item[IObjectAction::OBJECT_FIELD_NAME])) {
-                $newObjects[] = $this->module->getEditAction()->run($item);
+                $editedObject = $this->module->getEditAction()->run($item);
+                $newObjects[] = $editedObject;
+
+                if ($dataSource instanceof ITypedObjectCollection) {
+                    $dataSource->move($editedObject, $currentPosition);
+                }
             } else {
                 $newObjects[] = $this->module->getCreateAction()->run($item);
             }
+
+            $currentPosition++;
         }
 
         foreach ($originalObjects as $originalObject) {
@@ -48,9 +58,9 @@ class InnerCrudModuleProcessor extends FieldProcessor
             }
         }
 
-        $this->module->getDataSource()->removeAll($objectsToRemove);
+        $dataSource->removeAll($objectsToRemove);
 
-        return $this->module->getDataSource();
+        return $dataSource;
     }
 
     protected function doUnprocess($input)
