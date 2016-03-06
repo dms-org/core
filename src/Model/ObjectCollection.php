@@ -105,8 +105,8 @@ class ObjectCollection extends TypedCollection implements ITypedObjectCollection
     {
         $this->instanceMap = new \SplObjectStorage();
 
-        foreach ($elements as $key => $entity) {
-            $this->instanceMap[$entity] = $key;
+        foreach ($elements as $key => $object) {
+            $this->instanceMap[$object] = $key;
         }
     }
 

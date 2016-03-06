@@ -12,6 +12,7 @@ use Dms\Core\Common\Crud\Table\ISummaryTable;
 use Dms\Core\Common\Crud\Table\SummaryTable;
 use Dms\Core\Exception\InvalidOperationException;
 use Dms\Core\Model\IEntitySet;
+use Dms\Core\Model\IIdentifiableObjectSet;
 use Dms\Core\Model\IObjectSet;
 use Dms\Core\Model\Object\FinalizedClassDefinition;
 use Dms\Core\Module\Definition\Table\TableViewDefiner;
@@ -39,7 +40,7 @@ class SummaryTableDefinition
     protected $objectTableDefinition;
 
     /**
-     * @var IObjectSet
+     * @var IIdentifiableObjectSet
      */
     protected $dataSource;
 
@@ -68,9 +69,9 @@ class SummaryTableDefinition
      *
      * @param ReadModuleDefinition     $moduleDefinition
      * @param FinalizedClassDefinition $class
-     * @param IObjectSet               $dataSource
+     * @param IIdentifiableObjectSet               $dataSource
      */
-    public function __construct(ReadModuleDefinition $moduleDefinition, FinalizedClassDefinition $class, IObjectSet $dataSource)
+    public function __construct(ReadModuleDefinition $moduleDefinition, FinalizedClassDefinition $class, IIdentifiableObjectSet $dataSource)
     {
         $this->moduleDefinition      = $moduleDefinition;
         $this->objectTableDefinition = new ObjectTableDefinition($class, $dataSource->criteria()->getMemberExpressionParser());
@@ -180,12 +181,6 @@ class SummaryTableDefinition
 
     private function definerReorderAction($viewName, callable $reorderCallback, array $permissions = [], $actionName = null)
     {
-        if (!($this->dataSource instanceof IEntitySet)) {
-            throw InvalidOperationException::format(
-                    'Cannot define reorder action on non entity set'
-            );
-        }
-
         $reorderActionName = $actionName ?: IReadModule::SUMMARY_TABLE . '.' . $viewName . '.reorder';
 
         $viewPermission = Permission::named(IReadModule::VIEW_PERMISSION);

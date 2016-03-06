@@ -26,7 +26,7 @@ class EntityCollection extends ObjectCollection implements IEntityCollection
     /**
      * @var \SplObjectStorage|null
      */
-    protected $instanceMap;
+    protected $instanceIdMap;
 
     /**
      * @param string                 $entityType
@@ -37,15 +37,16 @@ class EntityCollection extends ObjectCollection implements IEntityCollection
      * @throws Exception\InvalidArgumentException
      */
     public function __construct(
-            string $entityType,
-            $entities = [],
-            IIteratorScheme $scheme = null,
-            Collection $source = null
-    ) {
+        string $entityType,
+        $entities = [],
+        IIteratorScheme $scheme = null,
+        Collection $source = null
+    )
+    {
         if (!is_a($entityType, IEntity::class, true)) {
             throw Exception\InvalidArgumentException::format(
-                    'Invalid entity class: expecting instance of %s, %s given',
-                    IEntity::class, $entityType
+                'Invalid entity class: expecting instance of %s, %s given',
+                IEntity::class, $entityType
             );
         }
 
@@ -72,8 +73,8 @@ class EntityCollection extends ObjectCollection implements IEntityCollection
 
     protected function loadIdentityMap(IOrderedMap $elements)
     {
-        $this->identityMap = [];
-        $this->instanceMap = new \SplObjectStorage();
+        $this->identityMap   = [];
+        $this->instanceIdMap = new \SplObjectStorage();
 
         /** @var IEntity $entity */
         $entityWithIdIndex = 0;
@@ -84,16 +85,10 @@ class EntityCollection extends ObjectCollection implements IEntityCollection
                 $id = self::ENTITY_WITHOUT_ID_PREFIX . $entityWithIdIndex++;
             }
 
-            $this->identityMap[$id]     = $entity;
-            $this->instanceMap[$entity] = $id;
+            $this->identityMap[$id]       = $entity;
+            $this->instanceIdMap[$entity] = $id;
         }
     }
-
-    protected function loadInstanceMap(IOrderedMap $elements)
-    {
-
-    }
-
 
     /**
      * {@inheritDoc}
@@ -120,7 +115,7 @@ class EntityCollection extends ObjectCollection implements IEntityCollection
                     return false;
                 }
             } else {
-                if (!isset($this->instanceMap[$object])) {
+                if (!isset($this->instanceIdMap[$object])) {
                     return false;
                 }
             }
@@ -144,8 +139,8 @@ class EntityCollection extends ObjectCollection implements IEntityCollection
         /** @var IEntity $object */
         if (!$this->doesContainsObjects([$object])) {
             throw InvalidArgumentException::format(
-                    'The supplied entity of type %s is not contained within the collection',
-                    get_class($object)
+                'The supplied entity of type %s is not contained within the collection',
+                get_class($object)
             );
         }
 
@@ -158,7 +153,7 @@ class EntityCollection extends ObjectCollection implements IEntityCollection
         if ($object->hasId()) {
             return $object->getId();
         } else {
-            return $this->instanceMap[$object];
+            return $this->instanceIdMap[$object];
         }
     }
 

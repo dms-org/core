@@ -9,6 +9,7 @@ use Dms\Core\Model\ILoadCriteria;
 use Dms\Core\Model\TypedCollection;
 use Dms\Core\Tests\Model\Fixtures\SubObject;
 use Dms\Core\Tests\Model\Fixtures\TestEntity;
+use Dms\Core\Tests\Model\Object\Fixtures\BlankEntity;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

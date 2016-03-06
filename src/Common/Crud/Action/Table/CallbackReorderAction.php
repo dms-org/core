@@ -12,7 +12,7 @@ use Dms\Core\Exception\TypeMismatchException;
 use Dms\Core\Form\Builder\Form;
 use Dms\Core\Form\Builder\StagedForm;
 use Dms\Core\Form\Field\Builder\Field;
-use Dms\Core\Model\IEntitySet;
+use Dms\Core\Model\IIdentifiableObjectSet;
 use Dms\Core\Model\Object\ArrayDataObject;
 
 /**
@@ -23,39 +23,40 @@ use Dms\Core\Model\Object\ArrayDataObject;
 class CallbackReorderAction extends ObjectAction implements IReorderAction
 {
     /**
-     * @param IEntitySet    $dataSource
-     * @param string        $name
-     * @param IAuthSystem   $auth
-     * @param IPermission[] $requiredPermissions
-     * @param callable      $reorderCallback
+     * @param IIdentifiableObjectSet $dataSource
+     * @param string                 $name
+     * @param IAuthSystem            $auth
+     * @param IPermission[]          $requiredPermissions
+     * @param callable               $reorderCallback
      *
      * @throws TypeMismatchException
      */
     public function __construct(
-            IEntitySet $dataSource,
-            string $name,
-            IAuthSystem $auth,
-            array $requiredPermissions,
-            callable $reorderCallback
-    ) {
+        IIdentifiableObjectSet $dataSource,
+        string $name,
+        IAuthSystem $auth,
+        array $requiredPermissions,
+        callable $reorderCallback
+    )
+    {
         parent::__construct(
-                $name,
-                $auth,
-                $requiredPermissions,
-                new ArrayObjectActionFormMapping($this->reorderForm($dataSource)),
-                new CustomObjectActionHandler(function ($object, ArrayDataObject $data) use ($reorderCallback) {
-                    $reorderCallback($object, $data[self::NEW_INDEX_FIELD_NAME]);
-                }, null, $dataSource->getEntityType(), ArrayDataObject::class)
+            $name,
+            $auth,
+            $requiredPermissions,
+            new ArrayObjectActionFormMapping($this->reorderForm($dataSource)),
+            new CustomObjectActionHandler(function ($object, ArrayDataObject $data) use ($reorderCallback) {
+                $reorderCallback($object, $data[self::NEW_INDEX_FIELD_NAME]);
+            }, null, $dataSource->getObjectType(), ArrayDataObject::class)
         );
     }
 
-    protected function reorderForm(IEntitySet $dataSource)
+    protected function reorderForm(IIdentifiableObjectSet $dataSource)
     {
         return StagedForm::begin(ObjectForm::build($dataSource))
-                ->then(Form::create()->section('Reorder', [
-                        Field::name(self::NEW_INDEX_FIELD_NAME)->label('New Index')->int()->min(1)->required()
-                ]))
-               ->build();
+            ->then(Form::create()->section('Reorder', [
+                Field::name(self::NEW_INDEX_FIELD_NAME)->label('New Index')->int()->min(1)->required(),
+            ]))
+            ->build();
     }
 
     /**
