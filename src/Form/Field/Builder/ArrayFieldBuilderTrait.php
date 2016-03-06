@@ -102,8 +102,7 @@ trait ArrayFieldBuilderTrait
     }
 
     /**
-     * Validates that all the array elements are unique within the supplied
-     * set of object properties.
+     * Maps the array of values to the supplied collection type.
      *
      * @param CollectionType $collectionType
      * @param callable|null  $mapperCallback
