@@ -10,6 +10,7 @@ use Dms\Core\Model\Object\TypedObject;
 use Dms\Core\Model\Type\Builder\Type;
 use Dms\Core\Model\Type\ObjectType;
 use Pinq\Iterators\IIteratorScheme;
+use Pinq\Iterators\IOrderedMap;
 
 /**
  * The object collection class.
@@ -27,6 +28,12 @@ class ObjectCollection extends TypedCollection implements ITypedObjectCollection
      * @var FinalizedClassDefinition
      */
     protected $classDefinition;
+
+
+    /**
+     * @var \SplObjectStorage|null
+     */
+    protected $instanceMap;
 
     /**
      * @param string                      $objectType
@@ -74,6 +81,33 @@ class ObjectCollection extends TypedCollection implements ITypedObjectCollection
     protected function constructScopedSelf($elements)
     {
         return new TypedCollection(Type::mixed(), $elements, $this->scheme, $this->source ?: $this);
+    }
+
+    protected function updateElements(\Traversable $elements)
+    {
+        parent::updateElements($elements);
+
+        $this->loadInstanceMap($this->toOrderedMap());
+    }
+
+    protected function toOrderedMap()
+    {
+        $elements = parent::toOrderedMap();
+
+        if ($this->instanceMap === null) {
+            $this->loadInstanceMap($elements);
+        }
+
+        return $elements;
+    }
+
+    protected function loadInstanceMap(IOrderedMap $elements)
+    {
+        $this->instanceMap = new \SplObjectStorage();
+
+        foreach ($elements->values() as $entity) {
+            $this->instanceMap[$entity] = true;
+        }
     }
 
     public function getAll() : array
@@ -132,6 +166,11 @@ class ObjectCollection extends TypedCollection implements ITypedObjectCollection
         return true;
     }
 
+    protected function containsInstance(ITypedObject $instance)
+    {
+        return isset($this->instanceMap[$instance]);
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -146,7 +185,7 @@ class ObjectCollection extends TypedCollection implements ITypedObjectCollection
     public function saveAll(array $objects)
     {
         foreach ($objects as $key => $object) {
-            if ($this->contains($object)) {
+            if ($this->containsInstance($object)) {
                 unset($objects[$key]);
             }
         }

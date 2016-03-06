@@ -89,6 +89,12 @@ class EntityCollection extends ObjectCollection implements IEntityCollection
         }
     }
 
+    protected function loadInstanceMap(IOrderedMap $elements)
+    {
+
+    }
+
+
     /**
      * {@inheritDoc}
      */

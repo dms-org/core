@@ -2,7 +2,7 @@
 
 namespace Dms\Core\Tests;
 
-use Dms\Core\Tests\Helpers\Comparators\EntityCollectionComparator;
+use Dms\Core\Tests\Helpers\Comparators\ObjectCollectionComparator;
 use SebastianBergmann\Comparator\Factory;
 
 /**
@@ -12,6 +12,6 @@ class CustomComparators
 {
     public static function load()
     {
-        Factory::getInstance()->register(new EntityCollectionComparator());
+        Factory::getInstance()->register(new ObjectCollectionComparator());
     }
 }

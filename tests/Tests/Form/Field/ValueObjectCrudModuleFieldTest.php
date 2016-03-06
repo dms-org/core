@@ -39,12 +39,10 @@ class ValueObjectCrudModuleFieldTest extends FieldBuilderTestBase
 
     public function testInitialData()
     {
-        $id = IObjectAction::OBJECT_FIELD_NAME;
-
         $this->assertSame([
-            [$id => 0, 'data' => 'abc'],
-            [$id => 1, 'data' => '123'],
-            [$id => 2, 'data' => 'xyz'],
+            ['data' => 'abc'],
+            ['data' => '123'],
+            ['data' => 'xyz'],
         ], $this->field()->getUnprocessedInitialValue());
     }
 

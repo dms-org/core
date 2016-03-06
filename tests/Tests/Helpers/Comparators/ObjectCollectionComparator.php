@@ -3,6 +3,7 @@
 namespace Dms\Core\Tests\Helpers\Comparators;
 
 use Dms\Core\Model\EntityCollection;
+use Dms\Core\Model\ObjectCollection;
 use SebastianBergmann\Comparator\ObjectComparator;
 
 /**
@@ -13,7 +14,7 @@ use SebastianBergmann\Comparator\ObjectComparator;
  *
  * @author Elliot Levin <elliotlevin@hotmail.com>
  */
-class EntityCollectionComparator extends ObjectComparator
+class ObjectCollectionComparator extends ObjectComparator
 {
 
     /**
@@ -26,7 +27,7 @@ class EntityCollectionComparator extends ObjectComparator
      */
     public function accepts($expected, $actual)
     {
-        return $expected instanceof EntityCollection && $actual instanceof EntityCollection;
+        return $expected instanceof ObjectCollection && $actual instanceof ObjectCollection;
     }
 
     protected function toArray($object)

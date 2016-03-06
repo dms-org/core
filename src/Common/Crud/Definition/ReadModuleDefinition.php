@@ -14,15 +14,14 @@ use Dms\Core\Common\Crud\UnsupportedActionException;
 use Dms\Core\Exception\InvalidArgumentException;
 use Dms\Core\Exception\InvalidOperationException;
 use Dms\Core\Form\Field\Builder\Field;
-use Dms\Core\Model\EntityCollection;
 use Dms\Core\Model\IEntity;
-use Dms\Core\Model\IEntitySet;
 use Dms\Core\Model\IIdentifiableObjectSet;
-use Dms\Core\Model\IObjectSetWithIdentityByIndex;
+use Dms\Core\Model\ITypedObject;
 use Dms\Core\Model\Object\FinalizedClassDefinition;
 use Dms\Core\Model\Object\TypedObject;
 use Dms\Core\Module\Definition\FinalizedModuleDefinition;
 use Dms\Core\Module\Definition\ModuleDefinition;
+use Dms\Core\Persistence\IRepository;
 
 /**
  * The read module definition class.
@@ -232,22 +231,17 @@ class ReadModuleDefinition extends ModuleDefinition
                 ->int()
                 ->required();
 
-        if ($this->dataSource instanceof EntityCollection) {
-            $definition->mapCallback(function (IEntity $entity) {
-                return $this->dataSource->getObjectId($entity);
-            })
-                    ->hidden()
-                    ->to($idField);
-        } elseif ($this->dataSource instanceof IEntitySet) {
+        if ($this->dataSource instanceof IRepository) {
             $definition->mapProperty(IEntity::ID)
                     ->hidden()
                     ->to($idField);
-        } elseif ($this->dataSource instanceof IObjectSetWithIdentityByIndex) {
-            $definition->map()->index()
+        } else {
+            $definition
+                    ->mapCallback(function (ITypedObject $object) {
+                        return $this->dataSource->getObjectId($object);
+                    })
                     ->hidden()
                     ->to($idField);
-        } else {
-            throw InvalidArgumentException::format('Unknown data source type: %s', get_class($this->dataSource));
         }
 
         $summaryTableDefinitionCallback($definition);

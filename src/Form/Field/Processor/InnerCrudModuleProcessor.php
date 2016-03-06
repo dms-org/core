@@ -6,6 +6,7 @@ use Dms\Core\Common\Crud\Action\Object\IObjectAction;
 use Dms\Core\Common\Crud\ICrudModule;
 use Dms\Core\Model\EntityCollection;
 use Dms\Core\Model\IMutableObjectSet;
+use Dms\Core\Model\Object\ValueObject;
 use Dms\Core\Model\Type\Builder\Type;
 
 /**
@@ -62,7 +63,7 @@ class InnerCrudModuleProcessor extends FieldProcessor
             $stages = $stagedForm->withSubmittedFirstStage([IObjectAction::OBJECT_FIELD_NAME => $object]);
             $objectId = $this->module->getDataSource()->getObjectId($object);
 
-            if (strpos((string)$objectId, EntityCollection::ENTITY_WITHOUT_ID_PREFIX) === 0) {
+            if (strpos((string)$objectId, EntityCollection::ENTITY_WITHOUT_ID_PREFIX) === 0 || $object instanceof ValueObject) {
                 $objectData = [];
             } else {
                 $objectData = [IObjectAction::OBJECT_FIELD_NAME => $objectId];

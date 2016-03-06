@@ -124,6 +124,9 @@ class ValueObjectCollection extends ObjectCollection implements IValueObjectColl
      */
     public function get($index)
     {
+        Exception\InvalidArgumentException::verify(ctype_digit((string)$index), 'The index must be a valid integer');
+
+        $index = (int)$index;
         if (!$this->offsetExists($index)) {
             throw new ObjectNotFoundException($this->getObjectType(), $index);
         }
@@ -139,11 +142,7 @@ class ValueObjectCollection extends ObjectCollection implements IValueObjectColl
         $objects = [];
 
         foreach ($indexes as $index) {
-            if (!$this->offsetExists($index)) {
-                throw new ObjectNotFoundException($this->getObjectType(), $index);
-            }
-
-            $objects[] = $this->offsetGet($index);
+            $objects[] = $this->get($index);
         }
 
         return $objects;

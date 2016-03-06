@@ -139,10 +139,6 @@ abstract class CrudModule extends ReadModule implements ICrudModule
 
     protected function loadCrudModuleWithDataSource(IMutableObjectSet $dataSource) : ICrudModule
     {
-        $clone = clone $this;
-
-        $clone->dataSource = $dataSource;
-
-        return $clone;
+        return new static($dataSource, $this->authSystem);
     }
 }

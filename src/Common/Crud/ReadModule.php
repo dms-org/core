@@ -205,10 +205,6 @@ abstract class ReadModule extends Module implements IReadModule
 
     protected function loadModuleWithDataSource(IIdentifiableObjectSet $dataSource) : IReadModule
     {
-        $clone = clone $this;
-
-        $clone->dataSource = $dataSource;
-
-        return $clone;
+        return new static($dataSource, $this->authSystem);
     }
 }
