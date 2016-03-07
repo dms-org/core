@@ -65,10 +65,8 @@ class ValueObjectCollection extends ObjectCollection implements IValueObjectColl
     {
         Exception\TypeMismatchException::verifyInstanceOf(__METHOD__, 'object', $object, $this->getObjectType());
 
-        foreach ($this->getTrueIterator() as $index => $other) {
-            if ($object === $other) {
-                return $index;
-            }
+        if (isset($this->instanceMap[$object])) {
+            return $this->instanceMap[$object];
         }
 
         throw Exception\InvalidArgumentException::format(
