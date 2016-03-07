@@ -39,7 +39,7 @@ class ArrayFieldOptions implements IFieldOptions
         foreach ($keyValueOptions as $value => $label) {
             $options[] = $label instanceof IFieldOption
                     ? $label
-                    : new FieldOption($value, $label);
+                    : new FieldOption((string)$value, $label);
         }
 
         return new self($options);
