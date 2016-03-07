@@ -28,6 +28,7 @@ abstract class FieldType implements IFieldType
     const ATTR_INITIAL_VALUE = 'initial-value';
     const ATTR_OPTIONS = 'options';
     const ATTR_SHOW_ALL_OPTIONS = 'show-all-options';
+    const ATTR_HIDDEN = 'hidden';
 
     /**
      * @var array
@@ -39,6 +40,7 @@ abstract class FieldType implements IFieldType
             self::ATTR_INITIAL_VALUE    => null,
             self::ATTR_OPTIONS          => null,
             self::ATTR_SHOW_ALL_OPTIONS => null,
+            self::ATTR_HIDDEN           => null,
     ];
 
     /**

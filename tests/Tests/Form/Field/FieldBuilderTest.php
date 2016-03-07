@@ -18,7 +18,6 @@ use Dms\Core\Form\Field\Processor\ObjectLoaderProcessor;
 use Dms\Core\Form\Field\Processor\EnumProcessor;
 use Dms\Core\Form\Field\Processor\InnerFormProcessor;
 use Dms\Core\Form\Field\Processor\TypeProcessor;
-use Dms\Core\Form\Field\Processor\Validator\BoolValidator;
 use Dms\Core\Form\Field\Processor\Validator\DateFormatValidator;
 use Dms\Core\Form\Field\Processor\Validator\ObjectIdArrayValidator;
 use Dms\Core\Form\Field\Processor\Validator\ObjectIdValidator;
@@ -514,5 +513,16 @@ class FieldBuilderTest extends FieldBuilderTestBase
         $this->assertEquals(null, $type->getOptions());
         $this->assertEquals([new TypeValidator(PhpType::object(\stdClass::class)->nullable())], $field->getProcessors());
         $this->assertEquals(PhpType::object(\stdClass::class)->nullable(), $field->getProcessedType());
+    }
+
+    public function testHiddenField()
+    {
+        $normalField = $this->field()->string()->build();
+
+        $this->assertEmpty($normalField->getType()->get(FieldType::ATTR_HIDDEN));
+
+        $hiddenField = $this->field()->string()->hidden()->build();
+
+        $this->assertSame(true, $hiddenField->getType()->get(FieldType::ATTR_HIDDEN));
     }
 }

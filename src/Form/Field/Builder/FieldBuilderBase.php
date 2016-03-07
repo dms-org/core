@@ -204,6 +204,16 @@ abstract class FieldBuilderBase
     }
 
     /**
+     * Sets the field as hidden.
+     *
+     * @return static
+     */
+    public function hidden()
+    {
+        return $this->attr(FieldType::ATTR_HIDDEN, true);
+    }
+
+    /**
      * Sets the default value for the field.
      *
      * @param mixed $value
