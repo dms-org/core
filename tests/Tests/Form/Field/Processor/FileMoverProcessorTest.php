@@ -112,6 +112,19 @@ class FileMoverProcessorTest extends FieldProcessorTest
         $this->assertSame($file2, $return2);
     }
 
+    public function testStaticFileName()
+    {
+        $processor = FileMoverProcessor::withFileName(IFile::class, '/some/dir', 'some-name.txt');
+        $messages  = [];
+
+        $return1 = $processor->process($this->mockUploadedFile('foo', null, $file1 = $this->mockFile(), $filePath1), $messages);
+        $return2 = $processor->process($this->mockUploadedFile('bar', null, $file2 = $this->mockFile(), $filePath2), $messages);
+
+        $this->assertSame('/some/dir' . DIRECTORY_SEPARATOR . 'some-name.txt', $filePath1);
+        $this->assertSame('/some/dir' . DIRECTORY_SEPARATOR . 'some-name.txt', $filePath2);
+        $this->assertSame($file1, $return1);
+        $this->assertSame($file2, $return2);
+    }
     public function testImage()
     {
         $processor = FileMoverProcessor::withClientFileName(IImage::class, '/some/dir');

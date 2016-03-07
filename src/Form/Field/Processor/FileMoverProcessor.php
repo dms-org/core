@@ -40,6 +40,13 @@ class FileMoverProcessor extends FieldProcessor
         $this->fileNameCallback = $fileNameCallback;
     }
 
+    public static function withFileName(string $processedFileClass, string $path, string $fileName)
+    {
+        return new self($processedFileClass, $path, function (IUploadedFile $file) use ($fileName) {
+            return $fileName;
+        });
+    }
+
     public static function withClientFileName(string $processedFileClass, string $path)
     {
         return new self($processedFileClass, $path, function (IUploadedFile $file) {
