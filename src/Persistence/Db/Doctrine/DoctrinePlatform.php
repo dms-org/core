@@ -2,9 +2,6 @@
 
 namespace Dms\Core\Persistence\Db\Doctrine;
 
-use Doctrine\DBAL\Connection as DbalConnection;
-use Doctrine\DBAL\Platforms\AbstractPlatform as DoctrineAbstractPlatform;
-use Doctrine\DBAL\Query\QueryBuilder;
 use Dms\Core\Exception\InvalidArgumentException;
 use Dms\Core\Persistence\Db\Doctrine\Resequence\ResequenceCompilerFactory;
 use Dms\Core\Persistence\Db\Platform\CompiledQuery;
@@ -19,6 +16,9 @@ use Dms\Core\Persistence\Db\Query\ResequenceOrderIndexColumn;
 use Dms\Core\Persistence\Db\Query\Select;
 use Dms\Core\Persistence\Db\Query\Update;
 use Dms\Core\Persistence\Db\Schema\Table;
+use Doctrine\DBAL\Connection as DbalConnection;
+use Doctrine\DBAL\Platforms\AbstractPlatform as DoctrineAbstractPlatform;
+use Doctrine\DBAL\Query\QueryBuilder;
 
 /**
  * The doctrine platform.
@@ -111,8 +111,13 @@ class DoctrinePlatform extends Platform
             $queryBuilder->set($this->identifier($columnName), ':' . $columnName);
         }
 
+        $wherePredicates = [];
         foreach ($whereColumnNameParameterMap as $columnName => $parameterName) {
-            $queryBuilder->where($this->identifier($columnName) . ' = :' . $parameterName);
+            $wherePredicates[] = $this->identifier($columnName) . ' = :' . $parameterName;
+        }
+
+        if ($wherePredicates) {
+            $queryBuilder->where(...$wherePredicates);
         }
 
         return $queryBuilder->getSQL();

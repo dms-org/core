@@ -2,8 +2,6 @@
 
 namespace Dms\Core\Tests\Persistence\Db\Doctrine;
 
-use Dms\Core\Persistence\Db\Schema\PrimaryKeyBuilder;
-use Doctrine\DBAL\Platforms\MySqlPlatform;
 use Dms\Core\Persistence\Db\Doctrine\DoctrinePlatform;
 use Dms\Core\Persistence\Db\Query\Clause\Join;
 use Dms\Core\Persistence\Db\Query\Delete;
@@ -11,12 +9,13 @@ use Dms\Core\Persistence\Db\Query\Expression\Expr;
 use Dms\Core\Persistence\Db\Query\Select;
 use Dms\Core\Persistence\Db\Query\Update;
 use Dms\Core\Persistence\Db\Schema\Column;
+use Dms\Core\Persistence\Db\Schema\PrimaryKeyBuilder;
 use Dms\Core\Persistence\Db\Schema\Table;
-use Dms\Core\Persistence\Db\Schema\Type\Integer;
 use Dms\Core\Persistence\Db\Schema\Type\Text;
 use Dms\Core\Persistence\Db\Schema\Type\Varchar;
 use Dms\Core\Tests\Persistence\Db\Doctrine\Mocks\ConnectionMock;
 use Dms\Core\Tests\Persistence\Db\Doctrine\Mocks\DriverMock;
+use Doctrine\DBAL\Platforms\MySqlPlatform;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>
@@ -78,10 +77,10 @@ class DoctrinePlatformTest extends DoctrineTestBase
         $table = $this->mockTable();
         $query = $this->platform->compileDelete(
                 Delete::from($table)
-                    ->where(Expr::lessThan(Expr::tableColumn($table, 'id'), Expr::idParam(15)))
-                    ->orderByDesc(Expr::tableColumn($table, 'id'))
-                    ->offset(10)
-                    ->limit(100)
+                        ->where(Expr::lessThan(Expr::tableColumn($table, 'id'), Expr::idParam(15)))
+                        ->orderByDesc(Expr::tableColumn($table, 'id'))
+                        ->offset(10)
+                        ->limit(100)
         );
 
         $this->assertSqlSame(<<<'SQL'
@@ -96,7 +95,7 @@ WHERE `id` IN (SELECT * FROM (
   OFFSET 10
 ) `foo`)
 SQL
-, $query->getSql());
+                , $query->getSql());
         $this->assertSame([1 => 15], $query->getParameters());
     }
 
@@ -104,7 +103,7 @@ SQL
     {
         $query = $this->platform->compileUpdate(
                 Update::from($this->mockTable())
-                    ->set('data', Expr::param(new Varchar(500), 'foo'))
+                        ->set('data', Expr::param(new Varchar(500), 'foo'))
         );
 
         $this->assertSqlSame('UPDATE `foo` SET `data` = ?', $query->getSql());
@@ -118,7 +117,8 @@ SQL
                 Update::from($table)
                         ->set('id', Expr::tableColumn($table, 'id'))
                         ->set('data', Expr::count())
-                        ->join(Join::inner($table, 'bar', [Expr::equal(Expr::tableColumn($table, 'id'), Expr::column('bar', $table->findColumn('id')))]))
+                        ->join(Join::inner($table, 'bar',
+                                [Expr::equal(Expr::tableColumn($table, 'id'), Expr::column('bar', $table->findColumn('id')))]))
                         ->where(Expr::lessThan(Expr::tableColumn($table, 'id'), Expr::idParam(15)))
                         ->orderByDesc(Expr::tableColumn($table, 'id'))
                         ->offset(10)
@@ -142,6 +142,21 @@ WHERE `id` IN (SELECT * FROM (
 SQL
                 , $query->getSql());
         $this->assertSame([1 => 15], $query->getParameters());
+    }
+
+    public function testCompiledUpdateWithMultipleWhereConditions()
+    {
+        $table = $this->mockTable();
+        $query = $this->platform->compilePreparedUpdate($table, ['id', 'data'], ['id' => 'lock_id', 'data' => 'lock_data']);
+
+        $this->assertSqlSame(<<<'SQL'
+UPDATE `foo` SET
+  `id` = :id,
+  `data` = :data
+WHERE (`id` = :lock_id) AND (`data` = :lock_data)
+SQL
+                , $query);
+
     }
 
     public function testSimpleSelect()
@@ -181,7 +196,7 @@ HAVING `t2`.`id` > ?
 ORDER BY `t2`.`id` DESC
 LIMIT 100 OFFSET 10
 SQL
-, $query->getSql());
+                , $query->getSql());
         $this->assertSame([1 => 15, 2 => 'abc', 3 => 10], $query->getParameters());
     }
 
