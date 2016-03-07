@@ -7,7 +7,10 @@ use Dms\Core\Model\Criteria\IMemberExpressionParser;
 use Dms\Core\Model\IObjectSet;
 use Dms\Core\Model\IObjectSetWithLoadCriteriaSupport;
 use Dms\Core\Model\ITypedObject;
+use Dms\Core\Model\Object\TypedObject;
+use Dms\Core\Table\Data\DataTable;
 use Dms\Core\Table\Data\TableRow;
+use Dms\Core\Table\Data\TableSection;
 use Dms\Core\Table\DataSource\Criteria\RowCriteriaMapper;
 use Dms\Core\Table\DataSource\Definition\FinalizedObjectTableDefinition;
 use Dms\Core\Table\IColumn;
@@ -141,26 +144,46 @@ class ObjectTableDataSource extends TableDataSource
         }
 
         if ($objectProperties === null) {
-            $objectProperties = [];
-
-            foreach ($objects as $key => $object) {
-                $objectProperties[$key] = $object->toArray();
-            }
-
-            // Load member expressions from object instances, eg 'some.nested.value'
-            foreach ($this->definition->getPropertyComponentIdMap() as $memberExpression => $componentId) {
-                if (strpos($memberExpression, '.') !== false || strpos($memberExpression, '(') !== null) {
-                    $memberGetter = $this->memberParser->parse($this->definition->getClass(), $memberExpression)->makeArrayGetterCallable();
-
-                    $values = $memberGetter($objects);
-                    foreach ($values as $key => $value) {
-                        $objectProperties[$key][$memberExpression] = $value;
-                    }
-                }
-            }
+            $objectProperties = $this->loadObjectProperties($objects);
         }
 
         return $this->mapObjectsToRows($definition, $objectProperties, $objects);
+    }
+
+    public function loadFromObjects(array $objects)
+    {
+        InvalidArgumentException::verifyAllInstanceOf(__METHOD__, 'objects', $objects, $this->definition->getClass()->getClassName());
+        $objectProperties = $this->loadObjectProperties($objects);
+
+        $rows = $this->mapObjectsToRows($this->definition, $objectProperties, $objects);
+        return new DataTable($this->structure, [new TableSection($this->structure, null, $rows)]);
+    }
+
+    /**
+     * @param TypedObject[] $objects
+     *
+     * @return array
+     */
+    protected function loadObjectProperties(array $objects) : array
+    {
+        $objectProperties = [];
+
+        foreach ($objects as $key => $object) {
+            $objectProperties[$key] = $object->toArray();
+        }
+
+        // Load member expressions from object instances, eg 'some.nested.value'
+        foreach ($this->definition->getPropertyComponentIdMap() as $memberExpression => $componentId) {
+            if (strpos($memberExpression, '.') !== false || strpos($memberExpression, '(') !== null) {
+                $memberGetter = $this->memberParser->parse($this->definition->getClass(), $memberExpression)->makeArrayGetterCallable();
+
+                $values = $memberGetter($objects);
+                foreach ($values as $key => $value) {
+                    $objectProperties[$key][$memberExpression] = $value;
+                }
+            }
+        }
+        return $objectProperties;
     }
 
     /**
