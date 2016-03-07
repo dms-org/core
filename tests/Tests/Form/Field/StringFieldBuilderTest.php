@@ -182,4 +182,13 @@ class StringFieldBuilderTest extends FieldBuilderTestBase
 
         $this->assertEquals(Type::string()->nullable(), $field->getProcessedType());
     }
+
+    public function testAutocomplete()
+    {
+        $field = $this->field()
+            ->autocomplete(['a', 'b', 'c'])
+            ->build();
+
+        $this->assertSame(['a', 'b', 'c'], $field->getType()->get(StringType::ATTR_SUGGESTED_VALUES));
+    }
 }

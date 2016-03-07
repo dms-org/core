@@ -128,4 +128,16 @@ class StringFieldBuilder extends FieldBuilderBase
     {
         return $this->attr(StringType::ATTR_MAX_LENGTH, $length);
     }
+
+    /**
+     * Sets an array of suggested values for the field.
+     *
+     * @param string[] $values
+     *
+     * @return static
+     */
+    public function autocomplete(array $values)
+    {
+        return $this->attr(StringType::ATTR_SUGGESTED_VALUES, $values);
+    }
 }

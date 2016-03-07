@@ -26,6 +26,7 @@ class StringType extends ScalarType
     const ATTR_MAX_LENGTH = 'max-length';
     const ATTR_EXACT_LENGTH = 'exact-length';
     const ATTR_TRIM_CHARACTERS = 'trim-chars';
+    const ATTR_SUGGESTED_VALUES = 'suggested-values';
 
     const TYPE_PASSWORD = 'password';
     const TYPE_EMAIL = 'email';
