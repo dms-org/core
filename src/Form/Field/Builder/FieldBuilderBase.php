@@ -253,12 +253,13 @@ abstract class FieldBuilderBase
      * Alternatively an array of {@see IFieldOption} can be passed as the options.
      *
      * @param array|IFieldOption[] $valueLabelMap
+     * @param string               $valueType
      *
      * @return static
      */
-    public function oneOf(array $valueLabelMap)
+    public function oneOf(array $valueLabelMap, string $valueType = 'string')
     {
-        return $this->attr(FieldType::ATTR_OPTIONS, ArrayFieldOptions::fromAssocArray($valueLabelMap));
+        return $this->attr(FieldType::ATTR_OPTIONS, ArrayFieldOptions::fromAssocArray($valueLabelMap, $valueType));
     }
 
     /**

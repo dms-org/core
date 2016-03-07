@@ -9,6 +9,7 @@ use Dms\Core\Form\Field\Processor\Validator\OneOfValidator;
 use Dms\Core\Form\IFieldProcessor;
 use Dms\Core\Model\Object\Enum;
 use Dms\Core\Model\Type\Builder\Type;
+use Dms\Core\Model\Type\IType;
 use Dms\Core\Model\Type\ScalarType as PhpScalarType;
 
 /**
@@ -32,8 +33,8 @@ class EnumType extends ScalarType
     {
         if (!is_subclass_of($enumClass, Enum::class, true)) {
             throw InvalidArgumentException::format(
-                    'Cannot construct enum field type: invalid enum class, expecting instance of %s, %s given',
-                    Enum::class, $enumClass
+                'Cannot construct enum field type: invalid enum class, expecting instance of %s, %s given',
+                Enum::class, $enumClass
             );
         };
 
@@ -42,17 +43,23 @@ class EnumType extends ScalarType
 
         if (!($valueType instanceof PhpScalarType)) {
             throw InvalidArgumentException::format(
-                    'Cannot construct enum field type: only enums containing scalar values are supported, %s given with values of type %s',
-                    $enumClass, $valueType->asTypeString()
+                'Cannot construct enum field type: only enums containing scalar values are supported, %s given with values of type %s',
+                $enumClass, $valueType->asTypeString()
             );
         }
 
         $this->attributes[self::ATTR_ENUM_CLASS] = $enumClass;
         $this->attributes[self::ATTR_OPTIONS]    = ArrayFieldOptions::fromAssocArray(
-                array_intersect_key(
-                        $valueLabelMap,
-                        array_flip($enumClass::getOptions())
-                )
+            array_intersect_key(
+                $valueLabelMap,
+                array_flip($enumClass::getOptions())
+            ),
+            [
+                IType::STRING => 'string',
+                IType::INT    => 'integer',
+                IType::BOOL   => 'boolean',
+                IType::FLOAT  => 'double',
+            ][$valueType->asTypeString()]
         );
 
         parent::__construct($valueType->asTypeString());
@@ -78,8 +85,8 @@ class EnumType extends ScalarType
         }
 
         return array_merge(parent::buildProcessors(), [
-                new OneOfValidator($enumValueType, $this->get(self::ATTR_OPTIONS)),
-                new EnumProcessor($this->get(self::ATTR_ENUM_CLASS)),
+            new OneOfValidator($enumValueType, $this->get(self::ATTR_OPTIONS)),
+            new EnumProcessor($this->get(self::ATTR_ENUM_CLASS)),
         ]);
     }
 }

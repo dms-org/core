@@ -28,18 +28,20 @@ class ArrayFieldOptions implements IFieldOptions
      * Constructs an array field options collections with the option
      * values as the array keys and the labels as the array values.
      *
-     * @param array $keyValueOptions
+     * @param array  $keyValueOptions
+     * @param string $valueType
      *
      * @return ArrayFieldOptions
      */
-    public static function fromAssocArray(array $keyValueOptions) : ArrayFieldOptions
+    public static function fromAssocArray(array $keyValueOptions, string $valueType = 'string') : ArrayFieldOptions
     {
         $options = [];
 
         foreach ($keyValueOptions as $value => $label) {
+            settype($value, $valueType);
             $options[] = $label instanceof IFieldOption
                     ? $label
-                    : new FieldOption((string)$value, $label);
+                    : new FieldOption($value, $label);
         }
 
         return new self($options);
