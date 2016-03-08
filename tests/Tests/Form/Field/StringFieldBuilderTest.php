@@ -12,6 +12,7 @@ use Dms\Core\Form\Field\Processor\Validator\IpAddressValidator;
 use Dms\Core\Form\Field\Processor\Validator\MaxLengthValidator;
 use Dms\Core\Form\Field\Processor\Validator\MinLengthValidator;
 use Dms\Core\Form\Field\Processor\Validator\RequiredValidator;
+use Dms\Core\Form\Field\Processor\Validator\StringCharactersValidator;
 use Dms\Core\Form\Field\Processor\Validator\UrlValidator;
 use Dms\Core\Form\Field\Type\StringType;
 use Dms\Core\Language\Message;
@@ -41,11 +42,11 @@ class StringFieldBuilderTest extends FieldBuilderTestBase
         $this->assertAttributes([StringType::ATTR_TYPE => IType::STRING, StringType::ATTR_MAX_LENGTH => 50], $field);
         $this->assertSame('test', $field->process('test'));
         $this->assertFieldThrows($field, str_repeat('-', 51), [
-                new Message(MaxLengthValidator::MESSAGE, [
-                        'field'      => 'Name',
-                        'input'      => str_repeat('-', 51),
-                        'max_length' => 50,
-                ])
+            new Message(MaxLengthValidator::MESSAGE, [
+                'field'      => 'Name',
+                'input'      => str_repeat('-', 51),
+                'max_length' => 50,
+            ]),
         ]);
     }
 
@@ -57,27 +58,27 @@ class StringFieldBuilderTest extends FieldBuilderTestBase
         $this->assertSame(str_repeat('-', 51), str_repeat('-', 51));
 
         $this->assertFieldThrows($field, str_repeat('-', 19), [
-                new Message(MinLengthValidator::MESSAGE, [
-                        'field'      => 'Name',
-                        'input'      => str_repeat('-', 19),
-                        'min_length' => 20,
-                ])
+            new Message(MinLengthValidator::MESSAGE, [
+                'field'      => 'Name',
+                'input'      => str_repeat('-', 19),
+                'min_length' => 20,
+            ]),
         ]);
     }
 
     public function testMultiline()
     {
         $this->assertAttributes(
-                [StringType::ATTR_TYPE => IType::STRING, StringType::ATTR_MULTILINE => true],
-                $this->field()->multiline()->build()
+            [StringType::ATTR_TYPE => IType::STRING, StringType::ATTR_MULTILINE => true],
+            $this->field()->multiline()->build()
         );
     }
 
     public function testExactLength()
     {
         $this->assertAttributes(
-                [StringType::ATTR_TYPE => IType::STRING, StringType::ATTR_EXACT_LENGTH => 25],
-                $this->field()->exactLength(25)->build()
+            [StringType::ATTR_TYPE => IType::STRING, StringType::ATTR_EXACT_LENGTH => 25],
+            $this->field()->exactLength(25)->build()
         );
     }
 
@@ -86,8 +87,8 @@ class StringFieldBuilderTest extends FieldBuilderTestBase
         $field = $this->field()->email()->build();
 
         $this->assertAttributes(
-                [StringType::ATTR_TYPE => IType::STRING, StringType::ATTR_STRING_TYPE => StringType::TYPE_EMAIL],
-                $field
+            [StringType::ATTR_TYPE => IType::STRING, StringType::ATTR_STRING_TYPE => StringType::TYPE_EMAIL],
+            $field
         );
 
         $this->assertHasProcessor(new EmailValidator(Type::string()->nullable()), $field);
@@ -98,8 +99,8 @@ class StringFieldBuilderTest extends FieldBuilderTestBase
         $field = $this->field()->url()->build();
 
         $this->assertAttributes(
-                [StringType::ATTR_TYPE => IType::STRING, StringType::ATTR_STRING_TYPE => StringType::TYPE_URL],
-                $field
+            [StringType::ATTR_TYPE => IType::STRING, StringType::ATTR_STRING_TYPE => StringType::TYPE_URL],
+            $field
         );
 
         $this->assertHasProcessor(new UrlValidator(Type::string()->nullable()), $field);
@@ -110,8 +111,8 @@ class StringFieldBuilderTest extends FieldBuilderTestBase
         $field = $this->field()->password()->build();
 
         $this->assertAttributes(
-                [StringType::ATTR_TYPE => IType::STRING, StringType::ATTR_STRING_TYPE => StringType::TYPE_PASSWORD],
-                $field
+            [StringType::ATTR_TYPE => IType::STRING, StringType::ATTR_STRING_TYPE => StringType::TYPE_PASSWORD],
+            $field
         );
     }
 
@@ -120,8 +121,8 @@ class StringFieldBuilderTest extends FieldBuilderTestBase
         $field = $this->field()->html()->build();
 
         $this->assertAttributes(
-                [StringType::ATTR_TYPE => IType::STRING, StringType::ATTR_STRING_TYPE => StringType::TYPE_HTML],
-                $field
+            [StringType::ATTR_TYPE => IType::STRING, StringType::ATTR_STRING_TYPE => StringType::TYPE_HTML],
+            $field
         );
     }
 
@@ -130,8 +131,8 @@ class StringFieldBuilderTest extends FieldBuilderTestBase
         $field = $this->field()->ipAddress()->build();
 
         $this->assertAttributes(
-                [StringType::ATTR_TYPE => IType::STRING, StringType::ATTR_STRING_TYPE => StringType::TYPE_IP_ADDRESS],
-                $field
+            [StringType::ATTR_TYPE => IType::STRING, StringType::ATTR_STRING_TYPE => StringType::TYPE_IP_ADDRESS],
+            $field
         );
 
         $this->assertHasProcessor(new IpAddressValidator(Type::string()->nullable()), $field);
@@ -140,16 +141,16 @@ class StringFieldBuilderTest extends FieldBuilderTestBase
     public function testTextFieldWithProcessors()
     {
         $field = $this->field()
-                ->trim()
-                ->maxLength(50)
-                ->required()
-                ->build();
+            ->trim()
+            ->maxLength(50)
+            ->required()
+            ->build();
 
         $this->assertEquals([
-                new TypeProcessor('string'),
-                new TrimProcessor(" \t\n\r\0\x0B"),
-                new RequiredValidator(Type::string()),
-                new MaxLengthValidator(Type::string(), 50),
+            new TypeProcessor('string'),
+            new TrimProcessor(" \t\n\r\0\x0B"),
+            new RequiredValidator(Type::string()),
+            new MaxLengthValidator(Type::string(), 50),
         ], $field->getProcessors());
 
         $this->assertSame('name', $field->getName());
@@ -157,11 +158,11 @@ class StringFieldBuilderTest extends FieldBuilderTestBase
         $this->assertSame(50, $field->getType()->get(StringType::ATTR_MAX_LENGTH));
         $this->assertSame('John Smith', $field->process('John Smith '));
         $this->assertFieldThrows($field, str_repeat('-', 51), [
-                new Message(MaxLengthValidator::MESSAGE, [
-                        'field'      => 'Name',
-                        'input'      => str_repeat('-', 51),
-                        'max_length' => 50,
-                ])
+            new Message(MaxLengthValidator::MESSAGE, [
+                'field'      => 'Name',
+                'input'      => str_repeat('-', 51),
+                'max_length' => 50,
+            ]),
         ]);
 
         $this->assertEquals(Type::string(), $field->getProcessedType());
@@ -190,5 +191,32 @@ class StringFieldBuilderTest extends FieldBuilderTestBase
             ->build();
 
         $this->assertSame(['a', 'b', 'c'], $field->getType()->get(StringType::ATTR_SUGGESTED_VALUES));
+    }
+
+    public function testValidCharacterRanges()
+    {
+        $field = $this->field()
+            ->onlyContainsCharacterRanges([
+                'a' => 'z',
+                'A' => 'Z',
+                '0' => '9',
+            ])
+            ->build();
+
+        $this->assertEquals([
+            new TypeProcessor('string'),
+            new StringCharactersValidator(Type::string()->nullable(), [
+                'a' => 'z',
+                'A' => 'Z',
+                '0' => '9',
+            ]),
+        ], $field->getProcessors());
+
+        $this->assertEquals(Type::string()->nullable(), $field->getProcessedType());
+        $this->assertSame([
+            'a' => 'z',
+            'A' => 'Z',
+            '0' => '9',
+        ], $field->getType()->get(StringType::ATTR_VALID_CHAR_RANGES));
     }
 }

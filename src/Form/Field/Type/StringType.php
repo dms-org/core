@@ -10,6 +10,7 @@ use Dms\Core\Form\Field\Processor\Validator\IpAddressValidator;
 use Dms\Core\Form\Field\Processor\Validator\MaxLengthValidator;
 use Dms\Core\Form\Field\Processor\Validator\MinLengthValidator;
 use Dms\Core\Form\Field\Processor\Validator\RequiredValidator;
+use Dms\Core\Form\Field\Processor\Validator\StringCharactersValidator;
 use Dms\Core\Form\Field\Processor\Validator\UrlValidator;
 use Dms\Core\Form\IFieldProcessor;
 
@@ -27,6 +28,7 @@ class StringType extends ScalarType
     const ATTR_EXACT_LENGTH = 'exact-length';
     const ATTR_TRIM_CHARACTERS = 'trim-chars';
     const ATTR_SUGGESTED_VALUES = 'suggested-values';
+    const ATTR_VALID_CHAR_RANGES = 'valid-char-ranges';
 
     const TYPE_PASSWORD = 'password';
     const TYPE_EMAIL = 'email';
@@ -67,6 +69,10 @@ class StringType extends ScalarType
 
         if ($this->get(self::ATTR_EMPTY_STRING_AS_NULL)) {
             $processors[] = new EmptyStringToNullProcessor($inputType);
+        }
+
+        if ($this->get(self::ATTR_VALID_CHAR_RANGES)) {
+            $processors[] = new StringCharactersValidator($inputType, $this->get(self::ATTR_VALID_CHAR_RANGES));
         }
 
         if ($this->has(self::ATTR_MIN_LENGTH)) {

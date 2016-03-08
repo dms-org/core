@@ -140,4 +140,24 @@ class StringFieldBuilder extends FieldBuilderBase
     {
         return $this->attr(StringType::ATTR_SUGGESTED_VALUES, $values);
     }
+
+    /**
+     * Validates the input only contains characters from the supplied char ranges.
+     *
+     * Example:
+     * <code>
+     * ->onlyContainsCharacterRanges([
+     *      'a' => 'z',
+     *      '0' => '9',
+     * ])
+     * </code>
+     *
+     * @param array $characterRanges
+     *
+     * @return static
+     */
+    public function onlyContainsCharacterRanges(array $characterRanges)
+    {
+        return $this->attr(StringType::ATTR_VALID_CHAR_RANGES, $characterRanges);
+    }
 }
