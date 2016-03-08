@@ -83,10 +83,11 @@ abstract class TableDataSource implements ITableDataSource
     {
         $this->verifyCriteria($criteria);
 
-        $rows     = $this->loadRows($criteria);
-        $sections = $this->performRowGrouping($rows, $criteria);
+        $structure = $criteria ? $this->structure->withColumns($criteria->getColumnsToLoad()) : $this->structure;
+        $rows      = $this->loadRows($criteria);
+        $sections  = $this->performRowGrouping($structure, $rows, $criteria);
 
-        return new DataTable($this->structure, $sections);
+        return new DataTable($structure, $sections);
     }
 
     /**
@@ -114,12 +115,13 @@ abstract class TableDataSource implements ITableDataSource
     abstract protected function loadCount(IRowCriteria $criteria = null) : int;
 
     /**
+     * @param ITableStructure   $structure
      * @param ITableRow[]       $rows
      * @param IRowCriteria|null $criteria
      *
-     * @return ITableSection[]
+     * @return array|\Dms\Core\Table\ITableSection[]
      */
-    protected function performRowGrouping(array $rows, IRowCriteria $criteria = null) : array
+    protected function performRowGrouping(ITableStructure $structure, array $rows, IRowCriteria $criteria = null) : array
     {
         $collection = new Collection($rows);
 
@@ -143,14 +145,14 @@ abstract class TableDataSource implements ITableDataSource
         }
 
         return $collection
-                ->select(function (ITraversable $section, array $groupData = null) {
-                    return new TableSection(
-                            $this->structure,
-                            $groupData ? new TableRow($groupData) : null,
-                            $section->asArray()
-                    );
-                })
-                ->asArray();
+            ->select(function (ITraversable $section, array $groupData = null) use ($structure) {
+                return new TableSection(
+                    $structure,
+                    $groupData ? new TableRow($groupData) : null,
+                    $section->asArray()
+                );
+            })
+            ->asArray();
     }
 
     final protected function verifyCriteria(IRowCriteria $criteria = null)

@@ -83,13 +83,14 @@ abstract class TableDataSourceTest extends CmsTestCase
     {
         $table          = $this->dataSource->load($criteria);
 
+        $expectedStructure = $criteria ? $this->structure->withColumns($criteria->getColumnsToLoad()) : $this->structure;
         foreach ($table->getSections() as $section) {
-            $this->assertSame($this->structure, $section->getStructure());
+            $this->assertEquals($expectedStructure, $section->getStructure());
         }
 
         $actualSections = DataTableHelper::covertDataTableToNormalizedArray($table);
 
-        $this->assertSame($this->structure, $table->getStructure());
+        $this->assertEquals($expectedStructure, $table->getStructure());
         $this->assertEquals($expectedSections, $actualSections);
     }
 
