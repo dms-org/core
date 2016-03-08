@@ -160,14 +160,6 @@ abstract class ReadModule extends Module implements IReadModule
     /**
      * @inheritDoc
      */
-    final public function getSummaryTableAction() : IUnparameterizedAction
-    {
-        return $this->getUnparameterizedAction(self::SUMMARY_TABLE_ACTION);
-    }
-
-    /**
-     * @inheritDoc
-     */
     final public function allowsDetails() : bool
     {
         return isset($this->objectActions[self::DETAILS_ACTION]);

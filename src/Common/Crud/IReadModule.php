@@ -5,7 +5,6 @@ namespace Dms\Core\Common\Crud;
 use Dms\Core\Common\Crud\Action\Object\IObjectAction;
 use Dms\Core\Common\Crud\Table\ISummaryTable;
 use Dms\Core\Model\IIdentifiableObjectSet;
-use Dms\Core\Model\IObjectSet;
 use Dms\Core\Model\ITypedObject;
 use Dms\Core\Module\ActionNotFoundException;
 use Dms\Core\Module\IModule;
@@ -85,13 +84,6 @@ interface IReadModule extends IModule
      * @throws ActionNotFoundException
      */
     public function getObjectAction(string $name) : IObjectAction;
-
-    /**
-     * Gets the action to view the summary table.
-     *
-     * @return IUnparameterizedAction
-     */
-    public function getSummaryTableAction() : IUnparameterizedAction;
 
     /**
      * Returns whether the modules allows view in details.

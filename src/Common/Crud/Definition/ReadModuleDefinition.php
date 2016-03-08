@@ -247,13 +247,6 @@ class ReadModuleDefinition extends ModuleDefinition
         $summaryTableDefinitionCallback($definition);
 
         $this->tables[IReadModule::SUMMARY_TABLE] = $this->summaryTable = $definition->finalize();
-
-        $this->action(IReadModule::SUMMARY_TABLE_ACTION)
-                ->authorize(IReadModule::VIEW_PERMISSION)
-                ->returns(ISummaryTable::class)
-                ->handler(function () {
-                    return $this->summaryTable;
-                });
     }
 
     /**

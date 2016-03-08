@@ -74,27 +74,6 @@ abstract class ReadModuleTest extends ModuleTestBase
         $this->assertSame($this->dataSource, $tableDataSource->getObjectDataSource());
     }
 
-    public function testSummaryTableActionRequiresViewPermission()
-    {
-        $permissions = $this->module->getSummaryTableAction()->getRequiredPermissions();
-
-        $this->assertContains(
-                Permission::named(IReadModule::VIEW_PERMISSION),
-                $permissions
-        );
-    }
-
-
-    public function testSummaryTableAction()
-    {
-        $this->assertSame($this->module->getSummaryTable(), $this->module->getSummaryTableAction()->run());
-
-        $this->authSystem->setIsAuthorized(false);
-        $this->assertThrows(function () {
-            $this->module->getSummaryTableAction()->run();
-        }, UserForbiddenException::class);
-    }
-
     public function testObjectActions()
     {
         if ($this->module->allowsDetails()) {
