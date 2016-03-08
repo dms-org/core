@@ -161,6 +161,14 @@ class DoctrinePlatform extends Platform
     /**
      * @inheritDoc
      */
+    public function quoteIdentifier(string $value) : string
+    {
+        return $this->doctrinePlatform->quoteSingleIdentifier($value);
+    }
+
+    /**
+     * @inheritDoc
+     */
     protected function compileSelectQuery(Select $query, CompiledQueryBuilder $compiled)
     {
         $queryBuilder = $this->doctrineConnection->createQueryBuilder();

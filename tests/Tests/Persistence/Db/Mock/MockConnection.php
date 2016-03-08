@@ -4,9 +4,9 @@ namespace Dms\Core\Tests\Persistence\Db\Mock;
 
 use Dms\Core\Exception\NotImplementedException;
 use Dms\Core\Persistence\Db\Connection\Connection;
+use Dms\Core\Persistence\Db\Connection\IQuery;
 use Dms\Core\Persistence\Db\Query\BulkUpdate;
 use Dms\Core\Persistence\Db\Query\Delete;
-use Dms\Core\Persistence\Db\Connection\IQuery;
 use Dms\Core\Persistence\Db\Query\ResequenceOrderIndexColumn;
 use Dms\Core\Persistence\Db\Query\Select;
 use Dms\Core\Persistence\Db\Query\Update;
@@ -32,6 +32,11 @@ class MockConnection extends Connection
      * @var MockDatabase
      */
     protected $db;
+
+    /**
+     * @var array
+     */
+    protected $preparedStatementResult;
 
     /**
      * @inheritDoc
@@ -80,7 +85,7 @@ class MockConnection extends Connection
     public function load(Select $query) : RowSet
     {
         $this->queryLog[] = $query;
-        $results = $this->db->query($this->platform->compileSelect($query));
+        $results          = $this->db->query($this->platform->compileSelect($query));
 
         return $this->platform->mapResultSetToPhpForm($query->getResultSetTableStructure(), $results);
     }
@@ -91,6 +96,7 @@ class MockConnection extends Connection
     public function update(Update $query) : int
     {
         $this->queryLog[] = $query;
+
         return $this->db->query($this->platform->compileUpdate($query));
     }
 
@@ -100,6 +106,7 @@ class MockConnection extends Connection
     public function delete(Delete $query) : int
     {
         $this->queryLog[] = $query;
+
         return $this->db->query($this->platform->compileDelete($query));
     }
 
@@ -109,6 +116,7 @@ class MockConnection extends Connection
     public function resequenceOrderIndexColumn(ResequenceOrderIndexColumn $query)
     {
         $this->queryLog[] = $query;
+
         return $this->db->query($this->platform->compileResequenceOrderIndexColumn($query));
     }
 
@@ -175,6 +183,11 @@ class MockConnection extends Connection
         $this->db->rollbackTransaction();
     }
 
+    public function setPreparedStatementResult(array $rows = null)
+    {
+        $this->preparedStatementResult = $rows;
+    }
+
     public function prepare($sql, array $parameters = []) : IQuery
     {
         if ($sql instanceof PhpPreparedCompiledQuery) {
@@ -184,6 +197,12 @@ class MockConnection extends Connection
             return $sql;
         }
 
-        throw NotImplementedException::method(__METHOD__);
+        if ($this->preparedStatementResult === null) {
+            throw NotImplementedException::method(__METHOD__);
+        } else {
+            $this->queryLog[] = [$sql, $parameters];
+
+            return new MockQuery($this->preparedStatementResult);
+        }
     }
 }

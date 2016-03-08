@@ -59,6 +59,14 @@ class MockPlatform extends Platform
         return 'H:i:s';
     }
 
+    /**
+     * @inheritDoc
+     */
+    public function quoteIdentifier(string $value) : string
+    {
+        return '!!' . $value . '!!';
+    }
+
     public function compilePreparedInsert(Table $table)
     {
         return new PhpPreparedCompiledQuery(function (MockDatabase $database, array $parameters) use ($table) {

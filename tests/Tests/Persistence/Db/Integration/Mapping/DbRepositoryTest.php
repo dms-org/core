@@ -8,11 +8,14 @@ use Dms\Core\Model\Criteria\SpecificationDefinition;
 use Dms\Core\Model\EntityNotFoundException;
 use Dms\Core\Model\IEntity;
 use Dms\Core\Persistence\Db\Mapping\CustomOrm;
+use Dms\Core\Persistence\DbRepository;
+use Dms\Core\Persistence\PersistenceException;
 use Dms\Core\Tests\Form\Field\Processor\Validator\Fixtures\TestEntity;
 use Dms\Core\Tests\Model\Criteria\Fixtures\MockSpecification;
 use Dms\Core\Tests\Persistence\Db\Fixtures\MockEntity;
 use Dms\Core\Tests\Persistence\Db\Integration\Mapping\Fixtures\Id\EmptyEntity;
 use Dms\Core\Tests\Persistence\Db\Integration\Mapping\Fixtures\Id\EmptyMapper;
+use Dms\Core\Tests\Persistence\Db\Mock\MockQuery;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>
@@ -367,5 +370,76 @@ class DbRepositoryTest extends DbIntegrationTest
         $this->assertThrows(function () {
             $this->repo->containsAll([new EmptyEntity(1), new EmptyEntity(2), new EmptyEntity(3), new TestEntity(1)]);
         }, TypeMismatchException::class);
+    }
+
+    public function testHasAllWithDuplicates()
+    {
+        $this->setDataInDb([
+            'data' => [
+                ['id' => 1],
+                ['id' => 2],
+            ],
+        ]);
+
+        $this->assertSame(true, $this->repo->hasAll([1, 2]));
+        $this->assertSame(true, $this->repo->hasAll([1, 1, 1, 2]));
+        $this->assertSame(true, $this->repo->hasAll([1, 1, 1, 2, 2]));
+        $this->assertSame(false, $this->repo->hasAll([1, 1, 1, 2, 2, 3]));
+        $this->assertSame(false, $this->repo->hasAll([1, 2, 3]));
+    }
+
+    public function testCustomQuery()
+    {
+        $this->connection->setPreparedStatementResult([
+            ['id' => 1],
+            ['id' => 2],
+            ['id' => 3],
+        ]);
+
+        $repo = new class($this->connection, $this->mapper) extends DbRepository
+        {
+            public function loadCustomQuery()
+            {
+                return $this->loadQuery(
+                    'SELECT (columns) FROM (table) AS alias WHERE some_column > :param',
+                    ['param' => 5]
+                );
+            }
+        };
+
+        $this->assertEquals([
+            new EmptyEntity(1),
+            new EmptyEntity(2),
+            new EmptyEntity(3),
+        ], $repo->loadCustomQuery());
+
+        // @see MockPlatform for identifier escaping
+        $this->assertSame([
+            ['SELECT !!id!! FROM !!data!! AS alias WHERE some_column > :param', ['param' => 5]]
+        ], $this->connection->getQueryLog());
+    }
+
+    public function testInvalidCustomQuery()
+    {
+        $this->connection->setPreparedStatementResult([
+            ['invalid_col' => 1],
+            ['invalid_col' => 2],
+            ['invalid_col' => 3],
+        ]);
+
+        $repo = new class($this->connection, $this->mapper) extends DbRepository
+        {
+            public function loadCustomQuery()
+            {
+                return $this->loadQuery(
+                    'SELECT (columns) FROM (table) AS alias WHERE some_column > :param',
+                    ['param' => 5]
+                );
+            }
+        };
+
+        $this->assertThrows(function () use ($repo) {
+            $repo->loadCustomQuery();
+        }, PersistenceException::class);
     }
 }

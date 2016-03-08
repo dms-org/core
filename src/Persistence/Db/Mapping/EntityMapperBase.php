@@ -119,7 +119,7 @@ abstract class EntityMapperBase extends ObjectMapper implements IEntityMapper
     /**
      * @inheritDoc
      */
-    final public function getSelect() : \Dms\Core\Persistence\Db\Query\Select
+    final public function getSelect() : Select
     {
         $select = Select::from($this->primaryTable);
 

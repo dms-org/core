@@ -61,7 +61,7 @@ class DbRepository extends DbRepositoryBase implements IRepository
     /**
      * @return ColumnExpr
      */
-    final protected function primaryKey() : Db\Query\Expression\ColumnExpr
+    final protected function primaryKey() : ColumnExpr
     {
         $table = $this->mapper->getPrimaryTable();
 
@@ -89,7 +89,7 @@ class DbRepository extends DbRepositoryBase implements IRepository
      *
      * @return Reorder
      */
-    final protected function reorder(string $columnName) : Db\Query\Reorder
+    final protected function reorder(string $columnName) : Reorder
     {
         return new Reorder($this->mapper->getPrimaryTable(), $columnName);
     }
@@ -145,6 +145,8 @@ class DbRepository extends DbRepositoryBase implements IRepository
         if (empty($ids)) {
             return true;
         }
+
+        $ids = array_unique($ids, SORT_NUMERIC);
 
         $rows = $this->connection->load(
                 $this->select()
@@ -216,9 +218,10 @@ class DbRepository extends DbRepositoryBase implements IRepository
      */
     public function getAllById(array $ids) : array
     {
+        $ids      = array_unique($ids, SORT_NUMERIC);
         $entities = $this->tryGetAll($ids);
 
-        if (count($entities) !== count(array_unique($ids, SORT_NUMERIC))) {
+        if (count($entities) !== count($ids)) {
             $idLookup = [];
 
             foreach ($entities as $entity) {

@@ -53,6 +53,15 @@ interface IPlatform
     public function mapResultSetToPhpForm(Table $table, array $rows) : RowSet;
 
     /**
+     * Quotes the supplied identifier.
+     *
+     * @param string $value
+     *
+     * @return string
+     */
+    public function quoteIdentifier(string $value) : string;
+
+    /**
      * Compiles the select query.
      *
      * @param Select $query

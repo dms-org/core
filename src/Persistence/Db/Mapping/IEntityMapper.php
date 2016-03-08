@@ -66,7 +66,7 @@ interface IEntityMapper extends IObjectMapper
     /**
      * @return Select
      */
-    public function getSelect() : \Dms\Core\Persistence\Db\Query\Select;
+    public function getSelect() : Select;
 
     /**
      * Adds a foreign key to the primary table of the entity mapper.

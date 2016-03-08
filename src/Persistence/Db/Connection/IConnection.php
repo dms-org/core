@@ -23,7 +23,7 @@ interface IConnection
      *
      * @return IPlatform
      */
-    public function getPlatform() : \Dms\Core\Persistence\Db\Platform\IPlatform;
+    public function getPlatform() : IPlatform;
 
     /**
      * Gets the last insert id.

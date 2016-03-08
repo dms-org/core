@@ -48,6 +48,14 @@ class DoctrinePlatformTest extends DoctrineTestBase
         ]);
     }
 
+    public function testQuoteIdentifier()
+    {
+        $this->assertSame('`foo`',  $this->platform->quoteIdentifier('foo'));
+        $this->assertSame('`foo.bar`',  $this->platform->quoteIdentifier('foo.bar'));
+        $this->assertSame('````',  $this->platform->quoteIdentifier('`'));
+        $this->assertSame('`abc``123`',  $this->platform->quoteIdentifier('abc`123'));
+    }
+
     public function testPreparedInsert()
     {
         $sql = $this->platform->compilePreparedInsert($this->mockTable());
