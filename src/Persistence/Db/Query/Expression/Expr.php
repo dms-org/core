@@ -107,7 +107,7 @@ abstract class Expr
      *
      * @return Parameter
      */
-    public static function idParam($value) : Parameter
+    public static function idParam(int $value = null) : Parameter
     {
         return new Parameter(Integer::normal()->nullable(), $value);
     }
@@ -117,9 +117,14 @@ abstract class Expr
      * @param mixed     $value
      *
      * @return Parameter
+     * @throws InvalidArgumentException
      */
     public static function param(Type $type = null, $value) : Parameter
     {
+        if ($value instanceof Expr) {
+            throw InvalidArgumentException::format('Parameter cannot be class of %s', get_class($value));
+        }
+
         return new Parameter($type ?? Type::fromValue($value), $value);
     }
 
@@ -160,7 +165,7 @@ abstract class Expr
         $expressions = [];
 
         foreach ($params as $param) {
-            $expressions[] = new Parameter($type ?? Type::fromValue($param), $param);
+            $expressions[] = self::param($type, $param);
         }
 
         return new Tuple($expressions);

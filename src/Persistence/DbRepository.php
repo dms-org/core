@@ -253,6 +253,8 @@ class DbRepository extends DbRepositoryBase implements IRepository
      */
     public function tryGetAll(array $ids) : array
     {
+        InvalidArgumentException::verifyAll(__METHOD__, 'ids', $ids, 'is_int');
+
         return $this->load(
                 $this->select()
                         ->where(Expr::in($this->primaryKey(), Expr::tuple($this->parameterIds($ids))))

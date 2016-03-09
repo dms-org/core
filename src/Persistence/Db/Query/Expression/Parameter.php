@@ -36,7 +36,7 @@ class Parameter extends Expr
     /**
      * @return Type
      */
-    public function getType() : \Dms\Core\Persistence\Db\Schema\Type\Type
+    public function getType() : Type
     {
         return $this->type;
     }
@@ -64,7 +64,7 @@ class Parameter extends Expr
      *
      * @return Type
      */
-    public function getResultingType() : \Dms\Core\Persistence\Db\Schema\Type\Type
+    public function getResultingType() : Type
     {
         return $this->type;
     }
