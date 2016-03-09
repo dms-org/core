@@ -2,6 +2,8 @@
 
 namespace Dms\Core\Module\Definition\Widget;
 
+use Dms\Core\Auth\IAuthSystem;
+use Dms\Core\Auth\IPermission;
 use Dms\Core\Module\IChartDisplay;
 use Dms\Core\Widget\ChartWidget;
 
@@ -27,12 +29,14 @@ class ChartWidgetDefiner extends WidgetDefinerBase
      *
      * @param string        $name
      * @param string        $label
+     * @param IAuthSystem   $authSystem
+     * @param IPermission[] $requiredPermissions
      * @param IChartDisplay $chart
      * @param callable      $callback
      */
-    public function __construct(string $name, string $label, IChartDisplay $chart, callable $callback)
+    public function __construct(string $name, string $label, IAuthSystem $authSystem, array $requiredPermissions, IChartDisplay $chart, callable $callback)
     {
-        parent::__construct($name, null, null, null, $callback);
+        parent::__construct($name, $authSystem, $requiredPermissions, null, null, null, $callback);
         $this->label = $label;
         $this->chart = $chart;
     }
@@ -58,7 +62,7 @@ class ChartWidgetDefiner extends WidgetDefinerBase
         $criteria = $this->chart->getDataSource()->criteria();
         $criteriaDefinitionCallback($criteria);
 
-        call_user_func($this->callback, new ChartWidget($this->name, $this->label, $this->chart, $criteria));
+        call_user_func($this->callback, new ChartWidget($this->name, $this->label, $this->authSystem, $this->requiredPermissions, $this->chart, $criteria));
     }
 
     /**
@@ -68,6 +72,6 @@ class ChartWidgetDefiner extends WidgetDefinerBase
      */
     public function allData()
     {
-        call_user_func($this->callback, new ChartWidget($this->name, $this->label, $this->chart));
+        call_user_func($this->callback, new ChartWidget($this->name, $this->label, $this->authSystem, $this->requiredPermissions, $this->chart));
     }
 }

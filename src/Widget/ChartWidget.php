@@ -2,6 +2,7 @@
 
 namespace Dms\Core\Widget;
 
+use Dms\Core\Auth\IAuthSystem;
 use Dms\Core\Module\IChartDisplay;
 use Dms\Core\Table\Chart\IChartCriteria;
 use Dms\Core\Table\Chart\IChartDataTable;
@@ -26,9 +27,9 @@ class ChartWidget extends Widget
     /**
      * @inheritDoc
      */
-    public function __construct($name, $label, IChartDisplay $chartDisplay, IChartCriteria $criteria = null)
+    public function __construct(string $name, string $label, IAuthSystem $authSystem, array $requiredPermissions, IChartDisplay $chartDisplay, IChartCriteria $criteria = null)
     {
-        parent::__construct($name, $label);
+        parent::__construct($name, $label, $authSystem, $requiredPermissions);
         $this->chartDisplay = $chartDisplay;
         $this->criteria     = $criteria;
     }
@@ -65,12 +66,7 @@ class ChartWidget extends Widget
         return $this->chartDisplay->getDataSource()->load($this->criteria);
     }
 
-    /**
-     * Returns whether the current user authorized to see this widget.
-     *
-     * @return bool
-     */
-    public function isAuthorized() : bool
+    protected function hasExtraAuthorization() : bool
     {
         return true;
     }

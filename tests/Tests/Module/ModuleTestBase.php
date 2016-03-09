@@ -11,6 +11,7 @@ use Dms\Core\Module\Module;
 use Dms\Core\Table\IDataTable;
 use Dms\Core\Tests\Module\Mock\MockAuthSystem;
 use Dms\Core\Tests\Table\DataSource\DataTableHelper;
+use Dms\Core\Widget\IWidget;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>
@@ -77,6 +78,19 @@ abstract class ModuleTestBase extends CmsTestCase
         sort($expected, SORT_REGULAR);
         sort($actual, SORT_REGULAR);
         $this->assertEquals($expected, $actual);
+    }
+
+    public function testWidgetPermissions()
+    {
+        /** @var IWidget $widget */
+        foreach ($this->module->getWidgets() as $widget) {
+            $this->authSystem->setIsAuthorized(true);
+            $this->assertSame(true, $widget->isAuthorized());
+            $this->authSystem->setIsAuthorized(false);
+            $this->assertSame(false, $widget->isAuthorized());
+
+            $this->assertEquals($this->expectedRequiredPermissions(), $widget->getRequiredPermissions());
+        }
     }
 
     protected function assertDataTableEquals(array $expectedSections, IDataTable $dataTable)

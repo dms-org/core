@@ -2,6 +2,8 @@
 
 namespace Dms\Core\Module\Definition\Widget;
 
+use Dms\Core\Auth\IAuthSystem;
+use Dms\Core\Auth\IPermission;
 use Dms\Core\Module\IAction;
 use Dms\Core\Module\IChartDisplay;
 use Dms\Core\Module\ITableDisplay;
@@ -17,6 +19,16 @@ abstract class WidgetDefinerBase
      * @var string
      */
     protected $name;
+
+    /**
+     * @var IAuthSystem
+     */
+    protected $authSystem;
+
+    /**
+     * @var IPermission[]
+     */
+    protected $requiredPermissions;
 
     /**
      * @var ITableDisplay[]|null
@@ -42,17 +54,21 @@ abstract class WidgetDefinerBase
      * WidgetDefiner constructor.
      *
      * @param string               $name
+     * @param IAuthSystem          $authSystem
+     * @param IPermission[]        $requiredPermissions
      * @param ITableDisplay[]|null $tables
      * @param IChartDisplay[]|null $charts
      * @param IAction[]|null       $actions
      * @param callable             $callback
      */
-    public function __construct(string $name, array $tables = null, array $charts = null, array $actions = null, callable $callback)
+    public function __construct(string $name, IAuthSystem $authSystem, array $requiredPermissions, array $tables = null, array $charts = null, array $actions = null, callable $callback)
     {
-        $this->name     = $name;
-        $this->tables   = $tables;
-        $this->charts   = $charts;
-        $this->actions  = $actions;
-        $this->callback = $callback;
+        $this->name                = $name;
+        $this->authSystem          = $authSystem;
+        $this->requiredPermissions = $requiredPermissions;
+        $this->tables              = $tables;
+        $this->charts              = $charts;
+        $this->actions             = $actions;
+        $this->callback            = $callback;
     }
 }

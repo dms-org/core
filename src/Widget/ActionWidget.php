@@ -2,6 +2,7 @@
 
 namespace Dms\Core\Widget;
 
+use Dms\Core\Auth\IAuthSystem;
 use Dms\Core\Module\IAction;
 
 /**
@@ -19,9 +20,9 @@ class ActionWidget extends Widget
     /**
      * @inheritDoc
      */
-    public function __construct($name, $label, IAction $action)
+    public function __construct(string $name, string $label, IAuthSystem $authSystem, array $requiredPermissions, IAction $action)
     {
-        parent::__construct($name, $label);
+        parent::__construct($name, $label, $authSystem, $requiredPermissions);
 
         $this->action = $action;
     }
@@ -29,17 +30,12 @@ class ActionWidget extends Widget
     /**
      * @return IAction
      */
-    public function getAction() : \Dms\Core\Module\IAction
+    public function getAction() : IAction
     {
         return $this->action;
     }
 
-    /**
-     * Returns whether the current user authorized to see this widget.
-     *
-     * @return bool
-     */
-    public function isAuthorized() : bool
+    protected function hasExtraAuthorization() : bool
     {
         return $this->action->isAuthorized();
     }

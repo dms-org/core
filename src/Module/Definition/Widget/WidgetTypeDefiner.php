@@ -2,6 +2,8 @@
 
 namespace Dms\Core\Module\Definition\Widget;
 
+use Dms\Core\Auth\IAuthSystem;
+use Dms\Core\Auth\IPermission;
 use Dms\Core\Exception\InvalidArgumentException;
 use Dms\Core\Module\IAction;
 use Dms\Core\Table\Chart\IChartDataSource;
@@ -24,14 +26,16 @@ class WidgetTypeDefiner extends WidgetDefinerBase
     /**
      * @param string             $name
      * @param string             $label
+     * @param IAuthSystem        $authSystem
+     * @param IPermission[]      $requiredPermissions
      * @param ITableDataSource[] $tables
      * @param IChartDataSource[] $charts
      * @param IAction[]          $actions
      * @param callable           $callback
      */
-    public function __construct(string $name, string $label, array $tables, array $charts, array $actions, callable $callback)
+    public function __construct(string $name, string $label, IAuthSystem $authSystem, array $requiredPermissions, array $tables, array $charts, array $actions, callable $callback)
     {
-        parent::__construct($name, $tables, $charts, $actions, $callback);
+        parent::__construct($name, $authSystem, $requiredPermissions, $tables, $charts, $actions, $callback);
         $this->label = $label;
     }
 
@@ -47,12 +51,12 @@ class WidgetTypeDefiner extends WidgetDefinerBase
     {
         if (!isset($this->tables[$tableName])) {
             throw InvalidArgumentException::format(
-                    'Invalid table name supplied to %s: expecting one of (%s), \'%s\' given',
-                    __METHOD__, Debug::formatValues(array_keys($this->tables)), $tableName
+                'Invalid table name supplied to %s: expecting one of (%s), \'%s\' given',
+                __METHOD__, Debug::formatValues(array_keys($this->tables)), $tableName
             );
         }
 
-        return new TableWidgetDefiner($this->name, $this->label, $this->tables[$tableName], $this->callback);
+        return new TableWidgetDefiner($this->name, $this->label, $this->authSystem, $this->requiredPermissions, $this->tables[$tableName], $this->callback);
     }
 
     /**
@@ -67,12 +71,12 @@ class WidgetTypeDefiner extends WidgetDefinerBase
     {
         if (!isset($this->charts[$chartName])) {
             throw InvalidArgumentException::format(
-                    'Invalid chart name supplied to %s: expecting one of (%s), \'%s\' given',
-                    __METHOD__, Debug::formatValues(array_keys($this->charts)), $chartName
+                'Invalid chart name supplied to %s: expecting one of (%s), \'%s\' given',
+                __METHOD__, Debug::formatValues(array_keys($this->charts)), $chartName
             );
         }
 
-        return new ChartWidgetDefiner($this->name, $this->label, $this->charts[$chartName], $this->callback);
+        return new ChartWidgetDefiner($this->name, $this->label, $this->authSystem, $this->requiredPermissions, $this->charts[$chartName], $this->callback);
     }
 
     /**
@@ -87,11 +91,11 @@ class WidgetTypeDefiner extends WidgetDefinerBase
     {
         if (!isset($this->actions[$actionName])) {
             throw InvalidArgumentException::format(
-                    'Invalid action name supplied to %s: expecting one of (%s), \'%s\' given',
-                    __METHOD__, Debug::formatValues(array_keys($this->actions)), $actionName
+                'Invalid action name supplied to %s: expecting one of (%s), \'%s\' given',
+                __METHOD__, Debug::formatValues(array_keys($this->actions)), $actionName
             );
         }
 
-        call_user_func($this->callback, new ActionWidget($this->name, $this->label, $this->actions[$actionName]));
+        call_user_func($this->callback, new ActionWidget($this->name, $this->label, $this->authSystem, $this->requiredPermissions, $this->actions[$actionName]));
     }
 }

@@ -2,6 +2,8 @@
 
 namespace Dms\Core\Module\Definition\Widget;
 
+use Dms\Core\Auth\IAuthSystem;
+use Dms\Core\Auth\IPermission;
 use Dms\Core\Module\ITableDisplay;
 use Dms\Core\Widget\TableWidget;
 
@@ -27,12 +29,14 @@ class TableWidgetDefiner extends WidgetDefinerBase
      *
      * @param string        $name
      * @param string        $label
+     * @param IAuthSystem   $authSystem
+     * @param IPermission[] $requiredPermissions
      * @param ITableDisplay $table
      * @param callable      $callback
      */
-    public function __construct(string $name, string $label, ITableDisplay $table, callable $callback)
+    public function __construct(string $name, string $label, IAuthSystem $authSystem, array $requiredPermissions, ITableDisplay $table, callable $callback)
     {
-        parent::__construct($name, null, null, null, $callback);
+        parent::__construct($name, $authSystem, $requiredPermissions, null, null, null, $callback);
         $this->label = $label;
         $this->table = $table;
     }
@@ -58,7 +62,7 @@ class TableWidgetDefiner extends WidgetDefinerBase
         $criteria = $this->table->getDataSource()->criteria();
         $criteriaDefinitionCallback($criteria);
 
-        call_user_func($this->callback, new TableWidget($this->name, $this->label, $this->table, $criteria));
+        call_user_func($this->callback, new TableWidget($this->name, $this->label, $this->authSystem, $this->requiredPermissions, $this->table, $criteria));
     }
 
     /**
@@ -68,6 +72,6 @@ class TableWidgetDefiner extends WidgetDefinerBase
      */
     public function allRows()
     {
-        call_user_func($this->callback, new TableWidget($this->name, $this->label, $this->table));
+        call_user_func($this->callback, new TableWidget($this->name, $this->label, $this->authSystem, $this->requiredPermissions, $this->table));
     }
 }

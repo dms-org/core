@@ -2,6 +2,10 @@
 
 namespace Dms\Core\Widget;
 
+use Dms\Core\Auth\IAuthSystem;
+use Dms\Core\Auth\IPermission;
+use Dms\Core\Exception\InvalidArgumentException;
+
 /**
  * The widget base class.
  *
@@ -20,19 +24,34 @@ abstract class Widget implements IWidget
     protected $label;
 
     /**
+     * @var IAuthSystem
+     */
+    protected $authSystem;
+
+    /**
+     * @var array
+     */
+    protected $requiredPermissions;
+
+    /**
      * Widget constructor.
      *
-     * @param string $name
-     * @param string $label
+     * @param string        $name
+     * @param string        $label
+     * @param IAuthSystem   $authSystem
+     * @param IPermission[] $requiredPermissions
      */
-    public function __construct(string $name, string $label)
+    public function __construct(string $name, string $label, IAuthSystem $authSystem, array $requiredPermissions)
     {
-        $this->name  = $name;
-        $this->label = $label;
+        InvalidArgumentException::verifyAllInstanceOf(__METHOD__, 'requiredPermissions', $requiredPermissions, IPermission::class);
+        $this->name                = $name;
+        $this->label               = $label;
+        $this->requiredPermissions = $requiredPermissions;
+        $this->authSystem          = $authSystem;
     }
 
     /**
-     * @return string
+     * @inheritdoc
      */
     final public function getName() : string
     {
@@ -40,10 +59,29 @@ abstract class Widget implements IWidget
     }
 
     /**
-     * @return string
+     * @inheritdoc
      */
     final public function getLabel() : string
     {
         return $this->label;
     }
+
+    /**
+     * @inheritdoc
+     */
+    final public function getRequiredPermissions() : array
+    {
+        return $this->requiredPermissions;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    final public function isAuthorized() : bool
+    {
+        return $this->authSystem->isAuthorized($this->requiredPermissions)
+        && $this->hasExtraAuthorization();
+    }
+
+    abstract protected function hasExtraAuthorization() : bool;
 }

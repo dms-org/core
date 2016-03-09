@@ -2,6 +2,7 @@
 
 namespace Dms\Core\Widget;
 
+use Dms\Core\Auth\IAuthSystem;
 use Dms\Core\Module\ITableDisplay;
 use Dms\Core\Table\IDataTable;
 use Dms\Core\Table\IRowCriteria;
@@ -26,9 +27,9 @@ class TableWidget extends Widget
     /**
      * @inheritDoc
      */
-    public function __construct($name, $label, ITableDisplay $tableDisplay, IRowCriteria $criteria = null)
+    public function __construct(string $name, string $label, IAuthSystem $authSystem, array $requiredPermissions, ITableDisplay $tableDisplay, IRowCriteria $criteria = null)
     {
-        parent::__construct($name, $label);
+        parent::__construct($name, $label, $authSystem, $requiredPermissions);
         $this->tableDisplay = $tableDisplay;
         $this->criteria     = $criteria;
     }
@@ -65,12 +66,7 @@ class TableWidget extends Widget
         return $this->tableDisplay->getDataSource()->load($this->criteria);
     }
 
-    /**
-     * Returns whether the current user authorized to see this widget.
-     *
-     * @return bool
-     */
-    public function isAuthorized() : bool
+    protected function hasExtraAuthorization() : bool
     {
         return true;
     }

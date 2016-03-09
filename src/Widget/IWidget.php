@@ -1,6 +1,7 @@
 <?php declare(strict_types = 1);
 
 namespace Dms\Core\Widget;
+use Dms\Core\Auth\IPermission;
 
 /**
  * The widget interface.
@@ -22,6 +23,13 @@ interface IWidget
      * @return string
      */
     public function getLabel() : string;
+
+    /**
+     * Gets the permissions required to view this widget
+     *
+     * @return IPermission[]
+     */
+    public function getRequiredPermissions() : array;
 
     /**
      * Returns whether the current user authorized to see this widget.

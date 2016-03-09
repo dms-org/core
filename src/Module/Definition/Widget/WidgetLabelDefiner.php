@@ -18,6 +18,6 @@ class WidgetLabelDefiner extends WidgetDefinerBase
      */
     public function label(string $label) : WidgetTypeDefiner
     {
-        return new WidgetTypeDefiner($this->name, $label, $this->tables, $this->charts, $this->actions, $this->callback);
+        return new WidgetTypeDefiner($this->name, $label, $this->authSystem, $this->requiredPermissions, $this->tables, $this->charts, $this->actions, $this->callback);
     }
 }

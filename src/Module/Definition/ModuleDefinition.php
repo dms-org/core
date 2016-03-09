@@ -166,7 +166,7 @@ class ModuleDefinition
      */
     public function widget(string $name) : Widget\WidgetLabelDefiner
     {
-        return new WidgetLabelDefiner($name, $this->tables, $this->charts, $this->actions, function (IWidget $widget) {
+        return new WidgetLabelDefiner($name, $this->authSystem, $this->requiredPermissions, $this->tables, $this->charts, $this->actions, function (IWidget $widget) {
             $this->widgets[$widget->getName()] = $widget;
         });
     }
