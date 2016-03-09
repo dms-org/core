@@ -3,8 +3,9 @@
 namespace Dms\Core\Tests\Module;
 
 use Dms\Common\Testing\CmsTestCase;
-use Dms\Core\Auth\IPermission;
 use Dms\Core\Auth\IAdmin;
+use Dms\Core\Auth\IPermission;
+use Dms\Core\Auth\Permission;
 use Dms\Core\Exception\InvalidOperationException;
 use Dms\Core\Module\IAction;
 use Dms\Core\Module\Module;
@@ -82,6 +83,8 @@ abstract class ModuleTestBase extends CmsTestCase
 
     public function testWidgetPermissions()
     {
+        $this->module->setPackageName('some-package');
+
         /** @var IWidget $widget */
         foreach ($this->module->getWidgets() as $widget) {
             $this->authSystem->setIsAuthorized(true);
@@ -89,15 +92,21 @@ abstract class ModuleTestBase extends CmsTestCase
             $this->authSystem->setIsAuthorized(false);
             $this->assertSame(false, $widget->isAuthorized());
 
-            $this->assertEquals($this->expectedRequiredPermissions(), $widget->getRequiredPermissions());
+            $this->assertSame('some-package', $widget->getPackageName());
+            $this->assertSame($this->module->getName(), $widget->getModuleName());
+
+            $this->assertEquals(
+                Permission::namespaceAll($this->expectedRequiredPermissions(), 'some-package.' . $this->module->getName()),
+                $widget->getRequiredPermissions()
+            );
         }
     }
 
     protected function assertDataTableEquals(array $expectedSections, IDataTable $dataTable)
     {
         $this->assertEquals(
-                DataTableHelper::normalizeSingleComponents($expectedSections),
-                DataTableHelper::covertDataTableToNormalizedArray($dataTable)
+            DataTableHelper::normalizeSingleComponents($expectedSections),
+            DataTableHelper::covertDataTableToNormalizedArray($dataTable)
         );
     }
 

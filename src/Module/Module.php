@@ -172,6 +172,10 @@ abstract class Module implements IModule
         foreach ($this->getActions() as $action) {
             $action->setPackageAndModuleName($packageName, $this->name);
         }
+
+        foreach ($this->getWidgets() as $widget) {
+            $widget->setPackageAndModuleName($packageName, $this->name);
+        }
     }
 
     /**

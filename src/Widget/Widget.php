@@ -4,7 +4,9 @@ namespace Dms\Core\Widget;
 
 use Dms\Core\Auth\IAuthSystem;
 use Dms\Core\Auth\IPermission;
+use Dms\Core\Auth\Permission;
 use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Exception\InvalidOperationException;
 
 /**
  * The widget base class.
@@ -13,6 +15,16 @@ use Dms\Core\Exception\InvalidArgumentException;
  */
 abstract class Widget implements IWidget
 {
+    /**
+     * @var string|null
+     */
+    protected $packageName;
+
+    /**
+     * @var string|null
+     */
+    protected $moduleName;
+
     /**
      * @var string
      */
@@ -51,6 +63,22 @@ abstract class Widget implements IWidget
     }
 
     /**
+     * @return string|null
+     */
+    final public function getModuleName()
+    {
+        return $this->moduleName;
+    }
+
+    /**
+     * @return string|null
+     */
+    final public function getPackageName()
+    {
+        return $this->packageName;
+    }
+
+    /**
      * @inheritdoc
      */
     final public function getName() : string
@@ -72,6 +100,20 @@ abstract class Widget implements IWidget
     final public function getRequiredPermissions() : array
     {
         return $this->requiredPermissions;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setPackageAndModuleName(string $packageName, string $moduleName)
+    {
+        if ($this->packageName || $this->moduleName) {
+            throw InvalidOperationException::methodCall(__METHOD__, 'package/module name already set');
+        }
+
+        $this->packageName         = $packageName;
+        $this->moduleName          = $moduleName;
+        $this->requiredPermissions = Permission::namespaceAll($this->requiredPermissions, $packageName . '.' . $moduleName);
     }
 
     /**

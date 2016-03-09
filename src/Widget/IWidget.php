@@ -2,6 +2,7 @@
 
 namespace Dms\Core\Widget;
 use Dms\Core\Auth\IPermission;
+use Dms\Core\Exception\InvalidOperationException;
 
 /**
  * The widget interface.
@@ -10,6 +11,21 @@ use Dms\Core\Auth\IPermission;
  */
 interface IWidget
 {
+    /**
+     * Gets the name of the parent package of this widget
+     *
+     * @return string|null
+     */
+    public function getPackageName();
+
+    /**
+     * Gets the name of the parent module of this widget
+     *
+     * @return string|null
+     */
+    public function getModuleName();
+
+
     /**
      * Gets the name.
      *
@@ -37,4 +53,15 @@ interface IWidget
      * @return bool
      */
     public function isAuthorized() : bool;
+
+    /**
+     * Sets the name of the parent package module of this widget
+     *
+     * @param string $packageName
+     * @param string $moduleName
+     *
+     * @return void
+     * @throws InvalidOperationException if the names are already set
+     */
+    public function setPackageAndModuleName(string $packageName, string $moduleName);
 }
