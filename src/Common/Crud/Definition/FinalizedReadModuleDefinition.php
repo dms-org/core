@@ -24,12 +24,13 @@ class FinalizedReadModuleDefinition extends FinalizedModuleDefinition
             $name,
             callable $labelObjectCallback,
             ISummaryTable $summaryTable,
+            array $requiredPermissions,
             array $actions,
             array $tables,
             array $charts,
             array $widgets
     ) {
-        parent::__construct($name, $actions, array_merge($tables, [$summaryTable]), $charts, $widgets);
+        parent::__construct($name, $requiredPermissions, $actions, array_merge($tables, [$summaryTable]), $charts, $widgets);
         $this->labelObjectCallback = $labelObjectCallback;
     }
 

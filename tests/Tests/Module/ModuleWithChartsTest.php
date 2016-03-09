@@ -39,6 +39,14 @@ class ModuleWithChartsTest extends ModuleTestBase
     }
 
     /**
+     * @inheritDoc
+     */
+    protected function expectedRequiredPermissions()
+    {
+        return [];
+    }
+
+    /**
      * @return string
      */
     protected function expectedName()
@@ -59,8 +67,8 @@ class ModuleWithChartsTest extends ModuleTestBase
         $this->assertInstanceOf(ChartTableDataSourceAdapter::class, $this->module->getChart('pie-chart')->getDataSource());
 
         $this->assertSame(
-                ['line-chart' => ChartDisplay::class, 'pie-chart' => ChartDisplay::class],
-                array_map('get_class', $this->module->getCharts())
+            ['line-chart' => ChartDisplay::class, 'pie-chart' => ChartDisplay::class],
+            array_map('get_class', $this->module->getCharts())
         );
 
         $this->assertThrows(function () {
@@ -80,25 +88,25 @@ class ModuleWithChartsTest extends ModuleTestBase
         $this->assertSame('line-chart', $chart->getName());
 
         $this->assertEquals([
-                'x' => new ChartAxis('x', 'X-Val', [
-                        $dataTable->getStructure()->getComponent('x'),
-                ]),
-                'y' => new ChartAxis('y', 'Y-Val', [
-                        $dataTable->getStructure()->getComponent('y'),
-                        $dataTable->getStructure()->getComponent('y2'),
-                ])
+            'x' => new ChartAxis('x', 'X-Val', [
+                $dataTable->getStructure()->getComponent('x'),
+            ]),
+            'y' => new ChartAxis('y', 'Y-Val', [
+                $dataTable->getStructure()->getComponent('y'),
+                $dataTable->getStructure()->getComponent('y2'),
+            ]),
         ], $chartDataSource->getStructure()->getAxes());
 
         $this->assertCount(3, $chartDataSource->load()->getRows());
 
         $this->assertEquals(
-                new ChartView('default', 'Default', true, $chartDataSource->criteria()->orderByAsc('x')),
-                $chart->getDefaultView()
+            new ChartView('default', 'Default', true, $chartDataSource->criteria()->orderByAsc('x')),
+            $chart->getDefaultView()
         );
 
         $this->assertEquals(
-                new ChartView('reversed', 'Reversed', false, $chartDataSource->criteria()->orderByDesc('x')),
-                $chart->getView('reversed')
+            new ChartView('reversed', 'Reversed', false, $chartDataSource->criteria()->orderByDesc('x')),
+            $chart->getView('reversed')
         );
 
         $this->assertSame(['default', 'reversed'], array_keys($chart->getViews()));
@@ -116,12 +124,12 @@ class ModuleWithChartsTest extends ModuleTestBase
         $this->assertSame('pie-chart', $chart->getName());
 
         $this->assertEquals([
-                'is_even' => new ChartAxis('is_even', 'Is Even', [
-                        ColumnComponent::forField(Field::name('is_even')->label('Is Even')->bool()->build())
-                ]),
-                'y'       => new ChartAxis('y', 'Y-Val', [
-                        $dataTable->getStructure()->getComponent('y'),
-                ])
+            'is_even' => new ChartAxis('is_even', 'Is Even', [
+                ColumnComponent::forField(Field::name('is_even')->label('Is Even')->bool()->build()),
+            ]),
+            'y'       => new ChartAxis('y', 'Y-Val', [
+                $dataTable->getStructure()->getComponent('y'),
+            ]),
         ], $chartDataSource->getStructure()->getAxes());
 
         $this->assertCount(3, $chartDataSource->load()->getRows());

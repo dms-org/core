@@ -2,6 +2,7 @@
 
 namespace Dms\Core\Tests\Common\Crud\Modules\Fixtures\Complex;
 
+use Dms\Core\Auth\Permission;
 use Dms\Core\Common\Crud\CrudModule;
 use Dms\Core\Common\Crud\Definition\CrudModuleDefinition;
 use Dms\Core\Common\Crud\Definition\Form\CrudFormDefinition;
@@ -28,6 +29,8 @@ class PersonModule extends CrudModule
     protected function defineCrudModule(CrudModuleDefinition $module)
     {
         $module->name('people-module');
+
+        $module->authorize(Permission::named('random-permission'));
 
         $module->labelObjects()->fromCallback(function (Person $person) {
             return $person->getFullName();

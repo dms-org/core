@@ -63,7 +63,20 @@ abstract class ReadModuleTest extends ModuleTestBase
     /**
      * @return IPermission[]
      */
+    final protected function expectedRequiredPermissions()
+    {
+        return array_merge($this->expectedReadModuleRequiredPermissions(), [Permission::named(IReadModule::VIEW_PERMISSION)]);
+    }
+
+    /**
+     * @return IPermission[]
+     */
     abstract protected function expectedReadModulePermissions();
+
+    /**
+     * @return IPermission[]
+     */
+    abstract protected function expectedReadModuleRequiredPermissions();
 
     public function testSummaryTableHasCorrectDataSource()
     {

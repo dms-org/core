@@ -49,6 +49,21 @@ interface IModule
     public function getPermissions() : array;
 
     /**
+     * Gets all the permissions required to access this module.
+     *
+     * @return IPermission[]
+     */
+    public function getRequiredPermissions() : array;
+
+    /**
+     * Returns whether the currently authenticated user is authorized to
+     * access this module
+     *
+     * @return bool
+     */
+    public function isAuthorized() : bool;
+
+    /**
      * Gets the actions.
      *
      * @return IAction[]

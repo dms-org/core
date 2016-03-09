@@ -26,6 +26,11 @@ class FinalizedModuleDefinition
     /**
      * @var IPermission[]
      */
+    private $requiredPermissions = [];
+
+    /**
+     * @var IPermission[]
+     */
     private $permissions = [];
 
     /**
@@ -52,23 +57,30 @@ class FinalizedModuleDefinition
      * FinalizedModuleDefinition constructor.
      *
      * @param string          $name
+     * @param IPermission[]   $requiredPermissions
      * @param IAction[]       $actions
      * @param ITableDisplay[] $tables
      * @param IChartDisplay[] $charts
      * @param IWidget[]       $widgets
      */
-    public function __construct(string $name, array $actions, array $tables, array $charts, array $widgets)
+    public function __construct(string $name, array $requiredPermissions, array $actions, array $tables, array $charts, array $widgets)
     {
+        InvalidArgumentException::verifyAllInstanceOf(__METHOD__, 'requiredPermissions', $requiredPermissions, IPermission::class);
         InvalidArgumentException::verifyAllInstanceOf(__METHOD__, 'actions', $actions, IAction::class);
         InvalidArgumentException::verifyAllInstanceOf(__METHOD__, 'tables', $tables, ITableDisplay::class);
         InvalidArgumentException::verifyAllInstanceOf(__METHOD__, 'charts', $charts, IChartDisplay::class);
         InvalidArgumentException::verifyAllInstanceOf(__METHOD__, 'widgets', $widgets, IWidget::class);
 
-        $this->name    = $name;
-        $this->actions = $actions;
-        $this->tables  = $tables;
-        $this->charts  = $charts;
-        $this->widgets = $widgets;
+        $this->name                = $name;
+        $this->requiredPermissions = $requiredPermissions;
+        $this->actions             = $actions;
+        $this->tables              = $tables;
+        $this->charts              = $charts;
+        $this->widgets             = $widgets;
+
+        foreach ($requiredPermissions as $permission) {
+            $this->permissions[$permission->getName()] = $permission;
+        }
 
         foreach ($actions as $action) {
             foreach ($action->getRequiredPermissions() as $permission) {
@@ -83,6 +95,14 @@ class FinalizedModuleDefinition
     public function getName() : string
     {
         return $this->name;
+    }
+
+    /**
+     * @return IPermission[]
+     */
+    public function getRequiredPermissions() : array
+    {
+        return $this->requiredPermissions;
     }
 
     /**

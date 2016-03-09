@@ -25,6 +25,8 @@ class ModuleWithActions extends Module
     {
         $module->name('test-module-with-actions');
 
+        $module->authorizeAll(['some-permission']);
+
         $module->action('unparameterized-action-no-return')
                 ->authorize('permission.name')
                 ->handler(function () {

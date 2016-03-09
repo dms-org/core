@@ -3,6 +3,8 @@
 namespace Dms\Core\Module\Definition;
 
 use Dms\Core\Auth\IAuthSystem;
+use Dms\Core\Auth\IPermission;
+use Dms\Core\Auth\Permission;
 use Dms\Core\Exception\InvalidOperationException;
 use Dms\Core\Module\Definition\Chart\ChartDefiner;
 use Dms\Core\Module\Definition\Table\TableDefiner;
@@ -28,6 +30,11 @@ class ModuleDefinition
      * @var string
      */
     protected $name;
+
+    /**
+     * @var IPermission[]
+     */
+    protected $requiredPermissions = [];
 
     /**
      * @var IAction[]
@@ -62,7 +69,7 @@ class ModuleDefinition
     /**
      * @return IAuthSystem
      */
-    public function getAuthSystem() : \Dms\Core\Auth\IAuthSystem
+    public function getAuthSystem() : IAuthSystem
     {
         return $this->authSystem;
     }
@@ -77,6 +84,35 @@ class ModuleDefinition
     public function name(string $name)
     {
         $this->name = $name;
+    }
+
+    /**
+     * Requires the supplied permission to access this module
+     *
+     * @param IPermission|string $permission
+     *
+     * @return void
+     */
+    public function authorize($permission)
+    {
+        $this->requiredPermissions[] = $permission instanceof IPermission
+            ? $permission
+            : Permission::named($permission);
+    }
+
+
+    /**
+     * Requires the supplied permissions to access this module
+     *
+     * @param IPermission[]|string[] $permissions
+     *
+     * @return void
+     */
+    public function authorizeAll(array $permissions)
+    {
+        foreach ($permissions as $permission) {
+            $this->authorize($permission);
+        }
     }
 
     /**
@@ -154,11 +190,12 @@ class ModuleDefinition
         $this->verifyCanBeFinalized();
 
         return new FinalizedModuleDefinition(
-                $this->name,
-                $this->actions,
-                $this->tables,
-                $this->charts,
-                $this->widgets
+            $this->name,
+            $this->requiredPermissions,
+            $this->actions,
+            $this->tables,
+            $this->charts,
+            $this->widgets
         );
     }
 

@@ -60,6 +60,14 @@ class SimpleReadModuleTest extends ReadModuleTest
         return [];
     }
 
+    /**
+     * @inheritDoc
+     */
+    protected function expectedReadModuleRequiredPermissions()
+    {
+        return [];
+    }
+
     public function testSummaryTableStructure()
     {
         $tableDataSource = $this->module->getSummaryTable()->getDataSource();

@@ -66,6 +66,14 @@ class SimpleValueObjectCrudModuleTest extends CrudModuleTest
         ];
     }
 
+    /**
+     * @inheritDoc
+     */
+    protected function expectedReadModuleRequiredPermissions()
+    {
+        return [];
+    }
+
     public function testSummaryTableData()
     {
         $data = $this->module->getSummaryTable()->loadView();

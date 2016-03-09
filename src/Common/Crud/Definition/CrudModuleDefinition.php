@@ -87,6 +87,7 @@ class CrudModuleDefinition extends ReadModuleDefinition
             $this->name,
             $this->labelObjectCallback,
             $this->summaryTable,
+            $this->requiredPermissions,
             $this->actions,
             $this->tables,
             $this->charts,

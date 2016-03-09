@@ -43,6 +43,11 @@ abstract class Module implements IModule
     /**
      * @var IPermission[]
      */
+    private $requiredPermissions = [];
+
+    /**
+     * @var IPermission[]
+     */
     private $permissions = [];
 
     /**
@@ -92,9 +97,9 @@ abstract class Module implements IModule
             $this->definition = $definition->finalize();
         }
 
-        $this->name = $this->definition->getName();
-
-        $this->permissions = Permission::namespaceAll($this->definition->getPermissions(), $this->name);
+        $this->name                = $this->definition->getName();
+        $this->requiredPermissions = Permission::namespaceAll($this->definition->getRequiredPermissions(), $this->name);
+        $this->permissions         = Permission::namespaceAll($this->definition->getPermissions(), $this->name);
 
         foreach ($this->definition->getActions() as $action) {
             if ($action instanceof IParameterizedAction) {
@@ -129,7 +134,7 @@ abstract class Module implements IModule
     /**
      * @return IAuthSystem
      */
-    final public function getAuthSystem() : \Dms\Core\Auth\IAuthSystem
+    final public function getAuthSystem() : IAuthSystem
     {
         return $this->authSystem;
     }
@@ -161,7 +166,8 @@ abstract class Module implements IModule
 
         $this->packageName = $packageName;
 
-        $this->permissions = Permission::namespaceAll($this->permissions, $packageName);
+        $this->requiredPermissions = Permission::namespaceAll($this->requiredPermissions, $packageName);
+        $this->permissions         = Permission::namespaceAll($this->permissions, $packageName);
 
         foreach ($this->getActions() as $action) {
             $action->setPackageAndModuleName($packageName, $this->name);
@@ -177,11 +183,27 @@ abstract class Module implements IModule
     }
 
     /**
+     * @inheritDoc
+     */
+    final public function getRequiredPermissions() : array
+    {
+        return $this->requiredPermissions;
+    }
+
+    /**
      * {@inheritDoc}
      */
     final public function getActions() : array
     {
         return $this->definition->getActions();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    final public function isAuthorized() : bool
+    {
+        return $this->authSystem->isAuthorized($this->requiredPermissions);
     }
 
     /**
@@ -196,8 +218,8 @@ abstract class Module implements IModule
         }
 
         throw ActionNotFoundException::format(
-                'Invalid call to %s: unknown action name, expecting one of (%s), \'%s\' given',
-                __METHOD__, Debug::formatValues(array_keys($this->parameterizedActions + $this->unparameterizedActions)), $name
+            'Invalid call to %s: unknown action name, expecting one of (%s), \'%s\' given',
+            __METHOD__, Debug::formatValues(array_keys($this->parameterizedActions + $this->unparameterizedActions)), $name
         );
     }
 
@@ -227,8 +249,8 @@ abstract class Module implements IModule
         }
 
         throw ActionNotFoundException::format(
-                'Invalid call to %s: unknown action name, expecting one of (%s), \'%s\' given',
-                __METHOD__, Debug::formatValues(array_keys($this->parameterizedActions)), $name
+            'Invalid call to %s: unknown action name, expecting one of (%s), \'%s\' given',
+            __METHOD__, Debug::formatValues(array_keys($this->parameterizedActions)), $name
         );
     }
 
@@ -258,8 +280,8 @@ abstract class Module implements IModule
         }
 
         throw ActionNotFoundException::format(
-                'Invalid call to %s: unknown action name, expecting one of (%s), \'%s\' given',
-                __METHOD__, Debug::formatValues(array_keys($this->unparameterizedActions)), $name
+            'Invalid call to %s: unknown action name, expecting one of (%s), \'%s\' given',
+            __METHOD__, Debug::formatValues(array_keys($this->unparameterizedActions)), $name
         );
     }
 
@@ -289,8 +311,8 @@ abstract class Module implements IModule
         }
 
         throw InvalidArgumentException::format(
-                'Invalid call to %s: unknown table name, expecting one of (%s), \'%s\' given',
-                __METHOD__, Debug::formatValues(array_keys($this->tables)), $name
+            'Invalid call to %s: unknown table name, expecting one of (%s), \'%s\' given',
+            __METHOD__, Debug::formatValues(array_keys($this->tables)), $name
         );
     }
 
@@ -320,8 +342,8 @@ abstract class Module implements IModule
         }
 
         throw InvalidArgumentException::format(
-                'Invalid call to %s: unknown chart name, expecting one of (%s), \'%s\' given',
-                __METHOD__, Debug::formatValues(array_keys($this->charts)), $name
+            'Invalid call to %s: unknown chart name, expecting one of (%s), \'%s\' given',
+            __METHOD__, Debug::formatValues(array_keys($this->charts)), $name
         );
     }
 
@@ -351,8 +373,8 @@ abstract class Module implements IModule
         }
 
         throw InvalidArgumentException::format(
-                'Invalid call to %s: unknown widget name, expecting one of (%s), \'%s\' given',
-                __METHOD__, Debug::formatValues(array_keys($this->widgets)), $name
+            'Invalid call to %s: unknown widget name, expecting one of (%s), \'%s\' given',
+            __METHOD__, Debug::formatValues(array_keys($this->widgets)), $name
         );
     }
 

@@ -46,6 +46,11 @@ abstract class ModuleTestBase extends CmsTestCase
     abstract protected function expectedPermissions();
 
     /**
+     * @return IPermission[]
+     */
+    abstract protected function expectedRequiredPermissions();
+
+    /**
      * @return string
      */
     abstract protected function expectedName();
@@ -99,5 +104,14 @@ abstract class ModuleTestBase extends CmsTestCase
         foreach ($this->module->getActions() as $action) {
             $this->assertSame('some-package', $action->getPackageName());
         }
+    }
+
+    public function testIsAuthorized()
+    {
+        $this->authSystem->setIsAuthorized(true);
+        $this->assertSame(true, $this->module->isAuthorized());
+
+        $this->authSystem->setIsAuthorized(false);
+        $this->assertSame(false, $this->module->isAuthorized());
     }
 }

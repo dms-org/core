@@ -4,7 +4,6 @@ namespace Dms\Core\Tests\Module;
 
 use Dms\Core\Auth\IPermission;
 use Dms\Core\Auth\Permission;
-use Dms\Core\Exception\InvalidArgumentException;
 use Dms\Core\Module\ActionNotFoundException;
 use Dms\Core\Module\IAction;
 use Dms\Core\Module\IParameterizedAction;
@@ -36,9 +35,20 @@ class ModuleWithActionsTest extends ModuleTestBase
     protected function expectedPermissions()
     {
         return [
+                Permission::named('some-permission'),
                 Permission::named('permission.name'),
                 Permission::named('permission.one'),
                 Permission::named('permission.two'),
+        ];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function expectedRequiredPermissions()
+    {
+        return [
+            Permission::named('some-permission'),
         ];
     }
 

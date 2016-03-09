@@ -38,6 +38,14 @@ class ModuleWithWidgetsTest extends ModuleTestBase
     }
 
     /**
+     * @inheritDoc
+     */
+    protected function expectedRequiredPermissions()
+    {
+        return [];
+    }
+
+    /**
      * @return string
      */
     protected function expectedName()

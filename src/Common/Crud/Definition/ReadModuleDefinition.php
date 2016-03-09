@@ -73,12 +73,13 @@ class ReadModuleDefinition extends ModuleDefinition
         parent::__construct($authSystem);
         $this->dataSource = $dataSource;
         $this->classType  = $this->dataSource->getObjectType();
+        $this->authorize(IReadModule::VIEW_PERMISSION);
 
 
         if (!is_a($this->classType, TypedObject::class, true)) {
             throw InvalidArgumentException::format(
-                    'Class type from data source must be an instance of %s, %s given',
-                    TypedObject::class, $this->classType
+                'Class type from data source must be an instance of %s, %s given',
+                TypedObject::class, $this->classType
             );
         }
 
@@ -100,12 +101,12 @@ class ReadModuleDefinition extends ModuleDefinition
     public function objectAction(string $name) : Action\ObjectActionDefiner
     {
         return new ObjectActionDefiner(
-                $this->dataSource,
-                $this->authSystem,
-                $name,
-                function (IObjectAction $action) {
-                    $this->actions[$action->getName()] = $action;
-                }
+            $this->dataSource,
+            $this->authSystem,
+            $name,
+            function (IObjectAction $action) {
+                $this->actions[$action->getName()] = $action;
+            }
         );
     }
 
@@ -228,20 +229,20 @@ class ReadModuleDefinition extends ModuleDefinition
         $definition = new SummaryTableDefinition($this, $this->class, $this->dataSource);
 
         $idField = Field::name(IReadModule::SUMMARY_TABLE_ID_COLUMN)->label('Id')
-                ->int()
-                ->required();
+            ->int()
+            ->required();
 
         if ($this->dataSource instanceof IRepository) {
             $definition->mapProperty(IEntity::ID)
-                    ->hidden()
-                    ->to($idField);
+                ->hidden()
+                ->to($idField);
         } else {
             $definition
-                    ->mapCallback(function (ITypedObject $object) {
-                        return $this->dataSource->getObjectId($object);
-                    })
-                    ->hidden()
-                    ->to($idField);
+                ->mapCallback(function (ITypedObject $object) {
+                    return $this->dataSource->getObjectId($object);
+                })
+                ->hidden()
+                ->to($idField);
         }
 
         $summaryTableDefinitionCallback($definition);
@@ -258,13 +259,14 @@ class ReadModuleDefinition extends ModuleDefinition
         $this->verifyCanBeFinalized();
 
         return new FinalizedReadModuleDefinition(
-                $this->name,
-                $this->labelObjectCallback,
-                $this->summaryTable,
-                $this->actions,
-                $this->tables,
-                $this->charts,
-                $this->widgets
+            $this->name,
+            $this->labelObjectCallback,
+            $this->summaryTable,
+            $this->requiredPermissions,
+            $this->actions,
+            $this->tables,
+            $this->charts,
+            $this->widgets
         );
     }
 
@@ -277,15 +279,15 @@ class ReadModuleDefinition extends ModuleDefinition
 
         if (!$this->labelObjectCallback) {
             throw InvalidOperationException::format(
-                    'Cannot finalize definition for module \'%s\': label objects callback has not been defined',
-                    $this->name
+                'Cannot finalize definition for module \'%s\': label objects callback has not been defined',
+                $this->name
             );
         }
 
         if (!$this->summaryTable) {
             throw InvalidOperationException::format(
-                    'Cannot finalize definition for module \'%s\': summary table has not been defined',
-                    $this->name
+                'Cannot finalize definition for module \'%s\': summary table has not been defined',
+                $this->name
             );
         }
     }

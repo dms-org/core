@@ -75,6 +75,7 @@ class CmsTest extends CmsTestCase
          * @see PackageWithActions Defined permissions in package
          */
         $this->assertEquals([
+                Permission::named('test-package.test-module-with-actions.some-permission'),
                 Permission::named('test-package.test-module-with-actions.permission.name'),
                 Permission::named('test-package.test-module-with-actions.permission.one'),
                 Permission::named('test-package.test-module-with-actions.permission.two'),
