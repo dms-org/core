@@ -9,23 +9,23 @@ use Dms\Core\Exception\BaseException;
  * 
  * @author Elliot Levin <elliot@aanet.com.au>
  */
-class UserException extends BaseException
+class AdminException extends BaseException
 {
     /**
-     * @var IUser
+     * @var IAdmin
      */
     private $user;
 
-    public function __construct(IUser $user, $message, $code = 0, $previous = null)
+    public function __construct(IAdmin $admin, $message, $code = 0, $previous = null)
     {
         parent::__construct($message, $code, $previous);
-        $this->user = $user;
+        $this->user = $admin;
     }
 
     /**
-     * @return IUser
+     * @return IAdmin
      */
-    public function getUser() : IUser
+    public function getUser() : IAdmin
     {
         return $this->user;
     }

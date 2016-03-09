@@ -4,7 +4,7 @@ namespace Dms\Core\Tests\Module;
 
 use Dms\Common\Testing\CmsTestCase;
 use Dms\Core\Auth\IPermission;
-use Dms\Core\Auth\IUser;
+use Dms\Core\Auth\IAdmin;
 use Dms\Core\Exception\InvalidOperationException;
 use Dms\Core\Module\IAction;
 use Dms\Core\Module\Module;
@@ -29,7 +29,7 @@ abstract class ModuleTestBase extends CmsTestCase
 
     public function setUp()
     {
-        $this->authSystem = new MockAuthSystem($this->getMockForAbstractClass(IUser::class));
+        $this->authSystem = new MockAuthSystem($this->getMockForAbstractClass(IAdmin::class));
         $this->module     = $this->buildModule($this->authSystem);
     }
 

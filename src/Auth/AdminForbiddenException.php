@@ -7,11 +7,11 @@ use Dms\Core\Util\Debug;
 
 /**
  * Exception for an action that is invalid with the current
- * authenticated user.
+ * authenticated admin.
  *
  * @author Elliot Levin <elliot@aanet.com.au>
  */
-class UserForbiddenException extends UserException
+class AdminForbiddenException extends AdminException
 {
     /**
      * @var IPermission[]
@@ -19,10 +19,10 @@ class UserForbiddenException extends UserException
     private $requiredPermissions = [];
 
     /**
-     * @param IUser         $user
+     * @param IAdmin        $admin
      * @param IPermission[] $requiredPermissions
      */
-    public function __construct(IUser $user, array $requiredPermissions)
+    public function __construct(IAdmin $admin, array $requiredPermissions)
     {
         InvalidArgumentException::verifyAllInstanceOf(__METHOD__, 'requiredPermissions', $requiredPermissions,
                 IPermission::class);
@@ -33,8 +33,8 @@ class UserForbiddenException extends UserException
         }
 
         parent::__construct(
-                $user,
-                'The currently authenticated user is forbidden from performing the requested action, required permissions: ' . Debug::formatValues($permissionNames)
+                $admin,
+                'The currently authenticated admin is forbidden from performing the requested action, required permissions: ' . Debug::formatValues($permissionNames)
         );
 
         $this->requiredPermissions = $requiredPermissions;

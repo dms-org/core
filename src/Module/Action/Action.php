@@ -5,7 +5,7 @@ namespace Dms\Core\Module\Action;
 use Dms\Core\Auth\IAuthSystem;
 use Dms\Core\Auth\IPermission;
 use Dms\Core\Auth\Permission;
-use Dms\Core\Auth\UserForbiddenException;
+use Dms\Core\Auth\AdminForbiddenException;
 use Dms\Core\Exception\InvalidArgumentException;
 use Dms\Core\Exception\InvalidOperationException;
 use Dms\Core\Form;
@@ -184,7 +184,7 @@ abstract class Action implements IAction
      * this action.
      *
      * @return void
-     * @throws UserForbiddenException
+     * @throws AdminForbiddenException
      */
     final protected function verifyUserHasPermission()
     {

@@ -70,13 +70,14 @@ class InnerCrudModuleProcessor extends FieldProcessor
 
         /** @var IMutableObjectSet $input */
         foreach ($input->getAll() as $object) {
-            $stages = $stagedForm->withSubmittedFirstStage([IObjectAction::OBJECT_FIELD_NAME => $object]);
-            $objectId = $this->module->getDataSource()->getObjectId($object);
+            $stages     = $stagedForm->withSubmittedFirstStage([IObjectAction::OBJECT_FIELD_NAME => $object]);
+            $objectData = [];
+            if (!($object instanceof ValueObject)) {
+                $objectId = $this->module->getDataSource()->getObjectId($object);
 
-            if (strpos((string)$objectId, EntityCollection::ENTITY_WITHOUT_ID_PREFIX) === 0 || $object instanceof ValueObject) {
-                $objectData = [];
-            } else {
-                $objectData = [IObjectAction::OBJECT_FIELD_NAME => $objectId];
+                if (strpos((string)$objectId, EntityCollection::ENTITY_WITHOUT_ID_PREFIX) !== 0) {
+                    $objectData[IObjectAction::OBJECT_FIELD_NAME] = $objectId;
+                }
             }
 
             foreach ($stages->getAllStages() as $stage) {

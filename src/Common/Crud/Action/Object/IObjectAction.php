@@ -2,7 +2,7 @@
 
 namespace Dms\Core\Common\Crud\Action\Object;
 
-use Dms\Core\Auth\UserForbiddenException;
+use Dms\Core\Auth\AdminForbiddenException;
 use Dms\Core\Exception\TypeMismatchException;
 use Dms\Core\Form\IForm;
 use Dms\Core\Form\InvalidFormSubmissionException;
@@ -72,7 +72,7 @@ interface IObjectAction extends IParameterizedAction
      * @param array  $data
      *
      * @return object|null
-     * @throws UserForbiddenException if the authenticated user does not have the required permissions
+     * @throws AdminForbiddenException if the authenticated user does not have the required permissions
      * @throws InvalidFormSubmissionException if the form data is invalid
      */
     public function runOnObject($object, array $data);

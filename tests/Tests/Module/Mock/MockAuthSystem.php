@@ -5,10 +5,10 @@ namespace Dms\Core\Tests\Module\Mock;
 use Dms\Core\Auth\IAuthSystem;
 use Dms\Core\Auth\InvalidCredentialsException;
 use Dms\Core\Auth\IPermission;
-use Dms\Core\Auth\IUser;
-use Dms\Core\Auth\UserBannedException;
-use Dms\Core\Auth\UserForbiddenException;
-use Dms\Core\Auth\UserNotAuthenticatedException;
+use Dms\Core\Auth\IAdmin;
+use Dms\Core\Auth\AdminBannedException;
+use Dms\Core\Auth\AdminForbiddenException;
+use Dms\Core\Auth\NotAuthenticatedException;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>
@@ -16,7 +16,7 @@ use Dms\Core\Auth\UserNotAuthenticatedException;
 class MockAuthSystem implements IAuthSystem
 {
     /**
-     * @var IUser
+     * @var IAdmin
      */
     protected $mockUser;
 
@@ -28,9 +28,9 @@ class MockAuthSystem implements IAuthSystem
     /**
      * MockAuthSystem constructor.
      *
-     * @param IUser $mockUser
+     * @param IAdmin $mockUser
      */
-    public function __construct(IUser $mockUser)
+    public function __construct(IAdmin $mockUser)
     {
         $this->mockUser = $mockUser;
     }
@@ -44,7 +44,7 @@ class MockAuthSystem implements IAuthSystem
      *
      * @return void
      * @throws InvalidCredentialsException
-     * @throws UserBannedException
+     * @throws AdminBannedException
      */
     public function login(string $username, string $password)
     {
@@ -55,7 +55,7 @@ class MockAuthSystem implements IAuthSystem
      * Attempts to logout the currently authenticated user.
      *
      * @return void
-     * @throws UserNotAuthenticatedException
+     * @throws NotAuthenticatedException
      */
     public function logout()
     {
@@ -71,7 +71,7 @@ class MockAuthSystem implements IAuthSystem
      *
      * @return void
      * @throws InvalidCredentialsException
-     * @throws UserBannedException
+     * @throws AdminBannedException
      */
     public function resetPassword(string $username, string $oldPassword, string $newPassword)
     {
@@ -91,10 +91,10 @@ class MockAuthSystem implements IAuthSystem
     /**
      * Returns the currently authenticated user.
      *
-     * @return IUser
-     * @throws UserNotAuthenticatedException
+     * @return IAdmin
+     * @throws NotAuthenticatedException
      */
-    public function getAuthenticatedUser() : IUser
+    public function getAuthenticatedUser() : IAdmin
     {
         return $this->mockUser;
     }
@@ -130,14 +130,14 @@ class MockAuthSystem implements IAuthSystem
      * @param IPermission[] $permissions
      *
      * @return void
-     * @throws UserForbiddenException
-     * @throws UserNotAuthenticatedException
-     * @throws UserBannedException
+     * @throws AdminForbiddenException
+     * @throws NotAuthenticatedException
+     * @throws AdminBannedException
      */
     public function verifyAuthorized(array $permissions)
     {
         if (!$this->isAuthorized($permissions)) {
-            throw new UserForbiddenException($this->mockUser, $permissions);
+            throw new AdminForbiddenException($this->mockUser, $permissions);
         }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Dms\Core\Module;
 
-use Dms\Core\Auth\UserForbiddenException;
+use Dms\Core\Auth\AdminForbiddenException;
 use Dms\Core\Form;
 use Dms\Core\Model\IDataTransferObject;
 use Dms\Core\Persistence;
@@ -25,7 +25,7 @@ interface IUnparameterizedAction extends IAction
      * Runs the action handler.
      *
      * @return IDataTransferObject|null
-     * @throws UserForbiddenException
+     * @throws AdminForbiddenException
      */
     public function run();
 }

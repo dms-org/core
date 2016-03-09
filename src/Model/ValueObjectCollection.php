@@ -64,6 +64,7 @@ class ValueObjectCollection extends ObjectCollection implements IValueObjectColl
     public function getObjectId(ITypedObject $object)
     {
         Exception\TypeMismatchException::verifyInstanceOf(__METHOD__, 'object', $object, $this->getObjectType());
+        $this->toOrderedMap();
 
         if (isset($this->instanceMap[$object])) {
             return $this->instanceMap[$object];

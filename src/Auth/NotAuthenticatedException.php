@@ -9,7 +9,7 @@ use Dms\Core\Exception\BaseException;
  *
  * @author Elliot Levin <elliot@aanet.com.au>
  */
-class UserNotAuthenticatedException extends BaseException
+class NotAuthenticatedException extends BaseException
 {
 
 }

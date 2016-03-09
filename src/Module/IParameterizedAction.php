@@ -2,7 +2,7 @@
 
 namespace Dms\Core\Module;
 
-use Dms\Core\Auth\UserForbiddenException;
+use Dms\Core\Auth\AdminForbiddenException;
 use Dms\Core\Exception\InvalidArgumentException;
 use Dms\Core\Exception\InvalidOperationException;
 use Dms\Core\Form\InvalidFormSubmissionException;
@@ -37,7 +37,7 @@ interface IParameterizedAction extends IAction
      * @param array $data
      *
      * @return object|null
-     * @throws UserForbiddenException if the authenticated user does not have the required permissions.
+     * @throws AdminForbiddenException if the authenticated user does not have the required permissions.
      * @throws InvalidFormSubmissionException if the form data is invalid
      */
     public function run(array $data);
@@ -49,7 +49,7 @@ interface IParameterizedAction extends IAction
      * @param array $data
      *
      * @return static
-     * @throws UserForbiddenException if the authenticated user does not have the required permissions.
+     * @throws AdminForbiddenException if the authenticated user does not have the required permissions.
      * @throws InvalidFormSubmissionException if the form data is invalid
      * @throws InvalidOperationException If there is only one stage
      */
@@ -65,7 +65,7 @@ interface IParameterizedAction extends IAction
      * @param array $processedData
      *
      * @return static
-     * @throws UserForbiddenException if the authenticated user does not have the required permissions.
+     * @throws AdminForbiddenException if the authenticated user does not have the required permissions.
      * @throws InvalidArgumentException If processed form data is invalid
      * @throws InvalidOperationException If there is only one stage
      */

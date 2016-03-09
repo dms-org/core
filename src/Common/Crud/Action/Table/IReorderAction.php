@@ -2,7 +2,7 @@
 
 namespace Dms\Core\Common\Crud\Action\Table;
 
-use Dms\Core\Auth\UserForbiddenException;
+use Dms\Core\Auth\AdminForbiddenException;
 use Dms\Core\Common\Crud\Action\Object\IObjectAction;
 use Dms\Core\Form\InvalidFormSubmissionException;
 
@@ -22,7 +22,7 @@ interface IReorderAction extends IObjectAction
      * @param int    $newIndex
      *
      * @return void
-     * @throws UserForbiddenException if the authenticated user does not have the required permissions
+     * @throws AdminForbiddenException if the authenticated user does not have the required permissions
      * @throws InvalidFormSubmissionException if the form data is invalid
      */
     public function runReorder($object, int $newIndex);

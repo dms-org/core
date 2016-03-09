@@ -5,7 +5,14 @@ namespace Dms\Core\Auth;
 use Dms\Core\Model\EntityIdCollection;
 use Dms\Core\Model\IEntity;
 
-interface IUser extends IEntity
+/**
+ * The admin interface.
+ *
+ * Represents a user account for the cms.
+ *
+ * @author Elliot Levin <elliotlevin@hotmail.com>
+ */
+interface IAdmin extends IEntity
 {
     /**
      * Gets the user's email address.
@@ -56,5 +63,5 @@ interface IUser extends IEntity
      *
      * @return EntityIdCollection
      */
-    public function getRoleIds() : \Dms\Core\Model\EntityIdCollection;
+    public function getRoleIds() : EntityIdCollection;
 }

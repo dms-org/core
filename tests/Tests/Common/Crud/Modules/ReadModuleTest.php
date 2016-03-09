@@ -4,7 +4,7 @@ namespace Dms\Core\Tests\Common\Crud\Modules;
 
 use Dms\Core\Auth\IPermission;
 use Dms\Core\Auth\Permission;
-use Dms\Core\Auth\UserForbiddenException;
+use Dms\Core\Auth\AdminForbiddenException;
 use Dms\Core\Common\Crud\Action\Crud\ViewDetailsAction;
 use Dms\Core\Common\Crud\IReadModule;
 use Dms\Core\Model\IEntitySet;

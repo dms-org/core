@@ -2,7 +2,7 @@
 
 namespace Dms\Core\Tests\Form\Field;
 
-use Dms\Core\Auth\IUser;
+use Dms\Core\Auth\IAdmin;
 use Dms\Core\Common\Crud\Action\Object\IObjectAction;
 use Dms\Core\Common\Crud\ICrudModule;
 use Dms\Core\Form\Field\Builder\Field;
@@ -26,7 +26,7 @@ class EntityCrudModuleFieldTest extends FieldBuilderTestBase
             new SimpleEntity(1, 'abc'),
             new SimpleEntity(2, '123'),
             new SimpleEntity(3, 'xyz'),
-        ]), new MockAuthSystem($this->getMockForAbstractClass(IUser::class)));
+        ]), new MockAuthSystem($this->getMockForAbstractClass(IAdmin::class)));
     }
 
     public function field()

@@ -3,7 +3,7 @@
 namespace Dms\Core\Tests\Common\Crud\Modules;
 
 use Dms\Core\Auth\IPermission;
-use Dms\Core\Auth\UserForbiddenException;
+use Dms\Core\Auth\AdminForbiddenException;
 use Dms\Core\Common\Crud\Action\Object\IObjectAction;
 use Dms\Core\Common\Crud\IReadModule;
 use Dms\Core\Form\IForm;
@@ -108,6 +108,6 @@ class SimpleReadModuleTest extends ReadModuleTest
         $this->authSystem->setIsAuthorized(false);
         $this->assertThrows(function () {
             $this->module->getDetailsAction()->run([IObjectAction::OBJECT_FIELD_NAME => 1]);
-        }, UserForbiddenException::class);
+        }, AdminForbiddenException::class);
     }
 }

@@ -19,7 +19,7 @@ interface IAuthSystem
      *
      * @return void
      * @throws InvalidCredentialsException
-     * @throws UserBannedException
+     * @throws AdminBannedException
      */
     public function login(string $username, string $password);
 
@@ -27,7 +27,7 @@ interface IAuthSystem
      * Attempts to logout the currently authenticated user.
      *
      * @return void
-     * @throws UserNotAuthenticatedException
+     * @throws NotAuthenticatedException
      */
     public function logout();
 
@@ -40,7 +40,7 @@ interface IAuthSystem
      *
      * @return void
      * @throws InvalidCredentialsException
-     * @throws UserBannedException
+     * @throws AdminBannedException
      */
     public function resetPassword(string $username, string $oldPassword, string $newPassword);
 
@@ -54,10 +54,10 @@ interface IAuthSystem
     /**
      * Returns the currently authenticated user.
      *
-     * @return IUser
-     * @throws UserNotAuthenticatedException
+     * @return IAdmin
+     * @throws NotAuthenticatedException
      */
-    public function getAuthenticatedUser() : IUser;
+    public function getAuthenticatedUser() : IAdmin;
 
     /**
      * Returns whether the currently authenticated user has the
@@ -76,9 +76,9 @@ interface IAuthSystem
      * @param IPermission[] $permissions
      *
      * @return void
-     * @throws UserForbiddenException
-     * @throws UserNotAuthenticatedException
-     * @throws UserBannedException
+     * @throws AdminForbiddenException
+     * @throws NotAuthenticatedException
+     * @throws AdminBannedException
      */
     public function verifyAuthorized(array $permissions);
 }

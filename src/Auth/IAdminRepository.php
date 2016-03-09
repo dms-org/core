@@ -7,54 +7,54 @@ use Dms\Core\Model\ICriteria;
 use Dms\Core\Model\ISpecification;
 use Dms\Core\Persistence\IRepository;
 
-interface IUserRepository extends IRepository
+interface IAdminRepository extends IRepository
 {
     /**
      * {@inheritDoc}
      *
-     * @return IUser[]
+     * @return IAdmin[]
      */
     public function getAll() : array;
 
     /**
      * {@inheritDoc}
      *
-     * @return IUser
+     * @return IAdmin
      */
     public function get($id);
 
     /**
      * {@inheritDoc}
      *
-     * @return IUser[]
+     * @return IAdmin[]
      */
     public function getAllById(array $ids) : array;
 
     /**
      * {@inheritDoc}
      *
-     * @return IUser|null
+     * @return IAdmin|null
      */
     public function tryGet($id);
 
     /**
      * {@inheritDoc}
      *
-     * @return IUser[]
+     * @return IAdmin[]
      */
     public function tryGetAll(array $ids) : array;
 
     /**
      * {@inheritDoc}
      *
-     * @return IUser[]
+     * @return IAdmin[]
      */
     public function matching(ICriteria $criteria) : array;
 
     /**
      * {@inheritDoc}
      *
-     * @return IUser[]
+     * @return IAdmin[]
      */
     public function satisfying(ISpecification $specification) : array;
 }
