@@ -246,6 +246,10 @@ abstract class EntityMapperBase extends ObjectMapper implements IEntityMapper
      */
     final public function deleteAll(PersistenceContext $context, array $ids)
     {
+        if (empty($ids)) {
+            return;
+        }
+
         $idParams = [];
         /** @var IEntity[] $entities */
         foreach ($ids as $id) {

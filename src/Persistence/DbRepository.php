@@ -253,6 +253,10 @@ class DbRepository extends DbRepositoryBase implements IRepository
      */
     public function tryGetAll(array $ids) : array
     {
+        if (empty($ids)) {
+            return [];
+        }
+
         InvalidArgumentException::verifyAll(__METHOD__, 'ids', $ids, 'is_int');
 
         return $this->load(
