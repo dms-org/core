@@ -2,8 +2,6 @@
 
 namespace Dms\Core\Package;
 
-use Dms\Core\Widget\IWidget;
-
 /**
  * The interface for a dashboard.
  *
@@ -17,4 +15,11 @@ interface IDashboard
      * @return IDashboardWidget[]
      */
     public function getWidgets() : array;
+
+    /**
+     * Gets the authorized widgets.
+     *
+     * @return IDashboardWidget[]
+     */
+    public function getAuthorizedWidgets() : array;
 }

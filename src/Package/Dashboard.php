@@ -20,7 +20,7 @@ class Dashboard implements IDashboard
     /**
      * Dashboard constructor.
      *
-     * @param IWidget[] $widgets
+     * @param IDashboardWidget[] $widgets
      */
     public function __construct(array $widgets)
     {
@@ -35,5 +35,21 @@ class Dashboard implements IDashboard
     public function getWidgets() : array
     {
         return $this->widgets;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getAuthorizedWidgets() : array
+    {
+        $authorizedWidgets = [];
+
+        foreach ($this->widgets as $widget) {
+            if ($widget->getModule()->isAuthorized() && $widget->getWidget()->isAuthorized()) {
+                $authorizedWidgets[] = $widget;
+            }
+        }
+
+        return $authorizedWidgets;
     }
 }

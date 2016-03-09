@@ -16,7 +16,7 @@ class DashboardTest extends CmsTestCase
     public function testNew()
     {
         $dashboard = new Dashboard([
-            $widget = $this->getMockForAbstractClass(IDashboardWidget::class)
+            $widget = $this->getMockForAbstractClass(IDashboardWidget::class),
         ]);
 
         $this->assertSame([$widget], $dashboard->getWidgets());
