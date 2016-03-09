@@ -45,4 +45,17 @@ class Collection extends \Pinq\Collection implements ICollection, \Serializable
     {
 
     }
+
+    public function asArray()
+    {
+        $array = [];
+
+        foreach (parent::asArray() as $key => $value) {
+            $array[$key] = $value;
+        }
+
+        return $array;
+    }
+
+
 }
