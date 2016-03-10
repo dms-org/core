@@ -4,6 +4,7 @@ namespace Dms\Core\Module\Action;
 
 use Dms\Core\Auth\IAuthSystem;
 use Dms\Core\Form;
+use Dms\Core\Module\IActionHandler;
 use Dms\Core\Module\IUnparameterizedAction;
 use Dms\Core\Module\IUnparameterizedActionHandler;
 
@@ -30,7 +31,7 @@ class UnparameterizedAction extends Action implements IUnparameterizedAction
     /**
      * @return IUnparameterizedActionHandler
      */
-    final public function getHandler() : \Dms\Core\Module\IActionHandler
+    final public function getHandler() : IActionHandler
     {
         return $this->handler;
     }
@@ -42,6 +43,14 @@ class UnparameterizedAction extends Action implements IUnparameterizedAction
     {
         $this->verifyUserHasPermission();
 
+        return $this->runWithoutAuthorization();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function runWithoutAuthorization()
+    {
         /** @var IUnparameterizedActionHandler $handler */
         $handler = $this->getHandler();
 

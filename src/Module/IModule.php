@@ -56,6 +56,13 @@ interface IModule
     public function getRequiredPermissions() : array;
 
     /**
+     * Returns an equivalent module without any required permissions.
+     *
+     * @return static
+     */
+    public function withoutRequiredPermissions();
+
+    /**
      * Returns whether the currently authenticated user is authorized to
      * access this module
      *

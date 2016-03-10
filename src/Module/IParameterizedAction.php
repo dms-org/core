@@ -43,6 +43,16 @@ interface IParameterizedAction extends IAction
     public function run(array $data);
 
     /**
+     * Runs the action without verifying the user is authorized.
+     *
+     * @param array $data
+     *
+     * @return object|null
+     * @throws InvalidFormSubmissionException if the form data is invalid
+     */
+    public function runWithoutAuthorization(array $data);
+
+    /**
      * Returns an equivalent parameterized action with the first stage
      * of the form filled out with the supplied data.
      *

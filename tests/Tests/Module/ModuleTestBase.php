@@ -102,6 +102,14 @@ abstract class ModuleTestBase extends CmsTestCase
         }
     }
 
+    public function testWithoutRequiredPermissions()
+    {
+        $module = $this->module->withoutRequiredPermissions();
+
+        $this->assertSame(get_class($this->module), get_class($module));
+        $this->assertSame([], $module->getRequiredPermissions());
+    }
+
     protected function assertDataTableEquals(array $expectedSections, IDataTable $dataTable)
     {
         $this->assertEquals(

@@ -195,6 +195,18 @@ abstract class Module implements IModule
     }
 
     /**
+     * @inheritDoc
+     */
+    final public function withoutRequiredPermissions()
+    {
+        $clone = clone $this;
+
+        $clone->requiredPermissions = [];
+
+        return $clone;
+    }
+
+    /**
      * {@inheritDoc}
      */
     final public function getActions() : array

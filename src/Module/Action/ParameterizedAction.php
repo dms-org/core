@@ -5,6 +5,7 @@ namespace Dms\Core\Module\Action;
 use Dms\Core\Auth\IAuthSystem;
 use Dms\Core\Exception\TypeMismatchException;
 use Dms\Core\Form;
+use Dms\Core\Form\InvalidFormSubmissionException;
 use Dms\Core\Form\IStagedForm;
 use Dms\Core\Module\IActionHandler;
 use Dms\Core\Module\IParameterizedAction;
@@ -83,6 +84,14 @@ class ParameterizedAction extends Action implements IParameterizedAction
     {
         $this->verifyUserHasPermission();
 
+        return $this->runWithoutAuthorization($data);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function runWithoutAuthorization(array $data)
+    {
         $dto = $this->formDtoMapping->mapFormSubmissionToDto($data);
 
         /** @var IParameterizedActionHandler $handler */

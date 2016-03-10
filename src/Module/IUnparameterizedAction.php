@@ -28,4 +28,11 @@ interface IUnparameterizedAction extends IAction
      * @throws AdminForbiddenException
      */
     public function run();
+
+    /**
+     * Runs the action without verifying the user is authorized.
+     *
+     * @return object|null
+     */
+    public function runWithoutAuthorization();
 }
