@@ -87,6 +87,12 @@ class FinalizedModuleDefinition
                 $this->permissions[$permission->getName()] = $permission;
             }
         }
+
+        foreach ($widgets as $widget) {
+            foreach ($widget->getRequiredPermissions() as $permission) {
+                $this->permissions[$permission->getName()] = $permission;
+            }
+        }
     }
 
     /**
