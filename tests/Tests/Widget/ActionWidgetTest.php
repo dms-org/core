@@ -18,7 +18,7 @@ class ActionWidgetTest extends CmsTestCase
         $action = $this->getMockForAbstractClass(IAction::class);
 
         $authSystem          = $this->getMockForAbstractClass(IAuthSystem::class);
-        $requiredPermissions = [Permission::named('abc')];
+        $requiredPermissions = ['abc' => Permission::named('abc')];
 
         $widget              = new ActionWidget('action-widget', 'Action', $authSystem, $requiredPermissions, $action);
 

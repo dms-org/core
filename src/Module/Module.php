@@ -97,6 +97,13 @@ abstract class Module implements IModule
             $this->definition = $definition->finalize();
         }
 
+        $this->loadFromDefinition($this->definition);
+    }
+
+    protected function loadFromDefinition(FinalizedModuleDefinition $definition)
+    {
+        $this->definition = $definition;
+
         $this->name                = $this->definition->getName();
         $this->requiredPermissions = Permission::namespaceAll($this->definition->getRequiredPermissions(), $this->name);
         $this->permissions         = Permission::namespaceAll($this->definition->getPermissions(), $this->name);
@@ -201,7 +208,7 @@ abstract class Module implements IModule
     {
         $clone = clone $this;
 
-        $clone->requiredPermissions = [];
+        $clone->loadFromDefinition($this->definition->withoutRequiredPermissions());
 
         return $clone;
     }
@@ -382,7 +389,7 @@ abstract class Module implements IModule
     /**
      * @inheritDoc
      */
-    final public function getWidget(string $name) : \Dms\Core\Widget\IWidget
+    final public function getWidget(string $name) : IWidget
     {
         if (isset($this->widgets[$name])) {
             return $this->widgets[$name];

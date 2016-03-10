@@ -55,9 +55,9 @@ class ObjectActionDefiner extends ActionDefiner
     /**
      * @inheritDoc
      */
-    public function __construct(IIdentifiableObjectSet $dataSource, IAuthSystem $authSystem, $name, callable $callback)
+    public function __construct(IIdentifiableObjectSet $dataSource, IAuthSystem $authSystem, array $requiredPermissions, $name, callable $callback)
     {
-        parent::__construct($authSystem, $name, $callback);
+        parent::__construct($authSystem, $requiredPermissions, $name, $callback);
 
         $this->dataSource = $dataSource;
     }

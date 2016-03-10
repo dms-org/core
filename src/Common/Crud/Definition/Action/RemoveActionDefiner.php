@@ -35,9 +35,9 @@ class RemoveActionDefiner extends ObjectActionDefiner
     /**
      * @inheritDoc
      */
-    public function __construct(IMutableObjectSet $dataSource, IAuthSystem $authSystem, callable $callback)
+    public function __construct(IMutableObjectSet $dataSource, IAuthSystem $authSystem, array $requiredPermissions, callable $callback)
     {
-        parent::__construct($dataSource, $authSystem, ICrudModule::REMOVE_ACTION, $callback);
+        parent::__construct($dataSource, $authSystem, $requiredPermissions, ICrudModule::REMOVE_ACTION, $callback);
 
         $this->dataSource = $dataSource;
         $this->authorize(ICrudModule::REMOVE_PERMISSION);

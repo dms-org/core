@@ -3,7 +3,6 @@
 namespace Dms\Core\Common\Crud;
 
 use Dms\Core\Auth\IAuthSystem;
-use Dms\Core\Auth\Permission;
 use Dms\Core\Common\Crud\Action\Object\IObjectAction;
 use Dms\Core\Common\Crud\Definition\FinalizedReadModuleDefinition;
 use Dms\Core\Common\Crud\Definition\ReadModuleDefinition;
@@ -13,6 +12,7 @@ use Dms\Core\Exception\TypeMismatchException;
 use Dms\Core\Model\IIdentifiableObjectSet;
 use Dms\Core\Model\ITypedObject;
 use Dms\Core\Module\ActionNotFoundException;
+use Dms\Core\Module\Definition\FinalizedModuleDefinition;
 use Dms\Core\Module\Definition\ModuleDefinition;
 use Dms\Core\Module\Module;
 use Dms\Core\Util\Debug;
@@ -50,17 +50,23 @@ abstract class ReadModule extends Module implements IReadModule
     public function __construct(IIdentifiableObjectSet $dataSource, IAuthSystem $authSystem)
     {
         $this->dataSource = $dataSource;
+
         parent::__construct($authSystem);
+    }
+
+    protected function loadFromDefinition(FinalizedModuleDefinition $definition)
+    {
+        /** @var FinalizedReadModuleDefinition $definition */
+        parent::loadFromDefinition($definition);
+
+        $this->labelCallback = $this->definition->getLabelObjectCallback();
 
         foreach ($this->getParameterizedActions() as $name => $action) {
             if ($action instanceof IObjectAction) {
                 $this->objectActions[$name] = $action;
             }
         }
-
-        $this->labelCallback = $this->definition->getLabelObjectCallback();
     }
-
 
     /**
      * @inheritDoc
@@ -110,8 +116,8 @@ abstract class ReadModule extends Module implements IReadModule
 
         if (!($object instanceof $objectType)) {
             throw TypeMismatchException::format(
-                    'Invalid object supplied to %s: expecting type %s, %s given',
-                    __METHOD__, $objectType, Debug::getType($object)
+                'Invalid object supplied to %s: expecting type %s, %s given',
+                __METHOD__, $objectType, Debug::getType($object)
             );
         }
 
@@ -149,8 +155,8 @@ abstract class ReadModule extends Module implements IReadModule
     {
         if (!isset($this->objectActions[$name])) {
             throw ActionNotFoundException::format(
-                    'Invalid name supplied to %s: expecting one of (%s), \'%s\' given',
-                    __METHOD__, Debug::formatValues(array_keys($this->objectActions)), $name
+                'Invalid name supplied to %s: expecting one of (%s), \'%s\' given',
+                __METHOD__, Debug::formatValues(array_keys($this->objectActions)), $name
             );
         }
 
@@ -172,8 +178,8 @@ abstract class ReadModule extends Module implements IReadModule
     {
         if (!isset($this->objectActions[self::DETAILS_ACTION])) {
             throw UnsupportedActionException::format(
-                    'Cannot get details action in crud module for \'%s\': action is not supported',
-                    $this->getObjectType()
+                'Cannot get details action in crud module for \'%s\': action is not supported',
+                $this->getObjectType()
             );
         }
 
@@ -187,8 +193,8 @@ abstract class ReadModule extends Module implements IReadModule
     {
         if ($dataSource->getObjectType() !== $this->getObjectType()) {
             throw InvalidArgumentException::format(
-                    'Invalid data source supplied to %s: object type %s does not match required type %s',
-                    __METHOD__, $dataSource->getObjectType(), $this->getObjectType()
+                'Invalid data source supplied to %s: object type %s does not match required type %s',
+                __METHOD__, $dataSource->getObjectType(), $this->getObjectType()
             );
         }
 

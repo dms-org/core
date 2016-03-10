@@ -150,4 +150,24 @@ class FinalizedModuleDefinition
     {
         return $this->widgets;
     }
+
+    /**
+     * @return static
+     */
+    public function withoutRequiredPermissions()
+    {
+        $clone = clone $this;
+
+        $clone->requiredPermissions = [];
+
+        foreach ($clone->actions as $name => $action) {
+            $clone->actions[$name] = $action->withoutRequiredPermissions();
+        }
+
+        foreach ($clone->widgets as $name => $widget) {
+            $clone->widgets[$name] = $widget->withoutRequiredPermissions();
+        }
+
+        return $clone;
+    }
 }

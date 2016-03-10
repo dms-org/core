@@ -124,7 +124,7 @@ class ModuleDefinition
      */
     public function action(string $name) : ActionDefiner
     {
-        return new ActionDefiner($this->authSystem, $name, function (IAction $action) {
+        return new ActionDefiner($this->authSystem, $this->requiredPermissions, $name, function (IAction $action) {
             $this->actions[$action->getName()] = $action;
         });
     }

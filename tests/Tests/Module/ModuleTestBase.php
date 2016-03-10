@@ -108,6 +108,14 @@ abstract class ModuleTestBase extends CmsTestCase
 
         $this->assertSame(get_class($this->module), get_class($module));
         $this->assertSame([], $module->getRequiredPermissions());
+
+        foreach ($module->getActions() as $action) {
+            $this->assertSame([], $action->getRequiredPermissions());
+        }
+
+        foreach ($module->getWidgets() as $widget) {
+            $this->assertSame([], $widget->getRequiredPermissions());
+        }
     }
 
     protected function assertDataTableEquals(array $expectedSections, IDataTable $dataTable)

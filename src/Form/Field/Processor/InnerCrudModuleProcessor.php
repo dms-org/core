@@ -39,14 +39,14 @@ class InnerCrudModuleProcessor extends FieldProcessor
         $currentPosition = 1;
         foreach ($input as $item) {
             if (isset($item[IObjectAction::OBJECT_FIELD_NAME])) {
-                $editedObject = $this->module->getEditAction()->run($item);
+                $editedObject = $this->module->getEditAction()->runWithoutAuthorization($item);
                 $newObjects[] = $editedObject;
 
                 if ($dataSource instanceof ITypedObjectCollection) {
                     $dataSource->move($editedObject, $currentPosition);
                 }
             } else {
-                $newObjects[] = $this->module->getCreateAction()->run($item);
+                $newObjects[] = $this->module->getCreateAction()->runWithoutAuthorization($item);
             }
 
             $currentPosition++;

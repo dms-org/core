@@ -66,14 +66,18 @@ class ActionDefiner
      * ActionDefiner constructor.
      *
      * @param IAuthSystem $authSystem
+     * @param array       $requiredPermissions
      * @param string      $name
      * @param callable    $callback
      */
-    public function __construct(IAuthSystem $authSystem, string $name, callable $callback)
+    public function __construct(IAuthSystem $authSystem, array $requiredPermissions, string $name, callable $callback)
     {
-        $this->name       = $name;
-        $this->callback   = $callback;
-        $this->authSystem = $authSystem;
+        InvalidArgumentException::verifyAllInstanceOf(__METHOD__, 'requiredPermissions', $requiredPermissions, IPermission::class);
+
+        $this->name                = $name;
+        $this->callback            = $callback;
+        $this->authSystem          = $authSystem;
+        $this->requiredPermissions = $requiredPermissions;
     }
 
     /**
@@ -142,9 +146,9 @@ class ActionDefiner
             $stagedForm = $form;
         } else {
             throw InvalidArgumentException::format(
-                    'Invalid form supplied to %s: expecting %s, %s given',
-                    __METHOD__, implode('|', [IForm::class, IStagedForm::class, FormBuilder::class, StagedFormBuilder::class]),
-                    Debug::getType($form)
+                'Invalid form supplied to %s: expecting %s, %s given',
+                __METHOD__, implode('|', [IForm::class, IStagedForm::class, FormBuilder::class, StagedFormBuilder::class]),
+                Debug::getType($form)
             );
         }
 
@@ -179,9 +183,9 @@ class ActionDefiner
     public function authorize($permission)
     {
         $this->requiredPermissions[] =
-                $permission instanceof IPermission
-                        ? $permission
-                        : Permission::named($permission);
+            $permission instanceof IPermission
+                ? $permission
+                : Permission::named($permission);
 
         return $this;
     }
@@ -234,11 +238,11 @@ class ActionDefiner
             $mapping = call_user_func($this->formDtoMappingCallback, $handler->getParameterTypeClass());
 
             call_user_func($this->callback, new ParameterizedAction(
-                    $this->name,
-                    $this->authSystem,
-                    $this->requiredPermissions,
-                    $mapping,
-                    $handler
+                $this->name,
+                $this->authSystem,
+                $this->requiredPermissions,
+                $mapping,
+                $handler
             ));
         } else {
 
@@ -247,10 +251,10 @@ class ActionDefiner
             }
 
             call_user_func($this->callback, new UnparameterizedAction(
-                    $this->name,
-                    $this->authSystem,
-                    $this->requiredPermissions,
-                    $handler
+                $this->name,
+                $this->authSystem,
+                $this->requiredPermissions,
+                $handler
             ));
         }
     }

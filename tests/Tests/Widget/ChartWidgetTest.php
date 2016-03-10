@@ -19,7 +19,7 @@ class ChartWidgetTest extends CmsTestCase
     public function testNewWithCriteria()
     {
         $authSystem          = $this->getMockForAbstractClass(IAuthSystem::class);
-        $requiredPermissions = [Permission::named('abc')];
+        $requiredPermissions = ['abc' => Permission::named('abc')];
 
         $chart      = $this->getMockForAbstractClass(IChartDisplay::class);
         $dataSource = $this->getMockForAbstractClass(IChartDataSource::class);

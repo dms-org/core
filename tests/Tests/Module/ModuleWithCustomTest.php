@@ -41,21 +41,26 @@ class ModuleWithCustomTest extends ModuleTestBase
     {
         $this->mockAction = $this->getMockForAbstractClass(IParameterizedAction::class);
         $this->mockAction
-                ->method('getName')
-                ->willReturn('mock-action');
+            ->method('getName')
+            ->willReturn('mock-action');
+
         $this->mockAction
-                ->method('getRequiredPermissions')
-                ->willReturn([]);
+            ->method('getRequiredPermissions')
+            ->willReturn([]);
+
+        $this->mockAction
+            ->method('withoutRequiredPermissions')
+            ->willReturnSelf();
 
         $this->mockTable = $this->getMockForAbstractClass(ITableDisplay::class);
         $this->mockTable
-                ->method('getName')
-                ->willReturn('mock-table');
+            ->method('getName')
+            ->willReturn('mock-table');
 
         $this->mockChart = $this->getMockForAbstractClass(IChartDisplay::class);
         $this->mockChart
-                ->method('getName')
-                ->willReturn('mock-chart');
+            ->method('getName')
+            ->willReturn('mock-chart');
 
         return new ModuleWithCustom($authSystem, $this->mockAction, $this->mockTable, $this->mockChart);
     }

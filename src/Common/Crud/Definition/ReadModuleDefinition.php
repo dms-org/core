@@ -103,6 +103,7 @@ class ReadModuleDefinition extends ModuleDefinition
         return new ObjectActionDefiner(
             $this->dataSource,
             $this->authSystem,
+            $this->requiredPermissions,
             $name,
             function (IObjectAction $action) {
                 $this->actions[$action->getName()] = $action;

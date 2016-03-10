@@ -19,7 +19,7 @@ class TableWidgetTest extends CmsTestCase
     public function testNewWithCriteria()
     {
         $authSystem          = $this->getMockForAbstractClass(IAuthSystem::class);
-        $requiredPermissions = [Permission::named('abc')];
+        $requiredPermissions = ['abc' => Permission::named('abc')];
 
         $table      = $this->getMockForAbstractClass(ITableDisplay::class);
         $dataSource = $this->getMockForAbstractClass(ITableDataSource::class);

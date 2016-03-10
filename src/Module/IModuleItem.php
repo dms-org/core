@@ -9,33 +9,12 @@ use Dms\Core\Form;
 use Dms\Core\Persistence;
 
 /**
- * The action interface.
+ * The module item interface.
  *
  * @author Elliot Levin <elliot@aanet.com.au>
  */
-interface IAction extends IModuleItem
+interface IModuleItem
 {
-    /**
-     * Gets the name of the action.
-     *
-     * @return string
-     */
-    public function getName() : string;
-
-    /**
-     * Returns whether the action has a return type.
-     *
-     * @return bool
-     */
-    public function hasReturnType() : bool;
-
-    /**
-     * Gets the return type of data transfer object for this handler.
-     *
-     * @return string|null
-     */
-    public function getReturnTypeClass();
-
     /**
      * Gets the name of the parent package of this action
      *
@@ -95,9 +74,9 @@ interface IAction extends IModuleItem
     public function isAuthorized() : bool;
 
     /**
-     * Gets the action handler
+     * Returns the equivalent item without any required permissions.
      *
-     * @return IActionHandler
+     * @return static
      */
-    public function getHandler() : IActionHandler;
+    public function withoutRequiredPermissions();
 }

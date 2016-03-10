@@ -71,7 +71,7 @@ class CrudModuleDefinition extends ReadModuleDefinition
      */
     public function removeAction() : Action\RemoveActionDefiner
     {
-        return new RemoveActionDefiner($this->dataSource, $this->authSystem, function (IObjectAction $action) {
+        return new RemoveActionDefiner($this->dataSource, $this->authSystem, $this->requiredPermissions, function (IObjectAction $action) {
             $this->actions[$action->getName()] = $action;
         });
     }
