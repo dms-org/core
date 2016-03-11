@@ -5,11 +5,13 @@ namespace Dms\Core\Module\Definition\Widget;
 use Dms\Core\Auth\IAuthSystem;
 use Dms\Core\Auth\IPermission;
 use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Form\IForm;
 use Dms\Core\Module\IAction;
 use Dms\Core\Table\Chart\IChartDataSource;
 use Dms\Core\Table\ITableDataSource;
 use Dms\Core\Util\Debug;
 use Dms\Core\Widget\ActionWidget;
+use Dms\Core\Widget\FormDataWidget;
 
 /**
  * The widget type definer class
@@ -97,5 +99,17 @@ class WidgetTypeDefiner extends WidgetDefinerBase
         }
 
         call_user_func($this->callback, new ActionWidget($this->name, $this->label, $this->authSystem, $this->requiredPermissions, $this->actions[$actionName]));
+    }
+
+    /**
+     * Defines the widget to contain the form data from the supplied form.
+     *
+     * @param IForm $form
+     *
+     * @throws InvalidArgumentException
+     */
+    public function withFormData(IForm $form)
+    {
+        call_user_func($this->callback, new FormDataWidget($this->name, $this->label, $this->authSystem, $this->requiredPermissions, $form));
     }
 }

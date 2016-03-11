@@ -4,6 +4,7 @@ namespace Dms\Core\Tests\Module;
 
 use Dms\Core\Auth\IPermission;
 use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Form\IForm;
 use Dms\Core\Module\Module;
 use Dms\Core\Table\Chart\IChartCriteria;
 use Dms\Core\Table\IRowCriteria;
@@ -11,6 +12,7 @@ use Dms\Core\Tests\Module\Fixtures\ModuleWithWidgets;
 use Dms\Core\Tests\Module\Mock\MockAuthSystem;
 use Dms\Core\Widget\ActionWidget;
 use Dms\Core\Widget\ChartWidget;
+use Dms\Core\Widget\FormDataWidget;
 use Dms\Core\Widget\TableWidget;
 
 /**
@@ -65,14 +67,15 @@ class ModuleWithWidgetsTest extends ModuleTestBase
         $this->assertInstanceOf(ActionWidget::class, $this->module->getWidget('action-widget'));
 
         $this->assertSame(
-                [
-                        'table-widget.all'           => TableWidget::class,
-                        'table-widget.with-criteria' => TableWidget::class,
-                        'chart-widget.all'           => ChartWidget::class,
-                        'chart-widget.with-criteria' => ChartWidget::class,
-                        'action-widget' => ActionWidget::class,
-                ],
-                array_map('get_class', $this->module->getWidgets())
+            [
+                'table-widget.all'           => TableWidget::class,
+                'table-widget.with-criteria' => TableWidget::class,
+                'chart-widget.all'           => ChartWidget::class,
+                'chart-widget.with-criteria' => ChartWidget::class,
+                'action-widget'              => ActionWidget::class,
+                'form-data-widget'           => FormDataWidget::class,
+            ],
+            array_map('get_class', $this->module->getWidgets())
         );
 
         $this->assertThrows(function () {
@@ -143,5 +146,15 @@ class ModuleWithWidgetsTest extends ModuleTestBase
         $this->assertSame($action, $widget->getAction());
         $this->assertSame('action-widget', $widget->getName());
         $this->assertSame('Action Widget #1', $widget->getLabel());
+    }
+
+    public function testFormDataWidget()
+    {
+        /** @var FormDataWidget $widget */
+        $widget = $this->module->getWidget('form-data-widget');
+
+        $this->assertInstanceOf(IForm::class, $widget->getForm());
+        $this->assertSame('form-data-widget', $widget->getName());
+        $this->assertSame('Form Data Widget #1', $widget->getLabel());
     }
 }
