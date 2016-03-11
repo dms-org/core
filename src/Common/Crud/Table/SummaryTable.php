@@ -64,7 +64,7 @@ class SummaryTable extends TableDisplay implements ISummaryTable
     /**
      * @inheritdoc
      */
-    public function getReorderAction(string $viewName) : \Dms\Core\Common\Crud\Action\Table\IReorderAction
+    public function getReorderAction(string $viewName) : IReorderAction
     {
         if (!isset($this->reorderActions[$viewName])) {
             throw InvalidArgumentException::format(

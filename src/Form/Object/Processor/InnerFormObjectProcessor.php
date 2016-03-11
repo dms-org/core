@@ -37,6 +37,15 @@ class InnerFormObjectProcessor extends FieldProcessor
     protected function doUnprocess($input)
     {
         /** @var FormObject $input */
-        return $this->formObject->unprocess($this->formObject->toArray());
+        $values = $this->formObject->getInitialValues();
+        $nonNullValues = [];
+
+        foreach ($values as $key => $value) {
+            if ($value !== null) {
+                $nonNullValues[$key] = $value;
+            }
+        }
+
+        return empty($nonNullValues) ? $values : $this->formObject->unprocess($values);
     }
 }

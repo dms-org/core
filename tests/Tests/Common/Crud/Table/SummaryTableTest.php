@@ -23,7 +23,7 @@ class SummaryTableTest extends CmsTestCase
 
         $this->assertSame('name', $table->getName());
         $this->assertSame($dataSource, $table->getDataSource());
-        $this->assertSame([], $table->getViews());
+        $this->assertEquals([TableView::createDefault()], array_values($table->getViews()));
         $this->assertSame([], $table->getReorderActions());
 
         $this->assertThrows(function () use ($table) {

@@ -42,6 +42,10 @@ class TableDisplay implements ITableDisplay
     {
         InvalidArgumentException::verifyAllInstanceOf(__METHOD__, 'views', $views, ITableView::class);
 
+        if (!$views) {
+            $views[] = TableView::createDefault();
+        }
+
         $this->name       = $name;
         $this->dataSource = $dataSource;
 
@@ -61,15 +65,15 @@ class TableDisplay implements ITableDisplay
     /**
      * @return ITableDataSource
      */
-    public function getDataSource() : \Dms\Core\Table\ITableDataSource
+    public function getDataSource() : ITableDataSource
     {
         return $this->dataSource;
     }
 
     /**
-     * @return ITableView|null
+     * @return ITableView
      */
-    public function getDefaultView() : \Dms\Core\Module\ITableView
+    public function getDefaultView() : ITableView
     {
         foreach ($this->views as $view) {
             if ($view->isDefault()) {
@@ -77,7 +81,7 @@ class TableDisplay implements ITableDisplay
             }
         }
 
-        return reset($this->views) ?: TableView::createDefault();
+        return reset($this->views);
     }
 
     /**
@@ -104,7 +108,7 @@ class TableDisplay implements ITableDisplay
      * @return ITableView
      * @throws InvalidArgumentException
      */
-    public function getView(string $name) : \Dms\Core\Module\ITableView
+    public function getView(string $name) : ITableView
     {
         if (isset($this->views[$name])) {
             return $this->views[$name];
@@ -119,7 +123,7 @@ class TableDisplay implements ITableDisplay
     /**
      * @inheritDoc
      */
-    public function loadView(string $name = null, int $skipRows = 0, int $limitRows = null) : \Dms\Core\Table\IDataTable
+    public function loadView(string $name = null, int $skipRows = 0, int $limitRows = null) : IDataTable
     {
         $view = $name ? $this->getView($name) : $this->getDefaultView();
 

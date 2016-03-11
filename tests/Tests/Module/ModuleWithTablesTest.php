@@ -93,7 +93,7 @@ class ModuleWithTablesTest extends ModuleTestBase
         $this->assertCount(3, $table->getDataSource()->load()->getSections()[0]->getRows());
 
         $this->assertEquals(TableView::createDefault(), $table->getDefaultView());
-        $this->assertSame([], $table->getViews());
+        $this->assertEquals([TableView::createDefault()], array_values($table->getViews()));
     }
 
     public function testObjectTable()
@@ -137,7 +137,7 @@ class ModuleWithTablesTest extends ModuleTestBase
         $this->assertCount(1, $table->getDataSource()->load()->getSections());
         $this->assertCount(3, $table->getDataSource()->load()->getSections()[0]->getRows());
         $this->assertEquals(TableView::createDefault(), $table->getDefaultView());
-        $this->assertSame([], $table->getViews());
+        $this->assertEquals([TableView::createDefault()], array_values($table->getViews()));
 
 
         $this->assertSame([

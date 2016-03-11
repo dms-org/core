@@ -21,7 +21,7 @@ class TableDisplayTest extends CmsTestCase
 
         $this->assertSame('name', $display->getName());
         $this->assertSame($dataSource, $display->getDataSource());
-        $this->assertSame([], $display->getViews());
+        $this->assertEquals([TableView::createDefault()], array_values($display->getViews()));
         $this->assertEquals(TableView::createDefault(), $display->getDefaultView());
         $this->assertSame(false, $display->hasView('some-name'));
 
