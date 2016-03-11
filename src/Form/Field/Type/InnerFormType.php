@@ -58,7 +58,7 @@ class InnerFormType extends FieldType
     {
         $form = $this->getForm();
 
-        $currentValue = $this->get(self::ATTR_INITIAL_VALUE);
+        $currentValue = $this->getInitialValuesForInnerForm();
 
         if (is_array($currentValue)) {
             $form = $form->withInitialValues($currentValue);
@@ -71,5 +71,13 @@ class InnerFormType extends FieldType
         }
 
         return $form->withFieldNames($fieldNameMap);
+    }
+
+    /**
+     * @return mixed|null
+     */
+    protected function getInitialValuesForInnerForm()
+    {
+        return $this->get(self::ATTR_INITIAL_VALUE);
     }
 }

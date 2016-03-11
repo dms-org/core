@@ -81,7 +81,11 @@ class CreatePageWithInnerFormFieldFormObjectTest extends CmsTestCase
         $this->assertInstanceOf(SeoFormWithInner::class, $form->seo);
         $this->assertSame('Hi Google', $form->seo->title);
         $this->assertSame('Checkout this page', $form->seo->description);
-        $this->assertEquals([new KeywordForm('foo'), new KeywordForm('bar'), new KeywordForm('baz')], $form->seo->keywords);
+        $this->assertEquals([
+            (new KeywordForm('foo'))->withInitialValues(['keyword' => 'foo']),
+            (new KeywordForm('bar'))->withInitialValues(['keyword' => 'bar']),
+            (new KeywordForm('baz'))->withInitialValues(['keyword' => 'baz']),
+        ], $form->seo->keywords);
     }
 
     public function testInvalidFormSubmission()

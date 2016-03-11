@@ -59,4 +59,18 @@ class InnerFormObjectType extends InnerFormType
     }
 
 
+    /**
+     * @return mixed|null
+     */
+    protected function getInitialValuesForInnerForm()
+    {
+        $value = $this->get(self::ATTR_INITIAL_VALUE);
+
+        if ($value instanceof FormObject) {
+            return $value->getInitialValues();
+        }
+
+        return null;
+    }
+
 }

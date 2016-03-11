@@ -60,7 +60,7 @@ class FinalizedFormObjectDefinition
     /**
      * @return FinalizedClassDefinition
      */
-    public function getClass() : \Dms\Core\Model\Object\FinalizedClassDefinition
+    public function getClass() : FinalizedClassDefinition
     {
         return $this->class;
     }
@@ -68,7 +68,7 @@ class FinalizedFormObjectDefinition
     /**
      * @return IForm
      */
-    public function getForm() : \Dms\Core\Form\IForm
+    public function getForm() : IForm
     {
         return $this->form;
     }
@@ -87,5 +87,39 @@ class FinalizedFormObjectDefinition
     public function getPropertyInnerFormMap() : array
     {
         return $this->propertyInnerFormMap;
+    }
+
+    /**
+     * @param array $initialProcessedValues
+     *
+     * @return static
+     */
+    public function withInitialValues(array $initialProcessedValues)
+    {
+        $clone = clone $this;
+
+        $clone->form = $clone->form->withInitialValues($initialProcessedValues);
+
+        return $clone;
+    }
+
+    /**
+     * @param string[] $fieldNameMap
+     *
+     * @return static
+     */
+    public function withFieldNames(array $fieldNameMap)
+    {
+        $clone = clone $this;
+
+        $clone->form = $clone->form->withFieldNames($fieldNameMap);
+
+        foreach ($clone->propertyFieldMap as $property => $fieldName) {
+            if (isset($fieldNameMap[$fieldName])) {
+                $clone->propertyFieldMap[$property] = $fieldNameMap[$fieldName];
+            }
+        }
+
+        return $clone;
     }
 }

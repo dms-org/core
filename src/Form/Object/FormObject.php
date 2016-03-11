@@ -2,8 +2,10 @@
 
 namespace Dms\Core\Form\Object;
 
+use Dms\Core\Form\IField;
 use Dms\Core\Form\IForm;
 use Dms\Core\Form\InvalidFormSubmissionException;
+use Dms\Core\Form\IStagedForm;
 use Dms\Core\Model\IDataTransferObject;
 use Dms\Core\Model\Object\ClassDefinition;
 use Dms\Core\Model\Object\TypedObject;
@@ -77,7 +79,7 @@ abstract class FormObject extends TypedObject implements IDataTransferObject, IF
      *
      * @return IForm
      */
-    final public function getForm() : \Dms\Core\Form\IForm
+    final public function getForm() : IForm
     {
         return $this->formDefinition->getForm();
     }
@@ -149,7 +151,7 @@ abstract class FormObject extends TypedObject implements IDataTransferObject, IF
     /**
      * {@inheritDoc}
      */
-    final public function getField(string $fieldName) : \Dms\Core\Form\IField
+    final public function getField(string $fieldName) : IField
     {
         return $this->form->getField($fieldName);
     }
@@ -165,23 +167,31 @@ abstract class FormObject extends TypedObject implements IDataTransferObject, IF
     /**
      * @inheritDoc
      */
-    final public function withInitialValues(array $initialProcessedValues) : \Dms\Core\Form\IForm
+    final public function withInitialValues(array $initialProcessedValues) : IForm
     {
-        return $this->form->withInitialValues($initialProcessedValues);
+        $clone = clone $this;
+
+        $clone->loadFormObjectDefinition($clone->formDefinition->withInitialValues($initialProcessedValues));
+
+        return $clone;
     }
 
     /**
      * @inheritDoc
      */
-    final public function withFieldNames(array $fieldNameMap) : \Dms\Core\Form\IForm
+    final public function withFieldNames(array $fieldNameMap) : IForm
     {
-        return $this->form->withFieldNames($fieldNameMap);
+        $clone = clone $this;
+
+        $clone->loadFormObjectDefinition($clone->formDefinition->withFieldNames($fieldNameMap));
+
+        return $clone;
     }
 
     /**
      * {@inheritDoc}
      */
-    final public function asStagedForm() : \Dms\Core\Form\IStagedForm
+    final public function asStagedForm() : IStagedForm
     {
         return $this->form->asStagedForm();
     }
@@ -233,6 +243,6 @@ abstract class FormObject extends TypedObject implements IDataTransferObject, IF
                     ->buildFromProcessedSubmission($innerFormSubmission);
         }
 
-        return $this;
+        return $this->withInitialValues($submission);
     }
 }
