@@ -470,8 +470,10 @@ class FieldBuilderTest extends FieldBuilderTestBase
 
     public function testInnerForm()
     {
-        /** @var IForm $form */
         $form  = $this->getMockForAbstractClass(IForm::class);
+        $form->method('withInitialValues')
+            ->willReturnSelf();
+
         $field = $this->field()->form($form)->build();
 
         /** @var InnerFormType $type */

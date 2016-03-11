@@ -8,11 +8,11 @@ use Dms\Core\Form\Field\Builder\Field;
 use Dms\Core\Form\Field\Processor\InnerFormProcessor;
 use Dms\Core\Form\Field\Processor\Validator\GreaterThanOrEqualValidator;
 use Dms\Core\Form\Field\Processor\Validator\TypeValidator;
+use Dms\Core\Form\Field\Type\InnerFormObjectType;
 use Dms\Core\Form\Field\Type\InnerFormType;
 use Dms\Core\Form\InvalidFormSubmissionException;
 use Dms\Core\Form\Object\FormObjectDefinition;
 use Dms\Core\Form\Object\IndependentFormObject;
-use Dms\Core\Form\Object\Type\InnerFormObjectType;
 use Dms\Core\Language\Message;
 use Dms\Core\Model\Type\Builder\Type;
 

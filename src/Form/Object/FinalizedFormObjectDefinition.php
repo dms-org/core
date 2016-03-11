@@ -28,27 +28,19 @@ class FinalizedFormObjectDefinition
     private $form;
 
     /**
-     * @var InnerFormDefinition[]
-     */
-    private $propertyInnerFormMap;
-
-    /**
      * FinalizedFormObjectDefinition constructor.
      *
      * @param FinalizedClassDefinition $class
      * @param string[]                 $propertyFieldMap
-     * @param InnerFormDefinition[]    $propertyInnerFormMap
      * @param IForm                    $form
      */
     public function __construct(
             FinalizedClassDefinition $class,
             array $propertyFieldMap,
-            array $propertyInnerFormMap,
             IForm $form
     ) {
         $this->class                = $class;
         $this->propertyFieldMap     = $propertyFieldMap;
-        $this->propertyInnerFormMap = $propertyInnerFormMap;
         $this->form                 = $form;
 
         $formInstance = $this->class->getCleanInstance();
@@ -79,14 +71,6 @@ class FinalizedFormObjectDefinition
     public function getPropertyFieldMap() : array
     {
         return $this->propertyFieldMap;
-    }
-
-    /**
-     * @return InnerFormDefinition[]
-     */
-    public function getPropertyInnerFormMap() : array
-    {
-        return $this->propertyInnerFormMap;
     }
 
     /**

@@ -18,6 +18,7 @@ use Dms\Core\Form\Field\Type\FileType;
 use Dms\Core\Form\Field\Type\FloatType;
 use Dms\Core\Form\Field\Type\ImageType;
 use Dms\Core\Form\Field\Type\InnerCrudModuleType;
+use Dms\Core\Form\Field\Type\InnerFormObjectType;
 use Dms\Core\Form\Field\Type\InnerFormType;
 use Dms\Core\Form\Field\Type\IntType;
 use Dms\Core\Form\Field\Type\ObjectIdType;
@@ -28,7 +29,6 @@ use Dms\Core\Form\IFieldProcessor;
 use Dms\Core\Form\IForm;
 use Dms\Core\Form\Object\FormObject;
 use Dms\Core\Form\Object\InnerFormObjectFieldBuilder;
-use Dms\Core\Form\Object\Type\InnerFormObjectType;
 use Dms\Core\Model\IEntitySet;
 use Dms\Core\Model\IObjectSetWithIdentityByIndex;
 use Dms\Core\Model\Type\IType;
@@ -342,10 +342,10 @@ class Field extends FieldBuilderBase
     public function form(IForm $form) : InnerFormFieldBuilder
     {
         if ($form instanceof FormObject) {
-            return new InnerFormObjectFieldBuilder($this->type(new InnerFormObjectType($form)));
+            return new InnerFormObjectFieldBuilder($this->type(new InnerFormObjectType($form))->value($form));
         }
 
-        return new InnerFormFieldBuilder($this->type(new InnerFormType($form)));
+        return new InnerFormFieldBuilder($this->type(new InnerFormType($form))->value($form->getInitialValues()));
     }
 
     /**

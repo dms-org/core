@@ -27,11 +27,6 @@ class FormObjectDefinition extends FormBuilder
     private $fieldPropertyMap = [];
 
     /**
-     * @var InnerFormDefinition[]
-     */
-    private $propertyInnerFormMap = [];
-
-    /**
      * @var ClassDefinition
      */
     private $class;
@@ -64,7 +59,7 @@ class FormObjectDefinition extends FormBuilder
     /**
      * @return ClassDefinition
      */
-    public function getClass() : \Dms\Core\Model\Object\ClassDefinition
+    public function getClass() : ClassDefinition
     {
         return $this->class;
     }
@@ -85,48 +80,6 @@ class FormObjectDefinition extends FormBuilder
         return FormObjectFieldNameBuilder::callback(function ($fieldName) use ($propertyName) {
             $this->fieldPropertyMap[$fieldName] = $propertyName;
         })->value($property);
-    }
-
-    /**
-     * Binds the supplied property to another form object.
-     *
-     * @param mixed $property
-     *
-     * @return PropertyFormBinding
-     */
-    public function bind(&$property) : PropertyFormBinding
-    {
-        $typeDefiner  = $this->class->property($property);
-        $propertyName = $this->loadTypeDefiner($typeDefiner);
-
-        return new PropertyFormBinding(
-                $typeDefiner,
-                function (FormObject $innerForm) use ($propertyName, &$property) {
-                    $this->loadInnerForm($propertyName, $innerForm);
-                    $property = $innerForm;
-                }
-        );
-    }
-
-    private function loadInnerForm($property, FormObject $formObject)
-    {
-        $definition        = $formObject->getFormDefinition();
-        $prefix            = $property . '_';
-        $innerFormFieldMap = [];
-
-        foreach ($definition->getForm()->getSections() as $section) {
-            $prefixedFields = [];
-
-            foreach ($section->getFields() as $field) {
-                $prefixedFieldName                     = $prefix . $field->getName();
-                $prefixedFields[]                      = $field->withName($prefixedFieldName);
-                $innerFormFieldMap[$prefixedFieldName] = $field->getName();
-            }
-
-            parent::section($section->getTitle(), $prefixedFields);
-        }
-
-        $this->propertyInnerFormMap[$property] = new InnerFormDefinition($property, $formObject, $innerFormFieldMap);
     }
 
     private function loadTypeDefiner(PropertyTypeDefiner $typeDefiner)
@@ -187,7 +140,6 @@ class FormObjectDefinition extends FormBuilder
         return new FinalizedFormObjectDefinition(
                 $class ?: $this->class->finalize(),
                 $this->propertyFieldMap,
-                $this->propertyInnerFormMap,
                 $this->build()
         );
     }

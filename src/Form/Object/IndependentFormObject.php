@@ -82,7 +82,7 @@ abstract class IndependentFormObject extends FormObject
      *
      * @return IForm
      */
-    final public static function asForm() : \Dms\Core\Form\IForm
+    final public static function asForm() : IForm
     {
         return static::formDefinition()->getForm();
     }

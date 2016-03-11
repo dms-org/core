@@ -43,8 +43,11 @@ class FormWithDefaults extends IndependentFormObject
                     ->label('Event Date')
                     ->date('Y-m-d')
                     ->required(),
+            //
+            $form->field($this->inner)
+                ->name('inner')
+                ->label('Inner')
+                ->form(new SubFormWithDefaults()),
         ]);
-
-        $form->bind($this->inner)->to(new SubFormWithDefaults());
     }
 }

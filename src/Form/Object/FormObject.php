@@ -27,11 +27,6 @@ abstract class FormObject extends TypedObject implements IDataTransferObject, IF
      */
     private $form;
 
-    /**
-     * @var array
-     */
-    private $initialValues;
-
     public function __construct(FinalizedFormObjectDefinition $definition)
     {
         parent::__construct();
@@ -45,7 +40,6 @@ abstract class FormObject extends TypedObject implements IDataTransferObject, IF
     {
         $class->property($this->formDefinition)->ignore();
         $class->property($this->form)->ignore();
-        $class->property($this->initialValues)->ignore();
 
         return $this->defineClass($class);
     }
@@ -61,7 +55,14 @@ abstract class FormObject extends TypedObject implements IDataTransferObject, IF
     {
         $this->formDefinition = $definition;
         $this->form           = $definition->getForm();
-        $this->initialValues  = $this->form->getInitialValues();
+
+        $values = $this->form->getInitialValues();
+
+        foreach ($this->formDefinition->getPropertyFieldMap() as $property => $field) {
+            if (isset($values[$field])) {
+                $this->{$property} = $values[$field];
+            }
+        }
     }
 
     /**
@@ -161,7 +162,14 @@ abstract class FormObject extends TypedObject implements IDataTransferObject, IF
      */
     final public function getInitialValues() : array
     {
-        return $this->initialValues;
+        $initialValues = [];
+        $properties    = $this->toArray();
+
+        foreach ($this->formDefinition->getPropertyFieldMap() as $property => $field) {
+            $initialValues[$field] = $properties[$property];
+        }
+
+        return $initialValues;
     }
 
     /**
@@ -228,19 +236,6 @@ abstract class FormObject extends TypedObject implements IDataTransferObject, IF
     {
         foreach ($this->formDefinition->getPropertyFieldMap() as $property => $field) {
             $this->{$property} = $submission[$field];
-        }
-
-        foreach ($this->formDefinition->getPropertyInnerFormMap() as $property => $innerForm) {
-            $fieldMap            = $innerForm->getEmbeddedFieldMap();
-            $innerFormSubmission = [];
-
-            foreach ($fieldMap as $field => $innerFormField) {
-                $innerFormSubmission[$innerFormField] = $submission[$field];
-            }
-
-            $this->{$property} = $innerForm
-                    ->getNewFormInstance()
-                    ->buildFromProcessedSubmission($innerFormSubmission);
         }
 
         return $this->withInitialValues($submission);

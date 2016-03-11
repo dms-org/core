@@ -46,8 +46,8 @@ class CreatePageForm extends IndependentFormObject
             $form->field($this->subTitle)->name('sub_title')->label('Sub Title')->string()->maxLength(50),
             //
             $form->field($this->content)->name('content')->label('Content')->string()->required(),
+            //
+            $form->field($this->seo)->name('seo')->label('SEO')->form(new SeoForm())->required()
         ]);
-
-        $form->bind($this->seo)->to(new SeoForm());
     }
 }

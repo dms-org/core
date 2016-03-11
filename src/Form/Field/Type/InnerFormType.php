@@ -24,6 +24,23 @@ class InnerFormType extends FieldType
     }
 
     /**
+     * @inheritDoc
+     */
+    protected function initializeFromCurrentAttributes()
+    {
+        parent::initializeFromCurrentAttributes();
+        $form = $this->getForm();
+
+        $initialValues = array_fill_keys($form->getFieldNames(), null);
+
+        if (is_array($this->get(self::ATTR_INITIAL_VALUE))) {
+            $initialValues = $this->get(self::ATTR_INITIAL_VALUE) + $initialValues;
+        }
+
+        $this->attributes[self::ATTR_FORM] = $form->withInitialValues($initialValues);
+    }
+
+    /**
      * @return IForm
      */
     public function getForm() : IForm
