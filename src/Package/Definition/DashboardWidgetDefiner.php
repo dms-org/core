@@ -31,6 +31,7 @@ class DashboardWidgetDefiner
      * <code>
      * ->widgets([
      *      'some-module-name.some-widget-name',
+     *      'some-module-name.*', /// All widgets from module
      *      'products.recent-table',
      * ]);
      * </code>

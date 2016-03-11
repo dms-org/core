@@ -47,7 +47,7 @@ class FinalizedPackageDefinition
     }
 
     /**
-     * @return \string[]
+     * @return string[]
      */
     public function getNameModuleClassMap() : array
     {
