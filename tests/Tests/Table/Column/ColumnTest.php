@@ -87,4 +87,26 @@ class ColumnTest extends CmsTestCase
         $this->setExpectedException(InvalidArgumentException::class);
         new Column('name', 'Label', false, [1]);
     }
+
+    public function testWithComponents()
+    {
+        $column = new Column(
+            'name',
+            'Label',
+            false,
+            [
+                $string = ColumnComponent::forField(Field::name('string')->label('String')->string()->build()),
+            ]
+        );
+
+        $column = $column->withComponents([
+            $int = ColumnComponent::forField(Field::name('int')->label('Int')->int()->build()),
+        ]);
+
+        $this->assertSame('name', $column->getName());
+        $this->assertSame('Label', $column->getLabel());
+        $this->assertSame(false, $column->isHidden());
+        $this->assertSame(['int'], $column->getComponentNames());
+        $this->assertSame(['int' => $int], $column->getComponents());
+    }
 }

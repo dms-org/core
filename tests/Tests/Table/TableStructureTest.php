@@ -27,6 +27,19 @@ class TableStructureTest extends CmsTestCase
         $this->assertSame($number, $structure->getColumn('number'));
         $this->assertSame(['string', 'number'], $structure->getColumnNames());
 
+        $this->assertSame(true, $structure->hasComponent('string'));
+        $this->assertSame(true, $structure->hasComponent('string.string'));
+        $this->assertSame(true, $structure->hasComponent('number.number'));
+        $this->assertSame(true, $structure->hasComponent('number'));
+        $this->assertSame(false, $structure->hasComponent('other'));
+        $this->assertSame(false, $structure->hasComponent('number.other'));
+        $this->assertSame(false, $structure->hasComponent('other.other'));
+
+        $this->assertSame('string.string', $structure->normalizeComponentId('string'));
+        $this->assertSame('string.string', $structure->normalizeComponentId('string.string'));
+        $this->assertSame('number.number', $structure->normalizeComponentId('number.number'));
+        $this->assertSame('number.number', $structure->normalizeComponentId('number'));
+
         $this->assertSame([$string, $string->getComponent()], $structure->getColumnAndComponent('string'));
         $this->assertSame([$string, $string->getComponent('string')], $structure->getColumnAndComponent('string.string'));
 
@@ -39,6 +52,10 @@ class TableStructureTest extends CmsTestCase
 
         $this->assertThrows(function () use ($structure) {
             $structure->getColumnAndComponent('string.invalid');
+        }, InvalidArgumentException::class);
+
+        $this->assertThrows(function () use ($structure) {
+            $structure->normalizeComponentId('string.invalid');
         }, InvalidArgumentException::class);
 
         $this->assertThrows(function () use ($structure) {

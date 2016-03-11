@@ -3,7 +3,6 @@
 namespace Dms\Core\Table\Data;
 
 use Dms\Core\Exception\InvalidArgumentException;
-use Dms\Core\Module\IParameterizedAction;
 use Dms\Core\Table\ITableRow;
 use Dms\Core\Table\ITableSection;
 use Dms\Core\Table\ITableStructure;
@@ -40,10 +39,11 @@ class TableSection implements ITableSection
      * @throws InvalidArgumentException
      */
     public function __construct(
-            ITableStructure $structure,
-            ITableRow $groupData = null,
-            array $rows
-    ) {
+        ITableStructure $structure,
+        ITableRow $groupData = null,
+        array $rows
+    )
+    {
         InvalidArgumentException::verifyAllInstanceOf(__METHOD__, 'rows', $rows, ITableRow::class);
 
         $this->structure = $structure;
@@ -54,7 +54,7 @@ class TableSection implements ITableSection
     /**
      * @return ITableStructure
      */
-    public function getStructure() : \Dms\Core\Table\ITableStructure
+    public function getStructure() : ITableStructure
     {
         return $this->structure;
     }
@@ -82,4 +82,20 @@ class TableSection implements ITableSection
     {
         return $this->rows;
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function getRowArray() : array
+    {
+        $rowArray = [];
+
+        foreach ($this->rows as $row) {
+            $rowArray[] = $row->getData();
+        }
+
+        return $rowArray;
+    }
+
+
 }

@@ -59,12 +59,24 @@ class TableStructure implements ITableStructure
     {
         if (!isset($this->columns[$name])) {
             throw InvalidArgumentException::format(
-                    'Invalid column name: expecting one of (%s), %s given',
-                    Debug::formatValues(array_keys($this->columns)), $name
+                'Invalid column name: expecting one of (%s), %s given',
+                Debug::formatValues(array_keys($this->columns)), $name
             );
         }
 
         return $this->columns[$name];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    final public function normalizeComponentId(string $componentId) : string
+    {
+        /** @var IColumn $column */
+        /** @var IColumnComponent $column */
+        list($column, $component) = $this->getColumnAndComponent($componentId);
+
+        return $column->getName() . '.' . $component->getName();
     }
 
     /**
@@ -82,6 +94,24 @@ class TableStructure implements ITableStructure
         $column = $this->getColumn($columnName);
 
         return [$column, $column->getComponent($componentName)];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    final public function hasComponent(string $componentId) : bool
+    {
+        if (strpos($componentId, '.') === false) {
+            return $this->hasColumn($componentId);
+        } else {
+            list($columnName, $componentName) = explode('.', $componentId);
+
+            if (!$this->hasColumn($columnName)) {
+                return false;
+            }
+
+            return $this->getColumn($columnName)->hasComponent($componentName);
+        }
     }
 
     /**

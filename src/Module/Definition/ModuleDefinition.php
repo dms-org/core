@@ -140,7 +140,7 @@ class ModuleDefinition
     {
         return new TableDefiner($name, function (ITableDisplay $table) {
             $this->tables[$table->getName()] = $table;
-        });
+        }, $this->tables);
     }
 
     /**

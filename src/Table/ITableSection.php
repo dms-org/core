@@ -30,4 +30,9 @@ interface ITableSection
      * @return ITableRow[]
      */
     public function getRows() : array;
+
+    /**
+     * @return array[]
+     */
+    public function getRowArray() : array;
 }

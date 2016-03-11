@@ -153,4 +153,12 @@ class Column implements IColumn
     {
         return $this->name . '.' . $this->getComponent($componentName)->getName();
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function withComponents(array $components)
+    {
+        return new self($this->name, $this->label, $this->hidden, $components);
+    }
 }

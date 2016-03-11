@@ -30,17 +30,17 @@ class ModuleWithCharts extends Module
         $module->name('test-module-with-charts');
 
         $module->table('data-table')
-                ->fromArray([
-                        ['x' => 1, 'y' => 2, 'y2' => 1],
-                        ['x' => 2, 'y' => 4, 'y2' => 4],
-                        ['x' => 3, 'y' => 6, 'y2' => 9],
-                ])
-                ->withColumns([
-                        Column::from(Field::name('x')->label('X-Val')->int()),
-                        Column::from(Field::name('y')->label('Y-Val')->int()),
-                        Column::from(Field::name('y2')->label('Y2-Val')->int()),
-                ])
-                ->withoutViews();
+            ->fromArray([
+                ['x' => 1, 'y' => 2, 'y2' => 1],
+                ['x' => 2, 'y' => 4, 'y2' => 4],
+                ['x' => 3, 'y' => 6, 'y2' => 9],
+            ])
+            ->withColumns([
+                Column::from(Field::name('x')->label('X-Val')->int()),
+                Column::from(Field::name('y')->label('Y-Val')->int()),
+                Column::from(Field::name('y2')->label('Y2-Val')->int()),
+            ])
+            ->withoutViews();
 
         $module->chart('line-chart')
                 ->fromTable('data-table')

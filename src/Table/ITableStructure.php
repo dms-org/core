@@ -37,6 +37,27 @@ interface ITableStructure
     public function getColumn(string $name) : IColumn;
 
     /**
+     * Normalized the supplied component id
+     *
+     * Example:
+     * <code>
+     * $structure->normalizeComponentId('column_name.component_name'); // column_name.component_name
+     * </code>
+     *
+     * Or for columns with only one component:
+     * <code>
+     * $structure->normalizeComponentId('column_name'); // column_name.column_name
+     * </code>
+     *
+     *
+     * @param string $componentId
+     *
+     * @return string
+     * @throws InvalidArgumentException
+     */
+    public function normalizeComponentId(string $componentId) : string;
+
+    /**
      * Gets the column and component for the given component id.
      *
      * Example:
@@ -55,6 +76,15 @@ interface ITableStructure
      * @throws InvalidArgumentException
      */
     public function getColumnAndComponent(string $componentId) : array;
+
+    /**
+     * Returns whether the structure contains the supplied component id.
+     *
+     * @param string $componentId
+     *
+     * @return bool
+     */
+    public function hasComponent(string $componentId) : bool;
 
     /**
      * Gets the column component for the given component id.

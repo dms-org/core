@@ -6,6 +6,7 @@ use Dms\Core\Form\Builder\Form;
 use Dms\Core\Form\Field\Builder\Field;
 use Dms\Core\Module\Definition\ModuleDefinition;
 use Dms\Core\Module\Module;
+use Dms\Core\Module\Table\TableDisplay;
 use Dms\Core\Table\Builder\Column;
 use Dms\Core\Table\Chart\Criteria\ChartCriteria;
 use Dms\Core\Table\Chart\DataSource\Definition\ChartTableMapperDefinition;

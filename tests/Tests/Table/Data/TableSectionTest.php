@@ -5,6 +5,7 @@ namespace Dms\Core\Tests\Table\Data;
 use Dms\Common\Testing\CmsTestCase;
 use Dms\Core\Exception\InvalidArgumentException;
 use Dms\Core\Module\IParameterizedAction;
+use Dms\Core\Table\Data\TableRow;
 use Dms\Core\Table\Data\TableSection;
 use Dms\Core\Table\ITableRow;
 use Dms\Core\Table\ITableStructure;
@@ -45,5 +46,14 @@ class TableSectionTest extends CmsTestCase
         $this->assertSame($groupData, $section->getGroupData());
         $this->assertSame(true, $section->hasGroupData());
         $this->assertSame([$row], $section->getRows());
+    }
+
+    public function testGetRowArray()
+    {
+        $structure = $this->getMockForAbstractClass(ITableStructure::class);
+        $row       = new TableRow(['column' => ['component' => 'value']]);
+        $section   = new TableSection($structure, null, [$row]);
+
+        $this->assertSame([['column' => ['component' => 'value']]], $section->getRowArray());
     }
 }

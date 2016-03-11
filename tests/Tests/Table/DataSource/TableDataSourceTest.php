@@ -6,7 +6,6 @@ use Dms\Common\Testing\CmsTestCase;
 use Dms\Core\Exception\InvalidArgumentException;
 use Dms\Core\Table\Builder\Table;
 use Dms\Core\Table\Criteria\RowCriteria;
-use Dms\Core\Table\IDataTable;
 use Dms\Core\Table\IRowCriteria;
 use Dms\Core\Table\ITableDataSource;
 use Dms\Core\Table\ITableStructure;
@@ -46,7 +45,7 @@ abstract class TableDataSourceTest extends CmsTestCase
 
     public function testStructure()
     {
-        $this->assertSame($this->structure, $this->dataSource->getStructure());
+        $this->assertEquals($this->structure, $this->dataSource->getStructure());
     }
 
     public function testCriteria()
@@ -54,7 +53,7 @@ abstract class TableDataSourceTest extends CmsTestCase
         $criteria = $this->dataSource->criteria();
 
         $this->assertInstanceOf(RowCriteria::class, $criteria);
-        $this->assertSame($this->structure, $criteria->getStructure());
+        $this->assertEquals($this->structure, $criteria->getStructure());
     }
 
     public function testLoadInvalidCriteria()
@@ -81,7 +80,7 @@ abstract class TableDataSourceTest extends CmsTestCase
      */
     protected function assertLoadsSections(array $expectedSections, IRowCriteria $criteria = null)
     {
-        $table          = $this->dataSource->load($criteria);
+        $table = $this->dataSource->load($criteria);
 
         $expectedStructure = $criteria ? $this->structure->withColumns($criteria->getColumnsToLoad()) : $this->structure;
         foreach ($table->getSections() as $section) {

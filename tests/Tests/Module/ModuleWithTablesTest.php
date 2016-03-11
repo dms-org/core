@@ -10,6 +10,7 @@ use Dms\Core\Module\Table\TableDisplay;
 use Dms\Core\Module\Table\TableView;
 use Dms\Core\Table\Builder\Column;
 use Dms\Core\Table\DataSource\ArrayTableDataSource;
+use Dms\Core\Table\DataSource\GroupedTableDataSourceAdapter;
 use Dms\Core\Table\DataSource\ObjectTableDataSource;
 use Dms\Core\Tests\Module\Fixtures\ModuleWithTables;
 use Dms\Core\Tests\Module\Mock\MockAuthSystem;
@@ -58,16 +59,19 @@ class ModuleWithTablesTest extends ModuleTestBase
     {
         $this->assertSame(true, $this->module->hasTable('array-table'));
         $this->assertSame(true, $this->module->hasTable('object-table'));
+        $this->assertSame(true, $this->module->hasTable('derived-table'));
         $this->assertSame(false, $this->module->hasTable('foo-table'));
 
         $this->assertSame('array-table', $this->module->getTable('array-table')->getName());
         $this->assertSame('object-table', $this->module->getTable('object-table')->getName());
+        $this->assertSame('derived-table', $this->module->getTable('derived-table')->getName());
 
         $this->assertInstanceOf(ArrayTableDataSource::class, $this->module->getTable('array-table')->getDataSource());
         $this->assertInstanceOf(ObjectTableDataSource::class, $this->module->getTable('object-table')->getDataSource());
+        $this->assertInstanceOf(GroupedTableDataSourceAdapter::class, $this->module->getTable('derived-table')->getDataSource());
 
         $this->assertSame(
-                ['array-table' => TableDisplay::class, 'object-table' => TableDisplay::class],
+                ['array-table' => TableDisplay::class, 'object-table' => TableDisplay::class, 'derived-table' => TableDisplay::class],
                 array_map('get_class', $this->module->getTables())
         );
 
@@ -104,7 +108,7 @@ class ModuleWithTablesTest extends ModuleTestBase
                 'name' => Column::from(Field::name('name')->label('Name')->string()),
         ], $dataSource->getStructure()->getColumns());
 
-        $this->assertCount(3, $dataSource->load()->getSections()[0]->getRows());
+        $this->assertCount(4, $dataSource->load()->getSections()[0]->getRows());
 
         $this->assertEquals(
                 new TableView('default', 'Default', true, $dataSource->criteria()->loadAll()),
@@ -117,5 +121,29 @@ class ModuleWithTablesTest extends ModuleTestBase
         );
 
         $this->assertSame(['default', 'ordered'], array_keys($table->getViews()));
+    }
+
+    public function testGroupedTable()
+    {
+        $table = $this->module->getTable('derived-table');
+
+        $this->assertSame('derived-table', $table->getName());
+
+        $this->assertEquals([
+            'name' => Column::from(Field::name('name')->label('Name')->string()),
+            'count' => Column::from(Field::name('count')->label('Count')->int())
+        ], $table->getDataSource()->getStructure()->getColumns());
+
+        $this->assertCount(1, $table->getDataSource()->load()->getSections());
+        $this->assertCount(3, $table->getDataSource()->load()->getSections()[0]->getRows());
+        $this->assertEquals(TableView::createDefault(), $table->getDefaultView());
+        $this->assertSame([], $table->getViews());
+
+
+        $this->assertSame([
+            ['name' => ['name' => 'Baz'], 'count' => ['count' => 2]],
+            ['name' => ['name' => 'Foo'], 'count' => ['count' => 1]],
+            ['name' => ['name' => 'Bar'], 'count' => ['count' => 1]],
+        ], $table->getDataSource()->load()->getSections()[0]->getRowArray());
     }
 }

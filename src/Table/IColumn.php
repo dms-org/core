@@ -78,4 +78,13 @@ interface IColumn
      * @return bool
      */
     public function hasSingleComponent() : bool;
+
+    /**
+     * Returns an equivalent column with the supplied components
+     *
+     * @param IColumnComponent[] $components
+     *
+     * @return IColumn
+     */
+    public function withComponents(array $components);
 }
