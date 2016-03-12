@@ -3,6 +3,7 @@
 namespace Dms\Core\Tests\Table\Chart\Criteria;
 
 use Dms\Common\Testing\CmsTestCase;
+use Dms\Core\Exception\TypeMismatchException;
 use Dms\Core\Form\Field\Builder\Field;
 use Dms\Core\Model\Criteria\OrderingDirection;
 use Dms\Core\Table\Chart\Criteria\AxisCondition;
@@ -43,10 +44,27 @@ class ChartCriteriaTest extends CmsTestCase
 
         $criteria = new ChartCriteria($structure);
 
-        $criteria->where('x', '>=', 0);
+        $criteria->where('x', '>=', '0');
 
         $this->assertEquals([
-                new AxisCondition($structure->getAxis('x'), $structure->getAxis('x')->getType()->getOperator('>='), 0)
+            new AxisCondition($structure->getAxis('x'), $structure->getAxis('x')->getType()->getOperator('>='), 0)
+        ], $criteria->getConditions());
+    }
+
+    public function testWhereIsProcessed()
+    {
+        $structure = $this->makeStructure();
+
+        $criteria = new ChartCriteria($structure);
+
+        $this->assertThrows(function () use ($criteria) {
+            $criteria->where('x', '>=', '0', true);
+        }, TypeMismatchException::class);
+
+        $criteria->where('x', '>=', 0, true);
+
+        $this->assertEquals([
+            new AxisCondition($structure->getAxis('x'), $structure->getAxis('x')->getType()->getOperator('>='), 0)
         ], $criteria->getConditions());
     }
 

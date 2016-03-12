@@ -76,18 +76,19 @@ class ChartCriteria implements IChartCriteria
      * @param string $axisName
      * @param string $operator
      * @param mixed  $value
+     * @param bool   $isProcessed
      *
      * @return static
      */
-    public function where(string $axisName, string $operator, $value)
+    public function where(string $axisName, string $operator, $value, bool $isProcessed = false)
     {
         $axis = $this->structure->getAxis($axisName);
 
         $operator           = $axis->getType()->getOperator($operator);
         $this->conditions[] = new AxisCondition(
-                $axis,
-                $operator,
-                $operator->getField()->process($value)
+            $axis,
+            $operator,
+            $isProcessed ? $value : $operator->getField()->process($value)
         );
 
         return $this;
