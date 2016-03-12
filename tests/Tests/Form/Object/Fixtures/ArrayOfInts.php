@@ -44,12 +44,13 @@ class ArrayOfInts extends DependentFormObject
     {
         $form->section('Numbers', [
             //
-            $form->field($this->data)
-                    ->name('data')
-                    ->label('Numbers')
-                    ->arrayOf(Field::element()->int()->required())
-                    ->exactLength($length)
-                    ->required(),
+            $form->bind($this->data)->to(
+                Field::name('data')
+                ->label('Numbers')
+                ->arrayOf(Field::element()->int()->required())
+                ->exactLength($length)
+                ->required()
+            ),
         ]);
     }
 }

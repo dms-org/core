@@ -65,6 +65,24 @@ class FormObjectDefinition extends FormBuilder
     }
 
     /**
+     * Binds the property to the the supplied field
+     *
+     * @param mixed $property
+     *
+     * @return FormObjectFieldBindingBuilder
+     * @throws InvalidPropertyDefinitionException
+     */
+    public function bind(&$property) : FormObjectFieldBindingBuilder
+    {
+        $typeDefiner  = $this->class->property($property);
+        $propertyName = $this->loadTypeDefiner($typeDefiner);
+
+        return new FormObjectFieldBindingBuilder(function (IField $field) use ($propertyName) {
+            $this->fieldPropertyMap[$field->getName()] = $propertyName;
+        });
+    }
+
+    /**
      * Binds the property to the defined field on the form object.
      *
      * @param mixed $property
