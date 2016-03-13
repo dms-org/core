@@ -39,7 +39,7 @@ abstract class ColumnCriterion
     /**
      * @return IColumn
      */
-    final public function getColumn() : \Dms\Core\Table\IColumn
+    final public function getColumn() : IColumn
     {
         return $this->column;
     }
@@ -47,7 +47,7 @@ abstract class ColumnCriterion
     /**
      * @return IColumnComponent
      */
-    final public function getColumnComponent() : \Dms\Core\Table\IColumnComponent
+    final public function getColumnComponent() : IColumnComponent
     {
         return $this->component;
     }

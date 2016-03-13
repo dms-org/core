@@ -70,7 +70,6 @@ class GroupedTableDataSourceAdapter extends TableDataSource
             }
         }
 
-
         foreach ($criteria->getOrderings() as $ordering) {
             if (isset($groupedByComponentIds[$ordering->getComponentId()])) {
                 $dataSourceCriteria->orderBy(

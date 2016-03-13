@@ -15,9 +15,8 @@ use Dms\Core\Table\IDataTable;
 use Dms\Core\Table\IRowCriteria;
 use Dms\Core\Table\ITableDataSource;
 use Dms\Core\Table\ITableRow;
-use Dms\Core\Table\ITableSection;
 use Dms\Core\Table\ITableStructure;
-use Pinq\ITraversable;
+use Dms\Core\Util\Hashing\ValueHasher;
 
 /**
  * The table data source class.
@@ -123,36 +122,46 @@ abstract class TableDataSource implements ITableDataSource
      */
     protected function performRowGrouping(ITableStructure $structure, array $rows, IRowCriteria $criteria = null) : array
     {
-        $collection = new Collection($rows);
+        $groupDataValuesMap = [];
+        $groupedRows        = [];
 
         if ($criteria && $criteria->getGroupings()) {
-            $groupings  = $criteria->getGroupings();
-            $collection = $collection->groupBy(function (ITableRow $row) use ($groupings) {
-                $groupData = [];
+            $groupings = $criteria->getGroupings();
+
+            foreach ($rows as $row) {
+                $groupData     = [];
+                $groupDataHash = '';
 
                 foreach ($groupings as $grouping) {
                     $columnName                             = $grouping->getColumn()->getName();
                     $componentName                          = $grouping->getColumnComponent()->getName();
-                    $groupData[$columnName][$componentName] = $row->getData()[$columnName][$componentName];
+                    $value                                  = $row->getData()[$columnName][$componentName];
+                    $groupData[$columnName][$componentName] = $value;
+                    $groupDataHash .= ValueHasher::hash($value) . '||';
                 }
 
-                return $groupData;
-            });
+                $groupedRows[$groupDataHash][] = $row;
+
+                if (!isset($groupDataValuesMap[$groupDataHash])) {
+                    $groupDataValuesMap[$groupDataHash] = $groupData;
+                }
+            }
         } else {
-            $collection = $collection->groupBy(function () {
-                return null;
-            });
+            $groupedRows[] = $rows;
         }
 
-        return $collection
-            ->select(function (ITraversable $section, array $groupData = null) use ($structure) {
-                return new TableSection(
-                    $structure,
-                    $groupData ? new TableRow($groupData) : null,
-                    $section->asArray()
-                );
-            })
-            ->asArray();
+        $sections = [];
+
+        foreach ($groupedRows as $groupingValueHash => $rows) {
+            $sections[] = new TableSection(
+                $structure,
+                isset($groupDataValuesMap[$groupingValueHash]) ? new TableRow($groupDataValuesMap[$groupingValueHash]) : null,
+                $rows
+            );
+        }
+
+
+        return $sections;
     }
 
     final protected function verifyCriteria(IRowCriteria $criteria = null)
