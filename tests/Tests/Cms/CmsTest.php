@@ -5,15 +5,12 @@ namespace Dms\Core\Tests\Cms;
 use Dms\Common\Testing\CmsTestCase;
 use Dms\Core\Auth\IAuthSystem;
 use Dms\Core\Auth\Permission;
-use Dms\Core\Exception\InvalidArgumentException;
 use Dms\Core\Language\ILanguageProvider;
 use Dms\Core\Package\PackageNotFoundException;
 use Dms\Core\Tests\Cms\Fixtures\TestCms;
 use Dms\Core\Tests\Helpers\Mock\MockingIocContainer;
-use Dms\Core\Tests\Package\Fixtures\InvalidModuleClassPackage;
-use Dms\Core\Tests\Package\Fixtures\PackageWithActions;
-use Dms\Core\Tests\Package\Fixtures\PackageWithCharts;
 use Dms\Core\Tests\Package\Fixtures\TestPackage;
+use Psr\Cache\CacheItemPoolInterface;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>
@@ -34,6 +31,7 @@ class CmsTest extends CmsTestCase
     {
         $this->assertInstanceOf(IAuthSystem::class, $this->cms->getAuth());
         $this->assertInstanceOf(ILanguageProvider::class, $this->cms->getLang());
+        $this->assertInstanceOf(CacheItemPoolInterface::class, $this->cms->getCache());
         $this->assertInstanceOf(MockingIocContainer::class, $this->cms->getIocContainer());
     }
 

@@ -9,6 +9,7 @@ use Dms\Core\Package\IPackage;
 use Dms\Core\Package\PackageNotFoundException;
 use Dms\Core\Util\Debug;
 use Interop\Container\ContainerInterface;
+use Psr\Cache\CacheItemPoolInterface;
 
 /**
  * The cms base class.
@@ -33,6 +34,11 @@ abstract class Cms implements ICms
     protected $lang;
 
     /**
+     * @var CacheItemPoolInterface
+     */
+    protected $cache;
+
+    /**
      * @var string[]
      */
     protected $namePackageClassMap;
@@ -53,6 +59,7 @@ abstract class Cms implements ICms
 
         $this->auth = $container->get(IAuthSystem::class);
         $this->lang = $container->get(ILanguageProvider::class);
+        $this->cache = $container->get(CacheItemPoolInterface::class);
 
         $definition = new CmsDefinition();
         $this->define($definition);
@@ -185,7 +192,15 @@ abstract class Cms implements ICms
     /**
      * @inheritDoc
      */
-    final public function getIocContainer() : \Interop\Container\ContainerInterface
+    final public function getCache() : CacheItemPoolInterface
+    {
+        return $this->cache;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    final public function getIocContainer() : ContainerInterface
     {
         return $this->container;
     }

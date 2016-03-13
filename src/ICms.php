@@ -8,6 +8,7 @@ use Dms\Core\Language\ILanguageProvider;
 use Dms\Core\Package\IPackage;
 use Dms\Core\Package\PackageNotFoundException;
 use Interop\Container\ContainerInterface;
+use Psr\Cache\CacheItemPoolInterface;
 
 /**
  * The interface for a CMS.
@@ -65,11 +66,18 @@ interface ICms
     public function getLang() : Language\ILanguageProvider;
 
     /**
+     * Gets the cache for the cms.
+     *
+     * @return CacheItemPoolInterface
+     */
+    public function getCache() : CacheItemPoolInterface;
+
+    /**
      * Gets the inversion of control container used within this cms instance.
      *
      * @return ContainerInterface
      */
-    public function getIocContainer() : \Interop\Container\ContainerInterface;
+    public function getIocContainer() : ContainerInterface;
 
     /**
      * Loads the namespaced permissions.
