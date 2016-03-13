@@ -47,7 +47,7 @@ class PieChart extends ChartStructure
     /**
      * @return IChartAxis
      */
-    public function getTypeAxis() : \Dms\Core\Table\Chart\IChartAxis
+    public function getTypeAxis() : IChartAxis
     {
         return $this->typeAxis;
     }
@@ -55,7 +55,7 @@ class PieChart extends ChartStructure
     /**
      * @return IChartAxis
      */
-    public function getValueAxis() : \Dms\Core\Table\Chart\IChartAxis
+    public function getValueAxis() : IChartAxis
     {
         return $this->valueAxis;
     }

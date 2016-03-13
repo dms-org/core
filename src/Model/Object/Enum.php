@@ -99,7 +99,7 @@ abstract class Enum extends TypedObject implements IHashable
     /**
      * @return IType
      */
-    final public static function getEnumType() : \Dms\Core\Model\Type\IType
+    final public static function getEnumType() : IType
     {
         return static::definition()->getPropertyType('value');
     }
