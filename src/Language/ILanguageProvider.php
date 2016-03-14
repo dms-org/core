@@ -35,12 +35,12 @@ interface ILanguageProvider
     public function formatAll(array $messages) : array;
 
     /**
-     * Adds a resource directory for the translator.
+     * Adds a resource directory which will load translations in the supplied namespace.
      *
-     * @param string $prefix
+     * @param string $namespace
      * @param string $directory
      *
      * @return void
      */
-    public function addResourceDirectory(string $prefix, string $directory);
+    public function addResourceDirectory(string $namespace, string $directory);
 }

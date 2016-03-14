@@ -4,11 +4,18 @@ namespace Dms\Core\Language;
 
 /**
  * The message class.
- * 
+ *
  * @author Elliot Levin <elliotlevin@hotmail.com>
  */
 class Message
 {
+    const NAMESPACE_SEPARATOR = '::';
+
+    /**
+     * @var string|null
+     */
+    private $namespace;
+
     /**
      * @var string
      */
@@ -19,10 +26,37 @@ class Message
      */
     private $parameters;
 
-    public function __construct($id, array $parameters = [])
+    /**
+     * Message constructor.
+     *
+     * @param string $id
+     * @param array  $parameters
+     */
+    public function __construct(string $id, array $parameters = [])
     {
-        $this->id         = $id;
+        if (strpos($id, self::NAMESPACE_SEPARATOR) !== false) {
+            list($this->namespace, $this->id) = explode(self::NAMESPACE_SEPARATOR, $id, 2);
+        } else {
+            $this->id = $id;
+        }
+
         $this->parameters = $parameters;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasNamespace() : bool
+    {
+        return $this->namespace !== null;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getNamespace()
+    {
+        return $this->namespace;
     }
 
     /**
