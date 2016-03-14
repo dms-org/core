@@ -41,11 +41,11 @@ class InnerFormObjectType extends InnerFormType
      */
     protected function initializeFromCurrentAttributes()
     {
-        parent::initializeFromCurrentAttributes();
-
         if ($this->get(self::ATTR_INITIAL_VALUE) instanceof FormObject) {
             $this->attributes[self::ATTR_FORM_OBJECT] = $this->get(self::ATTR_INITIAL_VALUE);
         }
+
+        parent::initializeFromCurrentAttributes();
     }
 
 
@@ -58,7 +58,6 @@ class InnerFormObjectType extends InnerFormType
             new InnerFormObjectProcessor($this->getFormObject())
         ];
     }
-
 
     /**
      * @return mixed|null

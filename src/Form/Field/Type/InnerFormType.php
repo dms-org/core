@@ -28,7 +28,6 @@ class InnerFormType extends FieldType
      */
     protected function initializeFromCurrentAttributes()
     {
-        parent::initializeFromCurrentAttributes();
         $form = $this->getForm();
 
         $initialValues = array_fill_keys($form->getFieldNames(), null);
@@ -38,6 +37,8 @@ class InnerFormType extends FieldType
         }
 
         $this->attributes[self::ATTR_FORM] = $form->withInitialValues($initialValues);
+
+        parent::initializeFromCurrentAttributes();
     }
 
     /**

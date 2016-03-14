@@ -4,6 +4,7 @@ namespace Dms\Core\Form\Field\Type;
 
 use Dms\Core\Exception\InvalidArgumentException;
 use Dms\Core\Form\Field\Options\ArrayFieldOptions;
+use Dms\Core\Form\Field\Processor\EmptyStringToNullProcessor;
 use Dms\Core\Form\Field\Processor\EnumProcessor;
 use Dms\Core\Form\Field\Processor\Validator\OneOfValidator;
 use Dms\Core\Form\IFieldProcessor;
@@ -85,6 +86,7 @@ class EnumType extends ScalarType
         }
 
         return array_merge(parent::buildProcessors(), [
+            new EmptyStringToNullProcessor($enumValueType->nullable()),
             new OneOfValidator($enumValueType, $this->get(self::ATTR_OPTIONS)),
             new EnumProcessor($this->get(self::ATTR_ENUM_CLASS)),
         ]);

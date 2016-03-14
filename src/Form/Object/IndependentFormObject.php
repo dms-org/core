@@ -110,8 +110,15 @@ abstract class IndependentFormObject extends FormObject
     protected function hydrateFromSerializedData($deserializedData)
     {
         parent::hydrateFromSerializedData($deserializedData);
-        $this->loadFormObjectDefinition(static::formDefinition(), false);
+
+        $formDefinition = static::formDefinition();
+        $initialValues = [];
+        $properties    = $this->toArray();
+
+        foreach ($formDefinition->getPropertyFieldMap() as $property => $field) {
+            $initialValues[$field] = $properties[$property];
+        }
+
+        $this->loadFormObjectDefinition($formDefinition->withInitialValues($initialValues), false);
     }
-
-
 }
