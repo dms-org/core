@@ -50,8 +50,8 @@ class FileExtensionValidatorTest extends FieldValidatorTest
         $file = $this->getMockForAbstractClass(IUploadedFile::class);
 
         $file->expects($this->any())
-            ->method('getExtension')
-            ->willReturn($extension);
+            ->method('getClientFileNameWithFallback')
+            ->willReturn('file-name.' . $extension);
 
         return $file;
     }

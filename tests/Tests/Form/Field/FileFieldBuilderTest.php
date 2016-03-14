@@ -38,8 +38,12 @@ class FileFieldBuilderTest extends FieldBuilderTestBase
                 ->willReturn($size);
 
         $file->expects($this->any())
-                ->method('getExtension')
-                ->willReturn($extension);
+            ->method('getExtension')
+            ->willReturn($extension);
+
+        $file->expects($this->any())
+            ->method('getClientFileNameWithFallback')
+            ->willReturn('some-name.' . $extension);
 
         $file->expects($this->any())
                 ->method('hasUploadedSuccessfully')

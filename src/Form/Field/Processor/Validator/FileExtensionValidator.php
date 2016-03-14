@@ -5,7 +5,6 @@ namespace Dms\Core\Form\Field\Processor\Validator;
 use Dms\Core\File\IUploadedFile;
 use Dms\Core\Form\Field\Processor\FieldValidator;
 use Dms\Core\Language\Message;
-use Dms\Core\Model\Type\Builder\Type;
 use Dms\Core\Model\Type\IType;
 
 /**
@@ -34,7 +33,13 @@ class FileExtensionValidator extends FieldValidator
     protected function validate($input, array &$messages)
     {
         /** @var IUploadedFile $input */
-        if (!in_array(strtoupper($input->getExtension()), array_map('strtoupper', $this->extensions), true)) {
+        $fileName = $input->getClientFileNameWithFallback();
+
+        $extension = strpos($fileName, '.') === false
+            ? false
+            : substr($fileName, strrpos($fileName, '.') + 1);
+
+        if ($extension === false || !in_array(strtoupper($extension), array_map('strtoupper', $this->extensions), true)) {
             $messages[] = new Message(self::MESSAGE, ['extensions' => implode(', ', $this->extensions)]);
         }
     }
