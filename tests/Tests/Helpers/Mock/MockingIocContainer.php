@@ -2,12 +2,14 @@
 
 namespace Dms\Core\Tests\Helpers\Mock;
 
+use Dms\Core\Exception\NotImplementedException;
+use Dms\Core\Ioc\IIocContainer;
 use Interop\Container\ContainerInterface;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>
  */
-class MockingIocContainer implements ContainerInterface
+class MockingIocContainer implements IIocContainer
 {
     /**
      * @var \PHPUnit_Framework_TestCase
@@ -84,5 +86,15 @@ class MockingIocContainer implements ContainerInterface
     public function has($id)
     {
         return class_exists($id) || interface_exists($id);
+    }
+
+    public function bind(string $scope, string $abstract, string $concrete)
+    {
+        throw NotImplementedException::method(__METHOD__);
+    }
+
+    public function bindCallback(string $scope, string $abstract, callable $factory)
+    {
+        throw NotImplementedException::method(__METHOD__);
     }
 }

@@ -4,6 +4,7 @@ namespace Dms\Core\Package;
 
 use Dms\Core\Exception\InvalidArgumentException;
 use Dms\Core\Exception\InvalidOperationException;
+use Dms\Core\ICms;
 use Dms\Core\Module\IModule;
 use Dms\Core\Module\ModuleNotFoundException;
 use Dms\Core\Package\Definition\PackageDefinition;
@@ -82,6 +83,18 @@ abstract class Package implements IPackage
      * @return void
      */
     abstract protected function define(PackageDefinition $package);
+
+    /**
+     * Boots and configures the package resources and services.
+     *
+     * @param ICms $cms
+     *
+     * @return void
+     */
+    public static function boot(ICms $cms)
+    {
+        //
+    }
 
     /**
      * @inheritDoc

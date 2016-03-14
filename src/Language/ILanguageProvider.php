@@ -33,4 +33,14 @@ interface ILanguageProvider
      * @throws MessageNotFoundException
      */
     public function formatAll(array $messages) : array;
+
+    /**
+     * Adds a resource directory for the translator.
+     *
+     * @param string $prefix
+     * @param string $directory
+     *
+     * @return void
+     */
+    public function addResourceDirectory(string $prefix, string $directory);
 }

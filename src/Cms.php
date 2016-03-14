@@ -4,6 +4,7 @@ namespace Dms\Core;
 
 use Dms\Core\Auth\IAuthSystem;
 use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Ioc\IIocContainer;
 use Dms\Core\Language\ILanguageProvider;
 use Dms\Core\Package\IPackage;
 use Dms\Core\Package\PackageNotFoundException;
@@ -57,8 +58,8 @@ abstract class Cms implements ICms
     {
         $this->container = $container;
 
-        $this->auth = $container->get(IAuthSystem::class);
-        $this->lang = $container->get(ILanguageProvider::class);
+        $this->auth  = $container->get(IAuthSystem::class);
+        $this->lang  = $container->get(ILanguageProvider::class);
         $this->cache = $container->get(CacheItemPoolInterface::class);
 
         $definition = new CmsDefinition();
@@ -66,6 +67,8 @@ abstract class Cms implements ICms
         $finalizedDefinition = $definition->finalize();
 
         $this->namePackageClassMap = $finalizedDefinition->getNamePackageMap();
+
+        $this->bootPackages();
     }
 
     /**
@@ -76,6 +79,18 @@ abstract class Cms implements ICms
      * @return void
      */
     abstract protected function define(CmsDefinition $cms);
+
+    /**
+     * @return void
+     */
+    protected function bootPackages()
+    {
+        foreach ($this->namePackageClassMap as $packageClass) {
+            if (method_exists($packageClass, 'boot')) {
+                $packageClass::boot($this);
+            }
+        }
+    }
 
     /**
      * @inheritDoc
@@ -114,8 +129,8 @@ abstract class Cms implements ICms
     {
         if (!isset($this->namePackageClassMap[$name])) {
             throw PackageNotFoundException::format(
-                    'Invalid package name supplied to %s: expecting one of (%s), \'%s\' given',
-                    get_class($this) . '::' . __FUNCTION__, Debug::formatValues($this->getPackageNames()), $name
+                'Invalid package name supplied to %s: expecting one of (%s), \'%s\' given',
+                get_class($this) . '::' . __FUNCTION__, Debug::formatValues($this->getPackageNames()), $name
             );
         }
 
@@ -139,8 +154,8 @@ abstract class Cms implements ICms
     {
         if (!is_subclass_of($packageClass, IPackage::class, true)) {
             throw InvalidArgumentException::format(
-                    'Invalid package class defined within cms: expecting subclass of %s, %s given',
-                    IPackage::class, $packageClass
+                'Invalid package class defined within cms: expecting subclass of %s, %s given',
+                IPackage::class, $packageClass
             );
         }
 
@@ -149,8 +164,8 @@ abstract class Cms implements ICms
 
         if ($package->getName() !== $name) {
             throw InvalidArgumentException::format(
-                    'Invalid package class defined within package: defined package name \'%s\' does not match package name \'%s\' from instance of %s',
-                    $name, $package->getName(), get_class($package)
+                'Invalid package class defined within package: defined package name \'%s\' does not match package name \'%s\' from instance of %s',
+                $name, $package->getName(), get_class($package)
             );
         }
 
@@ -200,7 +215,7 @@ abstract class Cms implements ICms
     /**
      * @inheritDoc
      */
-    final public function getIocContainer() : ContainerInterface
+    final public function getIocContainer() : IIocContainer
     {
         return $this->container;
     }
