@@ -68,6 +68,14 @@ class Message
     }
 
     /**
+     * @return string
+     */
+    public function getFullId() : string
+    {
+        return ($this->namespace !== null ? $this->namespace . self::NAMESPACE_SEPARATOR : '') . $this->id;
+    }
+
+    /**
      * @return string[]
      */
     public function getParameters() : array
@@ -82,6 +90,6 @@ class Message
      */
     public function withParameters(array $parameters) : Message
     {
-        return new self($this->id, $parameters + $this->parameters);
+        return new self($this->getFullId(), $parameters + $this->parameters);
     }
 }

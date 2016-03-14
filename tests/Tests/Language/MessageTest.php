@@ -18,6 +18,7 @@ class MessageTest extends CmsTestCase
         $this->assertSame(null, $message->getNamespace());
         $this->assertSame('abc.def', $message->getId());
         $this->assertSame(['foo' => 'bar'], $message->getParameters());
+        $this->assertSame(null, $message->withParameters(['abc' => '123'])->getNamespace());
     }
 
     public function testWithNamespace()
@@ -28,5 +29,6 @@ class MessageTest extends CmsTestCase
         $this->assertSame('some-namespace', $message->getNamespace());
         $this->assertSame('abc.def.ghi', $message->getId());
         $this->assertSame(['quz' => 'baz'], $message->getParameters());
+        $this->assertSame('some-namespace', $message->withParameters(['abc' => '123'])->getNamespace());
     }
 }
