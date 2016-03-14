@@ -21,16 +21,17 @@ class FinalizedReadModuleDefinition extends FinalizedModuleDefinition
      * @inheritDoc
      */
     public function __construct(
-            $name,
-            callable $labelObjectCallback,
-            ISummaryTable $summaryTable,
-            array $requiredPermissions,
-            array $actions,
-            array $tables,
-            array $charts,
-            array $widgets
+        string $name,
+        array $metadata,
+        callable $labelObjectCallback,
+        ISummaryTable $summaryTable,
+        array $requiredPermissions,
+        array $actions,
+        array $tables,
+        array $charts,
+        array $widgets
     ) {
-        parent::__construct($name, $requiredPermissions, $actions, array_merge($tables, [$summaryTable]), $charts, $widgets);
+        parent::__construct($name, $metadata, $requiredPermissions, $actions, array_merge($tables, [$summaryTable]), $charts, $widgets);
         $this->labelObjectCallback = $labelObjectCallback;
     }
 

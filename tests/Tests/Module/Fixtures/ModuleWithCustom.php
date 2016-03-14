@@ -53,6 +53,9 @@ class ModuleWithCustom extends Module
     {
         $module->name('test-module-with-custom');
 
+        $module->metadata([
+            'key' => 'some-metadata'
+        ]);
 
         $module->custom()->action($this->mockAction);
         $module->custom()->table($this->mockTable);

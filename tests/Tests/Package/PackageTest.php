@@ -36,6 +36,19 @@ class PackageTest extends CmsTestCase
         $this->assertSame('test-package', $this->package->getName());
     }
 
+    public function testMetadata()
+    {
+        $this->assertSame([
+            'another-key' => 'some-more-metadata', 'key' => 'some-metadata'
+        ], $this->package->getAllMetadata());
+
+        $this->assertSame(true, $this->package->hasMetadata('key'));
+        $this->assertSame(false, $this->package->hasMetadata('unknown'));
+
+        $this->assertSame('some-metadata', $this->package->getMetadata('key'));
+        $this->assertSame(null, $this->package->getMetadata('unknown'));
+    }
+
     public function testModuleNames()
     {
         $this->assertSame(['test-module-with-actions', 'test-module-with-charts'], $this->package->getModuleNames());

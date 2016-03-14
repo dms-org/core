@@ -89,6 +89,14 @@ class ModuleWithCustomTest extends ModuleTestBase
         return 'test-module-with-custom';
     }
 
+    public function testMetadata()
+    {
+        $this->assertSame([
+            'key' => 'some-metadata'
+        ], $this->module->getAllMetadata());
+    }
+
+
     public function testActionGetters()
     {
         $this->assertCount(1, $this->module->getActions());

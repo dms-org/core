@@ -24,6 +24,11 @@ class FinalizedModuleDefinition
     private $name;
 
     /**
+     * @var array
+     */
+    private $metadata;
+
+    /**
      * @var IPermission[]
      */
     private $requiredPermissions = [];
@@ -57,14 +62,22 @@ class FinalizedModuleDefinition
      * FinalizedModuleDefinition constructor.
      *
      * @param string          $name
+     * @param array           $metadata
      * @param IPermission[]   $requiredPermissions
      * @param IAction[]       $actions
      * @param ITableDisplay[] $tables
      * @param IChartDisplay[] $charts
      * @param IWidget[]       $widgets
      */
-    public function __construct(string $name, array $requiredPermissions, array $actions, array $tables, array $charts, array $widgets)
-    {
+    public function __construct(
+        string $name,
+        array $metadata,
+        array $requiredPermissions,
+        array $actions,
+        array $tables,
+        array $charts,
+        array $widgets
+    ) {
         InvalidArgumentException::verifyAllInstanceOf(__METHOD__, 'requiredPermissions', $requiredPermissions, IPermission::class);
         InvalidArgumentException::verifyAllInstanceOf(__METHOD__, 'actions', $actions, IAction::class);
         InvalidArgumentException::verifyAllInstanceOf(__METHOD__, 'tables', $tables, ITableDisplay::class);
@@ -72,6 +85,7 @@ class FinalizedModuleDefinition
         InvalidArgumentException::verifyAllInstanceOf(__METHOD__, 'widgets', $widgets, IWidget::class);
 
         $this->name                = $name;
+        $this->metadata            = $metadata;
         $this->requiredPermissions = $requiredPermissions;
         $this->actions             = $actions;
         $this->tables              = $tables;
@@ -101,6 +115,14 @@ class FinalizedModuleDefinition
     public function getName() : string
     {
         return $this->name;
+    }
+
+    /**
+     * @return array
+     */
+    public function getMetadata() : array
+    {
+        return $this->metadata;
     }
 
     /**

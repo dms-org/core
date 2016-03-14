@@ -85,6 +85,7 @@ class CrudModuleDefinition extends ReadModuleDefinition
 
         return new FinalizedCrudModuleDefinition(
             $this->name,
+            $this->metadata,
             $this->labelObjectCallback,
             $this->summaryTable,
             $this->requiredPermissions,

@@ -27,6 +27,11 @@ class ModuleDefinition
     protected $authSystem;
 
     /**
+     * @var array
+     */
+    protected $metadata = [];
+
+    /**
      * @var string
      */
     protected $name;
@@ -84,6 +89,18 @@ class ModuleDefinition
     public function name(string $name)
     {
         $this->name = $name;
+    }
+
+    /**
+     * Adds the supplied metadata to the module.
+     *
+     * @param array $metadata
+     *
+     * @return void
+     */
+    public function metadata(array $metadata)
+    {
+        $this->metadata = $metadata + $this->metadata;
     }
 
     /**
@@ -166,9 +183,10 @@ class ModuleDefinition
      */
     public function widget(string $name) : Widget\WidgetLabelDefiner
     {
-        return new WidgetLabelDefiner($name, $this->authSystem, $this->requiredPermissions, $this->tables, $this->charts, $this->actions, function (IWidget $widget) {
-            $this->widgets[$widget->getName()] = $widget;
-        });
+        return new WidgetLabelDefiner($name, $this->authSystem, $this->requiredPermissions, $this->tables, $this->charts, $this->actions,
+            function (IWidget $widget) {
+                $this->widgets[$widget->getName()] = $widget;
+            });
     }
 
     /**
@@ -191,6 +209,7 @@ class ModuleDefinition
 
         return new FinalizedModuleDefinition(
             $this->name,
+            $this->metadata,
             $this->requiredPermissions,
             $this->actions,
             $this->tables,

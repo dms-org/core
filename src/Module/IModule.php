@@ -6,6 +6,7 @@ use Dms\Core\Auth\IPermission;
 use Dms\Core\Exception\InvalidArgumentException;
 use Dms\Core\Exception\InvalidOperationException;
 use Dms\Core\Form;
+use Dms\Core\Util\Metadata\IMetadataProvider;
 use Dms\Core\Widget\IWidget;
 
 /**
@@ -15,7 +16,7 @@ use Dms\Core\Widget\IWidget;
  *
  * @author Elliot Levin <elliot@aanet.com.au>
  */
-interface IModule
+interface IModule extends IMetadataProvider
 {
     /**
      * Gets the package name

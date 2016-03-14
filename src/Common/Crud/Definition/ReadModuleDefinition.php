@@ -261,6 +261,7 @@ class ReadModuleDefinition extends ModuleDefinition
 
         return new FinalizedReadModuleDefinition(
             $this->name,
+            $this->metadata,
             $this->labelObjectCallback,
             $this->summaryTable,
             $this->requiredPermissions,

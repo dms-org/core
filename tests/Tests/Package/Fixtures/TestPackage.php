@@ -23,9 +23,17 @@ class TestPackage extends Package
     {
         $package->name('test-package');
 
+        $package->metadata([
+            'key' => 'some-metadata'
+        ]);
+
+        $package->metadata([
+            'another-key' => 'some-more-metadata'
+        ]);
+
         $package->modules([
-                'test-module-with-actions' => ModuleWithActions::class,
-                'test-module-with-charts'  => ModuleWithCharts::class,
+            'test-module-with-actions' => ModuleWithActions::class,
+            'test-module-with-charts'  => ModuleWithCharts::class,
         ]);
     }
 }

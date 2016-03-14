@@ -6,6 +6,7 @@ use Dms\Core\Auth\IPermission;
 use Dms\Core\Exception\InvalidOperationException;
 use Dms\Core\Module\IModule;
 use Dms\Core\Module\ModuleNotFoundException;
+use Dms\Core\Util\Metadata\IMetadataProvider;
 use Interop\Container\ContainerInterface;
 
 /**
@@ -13,7 +14,7 @@ use Interop\Container\ContainerInterface;
  *
  * @author Elliot Levin <elliot@aanet.com.au>
  */
-interface IPackage
+interface IPackage extends IMetadataProvider
 {
     /**
      * Gets the name.

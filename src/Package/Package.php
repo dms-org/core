@@ -9,6 +9,7 @@ use Dms\Core\Module\IModule;
 use Dms\Core\Module\ModuleNotFoundException;
 use Dms\Core\Package\Definition\PackageDefinition;
 use Dms\Core\Util\Debug;
+use Dms\Core\Util\Metadata\MetadataTrait;
 use Interop\Container\ContainerInterface;
 
 /**
@@ -18,6 +19,8 @@ use Interop\Container\ContainerInterface;
  */
 abstract class Package implements IPackage
 {
+    use MetadataTrait;
+
     /**
      * @var string
      */
@@ -71,6 +74,7 @@ abstract class Package implements IPackage
         $finalizedDefinition = $definition->finalize();
 
         $this->name                 = $finalizedDefinition->getName();
+        $this->metadata             = $finalizedDefinition->getMetadata();
         $this->dashboardWidgetNames = $finalizedDefinition->getDashboardWidgetNames();
         $this->nameModuleClassMap   = $finalizedDefinition->getNameModuleClassMap();
     }

@@ -11,6 +11,7 @@ use Dms\Core\Form;
 use Dms\Core\Module\Definition\FinalizedModuleDefinition;
 use Dms\Core\Module\Definition\ModuleDefinition;
 use Dms\Core\Util\Debug;
+use Dms\Core\Util\Metadata\MetadataTrait;
 use Dms\Core\Widget\IWidget;
 
 /**
@@ -20,6 +21,8 @@ use Dms\Core\Widget\IWidget;
  */
 abstract class Module implements IModule
 {
+    use MetadataTrait;
+
     /**
      * @var IAuthSystem
      */
@@ -105,6 +108,7 @@ abstract class Module implements IModule
         $this->definition = $definition;
 
         $this->name                = $this->definition->getName();
+        $this->metadata            = $this->definition->getMetadata();
         $this->requiredPermissions = Permission::namespaceAll($this->definition->getRequiredPermissions(), $this->name);
         $this->permissions         = Permission::namespaceAll($this->definition->getPermissions(), $this->name);
 

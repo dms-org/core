@@ -15,6 +15,11 @@ class FinalizedPackageDefinition
     private $name;
 
     /**
+     * @var array
+     */
+    private $metadata;
+
+    /**
      * @var string[]
      */
     private $nameModuleClassMap;
@@ -28,12 +33,14 @@ class FinalizedPackageDefinition
      * FinalizedPackageDefinition constructor.
      *
      * @param string   $name
+     * @param array    $metadata
      * @param string[] $nameModuleClassMap
      * @param string[] $dashboardWidgetNames
      */
-    public function __construct(string $name, array $nameModuleClassMap, array $dashboardWidgetNames)
+    public function __construct(string $name, array $metadata, array $nameModuleClassMap, array $dashboardWidgetNames)
     {
-        $this->name                 = $name;
+        $this->name     = $name;
+        $this->metadata = $metadata;
         $this->nameModuleClassMap   = $nameModuleClassMap;
         $this->dashboardWidgetNames = $dashboardWidgetNames;
     }
@@ -44,6 +51,14 @@ class FinalizedPackageDefinition
     public function getName() : string
     {
         return $this->name;
+    }
+
+    /**
+     * @return array
+     */
+    public function getMetadata() : array
+    {
+        return $this->metadata;
     }
 
     /**

@@ -17,6 +17,11 @@ class PackageDefinition
     protected $name;
 
     /**
+     * @var array
+     */
+    protected $metadata = [];
+
+    /**
      * @var string[]
      */
     protected $nameModuleClassMap = [];
@@ -43,6 +48,18 @@ class PackageDefinition
     public function name(string $name)
     {
         $this->name = $name;
+    }
+
+    /**
+     * Adds the supplied metadata to the package.
+     *
+     * @param array $metadata
+     *
+     * @return void
+     */
+    public function metadata(array $metadata)
+    {
+        $this->metadata = $metadata + $this->metadata;
     }
 
     /**
@@ -102,6 +119,6 @@ class PackageDefinition
             );
         }
 
-        return new FinalizedPackageDefinition($this->name, $this->nameModuleClassMap, $this->dashboardWidgetNames);
+        return new FinalizedPackageDefinition($this->name, $this->metadata, $this->nameModuleClassMap, $this->dashboardWidgetNames);
     }
 }
