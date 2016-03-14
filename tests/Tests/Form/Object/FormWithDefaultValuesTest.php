@@ -21,4 +21,9 @@ class FormWithDefaultValuesTest extends CmsTestCase
 
         $this->assertEquals($expectedValues, FormWithDefaults::initialValues());
     }
+
+    public function testSerialization()
+    {
+        $this->assertEquals(new FormWithDefaults(), unserialize(serialize(new FormWithDefaults())));
+    }
 }

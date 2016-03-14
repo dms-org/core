@@ -10,7 +10,6 @@ use Dms\Core\Model\ITypedObject;
 use Dms\Core\Model\ObjectCollection;
 use Dms\Core\Model\Type\Builder\Type;
 use Dms\Core\Model\Type\CollectionType;
-use Dms\Core\Model\Type\IType;
 use Dms\Core\Model\Type\ObjectType;
 
 /**

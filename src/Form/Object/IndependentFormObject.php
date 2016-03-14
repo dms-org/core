@@ -103,4 +103,15 @@ abstract class IndependentFormObject extends FormObject
 
         return $newInstance->submit($submission);
     }
+
+    /**
+     * @inheritDoc
+     */
+    protected function hydrateFromSerializedData($deserializedData)
+    {
+        parent::hydrateFromSerializedData($deserializedData);
+        $this->loadFormObjectDefinition(static::formDefinition(), false);
+    }
+
+
 }
