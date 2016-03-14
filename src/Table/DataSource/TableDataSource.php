@@ -15,6 +15,7 @@ use Dms\Core\Table\IDataTable;
 use Dms\Core\Table\IRowCriteria;
 use Dms\Core\Table\ITableDataSource;
 use Dms\Core\Table\ITableRow;
+use Dms\Core\Table\ITableSection;
 use Dms\Core\Table\ITableStructure;
 use Dms\Core\Util\Hashing\ValueHasher;
 
@@ -118,10 +119,14 @@ abstract class TableDataSource implements ITableDataSource
      * @param ITableRow[]       $rows
      * @param IRowCriteria|null $criteria
      *
-     * @return array|\Dms\Core\Table\ITableSection[]
+     * @return ITableSection[]
      */
     protected function performRowGrouping(ITableStructure $structure, array $rows, IRowCriteria $criteria = null) : array
     {
+        if (empty($rows)) {
+            return [];
+        }
+
         $groupDataValuesMap = [];
         $groupedRows        = [];
 
