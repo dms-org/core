@@ -40,7 +40,7 @@ class MockingIocContainer implements IIocContainer
             throw new \Exception("Class or interface {$id} does not exist");
         }
 
-        if ($id === ContainerInterface::class) {
+        if ($id === ContainerInterface::class || $id === IIocContainer::class) {
             return $this;
         }
 

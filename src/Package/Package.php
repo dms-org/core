@@ -5,12 +5,12 @@ namespace Dms\Core\Package;
 use Dms\Core\Exception\InvalidArgumentException;
 use Dms\Core\Exception\InvalidOperationException;
 use Dms\Core\ICms;
+use Dms\Core\Ioc\IIocContainer;
 use Dms\Core\Module\IModule;
 use Dms\Core\Module\ModuleNotFoundException;
 use Dms\Core\Package\Definition\PackageDefinition;
 use Dms\Core\Util\Debug;
 use Dms\Core\Util\Metadata\MetadataTrait;
-use Interop\Container\ContainerInterface;
 
 /**
  * The package base class.
@@ -27,7 +27,7 @@ abstract class Package implements IPackage
     protected $name;
 
     /**
-     * @var ContainerInterface
+     * @var IIocContainer
      */
     protected $container;
 
@@ -63,9 +63,9 @@ abstract class Package implements IPackage
     /**
      * Package constructor.
      *
-     * @param ContainerInterface $container
+     * @param IIocContainer $container
      */
-    public function __construct(ContainerInterface $container)
+    public function __construct(IIocContainer $container)
     {
         $this->container = $container;
 
@@ -268,7 +268,7 @@ abstract class Package implements IPackage
     /**
      * @inheritDoc
      */
-    final public function getIocContainer() : ContainerInterface
+    final public function getIocContainer() : IIocContainer
     {
         return $this->container;
     }

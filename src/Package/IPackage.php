@@ -4,10 +4,10 @@ namespace Dms\Core\Package;
 
 use Dms\Core\Auth\IPermission;
 use Dms\Core\Exception\InvalidOperationException;
+use Dms\Core\Ioc\IIocContainer;
 use Dms\Core\Module\IModule;
 use Dms\Core\Module\ModuleNotFoundException;
 use Dms\Core\Util\Metadata\IMetadataProvider;
-use Interop\Container\ContainerInterface;
 
 /**
  * The interface for a package.
@@ -85,7 +85,7 @@ interface IPackage extends IMetadataProvider
     /**
      * Gets the inversion of control container used within this package.
      *
-     * @return ContainerInterface
+     * @return IIocContainer
      */
-    public function getIocContainer() : ContainerInterface;
+    public function getIocContainer() : IIocContainer;
 }

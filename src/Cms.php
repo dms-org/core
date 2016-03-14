@@ -9,7 +9,6 @@ use Dms\Core\Language\ILanguageProvider;
 use Dms\Core\Package\IPackage;
 use Dms\Core\Package\PackageNotFoundException;
 use Dms\Core\Util\Debug;
-use Interop\Container\ContainerInterface;
 use Psr\Cache\CacheItemPoolInterface;
 
 /**
@@ -20,7 +19,7 @@ use Psr\Cache\CacheItemPoolInterface;
 abstract class Cms implements ICms
 {
     /**
-     * @var ContainerInterface
+     * @var IIocContainer
      */
     protected $container;
 
@@ -52,9 +51,9 @@ abstract class Cms implements ICms
     /**
      * Cms constructor.
      *
-     * @param ContainerInterface $container
+     * @param IIocContainer $container
      */
-    public function __construct(ContainerInterface $container)
+    public function __construct(IIocContainer $container)
     {
         $this->container = $container;
 
