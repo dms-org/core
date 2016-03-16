@@ -52,8 +52,8 @@ class MockingIocContainer implements IIocContainer
 
         $constructor      = (new \ReflectionClass($id))->getConstructor();
         $canBeConstructed = true;
+        $params           = [];
         if ($constructor) {
-            $params = [];
 
             foreach ($constructor->getParameters() as $param) {
                 if ($param->getClass()) {
