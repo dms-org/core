@@ -765,7 +765,13 @@ abstract class ObjectMapping implements IObjectMapping
     {
         foreach ($this->subClassMappings as $mapping) {
             if ($mapping instanceof IEmbeddedObjectMapping) {
-                $mapping->persistAllBeforeParent($context, $objects, $rows);
+                list($objectsOfSubClass, $rowsForSubClass) = $this->loadInstancesForSubclass($mapping, $rows, $objects);
+
+                if (!$objectsOfSubClass) {
+                    continue;
+                }
+
+                $mapping->persistAllBeforeParent($context, $objectsOfSubClass, $rowsForSubClass);
             }
         }
     }
@@ -774,7 +780,13 @@ abstract class ObjectMapping implements IObjectMapping
     {
         foreach ($this->subClassMappings as $mapping) {
             if ($mapping instanceof IEmbeddedObjectMapping) {
-                $mapping->persistAllAfterParent($context, $objects, $rows);
+                list($objectsOfSubClass, $rowsForSubClass) = $this->loadInstancesForSubclass($mapping, $rows, $objects);
+
+                if (!$objectsOfSubClass) {
+                    continue;
+                }
+
+                $mapping->persistAllAfterParent($context, $objectsOfSubClass, $rowsForSubClass);
             }
         }
     }
