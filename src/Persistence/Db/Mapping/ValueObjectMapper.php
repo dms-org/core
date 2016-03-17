@@ -12,6 +12,7 @@ use Dms\Core\Persistence\Db\Mapping\Hierarchy\ParentObjectMapping;
 use Dms\Core\Persistence\Db\PersistenceContext;
 use Dms\Core\Persistence\Db\Query\Delete;
 use Dms\Core\Persistence\Db\Row;
+use Dms\Core\Persistence\Db\Schema\Table;
 
 /**
  * The value object mapper base class.
@@ -34,6 +35,11 @@ abstract class ValueObjectMapper extends ObjectMapper implements IEmbeddedObject
      * @var string[]
      */
     private $parentColumns = [];
+
+    /**
+     * @var bool
+     */
+    protected $isSeparateTable = false;
 
     /**
      * @param IOrm               $orm
@@ -86,9 +92,35 @@ abstract class ValueObjectMapper extends ObjectMapper implements IEmbeddedObject
     /**
      * {@inheritDoc}
      */
+    public function getTableWhichThisIsEmbeddedWithin() : Table
+    {
+        if ($this->isSeparateTable) {
+            return $this->getDefinition()->getTable();
+        }
+
+        if ($this->parentMapper instanceof IEmbeddedObjectMapper) {
+            return $this->parentMapper->getTableWhichThisIsEmbeddedWithin();
+        } elseif ($this->parentMapper instanceof IEntityMapper) {
+            return $this->parentMapper->getPrimaryTable();
+        }
+
+        return $this->getDefinition()->getTable();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     final protected function loadMapping(FinalizedMapperDefinition $definition) : Hierarchy\ParentObjectMapping
     {
         return new EmbeddedParentObjectMapping($definition, $this->getRootEntityMapper());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function isSeparateTable() : bool
+    {
+        return $this->isSeparateTable;
     }
 
     /**
@@ -98,8 +130,9 @@ abstract class ValueObjectMapper extends ObjectMapper implements IEmbeddedObject
     {
         $table = $this->loadTableWithoutParentColumns($name, $extraColumns, $extraIndexes, $extraForeignKeys);
 
-        $clone          = clone $this;
-        $clone->mapping = new ParentObjectMapping($this->getDefinition()->withTable($table));
+        $clone                  = clone $this;
+        $clone->mapping         = new ParentObjectMapping($this->getDefinition()->withTable($table));
+        $clone->isSeparateTable = true;
 
         return $clone;
     }
@@ -114,10 +147,10 @@ abstract class ValueObjectMapper extends ObjectMapper implements IEmbeddedObject
         }
 
         return $table
-                ->withName($name)
-                ->withColumns(array_merge($extraColumns, $columns))
-                ->withIndexes(array_merge($extraIndexes, $table->getIndexes()))
-                ->withForeignKeys(array_merge($extraForeignKeys, $table->getForeignKeys()));
+            ->withName($name)
+            ->withColumns(array_merge($extraColumns, $columns))
+            ->withIndexes(array_merge($extraIndexes, $table->getIndexes()))
+            ->withForeignKeys(array_merge($extraForeignKeys, $table->getForeignKeys()));
     }
 
     final protected function loadFromDefinition(FinalizedMapperDefinition $definition)

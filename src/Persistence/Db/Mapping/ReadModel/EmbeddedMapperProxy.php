@@ -8,11 +8,14 @@ use Dms\Core\Model\ITypedCollection;
 use Dms\Core\Model\ITypedObject;
 use Dms\Core\Model\Type\IType;
 use Dms\Core\Persistence\Db\LoadingContext;
+use Dms\Core\Persistence\Db\Mapping\Definition\FinalizedMapperDefinition;
+use Dms\Core\Persistence\Db\Mapping\Hierarchy\ParentObjectMapping;
 use Dms\Core\Persistence\Db\Mapping\IEmbeddedObjectMapper;
 use Dms\Core\Persistence\Db\Mapping\IObjectMapper;
 use Dms\Core\Persistence\Db\PersistenceContext;
 use Dms\Core\Persistence\Db\Query\Delete;
 use Dms\Core\Persistence\Db\Row;
+use Dms\Core\Persistence\Db\Schema\Table;
 
 /**
  * This class wraps an entity mapper as an embedded mapper.
@@ -63,7 +66,7 @@ class EmbeddedMapperProxy implements IEmbeddedObjectMapper
     /**
      * @inheritDoc
      */
-    public function getDefinition() : \Dms\Core\Persistence\Db\Mapping\Definition\FinalizedMapperDefinition
+    public function getDefinition() : FinalizedMapperDefinition
     {
         return $this->mapper->getDefinition();
     }
@@ -79,7 +82,7 @@ class EmbeddedMapperProxy implements IEmbeddedObjectMapper
     /**
      * @inheritDoc
      */
-    public function findMapperFor(string $class) : \Dms\Core\Persistence\Db\Mapping\IObjectMapper
+    public function findMapperFor(string $class) : IObjectMapper
     {
         return $this->mapper->findMapperFor($class);
     }
@@ -87,7 +90,7 @@ class EmbeddedMapperProxy implements IEmbeddedObjectMapper
     /**
      * {@inheritDoc}
      */
-    public function getMapping() : \Dms\Core\Persistence\Db\Mapping\Hierarchy\ParentObjectMapping
+    public function getMapping() : ParentObjectMapping
     {
         return $this->mapper->getMapping();
     }
@@ -95,7 +98,7 @@ class EmbeddedMapperProxy implements IEmbeddedObjectMapper
     /**
      * {@inheritDoc}
      */
-    public function getParentMapper() : \Dms\Core\Persistence\Db\Mapping\IObjectMapper
+    public function getParentMapper() : IObjectMapper
     {
         return $this->mapper;
     }
@@ -109,9 +112,17 @@ class EmbeddedMapperProxy implements IEmbeddedObjectMapper
     }
 
     /**
+     * {@inheritDoc}
+     */
+    public function getTableWhichThisIsEmbeddedWithin() : Table
+    {
+        return $this->mapper->getDefinition()->getTable();
+    }
+
+    /**
      * @inheritDoc
      */
-    public function load(LoadingContext $context, Row $row) : \Dms\Core\Model\ITypedObject
+    public function load(LoadingContext $context, Row $row) : ITypedObject
     {
         return $this->mapper->load($context, $row);
     }
@@ -197,12 +208,17 @@ class EmbeddedMapperProxy implements IEmbeddedObjectMapper
         throw NotImplementedException::method(__METHOD__);
     }
 
-    public function withColumnsPrefixedBy(string $prefix) : \Dms\Core\Persistence\Db\Mapping\IEmbeddedObjectMapper
+    public function withColumnsPrefixedBy(string $prefix) : IEmbeddedObjectMapper
     {
         throw NotImplementedException::method(__METHOD__);
     }
 
-    public function asSeparateTable(string $name, array $extraColumns = [], array $extraIndexes = [], array $extraForeignKeys = []) : \Dms\Core\Persistence\Db\Mapping\IEmbeddedObjectMapper
+    public function isSeparateTable() : bool
+    {
+        throw NotImplementedException::method(__METHOD__);
+    }
+
+    public function asSeparateTable(string $name, array $extraColumns = [], array $extraIndexes = [], array $extraForeignKeys = []) : IEmbeddedObjectMapper
     {
         throw NotImplementedException::method(__METHOD__);
     }

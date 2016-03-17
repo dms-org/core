@@ -96,17 +96,29 @@ class ReadModelMapper extends ObjectMapper implements IEntityMapper, IEmbeddedOb
      *
      * @return Table
      */
-    public function getPrimaryTable() : \Dms\Core\Persistence\Db\Schema\Table
+    public function getPrimaryTable() : Table
     {
         return $this->getRootEntityMapper()->getPrimaryTable();
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function getPrimaryTableName() : string
     {
         return $this->getRootEntityMapper()->getPrimaryTableName();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getTableWhichThisIsEmbeddedWithin() : Table
+    {
+        if ($this->parentMapper instanceof IEmbeddedObjectMapper) {
+            return $this->parentMapper->getTableWhichThisIsEmbeddedWithin();
+        } else {
+            return $this->parentMapper->getDefinition()->getTable();
+        }
     }
 
     /**
@@ -122,7 +134,7 @@ class ReadModelMapper extends ObjectMapper implements IEntityMapper, IEmbeddedOb
     /**
      * @return Select
      */
-    public function getSelect() : \Dms\Core\Persistence\Db\Query\Select
+    public function getSelect() : Select
     {
         $select = Select::from($this->getPrimaryTable());
         $this->getMapping()->addLoadToSelect($select, $select->getTableAlias());
@@ -135,7 +147,7 @@ class ReadModelMapper extends ObjectMapper implements IEntityMapper, IEmbeddedOb
      *
      * @return RowSet
      */
-    public function rowSet(array $rows) : \Dms\Core\Persistence\Db\RowSet
+    public function rowSet(array $rows) : RowSet
     {
         return new RowSet($this->getPrimaryTable());
     }
@@ -202,12 +214,17 @@ class ReadModelMapper extends ObjectMapper implements IEntityMapper, IEmbeddedOb
         throw NotImplementedException::method(__METHOD__);
     }
 
-    public function withColumnsPrefixedBy(string $prefix) : \Dms\Core\Persistence\Db\Mapping\IEmbeddedObjectMapper
+    public function withColumnsPrefixedBy(string $prefix) : IEmbeddedObjectMapper
     {
         throw NotImplementedException::method(__METHOD__);
     }
 
-    public function asSeparateTable(string $name, array $extraColumns = [], array $extraIndexes = [], array $extraForeignKeys = []) : \Dms\Core\Persistence\Db\Mapping\IEmbeddedObjectMapper
+    public function isSeparateTable() : bool
+    {
+        throw NotImplementedException::method(__METHOD__);
+    }
+
+    public function asSeparateTable(string $name, array $extraColumns = [], array $extraIndexes = [], array $extraForeignKeys = []) : IEmbeddedObjectMapper
     {
         throw NotImplementedException::method(__METHOD__);
     }

@@ -205,8 +205,8 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
             return;
         }
 
-        if ($mapper instanceof IEmbeddedObjectMapper && $mapper->getRootEntityMapper()) {
-            $this->entityTable = $mapper->getRootEntityMapper()->getPrimaryTable();
+        if ($mapper instanceof IEmbeddedObjectMapper) {
+            $this->entityTable = $mapper->getTableWhichThisIsEmbeddedWithin();
         } else {
             $this->entityTable = $this->table;
         }
