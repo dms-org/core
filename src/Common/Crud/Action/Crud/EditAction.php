@@ -129,6 +129,8 @@ class EditAction extends SelfHandlingObjectAction
             $this->dataSource->update($object, $newObject);
 
             $this->form->invokeOnSaveCallbacks($object, $input);
+
+            return $newObject;
         } else {
             $this->form->bindToObject($object, $input);
             $this->form->invokeOnSubmitCallbacks($object, $input);
@@ -136,8 +138,8 @@ class EditAction extends SelfHandlingObjectAction
             $this->dataSource->save($object);
 
             $this->form->invokeOnSaveCallbacks($object, $input);
-        }
 
-        return $object;
+            return $object;
+        }
     }
 }

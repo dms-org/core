@@ -215,6 +215,18 @@ class ObjectCollection extends TypedCollection implements ITypedObjectCollection
         });
     }
 
+    public function offsetSet($index, $value)
+    {
+        parent::offsetSet($index, $value);
+        $this->loadInstanceMap($this->toOrderedMap());
+    }
+
+    public function offsetUnset($index)
+    {
+        parent::offsetUnset($index);
+        $this->loadInstanceMap($this->toOrderedMap());
+    }
+
     /**
      * @inheritDoc
      */
