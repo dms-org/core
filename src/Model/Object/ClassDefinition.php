@@ -93,17 +93,17 @@ class ClassDefinition
 
         if (isset($this->properties[$name]) && $this->properties[$name]->getAccessibility()->isPrivate()) {
             throw new ConflictingPropertyNameException(
-                    get_class($object),
-                    $this->properties[$name]->getClass(),
-                    $class,
-                    $name
+                get_class($object),
+                $this->properties[$name]->getClass(),
+                $class,
+                $name
             );
         }
 
         $definition = new PropertyDefinition(
-                $class,
-                $name,
-                PropertyAccessibility::from($property)
+            $class,
+            $name,
+            PropertyAccessibility::from($property)
         );
 
         if (is_subclass_of($this->class, IImmutableTypedObject::class, true)) {
@@ -121,17 +121,10 @@ class ClassDefinition
      *
      * @return PropertyTypeDefiner
      * @throws InvalidPropertyDefinitionException
-     * @throws DuplicatePropertyDefinitionException
      */
     public function property(&$property) : PropertyTypeDefiner
     {
         $definition = $this->findPropertyFromReference($property);
-
-        if ($definition->hasType()) {
-            $traceLevel = $this->propertyDefinitionTraceLevel;
-            $trace      = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, $traceLevel)[$traceLevel - 1];
-            throw new DuplicatePropertyDefinitionException($this->class, $definition->getName(), $trace['file'], $trace['line']);
-        }
 
         return new PropertyTypeDefiner($definition);
     }
@@ -188,11 +181,11 @@ class ClassDefinition
         foreach ($this->properties as $name => $definition) {
             if (!$definition->isIgnored()) {
                 $properties[] = new FinalizedPropertyDefinition(
-                        $definition->getName(),
-                        $definition->getType(),
-                        $definition->getReferenceOn($defaultInstance),
-                        $definition->getAccessibility(),
-                        $definition->isImmutable()
+                    $definition->getName(),
+                    $definition->getType(),
+                    $definition->getReferenceOn($defaultInstance),
+                    $definition->getAccessibility(),
+                    $definition->isImmutable()
                 );
 
                 $propertiesGroupedByClass[$definition->getClass()][] = $definition->getName();
@@ -203,10 +196,10 @@ class ClassDefinition
         $cleanInstance = $this->reflection->isAbstract() ? null : clone $this->instance;
 
         return new FinalizedClassDefinition(
-                $this->reflection,
-                $cleanInstance,
-                $properties,
-                new PropertyUnsetter($propertiesGroupedByClass)
+            $this->reflection,
+            $cleanInstance,
+            $properties,
+            new PropertyUnsetter($propertiesGroupedByClass)
         );
     }
 }

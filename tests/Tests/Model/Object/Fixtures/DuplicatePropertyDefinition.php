@@ -36,6 +36,8 @@ class DuplicatePropertyDefinition extends TypedObject
 
         $class->property($this->three)->asMixed();
 
+        $class->property($this->two)->asMixed();
+
         $class->property($this->one)->asMixed();
     }
 
