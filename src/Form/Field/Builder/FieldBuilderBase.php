@@ -2,6 +2,7 @@
 
 namespace Dms\Core\Form\Field\Builder;
 
+use Dms\Core\Exception\InvalidArgumentException;
 use Dms\Core\Exception\InvalidOperationException;
 use Dms\Core\Form\Field\Field as ActualField;
 use Dms\Core\Form\Field\Options\ArrayFieldOptions;
@@ -111,12 +112,25 @@ abstract class FieldBuilderBase
      * @param IFieldProcessor $processor
      *
      * @return static
+     * @throws InvalidArgumentException
      */
     public function process(IFieldProcessor $processor)
     {
         $this->customProcessorCallbacks[] = function () use ($processor) {
             return $processor;
         };
+
+        if ($this->initialValue !== null) {
+            $messages = [];
+            $this->initialValue = $processor->process($this->initialValue, $messages);
+
+            if (!empty($messages)) {
+                throw InvalidArgumentException::format(
+                    'Invalid initial value passed to processor for field %s for processor of type %s',
+                    $this->name, get_class($processor)
+                );
+            }
+        }
 
         return $this;
     }

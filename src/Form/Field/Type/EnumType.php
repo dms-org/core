@@ -81,7 +81,7 @@ class EnumType extends ScalarType
     {
         $enumValueType = Type::scalar($this->getType());
 
-        if (!$this->get(self::ATTR_REQUIRED)) {
+        if (!$this->get(self::ATTR_REQUIRED) || $this->get(self::ATTR_READ_ONLY)) {
             $enumValueType = $enumValueType->nullable();
         }
 
