@@ -184,9 +184,11 @@ class ArrayRepository implements IRepository
             } else {
                 $this->maxId = max($this->maxId, $entity->getId());
             }
-        }
 
-        $this->collection->addRange($entities);
+            if (!$this->collection->contains($entity)) {
+                $this->collection[] = $entity;
+            }
+        }
     }
 
     /**
