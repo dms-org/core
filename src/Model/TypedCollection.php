@@ -33,7 +33,8 @@ class TypedCollection extends Collection implements ITypedCollection
         $values = [],
         IIteratorScheme $scheme = null,
         Collection $source = null
-    ) {
+    )
+    {
         $this->elementType = $elementType;
 
         foreach ($values as $value) {
@@ -92,5 +93,16 @@ class TypedCollection extends Collection implements ITypedCollection
                 $this->elementType->asTypeString(), Debug::getType($value)
             );
         }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function __debugInfo()
+    {
+        return [
+            'type'     => $this->elementType->asTypeString(),
+            'elements' => $this->asArray(),
+        ];
     }
 }

@@ -322,4 +322,9 @@ abstract class TypedObject implements ITypedObject, \Serializable
         $class = get_class($this);
         throw new InvalidOperationException("Cannot unset(...->\${$name}): property deletion is disallowed on {$class}");
     }
+    
+    public function __debugInfo()
+    {
+        return $this->properties;
+    }
 }
