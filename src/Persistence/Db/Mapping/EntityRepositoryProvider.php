@@ -47,7 +47,7 @@ class EntityRepositoryProvider implements IEntitySetProvider
     /**
      * @return IConnection
      */
-    public function getConnection() : \Dms\Core\Persistence\Db\Connection\IConnection
+    public function getConnection() : IConnection
     {
         return $this->connection;
     }
@@ -59,7 +59,7 @@ class EntityRepositoryProvider implements IEntitySetProvider
      *
      * @return IEntitySet
      */
-    public function loadDataSourceFor(string $entityType) : \Dms\Core\Model\IEntitySet
+    public function loadDataSourceFor(string $entityType) : IEntitySet
     {
         $mapper = $this->orm->getEntityMapper($entityType);
 

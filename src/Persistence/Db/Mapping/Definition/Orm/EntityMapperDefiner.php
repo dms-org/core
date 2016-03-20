@@ -3,6 +3,7 @@
 namespace Dms\Core\Persistence\Db\Mapping\Definition\Orm;
 
 use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Ioc\IIocContainer;
 use Dms\Core\Persistence\Db\Mapping\IEmbeddedObjectMapper;
 use Dms\Core\Persistence\Db\Mapping\IEntityMapper;
 use Dms\Core\Persistence\Db\Mapping\IOrm;
@@ -15,6 +16,11 @@ use Dms\Core\Persistence\Db\Mapping\IOrm;
 class EntityMapperDefiner
 {
     /**
+     * @var IIocContainer
+     */
+    private $iocContainer;
+
+    /**
      * @var callable
      */
     private $callback;
@@ -22,10 +28,12 @@ class EntityMapperDefiner
     /**
      * EntityMapperDefiner constructor.
      *
-     * @param callable $callback
+     * @param IIocContainer $iocContainer
+     * @param callable      $callback
      */
-    public function __construct(callable $callback)
+    public function __construct(IIocContainer $iocContainer = null, callable $callback)
     {
+        $this->iocContainer = $iocContainer;
         $this->callback = $callback;
     }
 
@@ -44,6 +52,17 @@ class EntityMapperDefiner
             call_user_func($this->callback, $entityMapperTypeOrFactory);
         } elseif (is_a($entityMapperTypeOrFactory, IEntityMapper::class, true)) {
             call_user_func($this->callback, function (IOrm $orm) use ($entityMapperTypeOrFactory) {
+                if ($this->iocContainer) {
+                    $originalOrm = $this->iocContainer->has(IOrm::class) ? $this->iocContainer->get(IOrm::class) : null;
+                    $this->iocContainer->bindValue(IOrm::class, $orm);
+                    
+                    $entityMapper = $this->iocContainer->get($entityMapperTypeOrFactory);
+                    
+                    $this->iocContainer->bindValue(IOrm::class, $originalOrm);
+                    
+                    return $entityMapper;
+                }
+                
                 return new $entityMapperTypeOrFactory($orm);
             });
         } else {

@@ -3,6 +3,7 @@
 namespace Dms\Core\Persistence\Db\Mapping\Definition\Orm;
 
 use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Ioc\IIocContainer;
 use Dms\Core\Persistence\Db\Mapping\IOrm;
 
 /**
@@ -12,6 +13,11 @@ use Dms\Core\Persistence\Db\Mapping\IOrm;
  */
 class OrmDefinition
 {
+    /**
+     * @var IIocContainer|null
+     */
+    protected $iocContainer;
+
     /**
      * @var callable[]
      */
@@ -28,6 +34,16 @@ class OrmDefinition
     protected $includedOrms = [];
 
     /**
+     * OrmDefinition constructor.
+     *
+     * @param IIocContainer|null $iocContainer
+     */
+    public function __construct(IIocContainer $iocContainer = null)
+    {
+        $this->iocContainer = $iocContainer;
+    }
+
+    /**
      * Registers a mapper for the supplied entity class.
      *
      * @param string $entityClass
@@ -36,7 +52,7 @@ class OrmDefinition
      */
     public function entity(string $entityClass) : EntityMapperDefiner
     {
-        return new EntityMapperDefiner(function (callable $entityMapperFactory) use ($entityClass) {
+        return new EntityMapperDefiner($this->iocContainer, function (callable $entityMapperFactory) use ($entityClass) {
             $this->entityMapperFactories[] = $entityMapperFactory;
         });
     }
@@ -71,7 +87,7 @@ class OrmDefinition
      */
     public function valueObject(string $valueObjectClass) : EmbeddedMapperDefiner
     {
-        return new EmbeddedMapperDefiner(function (callable $embeddedMapperFactory) use ($valueObjectClass) {
+        return new EmbeddedMapperDefiner($this->iocContainer, function (callable $embeddedMapperFactory) use ($valueObjectClass) {
             $this->embeddedObjectMapperFactories[$valueObjectClass] = $embeddedMapperFactory;
         });
     }

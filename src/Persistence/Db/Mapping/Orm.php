@@ -3,6 +3,7 @@
 namespace Dms\Core\Persistence\Db\Mapping;
 
 use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Ioc\IIocContainer;
 use Dms\Core\Persistence\Db\Connection\IConnection;
 use Dms\Core\Persistence\Db\Mapping\Definition\Orm\OrmDefinition;
 use Dms\Core\Persistence\Db\Schema\Database;
@@ -48,10 +49,12 @@ abstract class Orm implements IOrm
 
     /**
      * Orm constructor.
+     *
+     * @param IIocContainer $iocContainer
      */
-    public function __construct()
+    public function __construct(IIocContainer $iocContainer = null)
     {
-        $definition = new OrmDefinition();
+        $definition = new OrmDefinition($iocContainer);
         $this->define($definition);
 
         $definition->finalize(function (array $entityMapperFactories, array $embeddedObjectMapperFactories, array $includedOrms) {
