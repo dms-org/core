@@ -4,9 +4,7 @@ namespace Dms\Core\Persistence\Db\Mapping\Definition\Relation;
 
 use Dms\Core\Exception\InvalidOperationException;
 use Dms\Core\Persistence\Db\Mapping\IEntityMapper;
-use Dms\Core\Persistence\Db\Mapping\Relation\IdentifyingToOneRelation;
 use Dms\Core\Persistence\Db\Mapping\Relation\ManyToOneRelation;
-use Dms\Core\Persistence\Db\Mapping\Relation\NonIdentifyingToOneRelation;
 use Dms\Core\Persistence\Db\Mapping\Relation\Reference\ToOneRelationIdentityReference;
 use Dms\Core\Persistence\Db\Mapping\Relation\Reference\ToOneRelationObjectReference;
 use Dms\Core\Persistence\Db\Schema\ForeignKey;
@@ -28,7 +26,7 @@ class ManyToOneRelationDefiner extends RelationTypeDefinerBase
     /**
      * @var string
      */
-    private $onDeleteMode = ForeignKeyMode::SET_NULL;
+    private $onDeleteMode = ForeignKeyMode::DO_NOTHING;
 
     /**
      * Defines the bidirectional relation property that is defined
@@ -130,8 +128,8 @@ class ManyToOneRelationDefiner extends RelationTypeDefinerBase
                             [$columnName],
                             $mapper->getPrimaryTableName(),
                             [$mapper->getPrimaryTable()->getPrimaryKeyColumnName()],
-                            ForeignKeyMode::CASCADE,
-                            $this->onDeleteMode
+                            $this->onDeleteMode,
+                            ForeignKeyMode::CASCADE
                     );
                 });
     }

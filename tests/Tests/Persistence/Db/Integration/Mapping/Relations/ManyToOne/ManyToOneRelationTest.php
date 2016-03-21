@@ -56,8 +56,8 @@ class ManyToOneRelationTest extends DbIntegrationTest
                         ['child_id'],
                         'sub_entities',
                         ['id'],
-                        ForeignKeyMode::CASCADE,
-                        ForeignKeyMode::SET_NULL
+                        ForeignKeyMode::DO_NOTHING,
+                        ForeignKeyMode::CASCADE
                 )
         ], array_values($this->parentEntities->getForeignKeys()));
     }
