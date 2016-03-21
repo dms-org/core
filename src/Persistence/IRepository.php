@@ -7,6 +7,7 @@ use Dms\Core\Model\ICriteria;
 use Dms\Core\Model\IEntity;
 use Dms\Core\Model\IEntitySet;
 use Dms\Core\Model\IMutableObjectSet;
+use Dms\Core\Model\IObjectSetWithLoadCriteriaSupport;
 use Dms\Core\Model\ISpecification;
 use Dms\Core\Model\ITypedObject;
 
@@ -18,7 +19,7 @@ use Dms\Core\Model\ITypedObject;
  *
  * @author Elliot Levin <elliot@aanet.com.au>
  */
-interface IRepository extends IMutableObjectSet, IEntitySet
+interface IRepository extends IMutableObjectSet, IEntitySet, IObjectSetWithLoadCriteriaSupport
 {
     /**
      * Returns the entity type of the repository.

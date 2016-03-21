@@ -4,9 +4,11 @@ namespace Dms\Core\Persistence;
 
 use Dms\Core\Exception;
 use Dms\Core\Model\Criteria\Criteria;
+use Dms\Core\Model\Criteria\LoadCriteria;
 use Dms\Core\Model\EntityCollection;
 use Dms\Core\Model\ICriteria;
 use Dms\Core\Model\IEntity;
+use Dms\Core\Model\ILoadCriteria;
 use Dms\Core\Model\ISpecification;
 use Dms\Core\Model\ITypedObject;
 use Dms\Core\Model\Type\IType;
@@ -271,6 +273,22 @@ class ArrayRepository implements IRepository
     public function satisfying(ISpecification $specification) : array
     {
         return $this->collection->satisfying($specification);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function loadCriteria() : LoadCriteria
+    {
+        return $this->collection->loadCriteria();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function loadMatching(ILoadCriteria $criteria) : array
+    {
+        return $this->collection->loadMatching($criteria);
     }
 
     public function getIterator()
