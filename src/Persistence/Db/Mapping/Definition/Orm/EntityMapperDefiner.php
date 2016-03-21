@@ -53,14 +53,9 @@ class EntityMapperDefiner
         } elseif (is_a($entityMapperTypeOrFactory, IEntityMapper::class, true)) {
             call_user_func($this->callback, function (IOrm $orm) use ($entityMapperTypeOrFactory) {
                 if ($this->iocContainer) {
-                    $originalOrm = $this->iocContainer->has(IOrm::class) ? $this->iocContainer->get(IOrm::class) : null;
-                    $this->iocContainer->bindValue(IOrm::class, $orm);
-                    
-                    $entityMapper = $this->iocContainer->get($entityMapperTypeOrFactory);
-                    
-                    $this->iocContainer->bindValue(IOrm::class, $originalOrm);
-                    
-                    return $entityMapper;
+                    return $this->iocContainer->bindForCallback(IOrm::class, $orm, function () use ($entityMapperTypeOrFactory) {
+                        return  $this->iocContainer->get($entityMapperTypeOrFactory);
+                    });
                 }
                 
                 return new $entityMapperTypeOrFactory($orm);

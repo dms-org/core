@@ -47,4 +47,16 @@ interface IIocContainer extends ContainerInterface
      * @return void
      */
     public function bindValue(string $abstract, $concrete);
+
+    /**
+     * Binds the supplied abstract class or interface to the supplied value for the duration
+     * of the supplied callback.
+     *
+     * @param string   $abstract
+     * @param mixed    $concrete
+     * @param callable $callback
+     *
+     * @return mixed The value returned from the callback
+     */
+    public function bindForCallback(string $abstract, $concrete, callable $callback);
 }

@@ -102,4 +102,9 @@ class MockingIocContainer implements IIocContainer
     {
         throw NotImplementedException::method(__METHOD__);
     }
+
+    public function bindForCallback(string $abstract, $concrete, callable $callback)
+    {
+        throw NotImplementedException::method(__METHOD__);
+    }
 }

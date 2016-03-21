@@ -65,15 +65,13 @@ abstract class Orm implements IOrm
 
         $definition->finalize(function (array $entityMapperFactories, array $embeddedObjectMapperFactories, array $includedOrms) use ($iocContainer) {
             $this->includedOrms = $includedOrms;
+            
             if ($iocContainer) {
-                $originalOrm = $iocContainer->has(IOrm::class) ? $iocContainer->get(IOrm::class) : null;
-                $iocContainer->bindValue(IOrm::class, $this);
-            }
-
-            $this->initializeMappers($entityMapperFactories, $embeddedObjectMapperFactories);
-
-            if ($iocContainer) {
-                $iocContainer->bindValue(IOrm::class, $originalOrm);
+                $iocContainer->bindForCallback(IOrm::class, $this, function () use ($entityMapperFactories, $embeddedObjectMapperFactories) {
+                    $this->initializeMappers($entityMapperFactories, $embeddedObjectMapperFactories);
+                });
+            } else {
+                $this->initializeMappers($entityMapperFactories, $embeddedObjectMapperFactories);
             }
         });
     }

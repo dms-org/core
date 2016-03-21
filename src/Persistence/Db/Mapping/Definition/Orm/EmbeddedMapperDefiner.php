@@ -59,17 +59,14 @@ class EmbeddedMapperDefiner
             call_user_func($this->callback, function (IOrm $orm, IObjectMapper $parentMapper) use ($embeddedObjectMapperTypeOrFactory) {
 
                 if ($this->iocContainer) {
-                    $originalOrm          = $this->iocContainer->has(IOrm::class) ? $this->iocContainer->get(IOrm::class) : null;
-                    $originalParentMapper = $this->iocContainer->has(IObjectMapper::class) ? $this->iocContainer->get(IObjectMapper::class) : null;
-                    $this->iocContainer->bindValue(IOrm::class, $orm);
-                    $this->iocContainer->bindValue(IObjectMapper::class, $parentMapper);
 
-                    $objectMapper = $this->iocContainer->get($embeddedObjectMapperTypeOrFactory);
+                    return $this->iocContainer->bindForCallback(IOrm::class, $orm, function () use ($parentMapper, $embeddedObjectMapperTypeOrFactory) {
 
-                    $this->iocContainer->bindValue(IOrm::class, $originalOrm);
-                    $this->iocContainer->bindValue(IObjectMapper::class, $originalParentMapper);
+                        return $this->iocContainer->bindForCallback(IObjectMapper::class, $parentMapper, function () use ($embeddedObjectMapperTypeOrFactory) {
+                            return  $this->iocContainer->get($embeddedObjectMapperTypeOrFactory);
+                        });
 
-                    return $objectMapper;
+                    });
                 }
 
                 return new $embeddedObjectMapperTypeOrFactory($orm, $parentMapper);
