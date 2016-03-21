@@ -46,14 +46,14 @@ class RecursiveToOneRelationTest extends DbIntegrationTest
     public function testCreatesForeignKey()
     {
         $this->assertEquals([
-                new ForeignKey(
-                        'fk_recursive_entities_parent_id_recursive_entities',
-                        ['parent_id'],
-                        'recursive_entities',
-                        ['id'],
-                        ForeignKeyMode::CASCADE,
-                        ForeignKeyMode::SET_NULL
-                )
+            new ForeignKey(
+                'fk_recursive_entities_parent_id_recursive_entities',
+                ['parent_id'],
+                'recursive_entities',
+                ['id'],
+                ForeignKeyMode::SET_NULL,
+                ForeignKeyMode::CASCADE
+            ),
         ], array_values($this->entities->getForeignKeys()));
     }
 
@@ -72,17 +72,17 @@ class RecursiveToOneRelationTest extends DbIntegrationTest
     public function testCreatesForeignKeys()
     {
         $this->assertEquals(
-                [
-                        new ForeignKey(
-                                'fk_recursive_entities_parent_id_recursive_entities',
-                                ['parent_id'],
-                                'recursive_entities',
-                                ['id'],
-                                ForeignKeyMode::CASCADE,
-                                ForeignKeyMode::SET_NULL
-                        ),
-                ],
-                array_values($this->entities->getForeignKeys())
+            [
+                new ForeignKey(
+                    'fk_recursive_entities_parent_id_recursive_entities',
+                    ['parent_id'],
+                    'recursive_entities',
+                    ['id'],
+                    ForeignKeyMode::SET_NULL,
+                    ForeignKeyMode::CASCADE
+                ),
+            ],
+            array_values($this->entities->getForeignKeys())
         );
     }
 
@@ -93,13 +93,13 @@ class RecursiveToOneRelationTest extends DbIntegrationTest
         $this->repo->save($entity);
 
         $this->assertDatabaseDataSameAs([
-                'recursive_entities' => [
-                        ['id' => 1, 'parent_id' => null],
-                ],
+            'recursive_entities' => [
+                ['id' => 1, 'parent_id' => null],
+            ],
         ]);
 
         $this->assertExecutedQueryTypes([
-                'Insert entity' => Upsert::class,
+            'Insert entity' => Upsert::class,
         ]);
     }
 
@@ -110,20 +110,20 @@ class RecursiveToOneRelationTest extends DbIntegrationTest
         $this->repo->save($entity);
 
         $this->assertDatabaseDataSameAs([
-                'recursive_entities' => [
-                        ['id' => 1, 'parent_id' => null],
-                        ['id' => 2, 'parent_id' => 1],
-                        ['id' => 3, 'parent_id' => 2],
-                        ['id' => 4, 'parent_id' => 3],
-                ],
+            'recursive_entities' => [
+                ['id' => 1, 'parent_id' => null],
+                ['id' => 2, 'parent_id' => 1],
+                ['id' => 3, 'parent_id' => 2],
+                ['id' => 4, 'parent_id' => 3],
+            ],
         ]);
 
         // Multiple inserts necessary to get the id of the previous level
         $this->assertExecutedQueryTypes([
-                'Insert level 1' => Upsert::class,
-                'Insert level 2' => Upsert::class,
-                'Insert level 3' => Upsert::class,
-                'Insert level 4' => Upsert::class,
+            'Insert level 1' => Upsert::class,
+            'Insert level 2' => Upsert::class,
+            'Insert level 3' => Upsert::class,
+            'Insert level 4' => Upsert::class,
         ]);
     }
 
@@ -135,26 +135,26 @@ class RecursiveToOneRelationTest extends DbIntegrationTest
         $this->repo->save($entity);
 
         $this->assertDatabaseDataSameAs([
-                'recursive_entities' => [
-                        ['id' => 1, 'parent_id' => 1],
-                ],
+            'recursive_entities' => [
+                ['id' => 1, 'parent_id' => 1],
+            ],
         ]);
 
         $this->assertSame(1, $entity->getId());
 
         $this->assertExecutedQueryTypes([
-                'Insert recursive entity'    => Upsert::class,
-                'Update recursive entity fk' => BulkUpdate::class,
+            'Insert recursive entity'    => Upsert::class,
+            'Update recursive entity fk' => BulkUpdate::class,
         ]);
     }
 
     public function testPersistDeepExisting()
     {
         $this->setDataInDb([
-                'recursive_entities' => [
-                        ['id' => 3, 'parent_id' => null],
-                        ['id' => 4, 'parent_id' => 3],
-                ],
+            'recursive_entities' => [
+                ['id' => 3, 'parent_id' => null],
+                ['id' => 4, 'parent_id' => 3],
+            ],
         ]);
 
         $entity = $this->buildTestEntity(4);
@@ -163,34 +163,34 @@ class RecursiveToOneRelationTest extends DbIntegrationTest
         $this->repo->save($entity);
 
         $this->assertDatabaseDataSameAs([
-                'recursive_entities' => [
-                        ['id' => 3, 'parent_id' => null],
-                        ['id' => 4, 'parent_id' => null],
-                        ['id' => 5, 'parent_id' => 4],
-                        ['id' => 6, 'parent_id' => 5],
-                        ['id' => 7, 'parent_id' => 6],
-                ],
+            'recursive_entities' => [
+                ['id' => 3, 'parent_id' => null],
+                ['id' => 4, 'parent_id' => null],
+                ['id' => 5, 'parent_id' => 4],
+                ['id' => 6, 'parent_id' => 5],
+                ['id' => 7, 'parent_id' => 6],
+            ],
         ]);
 
         // Multiple inserts necessary to get the id of the previous level
         $this->assertExecutedQueryTypes([
-                'Insert level 1'              => Upsert::class,
-                'Dissociate previous level 2' => Update::class,
-                'Insert level 2'              => Upsert::class,
-                'Insert level 3'              => Upsert::class,
-                'Insert level 4'              => Upsert::class,
+            'Insert level 1'              => Upsert::class,
+            'Dissociate previous level 2' => Update::class,
+            'Insert level 2'              => Upsert::class,
+            'Insert level 3'              => Upsert::class,
+            'Insert level 4'              => Upsert::class,
         ]);
     }
 
     public function testLoad()
     {
         $this->setDataInDb([
-                'recursive_entities' => [
-                        ['id' => 1, 'parent_id' => null],
-                        ['id' => 2, 'parent_id' => 1],
-                        ['id' => 3, 'parent_id' => 2],
-                        ['id' => 4, 'parent_id' => 3],
-                ],
+            'recursive_entities' => [
+                ['id' => 1, 'parent_id' => null],
+                ['id' => 2, 'parent_id' => 1],
+                ['id' => 3, 'parent_id' => 2],
+                ['id' => 4, 'parent_id' => 3],
+            ],
         ]);
 
         $entity = $this->buildTestEntity(4);
@@ -202,23 +202,23 @@ class RecursiveToOneRelationTest extends DbIntegrationTest
 
         // Multiple inserts necessary to get the id of the previous level
         $this->assertExecutedQueryTypes([
-                'Select level 1'                             => Select::class,
-                'Select level 2'                             => Select::class,
-                'Select level 3'                             => Select::class,
-                'Select level 4'                             => Select::class,
-                'Try select level 5 (will be empty so null)' => Select::class,
+            'Select level 1'                             => Select::class,
+            'Select level 2'                             => Select::class,
+            'Select level 3'                             => Select::class,
+            'Select level 4'                             => Select::class,
+            'Try select level 5 (will be empty so null)' => Select::class,
         ]);
     }
 
     public function testLoadMidLevel()
     {
         $this->setDataInDb([
-                'recursive_entities' => [
-                        ['id' => 1, 'parent_id' => null],
-                        ['id' => 2, 'parent_id' => 1],
-                        ['id' => 3, 'parent_id' => 2],
-                        ['id' => 4, 'parent_id' => 3],
-                ],
+            'recursive_entities' => [
+                ['id' => 1, 'parent_id' => null],
+                ['id' => 2, 'parent_id' => 1],
+                ['id' => 3, 'parent_id' => 2],
+                ['id' => 4, 'parent_id' => 3],
+            ],
         ]);
 
         $entity = $this->buildTestEntity(2);
@@ -228,18 +228,18 @@ class RecursiveToOneRelationTest extends DbIntegrationTest
 
         // Multiple inserts necessary to get the id of the previous level
         $this->assertExecutedQueryTypes([
-                'Select level 1'                             => Select::class,
-                'Select level 2'                             => Select::class,
-                'Try select level 5 (will be empty so null)' => Select::class,
+            'Select level 1'                             => Select::class,
+            'Select level 2'                             => Select::class,
+            'Try select level 5 (will be empty so null)' => Select::class,
         ]);
     }
 
     public function testLoadRecursive()
     {
         $this->setDataInDb([
-                'recursive_entities' => [
-                        ['id' => 1, 'parent_id' => 1],
-                ],
+            'recursive_entities' => [
+                ['id' => 1, 'parent_id' => 1],
+            ],
         ]);
 
         $entity = new RecursiveEntity();
@@ -249,18 +249,18 @@ class RecursiveToOneRelationTest extends DbIntegrationTest
         $this->assertEquals($entity, $this->repo->get(1));
 
         $this->assertExecutedQueryTypes([
-                'Select recursive entity'                                         => Select::class,
-                'Select parent entity (then find already loaded in identity map)' => Select::class,
+            'Select recursive entity'                                         => Select::class,
+            'Select parent entity (then find already loaded in identity map)' => Select::class,
         ]);
     }
 
     public function testLoadRecursiveDeep()
     {
         $this->setDataInDb([
-                'recursive_entities' => [
-                        ['id' => 1, 'parent_id' => 2],
-                        ['id' => 2, 'parent_id' => 1],
-                ],
+            'recursive_entities' => [
+                ['id' => 1, 'parent_id' => 2],
+                ['id' => 2, 'parent_id' => 1],
+            ],
         ]);
 
         $entity = new RecursiveEntity();
@@ -272,113 +272,113 @@ class RecursiveToOneRelationTest extends DbIntegrationTest
         $this->assertEquals($entity, $this->repo->get(1));
 
         $this->assertExecutedQueryTypes([
-                'Select recursive entity 1'                                       => Select::class,
-                'Select recursive entity 2'                                       => Select::class,
-                'Select parent entity (then find already loaded in identity map)' => Select::class,
+            'Select recursive entity 1'                                       => Select::class,
+            'Select recursive entity 2'                                       => Select::class,
+            'Select parent entity (then find already loaded in identity map)' => Select::class,
         ]);
     }
 
     public function testRemove()
     {
         $this->setDataInDb([
-                'recursive_entities' => [
-                        ['id' => 1, 'parent_id' => null],
-                        ['id' => 2, 'parent_id' => 1],
-                        ['id' => 3, 'parent_id' => 2],
-                        ['id' => 4, 'parent_id' => 3],
-                ],
+            'recursive_entities' => [
+                ['id' => 1, 'parent_id' => null],
+                ['id' => 2, 'parent_id' => 1],
+                ['id' => 3, 'parent_id' => 2],
+                ['id' => 4, 'parent_id' => 3],
+            ],
         ]);
 
         $this->repo->removeById(1);
 
         $this->assertDatabaseDataSameAs([
-                'recursive_entities' => [
-                        ['id' => 2, 'parent_id' => null],
-                        ['id' => 3, 'parent_id' => 2],
-                        ['id' => 4, 'parent_id' => 3],
-                ],
+            'recursive_entities' => [
+                ['id' => 2, 'parent_id' => null],
+                ['id' => 3, 'parent_id' => 2],
+                ['id' => 4, 'parent_id' => 3],
+            ],
         ]);
 
         // Multiple inserts necessary to get the id of the previous level
         $this->assertExecutedQueryTypes([
-                'Remove foreign key' => Update::class,
-                'Delete level'       => Delete::class,
+            'Remove foreign key' => Update::class,
+            'Delete level'       => Delete::class,
         ]);
     }
 
     public function testDeleteBulk()
     {
         $this->setDataInDb([
-                'recursive_entities' => [
-                        ['id' => 1, 'parent_id' => null],
-                        ['id' => 2, 'parent_id' => 1],
-                        ['id' => 3, 'parent_id' => 2],
-                        ['id' => 4, 'parent_id' => 3],
-                ],
+            'recursive_entities' => [
+                ['id' => 1, 'parent_id' => null],
+                ['id' => 2, 'parent_id' => 1],
+                ['id' => 3, 'parent_id' => 2],
+                ['id' => 4, 'parent_id' => 3],
+            ],
         ]);
 
         $this->repo->removeAllById([1, 3]);
 
         $this->assertDatabaseDataSameAs([
-                'recursive_entities' => [
-                        ['id' => 2, 'parent_id' => null],
-                        ['id' => 4, 'parent_id' => null],
-                ],
+            'recursive_entities' => [
+                ['id' => 2, 'parent_id' => null],
+                ['id' => 4, 'parent_id' => null],
+            ],
         ]);
 
         // Multiple inserts necessary to get the id of the previous level
         $this->assertExecutedQueryTypes([
-                'Remove foreign key' => Update::class,
-                'Delete level'       => Delete::class,
+            'Remove foreign key' => Update::class,
+            'Delete level'       => Delete::class,
         ]);
     }
 
     public function testRemoveRecursive()
     {
         $this->setDataInDb([
-                'recursive_entities' => [
-                        ['id' => 1, 'parent_id' => 1],
-                ],
+            'recursive_entities' => [
+                ['id' => 1, 'parent_id' => 1],
+            ],
         ]);
 
         $this->repo->removeById(1);
 
         $this->assertDatabaseDataSameAs([
-                'recursive_entities' => [],
+            'recursive_entities' => [],
         ]);
 
 
         $this->assertExecutedQueryTypes([
-                'Remove foreign key' => Update::class,
-                'Delete entity'      => Delete::class,
+            'Remove foreign key' => Update::class,
+            'Delete entity'      => Delete::class,
         ]);
     }
 
     public function testRemoveRecursiveMultiLevel()
     {
         $this->setDataInDb([
-                'recursive_entities' => [
-                        ['id' => 1, 'parent_id' => 2],
-                        ['id' => 2, 'parent_id' => 3],
-                        ['id' => 3, 'parent_id' => 4],
-                        ['id' => 4, 'parent_id' => 1],
-                ],
+            'recursive_entities' => [
+                ['id' => 1, 'parent_id' => 2],
+                ['id' => 2, 'parent_id' => 3],
+                ['id' => 3, 'parent_id' => 4],
+                ['id' => 4, 'parent_id' => 1],
+            ],
         ]);
 
         $this->repo->removeById(1);
 
         $this->assertDatabaseDataSameAs([
-                'recursive_entities' => [
-                        ['id' => 2, 'parent_id' => 3],
-                        ['id' => 3, 'parent_id' => 4],
-                        ['id' => 4, 'parent_id' => null],
-                ],
+            'recursive_entities' => [
+                ['id' => 2, 'parent_id' => 3],
+                ['id' => 3, 'parent_id' => 4],
+                ['id' => 4, 'parent_id' => null],
+            ],
         ]);
 
 
         $this->assertExecutedQueryTypes([
-                'Remove foreign key' => Update::class,
-                'Delete entity'      => Delete::class,
+            'Remove foreign key' => Update::class,
+            'Delete entity'      => Delete::class,
         ]);
     }
 
@@ -386,24 +386,24 @@ class RecursiveToOneRelationTest extends DbIntegrationTest
     public function testLoadCriteriaWithRecursiveFlatten()
     {
         $this->setDataInDb([
-                'recursive_entities' => [
-                        ['id' => 1, 'parent_id' => 2],
-                        ['id' => 2, 'parent_id' => 1],
-                ],
+            'recursive_entities' => [
+                ['id' => 1, 'parent_id' => 2],
+                ['id' => 2, 'parent_id' => 1],
+            ],
         ]);
 
         $this->assertEquals(
-                [
-                        ['id' => 1, 'parents' => $this->repo->get(2)],
-                        ['id' => 2, 'parents' => $this->repo->get(1)],
-                ],
-                $this->repo->loadMatching(
-                        $this->repo->loadCriteria()
-                                ->loadAll([
-                                        'id',
-                                        'parent.parent.parent' => 'parents',
-                                ])
-                )
+            [
+                ['id' => 1, 'parents' => $this->repo->get(2)],
+                ['id' => 2, 'parents' => $this->repo->get(1)],
+            ],
+            $this->repo->loadMatching(
+                $this->repo->loadCriteria()
+                    ->loadAll([
+                        'id',
+                        'parent.parent.parent' => 'parents',
+                    ])
+            )
         );
     }
 }

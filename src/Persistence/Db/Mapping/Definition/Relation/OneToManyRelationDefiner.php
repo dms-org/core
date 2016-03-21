@@ -134,23 +134,23 @@ class OneToManyRelationDefiner extends RelationTypeDefinerBase
             /** @var IEntityMapper $mapper */
             $mapper = call_user_func($this->mapperLoader);
             $mapper->addForeignKey(ForeignKey::createWithNamingConvention(
-                    $mapper->getPrimaryTableName(),
-                    [$columnName],
-                    $parentTable->getName(),
-                    [$parentTable->getPrimaryKeyColumnName()],
-                    ForeignKeyMode::CASCADE,
-                    $this->identifying
-                            ? ForeignKeyMode::CASCADE
-                            : ForeignKeyMode::SET_NULL
+                $mapper->getPrimaryTableName(),
+                [$columnName],
+                $parentTable->getName(),
+                [$parentTable->getPrimaryKeyColumnName()],
+                $this->identifying
+                    ? ForeignKeyMode::CASCADE
+                    : ForeignKeyMode::SET_NULL,
+                ForeignKeyMode::CASCADE
             ));
 
             if ($this->orderPersistColumn) {
                 $persistHook = new OrderIndexPropertyLoaderHook(
-                        $mapper->getObjectType(),
-                        $mapper->getPrimaryTable(),
-                        $this->orderPersistColumn,
-                        $columnName,
-                        $mapper->getDefinition()->getPropertyLinkedToColumn($this->orderPersistColumn)
+                    $mapper->getObjectType(),
+                    $mapper->getPrimaryTable(),
+                    $this->orderPersistColumn,
+                    $columnName,
+                    $mapper->getDefinition()->getPropertyLinkedToColumn($this->orderPersistColumn)
                 );
 
                 $mapper->addPersistHook($persistHook);
@@ -160,16 +160,16 @@ class OneToManyRelationDefiner extends RelationTypeDefinerBase
             }
 
             return new ToManyRelation(
-                    $idString,
-                    $this->loadIds
-                            ? new ToManyRelationIdentityReference($mapper, $this->bidirectionalRelationProperty)
-                            : new ToManyRelationObjectReference($mapper, $this->bidirectionalRelationProperty, $persistHookId),
-                    $columnName,
-                    $this->identifying
-                            ? new IdentifyingRelationMode()
-                            : new NonIdentifyingRelationMode(),
-                    $this->orderByColumnNameDirectionMap,
-                    $this->orderPersistColumn
+                $idString,
+                $this->loadIds
+                    ? new ToManyRelationIdentityReference($mapper, $this->bidirectionalRelationProperty)
+                    : new ToManyRelationObjectReference($mapper, $this->bidirectionalRelationProperty, $persistHookId),
+                $columnName,
+                $this->identifying
+                    ? new IdentifyingRelationMode()
+                    : new NonIdentifyingRelationMode(),
+                $this->orderByColumnNameDirectionMap,
+                $this->orderPersistColumn
             );
         });
     }

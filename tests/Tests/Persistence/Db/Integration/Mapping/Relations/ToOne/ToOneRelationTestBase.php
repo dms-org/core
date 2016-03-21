@@ -2,7 +2,6 @@
 
 namespace Dms\Core\Tests\Persistence\Db\Integration\Mapping\Relations\ToOne;
 
-use Dms\Core\Persistence\Db\Mapping\IEntityMapper;
 use Dms\Core\Persistence\Db\Mapping\IOrm;
 use Dms\Core\Persistence\Db\Query\Select;
 use Dms\Core\Persistence\Db\Query\Upsert;
@@ -58,17 +57,17 @@ abstract class ToOneRelationTestBase extends DbIntegrationTest
     public function testCreatesForeignKeys()
     {
         $this->assertEquals(
-                [
-                        new ForeignKey(
-                                'fk_sub_entities_parent_id_parent_entities',
-                                ['parent_id'],
-                                'parent_entities',
-                                ['id'],
-                                ForeignKeyMode::CASCADE,
-                                $this->deleteForeignKeyMode()
-                        ),
-                ],
-                array_values($this->subEntities->getForeignKeys())
+            [
+                new ForeignKey(
+                    'fk_sub_entities_parent_id_parent_entities',
+                    ['parent_id'],
+                    'parent_entities',
+                    ['id'],
+                    $this->deleteForeignKeyMode(),
+                    ForeignKeyMode::CASCADE
+                ),
+            ],
+            array_values($this->subEntities->getForeignKeys())
         );
     }
 
@@ -79,16 +78,16 @@ abstract class ToOneRelationTestBase extends DbIntegrationTest
         $this->repo->save($entity);
 
         $this->assertDatabaseDataSameAs([
-                'parent_entities' => [
-                        ['id' => 1]
-                ],
-                'sub_entities'    => [
+            'parent_entities' => [
+                ['id' => 1],
+            ],
+            'sub_entities'    => [
 
-                ]
+            ],
         ]);
 
         $this->assertExecutedQueryTypes([
-                'Insert parent entities' => Upsert::class,
+            'Insert parent entities' => Upsert::class,
         ]);
     }
 
@@ -99,17 +98,17 @@ abstract class ToOneRelationTestBase extends DbIntegrationTest
         $this->repo->save($entity);
 
         $this->assertDatabaseDataSameAs([
-                'parent_entities' => [
-                        ['id' => 1]
-                ],
-                'sub_entities'    => [
-                        ['id' => 1, 'parent_id' => 1, 'val' => 123]
-                ]
+            'parent_entities' => [
+                ['id' => 1],
+            ],
+            'sub_entities'    => [
+                ['id' => 1, 'parent_id' => 1, 'val' => 123],
+            ],
         ]);
 
         $this->assertExecutedQueryTypes([
-                'Insert parent entities' => Upsert::class,
-                'Insert child entities'  => Upsert::class,
+            'Insert parent entities' => Upsert::class,
+            'Insert child entities'  => Upsert::class,
         ]);
     }
 
@@ -125,70 +124,70 @@ abstract class ToOneRelationTestBase extends DbIntegrationTest
         $this->repo->saveAll($entities);
 
         $this->assertDatabaseDataSameAs([
-                'parent_entities' => [
-                        ['id' => 1],
-                        ['id' => 2],
-                        ['id' => 3],
-                ],
-                'sub_entities'    => [
-                        ['id' => 1, 'parent_id' => 1, 'val' => 123],
-                        ['id' => 2, 'parent_id' => 2, 'val' => 123],
-                        ['id' => 3, 'parent_id' => 3, 'val' => 123],
-                ]
+            'parent_entities' => [
+                ['id' => 1],
+                ['id' => 2],
+                ['id' => 3],
+            ],
+            'sub_entities'    => [
+                ['id' => 1, 'parent_id' => 1, 'val' => 123],
+                ['id' => 2, 'parent_id' => 2, 'val' => 123],
+                ['id' => 3, 'parent_id' => 3, 'val' => 123],
+            ],
         ]);
 
         $this->assertExecutedQueryTypes([
-                'Insert parent entities' => Upsert::class,
-                'Insert child entities'  => Upsert::class,
+            'Insert parent entities' => Upsert::class,
+            'Insert child entities'  => Upsert::class,
         ]);
     }
 
     public function testLoad()
     {
         $this->setDataInDb([
-                'parent_entities' => [
-                        ['id' => 1],
-                ],
-                'sub_entities'    => [
-                        ['id' => 1, 'parent_id' => 1, 'val' => 123],
-                ]
+            'parent_entities' => [
+                ['id' => 1],
+            ],
+            'sub_entities'    => [
+                ['id' => 1, 'parent_id' => 1, 'val' => 123],
+            ],
         ]);
 
         $this->assertEquals($this->buildTestEntity(1, 123, 1), $this->repo->get(1));
 
         $this->assertExecutedQueryTypes([
-                'Load parent entities' => Select::class,
-                'Load child entities'  => Select::class,
+            'Load parent entities' => Select::class,
+            'Load child entities'  => Select::class,
         ]);
     }
 
     public function testBulkLoad()
     {
         $this->setDataInDb([
-                'parent_entities' => [
-                        ['id' => 1],
-                        ['id' => 2],
-                        ['id' => 3],
-                ],
-                'sub_entities'    => [
-                        ['id' => 10, 'parent_id' => 1, 'val' => 100],
-                        ['id' => 11, 'parent_id' => 2, 'val' => 200],
-                        ['id' => 12, 'parent_id' => 3, 'val' => 300],
-                ]
+            'parent_entities' => [
+                ['id' => 1],
+                ['id' => 2],
+                ['id' => 3],
+            ],
+            'sub_entities'    => [
+                ['id' => 10, 'parent_id' => 1, 'val' => 100],
+                ['id' => 11, 'parent_id' => 2, 'val' => 200],
+                ['id' => 12, 'parent_id' => 3, 'val' => 300],
+            ],
         ]);
 
         // Should still only execute two selects
         $entities = $this->repo->getAll();
 
         $this->assertEquals([
-                $this->buildTestEntity($id = 1, 100, $subId = 10),
-                $this->buildTestEntity($id = 2, 200, $subId = 11),
-                $this->buildTestEntity($id = 3, 300, $subId = 12),
+            $this->buildTestEntity($id = 1, 100, $subId = 10),
+            $this->buildTestEntity($id = 2, 200, $subId = 11),
+            $this->buildTestEntity($id = 3, 300, $subId = 12),
         ], $entities);
 
         $this->assertExecutedQueryTypes([
-                'Load all parent entities' => Select::class,
-                'Load all child entities'  => Select::class,
+            'Load all parent entities' => Select::class,
+            'Load all child entities'  => Select::class,
         ]);
     }
 }

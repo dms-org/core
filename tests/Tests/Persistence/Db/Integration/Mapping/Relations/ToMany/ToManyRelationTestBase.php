@@ -2,8 +2,6 @@
 
 namespace Dms\Core\Tests\Persistence\Db\Integration\Mapping\Relations\ToMany;
 
-use Dms\Core\Model\EntityCollection;
-use Dms\Core\Persistence\Db\Mapping\IEntityMapper;
 use Dms\Core\Persistence\Db\Mapping\IOrm;
 use Dms\Core\Persistence\Db\Query\Select;
 use Dms\Core\Persistence\Db\Query\Upsert;
@@ -11,8 +9,8 @@ use Dms\Core\Persistence\Db\Schema\ForeignKey;
 use Dms\Core\Persistence\Db\Schema\ForeignKeyMode;
 use Dms\Core\Persistence\Db\Schema\Table;
 use Dms\Core\Tests\Persistence\Db\Integration\Mapping\DbIntegrationTest;
-use Dms\Core\Tests\Persistence\Db\Integration\Mapping\Relations\Fixtures\ToManyRelation\ParentEntity;
 use Dms\Core\Tests\Persistence\Db\Integration\Mapping\Relations\Fixtures\ToManyRelation\ChildEntity;
+use Dms\Core\Tests\Persistence\Db\Integration\Mapping\Relations\Fixtures\ToManyRelation\ParentEntity;
 use Dms\Core\Tests\Persistence\Db\Mock\MockDatabase;
 
 /**
@@ -42,8 +40,8 @@ abstract class ToManyRelationTestBase extends DbIntegrationTest
 
     protected function buildTestEntity(array $childrenValues)
     {
-        $entity        = new ParentEntity();
-        
+        $entity = new ParentEntity();
+
         foreach ($childrenValues as $value) {
             $entity->children[] = new ChildEntity(null, $value);
         }
@@ -59,17 +57,17 @@ abstract class ToManyRelationTestBase extends DbIntegrationTest
     public function testCreatesForeignKeys()
     {
         $this->assertEquals(
-                [
-                        new ForeignKey(
-                                'fk_child_entities_parent_id_parent_entities',
-                                ['parent_id'],
-                                'parent_entities',
-                                ['id'],
-                                ForeignKeyMode::CASCADE,
-                                $this->deleteForeignKeyMode()
-                        ),
-                ],
-                array_values($this->childEntities->getForeignKeys())
+            [
+                new ForeignKey(
+                    'fk_child_entities_parent_id_parent_entities',
+                    ['parent_id'],
+                    'parent_entities',
+                    ['id'],
+                    $this->deleteForeignKeyMode(),
+                    ForeignKeyMode::CASCADE
+                ),
+            ],
+            array_values($this->childEntities->getForeignKeys())
         );
     }
 
@@ -80,14 +78,14 @@ abstract class ToManyRelationTestBase extends DbIntegrationTest
         $this->repo->save($entity);
 
         $this->assertDatabaseDataSameAs([
-                'parent_entities' => [
-                        ['id' => 1]
-                ],
-                'child_entities'    => []
+            'parent_entities' => [
+                ['id' => 1],
+            ],
+            'child_entities'  => [],
         ]);
 
         $this->assertExecutedQueryTypes([
-                'Insert parent entities' => Upsert::class,
+            'Insert parent entities' => Upsert::class,
         ]);
     }
 
@@ -98,20 +96,20 @@ abstract class ToManyRelationTestBase extends DbIntegrationTest
         $this->repo->save($entity);
 
         $this->assertDatabaseDataSameAs([
-                'parent_entities' => [
-                        ['id' => 1]
-                ],
-                'child_entities'    => [
-                        ['id' => 1, 'parent_id' => 1, 'val' => 1],
-                        ['id' => 2, 'parent_id' => 1, 'val' => 2],
-                        ['id' => 3, 'parent_id' => 1, 'val' => 3],
-                        ['id' => 4, 'parent_id' => 1, 'val' => 4],
-                ]
+            'parent_entities' => [
+                ['id' => 1],
+            ],
+            'child_entities'  => [
+                ['id' => 1, 'parent_id' => 1, 'val' => 1],
+                ['id' => 2, 'parent_id' => 1, 'val' => 2],
+                ['id' => 3, 'parent_id' => 1, 'val' => 3],
+                ['id' => 4, 'parent_id' => 1, 'val' => 4],
+            ],
         ]);
 
         $this->assertExecutedQueryTypes([
-                'Insert parent entities' => Upsert::class,
-                'Insert child entities'  => Upsert::class,
+            'Insert parent entities' => Upsert::class,
+            'Insert child entities'  => Upsert::class,
         ]);
     }
 
@@ -127,41 +125,41 @@ abstract class ToManyRelationTestBase extends DbIntegrationTest
         $this->repo->saveAll($entities);
 
         $this->assertDatabaseDataSameAs([
-                'parent_entities' => [
-                        ['id' => 1],
-                        ['id' => 2],
-                        ['id' => 3],
-                ],
-                'child_entities'    => [
-                        ['id' => 1, 'parent_id' => 1, 'val' => 10],
-                        ['id' => 2, 'parent_id' => 1, 'val' => 20],
-                        ['id' => 3, 'parent_id' => 1, 'val' => 30],
+            'parent_entities' => [
+                ['id' => 1],
+                ['id' => 2],
+                ['id' => 3],
+            ],
+            'child_entities'  => [
+                ['id' => 1, 'parent_id' => 1, 'val' => 10],
+                ['id' => 2, 'parent_id' => 1, 'val' => 20],
+                ['id' => 3, 'parent_id' => 1, 'val' => 30],
 
-                        ['id' => 4, 'parent_id' => 2, 'val' => 10],
-                        ['id' => 5, 'parent_id' => 2, 'val' => 20],
-                        ['id' => 6, 'parent_id' => 2, 'val' => 30],
+                ['id' => 4, 'parent_id' => 2, 'val' => 10],
+                ['id' => 5, 'parent_id' => 2, 'val' => 20],
+                ['id' => 6, 'parent_id' => 2, 'val' => 30],
 
-                        ['id' => 7, 'parent_id' => 3, 'val' => 10],
-                        ['id' => 8, 'parent_id' => 3, 'val' => 20],
-                        ['id' => 9, 'parent_id' => 3, 'val' => 30],
-                ]
+                ['id' => 7, 'parent_id' => 3, 'val' => 10],
+                ['id' => 8, 'parent_id' => 3, 'val' => 20],
+                ['id' => 9, 'parent_id' => 3, 'val' => 30],
+            ],
         ]);
 
         $this->assertExecutedQueryTypes([
-                'Insert parent entities' => Upsert::class,
-                'Insert child entities'  => Upsert::class,
+            'Insert parent entities' => Upsert::class,
+            'Insert child entities'  => Upsert::class,
         ]);
     }
 
     public function testLoad()
     {
         $this->setDataInDb([
-                'parent_entities' => [
-                        ['id' => 1],
-                ],
-                'child_entities'    => [
-                        ['id' => 1, 'parent_id' => 1, 'val' => 123],
-                ]
+            'parent_entities' => [
+                ['id' => 1],
+            ],
+            'child_entities'  => [
+                ['id' => 1, 'parent_id' => 1, 'val' => 123],
+            ],
         ]);
 
 
@@ -171,32 +169,32 @@ abstract class ToManyRelationTestBase extends DbIntegrationTest
         $this->assertEquals($entity, $this->repo->get(1));
 
         $this->assertExecutedQueryTypes([
-                'Load parent entities' => Select::class,
-                'Load child entities'  => Select::class,
+            'Load parent entities' => Select::class,
+            'Load child entities'  => Select::class,
         ]);
     }
 
     public function testBulkLoad()
     {
         $this->setDataInDb([
-                'parent_entities' => [
-                        ['id' => 1],
-                        ['id' => 2],
-                        ['id' => 3],
-                ],
-                'child_entities'    => [
-                        ['id' => 1, 'parent_id' => 1, 'val' => 10],
-                        ['id' => 2, 'parent_id' => 1, 'val' => 20],
-                        ['id' => 3, 'parent_id' => 1, 'val' => 30],
+            'parent_entities' => [
+                ['id' => 1],
+                ['id' => 2],
+                ['id' => 3],
+            ],
+            'child_entities'  => [
+                ['id' => 1, 'parent_id' => 1, 'val' => 10],
+                ['id' => 2, 'parent_id' => 1, 'val' => 20],
+                ['id' => 3, 'parent_id' => 1, 'val' => 30],
 
-                        ['id' => 4, 'parent_id' => 2, 'val' => 10],
-                        ['id' => 5, 'parent_id' => 2, 'val' => 20],
-                        ['id' => 6, 'parent_id' => 2, 'val' => 30],
+                ['id' => 4, 'parent_id' => 2, 'val' => 10],
+                ['id' => 5, 'parent_id' => 2, 'val' => 20],
+                ['id' => 6, 'parent_id' => 2, 'val' => 30],
 
-                        ['id' => 7, 'parent_id' => 3, 'val' => 10],
-                        ['id' => 8, 'parent_id' => 3, 'val' => 20],
-                        ['id' => 9, 'parent_id' => 3, 'val' => 30],
-                ]
+                ['id' => 7, 'parent_id' => 3, 'val' => 10],
+                ['id' => 8, 'parent_id' => 3, 'val' => 20],
+                ['id' => 9, 'parent_id' => 3, 'val' => 30],
+            ],
         ]);
 
         $entities = [];
@@ -213,8 +211,8 @@ abstract class ToManyRelationTestBase extends DbIntegrationTest
         $this->assertEquals($entities, $this->repo->getAll());
 
         $this->assertExecutedQueryTypes([
-                'Load all parent entities' => Select::class,
-                'Load all child entities'  => Select::class,
+            'Load all parent entities' => Select::class,
+            'Load all child entities'  => Select::class,
         ]);
     }
 }

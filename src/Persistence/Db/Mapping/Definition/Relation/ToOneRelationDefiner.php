@@ -77,25 +77,25 @@ class ToOneRelationDefiner extends RelationTypeDefinerBase
             $mapper = call_user_func($this->mapperLoader);
 
             $mapper->addForeignKey(ForeignKey::createWithNamingConvention(
-                    $mapper->getPrimaryTableName(),
-                    [$columnName],
-                    $parentTable->getName(),
-                    [$parentTable->getPrimaryKeyColumnName()],
-                    ForeignKeyMode::CASCADE,
-                    $this->identifying
-                            ? ForeignKeyMode::CASCADE
-                            : ForeignKeyMode::SET_NULL
+                $mapper->getPrimaryTableName(),
+                [$columnName],
+                $parentTable->getName(),
+                [$parentTable->getPrimaryKeyColumnName()],
+                $this->identifying
+                    ? ForeignKeyMode::CASCADE
+                    : ForeignKeyMode::SET_NULL,
+                ForeignKeyMode::CASCADE
             ));
 
             return new ToOneRelation(
-                    $idString,
-                    $this->loadIds
-                            ? new ToOneRelationIdentityReference($mapper, $this->bidirectionalRelationProperty)
-                            : new ToOneRelationObjectReference($mapper, $this->bidirectionalRelationProperty),
-                    $columnName,
-                    $this->identifying
-                            ? new IdentifyingRelationMode()
-                            : new NonIdentifyingRelationMode()
+                $idString,
+                $this->loadIds
+                    ? new ToOneRelationIdentityReference($mapper, $this->bidirectionalRelationProperty)
+                    : new ToOneRelationObjectReference($mapper, $this->bidirectionalRelationProperty),
+                $columnName,
+                $this->identifying
+                    ? new IdentifyingRelationMode()
+                    : new NonIdentifyingRelationMode()
             );
         });
     }
