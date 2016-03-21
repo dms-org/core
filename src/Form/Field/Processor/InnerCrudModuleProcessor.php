@@ -4,6 +4,8 @@ namespace Dms\Core\Form\Field\Processor;
 
 use Dms\Core\Common\Crud\Action\Object\IObjectAction;
 use Dms\Core\Common\Crud\ICrudModule;
+use Dms\Core\Form\Field\Type\FieldType;
+use Dms\Core\Form\IForm;
 use Dms\Core\Model\EntityCollection;
 use Dms\Core\Model\IMutableObjectSet;
 use Dms\Core\Model\ITypedObjectCollection;
@@ -83,12 +85,23 @@ class InnerCrudModuleProcessor extends FieldProcessor
             foreach ($stages->getAllStages() as $stage) {
                 $currentStageForm = $stage->loadForm($objectData);
 
-                $objectData += $currentStageForm->unprocess($currentStageForm->getInitialValues());
+                $objectData += $this->filterOutReadonlyFields($currentStageForm, $currentStageForm->unprocess($currentStageForm->getInitialValues()));
             }
 
             $unprocessedObjects[] = $objectData;
         }
 
         return $unprocessedObjects;
+    }
+
+    private function filterOutReadonlyFields(IForm $form, array $values) : array
+    {
+        foreach ($values as $fieldName => $value) {
+            if ($form->getField($fieldName)->getType()->get(FieldType::ATTR_READ_ONLY)) {
+                unset($values[$fieldName]);
+            }
+        }
+
+        return $values;
     }
 }
