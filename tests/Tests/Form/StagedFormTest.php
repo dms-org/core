@@ -7,6 +7,7 @@ use Dms\Core\Exception\InvalidOperationException;
 use Dms\Core\Form\Builder\Form;
 use Dms\Core\Form\Builder\StagedForm;
 use Dms\Core\Form\Field\Builder\Field;
+use Dms\Core\Form\InvalidFormSubmissionException;
 use Dms\Core\Form\Stage\DependentFormStage;
 use Dms\Core\Form\Stage\IndependentFormStage;
 use Dms\Core\Model\Type\Builder\Type;
@@ -190,7 +191,7 @@ class StagedFormTest extends FormBuilderTestBase
 
         $this->assertThrows(function () use ($form) {
             $form->getFormForStage(3, ['dependent' => 'abc']);
-        }, InvalidArgumentException::class);
+        }, InvalidFormSubmissionException::class);
     }
 
     public function testFormDependentOnAllFields()
@@ -217,6 +218,7 @@ class StagedFormTest extends FormBuilderTestBase
         $this->assertSame([], $form->getRequiredFieldGroupedByStagesForStage(1));
         $this->assertSame([1 => ['count']], $form->getRequiredFieldGroupedByStagesForStage(2));
         $this->assertSame([1 => ['first', 'count'], 2 => '*'], $form->getRequiredFieldGroupedByStagesForStage(3));
+        $this->assertSame(['field: abc'], $form->getFormForStage(3, ['count' => '3', 'dependent' => 'abc'])->getFieldNames());
 
 
         $this->assertEquals(
@@ -228,10 +230,6 @@ class StagedFormTest extends FormBuilderTestBase
                 Field::name('field: abc')->label('Label')->string()->build(),
                 $form->getFormForStage(3, ['first' => 'abc', 'count' => '3', 'dependent' => 'abc'])->getField('field: abc')
         );
-
-        $this->assertThrows(function () use ($form) {
-            $form->getFormForStage(3, ['count' => '3', 'dependent' => 'abc']);
-        }, InvalidArgumentException::class);
     }
 
     public function testThrowsExceptionForDependingOnFutureStage()

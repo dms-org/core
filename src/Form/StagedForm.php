@@ -252,13 +252,8 @@ class StagedForm implements IStagedForm
                 $requiredFieldNames = $formForStage->getFieldNames();
             }
 
-            if ($missingFields = array_diff($requiredFieldNames, array_keys($previousStagesSubmission))) {
-                throw InvalidArgumentException::format(
-                    'Invalid call to %s: cannot load form for stage %d, missing required form fields (%s)',
-                    __METHOD__, $previousStageNumber, Debug::formatValues($missingFields)
-                );
-            }
-
+            $previousStagesSubmission = $previousStagesSubmission + array_fill_keys($requiredFieldNames, null);
+            
             $fieldsToProcess = [];
 
             foreach ($formForStage->getFields() as $field) {

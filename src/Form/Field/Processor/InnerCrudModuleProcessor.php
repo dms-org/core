@@ -72,8 +72,10 @@ class InnerCrudModuleProcessor extends FieldProcessor
 
         /** @var IMutableObjectSet $input */
         foreach ($input->getAll() as $object) {
-            $stages     = $stagedForm->withSubmittedFirstStage([IObjectAction::OBJECT_FIELD_NAME => $object]);
-            $objectData = [];
+            $stages        = $stagedForm->withSubmittedFirstStage([IObjectAction::OBJECT_FIELD_NAME => $object]);
+            $processedData = [IObjectAction::OBJECT_FIELD_NAME => $object];
+            $objectData    = [];
+
             if (!($object instanceof ValueObject)) {
                 $objectId = $this->module->getDataSource()->getObjectId($object);
 
@@ -83,8 +85,9 @@ class InnerCrudModuleProcessor extends FieldProcessor
             }
 
             foreach ($stages->getAllStages() as $stage) {
-                $currentStageForm = $stage->loadForm($objectData);
+                $currentStageForm = $stage->loadForm($processedData);
 
+                $processedData += $currentStageForm->getInitialValues();
                 $objectData += $this->filterOutReadonlyFields($currentStageForm, $currentStageForm->unprocess($currentStageForm->getInitialValues()));
             }
 
