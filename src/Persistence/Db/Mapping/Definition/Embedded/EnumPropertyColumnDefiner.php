@@ -1,6 +1,7 @@
 <?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Mapping\Definition\Embedded;
+use Dms\Core\Persistence\Db\Mapping\Definition\MapperDefinition;
 
 /**
  * The enum property column definer class.
@@ -10,13 +11,33 @@ namespace Dms\Core\Persistence\Db\Mapping\Definition\Embedded;
 class EnumPropertyColumnDefiner
 {
     /**
+     * @var MapperDefinition
+     */
+    private $definition;
+
+    /**
      * @var callable
      */
-    private $callback;
+    private $enumCallback;
 
-    public function __construct(callable $callback)
+    /**
+     * @var callable
+     */
+    private $columnCallback;
+
+    /**
+     * EnumPropertyColumnDefiner constructor.
+     *
+     * @param MapperDefinition $definition
+     * @param callable         $enumCallback
+     * @param callable         $columnCallback
+     */
+    public function __construct(MapperDefinition $definition, callable $enumCallback, callable $columnCallback)
     {
-        $this->callback = $callback;
+        $this->definition = $definition;
+
+        $this->enumCallback   = $enumCallback;
+        $this->columnCallback = $columnCallback;
     }
 
     /**
@@ -28,6 +49,6 @@ class EnumPropertyColumnDefiner
      */
     public function to(string $columnName) : EnumPropertyDefiner
     {
-        return new EnumPropertyDefiner($this->callback, $columnName);
+        return new EnumPropertyDefiner($this->definition, $this->enumCallback, $this->columnCallback, $columnName);
     }
 }

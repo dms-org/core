@@ -91,7 +91,7 @@ class MemberExpressionMapper
                             'Could not map member expression \'%s\' of entity type %s: %s',
                             $member->asString(), $this->rootEntityMapper->getObjectType(), $inner->getMessage()
                     ),
-                    null,
+                    1,
                     $inner
             );
         }

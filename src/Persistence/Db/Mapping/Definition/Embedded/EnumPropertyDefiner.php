@@ -1,28 +1,25 @@
 <?php declare(strict_types = 1);
 
 namespace Dms\Core\Persistence\Db\Mapping\Definition\Embedded;
+use Dms\Core\Persistence\Db\Mapping\Definition\Column\ColumnTypeDefiner;
+use Dms\Core\Persistence\Db\Mapping\Definition\MapperDefinition;
 
 /**
  * The enum property definer class.
  *
  * @author Elliot Levin <elliotlevin@hotmail.com>
  */
-class EnumPropertyDefiner
+class EnumPropertyDefiner extends ColumnTypeDefiner
 {
     /**
      * @var callable
      */
-    private $callback;
+    private $enumCallback;
 
-    /**
-     * @var string
-     */
-    private $columnName;
-
-    public function __construct(callable $callback, $columnName)
+    public function __construct(MapperDefinition $definition, callable $enumCallback, callable $columnCallback, $columnName)
     {
-        $this->callback   = $callback;
-        $this->columnName = $columnName;
+        parent::__construct($definition, $columnCallback, $columnName, false);
+        $this->enumCallback = $enumCallback;
     }
 
     /**
@@ -33,7 +30,7 @@ class EnumPropertyDefiner
      */
     public function usingValuesFromConstants()
     {
-        call_user_func($this->callback, $this->columnName, null);
+        call_user_func($this->enumCallback, $this->name, null);
     }
 
     /**
@@ -47,6 +44,6 @@ class EnumPropertyDefiner
      */
     public function usingValueMap(array $enumValueMap)
     {
-        call_user_func($this->callback, $this->columnName, $enumValueMap);
+        call_user_func($this->enumCallback, $this->name, $enumValueMap);
     }
 }

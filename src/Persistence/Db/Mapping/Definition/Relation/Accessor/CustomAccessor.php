@@ -35,6 +35,22 @@ class CustomAccessor implements IAccessor
     }
 
     /**
+     * @return callable
+     */
+    public function getGetterCallback() : callable
+    {
+        return $this->getterCallback;
+    }
+
+    /**
+     * @return callable
+     */
+    public function getSetterCallback() : callable
+    {
+        return $this->setterCallback;
+    }
+
+    /**
      * @inheritDoc
      */
     public function getCompatibleType()

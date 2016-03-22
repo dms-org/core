@@ -8,6 +8,7 @@ use Dms\Core\Model\Object\FinalizedClassDefinition;
 use Dms\Core\Module\InvalidHandlerClassException;
 use Dms\Core\Persistence\Db\Mapping\Definition\MapperDefinition;
 use Dms\Core\Persistence\Db\Schema\Column;
+use Dms\Core\Persistence\Db\Schema\Type\Type;
 use Dms\Core\Util\Debug;
 
 /**
@@ -53,30 +54,43 @@ class EnumMapper extends ValueObjectMapper
     private $flippedValueMap;
 
     /**
-     * @param IOrm          $orm
-     * @param bool          $nullable
-     * @param string        $columnName
-     * @param string        $enumClass
-     * @param array|null    $valueMap
+     * @var Type
+     */
+    private $columnType;
+
+    /**
+     * @param IOrm       $orm
+     * @param bool       $nullable
+     * @param string     $columnName
+     * @param string     $enumClass
+     * @param array|null $valueMap
+     * @param Type|null  $columnType
      *
      * @throws InvalidArgumentException
      * @throws InvalidHandlerClassException
      */
-    public function __construct(IOrm $orm, bool $nullable, string $columnName, string $enumClass, array $valueMap = null)
-    {
+    public function __construct(
+        IOrm $orm,
+        bool $nullable,
+        string $columnName,
+        string $enumClass,
+        array $valueMap = null,
+        Type $columnType = null
+    ) {
         $this->nullable      = $nullable;
         $this->columnName    = $columnName;
         $this->enumClassName = $enumClass;
         if (!is_subclass_of($enumClass, Enum::class, true)) {
             throw InvalidHandlerClassException::format(
-                    'Invalid enum class: must be instance of %s, %s given',
-                    Enum::class,
-                    $enumClass
+                'Invalid enum class: must be instance of %s, %s given',
+                Enum::class,
+                $enumClass
             );
         }
 
         /** @var Enum $enumClass */
-        $this->enumClass = $enumClass::definition();
+        $this->enumClass  = $enumClass::definition();
+        $this->columnType = $columnType;
 
         if ($valueMap !== null) {
             $options         = $enumClass::getOptions();
@@ -84,9 +98,9 @@ class EnumMapper extends ValueObjectMapper
 
             if (array_diff($options, $suppliedOptions) || array_diff($suppliedOptions, $options)) {
                 throw InvalidArgumentException::format(
-                        'Invalid enum value map: missing (%s) added (%s)',
-                        Debug::formatValues(array_diff($options, $suppliedOptions)),
-                        Debug::formatValues(array_diff($suppliedOptions, $options))
+                    'Invalid enum value map: missing (%s) added (%s)',
+                    Debug::formatValues(array_diff($options, $suppliedOptions)),
+                    Debug::formatValues(array_diff($suppliedOptions, $options))
                 );
             }
 
@@ -123,14 +137,14 @@ class EnumMapper extends ValueObjectMapper
 
         if ($this->valueMap) {
             $valueProperty = $valueProperty
-                    ->mappedVia(
-                            function ($phpValue) {
-                                return $this->valueMap[$phpValue];
-                            },
-                            function ($dbValue) {
-                                return $this->flippedValueMap[$dbValue];
-                            }
-                    );
+                ->mappedVia(
+                    function ($phpValue) {
+                        return $this->valueMap[$phpValue];
+                    },
+                    function ($dbValue) {
+                        return $this->flippedValueMap[$dbValue];
+                    }
+                );
         }
 
         if ($this->nullable) {
@@ -143,6 +157,10 @@ class EnumMapper extends ValueObjectMapper
             $valueProperty = $valueProperty->nullable();
         }
 
-        $valueProperty->asEnum($this->options);
+        if ($this->columnType) {
+            $valueProperty->asType($this->columnType);
+        } else {
+            $valueProperty->asEnum($this->options);
+        }
     }
 }
