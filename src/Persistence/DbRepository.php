@@ -259,10 +259,26 @@ class DbRepository extends DbRepositoryBase implements IRepository
 
         InvalidArgumentException::verifyAll(__METHOD__, 'ids', $ids, 'is_int');
 
-        return $this->load(
+        $identityMap = $this->loadingContext->getIdentityMap($this->getEntityType());
+        $entities = [];
+
+        foreach ($ids as $key => $id) {
+            if ($identityMap->has($id)) {
+                $entities[$key] = $identityMap->get($id);
+                unset($ids[$key]);
+            }
+        }
+
+        if($ids) {
+            $newEntities = $this->load(
                 $this->select()
-                        ->where(Expr::in($this->primaryKey(), Expr::tuple($this->parameterIds($ids))))
-        );
+                    ->where(Expr::in($this->primaryKey(), Expr::tuple($this->parameterIds($ids))))
+            );
+
+            $entities = array_merge($entities, $newEntities);
+        }
+
+        return $entities;
     }
 
     /**
