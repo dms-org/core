@@ -354,7 +354,7 @@ class ManyToManyRelation extends ToManyRelationBase
         }
 
         $relatedDelete = $delete
-                ->join(Join::inner($parentDelete->getTable(), $alias, [$joinOnCondition]));
+                ->prependJoin(Join::inner($parentDelete->getTable(), $alias, [$joinOnCondition]));
 
         $context->queue($relatedDelete);
     }
