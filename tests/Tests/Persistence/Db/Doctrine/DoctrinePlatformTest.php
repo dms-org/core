@@ -104,7 +104,7 @@ WHERE `id` IN (SELECT * FROM (
 ) `foo`)
 SQL
                 , $query->getSql());
-        $this->assertSame([1 => 15], $query->getParameters());
+        $this->assertSame([0 => 15], $query->getParameters());
     }
 
     public function testSimpleUpdate()
@@ -149,7 +149,7 @@ WHERE `id` IN (SELECT * FROM (
 ) `foo`)
 SQL
                 , $query->getSql());
-        $this->assertSame([1 => 15], $query->getParameters());
+        $this->assertSame([0 => 15], $query->getParameters());
     }
 
     public function testCompiledUpdateWithMultipleWhereConditions()

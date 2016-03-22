@@ -93,9 +93,9 @@ class DoctrinePlatform extends Platform
         }
 
         return $queryBuilder
-                ->insert($this->identifier($table->getName()))
-                ->values($escapedIdentifierValues)
-                ->getSQL();
+            ->insert($this->identifier($table->getName()))
+            ->values($escapedIdentifierValues)
+            ->getSQL();
     }
 
     /**
@@ -175,13 +175,13 @@ class DoctrinePlatform extends Platform
 
         foreach ($query->getAliasColumnMap() as $alias => $expression) {
             $queryBuilder->addSelect(
-                    $this->compileExpression($queryBuilder, $expression) . ' AS ' . $this->identifier($alias)
+                $this->compileExpression($queryBuilder, $expression) . ' AS ' . $this->identifier($alias)
             );
         }
 
         $queryBuilder->from(
-                $this->identifier($query->getTableName()),
-                $query->isTableAliased() ? $this->identifier($query->getTableAlias()) : null
+            $this->identifier($query->getTableName()),
+            $query->isTableAliased() ? $this->identifier($query->getTableAlias()) : null
         );
 
         $this->compileJoins($queryBuilder, $query);
@@ -203,24 +203,25 @@ class DoctrinePlatform extends Platform
         $queryBuilder = $this->doctrineConnection->createQueryBuilder();
 
         $queryBuilder->update(
-                $this->identifier($query->getTableName()),
-                $query->isTableAliased() ? $this->identifier($query->getTableAlias()) : null
+            $this->identifier($query->getTableName()),
+            $query->isTableAliased() ? $this->identifier($query->getTableAlias()) : null
         );
 
         foreach ($query->getColumnSetMap() as $columnName => $expression) {
             $queryBuilder->set(
-                    $this->identifier($columnName),
-                    $this->compileExpression($queryBuilder, $expression)
+                $this->identifier($columnName),
+                $this->compileExpression($queryBuilder, $expression)
             );
         }
 
         if ($query->getJoins() || $query->getOrderings() || $query->hasLimitOrOffset()) {
             $subQuery = $this->compileAsSubSelectPrimaryKey($query);
             $queryBuilder->where($queryBuilder->expr()->in(
-                    $this->identifier($query->getTable()->getPrimaryKeyColumnName()),
-                    $this->wrapInDerivedTable($subQuery, $query)
+                $this->identifier($query->getTable()->getPrimaryKeyColumnName()),
+                $this->wrapInDerivedTable($subQuery, $query)
             ));
-            $queryBuilder->setParameters($subQuery->getParameters());
+
+            $this->mergeQueryParameters($queryBuilder, $subQuery->getParameters());
         } else {
             $this->compileWhere($queryBuilder, $query);
         }
@@ -237,23 +238,37 @@ class DoctrinePlatform extends Platform
         $queryBuilder = $this->doctrineConnection->createQueryBuilder();
 
         $queryBuilder->delete(
-                $this->identifier($query->getTableName()),
-                $query->isTableAliased() ? $this->identifier($query->getTableAlias()) : null
+            $this->identifier($query->getTableName()),
+            $query->isTableAliased() ? $this->identifier($query->getTableAlias()) : null
         );
 
         if ($query->getJoins() || $query->getOrderings() || $query->hasLimitOrOffset()) {
             $subQuery = $this->compileAsSubSelectPrimaryKey($query);
             $queryBuilder->where($queryBuilder->expr()->in(
-                    $this->identifier($query->getTable()->getPrimaryKeyColumnName()),
-                    $this->wrapInDerivedTable($subQuery, $query)
+                $this->identifier($query->getTable()->getPrimaryKeyColumnName()),
+                $this->wrapInDerivedTable($subQuery, $query)
             ));
-            $queryBuilder->setParameters($subQuery->getParameters());
+
+            $this->mergeQueryParameters($queryBuilder, $subQuery->getParameters());
         } else {
             $this->compileWhere($queryBuilder, $query);
         }
 
         $compiled->sql        = $queryBuilder->getSQL();
         $compiled->parameters = $queryBuilder->getParameters();
+    }
+
+    protected function mergeQueryParameters(QueryBuilder $queryBuilder, array $newParameters)
+    {
+        $currentPosition = max(array_filter(array_keys($queryBuilder->getParameters()), 'is_int') ?: [-1]) + 1;
+
+        foreach ($newParameters as $key => $value) {
+            if (is_int($key)) {
+                $queryBuilder->setParameter($currentPosition++, $value);
+            } else {
+                $queryBuilder->setParameter($key, $value);
+            }
+        }
     }
 
     private function compileAsSubSelectPrimaryKey(Query $query)
@@ -264,12 +279,12 @@ class DoctrinePlatform extends Platform
 
         if ($fromTable->hasPrimaryKeyColumn()) {
             $subSelect->setColumns([
-                    $fromTable->getPrimaryKeyColumnName() => Expr::column($subSelect->getTableAlias(), $fromTable->getPrimaryKeyColumn())
+                $fromTable->getPrimaryKeyColumnName() => Expr::column($subSelect->getTableAlias(), $fromTable->getPrimaryKeyColumn())
             ]);
         } else {
             throw InvalidArgumentException::format(
-                    'Cannot select primary key from table \'%s\' for update/delete query: table has no primary key defined',
-                    $fromTable->getName()
+                'Cannot select primary key from table \'%s\' for update/delete query: table has no primary key defined',
+                $fromTable->getName()
             );
         }
 
@@ -281,8 +296,8 @@ class DoctrinePlatform extends Platform
         $queryBuilder = $this->doctrineConnection->createQueryBuilder();
 
         $queryBuilder
-                ->select('*')
-                ->from('(' . $subQuery->getSql() . ')', $this->identifier($query->getTableAlias()));
+            ->select('*')
+            ->from('(' . $subQuery->getSql() . ')', $this->identifier($query->getTableAlias()));
 
         return $queryBuilder->getSQL();
     }
@@ -312,8 +327,8 @@ class DoctrinePlatform extends Platform
     {
         foreach ($query->getOrderings() as $ordering) {
             $queryBuilder->orderBy(
-                    $this->compileExpression($queryBuilder, $ordering->getExpression()),
-                    $ordering->isAsc() ? 'ASC' : 'DESC'
+                $this->compileExpression($queryBuilder, $ordering->getExpression()),
+                $ordering->isAsc() ? 'ASC' : 'DESC'
             );
         }
     }
@@ -322,8 +337,8 @@ class DoctrinePlatform extends Platform
     {
         if ($query->hasLimitOrOffset()) {
             $queryBuilder
-                    ->setFirstResult($query->getOffset())
-                    ->setMaxResults($query->getLimit());
+                ->setFirstResult($query->getOffset())
+                ->setMaxResults($query->getLimit());
         }
     }
 
@@ -347,10 +362,10 @@ class DoctrinePlatform extends Platform
             }
 
             $queryBuilder->{$method}(
-                    $this->identifier($fromAlias),
-                    $this->identifier($join->getTableName()),
-                    $this->identifier($join->getAlias()),
-                    $join->getOn() ? $this->compileExpression($queryBuilder, Expr::compoundAnd($join->getOn())) : '1=1'
+                $this->identifier($fromAlias),
+                $this->identifier($join->getTableName()),
+                $this->identifier($join->getAlias()),
+                $join->getOn() ? $this->compileExpression($queryBuilder, Expr::compoundAnd($join->getOn())) : '1=1'
             );
 
             $fromAlias = $join->getAlias();
