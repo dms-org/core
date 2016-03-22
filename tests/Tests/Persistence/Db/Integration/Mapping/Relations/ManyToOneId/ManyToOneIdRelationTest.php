@@ -192,7 +192,6 @@ class ManyToOneIdRelationTest extends DbIntegrationTest
 
         $this->assertExecutedQueryTypes([
                 'Load parent entities' => Select::class,
-                'Load all child ids'   => Select::class,
         ]);
     }
 
@@ -222,7 +221,6 @@ class ManyToOneIdRelationTest extends DbIntegrationTest
 
         $this->assertExecutedQueryTypes([
                 'Load all parent entities' => Select::class,
-                'Load all child ids'       => Select::class,
         ]);
     }
 

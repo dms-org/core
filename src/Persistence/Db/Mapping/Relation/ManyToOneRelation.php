@@ -3,9 +3,11 @@
 namespace Dms\Core\Persistence\Db\Mapping\Relation;
 
 use Dms\Core\Persistence\Db\LoadingContext;
+use Dms\Core\Persistence\Db\Mapping\ParentChildItem;
 use Dms\Core\Persistence\Db\Mapping\ParentChildMap;
 use Dms\Core\Persistence\Db\Mapping\ParentMapBase;
 use Dms\Core\Persistence\Db\Mapping\Relation\Reference\IToOneRelationReference;
+use Dms\Core\Persistence\Db\Mapping\Relation\Reference\RelationIdentityReference;
 use Dms\Core\Persistence\Db\PersistenceContext;
 use Dms\Core\Persistence\Db\Query\Clause\Join;
 use Dms\Core\Persistence\Db\Query\Delete;
@@ -54,8 +56,8 @@ class ManyToOneRelation extends ToOneRelationBase
 
         if (!$this->foreignKeyColumn) {
             throw InvalidRelationException::format(
-                    'Invalid related foreign key column %s does not exist on parent table %s',
-                    $foreignKeyToRelated, $parentTable->getName()
+                'Invalid related foreign key column %s does not exist on parent table %s',
+                $foreignKeyToRelated, $parentTable->getName()
             );
         }
     }
@@ -114,6 +116,44 @@ class ManyToOneRelation extends ToOneRelationBase
     }
 
     /**
+     * @param LoadingContext $context
+     * @param ParentChildMap $map
+     *
+     * @return void
+     */
+    public function load(LoadingContext $context, ParentChildMap $map)
+    {
+        $filteredParentMap = new ParentChildMap();
+        $parentItemMap     = new \SplObjectStorage();
+        $relatedEntityMap  = $context->getIdentityMap($this->mapper->getObjectType());
+
+        foreach ($map->getItems() as $item) {
+            $relatedId = $item->getParent()->getColumn($this->foreignKeyToRelated);
+
+            if ($relatedId === null) {
+                $item->setChild(null);
+            } elseif ($this->reference instanceof RelationIdentityReference) {
+                $item->setChild((int)$relatedId);
+            } elseif ($relatedEntityMap->has($relatedId)) {
+                $item->setChild($relatedEntityMap->get($relatedId));
+            } else {
+                $filteredParentMap->add($item->getParent(), null);
+                $parentItemMap[$item->getParent()] = $item;
+            }
+        }
+
+        if ($filteredParentMap->getAllChildren()) {
+            parent::load($context, $filteredParentMap);
+
+            foreach ($filteredParentMap->getItems() as $item) {
+                /** @var ParentChildItem $originalItem */
+                $originalItem = $parentItemMap[$item->getParent()];
+                $originalItem->setChild($item->getChild());
+            }
+        }
+    }
+
+    /**
      * @inheritDoc
      */
     public function getRelationSelectFromParentRows(ParentMapBase $map, &$parentIdColumnName = null) : \Dms\Core\Persistence\Db\Query\Select
@@ -166,7 +206,7 @@ class ManyToOneRelation extends ToOneRelationBase
         $relatedTableAlias = $select->generateUniqueAliasFor($this->relatedTable->getName());
 
         $select->join(new Join($joinType, $this->relatedTable, $relatedTableAlias, [
-                $this->getRelationJoinCondition($parentTableAlias, $relatedTableAlias)
+            $this->getRelationJoinCondition($parentTableAlias, $relatedTableAlias),
         ]));
 
         return $relatedTableAlias;
@@ -178,8 +218,8 @@ class ManyToOneRelation extends ToOneRelationBase
     public function getRelationJoinCondition(string $parentTableAlias, string $relatedTableAlias) : \Dms\Core\Persistence\Db\Query\Expression\Expr
     {
         return Expr::equal(
-                Expr::column($parentTableAlias, $this->foreignKeyColumn),
-                Expr::column($relatedTableAlias, $this->relatedPrimaryKey)
+            Expr::column($parentTableAlias, $this->foreignKeyColumn),
+            Expr::column($relatedTableAlias, $this->relatedPrimaryKey)
         );
     }
 }
