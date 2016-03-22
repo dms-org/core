@@ -109,21 +109,21 @@ class EmbeddedRelationTypeDefiner
     {
         return new EmbeddedValueObjectDefiner($this->orm,
             function (callable $mapperLoader, string $issetColumnName = null, bool $isUnique) {
-                if ($issetColumnName) {
-                    $this->definition->addColumn(new Column($issetColumnName, new Boolean()));
-                    $isNullable = $issetColumnName !== null;
-                } else {
-                    $isNullable = false;
-                }
-
                 // Use null object mapper as parent to load the columns
                 /** @var IEmbeddedObjectMapper $tempMapper */
                 $tempMapper  = $mapperLoader(new NullObjectMapper());
                 $columnNames = [];
-                foreach ($tempMapper->getDefinition()->getTable()->getColumns() as $column) {
-                    $this->definition->addColumn($isNullable ? $column->asNullable() : $column);
+                $embeddedObjectTable = $tempMapper->getDefinition()->getTable();
+                
+                if ($issetColumnName && !$embeddedObjectTable->hasColumn($issetColumnName)) {
+                    $this->definition->addColumn(new Column($issetColumnName, new Boolean()));
+                }
+
+                foreach ($embeddedObjectTable->getColumns() as $column) {
+                    $this->definition->addColumn($issetColumnName ? $column->asNullable() : $column);
                     $columnNames[] = $column->getName();
                 }
+
 
                 if ($isUnique) {
                     $this->definition->unique($this->definition->getTableName() . '_' . implode('_', $columnNames) . '_unique_index')
