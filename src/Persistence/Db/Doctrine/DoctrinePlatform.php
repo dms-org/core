@@ -260,7 +260,7 @@ class DoctrinePlatform extends Platform
 
     protected function mergeQueryParameters(QueryBuilder $queryBuilder, array $newParameters)
     {
-        $currentPosition = max(array_filter(array_keys($queryBuilder->getParameters()), 'is_int') ?: [-1]) + 1;
+        $currentPosition = max(array_filter(array_keys($queryBuilder->getParameters()), 'is_int') ?: [0]) + 1;
 
         foreach ($newParameters as $key => $value) {
             if (is_int($key)) {
