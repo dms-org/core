@@ -170,6 +170,18 @@ class RowCriteria implements IRowCriteria
     }
 
     /**
+     * Clears the loaded columns.
+     *
+     * @return static
+     */
+    public function clearLoadedColumns()
+    {
+        $this->columnsToLoad = [];
+
+        return $this;
+    }
+
+    /**
      * Sets the condition mode of the criteria.
      *
      * @param string $conditionMode
@@ -211,6 +223,18 @@ class RowCriteria implements IRowCriteria
     public function setConditionModeToOr()
     {
         return $this->setConditionMode(self::CONDITION_MODE_OR);
+    }
+
+    /**
+     * Clears the conditions.
+     *
+     * @return static
+     */
+    public function clearConditions()
+    {
+        $this->conditionGroups = [];
+
+        return $this;
     }
 
     /**
@@ -263,6 +287,18 @@ class RowCriteria implements IRowCriteria
     }
 
     /**
+     * Clears the orderings.
+     *
+     * @return static
+     */
+    public function clearOrderings()
+    {
+        $this->orderings = [];
+
+        return $this;
+    }
+
+    /**
      * Adds an ordering on the supplied column component.
      *
      * @param string $componentId
@@ -309,6 +345,18 @@ class RowCriteria implements IRowCriteria
     public function getGroupings() : array
     {
         return $this->groupings;
+    }
+
+    /**
+     * Clears the groupings
+     *
+     * @return static
+     */
+    public function clearGroupings()
+    {
+        $this->groupings = [];
+        
+        return $this;
     }
 
     /**

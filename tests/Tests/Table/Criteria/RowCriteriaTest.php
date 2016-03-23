@@ -238,4 +238,19 @@ class RowCriteriaTest extends CmsTestCase
 
         $this->assertEquals(RowCriteria::fromExisting($this->criteria), $this->criteria);
     }
+
+    public function testClear()
+    {
+        $this->criteria
+            ->loadAll()
+            ->where('name.last_name', '!=', null)
+            ->groupBy('age')
+            ->orderByAsc('name.first_name')
+            ->clearLoadedColumns()
+            ->clearConditions()
+            ->clearGroupings()
+            ->clearOrderings();
+
+        $this->assertEquals(new RowCriteria($this->structure), $this->criteria);
+    }
 }
