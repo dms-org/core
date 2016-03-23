@@ -43,15 +43,24 @@ class ToManyRelationAggregateMapping extends RelationMapping
      * @param MemberMapping   $argumentMemberMapping
      */
     public function __construct(
-            IEntityMapper $rootEntityMapper,
-            array $relationsToSubSelect,
-            IToManyRelation $relation,
-            string $aggregateType,
-            MemberMapping $argumentMemberMapping
+        IEntityMapper $rootEntityMapper,
+        array $relationsToSubSelect,
+        IToManyRelation $relation,
+        string $aggregateType,
+        MemberMapping $argumentMemberMapping
     ) {
         parent::__construct($rootEntityMapper, $relationsToSubSelect, $relation);
         $this->aggregateType         = $aggregateType;
         $this->argumentMemberMapping = $argumentMemberMapping;
+    }
+
+    public function getWhereConditionExpr(Select $select, string $tableAlias, string $operator, $value) : Expr
+    {
+        if ($this->argumentMemberMapping instanceof ToOneEmbeddedObjectMapping && $this->argumentMemberMapping->isSingleColumnObject()) {
+            $value = $this->argumentMemberMapping->getColumnDataForObject($value)->getColumn($this->argumentMemberMapping->getSingleColumn()->getName());
+        }
+
+        return parent::getWhereConditionExpr($select, $tableAlias, $operator, $value);
     }
 
     /**

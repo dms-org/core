@@ -16,6 +16,7 @@ use Dms\Core\Persistence\Db\PersistenceContext;
 use Dms\Core\Persistence\Db\Query\Expression\BinOp;
 use Dms\Core\Persistence\Db\Query\Expression\Expr;
 use Dms\Core\Persistence\Db\Query\Select;
+use Dms\Core\Persistence\Db\Row;
 use Dms\Core\Persistence\Db\Schema\Column;
 use Dms\Core\Util\Debug;
 
@@ -54,7 +55,7 @@ class ToOneEmbeddedObjectMapping extends ToOneRelationMapping implements IFinalR
     /**
      * @return bool
      */
-    protected function isSingleColumnObject() : bool
+    public function isSingleColumnObject() : bool
     {
         return $this->getSingleColumn() !== null;
     }
@@ -62,7 +63,7 @@ class ToOneEmbeddedObjectMapping extends ToOneRelationMapping implements IFinalR
     /**
      * @return Column|null
      */
-    protected function getSingleColumn()
+    public function getSingleColumn()
     {
         $embeddedColumns = $this->relation->getMapper()->getDefinition()->getTable()->getColumns();
 
@@ -77,18 +78,18 @@ class ToOneEmbeddedObjectMapping extends ToOneRelationMapping implements IFinalR
         $isSingleColumn = $this->isSingleColumnObject();
 
         $multiColumnOperators = [
-                ConditionOperator::EQUALS,
-                ConditionOperator::NOT_EQUALS,
-                ConditionOperator::IN,
-                ConditionOperator::NOT_IN
+            ConditionOperator::EQUALS,
+            ConditionOperator::NOT_EQUALS,
+            ConditionOperator::IN,
+            ConditionOperator::NOT_IN
         ];
 
         $isEqualityOperator = in_array($operator, $multiColumnOperators, true);
 
         if (!$isSingleColumn && !$isEqualityOperator) {
             throw MemberExpressionMappingException::format(
-                    'Cannot compare value object of type %s using the \'%s\' operator, only (%s) are supported in multi-column value objects',
-                    $this->getRelatedObjectType(), $operator, Debug::formatValues($multiColumnOperators)
+                'Cannot compare value object of type %s using the \'%s\' operator, only (%s) are supported in multi-column value objects',
+                $this->getRelatedObjectType(), $operator, Debug::formatValues($multiColumnOperators)
             );
         }
 
@@ -119,32 +120,30 @@ class ToOneEmbeddedObjectMapping extends ToOneRelationMapping implements IFinalR
         return $this->getValueObjectConditionExpr($select, $tableAlias, $this->mapConditionOperator($operator), $value);
     }
 
-    protected function getValueObjectConditionExpr(Select $select, $tableAlias, $dbOperator, $value)
+    public function getValueObjectConditionExpr(Select $select, $tableAlias, $dbOperator, $value)
     {
         if ($value === null) {
             return $this->compareValueObjectWithNull($select, $tableAlias, $dbOperator);
         }
 
-        $table = $select->getTableFromAlias($tableAlias);
+        $table   = $select->getTableFromAlias($tableAlias);
+        $rowData = $this->getColumnDataForObject($value);
 
-        /** @var EmbeddedParentObjectMapping $embeddedDefinition */
-        $embeddedDefinition = $this->relation->getEmbeddedObjectMapper()->getMapping();
-        $rowData            = $embeddedDefinition->persistObject(PersistenceContext::dummy(), $value);
         $columnExpressions  = [];
 
         foreach ($rowData->getColumnData() as $columnName => $value) {
             $column = $table->getColumn($columnName);
 
             $columnExpressions[] = new BinOp(
-                    Expr::column($tableAlias, $column),
-                    $dbOperator,
-                    Expr::param(null, $value)
+                Expr::column($tableAlias, $column),
+                $dbOperator,
+                Expr::param(null, $value)
             );
         }
 
         return $dbOperator === BinOp::EQUAL
-                ? Expr::compoundAnd($columnExpressions)
-                : Expr::compoundOr($columnExpressions);
+            ? Expr::compoundAnd($columnExpressions)
+            : Expr::compoundOr($columnExpressions);
     }
 
     protected function compareValueObjectWithNull(Select $select, $tableAlias, $dbOperator)
@@ -154,12 +153,12 @@ class ToOneEmbeddedObjectMapping extends ToOneRelationMapping implements IFinalR
 
             if ($this->relation->issetColumnIsWithinValueObject()) {
                 return $dbOperator === BinOp::EQUAL
-                        ? Expr::isNull($issetColumn)
-                        : Expr::isNotNull($issetColumn);
+                    ? Expr::isNull($issetColumn)
+                    : Expr::isNotNull($issetColumn);
             } else {
                 return $dbOperator === BinOp::EQUAL
-                        ? Expr::equal($issetColumn, Expr::param($issetColumn->getResultingType(), false))
-                        : Expr::equal($issetColumn, Expr::param($issetColumn->getResultingType(), true));
+                    ? Expr::equal($issetColumn, Expr::param($issetColumn->getResultingType(), false))
+                    : Expr::equal($issetColumn, Expr::param($issetColumn->getResultingType(), true));
             }
         }
 
@@ -173,8 +172,8 @@ class ToOneEmbeddedObjectMapping extends ToOneRelationMapping implements IFinalR
     {
         if (!$this->isSingleColumnObject()) {
             throw InvalidOperationException::format(
-                    'Cannot order by value object of type %s: multi-column value objects ordering are not supported',
-                    $this->getRelatedObjectType()
+                'Cannot order by value object of type %s: multi-column value objects ordering are not supported',
+                $this->getRelatedObjectType()
             );
         }
 
@@ -201,5 +200,19 @@ class ToOneEmbeddedObjectMapping extends ToOneRelationMapping implements IFinalR
         }
 
         return Expr::column($tableAlias, $this->getSingleColumn());
+    }
+
+    /**
+     * @param $value
+     *
+     * @return Row
+     */
+    public function getColumnDataForObject($value) : Row
+    {
+        /** @var EmbeddedParentObjectMapping $embeddedDefinition */
+        $embeddedDefinition = $this->relation->getEmbeddedObjectMapper()->getMapping();
+        $rowData            = $embeddedDefinition->persistObject(PersistenceContext::dummy(), $value);
+
+        return $rowData;
     }
 }
