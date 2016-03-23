@@ -5,6 +5,7 @@ namespace Dms\Core\Persistence\Db\Criteria\MemberMapping;
 use Dms\Core\Persistence\Db\Mapping\IEntityMapper;
 use Dms\Core\Persistence\Db\Mapping\Relation\IRelation;
 use Dms\Core\Persistence\Db\Mapping\Relation\IToManyRelation;
+use Dms\Core\Persistence\Db\Query\Expression\Expr;
 use Dms\Core\Persistence\Db\Query\Expression\SimpleAggregate;
 use Dms\Core\Persistence\Db\Query\Select;
 
@@ -56,7 +57,7 @@ class ToManyRelationAggregateMapping extends RelationMapping
     /**
      * @inheritDoc
      */
-    protected function getSingleValueExpressionInSelect(Select $select, string $tableAlias) : \Dms\Core\Persistence\Db\Query\Expression\Expr
+    protected function getSingleValueExpressionInSelect(Select $select, string $tableAlias) : Expr
     {
         $argument = $this->argumentMemberMapping->getExpressionInSelect($select, $tableAlias);
 

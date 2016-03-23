@@ -5,8 +5,10 @@ namespace Dms\Core\Persistence\Db\Criteria\MemberMapping;
 use Dms\Core\Exception\InvalidOperationException;
 use Dms\Core\Exception\NotImplementedException;
 use Dms\Core\Model\Criteria\Condition\ConditionOperator;
+use Dms\Core\Persistence\Db\Criteria\MemberExpressionMappingException;
 use Dms\Core\Persistence\Db\Mapping\Hierarchy\EmbeddedParentObjectMapping;
 use Dms\Core\Persistence\Db\Mapping\IEntityMapper;
+use Dms\Core\Persistence\Db\Mapping\ReadModel\Relation\MemberRelation;
 use Dms\Core\Persistence\Db\Mapping\ReadModel\Relation\ToOneMemberRelation;
 use Dms\Core\Persistence\Db\Mapping\Relation\Embedded\EmbeddedObjectRelation;
 use Dms\Core\Persistence\Db\Mapping\Relation\IRelation;
@@ -44,7 +46,7 @@ class ToOneEmbeddedObjectMapping extends ToOneRelationMapping implements IFinalR
     /**
      * @inheritDoc
      */
-    public function asMemberRelation() : \Dms\Core\Persistence\Db\Mapping\ReadModel\Relation\MemberRelation
+    public function asMemberRelation() : MemberRelation
     {
         return new ToOneMemberRelation($this);
     }
@@ -70,7 +72,7 @@ class ToOneEmbeddedObjectMapping extends ToOneRelationMapping implements IFinalR
     /**
      * @inheritDoc
      */
-    public function getWhereConditionExpr(Select $select, string $tableAlias, string $operator, $value) : \Dms\Core\Persistence\Db\Query\Expression\Expr
+    public function getWhereConditionExpr(Select $select, string $tableAlias, string $operator, $value) : Expr
     {
         $isSingleColumn = $this->isSingleColumnObject();
 
@@ -192,8 +194,12 @@ class ToOneEmbeddedObjectMapping extends ToOneRelationMapping implements IFinalR
     /**
      * @inheritDoc
      */
-    protected function getSingleValueExpressionInSelect(Select $select, string $tableAlias) : \Dms\Core\Persistence\Db\Query\Expression\Expr
+    protected function getSingleValueExpressionInSelect(Select $select, string $tableAlias) : Expr
     {
-        throw NotImplementedException::method(__METHOD__);
+        if (!$this->isSingleColumnObject()) {
+            throw InvalidOperationException::format('Cannot treat a value object of type %s as an expression: value object is composed of multiple columns', $this->getRelatedObjectType());
+        }
+
+        return Expr::column($tableAlias, $this->getSingleColumn());
     }
 }
