@@ -7,7 +7,6 @@ use Dms\Core\Model\EntityCollection;
 use Dms\Core\Model\IEntity;
 use Dms\Core\Model\Type\Builder\Type;
 use Dms\Core\Model\Type\CollectionType;
-use Dms\Core\Model\Type\IType;
 use Dms\Core\Util\Hashing\IHashable;
 
 /**
@@ -94,14 +93,8 @@ abstract class Entity extends TypedObject implements IEntity, IHashable
     /**
      * {@inheritDoc}
      */
-    final public function setId(int $id)
+    final public function setId(int $id = null)
     {
-        if ($this->id !== null) {
-            throw Exception\InvalidOperationException::methodCall(__METHOD__, 'the id has already been set');
-        }
-
-        Exception\InvalidArgumentException::verifyNotNull(__METHOD__, 'id', $id);
-
         $this->id = $id;
     }
 

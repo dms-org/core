@@ -45,17 +45,17 @@ class EntityTest extends TypedObjectTest
         $this->assertTrue($this->object->hasId());
     }
 
-    public function testSetIdToNullThrows()
+    public function testSetIdToNull()
     {
-        $this->setExpectedException(\TypeError::class);
         $this->object->setId(null);
+        $this->assertSame(null, $this->object->getId());
     }
 
-    public function testSetIdAfterItIsSetThrows()
+    public function testSetIdAfterItIsSet()
     {
-        $this->setExpectedException(InvalidOperationException::class);
         $this->object->setId(12);
         $this->object->setId(14);
+        $this->assertSame(14, $this->object->getId());
     }
 
     public function testBuildWithId()
