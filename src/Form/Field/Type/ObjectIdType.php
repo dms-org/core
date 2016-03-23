@@ -3,13 +3,11 @@
 namespace Dms\Core\Form\Field\Type;
 
 use Dms\Core\Form\Field\Options\ObjectIdentityOptions;
-use Dms\Core\Form\Field\Processor\CustomProcessor;
+use Dms\Core\Form\Field\Processor\EmptyStringToNullProcessor;
 use Dms\Core\Form\Field\Processor\ObjectIdProcessor;
 use Dms\Core\Form\Field\Processor\ObjectLoaderProcessor;
 use Dms\Core\Form\Field\Processor\Validator\ObjectIdValidator;
 use Dms\Core\Form\IFieldProcessor;
-use Dms\Core\Language\Message;
-use Dms\Core\Model\EntityCollection;
 use Dms\Core\Model\IIdentifiableObjectSet;
 use Dms\Core\Model\Type\Builder\Type;
 use Dms\Core\Model\Type\IType as IPhpType;
@@ -67,8 +65,9 @@ class ObjectIdType extends FieldType
     protected function buildProcessors() : array
     {
         $processors = [
-                new ObjectIdProcessor(Type::mixed()),
-                new ObjectIdValidator(Type::string()->union(Type::int())->nullable(), $this->objects),
+            new EmptyStringToNullProcessor(Type::mixed()),
+            new ObjectIdProcessor(Type::mixed()),
+            new ObjectIdValidator(Type::string()->union(Type::int())->nullable(), $this->objects),
         ];
 
         if ($this->loadAsObjects) {
