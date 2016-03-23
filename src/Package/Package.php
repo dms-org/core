@@ -232,13 +232,15 @@ abstract class Package implements IPackage
      */
     final public function loadModules() : array
     {
+        $modulesInOriginalOrder = [];
+
         foreach ($this->nameModuleClassMap as $name => $moduleClass) {
             if (!isset($this->loadingModules[$name])) {
-                $this->loadModule($name);
+                $modulesInOriginalOrder[$name] = $this->loadModule($name);
             }
         }
-
-        return $this->loadedModules;
+        
+        return $modulesInOriginalOrder;
     }
 
     /**
