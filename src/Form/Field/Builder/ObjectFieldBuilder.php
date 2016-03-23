@@ -13,24 +13,13 @@ use Dms\Core\Form\Field\Type\FieldType;
 class ObjectFieldBuilder extends ObjectFieldBuilderBase
 {
     /**
-     * @inheritdoc
+     * @param callable $callback
      */
-    public function labelledBy(string $memberExpression)
+    protected function updateOptions(callable $callback)
     {
         /** @var ObjectIdentityOptions $options */
-        $options = $this->type->get(FieldType::ATTR_OPTIONS);
+        $options = $this->attributes[FieldType::ATTR_OPTIONS] ?? $this->type->get(FieldType::ATTR_OPTIONS);
 
-        return $this->attr(FieldType::ATTR_OPTIONS, $options->withLabelMemberExpression($memberExpression));
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function labelledByCallback(callable $labelCallback)
-    {
-        /** @var ObjectIdentityOptions $options */
-        $options = $this->type->get(FieldType::ATTR_OPTIONS);
-
-        return $this->attr(FieldType::ATTR_OPTIONS, $options->withLabelCallback($labelCallback));
+        $this->attr(FieldType::ATTR_OPTIONS, $callback($options));
     }
 }

@@ -10,7 +10,7 @@ namespace Dms\Core\Form;
 interface IFieldOptions
 {
     /**
-     * Gets the field name.
+     * Gets the available field options
      *
      * @return IFieldOption[]
      */
@@ -19,7 +19,14 @@ interface IFieldOptions
     /**
      * Gets all the option values.
      *
-     * @return mixed
+     * @return mixed[]
      */
-    public function getAllValues();
+    public function getAllValues() : array;
+
+    /**
+     * Gets all the enabled option values.
+     *
+     * @return mixed[]
+     */
+    public function getEnabledValues() : array;
 }

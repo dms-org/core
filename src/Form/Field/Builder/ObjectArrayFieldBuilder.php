@@ -2,6 +2,7 @@
 
 namespace Dms\Core\Form\Field\Builder;
 
+use Dms\Core\Form\Field\Options\ObjectIdentityOptions;
 use Dms\Core\Form\Field\Options\ObjectIndexOptions;
 use Dms\Core\Form\Field\Type\ArrayOfObjectIdsType;
 use Dms\Core\Form\Field\Type\ArrayOfType;
@@ -16,9 +17,9 @@ class ObjectArrayFieldBuilder extends ObjectFieldBuilderBase
     use ArrayFieldBuilderTrait;
 
     /**
-     * @inheritdoc
+     * @param callable $callback
      */
-    public function labelledBy(string $memberExpression)
+    protected function updateOptions(callable $callback)
     {
         /** @var ArrayOfObjectIdsType $fieldType */
         $fieldType = $this->type;
@@ -27,29 +28,8 @@ class ObjectArrayFieldBuilder extends ObjectFieldBuilderBase
         $elementType = $fieldType->getElementType();
         $options     = $elementType->getOptions();
 
-        $objectIdFieldType = $elementType->with(ArrayOfType::ATTR_OPTIONS, $options->withLabelMemberExpression($memberExpression));
+        $objectIdFieldType = $elementType->with(ArrayOfType::ATTR_OPTIONS, $callback($options));
 
         $this->type = $fieldType->withElementFieldType($objectIdFieldType);
-
-        return $this;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function labelledByCallback(callable $labelCallback)
-    {
-        /** @var ArrayOfObjectIdsType $fieldType */
-        $fieldType = $this->type;
-
-        /** @var ObjectIndexOptions $options */
-        $elementType = $fieldType->getElementType();
-        $options     = $elementType->getOptions();
-
-        $objectIdFieldType = $elementType->with(ArrayOfType::ATTR_OPTIONS, $options->withLabelCallback($labelCallback));
-
-        $this->type = $fieldType->withElementFieldType($objectIdFieldType);
-
-        return $this;
     }
 }

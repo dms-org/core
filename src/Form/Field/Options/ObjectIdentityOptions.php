@@ -29,20 +29,40 @@ abstract class ObjectIdentityOptions implements IFieldOptions
     protected $labelMemberExpression;
 
     /**
+     * @var callable|null
+     */
+    protected $enabledCallback;
+
+    /**
+     * @var callable|null
+     */
+    protected $disabledLabelCallback;
+
+    /**
      * EntityIdOptions constructor.
      *
      * @param IIdentifiableObjectSet $objects
      * @param callable|null          $labelCallback
      * @param string|null            $labelMemberExpression
+     * @param callable|null          $enabledCallback
+     * @param callable|null          $disabledLabelCallback
      */
-    public function __construct(IIdentifiableObjectSet $objects, callable $labelCallback = null, string $labelMemberExpression = null)
-    {
+    public function __construct(
+        IIdentifiableObjectSet $objects,
+        callable $labelCallback = null,
+        string $labelMemberExpression = null,
+        callable $enabledCallback = null,
+        callable $disabledLabelCallback = null
+    ) {
         $this->objects       = $objects;
         $this->labelCallback = $labelCallback;
 
         if ($labelMemberExpression) {
             $this->loadLabelCallbackFromMemberExpression($labelMemberExpression);
         }
+
+        $this->enabledCallback       = $enabledCallback;
+        $this->disabledLabelCallback = $disabledLabelCallback;
     }
 
     protected function loadLabelCallbackFromMemberExpression(string $labelMemberExpression)
@@ -76,12 +96,15 @@ abstract class ObjectIdentityOptions implements IFieldOptions
         $options = [];
 
         foreach ($this->objects->getAll() as $index => $object) {
-            $id = $this->getObjectIdentity($index, $object);
+            $id       = $this->getObjectIdentity($index, $object);
+            $label    = (string)($this->labelCallback ? call_user_func($this->labelCallback, $object) : $id);
+            $disabled = $this->enabledCallback ? !call_user_func($this->enabledCallback, $object) : false;
 
-            $options[] = new FieldOption(
-                $id,
-                (string)($this->labelCallback ? call_user_func($this->labelCallback, $object) : $id)
-            );
+            if ($disabled && $this->disabledLabelCallback) {
+                $label = call_user_func($this->disabledLabelCallback, $label);
+            }
+
+            $options[] = new FieldOption($id, $label, $disabled);
         }
 
         return $options;
@@ -90,7 +113,7 @@ abstract class ObjectIdentityOptions implements IFieldOptions
     /**
      * {@inheritDoc}
      */
-    public function getAllValues()
+    public function getAllValues() : array
     {
         $ids     = [];
         $objects = $this->objects->getAll();
@@ -100,6 +123,24 @@ abstract class ObjectIdentityOptions implements IFieldOptions
         }
 
         return $ids;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getEnabledValues() : array
+    {
+        if ($this->enabledCallback) {
+            $values = [];
+
+            foreach ($this->getAll() as $option) {
+                $values[] = $option->getValue();
+            }
+
+            return $values;
+        } else {
+            return $this->getAllValues();
+        }
     }
 
     /**
@@ -127,6 +168,34 @@ abstract class ObjectIdentityOptions implements IFieldOptions
         $clone = clone $this;
 
         $clone->loadLabelCallbackFromMemberExpression($memberExpression);
+
+        return $clone;
+    }
+
+    /**
+     * @param callable $enabledCallback
+     *
+     * @return static
+     */
+    public function withEnabledCallback(callable $enabledCallback)
+    {
+        $clone = clone $this;
+
+        $clone->enabledCallback = $enabledCallback;
+
+        return $clone;
+    }
+
+    /**
+     * @param callable $disabledLabelCallback
+     *
+     * @return static
+     */
+    public function withDisabledLabelCallback(callable $disabledLabelCallback)
+    {
+        $clone = clone $this;
+
+        $clone->disabledLabelCallback = $disabledLabelCallback;
 
         return $clone;
     }

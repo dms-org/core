@@ -26,10 +26,17 @@ class EntityIdOptions extends ObjectIdentityOptions
      * @param IEntitySet    $entities
      * @param callable|null $labelCallback
      * @param string|null   $labelMemberExpression
+     * @param callable|null      $enabledCallback
+     * @param callable|null      $disabledLabelCallback
      */
-    public function __construct(IEntitySet $entities, callable $labelCallback = null, string $labelMemberExpression = null)
-    {
-        parent::__construct($entities, $labelCallback, $labelMemberExpression);
+    public function __construct(
+        IEntitySet $entities,
+        callable $labelCallback = null,
+        string $labelMemberExpression = null,
+        callable $enabledCallback = null,
+        callable $disabledLabelCallback = null
+    ) {
+        parent::__construct($entities, $labelCallback, $labelMemberExpression, $enabledCallback, $disabledLabelCallback);
     }
 
     /**
@@ -37,7 +44,7 @@ class EntityIdOptions extends ObjectIdentityOptions
      */
     public function getAll() : array
     {
-        if ($this->objects instanceof IObjectSetWithLoadCriteriaSupport && $this->labelMemberExpression) {
+        if ($this->objects instanceof IObjectSetWithLoadCriteriaSupport && $this->labelMemberExpression && !$this->enabledCallback) {
             return $this->loadOptionsViaOptimizedLoadCriteria($this->objects, $this->labelMemberExpression);
         }
 
@@ -50,7 +57,10 @@ class EntityIdOptions extends ObjectIdentityOptions
      *
      * @return IFieldOption[]
      */
-    private function loadOptionsViaOptimizedLoadCriteria(IObjectSetWithLoadCriteriaSupport $entities, $labelMemberExpression = null) : array
+    private function loadOptionsViaOptimizedLoadCriteria(
+        IObjectSetWithLoadCriteriaSupport $entities,
+        $labelMemberExpression = null
+    ) : array
     {
         $criteria = $entities->loadCriteria();
 
@@ -74,7 +84,7 @@ class EntityIdOptions extends ObjectIdentityOptions
     /**
      * {@inheritDoc}
      */
-    public function getAllValues()
+    public function getAllValues() : array
     {
         if ($this->objects instanceof IObjectSetWithLoadCriteriaSupport) {
             return array_column(

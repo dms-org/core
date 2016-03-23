@@ -268,6 +268,51 @@ class FieldBuilderTest extends FieldBuilderTestBase
         $this->assertEquals(Type::mixed(), $type->getPhpTypeOfInput());
     }
 
+    public function testEntityWithDisabledOptions()
+    {
+        $entity1 = $this->getMock(Entity::class);
+        $entity1->setId(1);
+        $entity2 = $this->getMock(Entity::class);
+        $entity2->setId(2);
+
+        $entities = new EntityCollection(Entity::class, [$entity1, $entity2]);
+        $field    = $this->field()->entityFrom($entities)
+            ->enabledWhen(function (Entity $entity) {
+                return $entity->getId() > 1;
+            })
+            ->withDisabledLabels(function (string $label) {
+                return 'Disabled: ' . $label;
+            })
+            ->build();
+
+        /** @var ArrayOfType $type */
+        $type = $field->getType();
+
+        $this->assertEquals([new FieldOption(1, 'Disabled: 1', true), new FieldOption(2, '2')], $type->getOptions()->getAll());
+    }
+
+    public function testEntityArrayWithDisabledOptions()
+    {
+        $entity1 = $this->getMock(Entity::class);
+        $entity1->setId(1);
+        $entity2 = $this->getMock(Entity::class);
+        $entity2->setId(2);
+
+        $entities = new EntityCollection(Entity::class, [$entity1, $entity2]);
+        $field    = $this->field()->entitiesFrom($entities)
+            ->enabledWhen(function (Entity $entity) {
+                return $entity->getId() > 1;
+            })
+            ->withDisabledLabels(function (string $label) {
+                return 'Disabled: ' . $label;
+            })
+            ->build();
+
+        /** @var ArrayOfType $type */
+        $type = $field->getType();
+
+        $this->assertEquals([new FieldOption(1, 'Disabled: 1', true), new FieldOption(2, '2')], $type->getElementType()->getOptions()->getAll());
+    }
 
     public function testEntityArrayField()
     {

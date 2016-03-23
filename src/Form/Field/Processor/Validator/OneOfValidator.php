@@ -33,7 +33,7 @@ class OneOfValidator extends FieldValidator
      */
     protected function validate($input, array &$messages)
     {
-        $allowedValues = $this->options->getAllValues();
+        $allowedValues = $this->options->getEnabledValues();
         if (!in_array($input, $allowedValues, true)) {
             $messages[] = new Message(self::MESSAGE, ['options' => implode(', ', $allowedValues)]);
         }

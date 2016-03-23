@@ -20,17 +20,23 @@ class FieldOption implements IFieldOption
      * @var string
      */
     private $label;
+    /**
+     * @var bool
+     */
+    private $disabled;
 
     /**
      * FieldOption constructor.
      *
      * @param mixed  $value
      * @param string $label
+     * @param bool   $disabled
      */
-    public function __construct($value, string $label)
+    public function __construct($value, string $label, bool $disabled = false)
     {
         $this->value = $value;
         $this->label = $label;
+        $this->disabled = $disabled;
     }
 
     /**
@@ -47,5 +53,13 @@ class FieldOption implements IFieldOption
     public function getLabel() : string
     {
         return $this->label;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isDisabled() : bool
+    {
+        return $this->disabled;
     }
 }

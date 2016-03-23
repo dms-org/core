@@ -2,6 +2,8 @@
 
 namespace Dms\Core\Form\Field\Builder;
 
+use Dms\Core\Form\Field\Options\ObjectIdentityOptions;
+
 /**
  * The object field builder base class.
  *
@@ -16,14 +18,86 @@ abstract class ObjectFieldBuilderBase extends FieldBuilderBase
      *
      * @return static
      */
-    abstract public function labelledBy(string $memberExpression);
+    public function labelledBy(string $memberExpression)
+    {
+        $this->updateOptions(function (ObjectIdentityOptions $options) use ($memberExpression) {
+            return $options->withLabelMemberExpression($memberExpression);
+        });
+
+        return $this;
+    }
 
     /**
      * Labels the object options with the returned values of the supplied callback.
+     *
+     * Example:
+     * <code>
+     * ->labelledByCallback(function (SomeObject $object) : string {
+     *      return $object->string;
+     * })
+     * </code>
      *
      * @param callable $labelCallback
      *
      * @return static
      */
-    abstract public function labelledByCallback(callable $labelCallback);
+    public function labelledByCallback(callable $labelCallback)
+    {
+        $this->updateOptions(function (ObjectIdentityOptions $options) use ($labelCallback) {
+            return $options->withLabelCallback($labelCallback);
+        });
+
+        return $this;
+    }
+
+    /**
+     * Enables the options according to the supplied callback.
+     *
+     * Example:
+     * <code>
+     * ->enabledWhen(function (SomeObject $object) : bool {
+     *      return $object->satisfiesCondition();
+     * })
+     * </code>
+     *
+     * @param callable $enabledCallback
+     *
+     * @return static
+     */
+    public function enabledWhen(callable $enabledCallback)
+    {
+        $this->updateOptions(function (ObjectIdentityOptions $options) use ($enabledCallback) {
+            return $options->withEnabledCallback($enabledCallback);
+        });
+
+        return $this;
+    }
+
+    /**
+     * Changes the labels of the disabled items with the supplied callback.
+     *
+     * Example:
+     * <code>
+     * ->withDisabledLabels(function (string $originalLabel) : string {
+     *      return 'Disabled: ' . $originalLabel;
+     * })
+     * </code>
+     *
+     * @param callable $disabledLabelCallback
+     *
+     * @return static
+     */
+    public function withDisabledLabels(callable $disabledLabelCallback)
+    {
+        $this->updateOptions(function (ObjectIdentityOptions $options) use ($disabledLabelCallback) {
+            return $options->withDisabledLabelCallback($disabledLabelCallback);
+        });
+
+        return $this;
+    }
+
+    /**
+     * @param callable $callback
+     */
+    abstract protected function updateOptions(callable $callback);
 }

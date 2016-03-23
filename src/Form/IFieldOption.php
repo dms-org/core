@@ -21,4 +21,11 @@ interface IFieldOption
      * @return string
      */
     public function getLabel() : string;
+
+    /**
+     * Returns whether the field is disabled
+     *
+     * @return bool
+     */
+    public function isDisabled() : bool;
 }
