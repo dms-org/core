@@ -80,6 +80,10 @@ abstract class MemberRelation extends Relation
      */
     public function loadRelation(LoadingContext $context, ParentMapBase $map)
     {
+        if (!$map->getAllParents()) {
+            return;
+        }
+
         $separateTableRelations = $this->memberMapping->getSeperateTableRelations();
 
         /** @var ISeparateTableRelation|null $firstRelation */

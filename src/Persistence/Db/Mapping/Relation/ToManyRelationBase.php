@@ -49,6 +49,10 @@ abstract class ToManyRelationBase extends EntityRelation implements ISeparateToM
      */
     public function load(LoadingContext $context, ParentChildrenMap $map)
     {
+        if (!$map->getItems()) {
+            return;
+        }
+        
         $select = $this->getRelationSelectFromParentRows($map, $parentIdColumnName);
 
         $this->loadFromSelect($context, $map, $select, $select->getTableAlias(), $parentIdColumnName);

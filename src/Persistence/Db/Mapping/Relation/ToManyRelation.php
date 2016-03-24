@@ -254,7 +254,7 @@ class ToManyRelation extends ToManyRelationBase
     /**
      * @inheritDoc
      */
-    public function getRelationSelectFromParentRows(ParentMapBase $map, &$parentIdColumnName = null) : \Dms\Core\Persistence\Db\Query\Select
+    public function getRelationSelectFromParentRows(ParentMapBase $map, &$parentIdColumnName = null) : Select
     {
         $primaryKey = $map->getPrimaryKeyColumn();
         $parentIds  = [];
@@ -345,7 +345,7 @@ class ToManyRelation extends ToManyRelationBase
     /**
      * @inheritDoc
      */
-    public function getRelationSubSelect(Select $outerSelect, string $parentTableAlias) : \Dms\Core\Persistence\Db\Query\Select
+    public function getRelationSubSelect(Select $outerSelect, string $parentTableAlias) : Select
     {
         $subSelect = $outerSelect->buildSubSelect($this->relatedTable);
 

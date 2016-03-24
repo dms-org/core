@@ -50,6 +50,10 @@ abstract class ToOneRelationBase extends EntityRelation implements ISeparateToOn
      */
     public function load(LoadingContext $context, ParentChildMap $map)
     {
+        if (!$map->getItems()) {
+            return;
+        }
+        
         $select = $this->getRelationSelectFromParentRows($map, $parentIdColumnName);
 
         $this->loadFromSelect($context, $map, $select, $select->getTableAlias(), $parentIdColumnName);
