@@ -42,7 +42,7 @@ abstract class Package implements IPackage
     protected $dashboard;
 
     /**
-     * @var string[]
+     * @var string[]|callable[]
      */
     protected $nameModuleClassMap;
 
@@ -193,15 +193,21 @@ abstract class Package implements IPackage
     }
 
     /**
-     * @param string $name
-     * @param string $moduleClass
+     * @param string          $name
+     * @param string|callable $moduleClass
      *
      * @return IModule
      * @throws InvalidArgumentException
      */
-    private function loadModuleFromClass(string $name, string $moduleClass) : IModule
+    private function loadModuleFromClass(string $name, $moduleClass) : IModule
     {
-        if (!is_subclass_of($moduleClass, IModule::class, true)) {
+        $moduleFactory = is_callable($moduleClass)
+            ? $moduleClass
+            : function () use ($moduleClass) {
+                return $this->container->get($moduleClass);
+            };
+
+        if (is_string($moduleClass) && !is_subclass_of($moduleClass, IModule::class, true)) {
             throw InvalidArgumentException::format(
                 'Invalid module class defined within package \'%s\': expecting subclass of %s, %s given',
                 $this->name, IModule::class, $moduleClass
@@ -211,7 +217,7 @@ abstract class Package implements IPackage
         $this->loadingModules[$name] = true;
 
         /** @var IModule $module */
-        $module = $this->container->get($moduleClass);
+        $module = $moduleFactory();
 
         unset($this->loadingModules[$name]);
 
@@ -239,7 +245,7 @@ abstract class Package implements IPackage
                 $modulesInOriginalOrder[$name] = $this->loadModule($name);
             }
         }
-        
+
         return $modulesInOriginalOrder;
     }
 

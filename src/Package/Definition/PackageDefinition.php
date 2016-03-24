@@ -22,7 +22,7 @@ class PackageDefinition
     protected $metadata = [];
 
     /**
-     * @var string[]
+     * @var string[]|callable[]
      */
     protected $nameModuleClassMap = [];
 
@@ -92,7 +92,9 @@ class PackageDefinition
      * ]);
      * </code>
      *
-     * @param string[] $nameModuleClassMap
+     * You may also pass a callback to initialize the module.
+     *
+     * @param string[]|callable[] $nameModuleClassMap
      *
      * @return void
      */

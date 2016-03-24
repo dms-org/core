@@ -20,7 +20,7 @@ class FinalizedPackageDefinition
     private $metadata;
 
     /**
-     * @var string[]
+     * @var string[]|callable[]
      */
     private $nameModuleClassMap;
 
@@ -32,15 +32,15 @@ class FinalizedPackageDefinition
     /**
      * FinalizedPackageDefinition constructor.
      *
-     * @param string   $name
-     * @param array    $metadata
-     * @param string[] $nameModuleClassMap
-     * @param string[] $dashboardWidgetNames
+     * @param string              $name
+     * @param array               $metadata
+     * @param string[]|callable[] $nameModuleClassMap
+     * @param string[]            $dashboardWidgetNames
      */
     public function __construct(string $name, array $metadata, array $nameModuleClassMap, array $dashboardWidgetNames)
     {
-        $this->name     = $name;
-        $this->metadata = $metadata;
+        $this->name                 = $name;
+        $this->metadata             = $metadata;
         $this->nameModuleClassMap   = $nameModuleClassMap;
         $this->dashboardWidgetNames = $dashboardWidgetNames;
     }
@@ -62,7 +62,7 @@ class FinalizedPackageDefinition
     }
 
     /**
-     * @return string[]
+     * @return string[]|callable[]
      */
     public function getNameModuleClassMap() : array
     {

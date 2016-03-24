@@ -5,6 +5,7 @@ namespace Dms\Core\Tests\Package;
 use Dms\Common\Testing\CmsTestCase;
 use Dms\Core\Auth\Permission;
 use Dms\Core\Exception\InvalidOperationException;
+use Dms\Core\Module\Module;
 use Dms\Core\Module\ModuleNotFoundException;
 use Dms\Core\Tests\Helpers\Mock\MockingIocContainer;
 use Dms\Core\Tests\Module\Fixtures\ModuleWithActions;
@@ -51,7 +52,7 @@ class PackageTest extends CmsTestCase
 
     public function testModuleNames()
     {
-        $this->assertSame(['test-module-with-actions', 'test-module-with-charts'], $this->package->getModuleNames());
+        $this->assertSame(['test-module-with-actions', 'test-module-with-charts', 'test-module-factory'], $this->package->getModuleNames());
     }
 
     public function testDashboard()
@@ -67,6 +68,7 @@ class PackageTest extends CmsTestCase
     {
         $this->assertSame(true, $this->package->hasModule('test-module-with-actions'));
         $this->assertSame(true, $this->package->hasModule('test-module-with-charts'));
+        $this->assertSame(true, $this->package->hasModule('test-module-factory'));
         $this->assertSame(false, $this->package->hasModule('non-existent'));
     }
 
@@ -74,20 +76,23 @@ class PackageTest extends CmsTestCase
     {
         $modules = $this->package->loadModules();
 
-        $this->assertSame(['test-module-with-actions', 'test-module-with-charts'], array_keys($modules));
+        $this->assertSame(['test-module-with-actions', 'test-module-with-charts', 'test-module-factory'], array_keys($modules));
 
         $this->assertInstanceOf(ModuleWithActions::class, $modules['test-module-with-actions']);
         $this->assertInstanceOf(ModuleWithCharts::class, $modules['test-module-with-charts']);
+        $this->assertInstanceOf(Module::class, $modules['test-module-factory']);
     }
 
     public function testLoadModule()
     {
         $this->assertInstanceOf(ModuleWithActions::class, $module1 = $this->package->loadModule('test-module-with-actions'));
         $this->assertInstanceOf(ModuleWithCharts::class, $module2 = $this->package->loadModule('test-module-with-charts'));
+        $this->assertInstanceOf(Module::class, $module3 = $this->package->loadModule('test-module-factory'));
 
         // Should cache modules
         $this->assertSame($module1, $this->package->loadModule('test-module-with-actions'));
         $this->assertSame($module2, $this->package->loadModule('test-module-with-charts'));
+        $this->assertSame($module3, $this->package->loadModule('test-module-factory'));
 
         $this->assertThrows(function () {
             $this->package->loadModule('non-existent');
