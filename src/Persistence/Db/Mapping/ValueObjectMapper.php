@@ -32,11 +32,6 @@ abstract class ValueObjectMapper extends ObjectMapper implements IEmbeddedObject
     private $parentMapper;
 
     /**
-     * @var string[]
-     */
-    private $parentColumns = [];
-
-    /**
      * @var bool
      */
     protected $isSeparateTable = false;
@@ -56,12 +51,6 @@ abstract class ValueObjectMapper extends ObjectMapper implements IEmbeddedObject
         $this->define($definition);
         $rootEntityMapper = $this->getRootEntityMapper();
         $tableName        = $rootEntityMapper ? $rootEntityMapper->getPrimaryTableName() : '__EMBEDDED__';
-
-        if ($parentMapper) {
-            foreach ($parentMapper->getDefinition()->getTable()->getColumns() as $column) {
-                $this->parentColumns[] = $column->getName();
-            }
-        }
 
         parent::__construct($definition->finalize($tableName));
     }
@@ -128,7 +117,7 @@ abstract class ValueObjectMapper extends ObjectMapper implements IEmbeddedObject
      */
     final public function asSeparateTable(string $name, array $extraColumns = [], array $extraIndexes = [], array $extraForeignKeys = []) : IEmbeddedObjectMapper
     {
-        $table = $this->loadTableWithoutParentColumns($name, $extraColumns, $extraIndexes, $extraForeignKeys);
+        $table = $this->loadTableWithExtraColumns($name, $extraColumns, $extraIndexes, $extraForeignKeys);
 
         $clone                  = clone $this;
         $clone->mapping         = new ParentObjectMapping($this->getDefinition()->withTable($table));
@@ -137,14 +126,10 @@ abstract class ValueObjectMapper extends ObjectMapper implements IEmbeddedObject
         return $clone;
     }
 
-    private function loadTableWithoutParentColumns($name, array $extraColumns, array $extraIndexes, array $extraForeignKeys)
+    private function loadTableWithExtraColumns($name, array $extraColumns, array $extraIndexes, array $extraForeignKeys)
     {
         $table   = $this->getDefinition()->getTable();
         $columns = $table->getColumns();
-
-        foreach ($this->parentColumns as $parentColumn) {
-            unset($columns[$parentColumn]);
-        }
 
         return $table
             ->withName($name)
