@@ -56,10 +56,8 @@ abstract class Cms implements ICms
     public function __construct(IIocContainer $container)
     {
         $this->container = $container;
-
-        $this->auth  = $container->get(IAuthSystem::class);
-        $this->lang  = $container->get(ILanguageProvider::class);
-        $this->cache = $container->get(CacheItemPoolInterface::class);
+        $this->lang      = $container->get(ILanguageProvider::class);
+        $this->cache     = $container->get(CacheItemPoolInterface::class);
 
         $definition = new CmsDefinition();
         $this->define($definition);
@@ -68,6 +66,8 @@ abstract class Cms implements ICms
         $this->namePackageClassMap = $finalizedDefinition->getNamePackageMap();
 
         $this->bootPackages();
+
+        $this->auth = $container->get(IAuthSystem::class);
     }
 
     /**
@@ -85,7 +85,7 @@ abstract class Cms implements ICms
     protected function bootPackages()
     {
         foreach ($this->namePackageClassMap as $packageClass) {
-            if (method_exists($packageClass, 'boot')) {
+            if (is_callable([$packageClass, 'boot'])) {
                 $packageClass::boot($this);
             }
         }
