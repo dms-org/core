@@ -4,6 +4,7 @@ namespace Dms\Core\Form\Field\Type;
 
 use Dms\Core\Form\Field\Options\ArrayFieldOptions;
 use Dms\Core\Form\Field\Processor\DefaultValueProcessor;
+use Dms\Core\Form\Field\Processor\OverrideValueProcessor;
 use Dms\Core\Form\Field\Processor\Validator\NotSuppliedValidator;
 use Dms\Core\Form\Field\Processor\Validator\OneOfValidator;
 use Dms\Core\Form\Field\Processor\Validator\RequiredValidator;
@@ -34,13 +35,13 @@ abstract class FieldType implements IFieldType
      * @var array
      */
     protected $attributes = [
-            self::ATTR_REQUIRED         => null,
-            self::ATTR_READ_ONLY        => null,
-            self::ATTR_DEFAULT          => null,
-            self::ATTR_INITIAL_VALUE    => null,
-            self::ATTR_OPTIONS          => null,
-            self::ATTR_SHOW_ALL_OPTIONS => null,
-            self::ATTR_HIDDEN           => null,
+        self::ATTR_REQUIRED         => null,
+        self::ATTR_READ_ONLY        => null,
+        self::ATTR_DEFAULT          => null,
+        self::ATTR_INITIAL_VALUE    => null,
+        self::ATTR_OPTIONS          => null,
+        self::ATTR_SHOW_ALL_OPTIONS => null,
+        self::ATTR_HIDDEN           => null,
     ];
 
     /**
@@ -94,9 +95,6 @@ abstract class FieldType implements IFieldType
 
 
         $isReadonly = $this->get(self::ATTR_READ_ONLY);
-        if ($isReadonly) {
-            $processors[] = new NotSuppliedValidator(Type::mixed());
-        }
 
         if (!($this->inputType instanceof MixedType)) {
             $processors[] = new TypeValidator($this->inputType);
@@ -119,13 +117,26 @@ abstract class FieldType implements IFieldType
 
         if (!$isReadonly && $this->has(self::ATTR_DEFAULT)) {
             $processors[] = new DefaultValueProcessor(
-                    $currentProcessedType,
-                    $this->get(self::ATTR_DEFAULT)
+                $currentProcessedType,
+                $this->get(self::ATTR_DEFAULT)
             );
         }
 
         if ($isReadonly) {
             $processors[] = new DefaultValueProcessor($this->processedType, $this->get(self::ATTR_INITIAL_VALUE));
+        }
+
+        if ($isReadonly) {
+            $unprocessedInitialValue = $this->get(self::ATTR_INITIAL_VALUE);
+
+            if ($unprocessedInitialValue !== null) {
+                foreach (array_reverse($processors) as $processor) {
+                    /** @var IFieldProcessor $processor */
+                    $unprocessedInitialValue = $processor->unprocess($unprocessedInitialValue);
+                }
+            }
+
+            array_unshift($processors, new OverrideValueProcessor(Type::mixed(), $unprocessedInitialValue));
         }
 
         $this->processors = $processors;

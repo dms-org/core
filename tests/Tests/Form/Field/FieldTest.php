@@ -5,6 +5,7 @@ namespace Dms\Core\Tests\Form\Field;
 use Dms\Common\Testing\CmsTestCase;
 use Dms\Core\Form\Field\Builder\Field;
 use Dms\Core\Form\Field\Processor\DefaultValueProcessor;
+use Dms\Core\Form\Field\Processor\OverrideValueProcessor;
 use Dms\Core\Form\Field\Processor\TypeProcessor;
 use Dms\Core\Form\Field\Processor\Validator\NotSuppliedValidator;
 use Dms\Core\Form\Field\Type\FieldType;
@@ -44,15 +45,17 @@ class FieldTest extends CmsTestCase
         $this->assertSame(true, $testField->getType()->get(FieldType::ATTR_READ_ONLY));
 
         $this->assertEquals([
-            new NotSuppliedValidator(Type::mixed()),
+            new OverrideValueProcessor(Type::mixed(), 'abc'),
             new TypeProcessor('string'),
             new DefaultValueProcessor(Type::string()->nullable(), 'abc'),
         ], $testField->getType()->getProcessors());
 
         $this->assertSame('abc', $testField->process(null));
+        $this->assertSame('abc', $testField->process('fsdf'));
+        $this->assertSame('abc', $testField->process('345543'));
+        $this->assertSame('abc', $testField->process('abc'));
 
-        $this->assertThrows(function () use ($testField) {
-            $testField->process('aaa');
-        }, InvalidInputException::class);
+        $this->assertSame(null, $testField->withInitialValue(null)->process(null));
+        $this->assertSame(null, $testField->withInitialValue(null)->process('abc'));
     }
 }
