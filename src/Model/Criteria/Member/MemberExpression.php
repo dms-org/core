@@ -46,7 +46,7 @@ abstract class MemberExpression implements IMemberExpression
     /**
      * @inheritDoc
      */
-    public function getSourceType() : \Dms\Core\Model\Type\IType
+    public function getSourceType() : IType
     {
         return $this->sourceType;
     }
@@ -54,10 +54,24 @@ abstract class MemberExpression implements IMemberExpression
     /**
      * @inheritDoc
      */
-    public function getResultingType() : \Dms\Core\Model\Type\IType
+    public function getResultingType() : IType
     {
         return $this->resultType;
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function asNullable()
+    {
+        $clone = clone $this;
+
+        $clone->sourceType = $this->sourceType->nullable();
+        $clone->resultType = $this->resultType->nullable();
+
+        return $clone;
+    }
+
 
     /**
      * @inheritDoc

@@ -25,14 +25,14 @@ interface IMemberExpression
      *
      * @return IType
      */
-    public function getSourceType() : \Dms\Core\Model\Type\IType;
+    public function getSourceType() : IType;
 
     /**
      * Gets the resulting type of the expression.
      *
      * @return IType
      */
-    public function getResultingType() : \Dms\Core\Model\Type\IType;
+    public function getResultingType() : IType;
 
     /**
      * Returns whether the resulting expression is a property value.
@@ -40,6 +40,13 @@ interface IMemberExpression
      * @return bool
      */
     public function isPropertyValue() : bool;
+
+    /**
+     * Returns the equivalent nullable type.
+     * 
+     * @return static
+     */
+    public function asNullable();
 
     /**
      * Gets the property of which the expression returns.

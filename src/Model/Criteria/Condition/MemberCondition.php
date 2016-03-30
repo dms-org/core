@@ -5,8 +5,6 @@ namespace Dms\Core\Model\Criteria\Condition;
 use Dms\Core\Exception\InvalidArgumentException;
 use Dms\Core\Exception\TypeMismatchException;
 use Dms\Core\Model\Criteria\NestedMember;
-use Dms\Core\Model\Type\Builder\Type;
-use Dms\Core\Util\Debug;
 
 /**
  * The member condition class.
@@ -47,7 +45,7 @@ class MemberCondition extends OperatorCondition
     /**
      * @return NestedMember
      */
-    final public function getNestedMember() : \Dms\Core\Model\Criteria\NestedMember
+    final public function getNestedMember() : NestedMember
     {
         return $this->member;
     }

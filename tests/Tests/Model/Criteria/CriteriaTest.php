@@ -10,11 +10,13 @@ use Dms\Core\Model\Criteria\Condition\InstanceOfCondition;
 use Dms\Core\Model\Criteria\Condition\MemberCondition;
 use Dms\Core\Model\Criteria\Condition\NotCondition;
 use Dms\Core\Model\Criteria\Condition\OrCondition;
+use Dms\Core\Model\Criteria\CustomSpecification;
 use Dms\Core\Model\Criteria\InvalidMemberExpressionException;
 use Dms\Core\Model\Criteria\Member\MemberPropertyExpression;
 use Dms\Core\Model\Criteria\MemberOrdering;
 use Dms\Core\Model\Criteria\NestedMember;
 use Dms\Core\Model\Criteria\OrderingDirection;
+use Dms\Core\Model\Criteria\Specification;
 use Dms\Core\Model\Criteria\SpecificationDefinition;
 use Dms\Core\Tests\Model\Criteria\Fixtures\MockSpecification;
 use Dms\Core\Tests\Model\Fixtures\SubObject;
@@ -62,12 +64,12 @@ class CriteriaTest extends CmsTestCase
 
         $this->assertSame(TestEntity::definition(), $criteria->getClass());
         $this->assertEquals(
-                new MemberCondition(
-                        new NestedMember([new MemberPropertyExpression(TestEntity::definition()->getProperty('prop'), false)]),
-                        '=',
-                        'foo'
-                ),
-                $criteria->getCondition()
+            new MemberCondition(
+                new NestedMember([new MemberPropertyExpression(TestEntity::definition()->getProperty('prop'), false)]),
+                '=',
+                'foo'
+            ),
+            $criteria->getCondition()
         );
     }
 
@@ -79,15 +81,15 @@ class CriteriaTest extends CmsTestCase
 
         $this->assertSame(TestEntity::definition(), $criteria->getClass());
         $this->assertEquals(
-                new MemberCondition(
-                        new NestedMember([
-                                new MemberPropertyExpression(TestEntity::definition()->getProperty('object'), false),
-                                new MemberPropertyExpression(SubObject::definition()->getProperty('prop'), true),
-                        ]),
-                        '=',
-                        'foo'
-                ),
-                $criteria->getCondition());
+            new MemberCondition(
+                new NestedMember([
+                    new MemberPropertyExpression(TestEntity::definition()->getProperty('object'), false),
+                    new MemberPropertyExpression(SubObject::definition()->getProperty('prop'), true),
+                ]),
+                '=',
+                'foo'
+            ),
+            $criteria->getCondition());
     }
 
     public function testValidInstanceOfCondition()
@@ -97,8 +99,8 @@ class CriteriaTest extends CmsTestCase
         $criteria->whereInstanceOf(TestEntity::class);
 
         $this->assertEquals(
-                new InstanceOfCondition(TestEntity::class),
-                $criteria->getCondition());
+            new InstanceOfCondition(TestEntity::class),
+            $criteria->getCondition());
         $this->assertSame(TestEntity::definition(), $criteria->getClass());
     }
 
@@ -118,10 +120,10 @@ class CriteriaTest extends CmsTestCase
 
         $this->assertSame(TestEntity::definition(), $criteria->getClass());
         $this->assertEquals([
-                new MemberOrdering(
-                        new NestedMember([new MemberPropertyExpression(TestEntity::definition()->getProperty('prop'), false)]),
-                        OrderingDirection::ASC
-                )
+            new MemberOrdering(
+                new NestedMember([new MemberPropertyExpression(TestEntity::definition()->getProperty('prop'), false)]),
+                OrderingDirection::ASC
+            ),
         ], $criteria->getOrderings());
         $this->assertSame(true, $criteria->hasOrderings());
     }
@@ -134,10 +136,10 @@ class CriteriaTest extends CmsTestCase
 
         $this->assertSame(TestEntity::definition(), $criteria->getClass());
         $this->assertEquals([
-                new MemberOrdering(new NestedMember([
-                        new MemberPropertyExpression(TestEntity::definition()->getProperty('object'), false),
-                        new MemberPropertyExpression(SubObject::definition()->getProperty('prop'), true),
-                ]), OrderingDirection::ASC)
+            new MemberOrdering(new NestedMember([
+                new MemberPropertyExpression(TestEntity::definition()->getProperty('object'), false),
+                new MemberPropertyExpression(SubObject::definition()->getProperty('prop'), true),
+            ]), OrderingDirection::ASC),
         ], $criteria->getOrderings());
         $this->assertSame(true, $criteria->hasOrderings());
     }
@@ -166,21 +168,21 @@ class CriteriaTest extends CmsTestCase
         $criteria = TestEntity::criteria();
 
         $criteria->whereSatisfies(new MockSpecification(
-                TestEntity::class,
-                function (SpecificationDefinition $match) {
-                    $match->where('object.prop', '=', 'foo');
-                }
+            TestEntity::class,
+            function (SpecificationDefinition $match) {
+                $match->where('object.prop', '=', 'foo');
+            }
         ));
 
         $this->assertSame(TestEntity::definition(), $criteria->getClass());
         $this->assertEquals(
-                new MemberCondition(new NestedMember([
-                        new MemberPropertyExpression(TestEntity::definition()->getProperty('object'), false),
-                        new MemberPropertyExpression(SubObject::definition()->getProperty('prop'), true),
-                ]),
-                        '=',
-                        'foo')
-                , $criteria->getCondition());
+            new MemberCondition(new NestedMember([
+                new MemberPropertyExpression(TestEntity::definition()->getProperty('object'), false),
+                new MemberPropertyExpression(SubObject::definition()->getProperty('prop'), true),
+            ]),
+                '=',
+                'foo')
+            , $criteria->getCondition());
     }
 
     public function testValidInstanceOfConditionWithSpecification()
@@ -188,10 +190,10 @@ class CriteriaTest extends CmsTestCase
         $criteria = TestEntity::criteria();
 
         $criteria->whereSatisfies(new MockSpecification(
-                TestEntity::class,
-                function (SpecificationDefinition $match) {
-                    $match->whereInstanceOf(TestEntity::class);
-                }
+            TestEntity::class,
+            function (SpecificationDefinition $match) {
+                $match->whereInstanceOf(TestEntity::class);
+            }
         ));
 
         $this->assertSame(TestEntity::definition(), $criteria->getClass());
@@ -205,10 +207,10 @@ class CriteriaTest extends CmsTestCase
         $criteria = TestEntity::criteria();
 
         $criteria->whereSatisfies(new MockSpecification(
-                SubObject::class,
-                function (SpecificationDefinition $match) {
-                    $match->whereInstanceOf(SubObject::class);
-                }
+            SubObject::class,
+            function (SpecificationDefinition $match) {
+                $match->whereInstanceOf(SubObject::class);
+            }
         ));
     }
 
@@ -222,15 +224,15 @@ class CriteriaTest extends CmsTestCase
         });
 
         $this->assertEquals(
-                new AndCondition([
-                        new MemberCondition(new NestedMember([
-                                new MemberPropertyExpression(TestEntity::definition()->getProperty('prop'), false)
-                        ]), '!=', 'foo'),
-                        new MemberCondition(new NestedMember([
-                                new MemberPropertyExpression(TestEntity::definition()->getProperty('prop'), false)
-                        ]), '!=', 'bar'),
-                ]),
-                $criteria->getCondition());
+            new AndCondition([
+                new MemberCondition(new NestedMember([
+                    new MemberPropertyExpression(TestEntity::definition()->getProperty('prop'), false),
+                ]), '!=', 'foo'),
+                new MemberCondition(new NestedMember([
+                    new MemberPropertyExpression(TestEntity::definition()->getProperty('prop'), false),
+                ]), '!=', 'bar'),
+            ]),
+            $criteria->getCondition());
     }
 
     public function testWhereAny()
@@ -243,15 +245,15 @@ class CriteriaTest extends CmsTestCase
         });
 
         $this->assertEquals(
-                new OrCondition([
-                        new MemberCondition(new NestedMember([
-                                new MemberPropertyExpression(TestEntity::definition()->getProperty('prop'), false)
-                        ]), '!=', 'foo'),
-                        new MemberCondition(new NestedMember([
-                                new MemberPropertyExpression(TestEntity::definition()->getProperty('prop'), false)
-                        ]), '!=', 'bar'),
-                ]),
-                $criteria->getCondition());
+            new OrCondition([
+                new MemberCondition(new NestedMember([
+                    new MemberPropertyExpression(TestEntity::definition()->getProperty('prop'), false),
+                ]), '!=', 'foo'),
+                new MemberCondition(new NestedMember([
+                    new MemberPropertyExpression(TestEntity::definition()->getProperty('prop'), false),
+                ]), '!=', 'bar'),
+            ]),
+            $criteria->getCondition());
     }
 
     public function testWhereAndAll()
@@ -267,22 +269,22 @@ class CriteriaTest extends CmsTestCase
         });
 
         $this->assertEquals(
-                new OrCondition([
-                        new MemberCondition(new NestedMember([
-                                new MemberPropertyExpression(TestEntity::definition()->getProperty('prop'), false)
-                        ]), '!=', 'foo'),
-                        new AndCondition([
-                                new MemberCondition(new NestedMember([
-                                        new MemberPropertyExpression(TestEntity::definition()
-                                                ->getProperty('prop'), false)
-                                ]), '!=', 'foo'),
-                                new MemberCondition(new NestedMember([
-                                        new MemberPropertyExpression(TestEntity::definition()
-                                                ->getProperty('prop'), false)
-                                ]), '!=', 'bar'),
-                        ])
+            new OrCondition([
+                new MemberCondition(new NestedMember([
+                    new MemberPropertyExpression(TestEntity::definition()->getProperty('prop'), false),
+                ]), '!=', 'foo'),
+                new AndCondition([
+                    new MemberCondition(new NestedMember([
+                        new MemberPropertyExpression(TestEntity::definition()
+                            ->getProperty('prop'), false),
+                    ]), '!=', 'foo'),
+                    new MemberCondition(new NestedMember([
+                        new MemberPropertyExpression(TestEntity::definition()
+                            ->getProperty('prop'), false),
+                    ]), '!=', 'bar'),
                 ]),
-                $criteria->getCondition());
+            ]),
+            $criteria->getCondition());
     }
 
     public function testWhereNot()
@@ -295,15 +297,15 @@ class CriteriaTest extends CmsTestCase
         });
 
         $this->assertEquals(
-                new NotCondition(new AndCondition([
-                        new MemberCondition(new NestedMember([
-                                new MemberPropertyExpression(TestEntity::definition()->getProperty('prop'), false)
-                        ]), '!=', 'foo'),
-                        new MemberCondition(new NestedMember([
-                                new MemberPropertyExpression(TestEntity::definition()->getProperty('prop'), false)
-                        ]), '!=', 'bar'),
-                ])),
-                $criteria->getCondition());
+            new NotCondition(new AndCondition([
+                new MemberCondition(new NestedMember([
+                    new MemberPropertyExpression(TestEntity::definition()->getProperty('prop'), false),
+                ]), '!=', 'foo'),
+                new MemberCondition(new NestedMember([
+                    new MemberPropertyExpression(TestEntity::definition()->getProperty('prop'), false),
+                ]), '!=', 'bar'),
+            ])),
+            $criteria->getCondition());
     }
 
     public function testThrowsExceptionForInvalidOperatorWithNull()
@@ -321,5 +323,44 @@ class CriteriaTest extends CmsTestCase
         $this->assertThrows(function () use ($criteria) {
             $criteria->where('object', '<=', null);
         }, InvalidArgumentException::class);
+    }
+
+    public function testWherePropertySatisfies()
+    {
+        $criteria = TestEntity::criteria();
+
+        $specification = new CustomSpecification(
+            SubObject::class,
+            function (SpecificationDefinition $match) {
+                $match->whereStringContainsCaseInsensitive('prop', 'foo');
+
+                $match->whereNot(function (SpecificationDefinition $match) {
+                    $match->where('number', '>', 10);
+                });
+
+                $match->whereAny(function (SpecificationDefinition $match) {
+                    $match->where('number', '=', 20);
+                    $match->where('number', '=', 30);
+                    $match->where('number', '=', 40);
+                });
+            }
+        );
+
+        $criteria->whereMemberSatisfies('object', $specification);
+
+        $this->assertEquals(
+            TestEntity::criteria()
+                ->whereStringContainsCaseInsensitive('object.prop', 'foo')
+                ->whereNot(function (SpecificationDefinition $match) {
+                    $match->where('object.number', '>', 10);
+                })
+                ->whereAny(function (SpecificationDefinition $match) {
+                    $match->where('object.number', '=', 20);
+                    $match->where('object.number', '=', 30);
+                    $match->where('object.number', '=', 40);
+                })
+                ->getCondition(),
+            $criteria->getCondition()
+        );
     }
 }

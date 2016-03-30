@@ -71,7 +71,7 @@ class NestedMember
     /**
      * @return IType
      */
-    final public function getResultingType() : \Dms\Core\Model\Type\IType
+    final public function getResultingType() : IType
     {
         return $this->getLastPart()->getResultingType();
     }
@@ -87,7 +87,7 @@ class NestedMember
     /**
      * @return FinalizedPropertyDefinition
      */
-    final public function getProperty() : \Dms\Core\Model\Object\FinalizedPropertyDefinition
+    final public function getProperty() : FinalizedPropertyDefinition
     {
         return $this->getLastPart()->getProperty();
     }
@@ -122,5 +122,22 @@ class NestedMember
 
             return $results;
         };
+    }
+
+    /**
+     * @param NestedMember $member
+     *
+     * @return NestedMember
+     */
+    public function merge(NestedMember $member) : NestedMember
+    {
+        $parts = $this->parts;
+
+        $isNullable = $this->getResultingType()->isNullable();
+        foreach ($member->getParts() as $part) {
+            $parts[] = $isNullable ? $part->asNullable() : $part;
+        }
+
+        return new self($parts);
     }
 }

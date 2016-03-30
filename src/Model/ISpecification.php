@@ -4,6 +4,7 @@ namespace Dms\Core\Model;
 
 use Dms\Core\Exception;
 use Dms\Core\Model\Criteria\Condition\Condition;
+use Dms\Core\Model\Criteria\NestedMember;
 use Dms\Core\Model\Object\FinalizedClassDefinition;
 
 /**
@@ -73,6 +74,17 @@ interface ISpecification
      * @return ISpecification
      */
     public function not() : ISpecification;
+
+    /**
+     * Returns a specification that is satisfied the member of the supplied class
+     * matches the current specification.
+     * 
+     * @param FinalizedClassDefinition $rootClass
+     * @param NestedMember             $member
+     *
+     * @return ISpecification
+     */
+    public function forMemberOf(FinalizedClassDefinition $rootClass, NestedMember $member) : ISpecification;
 
     /**
      * Returns whether the object satisfies the specification.

@@ -45,7 +45,7 @@ class ConditionOperatorType
     /**
      * @return IType
      */
-    final public function getValueType() : \Dms\Core\Model\Type\IType
+    final public function getValueType() : IType
     {
         return $this->valueType;
     }

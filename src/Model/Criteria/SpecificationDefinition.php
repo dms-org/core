@@ -245,4 +245,23 @@ class SpecificationDefinition extends ObjectCriteriaBase
 
         return $this;
     }
+
+    /**
+     * Defines a condition that is satisfied when the member matches
+     * the supplied specification.
+     *
+     * @param string         $memberExpression
+     * @param ISpecification $specification
+     *
+     * @return static
+     */
+    final public function whereMemberSatisfies(string $memberExpression, ISpecification $specification)
+    {
+        $this->whereSatisfies(
+            $specification
+                ->forMemberOf($this->class, $this->getMemberExpressionParser()->parse($this->class, $memberExpression))
+        );
+
+        return $this;
+    }
 }
