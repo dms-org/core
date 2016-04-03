@@ -257,7 +257,7 @@ class StagedForm implements IStagedForm
             $fieldsToProcess = [];
 
             foreach ($formForStage->getFields() as $field) {
-                if (array_key_exists($field->getName(), $previousStagesSubmission)) {
+                if (in_array($field->getName(), $requiredFieldNames, true)) {
                     $fieldsToProcess[] = $field;
                 }
             }
