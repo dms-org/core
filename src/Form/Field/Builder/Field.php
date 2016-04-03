@@ -128,7 +128,7 @@ class Field extends FieldBuilderBase
      */
     public function bool() : BoolFieldBuilder
     {
-        return new BoolFieldBuilder($this->type(new BoolType()));
+        return (new BoolFieldBuilder($this->type(new BoolType())))->value(false);
     }
 
     /**

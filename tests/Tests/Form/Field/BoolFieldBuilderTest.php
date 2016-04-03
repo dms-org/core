@@ -32,7 +32,7 @@ class BoolFieldBuilderTest extends FieldBuilderTestBase
         $field = $this->field()->required()->build();
 
         $this->assertAttributes(
-                [FieldType::ATTR_REQUIRED => true, ScalarType::ATTR_TYPE => IType::BOOL, ScalarType::ATTR_DEFAULT => false],
+                [FieldType::ATTR_REQUIRED => true, ScalarType::ATTR_TYPE => IType::BOOL, ScalarType::ATTR_DEFAULT => false, ScalarType::ATTR_INITIAL_VALUE => false],
                 $field
         );
 

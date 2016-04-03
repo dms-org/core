@@ -4,6 +4,7 @@ namespace Dms\Core\Form\Binding;
 
 use Dms\Core\Exception\InvalidArgumentException;
 use Dms\Core\Exception\TypeMismatchException;
+use Dms\Core\Form\Field\Type\FieldType;
 use Dms\Core\Form\IForm;
 use Dms\Core\Util\Debug;
 
@@ -91,7 +92,7 @@ class FormBinding implements IFormBinding
             }
 
             foreach ($this->form->getInitialValues() as $fieldName => $value) {
-                if ($value !== null) {
+                if ($value !== null && $value !== $this->form->getField($fieldName)->getType()->get(FieldType::ATTR_DEFAULT)) {
                     unset($formValues[$fieldName]);
                 }
             }
