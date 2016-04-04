@@ -38,14 +38,13 @@ class InnerFormObjectProcessor extends FieldProcessor
     {
         /** @var FormObject $input */
         $values = $this->formObject->getInitialValues();
-        $nonNullValues = [];
 
-        foreach ($values as $key => $value) {
-            if ($value !== null) {
-                $nonNullValues[$key] = $value;
-            }
+        try {
+            $this->formObject->validateProcessedValues($values);
+
+            return $this->formObject->unprocess($values);
+        } catch (\Exception $e) {
+            return $values;
         }
-
-        return empty($nonNullValues) ? $values : $this->formObject->unprocess($values);
     }
 }
