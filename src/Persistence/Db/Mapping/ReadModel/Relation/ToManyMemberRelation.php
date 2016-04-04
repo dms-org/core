@@ -3,6 +3,7 @@
 namespace Dms\Core\Persistence\Db\Mapping\ReadModel\Relation;
 
 use Dms\Core\Exception\NotImplementedException;
+use Dms\Core\Model\ITypedCollection;
 use Dms\Core\Persistence\Db\Criteria\MemberMapping\ToManyRelationMapping;
 use Dms\Core\Persistence\Db\LoadingContext;
 use Dms\Core\Persistence\Db\Mapping\ParentChildrenMap;
@@ -41,7 +42,7 @@ class ToManyMemberRelation extends MemberRelation implements IToManyRelation
     /**
      * @inheritDoc
      */
-    public function buildCollection(array $children) : \Dms\Core\Model\ITypedCollection
+    public function buildCollection(array $children) : ITypedCollection
     {
         return $this->memberMapping->getRelation()->buildCollection($children);
     }

@@ -3,6 +3,7 @@
 namespace Dms\Core\Model\Type;
 
 use Dms\Core\Model\Criteria\Condition\ConditionOperator;
+use Dms\Core\Model\ISpecification;
 use Dms\Core\Model\Type\Builder\Type;
 
 /**
@@ -32,21 +33,24 @@ class NullType extends BaseType
      */
     protected function loadValidOperatorTypes() : array
     {
-        $mixedType      = Type::mixed();
-        $array          = Type::arrayOf($mixedType);
-        $nullableString = Type::string()->nullable();
+        $mixedType         = Type::mixed();
+        $array             = Type::arrayOf($mixedType);
+        $nullableString    = Type::string()->nullable();
+        $specificationType = Type::object(ISpecification::class)->nullable();
 
         return [
-                ConditionOperator::EQUALS                           => $mixedType,
-                ConditionOperator::NOT_EQUALS                       => $mixedType,
-                ConditionOperator::IN                               => $array,
-                ConditionOperator::NOT_IN                           => $array,
-                ConditionOperator::STRING_CONTAINS                  => $nullableString,
-                ConditionOperator::STRING_CONTAINS_CASE_INSENSITIVE => $nullableString,
-                ConditionOperator::GREATER_THAN                     => $mixedType,
-                ConditionOperator::GREATER_THAN_OR_EQUAL            => $mixedType,
-                ConditionOperator::LESS_THAN                        => $mixedType,
-                ConditionOperator::LESS_THAN_OR_EQUAL               => $mixedType,
+            ConditionOperator::EQUALS                           => $mixedType,
+            ConditionOperator::NOT_EQUALS                       => $mixedType,
+            ConditionOperator::IN                               => $array,
+            ConditionOperator::NOT_IN                           => $array,
+            ConditionOperator::STRING_CONTAINS                  => $nullableString,
+            ConditionOperator::STRING_CONTAINS_CASE_INSENSITIVE => $nullableString,
+            ConditionOperator::GREATER_THAN                     => $mixedType,
+            ConditionOperator::GREATER_THAN_OR_EQUAL            => $mixedType,
+            ConditionOperator::LESS_THAN                        => $mixedType,
+            ConditionOperator::LESS_THAN_OR_EQUAL               => $mixedType,
+            ConditionOperator::ALL_SATISFIES                    => $specificationType,
+            ConditionOperator::ANY_SATISFIES                    => $specificationType,
         ];
     }
 

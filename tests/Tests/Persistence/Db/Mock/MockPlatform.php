@@ -81,9 +81,9 @@ class MockPlatform extends Platform
     public function compilePreparedUpdate(Table $table, array $updateColumns, array $whereColumnNameParameterMap)
     {
         return new PhpPreparedCompiledQuery(function (MockDatabase $database, array $parameters) use (
-                $table,
-                $updateColumns,
-                $whereColumnNameParameterMap
+            $table,
+            $updateColumns,
+            $whereColumnNameParameterMap
         ) {
             $affectedRows = 0;
 
@@ -378,7 +378,13 @@ class MockPlatform extends Platform
             $rows = $this->performLimitAndOffset($query, $rows);
 
             $aliasCompiledMap = $this->compileExpressions($database, $query->getAliasColumnMap());
-            $rows             = $rows->select(function ($rowOrGroup) use ($aliasCompiledMap) {
+            $rows             = new Collection($rows->asArray());
+
+            if ($rows->isEmpty() && $isImpliedGroup) {
+                $rows->addRange([new Collection()]);
+            }
+
+            $rows = $rows->select(function ($rowOrGroup) use ($aliasCompiledMap) {
                 $selected = [];
 
                 foreach ($aliasCompiledMap as $alias => $selector) {
@@ -438,15 +444,15 @@ class MockPlatform extends Platform
     protected function performJoin(ICollection $rows, ICollection $joinedRows, $alias, Table $joinedTable, array $onConditions, $isOuter)
     {
         $joinWhere = $rows->join($joinedRows)
-                ->on(function ($row, $joined) use ($onConditions) {
-                    foreach ($onConditions as $on) {
-                        if (!$on($row + $joined)) {
-                            return false;
-                        }
+            ->on(function ($row, $joined) use ($onConditions) {
+                foreach ($onConditions as $on) {
+                    if (!$on($row + $joined)) {
+                        return false;
                     }
+                }
 
-                    return true;
-                });
+                return true;
+            });
 
         if ($isOuter) {
             $joinWhere = $joinWhere->withDefault([$alias => array_fill_keys($joinedTable->getColumnNames(), null)]);
@@ -474,14 +480,14 @@ class MockPlatform extends Platform
             /** @var Ordering $first */
             $first = array_pop($orderings);
             $rows  = $rows->orderBy(
-                    $this->compileExpression($database, $first->getExpression()),
-                    $first->getMode() === Ordering::ASC ? Direction::ASCENDING : Direction::DESCENDING
+                $this->compileExpression($database, $first->getExpression()),
+                $first->getMode() === Ordering::ASC ? Direction::ASCENDING : Direction::DESCENDING
             );
 
             foreach ($orderings as $ordering) {
                 $rows = $rows->thenBy(
-                        $this->compileExpression($database, $ordering->getExpression()),
-                        $ordering->getMode() === Ordering::ASC ? Direction::ASCENDING : Direction::DESCENDING
+                    $this->compileExpression($database, $ordering->getExpression()),
+                    $ordering->getMode() === Ordering::ASC ? Direction::ASCENDING : Direction::DESCENDING
                 );
             }
         }
@@ -516,17 +522,17 @@ class MockPlatform extends Platform
             $updatedRowsCount = $rows->count();
 
             $updatedRows = $rows
-                    ->indexBy(function (array $row) use ($table, $primaryKey) {
-                        return $row[$table][$primaryKey];
-                    })
-                    ->select(function (array $row) use ($table, $compiledSets) {
-                        foreach ($compiledSets as $column => $setter) {
-                            $row[$table][$column] = $setter($row);
-                        }
+                ->indexBy(function (array $row) use ($table, $primaryKey) {
+                    return $row[$table][$primaryKey];
+                })
+                ->select(function (array $row) use ($table, $compiledSets) {
+                    foreach ($compiledSets as $column => $setter) {
+                        $row[$table][$column] = $setter($row);
+                    }
 
-                        return $row[$table];
-                    })
-                    ->asArray();
+                    return $row[$table];
+                })
+                ->asArray();
 
             $newRows = $allRows->select(function (array $row) use ($updatedRows, $table, $primaryKey) {
                 if (isset($updatedRows[$row[$table][$primaryKey]])) {
@@ -560,18 +566,18 @@ class MockPlatform extends Platform
             $primaryKey  = $query->getTable()->getPrimaryKeyColumnName();
             $deletedRows = $rows->count();
             $idsToDelete = $rows
-                    ->indexBy(function (array $row) use ($table, $primaryKey) {
-                        return $primaryKey ? $row[$table][$primaryKey] : Identity::hash($row[$table]);
-                    })
-                    ->asArray();
+                ->indexBy(function (array $row) use ($table, $primaryKey) {
+                    return $primaryKey ? $row[$table][$primaryKey] : Identity::hash($row[$table]);
+                })
+                ->asArray();
 
             $newRows = $allRows
-                    ->where(function (array $row) use ($table, $primaryKey, $idsToDelete) {
-                        return !isset($idsToDelete[$primaryKey ? $row[$table][$primaryKey] : Identity::hash($row[$table])]);
-                    })
-                    ->select(function (array &$row) use ($table) {
-                        return $row[$table];
-                    });
+                ->where(function (array $row) use ($table, $primaryKey, $idsToDelete) {
+                    return !isset($idsToDelete[$primaryKey ? $row[$table][$primaryKey] : Identity::hash($row[$table])]);
+                })
+                ->select(function (array &$row) use ($table) {
+                    return $row[$table];
+                });
 
             $database->getTable($query->getTableName())->setRows($newRows->asArray());
 
@@ -611,20 +617,20 @@ class MockPlatform extends Platform
                 $orderIndex = 1;
 
                 $group
-                        ->orderByAscending(function (array $row) use ($tableName, $columnName) {
-                            return $row[$tableName][$columnName];
-                        })
-                        ->apply(function (array &$row) use ($tableName, $columnName, &$orderIndex) {
-                            $row[$tableName][$columnName] = $orderIndex++;
-                        });
+                    ->orderByAscending(function (array $row) use ($tableName, $columnName) {
+                        return $row[$tableName][$columnName];
+                    })
+                    ->apply(function (array &$row) use ($tableName, $columnName, &$orderIndex) {
+                        $row[$tableName][$columnName] = $orderIndex++;
+                    });
 
                 return $group;
             });
 
             $newRows = $rows
-                    ->select(function (array &$row) use ($tableName) {
-                        return $row[$tableName];
-                    });
+                ->select(function (array &$row) use ($tableName) {
+                    return $row[$tableName];
+                });
 
             $database->getTable($tableName)->setRows($newRows->asArray());
         };

@@ -2,6 +2,11 @@
 
 namespace Dms\Core\Model\Type;
 
+use Dms\Core\Model\Criteria\Condition\ConditionOperator;
+use Dms\Core\Model\ISpecification;
+use Dms\Core\Model\Object\TypedObject;
+use Dms\Core\Model\Type\Builder\Type;
+
 /**
  * The with elements type class.
  * 
@@ -18,6 +23,25 @@ abstract class WithElementsType extends BaseType
     {
         $this->elementType = $elementType;
         parent::__construct($typeString);
+    }
+
+    /**
+     * @return IType[]
+     */
+    protected function loadValidOperatorTypes() : array
+    {
+        $operators = parent::loadValidOperatorTypes();
+        
+        if ($this->elementType->nonNullable()->isSubsetOf(Type::object(TypedObject::class))) {
+            $specificationType = Type::object(ISpecification::class)->nullable();
+            
+            $operators += [
+                ConditionOperator::ALL_SATISFIES => $specificationType,
+                ConditionOperator::ANY_SATISFIES => $specificationType,
+            ];
+        }
+
+        return $operators;
     }
 
     /**

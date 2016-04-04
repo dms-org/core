@@ -3,6 +3,7 @@
 namespace Dms\Core\Tests\Model;
 
 use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Model\Criteria\SpecificationDefinition;
 use Dms\Core\Model\EntityCollection;
 use Dms\Core\Model\IEntity;
 use Dms\Core\Model\ILoadCriteria;
@@ -255,10 +256,36 @@ class EntityCollectionTest extends IEntitySetTest
         ], $data);
     }
 
+    public function testCriteriaWithWhereHasAllCondition()
+    {
+        $collection = $this->loadNestedTestDataCollection();
+        $data       = $collection->matching(
+            $collection->criteria()
+                ->whereHasAll('objects', SubObject::specification(function (SpecificationDefinition $spec) {
+                    $spec->where('number', '>=', 10);
+                }))
+        );
+
+        $this->assertEquals([1 => $collection->skip(1)->first()], $data);
+    }
+
+    public function testCriteriaWithWhereHasAnyCondition()
+    {
+        $collection = $this->loadNestedTestDataCollection();
+        $data       = $collection->matching(
+            $collection->criteria()
+                ->whereHasAny('objects', SubObject::specification(function (SpecificationDefinition $spec) {
+                    $spec->where('number', '>=', 10);
+                }))
+        );
+
+        $this->assertEquals([$collection->first(), $collection->skip(1)->first()], $data);
+    }
+
     public function testSelfCondition()
     {
         $data = $this->collection->matching(
-                $this->collection->criteria()->where('this', '=', $this->entityMock(1))
+            $this->collection->criteria()->where('this', '=', $this->entityMock(1))
         );
 
         $this->assertEquals([$this->entityMock(1)], $data);

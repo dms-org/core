@@ -43,7 +43,7 @@ abstract class RelationMapping extends MemberMapping
     /**
      * @return IRelation
      */
-    public function getFirstRelation() : \Dms\Core\Persistence\Db\Mapping\Relation\IRelation
+    public function getFirstRelation() : IRelation
     {
         return reset($this->relationsToSubSelect) ?: $this->relation;
     }

@@ -41,7 +41,7 @@ abstract class OperatorCondition extends Condition
 
         if (!isset($operators[$conditionOperator])) {
             throw InvalidArgumentException::format(
-                    'Invalid condition operator for %s of type %s: expecting one of (%s), %s given',
+                    'Invalid condition operator for %s of type %s: expecting one of (%s), \'%s\' given',
                     $this->debugExpressionString(), $expressionType->asTypeString(), Debug::formatValues(array_keys($operators)),
                     $conditionOperator
             );

@@ -100,8 +100,8 @@ class CriteriaMapper
         $orm = $this->definition->getOrm();
 
         $memberExpressionParser = new MemberExpressionParser(
-                $this->connection ? $orm->getEntityDataSourceProvider($this->connection) : null,
-                $orm
+            $this->connection ? $orm->getEntityDataSourceProvider($this->connection) : null,
+            $orm
         );
 
         return $memberExpressionParser;
@@ -118,7 +118,7 @@ class CriteriaMapper
     /**
      * @return Criteria
      */
-    public function newCriteria() : \Dms\Core\Model\Criteria\Criteria
+    public function newCriteria() : Criteria
     {
         $memberExpressionParser = $this->buildMemberExpressionParser();
 
@@ -142,25 +142,47 @@ class CriteriaMapper
 
         $select = Select::from($this->primaryTable);
 
-        $memberMappings = $this->mapAllRequiredMembersFor($criteria, $select->getTableAlias(), $extraRequiredMembers);
+        return $this->mapCriteriaToExistingSelect($criteria, $select, $select->getTableAlias(), $memberMappings, $extraRequiredMembers);
+    }
+
+    /**
+     * Maps the supplied criteria to an existing select query for the entity.
+     *
+     * @param ICriteria $criteria
+     * @param Select    $select
+     * @param string    $tableAlias
+     * @param array     $memberMappings
+     * @param array     $extraRequiredMembers
+     *
+     * @return mixed
+     * @throws InvalidArgumentException
+     */
+    public function mapCriteriaToExistingSelect(
+        ICriteria $criteria,
+        Select $select,
+        string $tableAlias,
+        array &$memberMappings = null,
+        array $extraRequiredMembers = []
+    ) {
+        $memberMappings = $this->mapAllRequiredMembersFor($criteria, $tableAlias, $extraRequiredMembers);
 
         $condition = null;
         $loaded    = false;
 
         if ($criteria->hasCondition()) {
             $condition = $this->applySpecificInstanceOfCondition(
-                    $criteria->getCondition(),
-                    $select,
-                    /* out */
-                    $loaded
+                $criteria->getCondition(),
+                $select,
+                /* out */
+                $loaded
             );
         }
 
         if (!$loaded) {
-            $this->mapper->getMapping()->addLoadToSelect($select, $select->getTableAlias());
+            $this->mapper->getMapping()->addLoadToSelect($select, $tableAlias);
         }
 
-        $memberMappings = $this->optimizeOneToOneRelationsAsLeftJoins($select, $memberMappings);
+        $memberMappings = $this->optimizeOneToOneRelationsAsLeftJoins($select, $tableAlias, $memberMappings);
 
         if ($condition) {
             $select->where($this->mapCondition($condition, $select, $memberMappings));
@@ -171,7 +193,7 @@ class CriteriaMapper
         }
 
         $select->offset($criteria->getStartOffset())
-                ->limit($criteria->getLimitAmount());
+            ->limit($criteria->getLimitAmount());
 
         return $select;
     }
@@ -213,8 +235,8 @@ class CriteriaMapper
 
         foreach ($memberExpressions as $key => $member) {
             $memberMappings[$key] = new MemberMappingWithTableAlias(
-                    $this->memberExpressionMapper->mapMemberExpression($member),
-                    $tableAlias
+                $this->memberExpressionMapper->mapMemberExpression($member),
+                $tableAlias
             );
         }
 
@@ -227,14 +249,14 @@ class CriteriaMapper
      *
      * @return MemberMappingWithTableAlias[]
      */
-    private function optimizeOneToOneRelationsAsLeftJoins(Select $select, array $memberMappings) : array
+    private function optimizeOneToOneRelationsAsLeftJoins(Select $select, string $initialTableAlias, array $memberMappings) : array
     {
         $joinedRelationTableAliasMap = [];
 
         foreach ($memberMappings as $key => $mappingWithAlias) {
             $mapping = $mappingWithAlias->getMapping();
 
-            $parentTableAlias  = $select->getTableAlias();
+            $parentTableAlias  = $initialTableAlias;
             $relationsToRemove = 0;
 
             foreach ($mapping->getRelationsToSubSelect() as $relation) {
@@ -255,8 +277,8 @@ class CriteriaMapper
             }
 
             $memberMappings[$key] = new MemberMappingWithTableAlias(
-                    $mapping->withRelationToSubSelect(array_slice($mapping->getRelationsToSubSelect(), $relationsToRemove)),
-                    $parentTableAlias
+                $mapping->withRelationToSubSelect(array_slice($mapping->getRelationsToSubSelect(), $relationsToRemove)),
+                $parentTableAlias
             );
         }
 
@@ -333,7 +355,7 @@ class CriteriaMapper
         }
 
         throw InvalidArgumentException::format(
-                'Unknown condition type %s', get_class($condition)
+            'Unknown condition type %s', get_class($condition)
         );
     }
 
@@ -349,7 +371,7 @@ class CriteriaMapper
         $mapping = $memberMappings[$ordering->getNestedMember()->asString()];
 
         $mapping->getMapping()
-                ->addOrderByToSelect($select, $mapping->getTableAlias(), $ordering->isAsc());
+            ->addOrderByToSelect($select, $mapping->getTableAlias(), $ordering->isAsc());
     }
 
     /**
@@ -364,6 +386,6 @@ class CriteriaMapper
         $mapping = $memberMappings[$condition->getNestedMember()->asString()];
 
         return $mapping->getMapping()
-                ->getWhereConditionExpr($select, $mapping->getTableAlias(), $condition->getOperator(), $condition->getValue());
+            ->getWhereConditionExpr($select, $mapping->getTableAlias(), $condition->getOperator(), $condition->getValue());
     }
 }

@@ -206,6 +206,34 @@ class SpecificationDefinition extends ObjectCriteriaBase
     }
 
     /**
+     * Defines a condition that is satisfied when the value
+     * ALL the objects in the collection satisfy the supplied specification.
+     *
+     * @param string         $collectionMemberExpression
+     * @param ISpecification $specification
+     *
+     * @return static
+     */
+    final public function whereHasAll(string $collectionMemberExpression, ISpecification $specification)
+    {
+        return $this->where($collectionMemberExpression, ConditionOperator::ALL_SATISFIES, $specification);
+    }
+
+    /**
+     * Defines a condition that is satisfied when the value
+     * ANY of the objects in the collection satisfy the supplied specification.
+     *
+     * @param string         $collectionMemberExpression
+     * @param ISpecification $specification
+     *
+     * @return static
+     */
+    final public function whereHasAny(string $collectionMemberExpression, ISpecification $specification)
+    {
+        return $this->where($collectionMemberExpression, ConditionOperator::ANY_SATISFIES, $specification);
+    }
+
+    /**
      * Defines a condition that is satisfied when the class
      * is an instance of the supplied class.
      *
@@ -218,8 +246,8 @@ class SpecificationDefinition extends ObjectCriteriaBase
     {
         if (!is_a($class, $this->class->getClassName(), true)) {
             throw InvalidArgumentException::format(
-                    'Invalid class supplied to %s: must be an a subclass of %s, %s given',
-                    __METHOD__, $this->class->getClassName(), $class
+                'Invalid class supplied to %s: must be an a subclass of %s, %s given',
+                __METHOD__, $this->class->getClassName(), $class
             );
         }
 

@@ -2,6 +2,7 @@
 
 namespace Dms\Core\Tests\Persistence\Db\Integration\Domains;
 
+use Dms\Core\Model\Criteria\SpecificationDefinition;
 use Dms\Core\Persistence\Db\Mapping\IOrm;
 use Dms\Core\Persistence\Db\Schema\ForeignKey;
 use Dms\Core\Persistence\Db\Schema\ForeignKeyMode;
@@ -9,6 +10,7 @@ use Dms\Core\Persistence\DbRepository;
 use Dms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\Mapper\BlogOrm;
 use Dms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\Mapper\TestPostMapper;
 use Dms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\Mapper\TestUserMapper;
+use Dms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\TestComment;
 use Dms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\TestHashedPassword;
 use Dms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\TestPost;
 use Dms\Core\Tests\Persistence\Db\Integration\Domains\Fixtures\Blog\TestUser;
@@ -918,6 +920,45 @@ class BlogTest extends DbIntegrationTest
             $this->repo->matching(
                 $this->repo->criteria()
                     ->where('this', '=', $this->dummyUserWithId(2))
+            )
+        );
+    }
+
+    public function testNestedWhereHas()
+    {
+        $this->setDataInDb([
+            'aliases'      => [],
+            'posts'        => [
+                ['id' => 1, 'author_id' => 1, 'content' => 'Hello World!'],
+                ['id' => 2, 'author_id' => 2, 'content' => 'Sup World!'],
+            ],
+            'comments'     => [
+                ['id' => 1, 'post_id' => 1, 'author_id' => 1, 'content' => 'Hello John!'],
+                ['id' => 2, 'post_id' => 1, 'author_id' => 2, 'content' => 'Goodbye!'],
+                ['id' => 3, 'post_id' => 2, 'author_id' => 1, 'content' => 'Sup John!'],
+                ['id' => 4, 'post_id' => 2, 'author_id' => 2, 'content' => 'Yo!'],
+            ],
+            'user_friends' => [],
+            'users'        => [
+                $this->dummyUserDbData(1),
+                $this->dummyUserDbData(2),
+            ],
+        ]);
+
+        $this->assertEquals(
+            [
+                ['id' => 2],
+            ],
+            $this->repo->loadMatching(
+                $this->repo->loadCriteria()
+                    ->loadAll(['id' => 'id'])
+                    ->whereHasAll('loadAll(postIds)', TestPost::specification(function (SpecificationDefinition $match) {
+                        $match->whereStringContains('content', 'World!');
+
+                        $match->whereHasAny('comments', TestComment::specification(function (SpecificationDefinition $match) {
+                            $match->whereStringContains('content', 'Yo!');
+                        }));
+                    }))
             )
         );
     }

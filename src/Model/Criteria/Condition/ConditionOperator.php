@@ -4,12 +4,16 @@ namespace Dms\Core\Model\Criteria\Condition;
 
 use Dms\Core\Exception\InvalidArgumentException;
 use Dms\Core\Exception\NotImplementedException;
+use Dms\Core\Model\ICriteria;
+use Dms\Core\Model\ISpecification;
+use Dms\Core\Model\ITypedObjectCollection;
+use Dms\Core\Model\ObjectCollection;
 use Dms\Core\Util\Debug;
 
 /**
  * The property condition operator enum class.
  *
- * NOTE: these operators are assumed null-safe, that is
+ * NOTE: these operators are assumed null-safe, that is,
  * return false if one of the operands is null (unless it is null == null).
  *
  * @author Elliot Levin <elliotlevin@hotmail.com>
@@ -26,18 +30,22 @@ final class ConditionOperator
     const GREATER_THAN_OR_EQUAL = '>=';
     const LESS_THAN = '<';
     const LESS_THAN_OR_EQUAL = '<=';
+    const ALL_SATISFIES = 'all-satisfies';
+    const ANY_SATISFIES = 'any-satisfies';
 
     private static $operators = [
-            self::EQUALS                           => true,
-            self::NOT_EQUALS                       => true,
-            self::IN                               => true,
-            self::NOT_IN                           => true,
-            self::STRING_CONTAINS                  => true,
-            self::STRING_CONTAINS_CASE_INSENSITIVE => true,
-            self::GREATER_THAN                     => true,
-            self::GREATER_THAN_OR_EQUAL            => true,
-            self::LESS_THAN                        => true,
-            self::LESS_THAN_OR_EQUAL               => true,
+        self::EQUALS                           => true,
+        self::NOT_EQUALS                       => true,
+        self::IN                               => true,
+        self::NOT_IN                           => true,
+        self::STRING_CONTAINS                  => true,
+        self::STRING_CONTAINS_CASE_INSENSITIVE => true,
+        self::GREATER_THAN                     => true,
+        self::GREATER_THAN_OR_EQUAL            => true,
+        self::LESS_THAN                        => true,
+        self::LESS_THAN_OR_EQUAL               => true,
+        self::ALL_SATISFIES                    => true,
+        self::ANY_SATISFIES                    => true,
     ];
 
     private function __construct()
@@ -72,8 +80,8 @@ final class ConditionOperator
     {
         if (!isset(self::$operators[$operator])) {
             throw InvalidArgumentException::format(
-                    'Invalid condition operator: expecting one of (%s), \'%s\' given',
-                    Debug::formatValues(array_keys(self::$operators)), $operator
+                'Invalid condition operator: expecting one of (%s), \'%s\' given',
+                Debug::formatValues(array_keys(self::$operators)), $operator
             );
         }
     }
@@ -97,8 +105,8 @@ final class ConditionOperator
                     $isScalar = !(is_object($l) || is_array($l));
 
                     return $isScalar
-                            ? $l === $r
-                            : $l == $r;
+                        ? $l === $r
+                        : $l == $r;
                 };
 
             case ConditionOperator::NOT_EQUALS:
@@ -109,8 +117,8 @@ final class ConditionOperator
                     $isScalar = !(is_object($l) || is_array($l));
 
                     return $isScalar
-                            ? $l !== $r
-                            : $l != $r;
+                        ? $l !== $r
+                        : $l != $r;
                 };
 
             case ConditionOperator::GREATER_THAN:
@@ -243,9 +251,45 @@ final class ConditionOperator
                     return true;
                 };
 
+            case ConditionOperator::ALL_SATISFIES:
+                return function ($arg) use ($left, $right) {
+                    /** @var array|\Traversable|null $l */
+                    $l = $left($arg);
+                    /** @var ISpecification|null $r */
+                    $r = $right($arg);
+
+                    if ($l === null || $r === null) {
+                        return false;
+                    }
+
+                    if (!is_array($l)) {
+                        $l = iterator_to_array($l);
+                    }
+
+                    return $r->isSatisfiedByAll($l);
+                };
+
+            case ConditionOperator::ANY_SATISFIES:
+                return function ($arg) use ($left, $right) {
+                    /** @var array|\Traversable|null $l */
+                    $l = $left($arg);
+                    /** @var ISpecification|null $r */
+                    $r = $right($arg);
+
+                    if ($l === null || $r === null) {
+                        return false;
+                    }
+
+                    if (!is_array($l)) {
+                        $l = iterator_to_array($l);
+                    }
+
+                    return $r->isSatisfiedByAny($l);
+                };
+
             default:
                 throw NotImplementedException::format(
-                        'Unknown condition operator \'%s\'', $operator
+                    'Unknown condition operator \'%s\'', $operator
                 );
         }
     }

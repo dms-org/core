@@ -2,6 +2,7 @@
 
 namespace Dms\Core\Tests\Persistence\Db\Integration\Criteria;
 
+use Dms\Core\Model\Criteria\SpecificationDefinition;
 use Dms\Core\Model\EntityIdCollection;
 use Dms\Core\Persistence\Db\Connection\IConnection;
 use Dms\Core\Persistence\Db\Criteria\CriteriaMapper;
@@ -188,6 +189,42 @@ class CriteriaMapperWithToManyIdsRelationTest extends CriteriaMapperTestBase
                                 $this->subSelectChildEntities()
                                         ->addColumn('__single_val', Expr::avg($this->tableColumn('child_entities', 'val')))
                         ))
+        );
+    }
+
+    public function testWhereHasAll()
+    {
+        $criteria = $this->mapper->newCriteria()
+            ->whereHasAll('loadAll(childIds)', ChildEntity::specification(function (SpecificationDefinition $match) {
+                $match->where('val', '>', 5);
+            }));
+
+        $this->assertMappedSelect($criteria,
+            $this->select()
+                ->addRawColumn('id')
+                ->where(Expr::subSelect(
+                    $this->subSelectChildEntities()
+                        ->addColumn('__single_val', Expr::equal(Expr::count(), Expr::param(null, 0)))
+                        ->where(Expr::not(Expr::greaterThan($this->tableColumn('child_entities', 'val'), Expr::param(null, 5))))
+                ))
+        );
+    }
+
+    public function testWhereHasAny()
+    {
+        $criteria = $this->mapper->newCriteria()
+            ->whereHasAny('loadAll(childIds)', ChildEntity::specification(function (SpecificationDefinition $match) {
+                $match->where('val', '=', 2);
+            }));
+
+        $this->assertMappedSelect($criteria,
+            $this->select()
+                ->addRawColumn('id')
+                ->where(Expr::subSelect(
+                    $this->subSelectChildEntities()
+                        ->addColumn('__single_val', Expr::greaterThan(Expr::count(), Expr::param(null, 0)))
+                        ->where(Expr::equal($this->tableColumn('child_entities', 'val'), Expr::param(null, 2)))
+                ))
         );
     }
 }

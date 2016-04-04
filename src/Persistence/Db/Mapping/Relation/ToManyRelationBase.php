@@ -2,6 +2,7 @@
 
 namespace Dms\Core\Persistence\Db\Mapping\Relation;
 
+use Dms\Core\Model\ITypedCollection;
 use Dms\Core\Persistence\Db\LoadingContext;
 use Dms\Core\Persistence\Db\Mapping\ParentChildrenMap;
 use Dms\Core\Persistence\Db\Mapping\Relation\Mode\IRelationMode;
@@ -61,7 +62,7 @@ abstract class ToManyRelationBase extends EntityRelation implements ISeparateToM
     /**
      * @inheritDoc
      */
-    public function buildCollection(array $children) : \Dms\Core\Model\ITypedCollection
+    public function buildCollection(array $children) : ITypedCollection
     {
         return $this->reference->buildNewCollection($children);
     }

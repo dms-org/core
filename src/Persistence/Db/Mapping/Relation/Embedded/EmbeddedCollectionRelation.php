@@ -130,7 +130,7 @@ class EmbeddedCollectionRelation extends EmbeddedRelation implements ISeparateTo
      *
      * @return ITypedCollection
      */
-    public function buildCollection(array $children) : \Dms\Core\Model\ITypedCollection
+    public function buildCollection(array $children) : ITypedCollection
     {
         return $this->mapper->buildCollection($children);
     }

@@ -4,7 +4,9 @@ namespace Dms\Core\Tests\Model;
 
 use Dms\Common\Testing\CmsTestCase;
 use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Model\Criteria\Condition\ConditionOperator;
 use Dms\Core\Model\ITypedCollection;
+use Dms\Core\Model\Object\TypedObject;
 use Dms\Core\Model\ObjectCollection;
 use Dms\Core\Model\Type\ArrayType;
 use Dms\Core\Model\Type\Builder\Type;

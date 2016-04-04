@@ -3,12 +3,16 @@
 namespace Dms\Core\Persistence\Db\Criteria\MemberMapping;
 
 use Dms\Core\Exception\NotImplementedException;
+use Dms\Core\Model\Criteria\Condition\ConditionOperator;
+use Dms\Core\Model\ISpecification;
+use Dms\Core\Persistence\Db\Criteria\CriteriaMapper;
 use Dms\Core\Persistence\Db\Criteria\MemberExpressionMappingException;
 use Dms\Core\Persistence\Db\Mapping\IEntityMapper;
 use Dms\Core\Persistence\Db\Mapping\ReadModel\Relation\MemberRelation;
 use Dms\Core\Persistence\Db\Mapping\ReadModel\Relation\ToManyMemberRelation;
 use Dms\Core\Persistence\Db\Mapping\Relation\IRelation;
 use Dms\Core\Persistence\Db\Mapping\Relation\IToManyRelation;
+use Dms\Core\Persistence\Db\Query\Expression\Expr;
 use Dms\Core\Persistence\Db\Query\Select;
 
 /**
@@ -40,7 +44,7 @@ class ToManyRelationMapping extends RelationMapping implements IFinalRelationMem
     /**
      * @return IToManyRelation
      */
-    public function getRelation() : \Dms\Core\Persistence\Db\Mapping\Relation\IToManyRelation
+    public function getRelation() : IToManyRelation
     {
         return $this->relation;
     }
@@ -48,7 +52,7 @@ class ToManyRelationMapping extends RelationMapping implements IFinalRelationMem
     /**
      * @return MemberRelation
      */
-    public function asMemberRelation() : \Dms\Core\Persistence\Db\Mapping\ReadModel\Relation\MemberRelation
+    public function asMemberRelation() : MemberRelation
     {
         return new ToManyMemberRelation($this);
     }
@@ -56,11 +60,43 @@ class ToManyRelationMapping extends RelationMapping implements IFinalRelationMem
     /**
      * @inheritDoc
      */
-    public function getWhereConditionExpr(Select $select, string $tableAlias, string $operator, $value) : \Dms\Core\Persistence\Db\Query\Expression\Expr
+    public function getWhereConditionExpr(Select $select, string $tableAlias, string $operator, $specification) : Expr
     {
+        if ($operator === ConditionOperator::ALL_SATISFIES || $operator === ConditionOperator::ANY_SATISFIES) {
+            /** @var ISpecification|null $specification */
+            if ($specification === null) {
+                return Expr::false();
+            }
+
+            $relatedEntityMapper   = $this->rootEntityMapper->getDefinition()->getOrm()->getEntityMapper($specification->getClass()->getClassName());
+            $relatedCriteriaMapper = new CriteriaMapper($relatedEntityMapper);
+
+            if ($operator === ConditionOperator::ALL_SATISFIES) {
+                return $this->loadExpressionWithNecessarySubselects(
+                    $select,
+                    $tableAlias,
+                    function (Select $subSelect, string $tableAlias) use ($relatedCriteriaMapper, $specification) {
+                        $relatedCriteriaMapper->mapCriteriaToExistingSelect($specification->not()->asCriteria(), $subSelect, $tableAlias);
+
+                        return Expr::equal(Expr::count(), Expr::param(null, 0));
+                    }
+                );
+            } else {
+                return $this->loadExpressionWithNecessarySubselects(
+                    $select,
+                    $tableAlias,
+                    function (Select $subSelect, string $tableAlias) use ($relatedCriteriaMapper, $specification) {
+                        $relatedCriteriaMapper->mapCriteriaToExistingSelect($specification->asCriteria(), $subSelect, $tableAlias);
+
+                        return Expr::greaterThan(Expr::count(), Expr::param(null, 0));
+                    }
+                );
+            }
+        }
+
         throw MemberExpressionMappingException::format(
-                'Cannot perform condition with operator \'%s\' on collection of related %s',
-                $operator, $this->getRelatedObjectType()
+            'Cannot perform condition with operator \'%s\' on collection of related %s',
+            $operator, $this->getRelatedObjectType()
         );
     }
 
@@ -77,13 +113,14 @@ class ToManyRelationMapping extends RelationMapping implements IFinalRelationMem
      */
     public function addSelectColumn(Select $select, string $tableAlias, string $alias)
     {
-        throw MemberExpressionMappingException::format('Cannot select a collection of related %s as a column', $this->getRelatedObjectType());
+        throw MemberExpressionMappingException::format('Cannot select a collection of related %s as a column',
+            $this->getRelatedObjectType());
     }
 
     /**
      * @inheritDoc
      */
-    protected function getSingleValueExpressionInSelect(Select $select, string $tableAlias) : \Dms\Core\Persistence\Db\Query\Expression\Expr
+    protected function getSingleValueExpressionInSelect(Select $select, string $tableAlias) : Expr
     {
         throw NotImplementedException::method(__METHOD__);
     }

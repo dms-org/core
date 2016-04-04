@@ -6,6 +6,7 @@ use Dms\Common\Testing\CmsTestCase;
 use Dms\Core\Exception\InvalidArgumentException;
 use Dms\Core\Exception\TypeMismatchException;
 use Dms\Core\Model\Criteria\Condition\AndCondition;
+use Dms\Core\Model\Criteria\Condition\ConditionOperator;
 use Dms\Core\Model\Criteria\Condition\InstanceOfCondition;
 use Dms\Core\Model\Criteria\Condition\MemberCondition;
 use Dms\Core\Model\Criteria\Condition\NotCondition;
@@ -16,7 +17,6 @@ use Dms\Core\Model\Criteria\Member\MemberPropertyExpression;
 use Dms\Core\Model\Criteria\MemberOrdering;
 use Dms\Core\Model\Criteria\NestedMember;
 use Dms\Core\Model\Criteria\OrderingDirection;
-use Dms\Core\Model\Criteria\Specification;
 use Dms\Core\Model\Criteria\SpecificationDefinition;
 use Dms\Core\Tests\Model\Criteria\Fixtures\MockSpecification;
 use Dms\Core\Tests\Model\Fixtures\SubObject;
@@ -362,5 +362,43 @@ class CriteriaTest extends CmsTestCase
                 ->getCondition(),
             $criteria->getCondition()
         );
+    }
+
+    public function testWhereHasAll()
+    {
+        $criteria = TestEntity::criteria();
+
+        $criteria->whereHasAll('objects', $spec = SubObject::specification(function (SpecificationDefinition $match) {
+            $match->where('number', '>', 5);
+        }));
+
+        $this->assertEquals(
+            new MemberCondition(
+                new NestedMember([
+                    new MemberPropertyExpression(TestEntity::definition()->getProperty('objects'), false),
+                ]),
+                ConditionOperator::ALL_SATISFIES,
+                $spec
+            ),
+            $criteria->getCondition());
+    }
+
+    public function testWhereHasAny()
+    {
+        $criteria = TestEntity::criteria();
+
+        $criteria->whereHasAny('objects', $spec = SubObject::specification(function (SpecificationDefinition $match) {
+            $match->where('number', '>', 5);
+        }));
+
+        $this->assertEquals(
+            new MemberCondition(
+                new NestedMember([
+                    new MemberPropertyExpression(TestEntity::definition()->getProperty('objects'), false),
+                ]),
+                ConditionOperator::ANY_SATISFIES,
+                $spec
+            ),
+            $criteria->getCondition());
     }
 }

@@ -31,7 +31,7 @@ interface IToManyRelation extends IRelation
      *
      * @return ITypedCollection
      */
-    public function buildCollection(array $children) : \Dms\Core\Model\ITypedCollection;
+    public function buildCollection(array $children) : ITypedCollection;
 
     /**
      * @param PersistenceContext $context

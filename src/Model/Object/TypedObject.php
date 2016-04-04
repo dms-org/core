@@ -119,7 +119,7 @@ abstract class TypedObject implements ITypedObject, \Serializable
      *
      * @return ISpecification
      */
-    final protected static function specification(callable $definitionCallback) : ISpecification
+    final public static function specification(callable $definitionCallback) : ISpecification
     {
         return new CustomSpecification(get_called_class(), $definitionCallback);
     }

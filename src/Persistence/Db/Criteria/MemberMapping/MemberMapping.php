@@ -259,7 +259,7 @@ abstract class MemberMapping
         /** @var Select $subSelect */
         list($subSelect, $joinedTableAlias) = $this->getJoinedSubSelectAndTableAlias($select, $tableAlias, $separateTableRelations);
 
-        $subSelect->addColumn('__single_val', $expressionLoader($subSelect, $joinedTableAlias));
+        $subSelect->setColumns(['__single_val' => $expressionLoader($subSelect, $joinedTableAlias)]);
 
         return Expr::subSelect($subSelect);
     }
@@ -296,7 +296,7 @@ abstract class MemberMapping
                     $subSelect
             );
         }
-
+        
         return [$subSelect, $tableAlias];
     }
 }
