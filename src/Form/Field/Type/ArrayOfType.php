@@ -41,6 +41,14 @@ class ArrayOfType extends FieldType
     }
 
     /**
+     * @return IField
+     */
+    public function getElementField() : IField
+    {
+        return $this->elementField;
+    }
+
+    /**
      * @return IFieldType
      */
     public function getElementType() : IFieldType
