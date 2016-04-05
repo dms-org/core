@@ -37,7 +37,7 @@ interface IField
      *
      * @return IType
      */
-    public function getProcessedType() : \Dms\Core\Model\Type\IType;
+    public function getProcessedType() : IType;
 
     /**
      * Gets the field processors.
@@ -45,6 +45,13 @@ interface IField
      * @return IFieldProcessor[]
      */
     public function getProcessors() : array;
+
+    /**
+     * Gets the custom field processors.
+     *
+     * @return IFieldProcessor[]
+     */
+    public function getCustomProcessors() : array;
 
     /**
      * Gets the (processed) initial value of the field.
@@ -80,7 +87,7 @@ interface IField
     public function unprocess($processedInput);
 
     /**
-     * Gets an equivalent form field with the supplied name and label.
+     * Returns an equivalent form field with the supplied name and label.
      *
      * @param string      $name
      * @param string|null $label
@@ -90,11 +97,22 @@ interface IField
     public function withName(string $name, string $label = null) : IField;
 
     /**
-     * Gets an equivalent form field with the supplied (processed) initial value.
+     * Returns an equivalent form field with the supplied (processed) initial value.
      *
      * @param mixed $value
      *
      * @return IField
      */
     public function withInitialValue($value) : IField;
+
+    /**
+     * Returns an equivalent form field with the supplied custom processors.
+     * 
+     * NOTE: The initial value of the field will be removed.
+     *
+     * @param IFieldProcessor[] $customProcessors
+     *
+     * @return IField
+     */
+    public function withCustomProcessors(array $customProcessors) : IField;
 }

@@ -4,12 +4,11 @@ namespace Dms\Core\Tests\Form\Field;
 
 use Dms\Common\Testing\CmsTestCase;
 use Dms\Core\Form\Field\Builder\Field;
+use Dms\Core\Form\Field\Processor\CustomProcessor;
 use Dms\Core\Form\Field\Processor\DefaultValueProcessor;
 use Dms\Core\Form\Field\Processor\OverrideValueProcessor;
 use Dms\Core\Form\Field\Processor\TypeProcessor;
-use Dms\Core\Form\Field\Processor\Validator\NotSuppliedValidator;
 use Dms\Core\Form\Field\Type\FieldType;
-use Dms\Core\Form\InvalidInputException;
 use Dms\Core\Model\Type\Builder\Type;
 
 /**
@@ -33,13 +32,52 @@ class FieldTest extends CmsTestCase
         $this->assertSame(null, $newField->withInitialValue(null)->getType()->get(FieldType::ATTR_INITIAL_VALUE));
     }
 
+    public function testWithCustomerProcessors()
+    {
+        $testField = Field::name('foo')->label('Foo')
+            ->string()
+            ->value('abc')
+            ->process(
+                $processor = new CustomProcessor(
+                    Type::string(),
+                    function ($i) {
+                        return $i . '!!';
+                    },
+                    function ($i) {
+                        return substr($i, 0, -2);
+                    }
+                )
+            )
+            ->build();
+
+        $this->assertSame([$processor], $testField->getCustomProcessors());
+        $this->assertSame('abc!!', $testField->getInitialValue());
+
+        $newField = $testField->withCustomProcessors([
+            $newProcessor = new CustomProcessor(
+                Type::string(),
+                function ($i) {
+                    return $i . '!!!';
+                },
+                function ($i) {
+                    return substr($i, 0, -3);
+                }
+            )
+        ]);
+
+        $this->assertSame([$processor], $testField->getCustomProcessors());
+        $this->assertSame('abc!!', $testField->getInitialValue());
+        $this->assertSame([$newProcessor], $newField->getCustomProcessors());
+        $this->assertSame(null, $newField->getInitialValue());
+    }
+
     public function testReadOnlyField()
     {
         $testField = Field::name('foo')->label('Foo')
-                ->string()
-                ->value('abc')
-                ->readonly()
-                ->build();
+            ->string()
+            ->value('abc')
+            ->readonly()
+            ->build();
 
         $this->assertSame('abc', $testField->getInitialValue());
         $this->assertSame(true, $testField->getType()->get(FieldType::ATTR_READ_ONLY));

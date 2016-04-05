@@ -79,6 +79,7 @@ class Field implements IField
         }
 
         $this->setInitialValue($initialValue);
+
     }
 
     private function validateInitialValue($initialValue)
@@ -111,6 +112,13 @@ class Field implements IField
         }
 
         $this->type = $this->type->with(FieldType::ATTR_INITIAL_VALUE, $unprocessedInitialValue);
+
+        foreach ($this->customProcessors as $key => $processor) {
+            if ($processor instanceof IFieldProcessorDependentOnInitialValue) {
+                /** @var IFieldProcessorDependentOnInitialValue $processor */
+                $this->customProcessors[$key] = $processor->withInitialValue($initialValue);
+            }
+        }
     }
 
     /**
@@ -145,6 +153,14 @@ class Field implements IField
     public function getProcessors() : array
     {
         return array_merge($this->type->getProcessors(), $this->customProcessors);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getCustomProcessors() : array
+    {
+        return $this->customProcessors;
     }
 
     /**
@@ -235,11 +251,19 @@ class Field implements IField
         $clone = clone $this;
         $clone->setInitialValue($value);
 
-        foreach ($clone->customProcessors as $key => $processor) {
-            if ($processor instanceof IFieldProcessorDependentOnInitialValue) {
-                $clone->customProcessors[$key] = $processor->withInitialValue($value);
-            }
-        }
+        return $clone;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function withCustomProcessors(array $customerProcessors) : IField
+    {
+        InvalidArgumentException::verifyAllInstanceOf(__METHOD__, 'customerProcessors', $customerProcessors, IFieldProcessor::class);
+
+        $clone = clone $this;
+        $clone->customProcessors = $customerProcessors;
+        $clone->setInitialValue(null);
 
         return $clone;
     }
