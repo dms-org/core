@@ -72,7 +72,7 @@ class MockPlatform extends Platform
         return new PhpPreparedCompiledQuery(function (MockDatabase $database, array $parameters) use ($table) {
             $table = $database->getTable($table->getName());
 
-            $table->insert($parameters);
+            $table->insert($parameters + $table->getStructure()->getNullColumnData());
 
             return 1;
         });

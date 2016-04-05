@@ -47,7 +47,7 @@ class Row
     {
         $this->table             = $table;
         $this->primaryKey        = $table->getPrimaryKeyColumnName();
-        $this->columnData        = $columnData + $table->getNullColumnData();
+        $this->columnData        = $columnData;
         $this->lockingColumnData = $lockingColumnData;
     }
 
@@ -135,6 +135,8 @@ class Row
      */
     public function setColumn(string $column, $value)
     {
+        $this->table->getColumn($column);
+
         $this->columnData[$column] = $value;
     }
 
@@ -154,6 +156,8 @@ class Row
      */
     public function setLockingColumn(string $column, $value)
     {
+        $this->table->getColumn($column);
+
         $this->lockingColumnData[$column] = $value;
     }
 

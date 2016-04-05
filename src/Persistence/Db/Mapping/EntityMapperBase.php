@@ -45,6 +45,11 @@ abstract class EntityMapperBase extends ObjectMapper implements IEntityMapper
     private $primaryKey;
 
     /**
+     * @var array
+     */
+    private $defaultColumnData;
+
+    /**
      * @var callable[]
      */
     private $onUpdatedPrimaryTableCallbacks = [];
@@ -69,9 +74,10 @@ abstract class EntityMapperBase extends ObjectMapper implements IEntityMapper
 
     final protected function loadFromDefinition(FinalizedMapperDefinition $definition)
     {
-        $this->entityType   = $definition->getClassName();
-        $this->primaryTable = $definition->getTable();
-        $this->primaryKey   = $this->primaryTable->getPrimaryKeyColumnName();
+        $this->entityType        = $definition->getClassName();
+        $this->primaryTable      = $definition->getTable();
+        $this->primaryKey        = $this->primaryTable->getPrimaryKeyColumnName();
+        $this->defaultColumnData = array_fill_keys($this->mapping->getAllColumnsToLoad(), null);
 
         $this->tables[$this->primaryTable->getName()] = $this->primaryTable;
 
@@ -205,7 +211,7 @@ abstract class EntityMapperBase extends ObjectMapper implements IEntityMapper
                 unset($entities[$key]);
                 $persistedRows[$key] = $context->getPersistedRowFor($entity);
             } else {
-                $row = new Row($this->primaryTable);
+                $row = new Row($this->primaryTable, $this->defaultColumnData);
 
                 if ($entity->hasId()) {
                     $row->setPrimaryKey($entity->getId());

@@ -165,7 +165,7 @@ class RecursiveToOneRelationTest extends DbIntegrationTest
         $this->assertDatabaseDataSameAs([
             'recursive_entities' => [
                 ['id' => 3, 'parent_id' => null],
-                ['id' => 4, 'parent_id' => null],
+                ['id' => 4, 'parent_id' => 3],
                 ['id' => 5, 'parent_id' => 4],
                 ['id' => 6, 'parent_id' => 5],
                 ['id' => 7, 'parent_id' => 6],
@@ -179,6 +179,23 @@ class RecursiveToOneRelationTest extends DbIntegrationTest
             'Insert level 2'              => Upsert::class,
             'Insert level 3'              => Upsert::class,
             'Insert level 4'              => Upsert::class,
+        ]);
+
+        // Test removing parent association
+
+        $entity = new RecursiveEntity();
+        $entity->setId(3);
+
+        $this->repo->save($entity);
+
+        $this->assertDatabaseDataSameAs([
+            'recursive_entities' => [
+                ['id' => 3, 'parent_id' => null],
+                ['id' => 4, 'parent_id' => null],
+                ['id' => 5, 'parent_id' => 4],
+                ['id' => 6, 'parent_id' => 5],
+                ['id' => 7, 'parent_id' => 6],
+            ],
         ]);
     }
 

@@ -129,28 +129,33 @@ abstract class Connection implements IConnection
                     $lockingColumnNameParameterMap[$columnName] = 'lock__' . $columnName;
                 }
 
-                $update = $this->createPreparedUpdatedWithWhereId($table, $lockingColumnNameParameterMap);
+                $groupedRowData = $this->groupRowDataBySuppliedColumns($rowsData);
 
-                foreach ($rowsData as $key => $row) {
-                    $update->setParameters($row);
-                    $update->execute();
+                foreach ($groupedRowData as $rows) {
+                    $columnsToUpdate = array_diff(array_keys($rows[0]), $lockingColumnNameParameterMap);
+                    $update          = $this->createPreparedUpdatedWithWhereId($table, $columnsToUpdate, $lockingColumnNameParameterMap);
 
-                    // If the update does not succeed that means the row has been updated
-                    // and optimistic locking has failed OR the row with that primary key
-                    // no longer exists.
-                    if ($update->getAffectedRows() !== 1) {
-                        $currentRow = $this->load(
+                    foreach ($rows as $key => $row) {
+                        $update->setParameters($row);
+                        $update->execute();
+
+                        // If the update does not succeed that means the row has been updated
+                        // and optimistic locking has failed OR the row with that primary key
+                        // no longer exists.
+                        if ($update->getAffectedRows() !== 1) {
+                            $currentRow = $this->load(
                                 Select::allFrom($table)
-                                        ->where(Expr::equal(
-                                                Expr::tableColumn($table, $table->getPrimaryKeyColumnName()),
-                                                Expr::idParam($rowsWithKeyArray[$key]->getColumn($table->getPrimaryKeyColumnName()))
-                                        ))
-                        )->getFirstRowOrNull();
+                                    ->where(Expr::equal(
+                                        Expr::tableColumn($table, $table->getPrimaryKeyColumnName()),
+                                        Expr::idParam($rowsWithKeyArray[$key]->getColumn($table->getPrimaryKeyColumnName()))
+                                    ))
+                            )->getFirstRowOrNull();
 
-                        throw new DbOutOfSyncException(
+                            throw new DbOutOfSyncException(
                                 $rowsWithKeyArray[$key],
                                 $currentRow
-                        );
+                            );
+                        }
                     }
                 }
             }
@@ -158,12 +163,13 @@ abstract class Connection implements IConnection
             $rowsWithoutKeys = $query->getRowsWithoutPrimaryKeys();
             $rowArray        = $rowsWithoutKeys->getRows();
             $rowsData        = $this->platform->mapResultSetToDbFormat($rowsWithoutKeys);
+            $defaultData     = $table->getNullColumnData();
 
             if ($rowsData) {
                 $insert = $this->prepare($this->platform->compilePreparedInsert($table));
 
                 foreach ($rowsData as $key => $row) {
-                    $insert->setParameters($row);
+                    $insert->setParameters($row + $defaultData);
                     $insert->execute();
                     $rowArray[$key]->firePrimaryKeyCallbacks($this->getLastInsertId());
                 }
@@ -181,33 +187,57 @@ abstract class Connection implements IConnection
             $rowArray = $rows->getRows();
             $table    = $rows->getTable();
 
-            $rowsData = $this->platform->mapResultSetToDbFormat($rows);
+            $rowsData       = $this->platform->mapResultSetToDbFormat($rows);
+            $groupedRowData = $this->groupRowDataBySuppliedColumns($rowsData);
 
-            $update = $this->createPreparedUpdatedWithWhereId($table);
+            foreach ($groupedRowData as $rows) {
+                $columnsToUpdate = array_keys($rows[0]);
+                $update          = $this->createPreparedUpdatedWithWhereId($table, $columnsToUpdate);
 
-            foreach ($rowsData as $key => $row) {
-                $update->setParameters($row);
-                $update->execute();
+                foreach ($rows as $key => $row) {
+                    $update->setParameters($row);
+                    $update->execute();
 
-                if ($update->getAffectedRows() !== 1) {
-                    throw new DbOutOfSyncException(
+                    if ($update->getAffectedRows() !== 1) {
+                        throw new DbOutOfSyncException(
                             $rowArray[$key],
                             null // There is no row with the supplied id.
-                    );
+                        );
+                    }
                 }
             }
         });
     }
 
-    protected function createPreparedUpdatedWithWhereId(Table $table, array $lockingColumnNameParameterMap = [])
+    protected function createPreparedUpdatedWithWhereId(Table $table, array $columnsToUpdate, array $lockingColumnNameParameterMap = [])
     {
         $primaryKey = $table->getPrimaryKeyColumnName();
 
         return $this->prepare($this->platform->compilePreparedUpdate(
-                $table,
-                array_diff($table->getColumnNames(), [$primaryKey]),
-                $lockingColumnNameParameterMap + [$primaryKey => $primaryKey]
+            $table,
+            array_diff($columnsToUpdate, [$primaryKey]),
+            $lockingColumnNameParameterMap + [$primaryKey => $primaryKey]
         ));
+    }
+
+    /**
+     * @param array[] $rows
+     *
+     * @return array[][]
+     */
+    protected function groupRowDataBySuppliedColumns(array $rows) : array
+    {
+        $groups = [];
+
+        foreach ($rows as $row) {
+            $columnNames = array_keys($row);
+            sort($columnNames, SORT_STRING);
+            $key = implode('||', $columnNames);
+
+            $groups[$key][] = $row;
+        }
+
+        return $groups;
     }
 
     /**
@@ -218,6 +248,4 @@ abstract class Connection implements IConnection
         $compiled = $this->loadQueryFrom($this->platform->compileResequenceOrderIndexColumn($query));
         $compiled->execute();
     }
-
-
 }
