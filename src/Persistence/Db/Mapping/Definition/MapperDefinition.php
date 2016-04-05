@@ -104,6 +104,11 @@ class MapperDefinition extends MapperDefinitionBase
     /**
      * @var callable[]
      */
+    protected $customLoadMappingCallbacks = [];
+
+    /**
+     * @var callable[]
+     */
     protected $relationFactories = [];
 
     /**
@@ -182,8 +187,8 @@ class MapperDefinition extends MapperDefinitionBase
         $baseType = $this->class ? $this->class->getClassName() : TypedObject::class;
         if (!is_a($classType, $baseType, true)) {
             throw InvalidArgumentException::format(
-                    'Invalid call to %s: class type must be an subclass of %s, %s given',
-                    __METHOD__, $baseType, $classType
+                'Invalid call to %s: class type must be an subclass of %s, %s given',
+                __METHOD__, $baseType, $classType
             );
         }
 
@@ -232,11 +237,11 @@ class MapperDefinition extends MapperDefinitionBase
     public function column(string $columnName) : ColumnTypeDefiner
     {
         return new ColumnTypeDefiner(
-                $this,
-                function (Column $column) {
-                    $this->addColumn($column);
-                },
-                $columnName
+            $this,
+            function (Column $column) {
+                $this->addColumn($column);
+            },
+            $columnName
         );
     }
 
@@ -258,8 +263,8 @@ class MapperDefinition extends MapperDefinitionBase
 
         if (!$this->class->hasProperty($property)) {
             throw InvalidArgumentException::format(
-                    'Invalid call to %s: property \'%s\' is not a defined property on %s',
-                    $method, $property, $this->class->getClassName()
+                'Invalid call to %s: property \'%s\' is not a defined property on %s',
+                $method, $property, $this->class->getClassName()
             );
         }
     }
@@ -277,10 +282,10 @@ class MapperDefinition extends MapperDefinitionBase
         $this->verifyProperty(__METHOD__, $propertyName);
 
         return new PropertyColumnDefiner($this, $propertyName, function (
-                Column $column,
-                callable $phpToDbPropertyConverter = null,
-                callable $dbToPhpPropertyConverter = null,
-                bool $ignoreNullabilityMismatch = false
+            Column $column,
+            callable $phpToDbPropertyConverter = null,
+            callable $dbToPhpPropertyConverter = null,
+            bool $ignoreNullabilityMismatch = false
         ) use ($propertyName) {
             $this->propertyColumnMap[$propertyName] = $column->getName();
             $this->addColumn($column);
@@ -291,7 +296,7 @@ class MapperDefinition extends MapperDefinitionBase
 
             if ($ignoreNullabilityMismatch) {
                 $propertyType = $propertyType->nonNullable();
-                $columnType = $columnType->nonNullable();
+                $columnType   = $columnType->nonNullable();
             }
 
             if ($phpToDbPropertyConverter && $dbToPhpPropertyConverter) {
@@ -299,10 +304,10 @@ class MapperDefinition extends MapperDefinitionBase
                 $this->dbToPhpPropertyConverterMap[$propertyName] = $dbToPhpPropertyConverter;
             } elseif (!$propertyType->equals($columnType)) {
                 throw IncompatiblePropertyMappingException::format(
-                        'Invalid property to column mapping: cannot bind %s to column \'%s\' as the types are incompatible, '
-                        . 'property type %s must match the column type %s',
-                        $this->class->getClassName() . '::$' . $propertyName, $column->getName(),
-                        $propertyType->asTypeString(), $columnType->asTypeString()
+                    'Invalid property to column mapping: cannot bind %s to column \'%s\' as the types are incompatible, '
+                    . 'property type %s must match the column type %s',
+                    $this->class->getClassName() . '::$' . $propertyName, $column->getName(),
+                    $propertyType->asTypeString(), $columnType->asTypeString()
                 );
             }
         });
@@ -409,8 +414,8 @@ class MapperDefinition extends MapperDefinitionBase
 
         if (!($enumType instanceof ObjectType)) {
             throw InvalidArgumentException::format(
-                    'Invalid enum property \'%s\': must map to an object type, %s given',
-                    $property, $type->asTypeString()
+                'Invalid enum property \'%s\': must map to an object type, %s given',
+                $property, $type->asTypeString()
             );
         }
 
@@ -484,23 +489,46 @@ class MapperDefinition extends MapperDefinitionBase
         });
     }
 
+    /**
+     * Defines a custom callback to load the supplied objects.
+     *
+     * Example:
+     * <code>
+     * $map->custom(function (array $objects) {
+     *      foreach ($objects as $object) {
+     *          // Load object...
+     *      }
+     * });
+     * </code>
+     *
+     * This will be called after all relations and properties are loaded.
+     *
+     * @param callable $loadCallback
+     *
+     * @return void
+     */
+    public function custom(callable $loadCallback)
+    {
+        $this->customLoadMappingCallbacks[] = $loadCallback;
+    }
+
     protected function defineRelationVia(IAccessor $accessor, callable $definedCallback = null)
     {
         return new RelationUsingDefiner(
-                $this,
-                $this->orm,
-                $accessor,
-                function (callable $relationFactory, callable $foreignKeyFactory = null) use ($accessor, $definedCallback) {
-                    $this->createRelationMappingFactory($accessor, $relationFactory);
+            $this,
+            $this->orm,
+            $accessor,
+            function (callable $relationFactory, callable $foreignKeyFactory = null) use ($accessor, $definedCallback) {
+                $this->createRelationMappingFactory($accessor, $relationFactory);
 
-                    if ($foreignKeyFactory) {
-                        $this->foreignKeyFactories[] = $foreignKeyFactory;
-                    }
-
-                    if ($definedCallback) {
-                        $definedCallback();
-                    }
+                if ($foreignKeyFactory) {
+                    $this->foreignKeyFactories[] = $foreignKeyFactory;
                 }
+
+                if ($definedCallback) {
+                    $definedCallback();
+                }
+            }
         );
     }
 
@@ -530,22 +558,22 @@ class MapperDefinition extends MapperDefinitionBase
         $this->verifyDefinedClass();
 
         return new SubClassMappingDefiner(
-                $this->orm,
-                $this,
-                function (callable $mappingLoader, MapperDefinition $subClassDefinition) {
-                    $subClassDefinition->verifyDefinedClass();
-                    $subClassName = $subClassDefinition->class->getClassName();
+            $this->orm,
+            $this,
+            function (callable $mappingLoader, MapperDefinition $subClassDefinition) {
+                $subClassDefinition->verifyDefinedClass();
+                $subClassName = $subClassDefinition->class->getClassName();
 
-                    if (!is_a($subClassName, $this->class->getClassName(), true)) {
-                        throw IncompleteMapperDefinitionException::format(
-                                'Invalid subclass mapper definition for: defined type must be a subclass of %s, %s given',
-                                $this->class->getClassName(),
-                                $subClassName
-                        );
-                    }
-
-                    $this->subClassMappingFactories[$subClassName] = $mappingLoader;
+                if (!is_a($subClassName, $this->class->getClassName(), true)) {
+                    throw IncompleteMapperDefinitionException::format(
+                        'Invalid subclass mapper definition for: defined type must be a subclass of %s, %s given',
+                        $this->class->getClassName(),
+                        $subClassName
+                    );
                 }
+
+                $this->subClassMappingFactories[$subClassName] = $mappingLoader;
+            }
         );
     }
 
@@ -587,19 +615,19 @@ class MapperDefinition extends MapperDefinitionBase
     public function foreignKey(string $foreignKeyName) : ForeignKeyLocalColumnsDefiner
     {
         return new ForeignKeyLocalColumnsDefiner(function (
-                array $localColumnNames,
-                $referencedTable,
-                array $referencedColumns,
-                $onUpdateMode,
-                $onDeleteMode
+            array $localColumnNames,
+            $referencedTable,
+            array $referencedColumns,
+            $onUpdateMode,
+            $onDeleteMode
         ) use ($foreignKeyName) {
             $this->foreignKeys[] = new ForeignKey(
-                    $this->orm->getNamespace() . $foreignKeyName,
-                    $localColumnNames,
-                    $referencedTable,
-                    $referencedColumns,
-                    $onUpdateMode,
-                    $onDeleteMode
+                $this->orm->getNamespace() . $foreignKeyName,
+                $localColumnNames,
+                $referencedTable,
+                $referencedColumns,
+                $onUpdateMode,
+                $onDeleteMode
             );
         });
     }
@@ -617,8 +645,8 @@ class MapperDefinition extends MapperDefinitionBase
         foreach ($strategy->getLockingColumnNames() as $columnName) {
             if (!isset($this->columns[$columnName])) {
                 throw InvalidArgumentException::format(
-                        'Cannot add optimistic locking strategy: expecting one of columns (%s), \'%s\' given',
-                        Debug::formatValues(array_keys($this->columns)), $columnName
+                    'Cannot add optimistic locking strategy: expecting one of columns (%s), \'%s\' given',
+                    Debug::formatValues(array_keys($this->columns)), $columnName
                 );
             }
         }
@@ -662,19 +690,19 @@ class MapperDefinition extends MapperDefinitionBase
 
             if ($this->verifyAllPropertiesMapped && !isset($allMappedProperties[$propertyName])) {
                 throw IncompleteMapperDefinitionException::format(
-                        'Invalid mapper definition for %s: unmapped property \'%s\' of type %s, call $map->ignoreUnmappedProperties() to ignore this warning',
-                        $this->class->getClassName(),
-                        $propertyName,
-                        $property->getType()->asTypeString()
+                    'Invalid mapper definition for %s: unmapped property \'%s\' of type %s, call $map->ignoreUnmappedProperties() to ignore this warning',
+                    $this->class->getClassName(),
+                    $propertyName,
+                    $property->getType()->asTypeString()
                 );
             }
         }
 
         $table = new Table(
-                $this->orm->getNamespace() . $tableName,
-                $this->columns,
-                $this->indexes,
-                $this->foreignKeys
+            $this->orm->getNamespace() . $tableName,
+            $this->columns,
+            $this->indexes,
+            $this->foreignKeys
         );
 
         $relationsFactory = function (Table $table, IObjectMapper $parentMapper) {
@@ -713,20 +741,21 @@ class MapperDefinition extends MapperDefinitionBase
         }
 
         return new FinalizedMapperDefinition(
-                $this->orm,
-                $this->class,
-                $table,
-                $this->propertyColumnMap,
-                $this->columnGetterMap,
-                $this->columnSetterMap,
-                $this->phpToDbPropertyConverterMap,
-                $this->dbToPhpPropertyConverterMap,
-                $this->methodColumnMap,
-                $this->lockingStrategies,
-                $persistHooks,
-                $subClassMappings,
-                $relationsFactory,
-                $foreignKeysFactory
+            $this->orm,
+            $this->class,
+            $table,
+            $this->propertyColumnMap,
+            $this->columnGetterMap,
+            $this->columnSetterMap,
+            $this->phpToDbPropertyConverterMap,
+            $this->dbToPhpPropertyConverterMap,
+            $this->methodColumnMap,
+            $this->customLoadMappingCallbacks,
+            $this->lockingStrategies,
+            $persistHooks,
+            $subClassMappings,
+            $relationsFactory,
+            $foreignKeysFactory
         );
     }
 
@@ -738,7 +767,7 @@ class MapperDefinition extends MapperDefinitionBase
     {
         if (!$this->class) {
             throw IncompleteMapperDefinitionException::format(
-                    'Invalid mapper definition: mapped object type is not defined, use $map->type(...)'
+                'Invalid mapper definition: mapped object type is not defined, use $map->type(...)'
             );
         }
     }

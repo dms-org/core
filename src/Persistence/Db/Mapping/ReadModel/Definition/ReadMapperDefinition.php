@@ -357,6 +357,29 @@ class ReadMapperDefinition
     }
 
     /**
+     * Defines a custom callback to load the supplied objects.
+     *
+     * Example:
+     * <code>
+     * $map->custom(function (array $objects) {
+     *      foreach ($objects as $object) {
+     *          // Load object...
+     *      }
+     * });
+     * </code>
+     *
+     * This will be called after all relations and properties are loaded.
+     *
+     * @param callable $loadCallback
+     *
+     * @return void
+     */
+    public function custom(callable $loadCallback)
+    {
+        $this->readDefinition->custom($loadCallback);
+    }
+
+    /**
      * @return FinalizedMapperDefinition
      * @throws IncompleteMapperDefinitionException
      */

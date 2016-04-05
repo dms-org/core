@@ -384,6 +384,10 @@ abstract class ObjectMapping implements IObjectMapping
         foreach ($objects as $key => $object) {
             $object->hydrate($objectProperties[$key]);
         }
+        
+        foreach ($this->definition->getCustomLoadMappingCallbacks() as $callback) {
+            $callback($objects);
+        }
     }
 
     /**

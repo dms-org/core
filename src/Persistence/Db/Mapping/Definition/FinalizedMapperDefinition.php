@@ -111,6 +111,10 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
      * @var callable
      */
     private $foreignKeysFactory;
+    /**
+     * @var array|\callable[]
+     */
+    private $customLoadMappingCallbacks;
 
     /**
      * FinalizedMapperDefinition constructor.
@@ -124,6 +128,7 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
      * @param callable[]                   $phpToDbPropertyConverterMap
      * @param callable[]                   $dbToPhpPropertyConverterMap
      * @param string[]                     $methodColumnNameMap
+     * @param callable[]                   $customLoadMappingCallbacks
      * @param IOptimisticLockingStrategy[] $lockingStrategies
      * @param IPersistHook[]               $persistHooks
      * @param IObjectMapping[]             $subClassMappings
@@ -141,14 +146,14 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
         array $phpToDbPropertyConverterMap,
         array $dbToPhpPropertyConverterMap,
         array $methodColumnNameMap,
+        array $customLoadMappingCallbacks,
         array $lockingStrategies,
         array $persistHooks,
         array $subClassMappings,
         callable $relationMappingsFactory,
         callable $foreignKeysFactory,
         Table $entityTable = null
-    )
-    {
+    ) {
         $this->orm                         = $orm;
         $this->class                       = $class;
         $this->table                       = $table;
@@ -158,6 +163,7 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
         $this->phpToDbPropertyConverterMap = $phpToDbPropertyConverterMap;
         $this->dbToPhpPropertyConverterMap = $dbToPhpPropertyConverterMap;
         $this->methodColumnNameMap         = $methodColumnNameMap;
+        $this->customLoadMappingCallbacks      = $customLoadMappingCallbacks;
         $this->lockingStrategies           = $lockingStrategies;
 
         foreach ($persistHooks as $persistHook) {
@@ -260,7 +266,7 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
     /**
      * @return IOrm
      */
-    public function getOrm() : \Dms\Core\Persistence\Db\Mapping\IOrm
+    public function getOrm() : IOrm
     {
         return $this->orm;
     }
@@ -369,6 +375,7 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
             $this->phpToDbPropertyConverterMap,
             $this->dbToPhpPropertyConverterMap,
             $methodColumnNameMap,
+            $this->customLoadMappingCallbacks,
             $lockingStrategies,
             $persistHooks,
             $subClassMappings,
@@ -387,7 +394,7 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
     /**
      * @return FinalizedClassDefinition
      */
-    public function getClass() : \Dms\Core\Model\Object\FinalizedClassDefinition
+    public function getClass() : FinalizedClassDefinition
     {
         return $this->class;
     }
@@ -395,7 +402,7 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
     /**
      * @return Table
      */
-    public function getTable() : \Dms\Core\Persistence\Db\Schema\Table
+    public function getTable() : Table
     {
         return $this->table;
     }
@@ -405,7 +412,7 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
      *
      * @return Table
      */
-    public function getEntityTable() : \Dms\Core\Persistence\Db\Schema\Table
+    public function getEntityTable() : Table
     {
         return $this->entityTable;
     }
@@ -458,6 +465,14 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
         return $this->methodColumnNameMap;
     }
 
+    /**
+     * @return callable[]
+     */
+    public function getCustomLoadMappingCallbacks() : array
+    {
+        return $this->customLoadMappingCallbacks;
+    }
+    
     /**
      * Gets the relations mapped to properties.
      *
