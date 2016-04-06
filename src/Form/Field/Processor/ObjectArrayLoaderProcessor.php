@@ -35,8 +35,10 @@ class ObjectArrayLoaderProcessor extends FieldProcessor
         /** @var ITypedObject[] $input */
         $ids = [];
 
-        foreach ($input as $objects) {
-            $ids[] = $this->objects->getObjectId($objects);
+        foreach ($input as $object) {
+            if ($this->objects->contains($object)) {
+                $ids[] = $this->objects->getObjectId($object);
+            }
         }
 
         return $ids;

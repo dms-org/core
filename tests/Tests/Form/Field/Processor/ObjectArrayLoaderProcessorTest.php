@@ -39,6 +39,10 @@ class ObjectArrayLoaderProcessorTest extends FieldProcessorTest
             }));
 
         $entitiesMock->expects($this->any())
+            ->method('contains')
+            ->willReturn(true);
+
+        $entitiesMock->expects($this->any())
             ->method('getObjectId')
             ->will($this->returnCallback(function (IEntity $entity) {
                 return $entity->getId();

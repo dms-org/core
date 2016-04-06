@@ -216,8 +216,7 @@ abstract class ObjectMapper implements IObjectMapper
 
         if (!empty($rowsToLoad)) {
             $this->mapping->loadAll($context, $newObjects, $rowsToLoad);
-        } else {
-            $newObjects = [];
+        } else { $newObjects = [];
         }
 
         $allObjectsInOriginalOrder = [];

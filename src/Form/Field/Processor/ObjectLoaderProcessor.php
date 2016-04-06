@@ -30,6 +30,6 @@ class ObjectLoaderProcessor extends FieldProcessor
 
     protected function doUnprocess($input)
     {
-        return $this->objects->getObjectId($input);
+        return $this->objects->contains($input) ? $this->objects->getObjectId($input) : null;
     }
 }
