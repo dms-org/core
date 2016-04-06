@@ -9,6 +9,7 @@ use Dms\Core\Form\Field\Processor\DefaultValueProcessor;
 use Dms\Core\Form\Field\Processor\OverrideValueProcessor;
 use Dms\Core\Form\Field\Processor\TypeProcessor;
 use Dms\Core\Form\Field\Type\FieldType;
+use Dms\Core\Form\InvalidInputException;
 use Dms\Core\Model\Type\Builder\Type;
 
 /**
@@ -69,6 +70,25 @@ class FieldTest extends CmsTestCase
         $this->assertSame('abc!!', $testField->getInitialValue());
         $this->assertSame([$newProcessor], $newField->getCustomProcessors());
         $this->assertSame(null, $newField->getInitialValue());
+    }
+
+    public function testWithTypeAttributes()
+    {
+        $testField = Field::name('foo')->label('Foo')
+            ->string()
+            ->build();
+
+        $this->assertSame(null, $testField->getType()->get(FieldType::ATTR_REQUIRED));
+
+        $newField = $testField->withTypeAttributes([FieldType::ATTR_REQUIRED => true]);
+
+        $this->assertSame(null, $testField->getType()->get(FieldType::ATTR_REQUIRED));
+        $this->assertSame(true, $newField->getType()->get(FieldType::ATTR_REQUIRED));
+
+        $this->assertSame(null, $testField->process(null));
+        $this->assertThrows(function () use ($newField) {
+            $newField->process(null);
+        }, InvalidInputException::class);
     }
 
     public function testReadOnlyField()

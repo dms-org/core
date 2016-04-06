@@ -267,4 +267,15 @@ class Field implements IField
 
         return $clone;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function withTypeAttributes(array $attributes) : IField
+    {
+        $clone = clone $this;
+        $clone->type = $clone->type->withAll($attributes);
+
+        return $clone;
+    }
 }

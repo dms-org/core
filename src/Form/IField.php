@@ -107,7 +107,7 @@ interface IField
 
     /**
      * Returns an equivalent form field with the supplied custom processors.
-     * 
+     *
      * NOTE: The initial value of the field will be removed.
      *
      * @param IFieldProcessor[] $customProcessors
@@ -115,4 +115,13 @@ interface IField
      * @return IField
      */
     public function withCustomProcessors(array $customProcessors) : IField;
+
+    /**
+     * Returns an equivalent form field with updated field type attribute.
+     *
+     * @param array $attributes
+     *
+     * @return IField
+     */
+    public function withTypeAttributes(array $attributes) : IField;
 }
