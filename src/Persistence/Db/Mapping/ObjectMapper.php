@@ -197,7 +197,7 @@ abstract class ObjectMapper implements IObjectMapper
     /**
      * {@inheritDoc}
      */
-    final public function load(LoadingContext $context, Row $row) : \Dms\Core\Model\ITypedObject
+    final public function load(LoadingContext $context, Row $row) : ITypedObject
     {
         return $this->loadAll($context, [$row])[0];
     }
@@ -220,7 +220,13 @@ abstract class ObjectMapper implements IObjectMapper
             $newObjects = [];
         }
 
-        return $loadedObjects + $newObjects;
+        $allObjectsInOriginalOrder = [];
+
+        foreach ($rows as $key => $row) {
+            $allObjectsInOriginalOrder[$key] = $newObjects[$key] ?? $loadedObjects[$key];
+        }
+
+        return $allObjectsInOriginalOrder;
     }
 
     /**
@@ -248,7 +254,7 @@ abstract class ObjectMapper implements IObjectMapper
      *
      * @return ITypedObject
      */
-    final protected function constructNewObjectsFromRow(LoadingContext $context, Row $row) : \Dms\Core\Model\ITypedObject
+    final protected function constructNewObjectsFromRow(LoadingContext $context, Row $row) : ITypedObject
     {
         return $this->mapping->constructNewObjectFromRow($row);
     }
