@@ -95,9 +95,19 @@ class DoctrineExpressionCompilerTest extends DoctrineTestBase
                     [1 => 1, 2 => 2, 3 => 3]
             ],
             [
-                    Expr::notIn($testColumn, Expr::tuple([Expr::idParam(3), Expr::idParam(2), Expr::idParam(1)])),
-                    '`table`.`column` NOT IN (?, ?, ?)',
-                    [1 => 3, 2 => 2, 3 => 1]
+                Expr::notIn($testColumn, Expr::tuple([Expr::idParam(3), Expr::idParam(2), Expr::idParam(1)])),
+                '`table`.`column` NOT IN (?, ?, ?)',
+                [1 => 3, 2 => 2, 3 => 1]
+            ],
+            [
+                Expr::in($testColumn, Expr::tuple([])),
+                '?',
+                [1 => 0]
+            ],
+            [
+                Expr::notIn($testColumn, Expr::tuple([])),
+                '?',
+                [1 => 1]
             ],
             //
             // Unary ops

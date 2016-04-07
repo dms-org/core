@@ -65,7 +65,7 @@ class DoctrinePlatform extends Platform
     /**
      * @return DoctrineAbstractPlatform
      */
-    public function getDoctrinePlatform() : \Doctrine\DBAL\Platforms\AbstractPlatform
+    public function getDoctrinePlatform() : DoctrineAbstractPlatform
     {
         return $this->doctrinePlatform;
     }

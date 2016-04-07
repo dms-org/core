@@ -127,10 +127,10 @@ class DoctrineExpressionCompiler
                 return $expressionBuilder->gte($left, $right);
 
             case Expression\BinOp::IN:
-                return $expressionBuilder->in($left, $right);
+                return $right === [] ? $this->compileExpression($queryBuilder, Expr::false()) : $expressionBuilder->in($left, $right);
 
             case Expression\BinOp::NOT_IN:
-                return $expressionBuilder->notIn($left, $right);
+                return $right === [] ? $this->compileExpression($queryBuilder, Expr::true()) : $expressionBuilder->notIn($left, $right);
 
             case Expression\BinOp::AND_:
                 return $expressionBuilder->andX($left, $right);
