@@ -2,6 +2,7 @@
 
 namespace Dms\Core\Tests\Persistence\Db\Integration\Mapping;
 
+use Dms\Core\Model\Criteria\SpecificationDefinition;
 use Dms\Core\Persistence\Db\Query\Delete;
 use Dms\Core\Persistence\Db\Query\Expression\Expr;
 use Dms\Core\Persistence\Db\Query\Upsert;
@@ -276,6 +277,36 @@ class ValueObjectCollectionTest extends DbIntegrationTest
                         $this->repo->criteria()
                                 ->where('emails.count()', '>=', 2)
                 )
+        );
+    }
+
+    public function testWhereHasAny()
+    {
+        $this->setDataInDb([
+            'entities' => [
+                ['id' => 1],
+                ['id' => 2],
+            ],
+            'emails'   => [
+                ['id' => 1, 'entity_id' => 1, 'email' => 'test@foo.com'],
+                ['id' => 2, 'entity_id' => 1, 'email' => 'gmail@foo.com'],
+                ['id' => 3, 'entity_id' => 2, 'email' => 'aaa@foo.com'],
+            ]
+        ]);
+
+        $this->assertEquals(
+            [
+                new EntityWithEmails(
+                    1,
+                    [new EmbeddedEmailAddress('test@foo.com'), new EmbeddedEmailAddress('gmail@foo.com'),]
+                )
+            ],
+            $this->repo->matching(
+                $this->repo->criteria()
+                    ->whereHasAny('emails', EmbeddedEmailAddress::specification(function (SpecificationDefinition $match) {
+                        $match->whereStringContains('email', 'gmail');
+                    }))
+            )
         );
     }
 }

@@ -18,6 +18,7 @@ use Dms\Core\Model\Object\FinalizedClassDefinition;
 use Dms\Core\Persistence\Db\Connection\IConnection;
 use Dms\Core\Persistence\Db\Mapping\Definition\FinalizedMapperDefinition;
 use Dms\Core\Persistence\Db\Mapping\IEntityMapper;
+use Dms\Core\Persistence\Db\Mapping\IObjectMapper;
 use Dms\Core\Persistence\Db\Mapping\Relation\ISeparateTableRelation;
 use Dms\Core\Persistence\Db\Mapping\Relation\IToManyRelation;
 use Dms\Core\Persistence\Db\Mapping\Relation\IToOneRelation;
@@ -35,7 +36,7 @@ use Dms\Core\Persistence\Db\Schema\Table;
 class CriteriaMapper
 {
     /**
-     * @var IEntityMapper
+     * @var IObjectMapper
      */
     private $mapper;
 

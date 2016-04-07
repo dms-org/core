@@ -6,10 +6,12 @@ use Dms\Core\Exception\NotImplementedException;
 use Dms\Core\Model\Criteria\Condition\ConditionOperator;
 use Dms\Core\Model\ISpecification;
 use Dms\Core\Persistence\Db\Criteria\CriteriaMapper;
+use Dms\Core\Persistence\Db\Criteria\EntityMapperProxy;
 use Dms\Core\Persistence\Db\Criteria\MemberExpressionMappingException;
 use Dms\Core\Persistence\Db\Mapping\IEntityMapper;
 use Dms\Core\Persistence\Db\Mapping\ReadModel\Relation\MemberRelation;
 use Dms\Core\Persistence\Db\Mapping\ReadModel\Relation\ToManyMemberRelation;
+use Dms\Core\Persistence\Db\Mapping\Relation\Embedded\EmbeddedCollectionRelation;
 use Dms\Core\Persistence\Db\Mapping\Relation\IRelation;
 use Dms\Core\Persistence\Db\Mapping\Relation\IToManyRelation;
 use Dms\Core\Persistence\Db\Query\Expression\Expr;
@@ -68,7 +70,12 @@ class ToManyRelationMapping extends RelationMapping implements IFinalRelationMem
                 return Expr::false();
             }
 
-            $relatedEntityMapper   = $this->rootEntityMapper->getDefinition()->getOrm()->getEntityMapper($specification->getClass()->getClassName());
+            if ($this->relation instanceof EmbeddedCollectionRelation) {
+                $relatedEntityMapper   = new EntityMapperProxy($this->relation->getMapper());
+            } else {
+                $relatedEntityMapper   = $this->relation->getMapper();
+            }
+            
             $relatedCriteriaMapper = new CriteriaMapper($relatedEntityMapper);
 
             if ($operator === ConditionOperator::ALL_SATISFIES) {
