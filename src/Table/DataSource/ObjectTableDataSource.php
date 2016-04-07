@@ -15,6 +15,7 @@ use Dms\Core\Table\DataSource\Criteria\RowCriteriaMapper;
 use Dms\Core\Table\DataSource\Definition\FinalizedObjectTableDefinition;
 use Dms\Core\Table\IColumn;
 use Dms\Core\Table\IColumnComponent;
+use Dms\Core\Table\IDataTable;
 use Dms\Core\Table\IRowCriteria;
 use Dms\Core\Table\ITableRow;
 use Dms\Core\Table\ITableSection;
@@ -150,7 +151,12 @@ class ObjectTableDataSource extends TableDataSource
         return $this->mapObjectsToRows($definition, $objectProperties, $objects);
     }
 
-    public function loadFromObjects(array $objects)
+    /**
+     * @param object[] $objects
+     *
+     * @return IDataTable
+     */
+    public function loadFromObjects(array $objects) : IDataTable
     {
         InvalidArgumentException::verifyAllInstanceOf(__METHOD__, 'objects', $objects, $this->definition->getClass()->getClassName());
         $objectProperties = $this->loadObjectProperties($objects);

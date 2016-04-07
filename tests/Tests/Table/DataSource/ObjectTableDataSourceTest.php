@@ -24,6 +24,11 @@ class ObjectTableDataSourceTest extends PeopleTableDataSourceTest
     protected $definition;
 
     /**
+     * @var ObjectTableDataSource
+     */
+    protected $dataSource;
+
+    /**
      * @return ITableStructure
      */
     protected function buildStructure()
@@ -80,5 +85,20 @@ class ObjectTableDataSourceTest extends PeopleTableDataSourceTest
 
         $this->definition = $map->finalize();
         $this->buildDataSource($this->definition->getStructure());
+    }
+
+    public function testLoadFromObjects()
+    {
+        $dataTable = $this->dataSource->loadFromObjects([
+            new TestPerson('A', '!!', 10),
+            new TestPerson('B', '@@', 20),
+        ]);
+        
+        $this->assertSameDataTable([
+            [
+                ['name' => ['first_name' => 'A', 'last_name' => '!!'], 'age' => ['age' => 10]],
+                ['name' => ['first_name' => 'B', 'last_name' => '@@'], 'age' => ['age' => 20]],
+            ]
+        ], $dataTable);
     }
 }

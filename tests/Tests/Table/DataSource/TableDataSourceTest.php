@@ -6,6 +6,7 @@ use Dms\Common\Testing\CmsTestCase;
 use Dms\Core\Exception\InvalidArgumentException;
 use Dms\Core\Table\Builder\Table;
 use Dms\Core\Table\Criteria\RowCriteria;
+use Dms\Core\Table\IDataTable;
 use Dms\Core\Table\IRowCriteria;
 use Dms\Core\Table\ITableDataSource;
 use Dms\Core\Table\ITableStructure;
@@ -82,19 +83,24 @@ abstract class TableDataSourceTest extends CmsTestCase
     {
         $table = $this->dataSource->load($criteria);
 
-        $expectedStructure = $criteria ? $this->structure->withColumns($criteria->getColumnsToLoad()) : $this->structure;
-        foreach ($table->getSections() as $section) {
-            $this->assertEquals($expectedStructure, $section->getStructure());
-        }
-
-        $actualSections = DataTableHelper::covertDataTableToNormalizedArray($table);
-
-        $this->assertEquals($expectedStructure, $table->getStructure());
-        $this->assertEquals($expectedSections, $actualSections);
+        $this->assertSameDataTable($expectedSections, $table, $criteria);
     }
 
     protected function assertLoadsCount($expectedCount, IRowCriteria $criteria = null)
     {
         $this->assertSame($expectedCount, $this->dataSource->count($criteria));
+    }
+
+    protected function assertSameDataTable(array $expectedSections, IDataTable $actualTable, IRowCriteria $criteria = null)
+    {
+        $expectedStructure = $criteria ? $this->structure->withColumns($criteria->getColumnsToLoad()) : $this->structure;
+        foreach ($actualTable->getSections() as $section) {
+            $this->assertEquals($expectedStructure, $section->getStructure());
+        }
+
+        $actualSections = DataTableHelper::covertDataTableToNormalizedArray($actualTable);
+
+        $this->assertEquals($expectedStructure, $actualTable->getStructure());
+        $this->assertEquals($expectedSections, $actualSections);
     }
 }
