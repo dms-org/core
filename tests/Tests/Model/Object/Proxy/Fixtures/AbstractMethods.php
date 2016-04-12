@@ -25,7 +25,7 @@ abstract class AbstractMethods
 
     abstract public function abstractMethodWithParams($a, $b, $c) : self;
 
-    abstract public function abstractMethodWithComplexParams(array &$a = null, callable $b = null, self $c, $foo = \PDO::ATTR_AUTOCOMMIT) : \PDO;
+    abstract public function abstractMethodWithComplexParams(array &$a = null, callable $b = null, self $c, $foo = \PDO::ATTR_AUTOCOMMIT, string $aaa = null) : \PDO;
 
     abstract protected function abstractMethodWithMoreComplexParams(\DateTime &$foo = null, AbstractMethods &$self) : string;
 }

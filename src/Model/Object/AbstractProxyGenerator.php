@@ -62,9 +62,7 @@ PHP;
         $parameters = [];
         foreach ($method->getParameters() as $parameter) {
             $parameters[] = implode(' ', [
-                $parameter->isArray() ? 'array' : '',
-                $parameter->isCallable() ? 'callable' : '',
-                $parameter->getClass() ? '\\' . $parameter->getClass()->getName() : '',
+                self::getParameterTypeHint($parameter),
                 $parameter->isPassedByReference() ? '&' : '',
                 '$' . $parameter->getName(),
                 $parameter->isOptional() ? '=' : '',
@@ -96,6 +94,21 @@ PHP;
         } else {
             $type = (string)$method->getReturnType();
             return '\\' . ($type === 'self' ? $method->getDeclaringClass()->getName() : $type);
+        }
+    }
+    /**
+     * @param \ReflectionParameter $parameter
+     *
+     * @return string
+     */
+    protected static function getParameterTypeHint(\ReflectionParameter $parameter) : string
+    {
+        if ($parameter->getClass()) {
+            return '\\' . $parameter->getClass()->getName();
+        } elseif ($parameter->hasType()) {
+            return $parameter->getType()->__toString();
+        } else {
+            return '';
         }
     }
 }
