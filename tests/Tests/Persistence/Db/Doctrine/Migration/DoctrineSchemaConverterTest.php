@@ -157,7 +157,7 @@ class DoctrineSchemaConverterTest extends CmsTestCase
     {
         $original = new Database([
                 new Table('test', [new Column('id', Integer::normal()), new Column('id2', Integer::normal())]),
-                new Table('another_table', [new Column('fk', Integer::normal())], [], [
+                new Table('another_table', [new Column('fk', Integer::normal()->nullable())], [], [
                         new ForeignKey(
                                 'fk_name1',
                                 ['fk'],
@@ -183,7 +183,7 @@ class DoctrineSchemaConverterTest extends CmsTestCase
         $testTable->addColumn('id2', Type::INTEGER);
 
         $anotherTable = $expected->createTable('another_table');
-        $anotherTable->addColumn('fk', Type::INTEGER);
+        $anotherTable->addColumn('fk', Type::INTEGER, ['notnull' => false]);
         $anotherTable->addForeignKeyConstraint(
                 'test',
                 ['fk'],

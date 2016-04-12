@@ -174,6 +174,15 @@ class ForeignKey
     }
 
     /**
+     * @return bool
+     */
+    public function requiresNullableColumns() : bool
+    {
+        return $this->onUpdateMode === ForeignKeyMode::SET_NULL
+        || $this->onDeleteMode === ForeignKeyMode::SET_NULL;
+    }
+
+    /**
      * Gets the foreign key with the *local* columns prefixed
      * and the name prefixed.
      *

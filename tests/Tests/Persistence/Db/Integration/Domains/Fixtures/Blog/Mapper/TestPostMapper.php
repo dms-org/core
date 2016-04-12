@@ -27,7 +27,7 @@ class TestPostMapper extends EntityMapper
         $map->toTable('posts');
 
         $map->idToPrimaryKey('id');
-        $map->column('author_id')->asInt();
+        $map->column('author_id')->nullable()->asInt();
 
         $map->property('content')->to('content')->asText();
 

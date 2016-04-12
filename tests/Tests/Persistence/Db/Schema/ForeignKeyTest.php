@@ -27,6 +27,7 @@ class ForeignKeyTest extends CmsTestCase
         $this->assertSame(['some_id'], $foreignKey->getLocalColumnNames());
         $this->assertSame('other_table', $foreignKey->getReferencedTableName());
         $this->assertSame(['referenced_id'], $foreignKey->getReferencedColumnNames());
+        $this->assertSame(true, $foreignKey->requiresNullableColumns());
         $this->assertSame(ForeignKeyMode::CASCADE, $foreignKey->getOnDeleteMode());
         $this->assertSame(ForeignKeyMode::SET_NULL, $foreignKey->getOnUpdateMode());
     }
@@ -88,6 +89,7 @@ class ForeignKeyTest extends CmsTestCase
         $this->assertSame(['foo_some_id'], $foreignKey->getLocalColumnNames());
         $this->assertSame('other_table', $foreignKey->getReferencedTableName());
         $this->assertSame(['referenced_id'], $foreignKey->getReferencedColumnNames());
+        $this->assertSame(true, $foreignKey->requiresNullableColumns());
         $this->assertSame(ForeignKeyMode::CASCADE, $foreignKey->getOnDeleteMode());
         $this->assertSame(ForeignKeyMode::SET_NULL, $foreignKey->getOnUpdateMode());
     }
@@ -115,10 +117,11 @@ class ForeignKeyTest extends CmsTestCase
                 'other_table',
                 ['referenced_id', 'other_referenced_id'],
                 ForeignKeyMode::CASCADE,
-                ForeignKeyMode::SET_NULL
+                ForeignKeyMode::CASCADE
         );
 
         $this->assertSame('fk_parent_table_some_id_other_id_other_table', $fk->getName());
+        $this->assertSame(false, $fk->requiresNullableColumns());
     }
 
     public function testWithPrefixKeepsFkConventionPrefix()
@@ -129,9 +132,10 @@ class ForeignKeyTest extends CmsTestCase
                 'other_table',
                 ['referenced_id'],
                 ForeignKeyMode::CASCADE,
-                ForeignKeyMode::SET_NULL
+                ForeignKeyMode::CASCADE
         )->withPrefix('foo_');
 
         $this->assertSame('fk_foo_parent_table_some_id_other_table', $fk->getName());
+        $this->assertSame(false, $fk->requiresNullableColumns());
     }
 }

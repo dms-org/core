@@ -65,9 +65,9 @@ class Table
             if ($column->isPrimaryKey()) {
                 if ($this->primaryKeyColumn) {
                     throw InvalidArgumentException::format(
-                            'Invalid columns supplied to table: duplicate primary key columns \'%s\' and \'%s\'',
-                            $this->primaryKeyColumn->getName(),
-                            $column->getName()
+                        'Invalid columns supplied to table: duplicate primary key columns \'%s\' and \'%s\'',
+                        $this->primaryKeyColumn->getName(),
+                        $column->getName()
                     );
                 }
 
@@ -92,6 +92,18 @@ class Table
 
         foreach ($foreignKeys as $foreignKey) {
             $this->verifyColumns('foreign key ' . $foreignKey->getName(), $foreignKey->getLocalColumnNames());
+
+            if ($foreignKey->requiresNullableColumns()) {
+                foreach ($foreignKey->getLocalColumnNames() as $column) {
+                    if (!$this->getColumn($column)->getType()->isNullable()) {
+                        throw InvalidArgumentException::format(
+                            'Invalid foreign key \'%s\' supplied to table \'%s\': foreign key has a ON DELETE|UPDATE SET NULL condition and hence the columns must be nullable, \'%s\' is not nullable',
+                            $foreignKey->getName(), $this->name, $column
+                        );
+                    }
+                }
+            }
+
             $this->foreignKeys[$foreignKey->getName()] = $foreignKey;
         }
     }
@@ -101,8 +113,8 @@ class Table
         foreach ($columnNames as $columnName) {
             if (!$this->hasColumn($columnName)) {
                 throw InvalidArgumentException::format(
-                        'Invalid column name in %s: expecting one of (%s), \'%s\' given',
-                        $itemName, Debug::formatValues($this->getColumnNames()), $columnName
+                    'Invalid column name in %s: expecting one of (%s), \'%s\' given',
+                    $itemName, Debug::formatValues($this->getColumnNames()), $columnName
                 );
             }
         }
@@ -178,8 +190,8 @@ class Table
 
         if (!$column) {
             throw InvalidArgumentException::format(
-                    'Could not get column from table \'%s\': expecting one of (%s), \'%s\' given',
-                    $this->name, Debug::formatValues($this->getColumnNames()), $name
+                'Could not get column from table \'%s\': expecting one of (%s), \'%s\' given',
+                $this->name, Debug::formatValues($this->getColumnNames()), $name
             );
         }
 
@@ -282,8 +294,8 @@ class Table
     public function withPrefix(string $prefix) : Table
     {
         return $this
-                ->withColumnsPrefixedBy($prefix)
-                ->withNameAndConstraintsPrefixedBy($prefix);
+            ->withColumnsPrefixedBy($prefix)
+            ->withNameAndConstraintsPrefixedBy($prefix);
     }
 
     /**
@@ -310,10 +322,10 @@ class Table
         }
 
         return new self(
-                $prefix . $this->name,
-                $this->columns,
-                $indexes,
-                $foreignKeys
+            $prefix . $this->name,
+            $this->columns,
+            $indexes,
+            $foreignKeys
         );
     }
 
@@ -343,10 +355,10 @@ class Table
 
 
         return new self(
-                $this->name,
-                $columns,
-                $indexes,
-                $foreignKeys
+            $this->name,
+            $columns,
+            $indexes,
+            $foreignKeys
         );
     }
 
