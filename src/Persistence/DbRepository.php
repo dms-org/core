@@ -149,9 +149,9 @@ class DbRepository extends DbRepositoryBase implements IRepository
         $ids = array_unique($ids, SORT_NUMERIC);
 
         $rows = $this->connection->load(
-                $this->select()
-                        ->setColumns(['count' => Expr::count()])
-                        ->where(Expr::in($this->primaryKey(), Expr::tuple($this->parameterIds($ids))))
+            $this->select()
+                ->setColumns(['count' => Expr::count()])
+                ->where(Expr::in($this->primaryKey(), Expr::tuple($this->parameterIds($ids))))
         )->asArray();
 
         return empty($rows) ? false : (int)$rows[0]['count'] === count($ids);
@@ -171,8 +171,8 @@ class DbRepository extends DbRepositoryBase implements IRepository
         /** @var IEntity $object */
 
         return $object->hasId()
-                ? $this->has($object->getId())
-                : false;
+            ? $this->has($object->getId())
+            : false;
     }
 
     /**
@@ -259,8 +259,9 @@ class DbRepository extends DbRepositoryBase implements IRepository
 
         InvalidArgumentException::verifyAll(__METHOD__, 'ids', $ids, 'is_int');
 
+        $idKeyMap    = array_flip($ids);
         $identityMap = $this->loadingContext->getIdentityMap($this->getEntityType());
-        $entities = [];
+        $entities    = array_fill_keys($idKeyMap, null);
 
         foreach ($ids as $key => $id) {
             if ($identityMap->has($id)) {
@@ -269,16 +270,18 @@ class DbRepository extends DbRepositoryBase implements IRepository
             }
         }
 
-        if($ids) {
+        if ($ids) {
             $newEntities = $this->load(
                 $this->select()
                     ->where(Expr::in($this->primaryKey(), Expr::tuple($this->parameterIds($ids))))
             );
 
-            $entities = array_merge($entities, $newEntities);
+            foreach ($newEntities as $entity) {
+                $entities[$idKeyMap[$entity->getId()]] = $entity;
+            }
         }
-
-        return $entities;
+        
+        return array_filter($entities);
     }
 
     /**
@@ -343,13 +346,13 @@ class DbRepository extends DbRepositoryBase implements IRepository
         /** @var IEntity $currentEntityInDb */
         $currentRowInDb    = $e->getCurrentRowInDb();
         $currentEntityInDb = $currentRowInDb
-                ? $mapper->load($this->loadingContext, $currentRowInDb)
-                : null;
+            ? $mapper->load($this->loadingContext, $currentRowInDb)
+            : null;
 
         throw new EntityOutOfSyncException(
-                $entityBeingPersisted,
-                $currentEntityInDb,
-                $e
+            $entityBeingPersisted,
+            $currentEntityInDb,
+            $e
         );
     }
 

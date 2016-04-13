@@ -15,7 +15,6 @@ use Dms\Core\Tests\Model\Criteria\Fixtures\MockSpecification;
 use Dms\Core\Tests\Persistence\Db\Fixtures\MockEntity;
 use Dms\Core\Tests\Persistence\Db\Integration\Mapping\Fixtures\Id\EmptyEntity;
 use Dms\Core\Tests\Persistence\Db\Integration\Mapping\Fixtures\Id\EmptyMapper;
-use Dms\Core\Tests\Persistence\Db\Mock\MockQuery;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>
@@ -159,6 +158,16 @@ class DbRepositoryTest extends DbIntegrationTest
         $this->assertThrows(function () {
             $this->repo->getAllById([1, 2, 3, 100]);
         }, EntityNotFoundException::class);
+    }
+
+    public function testGetAllByIdMaintainsArrayKeys()
+    {
+        $entities = $this->makeEntities(5);
+
+        $this->repo->saveAll($entities);
+
+        $this->repo->get(3);
+        $this->assertEquals(['a' => $entities[0], 'b' => $entities[1], 'c' => $entities[2]], $this->repo->getAllById(['a' => 1, 'b' => 2, 'c' => 3]));
     }
 
     public function testTryGetInvalidId()
@@ -415,7 +424,7 @@ class DbRepositoryTest extends DbIntegrationTest
 
         // @see MockPlatform for identifier escaping
         $this->assertSame([
-            ['SELECT !!id!! FROM !!data!! AS alias WHERE some_column > :param', ['param' => 5]]
+            ['SELECT !!id!! FROM !!data!! AS alias WHERE some_column > :param', ['param' => 5]],
         ], $this->connection->getQueryLog());
     }
 
