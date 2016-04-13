@@ -167,6 +167,7 @@ class DbRepositoryTest extends DbIntegrationTest
         $this->repo->saveAll($entities);
 
         $this->repo->get(3);
+        $this->assertSame(['a', 'b', 'c'], array_keys($this->repo->getAllById(['a' => 1, 'b' => 2, 'c' => 3])));
         $this->assertEquals(['a' => $entities[0], 'b' => $entities[1], 'c' => $entities[2]], $this->repo->getAllById(['a' => 1, 'b' => 2, 'c' => 3]));
     }
 
