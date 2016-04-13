@@ -186,8 +186,10 @@ SQL
                         ->where(Expr::lessThan(Expr::tableColumn($table, 'id'), Expr::idParam(15)))
                         ->where(Expr::strContainsCaseInsensitive(Expr::tableColumn($table, 'data'), Expr::param(Text::long(), 'abc')))
                         ->addGroupBy(Expr::tableColumn($table, 'data'))
+                        ->addGroupBy(Expr::tableColumn($table, 'id'))
                         ->addHaving(Expr::greaterThan(Expr::column('t2', $table->findColumn('id')), Expr::idParam(10)))
                         ->orderByDesc(Expr::column('t2', $table->findColumn('id')))
+                        ->orderByAsc(Expr::column('t2', $table->findColumn('data')))
                         ->offset(10)
                         ->limit(100)
         );
@@ -199,9 +201,9 @@ SELECT
 FROM `foo`
 LEFT JOIN `foo` `t2` ON 1=1
 WHERE (`foo`.`id` < ?) AND (LOCATE(UPPER(?), UPPER(`foo`.`data`)) > 0)
-GROUP BY `foo`.`data`
+GROUP BY `foo`.`data`, `foo`.`id`
 HAVING `t2`.`id` > ?
-ORDER BY `t2`.`id` DESC
+ORDER BY `t2`.`id` DESC, `t2`.`data` ASC
 LIMIT 100 OFFSET 10
 SQL
                 , $query->getSql());

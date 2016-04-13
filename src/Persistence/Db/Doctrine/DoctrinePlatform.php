@@ -312,7 +312,7 @@ class DoctrinePlatform extends Platform
     protected function compileGroupBy(QueryBuilder $queryBuilder, Select $query)
     {
         foreach ($query->getGroupBy() as $grouping) {
-            $queryBuilder->groupBy($this->compileExpression($queryBuilder, $grouping));
+            $queryBuilder->addGroupBy($this->compileExpression($queryBuilder, $grouping));
         }
     }
 
@@ -326,7 +326,7 @@ class DoctrinePlatform extends Platform
     protected function compileOrderBy(QueryBuilder $queryBuilder, Query $query)
     {
         foreach ($query->getOrderings() as $ordering) {
-            $queryBuilder->orderBy(
+            $queryBuilder->addOrderBy(
                 $this->compileExpression($queryBuilder, $ordering->getExpression()),
                 $ordering->isAsc() ? 'ASC' : 'DESC'
             );
