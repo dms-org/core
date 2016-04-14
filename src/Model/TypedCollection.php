@@ -79,6 +79,25 @@ class TypedCollection extends Collection implements ITypedCollection
         parent::offsetSet($index, $value);
     }
 
+    public function addRange($values)
+    {
+        foreach ($values as $value) {
+            $this->verifyElement($value);
+        }
+
+        parent::addRange($values);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function insertAt(int $index, $value)
+    {
+        $this->verifyElement($value);
+        parent::insertAt($index, $value);
+    }
+
+
     /**
      * @param $value
      *

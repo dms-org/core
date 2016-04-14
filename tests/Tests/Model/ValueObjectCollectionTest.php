@@ -338,4 +338,29 @@ class ValueObjectCollectionTest extends CmsTestCase
             $collection->getObjectId(new SubObject('123'));
         }, InvalidArgumentException::class);
     }
+
+    public function testInsertAt()
+    {
+        $collection = SubObject::collection([
+            $object1 = new SubObject('foo'),
+            $object2 = new SubObject('bar'),
+        ]);
+
+        $collection->insertAt(0, $newObject1 = new SubObject('1'));
+
+        $this->assertSame([$newObject1, $object1, $object2], $collection->getAll());
+
+        $collection->insertAt(2, $newObject2 = new SubObject('1'));
+
+        $this->assertSame([$newObject1, $object1, $newObject2, $object2], $collection->getAll());
+
+        $this->assertThrows(function () use ($collection) {
+            $collection->insertAt(5, new SubObject('123'));
+        }, InvalidArgumentException::class);
+
+        $this->assertThrows(function () use ($collection) {
+            $collection->insertAt(0, 'abc');
+        }, InvalidArgumentException::class);
+    }
+
 }

@@ -35,7 +35,7 @@ class Collection extends \Pinq\Collection implements ICollection, \Serializable
         list($elements, $data) = unserialize($serialized);
 
         $this->elements = $this->scheme->createOrderedMap(
-                $this->scheme->arrayIterator($elements)
+            $this->scheme->arrayIterator($elements)
         );
 
         $this->loadFromSerializedData($data);
@@ -46,6 +46,9 @@ class Collection extends \Pinq\Collection implements ICollection, \Serializable
 
     }
 
+    /**
+     * @inheritdoc
+     */
     public function asArray()
     {
         $array = [];
@@ -57,5 +60,31 @@ class Collection extends \Pinq\Collection implements ICollection, \Serializable
         return $array;
     }
 
+    /**
+     * Inserts the element at the supplied (0-based) index.
+     *
+     * This will reindex the collection.
+     *
+     * @param int   $index
+     * @param mixed $value
+     *
+     * @return void
+     */
+    public function insertAt(int $index, $value)
+    {
+        $array = $this->reindex()->asArray();
 
+        Exception\InvalidArgumentException::verify(
+            $index <= count($array),
+            'The supplied index must not be greater than the amount of elements: expecting <= %s, %s given',
+            count($array), $index
+        );
+
+        array_splice($array, $index, 0, [$value]);
+        $this->updateElements(
+            $this->scheme->createOrderedMap(
+                $this->scheme->arrayIterator($array)
+            )
+        );
+    }
 }
