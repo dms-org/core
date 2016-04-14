@@ -363,4 +363,17 @@ class ValueObjectCollectionTest extends CmsTestCase
         }, InvalidArgumentException::class);
     }
 
+    public function testAddRange()
+    {
+        $collection = SubObject::collection([
+            $object1 = new SubObject('foo'),
+            $object2 = new SubObject('bar'),
+        ]);
+
+        $collection->addRange([$object1, $object2]);
+
+        $this->assertThrows(function () use ($collection) {
+            $collection->addRange([new SubObject('fsd'), 453]);
+        }, InvalidArgumentException::class);
+    }
 }
