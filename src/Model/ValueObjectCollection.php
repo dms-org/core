@@ -3,6 +3,7 @@
 namespace Dms\Core\Model;
 
 use Dms\Core\Exception;
+use Dms\Core\Model\Subset\MutableObjectSetSubset;
 use Pinq\Iterators\IIteratorScheme;
 
 /**
@@ -201,5 +202,15 @@ class ValueObjectCollection extends ObjectCollection implements IValueObjectColl
         Exception\TypeMismatchException::verifyInstanceOf(__METHOD__, 'newObject', $newObject, $this->getObjectType());
 
         $this->offsetSet($index, $newObject);
+    }
+
+    /**
+     * @inheritDoc
+     *
+     * @return IMutableObjectSet
+     */
+    public function subset(ICriteria $criteria) : IObjectSet
+    {
+        return new MutableObjectSetSubset($this, $criteria);
     }
 }

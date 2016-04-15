@@ -5,8 +5,10 @@ namespace Dms\Core\Tests\Model;
 use Dms\Common\Testing\CmsTestCase;
 use Dms\Core\Exception\InvalidArgumentException;
 use Dms\Core\Exception\TypeMismatchException;
+use Dms\Core\Model\Criteria\SpecificationDefinition;
 use Dms\Core\Model\IValueObject;
 use Dms\Core\Model\ObjectNotFoundException;
+use Dms\Core\Model\Subset\MutableObjectSetSubset;
 use Dms\Core\Model\TypedCollection;
 use Dms\Core\Model\ValueObjectCollection;
 use Dms\Core\Tests\Model\Fixtures\SubObject;
@@ -375,5 +377,192 @@ class ValueObjectCollectionTest extends CmsTestCase
         $this->assertThrows(function () use ($collection) {
             $collection->addRange([new SubObject('fsd'), 453]);
         }, InvalidArgumentException::class);
+    }
+
+    public function testRemoveMatching()
+    {
+        $collection = SubObject::collection([
+            $object1 = new SubObject('foo', 3),
+            $object2 = new SubObject('bar', 2),
+            $object3 = new SubObject('aFOOb', 1),
+            $object4 = new SubObject('quzFoo', 0),
+        ]);
+
+        $collection->removeMatching(
+            $collection->criteria()
+                ->whereStringContainsCaseInsensitive('prop', 'foo')
+                ->skip(1)
+        );
+
+        $this->assertSame([$object1, $object2], $collection->getAll());
+    }
+
+    public function testSubset()
+    {
+        $collection = SubObject::collection([
+            $object1 = new SubObject('foo', 3),
+            $object2 = new SubObject('bar', 2),
+            $object3 = new SubObject('aFOOb', 1),
+            $object4 = new SubObject('quzFoo', 0),
+        ]);
+
+        $subset = $collection->subset(
+            $collection->criteria()
+                ->whereStringContainsCaseInsensitive('prop', 'foo')
+                ->orderByAsc('number')
+        );
+
+        $this->assertInstanceOf(MutableObjectSetSubset::class, $subset);
+        $this->assertSame(3, $subset->count());
+        $this->assertSame([$object4, $object3, $object1], $subset->getAll());
+        $this->assertSame(false, $subset->containsAll($collection->asArray()));
+        $this->assertSame(true, $subset->containsAll([$object1, $object3, $object4]));
+
+        $this->assertSame(0, $subset->countMatching(
+            $subset->criteria()
+                ->where('prop', '=', 'bar')
+        ));
+
+        $this->assertSame([], $subset->matching(
+            $subset->criteria()
+                ->where('prop', '=', 'bar')
+        ));
+
+        $this->assertSame(1, $subset->countMatching(
+            $subset->criteria()
+                ->where('prop', '=', 'aFOOb')
+        ));
+
+        $this->assertSame([$object3], $subset->matching(
+            $subset->criteria()
+                ->where('prop', '=', 'aFOOb')
+        ));
+
+        $this->assertSame([$object1], $subset->satisfying(
+            SubObject::specification(function (SpecificationDefinition $match) {
+                $match->where('number', '>=', 2)->where('number', '<=', 3);
+            })
+        ));
+    }
+
+    public function testNestedSubset()
+    {
+        $collection = SubObject::collection([
+            $object1 = new SubObject('foo', 3),
+            $object2 = new SubObject('bar', 2),
+            $object3 = new SubObject('aFOOb', 1),
+            $object4 = new SubObject('quzFoo', 0),
+        ]);
+
+        $subset = $collection->subset(
+            $collection->criteria()
+                ->whereStringContainsCaseInsensitive('prop', 'foo')
+        )->subset(
+            $collection->criteria()
+                ->whereStringContainsCaseInsensitive('prop', 'q')
+        );
+
+        $this->assertInstanceOf(MutableObjectSetSubset::class, $subset);
+        $this->assertSame(1, $subset->count());
+        $this->assertSame([3 => $object4], $subset->getAll());
+        $this->assertSame([$object4], $subset->getAllById([3]));
+        $this->assertSame(false, $subset->containsAll($collection->asArray()));
+        $this->assertSame(true, $subset->containsAll([$object4]));
+
+        $this->assertThrows(function () use ($subset) {
+            $subset->getAllById([1, 2, 3]);
+        }, ObjectNotFoundException::class);
+    }
+
+    public function testSubsetIdentityMethods()
+    {
+        $collection = SubObject::collection([
+            $object1 = new SubObject('foo', 3),
+            $object2 = new SubObject('bar', 2),
+            $object3 = new SubObject('aFOOb', 1),
+            $object4 = new SubObject('quzFoo', 0),
+        ]);
+
+        $subset = $collection->subset(
+            $collection->criteria()
+                ->whereStringContainsCaseInsensitive('prop', 'foo')
+        );
+
+        $this->assertSame(3, $subset->getObjectId($object4));
+        $this->assertSame(true, $subset->has(3));
+        $this->assertSame(false, $subset->has(1));
+
+        $this->assertSame($object4, $subset->get(3));
+        $this->assertThrows(function () use ($subset) {
+            $subset->get(1);
+        }, ObjectNotFoundException::class);
+
+        $this->assertSame($object4, $subset->tryGet(3));
+        $this->assertSame(null, $subset->tryGet(1));
+    }
+
+    public function testSubsetRemoveById()
+    {
+        $collection = SubObject::collection([
+            $object1 = new SubObject('foo', 3),
+            $object2 = new SubObject('bar', 2),
+            $object3 = new SubObject('aFOOb', 1),
+            $object4 = new SubObject('quzFoo', 0),
+        ]);
+
+        $subset = $collection->subset(
+            $collection->criteria()
+                ->whereStringContainsCaseInsensitive('prop', 'foo')
+        );
+
+        $subset->removeById(3);
+
+        $this->assertSame(2, $subset->count());
+        $this->assertSame([$object1, 2 => $object3], $subset->getAll());
+        $this->assertSame(3, $collection->count());
+        $this->assertSame([$object1, $object2, $object3], $collection->getAll());
+    }
+
+    public function testSubsetClear()
+    {
+        $collection = SubObject::collection([
+            $object1 = new SubObject('foo', 3),
+            $object2 = new SubObject('bar', 2),
+            $object3 = new SubObject('aFOOb', 1),
+            $object4 = new SubObject('quzFoo', 0),
+        ]);
+
+        $subset = $collection->subset(
+            $collection->criteria()
+                ->whereStringContainsCaseInsensitive('prop', 'foo')
+        );
+
+        $subset->clear();
+
+        $this->assertSame([], $subset->getAll());
+        $this->assertSame([$object2], $collection->getAll());
+    }
+
+    public function testSubsetRemoveMatching()
+    {
+        $collection = SubObject::collection([
+            $object1 = new SubObject('foo', 3),
+            $object2 = new SubObject('bar', 2),
+            $object3 = new SubObject('aFOOb', 1),
+            $object4 = new SubObject('quzFoo', 0),
+        ]);
+
+        $subset = $collection->subset(
+            $collection->criteria()
+                ->whereStringContainsCaseInsensitive('prop', 'foo')
+        );
+
+        $subset->removeMatching(
+            $collection->criteria()
+                ->whereIn('number', [2, 0])
+        );
+
+        $this->assertSame([$object1, 2 => $object3], $subset->getAll());
+        $this->assertSame([$object1, $object2, $object3], $collection->getAll());
     }
 }

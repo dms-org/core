@@ -4,7 +4,10 @@ namespace Dms\Core\Persistence;
 
 use Dms\Core\Exception;
 use Dms\Core\Exception\NotImplementedException;
+use Dms\Core\Model\ICriteria;
+use Dms\Core\Model\IObjectSet;
 use Dms\Core\Model\ITypedObject;
+use Dms\Core\Model\Subset\ObjectSetSubset;
 use Dms\Core\Persistence\Db\Connection\IConnection;
 use Dms\Core\Persistence\Db\Mapping\IObjectMapper;
 use Dms\Core\Persistence\Db\Mapping\IOrm;
@@ -99,5 +102,13 @@ abstract class ReadModelRepository extends DbRepositoryBase implements IReadMode
     public function containsAll(array $objects) : bool
     {
         throw NotImplementedException::method(__METHOD__);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function subset(ICriteria $criteria) : IObjectSet
+    {
+        return new ObjectSetSubset($this, $criteria);
     }
 }

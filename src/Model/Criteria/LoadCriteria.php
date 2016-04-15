@@ -3,6 +3,7 @@
 namespace Dms\Core\Model\Criteria;
 
 use Dms\Core\Exception;
+use Dms\Core\Model\ICriteria;
 use Dms\Core\Model\ILoadCriteria;
 
 /**

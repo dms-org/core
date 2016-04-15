@@ -8,6 +8,7 @@ use Dms\Core\Model\Criteria\SpecificationDefinition;
 use Dms\Core\Persistence\Db\Criteria\CriteriaMapper;
 use Dms\Core\Persistence\Db\Mapping\CustomOrm;
 use Dms\Core\Persistence\Db\Query\Clause\Ordering;
+use Dms\Core\Persistence\Db\Query\Delete;
 use Dms\Core\Persistence\Db\Query\Expression\Expr;
 use Dms\Core\Tests\Persistence\Db\Fixtures\MockEntity;
 use Dms\Core\Tests\Persistence\Db\Integration\Mapping\Fixtures\Types\TypesEntity;
@@ -174,6 +175,26 @@ class CriteriaMapperTest extends CriteriaMapperTestBase
                     ]),
                     Expr::not(Expr::equal($this->column('int'), Expr::param(null, 3))),
                 ]))
+        );
+    }
+
+    public function testMapToDelete()
+    {
+        $criteria = $this->mapper->newCriteria()
+            ->where('string', '=', 'foo')
+            ->orderByAsc('string')
+            ->orderByDesc('int')
+            ->skip(3)
+            ->limit(10);
+
+        $this->assertEquals(
+            Delete::from($this->mapper->getMapper()->getPrimaryTable())
+                ->where(Expr::equal($this->column('string'), Expr::param(null, 'foo')))
+                ->orderBy(new Ordering($this->column('string'), Ordering::ASC))
+                ->orderBy(new Ordering($this->column('int'), Ordering::DESC))
+                ->offset(3)
+                ->limit(10),
+            $this->mapper->mapCriteriaToDelete($criteria)
         );
     }
 }

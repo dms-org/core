@@ -4,6 +4,7 @@ namespace Dms\Core\Model\Criteria;
 
 use Dms\Core\Exception;
 use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Model\Criteria\Condition\AndCondition;
 use Dms\Core\Model\ICriteria;
 
 /**
@@ -62,8 +63,8 @@ class Criteria extends SpecificationDefinition implements ICriteria
     final public function orderBy(string $memberExpression, string $direction)
     {
         $this->orderings[] = new MemberOrdering(
-                $this->memberExpressionParser->parse($this->class, $memberExpression),
-                $direction
+            $this->memberExpressionParser->parse($this->class, $memberExpression),
+            $direction
         );
 
         return $this;
@@ -151,5 +152,45 @@ class Criteria extends SpecificationDefinition implements ICriteria
         $this->limitAmount = $amount === null ? null : $amount;
 
         return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function merge(ICriteria $criteria) : ICriteria
+    {
+        $criteria->verifyOfClass($this->class->getClassName());
+
+        $mergedCriteria = $this->asMutableCriteria();
+
+        if ($criteria->hasCondition() && $this->hasCondition()) {
+            $mergedCriteria->condition = new AndCondition([
+                $this->condition, $criteria->getCondition(),
+            ]);
+        } elseif ($criteria->hasCondition() && !$this->hasCondition()) {
+            $mergedCriteria->condition = $criteria->getCondition();
+        }
+
+        $mergedCriteria->orderings = array_merge($criteria->getOrderings(), $this->orderings);
+        $mergedCriteria->startOffset += $criteria->getStartOffset();
+
+        if ($criteria->hasLimitAmount() && $this->hasLimitAmount()) {
+            $mergedCriteria->limitAmount = min($criteria->getLimitAmount(), $this->limitAmount);
+        } elseif ($criteria->hasLimitAmount() && !$this->hasLimitAmount()) {
+            $mergedCriteria->limitAmount = $criteria->getLimitAmount();
+        }
+
+        return $mergedCriteria;
+    }
+
+
+    /**
+     * Returns a copy of the criteria which can be modified.
+     *
+     * @return Criteria
+     */
+    public function asMutableCriteria() : Criteria
+    {
+        return clone $this;
     }
 }

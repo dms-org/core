@@ -162,7 +162,7 @@ abstract class DbRepositoryBase implements IObjectSetWithLoadCriteriaSupport
         $quoteIdentifier = [$this->connection->getPlatform(), 'quoteIdentifier'];
         $placeholders    = [
             '(columns)' => implode(', ', array_map($quoteIdentifier, $columnsToLoad)),
-            '(table)'   => $quoteIdentifier($this->mapper->getPrimaryTableName())
+            '(table)'   => $quoteIdentifier($this->mapper->getPrimaryTableName()),
         ];
 
         return strtr($sql, $placeholders);

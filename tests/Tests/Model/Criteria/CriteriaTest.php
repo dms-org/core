@@ -401,4 +401,88 @@ class CriteriaTest extends CmsTestCase
             ),
             $criteria->getCondition());
     }
+
+    public function testMergeCriteriaConditions()
+    {
+        $criteria1 = TestEntity::criteria();
+        $criteria2 = TestEntity::criteria();
+
+        $criteria1->where('prop', '=', 'foo');
+        $criteria2->where('prop', '!=', 'abc');
+
+        $this->assertEquals(
+            TestEntity::criteria()
+                ->where('prop', '=', 'foo')
+                ->where('prop', '!=', 'abc'),
+            $criteria1->merge($criteria2)
+        );
+
+        $this->assertEquals(
+            TestEntity::criteria()
+                ->where('prop', '=', 'foo'),
+            $criteria1->merge(TestEntity::criteria())
+        );
+
+        $this->assertEquals(
+            TestEntity::criteria()
+                ->where('prop', '=', 'foo'),
+            TestEntity::criteria()->merge($criteria1)
+        );
+    }
+
+    public function testMergeCriteriaOrderings()
+    {
+        $criteria1 = TestEntity::criteria();
+        $criteria2 = TestEntity::criteria();
+
+        $criteria1->orderByAsc('prop');
+        $criteria2->orderByDesc('prop');
+
+        $this->assertEquals(
+            TestEntity::criteria()
+                ->orderByDesc('prop')
+                ->orderByAsc('prop'),
+            $criteria1->merge($criteria2)
+        );
+
+        $this->assertEquals(
+            TestEntity::criteria()
+                ->orderByAsc('prop'),
+            $criteria1->merge(TestEntity::criteria())
+        );
+
+        $this->assertEquals(
+            TestEntity::criteria()
+                ->orderByAsc('prop'),
+            TestEntity::criteria()->merge($criteria1)
+        );
+    }
+
+    public function testMergeCriteriaStartAndOffset()
+    {
+        $criteria1 = TestEntity::criteria();
+        $criteria2 = TestEntity::criteria();
+
+        $criteria1->skip(2)->limit(10);
+        $criteria2->skip(5)->limit(20);
+
+        $this->assertEquals(
+            TestEntity::criteria()
+                ->skip(7)
+                ->limit(10),
+            $criteria1->merge($criteria2)
+        );
+
+        $this->assertEquals(
+            TestEntity::criteria()
+                ->skip(2)->limit(10),
+            $criteria1->merge(TestEntity::criteria())
+        );
+
+        $this->assertEquals(
+            TestEntity::criteria()
+                ->skip(2)->limit(10),
+            TestEntity::criteria()->merge($criteria1)
+        );
+    }
 }

@@ -33,7 +33,7 @@ class LoadCriteriaMapper
     /**
      * @return LoadCriteria
      */
-    public function newCriteria() : \Dms\Core\Model\Criteria\LoadCriteria
+    public function newCriteria() : LoadCriteria
     {
         $memberExpressionParser = $this->criteriaMapper->buildMemberExpressionParser();
 

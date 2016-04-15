@@ -51,7 +51,7 @@ class MappedLoadQuery
     /**
      * @return Select
      */
-    public function getSelect() : \Dms\Core\Persistence\Db\Query\Select
+    public function getSelect() : Select
     {
         return $this->select;
     }

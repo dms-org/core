@@ -7,6 +7,8 @@ use Dms\Core\Model\Criteria\LoadCriteria;
 use Dms\Core\Model\Criteria\MemberExpressionNode;
 use Dms\Core\Model\Object\FinalizedClassDefinition;
 use Dms\Core\Model\Object\TypedObject;
+use Dms\Core\Model\Subset\MutableObjectSetSubset;
+use Dms\Core\Model\Subset\ObjectSetSubset;
 use Dms\Core\Model\Type\Builder\Type;
 use Dms\Core\Model\Type\ObjectType;
 use Pinq\Iterators\IIteratorScheme;
@@ -48,8 +50,7 @@ class ObjectCollection extends TypedCollection implements ITypedObjectCollection
         $objects = [],
         IIteratorScheme $scheme = null,
         Collection $source = null
-    )
-    {
+    ) {
         if (!is_a($objectType, ITypedObject::class, true)) {
             throw Exception\InvalidArgumentException::format(
                 'Invalid object class: expecting instance of %s, %s given',
@@ -266,7 +267,7 @@ class ObjectCollection extends TypedCollection implements ITypedObjectCollection
         }
 
         $currentPosition = 1;
-        $newOrderedMap = $this->scheme->createOrderedMap();
+        $newOrderedMap   = $this->scheme->createOrderedMap();
 
         foreach ($currentElements as $key => $value) {
             if ($currentPosition === $newPosition) {
@@ -387,5 +388,21 @@ class ObjectCollection extends TypedCollection implements ITypedObjectCollection
         foreach ($node->getChildren() as $childNode) {
             $this->loadMemberNode($loadedData, $memberValues, $childNode);
         }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function removeMatching(ICriteria $criteria)
+    {
+        $this->removeAll($this->matching($criteria));
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function subset(ICriteria $criteria) : IObjectSet
+    {
+        return new ObjectSetSubset($this, $criteria);
     }
 }

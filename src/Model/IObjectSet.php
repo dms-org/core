@@ -88,4 +88,14 @@ interface IObjectSet extends ITypedCollection, \Countable
      * @throws Exception\TypeMismatchException
      */
     public function satisfying(ISpecification $specification) : array;
+
+    /**
+     * Returns an equivalent object set which represents a subset of the
+     * initial object set.
+     *
+     * @param ICriteria $criteria
+     *
+     * @return IObjectSet
+     */
+    public function subset(ICriteria $criteria) : IObjectSet;
 }

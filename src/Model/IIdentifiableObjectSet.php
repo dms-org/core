@@ -52,6 +52,8 @@ interface IIdentifiableObjectSet extends IObjectSet
     /**
      * Returns the objects with the given ids.
      *
+     * NOTE: the keys of the returned objects will match keys of the $ids.
+     *
      * @param int[] $ids
      *
      * @return ITypedObject[]
@@ -71,9 +73,21 @@ interface IIdentifiableObjectSet extends IObjectSet
     /**
      * Returns the objects with the given ids.
      *
+     * NOTE: the keys of the returned objects will match keys of the $ids.
+     *
      * @param int[] $ids
      *
      * @return ITypedObject[]
      */
     public function tryGetAll(array $ids) : array;
+
+    /**
+     * Returns an equivalent object set which represents a subset of the
+     * initial object set.
+     *
+     * @param ICriteria $criteria
+     *
+     * @return IIdentifiableObjectSet
+     */
+    public function subset(ICriteria $criteria) : IObjectSet;
 }

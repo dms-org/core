@@ -105,4 +105,14 @@ interface IEntitySet extends IIdentifiableObjectSet
      * @throws Exception\TypeMismatchException
      */
     public function satisfying(ISpecification $specification) : array;
+
+    /**
+     * Returns an equivalent object set which represents a subset of the
+     * initial object set.
+     *
+     * @param ICriteria $criteria
+     *
+     * @return IEntitySet
+     */
+    public function subset(ICriteria $criteria) : IObjectSet;
 }

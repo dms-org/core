@@ -9,6 +9,8 @@ use Dms\Core\Model\EntityCollection;
 use Dms\Core\Model\ICriteria;
 use Dms\Core\Model\IEntity;
 use Dms\Core\Model\ILoadCriteria;
+use Dms\Core\Model\IMutableObjectSet;
+use Dms\Core\Model\IObjectSet;
 use Dms\Core\Model\ISpecification;
 use Dms\Core\Model\ITypedObject;
 use Dms\Core\Model\Type\IType;
@@ -294,5 +296,21 @@ class ArrayRepository implements IRepository
     public function getIterator()
     {
         return $this->collection->getIterator();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function removeMatching(ICriteria $criteria)
+    {
+        $this->collection->removeMatching($criteria);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function subset(ICriteria $criteria) : IObjectSet
+    {
+        return $this->collection->subset($criteria);
     }
 }

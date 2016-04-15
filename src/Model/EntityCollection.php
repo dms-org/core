@@ -5,6 +5,7 @@ namespace Dms\Core\Model;
 use Dms\Core\Exception;
 use Dms\Core\Exception\InvalidArgumentException;
 use Dms\Core\Exception\TypeMismatchException;
+use Dms\Core\Model\Subset\MutableObjectSetSubset;
 use Pinq\Iterators\IIteratorScheme;
 use Pinq\Iterators\IOrderedMap;
 
@@ -261,5 +262,15 @@ class EntityCollection extends ObjectCollection implements IEntityCollection
         $this->toOrderedMap();
 
         return array_intersect_key($this->identityMap, array_flip($ids));
+    }
+
+    /**
+     * @inheritDoc
+     *
+     * @return IMutableObjectSet
+     */
+    public function subset(ICriteria $criteria) : IObjectSet
+    {
+        return new MutableObjectSetSubset($this, $criteria);
     }
 }

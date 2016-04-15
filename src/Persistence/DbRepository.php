@@ -6,8 +6,11 @@ use Dms\Core\Exception;
 use Dms\Core\Exception\InvalidArgumentException;
 use Dms\Core\Exception\TypeMismatchException;
 use Dms\Core\Model\EntityNotFoundException;
+use Dms\Core\Model\ICriteria;
 use Dms\Core\Model\IEntity;
+use Dms\Core\Model\IObjectSet;
 use Dms\Core\Model\ITypedObject;
+use Dms\Core\Model\Subset\MutableObjectSetSubset;
 use Dms\Core\Persistence\Db\Connection\DbOutOfSyncException;
 use Dms\Core\Persistence\Db\Connection\IConnection;
 use Dms\Core\Persistence\Db\Mapping\EntityOutOfSyncException;
@@ -411,5 +414,25 @@ class DbRepository extends DbRepositoryBase implements IRepository
         $this->transaction(function (PersistenceContext $context) {
             $this->mapper->deleteFromQuery($context, Delete::from($this->mapper->getPrimaryTable()));
         });
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function removeMatching(ICriteria $criteria)
+    {
+        $delete = $this->criteriaMapper->mapCriteriaToDelete($criteria);
+
+        $this->transaction(function (PersistenceContext $context) use($delete){
+            $this->mapper->deleteFromQuery($context, $delete);
+        });
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function subset(ICriteria $criteria) : IObjectSet
+    {
+        return new MutableObjectSetSubset($this, $criteria);
     }
 }

@@ -5,8 +5,11 @@ namespace Dms\Core\Tests\Model;
 use Dms\Core\Exception\InvalidArgumentException;
 use Dms\Core\Model\Criteria\SpecificationDefinition;
 use Dms\Core\Model\EntityCollection;
+use Dms\Core\Model\EntityNotFoundException;
 use Dms\Core\Model\IEntity;
 use Dms\Core\Model\ILoadCriteria;
+use Dms\Core\Model\ObjectNotFoundException;
+use Dms\Core\Model\Subset\MutableObjectSetSubset;
 use Dms\Core\Model\TypedCollection;
 use Dms\Core\Tests\Model\Fixtures\SubObject;
 use Dms\Core\Tests\Model\Fixtures\TestEntity;
@@ -358,5 +361,174 @@ class EntityCollectionTest extends IEntitySetTest
         $this->assertSame(false, $this->collection->has($id));
         $this->assertSame(null, $this->collection->tryGet($id));
         $this->assertSame([], $this->collection->tryGetAll([$id]));
+    }
+
+    public function testSubset()
+    {
+        $collection = TestEntity::collection([
+            $object1 = new TestEntity(3, 'foo'),
+            $object2 = new TestEntity(2, 'bar'),
+            $object3 = new TestEntity(1, 'aFOOb'),
+            $object4 = new TestEntity(0, 'quzFoo'),
+        ]);
+
+        $subset = $collection->subset(
+            $collection->criteria()
+                ->whereStringContainsCaseInsensitive('prop', 'foo')
+                ->orderByAsc('id')
+        );
+
+        $this->assertInstanceOf(MutableObjectSetSubset::class, $subset);
+        $this->assertSame(3, $subset->count());
+        $this->assertSame([$object4, $object3, $object1], $subset->getAll());
+        $this->assertSame(false, $subset->containsAll($collection->asArray()));
+        $this->assertSame(true, $subset->containsAll([$object1, $object3, $object4]));
+
+        $this->assertSame(0, $subset->countMatching(
+            $subset->criteria()
+                ->where('prop', '=', 'bar')
+        ));
+
+        $this->assertSame([], $subset->matching(
+            $subset->criteria()
+                ->where('prop', '=', 'bar')
+        ));
+
+        $this->assertSame(1, $subset->countMatching(
+            $subset->criteria()
+                ->where('prop', '=', 'aFOOb')
+        ));
+
+        $this->assertSame([$object3], $subset->matching(
+            $subset->criteria()
+                ->where('prop', '=', 'aFOOb')
+        ));
+
+        $this->assertSame([$object1], $subset->satisfying(
+            TestEntity::specification(function (SpecificationDefinition $match) {
+                $match->where('id', '>=', 2)->where('id', '<=', 3);
+            })
+        ));
+    }
+
+    public function testNestedSubset()
+    {
+        $collection = TestEntity::collection([
+            $object1 = new TestEntity(3, 'foo'),
+            $object2 = new TestEntity(2, 'bar'),
+            $object3 = new TestEntity(1, 'aFOOb'),
+            $object4 = new TestEntity(0, 'quzFoo'),
+        ]);
+
+        $subset = $collection->subset(
+            $collection->criteria()
+                ->whereStringContainsCaseInsensitive('prop', 'foo')
+        )->subset(
+            $collection->criteria()
+                ->whereStringContainsCaseInsensitive('prop', 'q')
+        );
+
+        $this->assertInstanceOf(MutableObjectSetSubset::class, $subset);
+        $this->assertSame(1, $subset->count());
+        $this->assertSame([3 => $object4], $subset->getAll());
+        $this->assertSame([$object4], $subset->getAllById([0]));
+        $this->assertSame(false, $subset->containsAll($collection->asArray()));
+        $this->assertSame(true, $subset->containsAll([$object4]));
+
+        $this->assertThrows(function () use ($subset) {
+            $subset->getAllById([1, 2, 3]);
+        }, EntityNotFoundException::class);
+    }
+
+    public function testSubsetIdentityMethods()
+    {
+        $collection = TestEntity::collection([
+            $object1 = new TestEntity(3, 'foo'),
+            $object2 = new TestEntity(2, 'bar'),
+            $object3 = new TestEntity(1, 'aFOOb'),
+            $object4 = new TestEntity(0, 'quzFoo'),
+        ]);
+
+        $subset = $collection->subset(
+            $collection->criteria()
+                ->whereStringContainsCaseInsensitive('prop', 'foo')
+        );
+
+        $this->assertSame(0, $subset->getObjectId($object4));
+        $this->assertSame(true, $subset->has(3));
+        $this->assertSame(false, $subset->has(2));
+
+        $this->assertSame($object1, $subset->get(3));
+        $this->assertThrows(function () use ($subset) {
+            $subset->get(2);
+        }, EntityNotFoundException::class);
+
+        $this->assertSame($object1, $subset->tryGet(3));
+        $this->assertSame(null, $subset->tryGet(2));
+    }
+
+    public function testSubsetRemoveById()
+    {
+        $collection = TestEntity::collection([
+            $object1 = new TestEntity(3, 'foo'),
+            $object2 = new TestEntity(2, 'bar'),
+            $object3 = new TestEntity(1, 'aFOOb'),
+            $object4 = new TestEntity(0, 'quzFoo'),
+        ]);
+
+        $subset = $collection->subset(
+            $collection->criteria()
+                ->whereStringContainsCaseInsensitive('prop', 'foo')
+        );
+
+        $subset->removeById(3);
+
+        $this->assertSame(2, $subset->count());
+        $this->assertSame([2 => $object3, 3 => $object4], $subset->getAll());
+        $this->assertSame(3, $collection->count());
+        $this->assertSame([$object2, $object3, $object4], $collection->getAll());
+    }
+
+    public function testSubsetClear()
+    {
+        $collection = TestEntity::collection([
+            $object1 = new TestEntity(3, 'foo'),
+            $object2 = new TestEntity(2, 'bar'),
+            $object3 = new TestEntity(1, 'aFOOb'),
+            $object4 = new TestEntity(0, 'quzFoo'),
+        ]);
+
+        $subset = $collection->subset(
+            $collection->criteria()
+                ->whereStringContainsCaseInsensitive('prop', 'foo')
+        );
+
+        $subset->clear();
+
+        $this->assertSame([], $subset->getAll());
+        $this->assertSame([$object2], $collection->getAll());
+    }
+
+    public function testSubsetRemoveMatching()
+    {
+        $collection = TestEntity::collection([
+            $object1 = new TestEntity(3, 'foo'),
+            $object2 = new TestEntity(2, 'bar'),
+            $object3 = new TestEntity(1, 'aFOOb'),
+            $object4 = new TestEntity(0, 'quzFoo'),
+        ]);
+
+        $subset = $collection->subset(
+            $collection->criteria()
+                ->whereStringContainsCaseInsensitive('prop', 'foo')
+        );
+
+        $subset->removeMatching(
+            $collection->criteria()
+                ->whereIn('id', [2, 0])
+        );
+
+        $this->assertSame([$object1, 2 => $object3], $subset->getAll());
+        $this->assertSame([$object1, $object2, $object3], $collection->getAll());
     }
 }

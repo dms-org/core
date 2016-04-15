@@ -66,4 +66,23 @@ interface IMutableObjectSet extends IIdentifiableObjectSet
      * @return void
      */
     public function clear();
+
+    /**
+     * Removes all the objects matching the supplied criteria the object set.
+     *
+     * @param ICriteria $criteria
+     *
+     * @return void
+     */
+    public function removeMatching(ICriteria $criteria);
+
+    /**
+     * Returns an equivalent object set which represents a subset of the
+     * initial object set.
+     *
+     * @param ICriteria $criteria
+     *
+     * @return IMutableObjectSet
+     */
+    public function subset(ICriteria $criteria) : IObjectSet;
 }

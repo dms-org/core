@@ -452,4 +452,64 @@ class DbRepositoryTest extends DbIntegrationTest
             $repo->loadCustomQuery();
         }, PersistenceException::class);
     }
+
+    public function testRemoveMatching()
+    {
+        $entities = $this->makeEntities(10);
+
+        $this->repo->saveAll($entities);
+
+        $this->repo->removeMatching(
+            EmptyEntity::criteria()
+                ->where('id', '<=', 9)
+                ->orderByDesc('id')
+                ->skip(5)
+                ->limit(3)
+        );
+
+        $this->assertEquals([
+            new EmptyEntity(1),
+            //
+            new EmptyEntity(5),
+            new EmptyEntity(6),
+            new EmptyEntity(7),
+            new EmptyEntity(8),
+            new EmptyEntity(9),
+            new EmptyEntity(10)
+        ], $this->repo->getAll());
+    }
+
+    public function testRepositorySubset()
+    {
+        $entities = $this->makeEntities(10);
+
+        $this->repo->saveAll($entities);
+
+        $subset = $this->repo->subset(
+            EmptyEntity::criteria()
+                ->where('id', '<=', 9)
+                ->orderByDesc('id')
+                ->skip(5)
+                ->limit(3)
+        );
+
+        $this->assertEquals([
+            new EmptyEntity(4),
+            new EmptyEntity(3),
+            new EmptyEntity(2),
+        ], $subset->getAll());
+
+        $subset->clear();
+
+        $this->assertEquals([
+            new EmptyEntity(1),
+            //
+            new EmptyEntity(5),
+            new EmptyEntity(6),
+            new EmptyEntity(7),
+            new EmptyEntity(8),
+            new EmptyEntity(9),
+            new EmptyEntity(10)
+        ], $this->repo->getAll());
+    }
 }

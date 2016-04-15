@@ -4,6 +4,7 @@ namespace Dms\Core\Model;
 
 use Dms\Core\Exception;
 use Dms\Core\Model\Criteria\Condition\Condition;
+use Dms\Core\Model\Criteria\Criteria;
 use Dms\Core\Model\Criteria\MemberOrdering;
 use Dms\Core\Model\Object\FinalizedClassDefinition;
 
@@ -80,4 +81,20 @@ interface ICriteria
      * @return int|null
      */
     public function getLimitAmount();
+
+    /**
+     * Merges the criteria.
+     *
+     * @param ICriteria $criteria
+     *
+     * @return ICriteria
+     */
+    public function merge(ICriteria $criteria) : ICriteria;
+
+    /**
+     * Returns a copy of the criteria which can be modified.
+     * 
+     * @return Criteria
+     */
+    public function asMutableCriteria() : Criteria;
 }

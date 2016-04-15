@@ -15,6 +15,12 @@ use Dms\Core\Model\Criteria\NestedMember;
 interface ILoadCriteria extends ICriteria
 {
     /**
+     * @inheritdoc
+     * @return ILoadCriteria
+     */
+    public function merge(ICriteria $criteria) : ICriteria;
+
+    /**
      * Gets the nested members to load.
      *
      * Example:

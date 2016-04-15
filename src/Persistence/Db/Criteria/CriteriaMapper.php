@@ -24,6 +24,7 @@ use Dms\Core\Persistence\Db\Mapping\Relation\IToManyRelation;
 use Dms\Core\Persistence\Db\Mapping\Relation\IToOneRelation;
 use Dms\Core\Persistence\Db\Query;
 use Dms\Core\Persistence\Db\Query\Clause\Join;
+use Dms\Core\Persistence\Db\Query\Delete;
 use Dms\Core\Persistence\Db\Query\Expression\Expr;
 use Dms\Core\Persistence\Db\Query\Select;
 use Dms\Core\Persistence\Db\Schema\Table;
@@ -144,6 +145,19 @@ class CriteriaMapper
         $select = Select::from($this->primaryTable);
 
         return $this->mapCriteriaToExistingSelect($criteria, $select, $select->getTableAlias(), $memberMappings, $extraRequiredMembers);
+    }
+
+    /**
+     * Maps the supplied criteria to a delete query for the entity.
+     *
+     * @param ICriteria                     $criteria
+     *
+     * @return Delete
+     * @throws InvalidArgumentException
+     */
+    public function mapCriteriaToDelete(ICriteria $criteria) : Delete
+    {
+        return Delete::copyFrom($this->mapCriteriaToSelect($criteria));
     }
 
     /**
