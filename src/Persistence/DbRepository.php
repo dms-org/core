@@ -10,7 +10,6 @@ use Dms\Core\Model\ICriteria;
 use Dms\Core\Model\IEntity;
 use Dms\Core\Model\IObjectSet;
 use Dms\Core\Model\ITypedObject;
-use Dms\Core\Model\Subset\MutableObjectSetSubset;
 use Dms\Core\Persistence\Db\Connection\DbOutOfSyncException;
 use Dms\Core\Persistence\Db\Connection\IConnection;
 use Dms\Core\Persistence\Db\Mapping\EntityOutOfSyncException;
@@ -21,6 +20,7 @@ use Dms\Core\Persistence\Db\Query\Expression\ColumnExpr;
 use Dms\Core\Persistence\Db\Query\Expression\Expr;
 use Dms\Core\Persistence\Db\Query\Reorder;
 use Dms\Core\Persistence\Db\Query\Select;
+use Dms\Core\Persistence\Subset\RepositorySubset;
 
 /**
  * An implementation of the repository using the db orm implementation.
@@ -283,7 +283,7 @@ class DbRepository extends DbRepositoryBase implements IRepository
                 $entities[$idKeyMap[$entity->getId()]] = $entity;
             }
         }
-        
+
         return array_filter($entities);
     }
 
@@ -423,7 +423,7 @@ class DbRepository extends DbRepositoryBase implements IRepository
     {
         $delete = $this->criteriaMapper->mapCriteriaToDelete($criteria);
 
-        $this->transaction(function (PersistenceContext $context) use($delete){
+        $this->transaction(function (PersistenceContext $context) use ($delete) {
             $this->mapper->deleteFromQuery($context, $delete);
         });
     }
@@ -433,6 +433,6 @@ class DbRepository extends DbRepositoryBase implements IRepository
      */
     public function subset(ICriteria $criteria) : IObjectSet
     {
-        return new MutableObjectSetSubset($this, $criteria);
+        return new RepositorySubset($this, $criteria);
     }
 }

@@ -4,10 +4,8 @@ namespace Dms\Core\Model\Subset;
 
 use Dms\Core\Exception;
 use Dms\Core\Model\Criteria;
-use Dms\Core\Model\Criteria\LoadCriteria;
 use Dms\Core\Model\ICriteria;
 use Dms\Core\Model\IEntitySet;
-use Dms\Core\Model\ILoadCriteria;
 use Dms\Core\Model\IMutableObjectSet;
 use Dms\Core\Model\IObjectSetWithLoadCriteriaSupport;
 use Dms\Core\Model\ITypedObject;
