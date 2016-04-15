@@ -541,14 +541,14 @@ class TypeTest extends CmsTestCase
         /** @var UnionType $type */
         $type = UnionType::create([
             UnionType::create([new ScalarType(IType::BOOL), new ScalarType(IType::INT)]),
-            new ScalarType(IType::STRING)
+            new ScalarType(IType::STRING),
         ]);
 
         $this->assertInstanceOf(UnionType::class, $type);
         $this->assertEquals([
             new ScalarType(IType::BOOL),
             new ScalarType(IType::INT),
-            new ScalarType(IType::STRING)
+            new ScalarType(IType::STRING),
         ], array_values($type->getTypes()));
     }
 
@@ -585,5 +585,15 @@ class TypeTest extends CmsTestCase
 
         $this->assertContains(ConditionOperator::ALL_SATISFIES, $type->getConditionOperators());
         $this->assertContains(ConditionOperator::ANY_SATISFIES, $type->getConditionOperators());
+    }
+
+    public function testCollectionTypeSubset()
+    {
+        $type1 = Type::collectionOf(Type::string(), TypedCollection::class);
+        $type2 = Type::collectionOf(Type::string(), ITypedCollection::class);
+
+        $this->assertSame(false, $type1->equals($type2));
+        $this->assertSame(true, $type1->isSubsetOf($type2));
+        $this->assertSame(false, $type2->isSubsetOf($type1));
     }
 }

@@ -22,8 +22,8 @@ class CollectionType extends WithElementsType
     {
         if (!is_a($collectionClass, ITypedCollection::class, true)) {
             throw InvalidArgumentException::format(
-                    'Invalid collection class supplied to %s: expecting type compatible with %s, %s given',
-                    __METHOD__, ITypedCollection::class, $collectionClass
+                'Invalid collection class supplied to %s: expecting type compatible with %s, %s given',
+                __METHOD__, ITypedCollection::class, $collectionClass
             );
         }
 
@@ -43,6 +43,17 @@ class CollectionType extends WithElementsType
     /**
      * @param IType $type
      *
+     * @return bool
+     */
+    protected function checkThisIsSubsetOf(IType $type) : bool
+    {
+        /** @var static $type */
+        return parent::checkThisIsSubsetOf($type) && is_a($this->collectionClass, $type->collectionClass, true);
+    }
+
+    /**
+     * @param IType $type
+     *
      * @return IType|null
      */
     protected function intersection(IType $type)
@@ -50,8 +61,8 @@ class CollectionType extends WithElementsType
         if ($type instanceof self) {
             $elementType     = $this->elementType->intersect($type->elementType);
             $collectionClass = Type::object($this->collectionClass)
-                    ->intersect(Type::object($type->collectionClass))
-                    ->getClass();
+                ->intersect(Type::object($type->collectionClass))
+                ->getClass();
 
             return $elementType && $collectionClass ? new self($elementType, $collectionClass) : null;
         }
