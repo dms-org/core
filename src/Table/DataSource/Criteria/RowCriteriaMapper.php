@@ -5,6 +5,8 @@ namespace Dms\Core\Table\DataSource\Criteria;
 use Dms\Core\Model\Criteria\LoadCriteria;
 use Dms\Core\Model\Criteria\SpecificationDefinition;
 use Dms\Core\Model\ILoadCriteria;
+use Dms\Core\Model\IObjectSet;
+use Dms\Core\Model\IObjectSetWithLoadCriteriaSupport;
 use Dms\Core\Table\Criteria\ColumnConditionGroup;
 use Dms\Core\Table\Criteria\ColumnCriterion;
 use Dms\Core\Table\DataSource\Definition\FinalizedObjectTableDefinition;
@@ -29,14 +31,21 @@ class RowCriteriaMapper
     protected $componentIdPropertyMap;
 
     /**
+     * @var IObjectSet
+     */
+    private $objectSet;
+
+    /**
      * RowCriteriaMapper constructor.
      *
      * @param FinalizedObjectTableDefinition $definition
+     * @param IObjectSet                     $objectSet
      */
-    public function __construct(FinalizedObjectTableDefinition $definition)
+    public function __construct(FinalizedObjectTableDefinition $definition, IObjectSet $objectSet)
     {
         $this->definition             = $definition;
         $this->componentIdPropertyMap = array_flip($this->definition->getPropertyComponentIdMap());
+        $this->objectSet              = $objectSet;
     }
 
     /**
@@ -49,18 +58,20 @@ class RowCriteriaMapper
      */
     public function mapCriteria(IRowCriteria $criteria) : ILoadCriteria
     {
-        $objectCriteria = new LoadCriteria($this->definition->getClass());
+        $objectCriteria = $this->objectSet instanceof IObjectSetWithLoadCriteriaSupport
+            ? $this->objectSet->loadCriteria()
+            : new LoadCriteria($this->definition->getClass());
 
         foreach ($criteria->getColumnsToLoad() as $column) {
             $objectCriteria->loadAll($this->definition->getPropertiesRequiredFor($column->getName()));
         }
 
-        $mapConditions = function (SpecificationDefinition $objectCriteria, ColumnConditionGroup $conditionGroup)  {
+        $mapConditions = function (SpecificationDefinition $objectCriteria, ColumnConditionGroup $conditionGroup) {
             foreach ($conditionGroup->getConditions() as $condition) {
                 $objectCriteria->where(
-                        $this->mapColumnToPropertyName($condition),
-                        $condition->getOperator()->getOperator(),
-                        $condition->getValue()
+                    $this->mapColumnToPropertyName($condition),
+                    $condition->getOperator()->getOperator(),
+                    $condition->getValue()
                 );
             }
         };
@@ -77,8 +88,8 @@ class RowCriteriaMapper
 
         foreach ($criteria->getOrderings() as $ordering) {
             $objectCriteria->orderBy(
-                    $this->mapColumnToPropertyName($ordering),
-                    $ordering->getDirection()
+                $this->mapColumnToPropertyName($ordering),
+                $ordering->getDirection()
             );
         }
 

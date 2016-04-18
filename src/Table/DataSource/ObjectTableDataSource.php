@@ -59,7 +59,7 @@ class ObjectTableDataSource extends TableDataSource
 
         $this->objectSource   = $objectSource;
         $this->memberParser   = $objectSource->criteria()->getMemberExpressionParser();
-        $this->criteriaMapper = new RowCriteriaMapper($definition);
+        $this->criteriaMapper = new RowCriteriaMapper($definition, $objectSource);
         $this->definition     = $definition;
 
         $this->validateMapping();
