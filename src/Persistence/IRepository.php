@@ -7,6 +7,7 @@ use Dms\Core\Model\ICriteria;
 use Dms\Core\Model\IEntity;
 use Dms\Core\Model\IEntitySet;
 use Dms\Core\Model\IMutableObjectSet;
+use Dms\Core\Model\IObjectSet;
 use Dms\Core\Model\IObjectSetWithLoadCriteriaSupport;
 use Dms\Core\Model\ISpecification;
 use Dms\Core\Model\ITypedObject;
@@ -137,4 +138,11 @@ interface IRepository extends IMutableObjectSet, IEntitySet, IObjectSetWithLoadC
      * @return void
      */
     public function clear();
+
+    /**
+     * @inheritdoc
+     *
+     * @return IMutableObjectSet|IRepository
+     */
+    public function subset(ICriteria $criteria) : IObjectSet;
 }

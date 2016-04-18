@@ -14,6 +14,7 @@ use Dms\Core\Model\IObjectSet;
 use Dms\Core\Model\ISpecification;
 use Dms\Core\Model\ITypedObject;
 use Dms\Core\Model\Type\IType;
+use Dms\Core\Persistence\Subset\RepositorySubset;
 
 /**
  * An implementation of the repository using an in-memory store.
@@ -311,6 +312,6 @@ class ArrayRepository implements IRepository
      */
     public function subset(ICriteria $criteria) : IObjectSet
     {
-        return $this->collection->subset($criteria);
+        return new RepositorySubset($this, $criteria);
     }
 }
