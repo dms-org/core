@@ -26,8 +26,8 @@ class LoadIdMethodExpression extends LoadIdFromEntitySetMethodExpression
 
         if (!$member->getResultingType()->nonNullable()->isSubsetOf(Type::int())) {
             throw InvalidArgumentException::format(
-                    'Invalid argument for \'%s\' method, argument \'%s\' must result in type int, %s given',
-                    self::METHOD_NAME, $member->asString(), $member->getResultingType()->asTypeString()
+                'Invalid argument for \'%s\' method, argument \'%s\' must result in type int, %s given',
+                self::METHOD_NAME, $member->asString(), $member->getResultingType()->asTypeString()
             );
         }
     }
@@ -42,18 +42,21 @@ class LoadIdMethodExpression extends LoadIdFromEntitySetMethodExpression
         return function (array $objects) use ($memberGetter) {
             $relatedIds = $memberGetter($objects);
             $idsToLoad  = [];
+            $idKeyMap   = [];
 
             foreach ($relatedIds as $key => $id) {
                 if ($id !== null) {
                     $idsToLoad[$key] = $id;
+                    $idKeyMap[$id][] = $key;
                 }
             }
 
             $relatedEntities = $this->dataSource->getAllById($idsToLoad);
 
-            $idKeyMap = array_flip($idsToLoad);
             foreach ($relatedEntities as $relatedEntity) {
-                $relatedIds[$idKeyMap[$relatedEntity->getId()]] = $relatedEntity;
+                foreach ($idKeyMap[$relatedEntity->getId()] as $key) {
+                    $relatedIds[$key] = $relatedEntity;
+                }
             }
 
             return $relatedIds;

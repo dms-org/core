@@ -46,7 +46,7 @@ class LoadAllIdsMethodExpression extends LoadIdFromEntitySetMethodExpression
             $relatedIdGroups     = $memberGetter($objects);
             $relatedEntityGroups = [];
             $idsToLoad           = [];
-            $idKeyMap            = array_flip($idsToLoad);
+            $idKeyMap            = [];
 
             foreach ($relatedIdGroups as $key => $ids) {
                 if ($ids !== null) {
