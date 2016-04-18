@@ -8,6 +8,7 @@ use Dms\Core\Form\Field\Field as ActualField;
 use Dms\Core\Form\Field\Options\ArrayFieldOptions;
 use Dms\Core\Form\Field\Processor\CustomProcessor;
 use Dms\Core\Form\Field\Processor\FieldValidator;
+use Dms\Core\Form\Field\Processor\TypeProcessor;
 use Dms\Core\Form\Field\Processor\Validator\CustomValidator;
 use Dms\Core\Form\Field\Processor\Validator\UniquePropertyValidator;
 use Dms\Core\Form\Field\Type\FieldType;
@@ -294,6 +295,27 @@ abstract class FieldBuilderBase
     public function showAllOptions()
     {
         return $this->attr(FieldType::ATTR_SHOW_ALL_OPTIONS, true);
+    }
+
+    /**
+     * Casts the input to the supplied scalar type.
+     *
+     * Accepts values accepted by `settype`:
+     * "bool"
+     * "int"
+     * "float"
+     * "string"
+     * "array"
+     * "object"
+     * "null"
+     *
+     * @param string $scalarType
+     *
+     * @return static
+     */
+    public function castTo(string $scalarType)
+    {
+        return $this->process(new TypeProcessor($scalarType));
     }
 
     /**

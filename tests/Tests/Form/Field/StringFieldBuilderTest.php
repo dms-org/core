@@ -219,4 +219,32 @@ class StringFieldBuilderTest extends FieldBuilderTestBase
             '0' => '9',
         ], $field->getType()->get(StringType::ATTR_VALID_CHAR_RANGES));
     }
+
+    public function testCastTo()
+    {
+        $field = $this->field()->castTo('int')->build();
+
+        $this->assertEquals([
+            new TypeProcessor('string'),
+            new TypeProcessor('int'),
+        ], $field->getProcessors());
+
+        $this->assertSame(null, $field->process(null));
+        $this->assertSame(123, $field->process('123'));
+        $this->assertSame(Type::int()->nullable(), $field->getProcessedType());
+    }
+
+    public function testCastToRequired()
+    {
+        $field = $this->field()->castTo('int')->required()->build();
+
+        $this->assertEquals([
+            new RequiredValidator(Type::mixed()),
+            new TypeProcessor('string'),
+            new TypeProcessor('int'),
+        ], $field->getProcessors());
+
+        $this->assertSame(123, $field->process('123'));
+        $this->assertSame(Type::int(), $field->getProcessedType());
+    }
 }
