@@ -11,6 +11,7 @@ use Dms\Core\Form\IFieldProcessor;
 use Dms\Core\Model\IIdentifiableObjectSet;
 use Dms\Core\Model\Type\Builder\Type;
 use Dms\Core\Model\Type\IType as IPhpType;
+use Dms\Core\Persistence\IRepository;
 
 /**
  * The object id type class.
@@ -64,10 +65,16 @@ class ObjectIdType extends FieldType
      */
     protected function buildProcessors() : array
     {
+        if ($this->objects instanceof IRepository) {
+            $inputType = Type::int()->nullable();
+        } else {
+            $inputType = Type::string()->union(Type::int())->nullable();
+        }
+
         $processors = [
             new EmptyStringToNullProcessor(Type::mixed()),
             new ObjectIdProcessor(Type::mixed()),
-            new ObjectIdValidator(Type::string()->union(Type::int())->nullable(), $this->objects),
+            new ObjectIdValidator($inputType, $this->objects),
         ];
 
         if ($this->loadAsObjects) {
