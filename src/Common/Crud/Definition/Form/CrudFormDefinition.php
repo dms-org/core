@@ -554,16 +554,8 @@ class CrudFormDefinition
             $this->mode,
             $stagedForm,
             $this->createObjectCallback,
-            function ($object, $input) {
-                foreach ($this->onSubmitCallbacks as $callback) {
-                    $callback($object, $input);
-                }
-            },
-            function ($object, $input) {
-                foreach ($this->onSaveCallbacks as $callback) {
-                    $callback($object, $input);
-                }
-            }
+            $this->onSubmitCallbacks,
+            $this->onSaveCallbacks
         );
     }
 }

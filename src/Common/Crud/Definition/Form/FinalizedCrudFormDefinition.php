@@ -30,14 +30,14 @@ class FinalizedCrudFormDefinition
     protected $createObjectCallback;
 
     /**
-     * @var callable
+     * @var callable[]
      */
-    protected $onSubmitCallback;
+    protected $onSubmitCallbacks;
 
     /**
-     * @var  callable
+     * @var  callable[]
      */
-    protected $onSaveCallback;
+    protected $onSaveCallbacks;
 
     /**
      * FinalizedCrudFormDefinition constructor.
@@ -45,15 +45,15 @@ class FinalizedCrudFormDefinition
      * @param string        $mode
      * @param IStagedForm   $stagedForm
      * @param callable|null $createObjectCallback
-     * @param callable    $onSubmitCallback
-     * @param callable    $onSaveCallback
+     * @param callable[]    $onSubmitCallbacks
+     * @param callable[]    $onSaveCallbacks
      */
     public function __construct(
         string $mode,
         IStagedForm $stagedForm,
         callable $createObjectCallback = null,
-        callable $onSubmitCallback,
-        callable $onSaveCallback
+        array $onSubmitCallbacks,
+        array $onSaveCallbacks
     )
     {
         InvalidArgumentException::verify(
@@ -63,8 +63,8 @@ class FinalizedCrudFormDefinition
         $this->mode                 = $mode;
         $this->stagedForm           = $stagedForm;
         $this->createObjectCallback = $createObjectCallback;
-        $this->onSubmitCallback    = $onSubmitCallback;
-        $this->onSaveCallback      = $onSaveCallback;
+        $this->onSubmitCallbacks    = $onSubmitCallbacks;
+        $this->onSaveCallbacks      = $onSaveCallbacks;
     }
 
     /**
@@ -92,19 +92,19 @@ class FinalizedCrudFormDefinition
     }
 
     /**
-     * @return callable
+     * @return callable[]
      */
-    public function getOnSubmitCallback() : callable
+    public function getOnSubmitCallbacks() : array
     {
-        return $this->onSubmitCallback;
+        return $this->onSubmitCallbacks;
     }
 
     /**
-     * @return callable
+     * @return callable[]
      */
-    public function getOnSaveCallback() : callable
+    public function getOnSaveCallbacks() : array
     {
-        return $this->onSaveCallback;
+        return $this->onSaveCallbacks;
     }
 
     /**
@@ -145,7 +145,9 @@ class FinalizedCrudFormDefinition
      */
     public function invokeOnSubmitCallbacks(ITypedObject $object, array $input)
     {
-        call_user_func($this->onSubmitCallback, $object, $input);
+        foreach ($this->onSubmitCallbacks as $callback) {
+            $callback($object, $input);
+        }
     }
 
     /**
@@ -156,6 +158,8 @@ class FinalizedCrudFormDefinition
      */
     public function invokeOnSaveCallbacks(ITypedObject $object, array $input)
     {
-        call_user_func($this->onSaveCallback, $object, $input);
+        foreach ($this->onSaveCallbacks as $callback) {
+            $callback($object, $input);
+        }
     }
 }
