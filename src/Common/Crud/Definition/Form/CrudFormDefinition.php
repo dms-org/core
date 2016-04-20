@@ -500,9 +500,16 @@ class CrudFormDefinition
      * @param callable $callback
      *
      * @return void
+     * @throws InvalidOperationException
      */
     public function onSubmit(callable $callback)
     {
+        if ($this->isDependent) {
+            throw InvalidOperationException::format(
+                'Invalid call to %s: cannot add form callbacks in dependent form sections'
+            );
+        }
+
         $this->onSubmitCallbacks[] = $callback;
     }
 
@@ -524,9 +531,16 @@ class CrudFormDefinition
      * @param callable $callback
      *
      * @return void
+     * @throws InvalidOperationException
      */
     public function onSave(callable $callback)
     {
+        if ($this->isDependent) {
+            throw InvalidOperationException::format(
+                'Invalid call to %s: cannot add form callbacks in dependent form sections'
+            );
+        }
+
         $this->onSaveCallbacks[] = $callback;
     }
 

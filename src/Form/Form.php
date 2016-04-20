@@ -53,7 +53,8 @@ class Form implements IForm
                 /** @var IFormSection $lastSection */
                 $lastSection      = array_pop($this->sections);
                 $this->sections[] = new FormSection(
-                        $lastSection->getTitle(), array_merge($lastSection->getFields(), $section->getFields())
+                    $lastSection->getTitle(),
+                    array_merge($lastSection->getFields(), $section->getFields())
                 );
             } else {
                 $this->sections[] = $section;
@@ -125,8 +126,8 @@ class Form implements IForm
     {
         if (!isset($this->fields[$fieldName])) {
             throw InvalidArgumentException::format(
-                    'Invalid call to %s: invalid field name, expecting one of (%s), \'%s\' given',
-                    __METHOD__, Debug::formatValues($this->getFieldNames()), $fieldName
+                'Invalid call to %s: invalid field name, expecting one of (%s), \'%s\' given',
+                __METHOD__, Debug::formatValues($this->getFieldNames()), $fieldName
             );
         }
 
@@ -185,11 +186,11 @@ class Form implements IForm
         }
 
         throw new InvalidFormSubmissionException(
-                $this,
-                $submission,
-                $invalidInputExceptions,
-                $invalidSubmissionExceptions,
-                $unmetConstraintExceptions
+            $this,
+            $submission,
+            $invalidInputExceptions,
+            $invalidSubmissionExceptions,
+            $unmetConstraintExceptions
         );
     }
 
@@ -206,8 +207,8 @@ class Form implements IForm
 
         if ($processedKeys !== $fieldKeys) {
             throw InvalidArgumentException::format(
-                    'Invalid processed submission: expecting keys (%s), (%s) given',
-                    Debug::formatValues($fieldKeys), Debug::formatValues($processedKeys)
+                'Invalid processed submission: expecting keys (%s), (%s) given',
+                Debug::formatValues($fieldKeys), Debug::formatValues($processedKeys)
             );
         }
 
@@ -216,8 +217,8 @@ class Form implements IForm
 
             if (!$expectedType->isOfType($value)) {
                 throw InvalidArgumentException::format(
-                        'Invalid processed submission: expecting value for field \'%s\' to be of type %s, %s given',
-                        $fieldName, $expectedType->asTypeString(), Type::from($value)->asTypeString()
+                    'Invalid processed submission: expecting value for field \'%s\' to be of type %s, %s given',
+                    $fieldName, $expectedType->asTypeString(), Type::from($value)->asTypeString()
                 );
             }
         }
@@ -268,8 +269,8 @@ class Form implements IForm
 
             foreach ($section->getFields() as $field) {
                 $newFieldsInSection[] = isset($newFields[$field->getName()])
-                        ? $newFields[$field->getName()]
-                        : $field;
+                    ? $newFields[$field->getName()]
+                    : $field;
             }
 
             $sections[] = new FormSection($section->getTitle(), $newFieldsInSection);
