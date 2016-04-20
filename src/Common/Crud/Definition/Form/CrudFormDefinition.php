@@ -293,7 +293,7 @@ class CrudFormDefinition
     {
         if ($this->isDependent) {
             throw InvalidOperationException::format(
-                'Invalid call to %s: cannot nest dependent form sections'
+                'Invalid call to %s: cannot nest dependent form sections', __METHOD__
             );
         }
 
@@ -506,7 +506,7 @@ class CrudFormDefinition
     {
         if ($this->isDependent) {
             throw InvalidOperationException::format(
-                'Invalid call to %s: cannot add form callbacks in dependent form sections'
+                'Invalid call to %s: cannot add form callbacks in dependent form sections', __METHOD__
             );
         }
 
@@ -537,7 +537,7 @@ class CrudFormDefinition
     {
         if ($this->isDependent) {
             throw InvalidOperationException::format(
-                'Invalid call to %s: cannot add form callbacks in dependent form sections'
+                'Invalid call to %s: cannot add form callbacks in dependent form sections', __METHOD__
             );
         }
 
