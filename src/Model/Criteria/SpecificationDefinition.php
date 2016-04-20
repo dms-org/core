@@ -92,7 +92,7 @@ class SpecificationDefinition extends ObjectCriteriaBase
      */
     final public function whereAny(callable $conditionCallback)
     {
-        $definition           = new SpecificationDefinition($this->class);
+        $definition           = new SpecificationDefinition($this->class, $this->memberExpressionParser);
         $definition->isOrMode = true;
         $conditionCallback($definition);
         $this->append($definition->getCondition());
@@ -118,7 +118,7 @@ class SpecificationDefinition extends ObjectCriteriaBase
      */
     final public function whereAll(callable $conditionCallback)
     {
-        $definition = new SpecificationDefinition($this->class);
+        $definition = new SpecificationDefinition($this->class, $this->memberExpressionParser);
         $conditionCallback($definition);
         $this->append($definition->getCondition());
 
@@ -142,7 +142,7 @@ class SpecificationDefinition extends ObjectCriteriaBase
      */
     final public function whereNot(callable $conditionCallback)
     {
-        $definition = new SpecificationDefinition($this->class);
+        $definition = new SpecificationDefinition($this->class, $this->memberExpressionParser);
         $conditionCallback($definition);
         $this->append(new NotCondition($definition->getCondition()));
 
