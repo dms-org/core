@@ -19,7 +19,7 @@ class MysqlResequenceCompiler extends ResequenceCompiler
      *
      * @return CompiledQuery
      */
-    public function compileResequenceQuery(QueryBuilder $queryBuilder, ResequenceOrderIndexColumn $query) : \Dms\Core\Persistence\Db\Platform\CompiledQuery
+    public function compileResequenceQuery(QueryBuilder $queryBuilder, ResequenceOrderIndexColumn $query) : CompiledQuery
     {
         $platform   = $queryBuilder->getConnection()->getDatabasePlatform();
         $primaryKey = $platform->quoteSingleIdentifier($query->getTable()->getPrimaryKeyColumnName());
@@ -32,35 +32,23 @@ class MysqlResequenceCompiler extends ResequenceCompiler
         if ($query->hasGroupingColumn()) {
             $groupingColumnName = $platform->quoteSingleIdentifier($query->getGroupingColumn()->getName());
 
-            $subSelect          = <<<SQL
-SELECT
-  {$primaryKey},
-  (@__rownum := IF({$groupingColumnName} = @__previous_group, @__rownum, 0) + 1) AS row_number,
-  (@__previous_group := {$groupingColumnName})
-FROM
- {$table},
- (SELECT @__previous_group := NULL) AS __previous_group,
- (SELECT @__rownum := 0) AS row_num
-ORDER BY {$groupingColumnName}, {$column}
+            $sql          = <<<SQL
+UPDATE {$table}
+SET 
+    {$column} = (@__rownum:=IF({$groupingColumnName} = @__previous_group, @__rownum, 0) + 1),
+	{$primaryKey} = IF((@__previous_group:={$groupingColumnName}) IS NOT NULL, {$primaryKey}, {$primaryKey})
+WHERE {$where}
+ORDER BY {$groupingColumnName} , {$column}, @__previous_group := NULL, @__rownum := 0
 SQL;
         } else {
-            $subSelect = <<<SQL
-SELECT
-  {$primaryKey},
-  (@__rownum := @__rownum + 1) AS row_number
-FROM
- {$table},
- (SELECT @__rownum := 0) AS row_num
-ORDER BY {$column}
+            $sql = <<<SQL
+UPDATE {$table}
+SET 
+    {$column} = (@__rownum:= @__rownum + 1)
+WHERE {$where}
+ORDER BY {$column}, @__rownum := 0
 SQL;
         }
-        $sql = <<<SQL
-UPDATE {$table}
-INNER JOIN ($subSelect) AS __row_numbers USING ({$primaryKey})
-SET
-{$column} = __row_numbers.row_number
-WHERE {$where}
-SQL;
 
         return new CompiledQuery($sql, $queryBuilder->getParameters());
     }
