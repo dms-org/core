@@ -66,7 +66,17 @@ class LoadCriteriaMapper
                 $relationsToLoad[$alias] = $memberRelation;
 
                 foreach ($memberRelation->getParentColumnsToLoad() as $column) {
-                    $select->addColumn($column, Expr::tableColumn($select->getTable(), $column));
+                    if ($select->getTable()->hasColumn($column)) {
+                        $select->addColumn($column, Expr::tableColumn($select->getTable(), $column));
+                        continue;
+                    } else {
+                        foreach ($select->getJoins() as $join) {
+                            if ($join->getTable()->hasColumn($column)) {
+                                $select->addColumn($column, Expr::column($join->getTableName(), $join->getTable()->getColumn($column)));
+                                continue;
+                            }
+                        }
+                    }
                 }
 
                 if (!($mapping instanceof ToOneEmbeddedObjectMapping)) {
