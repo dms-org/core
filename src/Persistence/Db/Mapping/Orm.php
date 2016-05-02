@@ -65,7 +65,7 @@ abstract class Orm implements IOrm
 
         $definition->finalize(function (array $entityMapperFactories, array $embeddedObjectMapperFactories, array $includedOrms) use ($iocContainer) {
             $this->includedOrms = $includedOrms;
-            
+
             if ($iocContainer) {
                 $iocContainer->bindForCallback(IOrm::class, $this, function () use ($entityMapperFactories, $embeddedObjectMapperFactories) {
                     $this->initializeMappers($entityMapperFactories, $embeddedObjectMapperFactories);
@@ -343,7 +343,7 @@ abstract class Orm implements IOrm
     /**
      * @inheritDoc
      */
-    final public function getDatabase() : \Dms\Core\Persistence\Db\Schema\Database
+    final public function getDatabase() : Database
     {
         if (!$this->database) {
             $this->initializeDb();
@@ -355,11 +355,26 @@ abstract class Orm implements IOrm
     /**
      * @inheritDoc
      */
-    public function loadRelatedEntityType(string $entityType, string $idPropertyName) : string
+    public function loadRelatedEntityType(string $entityType, array $valueObjectProperties, string $idPropertyName) : string
     {
-        $mapper = $this->getEntityMapper($entityType);
+        $sourceType = $entityType;
+        $mapper     = $this->getEntityMapper($entityType);
 
         $propertyRelationMap = $mapper->getDefinition()->getPropertyRelationMap();
+
+        foreach ($valueObjectProperties as $valueObjectProperty) {
+
+            if (!isset($propertyRelationMap[$valueObjectProperty])) {
+                throw InvalidArgumentException::format(
+                    'Could not load related value object type for property %s::$%s: '
+                    . 'the property must mapped to a relation, expecting one of (%s), \'%s\' given',
+                    $sourceType, $idPropertyName, Debug::formatValues(array_keys($propertyRelationMap)), $valueObjectProperty
+                );
+            }
+
+            $sourceType          = $propertyRelationMap[$valueObjectProperty]->getMapper()->getObjectType();
+            $propertyRelationMap = $propertyRelationMap[$valueObjectProperty]->getMapper()->getDefinition()->getPropertyRelationMap();
+        }
 
         if (!isset($propertyRelationMap[$idPropertyName])) {
             throw InvalidArgumentException::format(

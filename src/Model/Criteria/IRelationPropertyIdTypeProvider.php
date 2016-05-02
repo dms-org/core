@@ -2,9 +2,6 @@
 
 namespace Dms\Core\Model\Criteria;
 
-use Dms\Core\Exception\InvalidArgumentException;
-use Dms\Core\Model\IEntitySet;
-
 /**
  * The relation property type provider
  *
@@ -15,11 +12,11 @@ interface IRelationPropertyIdTypeProvider
     /**
      * Loads the data source for the supplied entity type.
      *
-     * @param string $entityType
-     * @param string $idPropertyName
+     * @param string   $entityType
+     * @param string[] $valueObjectProperties
+     * @param string   $idPropertyName
      *
      * @return string
-     * @throws InvalidArgumentException
      */
-    public function loadRelatedEntityType(string $entityType, string $idPropertyName) : string;
+    public function loadRelatedEntityType(string $entityType, array $valueObjectProperties, string $idPropertyName) : string;
 }

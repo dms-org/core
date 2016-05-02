@@ -16,6 +16,7 @@ use Dms\Core\Model\Criteria\Member\SelfExpression;
 use Dms\Core\Model\IEntity;
 use Dms\Core\Model\Object\FinalizedClassDefinition;
 use Dms\Core\Model\Object\TypedObject;
+use Dms\Core\Model\Object\ValueObject;
 use Dms\Core\Model\Type\Builder\Type;
 use Dms\Core\Model\Type\CollectionType;
 use Dms\Core\Model\Type\IType;
@@ -49,8 +50,8 @@ class MemberExpressionParser implements IMemberExpressionParser
      * @param IRelationPropertyIdTypeProvider|null $relationPropertyIdTypeProvider
      */
     public function __construct(
-            IEntitySetProvider $entitySetProvider = null,
-            IRelationPropertyIdTypeProvider $relationPropertyIdTypeProvider = null
+        IEntitySetProvider $entitySetProvider = null,
+        IRelationPropertyIdTypeProvider $relationPropertyIdTypeProvider = null
     ) {
         $this->entitySetProvider              = $entitySetProvider;
         $this->relationPropertyIdTypeProvider = $relationPropertyIdTypeProvider;
@@ -71,12 +72,12 @@ class MemberExpressionParser implements IMemberExpressionParser
             }
 
             throw new InvalidMemberExpressionException(
-                    sprintf(
-                            'Could not parse member expression string \'%s\' from type %s: %s',
-                            $string, $rootCollectionType->getClassName(), $inner->getMessage()
-                    ),
-                    0,
-                    $inner
+                sprintf(
+                    'Could not parse member expression string \'%s\' from type %s: %s',
+                    $string, $rootCollectionType->getClassName(), $inner->getMessage()
+                ),
+                0,
+                $inner
             );
         }
     }
@@ -150,9 +151,9 @@ class MemberExpressionParser implements IMemberExpressionParser
             } //
             elseif ($char === '.' && $parenthesisCount === 0) {
                 $parts[] = [
-                        $currentType,
-                        $currentName,
-                        $currentParams
+                    $currentType,
+                    $currentName,
+                    $currentParams
                 ];
 
                 $currentType   = self::TYPE_PROPERTY;
@@ -179,9 +180,9 @@ class MemberExpressionParser implements IMemberExpressionParser
 
         if ($currentName) {
             $parts[] = [
-                    $currentType,
-                    $currentName,
-                    $currentParams
+                $currentType,
+                $currentName,
+                $currentParams
             ];
         }
 
@@ -221,8 +222,8 @@ class MemberExpressionParser implements IMemberExpressionParser
         }
 
         return new MemberPropertyExpression(
-                $definition->getProperty($propertyName),
-                $sourceType->isNullable()
+            $definition->getProperty($propertyName),
+            $sourceType->isNullable()
         );
     }
 
@@ -238,32 +239,32 @@ class MemberExpressionParser implements IMemberExpressionParser
 
             case ObjectSetFlattenMethodExpression::METHOD_NAME:
                 return new ObjectSetFlattenMethodExpression(
-                        $sourceType,
-                        $this->assertCollectionSourceAndSingleMemberParameter($sourceType, $methodName, $params)
+                    $sourceType,
+                    $this->assertCollectionSourceAndSingleMemberParameter($sourceType, $methodName, $params)
                 );
 
             case ObjectSetAverageMethodExpression::METHOD_NAME:
                 return new ObjectSetAverageMethodExpression(
-                        $sourceType,
-                        $this->assertCollectionSourceAndSingleMemberParameter($sourceType, $methodName, $params)
+                    $sourceType,
+                    $this->assertCollectionSourceAndSingleMemberParameter($sourceType, $methodName, $params)
                 );
 
             case ObjectSetMaximumMethodExpression::METHOD_NAME:
                 return new ObjectSetMaximumMethodExpression(
-                        $sourceType,
-                        $this->assertCollectionSourceAndSingleMemberParameter($sourceType, $methodName, $params)
+                    $sourceType,
+                    $this->assertCollectionSourceAndSingleMemberParameter($sourceType, $methodName, $params)
                 );
 
             case ObjectSetMinimumMethodExpression::METHOD_NAME:
                 return new ObjectSetMinimumMethodExpression(
-                        $sourceType,
-                        $this->assertCollectionSourceAndSingleMemberParameter($sourceType, $methodName, $params)
+                    $sourceType,
+                    $this->assertCollectionSourceAndSingleMemberParameter($sourceType, $methodName, $params)
                 );
 
             case ObjectSetSumMethodExpression::METHOD_NAME:
                 return new ObjectSetSumMethodExpression(
-                        $sourceType,
-                        $this->assertCollectionSourceAndSingleMemberParameter($sourceType, $methodName, $params)
+                    $sourceType,
+                    $this->assertCollectionSourceAndSingleMemberParameter($sourceType, $methodName, $params)
                 );
 
             default:
@@ -275,8 +276,8 @@ class MemberExpressionParser implements IMemberExpressionParser
     {
         if (!$this->entitySetProvider) {
             throw BaseException::format(
-                    'cannot call method \'%s\', entity set provider is not available',
-                    $methodName
+                'cannot call method \'%s\', entity set provider is not available',
+                $methodName
             );
         }
     }
@@ -285,8 +286,8 @@ class MemberExpressionParser implements IMemberExpressionParser
     {
         if (count($params) !== $expected) {
             throw BaseException::format(
-                    'call to method \'%s\' expects %d parameters, %d given',
-                    $methodName, $expected, count($params)
+                'call to method \'%s\' expects %d parameters, %d given',
+                $methodName, $expected, count($params)
             );
         }
     }
@@ -297,8 +298,8 @@ class MemberExpressionParser implements IMemberExpressionParser
 
         if (!($sourceType instanceof ObjectType) || !$sourceType->isSubsetOf(TypedObject::type())) {
             throw BaseException::format(
-                    'cannot %s \'%s\', type must be instance of %s, %s given',
-                    $action, $name, TypedObject::class, $sourceType->asTypeString()
+                'cannot %s \'%s\', type must be instance of %s, %s given',
+                $action, $name, TypedObject::class, $sourceType->asTypeString()
             );
         }
 
@@ -314,8 +315,8 @@ class MemberExpressionParser implements IMemberExpressionParser
 
         if (!($sourceType instanceof CollectionType) || !$sourceType->getElementType()->nonNullable()->isSubsetOf(TypedObject::type())) {
             throw BaseException::format(
-                    'cannot %s \'%s\' on type %s, source type must be a %s',
-                    $action, $name, $sourceType->asTypeString(), Type::collectionOf(TypedObject::type())->asTypeString()
+                'cannot %s \'%s\' on type %s, source type must be a %s',
+                $action, $name, $sourceType->asTypeString(), Type::collectionOf(TypedObject::type())->asTypeString()
             );
         }
 
@@ -346,8 +347,8 @@ class MemberExpressionParser implements IMemberExpressionParser
 
         if (count($params) === 0 || count($params) > 2) {
             throw BaseException::format(
-                    'call to method \'%s\' expects 1 or 2 parameters, %d given',
-                    $methodName, count($params)
+                'call to method \'%s\' expects 1 or 2 parameters, %d given',
+                $methodName, count($params)
             );
         }
 
@@ -356,8 +357,8 @@ class MemberExpressionParser implements IMemberExpressionParser
         if (count($params) === 2) {
             if (!is_subclass_of($params[1], IEntity::class, true)) {
                 throw BaseException::format(
-                        'call to method \'%s\' expects 2nd parameter to be a subclass of %s, %s given',
-                        $methodName, IEntity::class, $params[1]
+                    'call to method \'%s\' expects 2nd parameter to be a subclass of %s, %s given',
+                    $methodName, IEntity::class, $params[1]
                 );
             }
 
@@ -365,8 +366,8 @@ class MemberExpressionParser implements IMemberExpressionParser
         } else {
             if (!$this->relationPropertyIdTypeProvider) {
                 throw BaseException::format(
-                        'call to method \'%s\' cannot infer related entity type of <%s>.%s, either set related id type provider or pass the entity type as 2nd parameter',
-                        $methodName, $definition->getClassName(), $params[0]
+                    'call to method \'%s\' cannot infer related entity type of <%s>.%s, either set related id type provider or pass the entity type as 2nd parameter',
+                    $methodName, $definition->getClassName(), $params[0]
                 );
             }
 
@@ -374,14 +375,27 @@ class MemberExpressionParser implements IMemberExpressionParser
 
             if (!$idProperty) {
                 throw BaseException::format(
-                        'call to method \'%s\' cannot infer related entity type of <%s>.%s, must be a property value',
-                        $methodName, $definition->getClassName(), $params[0]
+                    'call to method \'%s\' cannot infer related entity type of <%s>.%s, must be a property value',
+                    $methodName, $definition->getClassName(), $params[0]
                 );
             }
 
+            $sourceType = $idMemberExpression->getLastPart()->getSourceType();
+            $valueObjects = [];
+
+            foreach ($idMemberExpression->getPartsExceptLast() as $part) {
+                /** @var IMemberExpression $part */
+                if (is_subclass_of($part->getResultingType()->nonNullable()->asTypeString(), ValueObject::class, true)) {
+                    $valueObjects[] = $part->getProperty()->getName();
+                }
+            }
+
+            $entityType = $idMemberExpression->getParts()[0]->getSourceType()->asTypeString();
+
             $relatedEntityType = $this->relationPropertyIdTypeProvider->loadRelatedEntityType(
-                    $idMemberExpression->getLastPart()->getSourceType()->asTypeString(),
-                    $idProperty->getName()
+                $entityType,
+                $valueObjects,
+                $idProperty->getName()
             );
         }
 
@@ -389,15 +403,15 @@ class MemberExpressionParser implements IMemberExpressionParser
 
         if ($methodName === LoadIdMethodExpression::METHOD_NAME) {
             return new LoadIdMethodExpression(
-                    $sourceType,
-                    $idMemberExpression,
-                    $dataSource
+                $sourceType,
+                $idMemberExpression,
+                $dataSource
             );
         } else {
             return new LoadAllIdsMethodExpression(
-                    $sourceType,
-                    $idMemberExpression,
-                    $dataSource
+                $sourceType,
+                $idMemberExpression,
+                $dataSource
             );
         }
     }
@@ -409,9 +423,9 @@ class MemberExpressionParser implements IMemberExpressionParser
 
         if (!($instanceSourceType instanceof WithElementsType)) {
             throw BaseException::format(
-                    'cannot call method \'%s\' on type %s, source type must be a %s',
-                    $methodName, $sourceType->asTypeString(),
-                    Type::collectionOf(Type::mixed())->union(Type::arrayOf(Type::mixed()))->asTypeString()
+                'cannot call method \'%s\' on type %s, source type must be a %s',
+                $methodName, $sourceType->asTypeString(),
+                Type::collectionOf(Type::mixed())->union(Type::arrayOf(Type::mixed()))->asTypeString()
             );
         }
 

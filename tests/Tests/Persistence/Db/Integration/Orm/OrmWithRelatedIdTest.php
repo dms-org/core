@@ -35,43 +35,43 @@ class OrmWithRelatedIdTest extends OrmTestBase
     public function testBuildsExpectedDatabase()
     {
         $this->assertEquals(new Database([
-                new Table('parents', [
-                        PrimaryKeyBuilder::incrementingInt('id'),
-                ]),
-                new Table('children', [
-                        PrimaryKeyBuilder::incrementingInt('id'),
-                        new Column('parent_id', Integer::normal()),
-                        new Column('data', (new Varchar(255))->nullable()),
-                ], [], [
-                        new ForeignKey(
-                                'fk_children_parent_id_parents',
-                                ['parent_id'],
-                                'parents',
-                                ['id'],
-                                ForeignKeyMode::CASCADE,
-                                ForeignKeyMode::CASCADE
-                        ),
-                ]),
+            new Table('parents', [
+                PrimaryKeyBuilder::incrementingInt('id'),
+            ]),
+            new Table('children', [
+                PrimaryKeyBuilder::incrementingInt('id'),
+                new Column('parent_id', Integer::normal()),
+                new Column('data', (new Varchar(255))->nullable()),
+            ], [], [
+                new ForeignKey(
+                    'fk_children_parent_id_parents',
+                    ['parent_id'],
+                    'parents',
+                    ['id'],
+                    ForeignKeyMode::CASCADE,
+                    ForeignKeyMode::CASCADE
+                ),
+            ]),
         ]), $this->orm->getDatabase());
     }
 
     public function testLoadRelatedObjectTypeFromProperty()
     {
-        $this->assertSame(ChildEntity::class, $this->orm->loadRelatedEntityType(ParentEntity::class, 'childIds'));
+        $this->assertSame(ChildEntity::class, $this->orm->loadRelatedEntityType(ParentEntity::class, [], 'childIds'));
 
-        $this->assertSame(ParentEntity::class, $this->orm->loadRelatedEntityType(ChildEntity::class, 'parentId'));
+        $this->assertSame(ParentEntity::class, $this->orm->loadRelatedEntityType(ChildEntity::class, [], 'parentId'));
 
         $this->assertThrows(function () {
-            $this->orm->loadRelatedEntityType('SomeInvalidEntityClass', 'parentId');
+            $this->orm->loadRelatedEntityType('SomeInvalidEntityClass', [], 'parentId');
         }, InvalidArgumentException::class);
 
         $this->assertThrows(function () {
-            $this->orm->loadRelatedEntityType(ChildEntity::class, 'someInvalidPropertyName');
+            $this->orm->loadRelatedEntityType(ChildEntity::class, [], 'someInvalidPropertyName');
         }, InvalidArgumentException::class);
 
         $this->assertThrows(function () {
             // Property does not map to a relation
-            $this->orm->loadRelatedEntityType(ChildEntity::class, 'data');
+            $this->orm->loadRelatedEntityType(ChildEntity::class, [], 'data');
         }, InvalidArgumentException::class);
     }
 
@@ -79,7 +79,7 @@ class OrmWithRelatedIdTest extends OrmTestBase
     {
         /** @var EntityRepositoryProvider $provider */
         $connection = $this->getMockForAbstractClass(IConnection::class);
-        $provider = $this->orm->getEntityDataSourceProvider($connection);
+        $provider   = $this->orm->getEntityDataSourceProvider($connection);
 
         $this->assertInstanceOf(EntityRepositoryProvider::class, $provider);
         $this->assertSame($this->orm, $provider->getOrm());

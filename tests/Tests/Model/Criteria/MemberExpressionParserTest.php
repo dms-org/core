@@ -248,8 +248,8 @@ class MemberExpressionParserTest extends CmsTestCase
 
         $relatedIdTypeProviderMock->method('loadRelatedEntityType')
                 ->withConsecutive(
-                        [ParentEntity::class, 'relatedId'],
-                        [ParentEntity::class, 'relatedIds']
+                        [ParentEntity::class, [], 'relatedId'],
+                        [ParentEntity::class, [], 'relatedIds']
                 )
                 ->willReturn(RelatedEntity::class);
 
