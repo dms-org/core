@@ -116,6 +116,27 @@ class EmbeddedValueObjectDefiner extends EmbeddedRelationDefiner
     }
 
     /**
+     * Defines the embedded object mapper using the supplied callback
+     * 
+     * Example:
+     * <code>
+     * ->usingCallback(function (IOrm $orm, IObjectMapper $mapper) {
+     *      return new YourValueObjectMapper($orm, $mapper);
+     * });
+     * </code>
+     *
+     * @param callable $mapperLoaderCallback
+     *
+     * @return void
+     */
+    public function usingCallback(callable $mapperLoaderCallback)
+    {
+        $this->defineRelation(function (IObjectMapper $parentMapper) use ($mapperLoaderCallback) {
+            return $mapperLoaderCallback($this->orm, $parentMapper);
+        });
+    }
+
+    /**
      * @param callable $mapperLoader
      *
      * @return void

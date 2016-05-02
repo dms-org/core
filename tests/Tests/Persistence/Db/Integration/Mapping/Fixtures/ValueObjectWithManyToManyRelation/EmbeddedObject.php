@@ -1,6 +1,6 @@
 <?php
 
-namespace Dms\Core\Tests\Persistence\Db\Integration\Mapping\Fixtures\ValueObjectWithToManyRelation;
+namespace Dms\Core\Tests\Persistence\Db\Integration\Mapping\Fixtures\ValueObjectWithManyToManyRelation;
 
 use Dms\Core\Model\EntityCollection;
 use Dms\Core\Model\IEntityCollection;
