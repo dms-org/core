@@ -163,6 +163,14 @@ class MapperDefinition extends MapperDefinitionBase
     }
 
     /**
+     * @return IOrm
+     */
+    public function getOrm() : IOrm
+    {
+        return $this->orm;
+    }
+
+    /**
      * Defines the default table name for the mapper.
      *
      * @param string $tableName
