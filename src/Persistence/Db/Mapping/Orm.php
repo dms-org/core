@@ -5,6 +5,7 @@ namespace Dms\Core\Persistence\Db\Mapping;
 use Dms\Core\Exception\InvalidArgumentException;
 use Dms\Core\Ioc\IIocContainer;
 use Dms\Core\Persistence\Db\Connection\IConnection;
+use Dms\Core\Persistence\Db\Mapping\Definition\FinalizedMapperDefinition;
 use Dms\Core\Persistence\Db\Mapping\Definition\Orm\OrmDefinition;
 use Dms\Core\Persistence\Db\Schema\Database;
 use Dms\Core\Persistence\Db\Schema\Table;
@@ -179,24 +180,28 @@ abstract class Orm implements IOrm
                 }
             }
 
-            $this->loadTablesFromMapperRelations($tables, $innerMapper);
+            $this->loadTablesFromMapperRelations($tables, $innerMapper->getDefinition());
         }
 
-        $this->loadTablesFromMapperRelations($tables, $mapper);
+        $this->loadTablesFromMapperRelations($tables, $mapper->getDefinition());
 
         return $tables;
     }
 
     /**
-     * @param Table[]       $tables
-     * @param IObjectMapper $mapper
+     * @param Table[]                   $tables
+     * @param FinalizedMapperDefinition $definition
      */
-    private function loadTablesFromMapperRelations(array &$tables, IObjectMapper $mapper)
+    private function loadTablesFromMapperRelations(array &$tables, FinalizedMapperDefinition $definition)
     {
-        foreach ($mapper->getDefinition()->getRelationMappings() as $relationMapping) {
+        foreach ($definition->getRelationMappings() as $relationMapping) {
             foreach ($relationMapping->getRelation()->getRelationshipTables() as $table) {
                 $tables[] = $table;
             }
+        }
+
+        foreach ($definition->getSubClassMappings() as $mapping) {
+            $this->loadTablesFromMapperRelations($tables, $mapping->getDefinition());
         }
     }
 

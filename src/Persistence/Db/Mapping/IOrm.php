@@ -101,7 +101,7 @@ interface IOrm extends IRelationPropertyIdTypeProvider
      *
      * @return Database
      */
-    public function getDatabase() : \Dms\Core\Persistence\Db\Schema\Database;
+    public function getDatabase() : Database;
 
     /**
      * Loads the entity set provider for the supplied db connection.
@@ -110,7 +110,7 @@ interface IOrm extends IRelationPropertyIdTypeProvider
      *
      * @return IEntitySetProvider
      */
-    public function getEntityDataSourceProvider(IConnection $connection) : \Dms\Core\Model\Criteria\IEntitySetProvider;
+    public function getEntityDataSourceProvider(IConnection $connection) : IEntitySetProvider;
 
     /**
      * Gets the current namespace of the orm.
