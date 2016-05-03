@@ -126,7 +126,7 @@ abstract class Platform implements IPlatform
             $rowData = $row->getColumnData();
 
             foreach ($columnDateFormatMap as $column => $dateFormat) {
-                $rowData[$column] = $rowData[$column] instanceof \DateTimeInterface
+                $rowData[$column] = isset($rowData[$column]) && $rowData[$column] instanceof \DateTimeInterface
                         ? $rowData[$column]->format($dateFormat)
                         : null;
 
