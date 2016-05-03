@@ -10,6 +10,7 @@ use Dms\Core\Model\EntityCollection;
 use Dms\Core\Model\IMutableObjectSet;
 use Dms\Core\Model\ITypedObjectCollection;
 use Dms\Core\Model\Object\ValueObject;
+use Dms\Core\Model\ObjectCollection;
 use Dms\Core\Model\Type\Builder\Type;
 
 /**
@@ -61,6 +62,11 @@ class InnerCrudModuleProcessor extends FieldProcessor
         }
 
         $dataSource->removeAll($objectsToRemove);
+
+        if ($dataSource instanceof ObjectCollection) {
+            // Reindex the collection
+            $dataSource->addRange([]);
+        }
 
         return $dataSource;
     }
