@@ -436,13 +436,6 @@ class CrudFormDefinition
             }
         }
 
-        if (!is_a($classType, $this->class->getClassName(), true)) {
-            throw InvalidArgumentException::format(
-                'Invalid class type supplied to %s: expecting subclass of %s, %s given',
-                __METHOD__, $this->class->getClassName(), $classType
-            );
-        }
-
         /** @var string|TypedObject $classType */
         $this->class = $classType::definition();
         $this->createObjectType()->asClass($classType);
