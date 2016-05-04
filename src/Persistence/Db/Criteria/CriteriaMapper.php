@@ -16,7 +16,6 @@ use Dms\Core\Model\Criteria\NestedMember;
 use Dms\Core\Model\ICriteria;
 use Dms\Core\Model\Object\FinalizedClassDefinition;
 use Dms\Core\Persistence\Db\Connection\IConnection;
-use Dms\Core\Persistence\Db\Criteria\MemberMapping\IFinalRelationMemberMapping;
 use Dms\Core\Persistence\Db\Mapping\Definition\FinalizedMapperDefinition;
 use Dms\Core\Persistence\Db\Mapping\IEntityMapper;
 use Dms\Core\Persistence\Db\Mapping\IObjectMapper;
@@ -151,7 +150,7 @@ class CriteriaMapper
     /**
      * Maps the supplied criteria to a delete query for the entity.
      *
-     * @param ICriteria                     $criteria
+     * @param ICriteria $criteria
      *
      * @return Delete
      * @throws InvalidArgumentException
@@ -261,21 +260,17 @@ class CriteriaMapper
 
     /**
      * @param Select                        $select
+     * @param string                        $initialTableAlias
      * @param MemberMappingWithTableAlias[] $memberMappings
      *
-     * @return MemberMappingWithTableAlias[]
+     * @return array|MemberMappingWithTableAlias[]
      */
     private function optimizeOneToOneRelationsAsLeftJoins(Select $select, string $initialTableAlias, array $memberMappings) : array
     {
         $joinedRelationTableAliasMap = [];
 
         foreach ($memberMappings as $key => $mappingWithAlias) {
-            $mapping = $mappingWithAlias->getMapping();
-            
-            if ($mapping instanceof IFinalRelationMemberMapping) {
-                continue;
-            }
-
+            $mapping           = $mappingWithAlias->getMapping();
             $parentTableAlias  = $initialTableAlias;
             $relationsToRemove = 0;
 
@@ -297,7 +292,7 @@ class CriteriaMapper
             }
 
             $memberMappings[$key] = new MemberMappingWithTableAlias(
-                $mapping->withRelationToSubSelect(array_slice($mapping->getRelationsToSubSelect(), $relationsToRemove)),
+                $mapping->withoutRelationsToSubSelect($relationsToRemove),
                 $parentTableAlias
             );
         }

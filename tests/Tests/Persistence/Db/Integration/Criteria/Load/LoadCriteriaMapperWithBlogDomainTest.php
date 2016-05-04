@@ -84,7 +84,7 @@ class LoadCriteriaMapperWithBlogDomainTest extends LoadCriteriaMapperTestBase
                 [
                         'password' => new ToOneMemberRelation(
                                 (new ToOneEmbeddedObjectMapping($objectMapper, [],
-                                        $objectMapper->getDefinition()->getRelationMappedToProperty('password')))->withRelationToSubSelect([])
+                                        $objectMapper->getDefinition()->getRelationMappedToProperty('password')))->withoutRelationsToSubSelect(1)
                         )
                 ]
         ));
@@ -109,7 +109,7 @@ class LoadCriteriaMapperWithBlogDomainTest extends LoadCriteriaMapperTestBase
                 [
                         'alias' => new ToOneMemberRelation(
                                 (new ToOneEntityRelationMapping($objectMapper, [],
-                                        $objectMapper->getDefinition()->getRelationMappedToProperty('alias')))->withRelationToSubSelect([])
+                                        $objectMapper->getDefinition()->getRelationMappedToProperty('alias')))->withoutRelationsToSubSelect(1)
                         )
                 ]
         ));

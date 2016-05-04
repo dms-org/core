@@ -62,6 +62,14 @@ class ToManyRelationMapping extends RelationMapping implements IFinalRelationMem
     /**
      * @inheritDoc
      */
+    public function withoutRelationsToSubSelect(int $relationsToRemove)
+    {
+        return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function getWhereConditionExpr(Select $select, string $tableAlias, string $operator, $specification) : Expr
     {
         if ($operator === ConditionOperator::ALL_SATISFIES || $operator === ConditionOperator::ANY_SATISFIES) {

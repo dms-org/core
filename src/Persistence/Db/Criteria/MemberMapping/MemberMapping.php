@@ -70,16 +70,14 @@ abstract class MemberMapping
     }
 
     /**
-     * @param IRelation[] $nestedRelations
+     * @param int $relationsToRemove
      *
      * @return static
      */
-    public function withRelationToSubSelect(array $nestedRelations)
+    public function withoutRelationsToSubSelect(int $relationsToRemove)
     {
-        InvalidArgumentException::verifyAllInstanceOf(__METHOD__, 'nestedRelations', $nestedRelations, IRelation::class);
-
         $clone                       = clone $this;
-        $clone->relationsToSubSelect = $nestedRelations;
+        $clone->relationsToSubSelect = array_slice($clone->relationsToSubSelect, $relationsToRemove);
 
         return $clone;
     }
