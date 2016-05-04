@@ -16,6 +16,7 @@ use Dms\Core\Model\Criteria\NestedMember;
 use Dms\Core\Model\ICriteria;
 use Dms\Core\Model\Object\FinalizedClassDefinition;
 use Dms\Core\Persistence\Db\Connection\IConnection;
+use Dms\Core\Persistence\Db\Criteria\MemberMapping\IFinalRelationMemberMapping;
 use Dms\Core\Persistence\Db\Mapping\Definition\FinalizedMapperDefinition;
 use Dms\Core\Persistence\Db\Mapping\IEntityMapper;
 use Dms\Core\Persistence\Db\Mapping\IObjectMapper;
@@ -270,6 +271,10 @@ class CriteriaMapper
 
         foreach ($memberMappings as $key => $mappingWithAlias) {
             $mapping = $mappingWithAlias->getMapping();
+            
+            if ($mapping instanceof IFinalRelationMemberMapping) {
+                continue;
+            }
 
             $parentTableAlias  = $initialTableAlias;
             $relationsToRemove = 0;

@@ -283,7 +283,7 @@ abstract class ObjectMapping implements IObjectMapping
     /**
      * {@inheritdoc}
      */
-    final public function getClassConditionExpr(Query $query, string $objectType) : \Dms\Core\Persistence\Db\Query\Expression\Expr
+    final public function getClassConditionExpr(Query $query, string $objectType) : Expr
     {
         foreach ($this->subClassMappings as $subType) {
             if (is_a($objectType, $subType->getObjectType(), true)) {
@@ -299,7 +299,7 @@ abstract class ObjectMapping implements IObjectMapping
      *
      * @return Expr
      */
-    abstract protected function makeClassConditionExpr(Query $query) : \Dms\Core\Persistence\Db\Query\Expression\Expr;
+    abstract protected function makeClassConditionExpr(Query $query) : Expr;
 
     /**
      * @param Select $select
@@ -309,7 +309,7 @@ abstract class ObjectMapping implements IObjectMapping
      */
     protected function addLoadClausesToSelect(Select $select, string $tableAlias) : string
     {
-        $table = $select->getTable();
+        $table = $select->getTableFromAlias($tableAlias);
 
         foreach ($this->getAllColumnsToLoad() as $column) {
             $select->addColumn($column, Expr::column($tableAlias, $table->getColumn($column)));
@@ -329,7 +329,7 @@ abstract class ObjectMapping implements IObjectMapping
     /**
      * {@inheritdoc}
      */
-    final public function constructNewObjectFromRow(Row $row) : \Dms\Core\Model\ITypedObject
+    final public function constructNewObjectFromRow(Row $row) : ITypedObject
     {
         $subClassRow = $this->processRowBeforeLoadSubclass($row);
         foreach ($this->subClassMappings as $subType) {
@@ -384,7 +384,7 @@ abstract class ObjectMapping implements IObjectMapping
         foreach ($objects as $key => $object) {
             $object->hydrate($objectProperties[$key]);
         }
-        
+
         foreach ($this->definition->getCustomLoadMappingCallbacks() as $callback) {
             $callback($objects);
         }
