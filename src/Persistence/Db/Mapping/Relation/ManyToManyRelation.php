@@ -256,7 +256,7 @@ class ManyToManyRelation extends ToManyRelationBase
     /**
      * @inheritDoc
      */
-    public function getRelationSelectFromParentRows(ParentMapBase $map, &$parentIdColumnName = null) : \Dms\Core\Persistence\Db\Query\Select
+    public function getRelationSelectFromParentRows(ParentMapBase $map, &$parentIdColumnName = null, &$mapIdColumn = null) : \Dms\Core\Persistence\Db\Query\Select
     {
         // SELECT <related>.*, <parent id> FROM <related>
         // INNER JOIN <join table> ON <join table>.<related key> = <related>.<primary key>

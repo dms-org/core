@@ -20,10 +20,11 @@ interface ISeparateTableRelation extends IRelation
      *
      * @param ParentMapBase $map
      * @param string        &$parentIdColumnName This is an out parameter
+     * @param string        &$mapIdColumn This is an out parameter
      *
      * @return Select
      */
-    public function getRelationSelectFromParentRows(ParentMapBase $map, &$parentIdColumnName = null) : \Dms\Core\Persistence\Db\Query\Select;
+    public function getRelationSelectFromParentRows(ParentMapBase $map, &$parentIdColumnName = null, &$mapIdColumn = null) : Select;
 
     /**
      * Builds a select query to select the related rows as a sub select.
@@ -37,7 +38,7 @@ interface ISeparateTableRelation extends IRelation
      *
      * @return Select
      */
-    public function getRelationSubSelect(Select $outerSelect, string $parentTableAlias) : \Dms\Core\Persistence\Db\Query\Select;
+    public function getRelationSubSelect(Select $outerSelect, string $parentTableAlias) : Select;
 
     /**
      * Gets the condition to join the related parent table to the child table,

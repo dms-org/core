@@ -156,7 +156,11 @@ class ManyToOneRelation extends ToOneRelationBase
     /**
      * @inheritDoc
      */
-    public function getRelationSelectFromParentRows(ParentMapBase $map, &$parentIdColumnName = null) : \Dms\Core\Persistence\Db\Query\Select
+    public function getRelationSelectFromParentRows(
+        ParentMapBase $map,
+        &$parentIdColumnName = null,
+        &$mapIdColumn = null
+    ) : \Dms\Core\Persistence\Db\Query\Select
     {
         $relatedPrimaryKey     = $this->mapper->getPrimaryTable()->getPrimaryKeyColumn();
         $relatedPrimaryKeyName = $relatedPrimaryKey->getName();
@@ -171,6 +175,7 @@ class ManyToOneRelation extends ToOneRelationBase
         $select->where(Expr::in($this->column($relatedPrimaryKey), Expr::tuple($parentIds)));
 
         $parentIdColumnName = $relatedPrimaryKeyName;
+        $mapIdColumn        = $this->foreignKeyToRelated;
 
         return $select;
     }
@@ -178,8 +183,13 @@ class ManyToOneRelation extends ToOneRelationBase
     /**
      * @inheritDoc
      */
-    public function loadFromSelect(LoadingContext $context, ParentChildMap $map, Select $select, string $relatedTableAlias, string $parentIdColumnName)
-    {
+    public function loadFromSelect(
+        LoadingContext $context,
+        ParentChildMap $map,
+        Select $select,
+        string $relatedTableAlias,
+        string $parentIdColumnName
+    ) {
         $this->reference->addLoadToSelect($select, $relatedTableAlias);
 
         $indexedResults = [];

@@ -175,7 +175,7 @@ class ToOneRelation extends ToOneRelationBase
     /**
      * @inheritDoc
      */
-    public function getRelationSelectFromParentRows(ParentMapBase $map, &$parentIdColumnName = null) : \Dms\Core\Persistence\Db\Query\Select
+    public function getRelationSelectFromParentRows(ParentMapBase $map, &$parentIdColumnName = null, &$mapIdColumn = null) : \Dms\Core\Persistence\Db\Query\Select
     {
         $primaryKey = $map->getPrimaryKeyColumn();
         $parentIds  = [];

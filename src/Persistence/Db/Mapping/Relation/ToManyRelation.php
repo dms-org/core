@@ -254,7 +254,7 @@ class ToManyRelation extends ToManyRelationBase
     /**
      * @inheritDoc
      */
-    public function getRelationSelectFromParentRows(ParentMapBase $map, &$parentIdColumnName = null) : Select
+    public function getRelationSelectFromParentRows(ParentMapBase $map, &$parentIdColumnName = null, &$mapIdColumn = null) : Select
     {
         $primaryKey = $map->getPrimaryKeyColumn();
         $parentIds  = [];

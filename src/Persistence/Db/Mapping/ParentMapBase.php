@@ -34,7 +34,7 @@ abstract class ParentMapBase
     {
         return $this->primaryKeyColumn;
     }
-    
+
     /**
      * @return int[]
      */
@@ -71,5 +71,18 @@ abstract class ParentMapBase
         }
 
         return false;
+    }
+
+    /**
+     * @param string $column
+     *
+     * @return static
+     */
+    public function withPrimaryKeyColumn(string $column)
+    {
+        $clone = clone $this;
+        $clone->primaryKeyColumn = $column;
+
+        return $clone;
     }
 }

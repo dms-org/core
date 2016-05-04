@@ -41,12 +41,12 @@ abstract class MemberRelation extends Relation
         $firstRelation = $memberMapping->getFirstRelation();
 
         parent::__construct(
-                $firstRelation->getIdString() . ':' . $memberMapping->getRelation()->getIdString(),
-                $memberMapping->getRelation()->getValueType(),
-                $memberMapping->getRelation()->getMapper(),
-                self::DEPENDENT_CHILDREN,
-                [],
-                $firstRelation->getParentColumnsToLoad()
+            $firstRelation->getIdString() . ':' . $memberMapping->getRelation()->getIdString(),
+            $memberMapping->getRelation()->getValueType(),
+            $memberMapping->getRelation()->getMapper(),
+            self::DEPENDENT_CHILDREN,
+            [],
+            $firstRelation->getParentColumnsToLoad()
         );
 
         $this->memberMapping = $memberMapping;
@@ -95,15 +95,19 @@ abstract class MemberRelation extends Relation
             return;
         }
 
-        $relationSelect = $firstRelation->getRelationSelectFromParentRows($map, $parentIdColumnName);
+        $relationSelect = $firstRelation->getRelationSelectFromParentRows($map, $parentIdColumnName, $mapIdColumn);
+
+        if ($mapIdColumn) {
+            $map = $map->withPrimaryKeyColumn($mapIdColumn);
+        }
 
         $tableAlias = $relationSelect->getTableAlias();
 
         foreach ($separateTableRelations as $relation) {
             $tableAlias = $relation->joinSelectToRelatedTable(
-                    $tableAlias,
-                    Join::INNER,
-                    $relationSelect
+                $tableAlias,
+                Join::INNER,
+                $relationSelect
             );
         }
 
@@ -129,12 +133,12 @@ abstract class MemberRelation extends Relation
     }
 
     public function loadEmbeddedObjectRelation(
-            LoadingContext $context,
-            ParentChildMap $map,
-            EmbeddedObjectRelation $lastRelation,
-            Select $relationSelect,
-            $tableAlias,
-            $parentIdColumnName
+        LoadingContext $context,
+        ParentChildMap $map,
+        EmbeddedObjectRelation $lastRelation,
+        Select $relationSelect,
+        $tableAlias,
+        $parentIdColumnName
     ) {
         $mapper = $lastRelation->getEmbeddedObjectMapper();
 
@@ -144,8 +148,8 @@ abstract class MemberRelation extends Relation
 
         if ($objectIssetColumnName) {
             $relationSelect->addColumn(
-                    $objectIssetColumnName,
-                    Expr::column($tableAlias, $mapper->getRootEntityMapper()->getPrimaryTable()->getColumn($objectIssetColumnName))
+                $objectIssetColumnName,
+                Expr::column($tableAlias, $mapper->getRootEntityMapper()->getPrimaryTable()->getColumn($objectIssetColumnName))
             );
         }
 
