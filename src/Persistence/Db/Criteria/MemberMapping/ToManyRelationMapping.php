@@ -32,6 +32,11 @@ class ToManyRelationMapping extends RelationMapping implements IFinalRelationMem
     protected $relation;
 
     /**
+     * @var IRelation[]
+     */
+    protected $relationsToSubselectForWhereExpr;
+
+    /**
      * ToManyRelationMapping constructor.
      *
      * @param IEntityMapper   $rootEntityMapper
@@ -41,6 +46,8 @@ class ToManyRelationMapping extends RelationMapping implements IFinalRelationMem
     public function __construct(IEntityMapper $rootEntityMapper, array $relationsToSubSelect, IToManyRelation $relation)
     {
         parent::__construct($rootEntityMapper, $relationsToSubSelect, $relation);
+
+        $this->relationsToSubselectForWhereExpr = $this->relationsToSubSelect;
     }
 
     /**
@@ -64,7 +71,10 @@ class ToManyRelationMapping extends RelationMapping implements IFinalRelationMem
      */
     public function withoutRelationsToSubSelect(int $relationsToRemove)
     {
-        return $this;
+        $clone                                   = clone $this;
+        $clone->relationsToSubselectForWhereExpr = array_slice($clone->relationsToSubselectForWhereExpr, $relationsToRemove);
+
+        return $clone;
     }
 
     /**
@@ -72,47 +82,54 @@ class ToManyRelationMapping extends RelationMapping implements IFinalRelationMem
      */
     public function getWhereConditionExpr(Select $select, string $tableAlias, string $operator, $specification) : Expr
     {
-        if ($operator === ConditionOperator::ALL_SATISFIES || $operator === ConditionOperator::ANY_SATISFIES) {
-            /** @var ISpecification|null $specification */
-            if ($specification === null) {
-                return Expr::false();
+        try {
+            $originalRelations          = $this->relationsToSubSelect;
+            $this->relationsToSubSelect = $this->relationsToSubselectForWhereExpr;
+
+            if ($operator === ConditionOperator::ALL_SATISFIES || $operator === ConditionOperator::ANY_SATISFIES) {
+                /** @var ISpecification|null $specification */
+                if ($specification === null) {
+                    return Expr::false();
+                }
+
+                if ($this->relation instanceof EmbeddedCollectionRelation) {
+                    $relatedEntityMapper = new EntityMapperProxy($this->relation->getMapper());
+                } else {
+                    $relatedEntityMapper = $this->relation->getMapper();
+                }
+
+                $relatedCriteriaMapper = new CriteriaMapper($relatedEntityMapper);
+
+                if ($operator === ConditionOperator::ALL_SATISFIES) {
+                    return $this->loadExpressionWithNecessarySubselects(
+                        $select,
+                        $tableAlias,
+                        function (Select $subSelect, string $tableAlias) use ($relatedCriteriaMapper, $specification) {
+                            $relatedCriteriaMapper->mapCriteriaToExistingSelect($specification->not()->asCriteria(), $subSelect, $tableAlias);
+
+                            return Expr::equal(Expr::count(), Expr::param(null, 0));
+                        }
+                    );
+                } else {
+                    return $this->loadExpressionWithNecessarySubselects(
+                        $select,
+                        $tableAlias,
+                        function (Select $subSelect, string $tableAlias) use ($relatedCriteriaMapper, $specification) {
+                            $relatedCriteriaMapper->mapCriteriaToExistingSelect($specification->asCriteria(), $subSelect, $tableAlias);
+
+                            return Expr::greaterThan(Expr::count(), Expr::param(null, 0));
+                        }
+                    );
+                }
             }
 
-            if ($this->relation instanceof EmbeddedCollectionRelation) {
-                $relatedEntityMapper   = new EntityMapperProxy($this->relation->getMapper());
-            } else {
-                $relatedEntityMapper   = $this->relation->getMapper();
-            }
-            
-            $relatedCriteriaMapper = new CriteriaMapper($relatedEntityMapper);
-
-            if ($operator === ConditionOperator::ALL_SATISFIES) {
-                return $this->loadExpressionWithNecessarySubselects(
-                    $select,
-                    $tableAlias,
-                    function (Select $subSelect, string $tableAlias) use ($relatedCriteriaMapper, $specification) {
-                        $relatedCriteriaMapper->mapCriteriaToExistingSelect($specification->not()->asCriteria(), $subSelect, $tableAlias);
-
-                        return Expr::equal(Expr::count(), Expr::param(null, 0));
-                    }
-                );
-            } else {
-                return $this->loadExpressionWithNecessarySubselects(
-                    $select,
-                    $tableAlias,
-                    function (Select $subSelect, string $tableAlias) use ($relatedCriteriaMapper, $specification) {
-                        $relatedCriteriaMapper->mapCriteriaToExistingSelect($specification->asCriteria(), $subSelect, $tableAlias);
-
-                        return Expr::greaterThan(Expr::count(), Expr::param(null, 0));
-                    }
-                );
-            }
+            throw MemberExpressionMappingException::format(
+                'Cannot perform condition with operator \'%s\' on collection of related %s',
+                $operator, $this->getRelatedObjectType()
+            );
+        } finally {
+            $this->relationsToSubSelect = $originalRelations;
         }
-
-        throw MemberExpressionMappingException::format(
-            'Cannot perform condition with operator \'%s\' on collection of related %s',
-            $operator, $this->getRelatedObjectType()
-        );
     }
 
     /**
