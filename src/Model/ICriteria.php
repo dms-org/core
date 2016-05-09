@@ -93,8 +93,17 @@ interface ICriteria
 
     /**
      * Returns a copy of the criteria which can be modified.
-     * 
+     *
      * @return Criteria
      */
     public function asMutableCriteria() : Criteria;
+
+    /**
+     * Returns the equivalent conditions of the criteria as a specification.
+     * 
+     * NOTE: orderings and limits are ignored.
+     *
+     * @return ISpecification
+     */
+    public function asSpecification() : ISpecification;
 }

@@ -6,6 +6,7 @@ use Dms\Core\Exception;
 use Dms\Core\Exception\InvalidArgumentException;
 use Dms\Core\Model\Criteria\Condition\AndCondition;
 use Dms\Core\Model\ICriteria;
+use Dms\Core\Model\ISpecification;
 
 /**
  * The typed object criteria class.
@@ -192,5 +193,15 @@ class Criteria extends SpecificationDefinition implements ICriteria
     public function asMutableCriteria() : Criteria
     {
         return clone $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function asSpecification() : ISpecification
+    {
+        return new CustomSpecification($this->class->getClassName(), function (SpecificationDefinition $match) {
+            $match->condition = $this->condition;
+        });
     }
 }

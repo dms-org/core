@@ -485,4 +485,18 @@ class CriteriaTest extends CmsTestCase
             TestEntity::criteria()->merge($criteria1)
         );
     }
+
+    public function testAsSpecification()
+    {
+        $criteria = TestEntity::criteria();
+
+        $criteria->where('prop', '=', 'foo');
+
+        $this->assertEquals(
+            $criteria,
+            $criteria->asSpecification()->asCriteria()
+        );
+
+        $this->assertSame($criteria->getCondition(), $criteria->asSpecification()->getCondition());
+    }
 }
