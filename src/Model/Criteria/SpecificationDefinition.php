@@ -66,9 +66,9 @@ class SpecificationDefinition extends ObjectCriteriaBase
     final public function where(string $memberExpression, string $operator, $value)
     {
         $this->append(new MemberCondition(
-                $this->memberExpressionParser->parse($this->class, $memberExpression),
-                $operator,
-                $value
+            $this->memberExpressionParser->parse($this->class, $memberExpression),
+            $operator,
+            $value
         ));
 
         return $this;
@@ -95,7 +95,10 @@ class SpecificationDefinition extends ObjectCriteriaBase
         $definition           = new SpecificationDefinition($this->class, $this->memberExpressionParser);
         $definition->isOrMode = true;
         $conditionCallback($definition);
-        $this->append($definition->getCondition());
+
+        if ($definition->hasCondition()) {
+            $this->append($definition->getCondition());
+        }
 
         return $this;
     }
@@ -120,7 +123,10 @@ class SpecificationDefinition extends ObjectCriteriaBase
     {
         $definition = new SpecificationDefinition($this->class, $this->memberExpressionParser);
         $conditionCallback($definition);
-        $this->append($definition->getCondition());
+
+        if ($definition->hasCondition()) {
+            $this->append($definition->getCondition());
+        }
 
         return $this;
     }

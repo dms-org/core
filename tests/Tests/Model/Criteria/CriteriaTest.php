@@ -499,4 +499,26 @@ class CriteriaTest extends CmsTestCase
 
         $this->assertSame($criteria->getCondition(), $criteria->asSpecification()->getCondition());
     }
+
+    public function testEmptyWhereAny()
+    {
+        $criteria = TestEntity::criteria();
+
+        $criteria->whereAny(function () {
+
+        });
+
+        $this->assertNull($criteria->getCondition());
+    }
+
+    public function testEmptyWhereAll()
+    {
+        $criteria = TestEntity::criteria();
+
+        $criteria->whereAll(function () {
+
+        });
+
+        $this->assertNull($criteria->getCondition());
+    }
 }
