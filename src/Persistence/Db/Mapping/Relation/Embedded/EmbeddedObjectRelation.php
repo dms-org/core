@@ -200,6 +200,19 @@ class EmbeddedObjectRelation extends EmbeddedRelation implements IEmbeddedToOneR
         return array($parentRows, $children);
     }
 
+    protected function getRequiredColumnLookup() : array
+    {
+        $lookup = [];
+
+        foreach ($this->parentColumnsToLoad as $parentColumn) {
+            if (!$this->mapper->getTableWhichThisIsEmbeddedWithin()->getColumn($parentColumn)->getType()->isNullable()) {
+                $lookup[$parentColumn] = true;
+            }
+        }
+
+        return $lookup;
+    }
+
     /**
      * @param LoadingContext $context
      * @param ParentChildMap $map
@@ -213,6 +226,8 @@ class EmbeddedObjectRelation extends EmbeddedRelation implements IEmbeddedToOneR
         /** @var ParentChildItem[] $items */
         $items = [];
 
+        $requiredColumnLookup = $this->getRequiredColumnLookup();
+
         foreach ($map->getItems() as $key => $item) {
             $parentRow = $item->getParent();
 
@@ -222,6 +237,15 @@ class EmbeddedObjectRelation extends EmbeddedRelation implements IEmbeddedToOneR
                     continue;
                 } elseif (!$this->isWithinValueObject && !$objectIssetValue) {
                     continue;
+                }
+            } else {
+                // In case this relation was loaded via a LEFT JOIN the columns may be null
+                // even if they are not nullable hence we must only load the object if all the non nullable columns
+                // does not contain a null value.
+                foreach ($this->parentColumnsToLoad as $requiredColumn) {
+                    if (isset($requiredColumnLookup[$requiredColumn]) && $parentRow->getColumn($requiredColumn) === null) {
+                        continue 2;
+                    }
                 }
             }
 
