@@ -145,14 +145,9 @@ abstract class DbRepositoryBase implements IObjectSetWithLoadCriteriaSupport
 
         $this->validateHasRequiredColumns($sql, reset($rows));
 
-        $table      = $this->mapper->getPrimaryTable();
-        $rowObjects = [];
+        $rowSet = $this->connection->getPlatform()->mapResultSetToPhpForm($this->mapper->getSelect()->getResultSetTableStructure(), $rows);
 
-        foreach ($rows as $row) {
-            $rowObjects[] = new Row($table, $row);
-        }
-
-        return $this->mapper->loadAll($this->loadingContext, $rowObjects);
+        return $this->mapper->loadAll($this->loadingContext, $rowSet->getRows());
     }
 
     protected function replaceQueryPlaceholders(string $sql)
