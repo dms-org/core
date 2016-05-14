@@ -9,7 +9,10 @@
     ],
     "minimum-stability": "stable",
     "repositories": [
-        { "type": "composer", "url": "http://satis.dev:4321" }
+        {
+            "type": "composer",
+            "url": "https://api.package.studio/meta/composer"
+        }
     ],
     "autoload": {
         "psr-4": {
