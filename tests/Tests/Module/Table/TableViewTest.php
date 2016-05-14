@@ -14,7 +14,7 @@ class TableViewTest extends CmsTestCase
 {
     public function testWithCriteria()
     {
-        $criteria = $this->getMockForAbstractClass(RowCriteria::class, [], '', false);
+        $criteria = $this->getMock(RowCriteria::class, ['asNewCriteria'], [], '', false);
 
         $criteria->method('asNewCriteria')
                 ->willReturn(clone $criteria);
