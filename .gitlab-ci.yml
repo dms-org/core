@@ -8,7 +8,7 @@ before_script:
   # Get composer
   - curl -sS https://getcomposer.org/installer | php
   # Set the package.studio deploy token from the environment
-  - php composer.phar config http-basic.api.package.studio x-deploy-token $PACKAGE_STUDIO_DEPLOY_TOKEN
+  #- php composer.phar config http-basic.api.package.studio x-deploy-token $PACKAGE_STUDIO_DEPLOY_TOKEN
   # Install composer dependencies
   - php composer.phar install
 
@@ -16,4 +16,4 @@ before_script:
 test:7.0:
   image: php:7.0
   script:
-    - ./vendor/bin/phpunit --configuration Tests/phpunit.xml
+    - ./vendor/bin/phpunit --configuration tests/phpunit.xml
