@@ -50,6 +50,10 @@ class InnerCrudModuleType extends FieldType
         if ($this->has(self::ATTR_INITIAL_VALUE)) {
             $this->module = $this->module->withDataSource($this->get(self::ATTR_INITIAL_VALUE));
         }
+        
+        if ($this->get(self::ATTR_READ_ONLY) && !$this->has(self::ATTR_INITIAL_VALUE)) {
+            $this->attributes[self::ATTR_INITIAL_VALUE] = $this->module->getDataSource()->subset($this->module->getDataSource()->criteria());
+        }
 
         parent::initializeFromCurrentAttributes();
     }
