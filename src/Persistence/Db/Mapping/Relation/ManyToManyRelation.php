@@ -256,7 +256,7 @@ class ManyToManyRelation extends ToManyRelationBase
     /**
      * @inheritDoc
      */
-    public function getRelationSelectFromParentRows(ParentMapBase $map, &$parentIdColumnName = null, &$mapIdColumn = null) : \Dms\Core\Persistence\Db\Query\Select
+    public function getRelationSelectFromParentRows(ParentMapBase $map, &$parentIdColumnName = null, &$mapIdColumn = null) : Select
     {
         // SELECT <related>.*, <parent id> FROM <related>
         // INNER JOIN <join table> ON <join table>.<related key> = <related>.<primary key>
@@ -385,22 +385,38 @@ class ManyToManyRelation extends ToManyRelationBase
     /**
      * @inheritDoc
      */
-    public function getRelationSubSelect(Select $outerSelect, string $parentTableAlias) : \Dms\Core\Persistence\Db\Query\Select
+    public function getRelationSubSelect(Select $outerSelect, string $parentTableAlias) : Select
     {
         $subSelect = $outerSelect->buildSubSelect($this->relatedTable);
 
         $joinTableAlias = $subSelect->generateUniqueAliasFor($this->joinTable->getName());
 
-        $subSelect->join(Join::inner($this->joinTable, $joinTableAlias, [
+        $isSelfReferencing = $outerSelect->getTable()->getName() === $this->mapper->getPrimaryTableName();
+
+        if ($isSelfReferencing) {
+            $subSelect->join(Join::inner($this->joinTable, $joinTableAlias, [
                 Expr::equal(
-                        Expr::column($joinTableAlias, $this->relatedForeignKeyColumn),
-                        Expr::column($subSelect->getTableAlias(), $this->relatedPrimaryKey)
-                )
-        ]));
+                    Expr::column($joinTableAlias, $this->parentForeignKeyColumn),
+                    Expr::column($subSelect->getTableAlias(), $this->relatedPrimaryKey)
+                ),
+            ]));
 
+            return $subSelect
+                ->where(Expr::equal(
+                    Expr::column($parentTableAlias, $this->parentTablePrimaryKey),
+                    Expr::column($joinTableAlias, $this->relatedForeignKeyColumn)
+                ));
+        } else {
+            $subSelect->join(Join::inner($this->joinTable, $joinTableAlias, [
+                Expr::equal(
+                    Expr::column($joinTableAlias, $this->relatedForeignKeyColumn),
+                    Expr::column($subSelect->getTableAlias(), $this->relatedPrimaryKey)
+                ),
+            ]));
 
-        return $subSelect
+            return $subSelect
                 ->where($this->getRelationJoinCondition($parentTableAlias, $joinTableAlias));
+        }
     }
 
     /**
@@ -409,7 +425,7 @@ class ManyToManyRelation extends ToManyRelationBase
     public function getRelationJoinCondition(
             string $parentTableAlias,
             string $relatedTableAlias
-    ) : \Dms\Core\Persistence\Db\Query\Expression\Expr
+    ) : Expr
     {
         $joinTableAlias = $relatedTableAlias;
 

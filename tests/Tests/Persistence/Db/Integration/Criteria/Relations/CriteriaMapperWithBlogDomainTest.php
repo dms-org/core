@@ -53,13 +53,13 @@ class CriteriaMapperWithBlogDomainTest extends CriteriaMapperTestBase
                             ->addColumn('__single_val', Expr::count())
                             ->join(Join::inner($this->tables['user_friends'], 'user_friends', [
                                 Expr::equal(
-                                    $this->tableColumn('user_friends', 'friend_id'),
+                                    $this->tableColumn('user_friends', 'user_id'),
                                     Expr::column('users1', $this->tables['users']->getColumn('id'))
                                 )
                             ]))
                             ->where(Expr::equal(
                                 $this->tableColumn('users', 'id'),
-                                $this->tableColumn('user_friends', 'user_id')
+                                $this->tableColumn('user_friends', 'friend_id')
                             ))
                     ),
                     Expr::param(null, 2))
