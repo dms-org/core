@@ -6,6 +6,7 @@ use Dms\Core\Model\Criteria\LoadCriteria;
 use Dms\Core\Model\ILoadCriteria;
 use Dms\Core\Persistence\Db\Criteria\MemberMapping\IFinalRelationMemberMapping;
 use Dms\Core\Persistence\Db\Criteria\MemberMapping\ToOneEmbeddedObjectMapping;
+use Dms\Core\Persistence\Db\Mapping\Relation\ISeparateTableRelation;
 use Dms\Core\Persistence\Db\Query\Expression\Expr;
 
 /**
@@ -64,7 +65,9 @@ class LoadCriteriaMapper
 
             if ($mapping instanceof IFinalRelationMemberMapping) {
                 $memberRelation   = $mapping->asMemberRelation();
-                $parentTableAlias = count($memberMapping->getTableAliases()) === 1 ? $memberMapping->getLastTableAlias() : $memberMapping->getSecondLastTableAlias();
+                $parentTableAlias = !($memberRelation->getFirstRelation() instanceof ISeparateTableRelation) || count($memberMapping->getTableAliases()) === 1
+                    ? $memberMapping->getLastTableAlias()
+                    : $memberMapping->getSecondLastTableAlias();
                 $parentTable      = $select->getTableFromAlias($parentTableAlias);
                 $parentColumnMap  = [];
 
