@@ -51,50 +51,48 @@ class LoadCriteriaMapper
     {
         $select = $this->criteriaMapper->mapCriteriaToSelect($criteria, $memberMappings, $criteria->getAliasNestedMemberMap());
         $select->setColumns([]);
+        $primaryKeyColumnName = $this->criteriaMapper->getMapper()->getPrimaryTable()->getPrimaryKeyColumnName();
 
         $columnIndexMap  = [];
         $relationsToLoad = [];
         $requiresLoadId  = false;
 
         foreach ($criteria->getAliasNestedMemberMap() as $alias => $member) {
-            /** @var MemberMappingWithTableAlias $memberMapping */
+            /** @var MemberMappingWithTableAliases $memberMapping */
             $memberMapping = $memberMappings[$member->asString()];
             $mapping       = $memberMapping->getMapping();
 
             if ($mapping instanceof IFinalRelationMemberMapping) {
-                $memberRelation          = $mapping->asMemberRelation();
-                $relationsToLoad[$alias] = $memberRelation;
+                $memberRelation   = $mapping->asMemberRelation();
+                $parentTableAlias = count($memberMapping->getTableAliases()) === 1 ? $memberMapping->getLastTableAlias() : $memberMapping->getSecondLastTableAlias();
+                $parentTable      = $select->getTableFromAlias($parentTableAlias);
+                $parentColumnMap  = [];
 
                 foreach ($memberRelation->getParentColumnsToLoad() as $column) {
-                    if ($select->getTable()->hasColumn($column)) {
-                        $select->addColumn($column, Expr::tableColumn($select->getTable(), $column));
-                        continue;
-                    } else {
-                        foreach ($select->getJoins() as $join) {
-                            if ($join->getTable()->hasColumn($column)) {
-                                $select->addColumn($column, Expr::column($join->getTableName(), $join->getTable()->getColumn($column)));
-                                continue;
-                            }
-                        }
-                    }
+                    $parentColumnMap[$alias . '_' . $column] = $column;
+
+                    $select->addColumn($alias . '_' . $column, Expr::column($parentTableAlias, $parentTable->getColumn($column)));
                 }
 
                 if (!($mapping instanceof ToOneEmbeddedObjectMapping)) {
                     $requiresLoadId = true;
+                    $parentColumnMap[$primaryKeyColumnName] = $primaryKeyColumnName;
                 }
+
+                $relationsToLoad[$alias] = [$memberRelation, $parentTable, $parentColumnMap];
             } else {
-                $mapping->addSelectColumn($select, $memberMapping->getTableAlias(), $alias);
+                $mapping->addSelectColumn($select, $memberMapping->getLastTableAlias(), $alias);
                 $columnIndexMap[$alias] = $alias;
             }
         }
 
         foreach ($memberMappings as $key => $memberMapping) {
-            /** @var MemberMappingWithTableAlias $memberMapping */
+            /** @var MemberMappingWithTableAliases $memberMapping */
             $memberMappings[$key] = $memberMapping->getMapping();
         }
 
         if ($requiresLoadId) {
-            $select->addRawColumn($this->criteriaMapper->getMapper()->getPrimaryTable()->getPrimaryKeyColumnName());
+            $select->addRawColumn($primaryKeyColumnName);
         }
 
         return new MappedLoadQuery($select, $columnIndexMap, $relationsToLoad);

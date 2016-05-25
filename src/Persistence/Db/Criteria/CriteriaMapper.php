@@ -130,9 +130,9 @@ class CriteriaMapper
     /**
      * Maps the supplied criteria to a select query for the entity.
      *
-     * @param ICriteria                     $criteria
-     * @param MemberMappingWithTableAlias[] &$memberMappings
-     * @param NestedMember[]                $extraRequiredMembers
+     * @param ICriteria                       $criteria
+     * @param MemberMappingWithTableAliases[] &$memberMappings
+     * @param NestedMember[]                  $extraRequiredMembers
      *
      * @return Select
      * @throws InvalidArgumentException
@@ -218,7 +218,7 @@ class CriteriaMapper
      * @param string         $tableAlias
      * @param NestedMember[] $extraRequiredMembers
      *
-     * @return MemberMappingWithTableAlias[]
+     * @return MemberMappingWithTableAliases[]
      * @throws MemberExpressionMappingException
      */
     private function mapAllRequiredMembersFor(ICriteria $criteria, string $tableAlias, array $extraRequiredMembers) : array
@@ -245,13 +245,13 @@ class CriteriaMapper
             $memberExpressions[$member->asString()] = $member;
         }
 
-        /** @var MemberMappingWithTableAlias[] $memberMappings */
+        /** @var MemberMappingWithTableAliases[] $memberMappings */
         $memberMappings = [];
 
         foreach ($memberExpressions as $key => $member) {
-            $memberMappings[$key] = new MemberMappingWithTableAlias(
+            $memberMappings[$key] = new MemberMappingWithTableAliases(
                 $this->memberExpressionMapper->mapMemberExpression($member),
-                $tableAlias
+                [$tableAlias]
             );
         }
 
@@ -259,11 +259,11 @@ class CriteriaMapper
     }
 
     /**
-     * @param Select                        $select
-     * @param string                        $initialTableAlias
-     * @param MemberMappingWithTableAlias[] $memberMappings
+     * @param Select                          $select
+     * @param string                          $initialTableAlias
+     * @param MemberMappingWithTableAliases[] $memberMappings
      *
-     * @return array|MemberMappingWithTableAlias[]
+     * @return array|MemberMappingWithTableAliases[]
      */
     private function optimizeOneToOneRelationsAsLeftJoins(Select $select, string $initialTableAlias, array $memberMappings) : array
     {
@@ -271,18 +271,18 @@ class CriteriaMapper
 
         foreach ($memberMappings as $key => $mappingWithAlias) {
             $mapping           = $mappingWithAlias->getMapping();
-            $parentTableAlias  = $initialTableAlias;
+            $tableAliases  = [$initialTableAlias];
             $relationsToRemove = 0;
 
             foreach ($mapping->getRelationsToSubSelect() as $relation) {
 
                 if ($relation instanceof IToOneRelation && $relation instanceof ISeparateTableRelation) {
                     if (isset($joinedRelationTableAliasMap[$relation->getIdString()])) {
-                        $parentTableAlias = $joinedRelationTableAliasMap[$relation->getIdString()];
+                        $tableAliases[] = $joinedRelationTableAliasMap[$relation->getIdString()];
                     } else {
-                        $parentTableAlias = $relation->joinSelectToRelatedTable($parentTableAlias, Join::LEFT, $select);
+                        $tableAliases[] = $tableAlias = $relation->joinSelectToRelatedTable(end($tableAliases), Join::LEFT, $select);
 
-                        $joinedRelationTableAliasMap[$relation->getIdString()] = $parentTableAlias;
+                        $joinedRelationTableAliasMap[$relation->getIdString()] = $tableAlias;
                     }
                 } elseif ($relation instanceof IToManyRelation) {
                     break;
@@ -291,9 +291,9 @@ class CriteriaMapper
                 $relationsToRemove++;
             }
 
-            $memberMappings[$key] = new MemberMappingWithTableAlias(
+            $memberMappings[$key] = new MemberMappingWithTableAliases(
                 $mapping->withoutRelationsToSubSelect($relationsToRemove),
-                $parentTableAlias
+                $tableAliases
             );
         }
 
@@ -336,16 +336,16 @@ class CriteriaMapper
     }
 
     /**
-     * @param Condition                     $condition
-     * @param Select                        $select
-     * @param MemberMappingWithTableAlias[] $memberMappings
+     * @param Condition                       $condition
+     * @param Select                          $select
+     * @param MemberMappingWithTableAliases[] $memberMappings
      *
      * @return Expr
      * @throws InvalidArgumentException
      */
     private function mapCondition(Condition $condition, Select $select, array $memberMappings) : Expr
     {
-        /** @var MemberMappingWithTableAlias[] $memberMappings */
+        /** @var MemberMappingWithTableAliases[] $memberMappings */
 
         if ($condition instanceof AndCondition) {
             $expressions = [];
@@ -375,9 +375,9 @@ class CriteriaMapper
     }
 
     /**
-     * @param MemberOrdering                $ordering
-     * @param Select                        $select
-     * @param MemberMappingWithTableAlias[] $memberMappings
+     * @param MemberOrdering                  $ordering
+     * @param Select                          $select
+     * @param MemberMappingWithTableAliases[] $memberMappings
      *
      * @return void
      */
@@ -386,13 +386,13 @@ class CriteriaMapper
         $mapping = $memberMappings[$ordering->getNestedMember()->asString()];
 
         $mapping->getMapping()
-            ->addOrderByToSelect($select, $mapping->getTableAlias(), $ordering->isAsc());
+            ->addOrderByToSelect($select, $mapping->getLastTableAlias(), $ordering->isAsc());
     }
 
     /**
-     * @param MemberCondition               $condition
-     * @param Select                        $select
-     * @param MemberMappingWithTableAlias[] $memberMappings
+     * @param MemberCondition                 $condition
+     * @param Select                          $select
+     * @param MemberMappingWithTableAliases[] $memberMappings
      *
      * @return Expr
      */
@@ -401,6 +401,6 @@ class CriteriaMapper
         $mapping = $memberMappings[$condition->getNestedMember()->asString()];
 
         return $mapping->getMapping()
-            ->getWhereConditionExpr($select, $mapping->getTableAlias(), $condition->getOperator(), $condition->getValue());
+            ->getWhereConditionExpr($select, $mapping->getLastTableAlias(), $condition->getOperator(), $condition->getValue());
     }
 }

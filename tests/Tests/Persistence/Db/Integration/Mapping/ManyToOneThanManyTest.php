@@ -60,8 +60,9 @@ class ManyToOneThanManyTest extends DbIntegrationTest
                         Expr::tableColumn($this->getSchemaTable('subs'), 'id')
                     )
                 ]))
-                ->addRawColumn('id')
-                ->addColumn('sub_id', Expr::tableColumn($this->getSchemaTable('parents'), 'sub_id')),
+                ->addColumn('id', Expr::tableColumn($this->getSchemaTable('parents'), 'id'))
+                ->addColumn('sub_sub_id', Expr::tableColumn($this->getSchemaTable('parents'), 'sub_id'))
+                ->addColumn('to-many_sub_id', Expr::tableColumn($this->getSchemaTable('parents'), 'sub_id')),
             //
             Select::from($this->getSchemaTable('subs'))
                 ->addColumn('id', Expr::tableColumn($this->getSchemaTable('subs'), 'id'))

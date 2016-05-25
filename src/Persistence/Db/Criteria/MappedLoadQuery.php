@@ -10,6 +10,7 @@ use Dms\Core\Persistence\Db\Mapping\ReadModel\Relation\MemberRelation;
 use Dms\Core\Persistence\Db\Mapping\Relation\IToManyRelation;
 use Dms\Core\Persistence\Db\Mapping\Relation\IToOneRelation;
 use Dms\Core\Persistence\Db\Query\Select;
+use Dms\Core\Persistence\Db\Row;
 
 /**
  * The mapped load query class.
@@ -29,7 +30,7 @@ class MappedLoadQuery
     protected $columnIndexMap;
 
     /**
-     * @var MemberRelation[]
+     * @var array[]
      */
     protected $relationsToLoad;
 
@@ -38,11 +39,10 @@ class MappedLoadQuery
      *
      * @param Select           $select
      * @param string[]         $columnIndexMap
-     * @param MemberRelation[] $relationsToLoad
+     * @param array[] $relationsToLoad
      */
     public function __construct(Select $select, array $columnIndexMap, array $relationsToLoad)
     {
-        InvalidArgumentException::verifyAllInstanceOf(__METHOD__, 'relationsToLoad', $relationsToLoad, MemberRelation::class);
         $this->select          = $select;
         $this->columnIndexMap  = $columnIndexMap;
         $this->relationsToLoad = $relationsToLoad;
@@ -64,12 +64,7 @@ class MappedLoadQuery
     public function load(LoadingContext $context) : array
     {
         $rows      = $context->query($this->select)->getRows();
-        $rowKeyMap = new \SplObjectStorage();
         $data      = [];
-
-        foreach ($rows as $key => $row) {
-            $rowKeyMap[$row] = $key;
-        }
 
         foreach ($this->columnIndexMap as $columnName => $index) {
             foreach ($rows as $key => $row) {
@@ -79,12 +74,23 @@ class MappedLoadQuery
 
         $primaryKey = $this->select->getTable()->getPrimaryKeyColumnName();
 
-        foreach ($this->relationsToLoad as $index => $relation) {
+        foreach ($this->relationsToLoad as $index => list($relation, $parentTable, $parentColumnMap)) {
             if ($relation instanceof IToOneRelation) {
                 $map = new ParentChildMap($primaryKey);
+                $rowKeyMap = new \SplObjectStorage();
 
-                foreach ($rows as $row) {
-                    $map->add($row, null);
+                foreach ($rows as  $key => $row) {
+                    $mappedColumnData = [];
+                    $originalColumnData = $row->getColumnData();
+
+                    foreach($parentColumnMap as $original => $mapped) {
+                        $mappedColumnData[$mapped] = $originalColumnData[$original];
+                    }
+
+                    $mappedRow = new Row($parentTable, $mappedColumnData);
+
+                    $map->add($mappedRow, null);
+                    $rowKeyMap[$mappedRow] = $key;
                 }
 
                 $relation->load($context, $map);
@@ -94,9 +100,20 @@ class MappedLoadQuery
                 }
             } elseif ($relation instanceof IToManyRelation) {
                 $map = new ParentChildrenMap($primaryKey);
+                $rowKeyMap = new \SplObjectStorage();
 
-                foreach ($rows as $row) {
-                    $map->add($row, []);
+                foreach ($rows as $key => $row) {
+                    $mappedColumnData = [];
+                    $originalColumnData = $row->getColumnData();
+
+                    foreach($parentColumnMap as $original => $mapped) {
+                        $mappedColumnData[$mapped] = $originalColumnData[$original];
+                    }
+
+                    $mappedRow = new Row($parentTable, $mappedColumnData);
+
+                    $map->add($mappedRow, []);
+                    $rowKeyMap[$mappedRow] = $key;
                 }
 
                 $relation->load($context, $map);
