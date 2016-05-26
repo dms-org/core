@@ -17,11 +17,6 @@ use Dms\Core\Persistence\Db\Query\Select;
 class ToManyRelationAggregateMapping extends RelationMapping
 {
     /**
-     * @var IToManyRelation
-     */
-    protected $relation;
-
-    /**
      * @see SimpleAggregate
      *
      * @var string
@@ -52,6 +47,14 @@ class ToManyRelationAggregateMapping extends RelationMapping
         parent::__construct($rootEntityMapper, $relationsToSubSelect, $relation);
         $this->aggregateType         = $aggregateType;
         $this->argumentMemberMapping = $argumentMemberMapping;
+    }
+
+    /**
+     * @return IToManyRelation
+     */
+    public function getRelation() : IToManyRelation
+    {
+        return parent::getRelation();
     }
 
     public function getWhereConditionExpr(Select $select, string $tableAlias, string $operator, $value) : Expr

@@ -14,11 +14,6 @@ use Dms\Core\Persistence\Db\Mapping\Relation\IToOneRelation;
 abstract class ToOneRelationMapping extends RelationMapping
 {
     /**
-     * @var IToOneRelation
-     */
-    protected $relation;
-
-    /**
      * ToOneRelationMapping constructor.
      *
      * @param IEntityMapper  $rootEntityMapper
@@ -28,13 +23,5 @@ abstract class ToOneRelationMapping extends RelationMapping
     public function __construct(IEntityMapper $rootEntityMapper, array $relationsToSubSelect, IToOneRelation $relation)
     {
         parent::__construct($rootEntityMapper, $relationsToSubSelect, $relation);
-    }
-
-    /**
-     * @return IToOneRelation
-     */
-    public function getRelation() : \Dms\Core\Persistence\Db\Mapping\Relation\IToOneRelation
-    {
-        return $this->relation;
     }
 }

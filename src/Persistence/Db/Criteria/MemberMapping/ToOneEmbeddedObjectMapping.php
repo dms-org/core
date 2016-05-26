@@ -28,11 +28,6 @@ use Dms\Core\Util\Debug;
 class ToOneEmbeddedObjectMapping extends ToOneRelationMapping implements IFinalRelationMemberMapping
 {
     /**
-     * @var EmbeddedObjectRelation
-     */
-    protected $relation;
-
-    /**
      * ToOneEmbeddedObjectMapping constructor.
      *
      * @param IEntityMapper          $rootEntityMapper
@@ -42,6 +37,14 @@ class ToOneEmbeddedObjectMapping extends ToOneRelationMapping implements IFinalR
     public function __construct(IEntityMapper $rootEntityMapper, array $relationsToSubSelect, EmbeddedObjectRelation $relation)
     {
         parent::__construct($rootEntityMapper, $relationsToSubSelect, $relation);
+    }
+
+    /**
+     * @return EmbeddedObjectRelation
+     */
+    public function getRelation() : EmbeddedObjectRelation
+    {
+        return parent::getRelation();
     }
 
     /**
@@ -65,7 +68,7 @@ class ToOneEmbeddedObjectMapping extends ToOneRelationMapping implements IFinalR
      */
     public function getSingleColumn()
     {
-        $embeddedColumns = $this->relation->getMapper()->getDefinition()->getTable()->getColumns();
+        $embeddedColumns = $this->getRelation()->getMapper()->getDefinition()->getTable()->getColumns();
 
         return count($embeddedColumns) === 1 ? reset($embeddedColumns) : null;
     }
@@ -148,10 +151,11 @@ class ToOneEmbeddedObjectMapping extends ToOneRelationMapping implements IFinalR
 
     protected function compareValueObjectWithNull(Select $select, $tableAlias, $dbOperator)
     {
-        if ($this->relation->getObjectIssetColumnName() !== null) {
-            $issetColumn = Expr::tableColumn($select->getTableFromAlias($tableAlias), $this->relation->getObjectIssetColumnName());
+        $relation = $this->getRelation();
+        if ($relation->getObjectIssetColumnName() !== null) {
+            $issetColumn = Expr::tableColumn($select->getTableFromAlias($tableAlias), $relation->getObjectIssetColumnName());
 
-            if ($this->relation->issetColumnIsWithinValueObject()) {
+            if ($relation->issetColumnIsWithinValueObject()) {
                 return $dbOperator === BinOp::EQUAL
                     ? Expr::isNull($issetColumn)
                     : Expr::isNotNull($issetColumn);
@@ -210,7 +214,7 @@ class ToOneEmbeddedObjectMapping extends ToOneRelationMapping implements IFinalR
     public function getColumnDataForObject($value) : Row
     {
         /** @var EmbeddedParentObjectMapping $embeddedDefinition */
-        $embeddedDefinition = $this->relation->getEmbeddedObjectMapper()->getMapping();
+        $embeddedDefinition = $this->getRelation()->getEmbeddedObjectMapper()->getMapping();
         $rowData            = $embeddedDefinition->persistObject(PersistenceContext::dummy(), $value);
 
         return $rowData;

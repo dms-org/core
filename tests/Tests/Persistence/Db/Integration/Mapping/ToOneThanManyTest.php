@@ -59,7 +59,8 @@ class ToOneThanManyTest extends DbIntegrationTest
                         Expr::tableColumn($this->getSchemaTable('subs'), 'parent_id')
                     )
                 ]))
-                ->addRawColumn('id'),
+                ->addColumn('sub_id', Expr::tableColumn($this->getSchemaTable('parents'), 'id'))
+                ->addColumn('to-many_id', Expr::tableColumn($this->getSchemaTable('subs'), 'id')),
             //
             Select::from($this->getSchemaTable('subs'))
                 ->addColumn('id', Expr::tableColumn($this->getSchemaTable('subs'), 'id'))
@@ -77,19 +78,13 @@ class ToOneThanManyTest extends DbIntegrationTest
                     Expr::tuple([Expr::idParam(1), Expr::idParam(2)])
                 )),
             //
-            Select::from($this->getSchemaTable('subs'))
-                ->join(Join::inner($this->getSchemaTable('children'), 'children', [
-                    Expr::equal(
-                        Expr::tableColumn($this->getSchemaTable('subs'), 'id'),
-                        Expr::tableColumn($this->getSchemaTable('children'), 'sub_id')
-                    )
-                ]))
+            Select::from($this->getSchemaTable('children'))
                 ->where(Expr::in(
-                    Expr::tableColumn($this->getSchemaTable('subs'), 'parent_id'),
-                    Expr::tuple([Expr::idParam(10), Expr::idParam(11)])
+                    Expr::tableColumn($this->getSchemaTable('children'), 'sub_id'),
+                    Expr::tuple([Expr::idParam(1), Expr::idParam(2)])
                 ))
                 ->addColumn('id', Expr::tableColumn($this->getSchemaTable('children'), 'id'))
-                ->addColumn('__parent_id__', Expr::tableColumn($this->getSchemaTable('subs'), 'parent_id')),
+                ->addColumn('__parent_id__', Expr::tableColumn($this->getSchemaTable('children'), 'sub_id')),
         ]);
 
         $this->assertEquals([

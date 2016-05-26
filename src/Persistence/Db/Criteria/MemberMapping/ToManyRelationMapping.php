@@ -27,11 +27,6 @@ use Dms\Core\Persistence\Db\Query\Select;
 class ToManyRelationMapping extends RelationMapping implements IFinalRelationMemberMapping
 {
     /**
-     * @var IToManyRelation
-     */
-    protected $relation;
-
-    /**
      * @var IRelation[]
      */
     protected $relationsToSubselectForWhereExpr;
@@ -55,7 +50,7 @@ class ToManyRelationMapping extends RelationMapping implements IFinalRelationMem
      */
     public function getRelation() : IToManyRelation
     {
-        return $this->relation;
+        return parent::getRelation();
     }
 
     /**
@@ -72,6 +67,7 @@ class ToManyRelationMapping extends RelationMapping implements IFinalRelationMem
     public function withoutRelationsToSubSelect(int $relationsToRemove)
     {
         $clone                                   = clone $this;
+        $clone->relationsToSubSelect             = array_slice($clone->relationsToSubSelect, $relationsToRemove);
         $clone->relationsToSubselectForWhereExpr = array_slice($clone->relationsToSubselectForWhereExpr, $relationsToRemove);
 
         return $clone;
@@ -92,10 +88,11 @@ class ToManyRelationMapping extends RelationMapping implements IFinalRelationMem
                     return Expr::false();
                 }
 
-                if ($this->relation instanceof EmbeddedCollectionRelation) {
-                    $relatedEntityMapper = new EntityMapperProxy($this->relation->getMapper());
+                $relation = $this->getRelation();
+                if ($relation instanceof EmbeddedCollectionRelation) {
+                    $relatedEntityMapper = new EntityMapperProxy($relation->getMapper());
                 } else {
-                    $relatedEntityMapper = $this->relation->getMapper();
+                    $relatedEntityMapper = $relation->getMapper();
                 }
 
                 $relatedCriteriaMapper = new CriteriaMapper($relatedEntityMapper);

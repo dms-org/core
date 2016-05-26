@@ -11,6 +11,7 @@ use Dms\Core\Persistence\Db\Mapping\Relation\IToManyRelation;
 use Dms\Core\Persistence\Db\Mapping\Relation\IToOneRelation;
 use Dms\Core\Persistence\Db\Query\Select;
 use Dms\Core\Persistence\Db\Row;
+use Dms\Core\Persistence\Db\Schema\Table;
 
 /**
  * The mapped load query class.
@@ -72,11 +73,10 @@ class MappedLoadQuery
             }
         }
 
-        $primaryKey = $this->select->getTable()->getPrimaryKeyColumnName();
-
         foreach ($this->relationsToLoad as $index => list($relation, $parentTable, $parentColumnMap)) {
+            /** @var Table $parentTable */
             if ($relation instanceof IToOneRelation) {
-                $map = new ParentChildMap($primaryKey);
+                $map       = new ParentChildMap($parentTable->getPrimaryKeyColumnName());
                 $rowKeyMap = new \SplObjectStorage();
 
                 foreach ($rows as  $key => $row) {
@@ -99,7 +99,7 @@ class MappedLoadQuery
                     $data[$rowKeyMap[$item->getParent()]][$index] = $item->getChild();
                 }
             } elseif ($relation instanceof IToManyRelation) {
-                $map = new ParentChildrenMap($primaryKey);
+                $map = new ParentChildrenMap($parentTable->getPrimaryKeyColumnName());
                 $rowKeyMap = new \SplObjectStorage();
 
                 foreach ($rows as $key => $row) {

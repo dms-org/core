@@ -16,11 +16,6 @@ use Dms\Core\Persistence\Db\Query\Select;
 class ToManyRelationCountMapping extends RelationMapping
 {
     /**
-     * @var IToManyRelation
-     */
-    protected $relation;
-
-    /**
      * ToManyRelationCountMapping constructor.
      *
      * @param IEntityMapper   $rootEntityMapper
@@ -31,7 +26,15 @@ class ToManyRelationCountMapping extends RelationMapping
     {
         parent::__construct($rootEntityMapper, $relationsToSubSelect, $relation);
     }
-
+    
+    /**
+     * @return IToManyRelation
+     */
+    public function getRelation() : IToManyRelation
+    {
+        return parent::getRelation();
+    }
+    
     /**
      * @inheritDoc
      */

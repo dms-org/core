@@ -9,6 +9,7 @@ use Dms\Core\Model\Criteria\Condition\ConditionOperator;
 use Dms\Core\Model\IEntity;
 use Dms\Core\Persistence\Db\Criteria\MemberExpressionMappingException;
 use Dms\Core\Persistence\Db\Mapping\IEntityMapper;
+use Dms\Core\Persistence\Db\Mapping\ReadModel\Relation\MemberRelation;
 use Dms\Core\Persistence\Db\Mapping\ReadModel\Relation\ToOneMemberRelation;
 use Dms\Core\Persistence\Db\Mapping\Relation\EntityRelation;
 use Dms\Core\Persistence\Db\Mapping\Relation\IRelation;
@@ -27,11 +28,6 @@ use Dms\Core\Util\Debug;
  */
 class ToOneEntityRelationMapping extends ToOneRelationMapping implements IFinalRelationMemberMapping
 {
-    /**
-     * @var IToOneRelation|ISeparateTableRelation|EntityRelation
-     */
-    protected $relation;
-
     /**
      * ToOneEntityRelationMapping constructor.
      *
@@ -52,9 +48,17 @@ class ToOneEntityRelationMapping extends ToOneRelationMapping implements IFinalR
     }
 
     /**
+     * @return IToOneRelation|ISeparateTableRelation|EntityRelation
+     */
+    public function getRelation() : IToOneRelation
+    {
+        return parent::getRelation();
+    }
+
+    /**
      * @inheritDoc
      */
-    public function asMemberRelation() : \Dms\Core\Persistence\Db\Mapping\ReadModel\Relation\MemberRelation
+    public function asMemberRelation() : MemberRelation
     {
         return new ToOneMemberRelation($this);
     }
@@ -62,7 +66,7 @@ class ToOneEntityRelationMapping extends ToOneRelationMapping implements IFinalR
     /**
      * @inheritDoc
      */
-    public function getWhereConditionExpr(Select $select, string $tableAlias, string $operator, $value) : \Dms\Core\Persistence\Db\Query\Expression\Expr
+    public function getWhereConditionExpr(Select $select, string $tableAlias, string $operator, $value) : Expr
     {
         $allowedOperators = [
                 ConditionOperator::EQUALS,
@@ -116,7 +120,7 @@ class ToOneEntityRelationMapping extends ToOneRelationMapping implements IFinalR
             );
         }
 
-        $relatedPrimaryKey = $this->relation->getRelatedPrimaryKey();
+        $relatedPrimaryKey = $this->getRelation()->getRelatedPrimaryKey();
 
         if ($idValue === false) {
             if ($operator === ConditionOperator::EQUALS) {
@@ -160,7 +164,7 @@ class ToOneEntityRelationMapping extends ToOneRelationMapping implements IFinalR
     /**
      * @inheritDoc
      */
-    protected function getSingleValueExpressionInSelect(Select $select, string $tableAlias) : \Dms\Core\Persistence\Db\Query\Expression\Expr
+    protected function getSingleValueExpressionInSelect(Select $select, string $tableAlias) : Expr
     {
         throw NotImplementedException::method(__METHOD__);
     }

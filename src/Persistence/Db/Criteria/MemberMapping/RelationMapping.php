@@ -2,6 +2,7 @@
 
 namespace Dms\Core\Persistence\Db\Criteria\MemberMapping;
 
+use Dms\Core\Exception\InvalidOperationException;
 use Dms\Core\Persistence\Db\Mapping\IEntityMapper;
 use Dms\Core\Persistence\Db\Mapping\Relation\IRelation;
 use Dms\Core\Persistence\Db\Mapping\Relation\IToManyRelation;
@@ -17,7 +18,7 @@ abstract class RelationMapping extends MemberMapping
     /**
      * @var IRelation
      */
-    protected $relation;
+    private $lastRelation;
 
     /**
      * RelationMapping constructor.
@@ -29,23 +30,26 @@ abstract class RelationMapping extends MemberMapping
     public function __construct(IEntityMapper $rootEntityMapper, array $relationsToSubSelect, IRelation $relation)
     {
         parent::__construct($rootEntityMapper, array_merge($relationsToSubSelect, [$relation]));
-        $this->relation = $relation;
+
+        $this->lastRelation = $relation;
     }
 
     /**
-     * @return IToOneRelation|IToManyRelation
+     * @return IToManyRelation|IToOneRelation
+     * @throws InvalidOperationException
      */
     public function getRelation()
     {
-        return $this->relation;
+        return end($this->relationsToSubSelect) ?: $this->lastRelation;
     }
 
     /**
      * @return IRelation
+     * @throws InvalidOperationException
      */
     public function getFirstRelation() : IRelation
     {
-        return reset($this->relationsToSubSelect) ?: $this->relation;
+        return reset($this->relationsToSubSelect) ?: $this->lastRelation;
     }
 
     /**
@@ -53,6 +57,6 @@ abstract class RelationMapping extends MemberMapping
      */
     protected function getRelatedObjectType() : string
     {
-        return $this->relation->getMapper()->getObjectType();
+        return $this->getRelation()->getMapper()->getObjectType();
     }
 }

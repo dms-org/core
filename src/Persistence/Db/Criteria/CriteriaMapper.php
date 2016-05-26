@@ -271,7 +271,7 @@ class CriteriaMapper
 
         foreach ($memberMappings as $key => $mappingWithAlias) {
             $mapping           = $mappingWithAlias->getMapping();
-            $tableAliases  = [$initialTableAlias];
+            $tableAliases      = [$initialTableAlias];
             $relationsToRemove = 0;
 
             foreach ($mapping->getRelationsToSubSelect() as $relation) {

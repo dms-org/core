@@ -55,7 +55,7 @@ class LoadCriteriaMapperWithBlogDomainTest extends LoadCriteriaMapperTestBase
 
         $objectMapper = $this->mapper->getMapper();
         $this->assertMappedLoadQuery($criteria, new MappedLoadQuery(
-            $this->select()->addRawColumn('id'),
+            $this->select()->addAliasedRawColumn('this_id', 'id'),
             [], [
                 'this' => [
                     new ToOneMemberRelation(
@@ -67,7 +67,7 @@ class LoadCriteriaMapperWithBlogDomainTest extends LoadCriteriaMapperTestBase
                         ))
                     ),
                     $this->tables['users'],
-                    ['id' => 'id'],
+                    ['this_id' => 'id'],
                 ],
             ]
         ));
@@ -106,7 +106,7 @@ class LoadCriteriaMapperWithBlogDomainTest extends LoadCriteriaMapperTestBase
         $objectMapper = $this->mapper->getMapper();
         $this->assertMappedLoadQuery($criteria, new MappedLoadQuery(
             $this->select()
-                ->addRawColumn('id')
+                ->addAliasedRawColumn('alias_id', 'id')
                 ->join(Join::left($this->tables['aliases'], 'aliases', [
                     Expr::equal(
                         $this->tableColumn('users', 'id'),
@@ -121,7 +121,7 @@ class LoadCriteriaMapperWithBlogDomainTest extends LoadCriteriaMapperTestBase
                             $objectMapper->getDefinition()->getRelationMappedToProperty('alias')))->withoutRelationsToSubSelect(1)
                     ),
                     $this->tables['users'],
-                    ['id' => 'id'],
+                    ['alias_id' => 'id'],
                 ],
             ]
         ));
@@ -203,7 +203,7 @@ class LoadCriteriaMapperWithBlogDomainTest extends LoadCriteriaMapperTestBase
         $relation = $objectMapper->getDefinition()->getRelationMappedToProperty('postIds');
         $this->assertMappedLoadQuery($criteria, new MappedLoadQuery(
             $this->select()
-                ->addRawColumn('id'),
+                ->addAliasedRawColumn('posts_id', 'id'),
             [],
             [
                 'posts' => [
@@ -211,7 +211,7 @@ class LoadCriteriaMapperWithBlogDomainTest extends LoadCriteriaMapperTestBase
                         (new ToManyRelationMapping($objectMapper, [], $relation->withObjectReference()))
                     ),
                     $this->tables['users'],
-                    ['id' => 'id'],
+                    ['posts_id' => 'id'],
                 ],
             ]
         ));
@@ -231,7 +231,7 @@ class LoadCriteriaMapperWithBlogDomainTest extends LoadCriteriaMapperTestBase
         $commentRelation = $postRelation->getEntityMapper()->getDefinition()->getRelationMappedToProperty('comments');
         $this->assertMappedLoadQuery($criteria, new MappedLoadQuery(
             $this->select()
-                ->addRawColumn('id'),
+                ->addAliasedRawColumn('all-comments_id', 'id'),
             [],
             [
                 'all-comments' => [
@@ -239,7 +239,7 @@ class LoadCriteriaMapperWithBlogDomainTest extends LoadCriteriaMapperTestBase
                         (new ToManyRelationMapping($objectMapper, [$postRelation->withObjectReference()], $commentRelation))
                     ),
                     $this->tables['users'],
-                    ['id' => 'id'],
+                    ['all-comments_id' => 'id'],
                 ],
             ]
         ));

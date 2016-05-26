@@ -6,6 +6,7 @@ use Dms\Core\Model\Criteria\LoadCriteria;
 use Dms\Core\Model\ILoadCriteria;
 use Dms\Core\Persistence\Db\Criteria\MemberMapping\IFinalRelationMemberMapping;
 use Dms\Core\Persistence\Db\Criteria\MemberMapping\ToOneEmbeddedObjectMapping;
+use Dms\Core\Persistence\Db\Mapping\ReadModel\Relation\ToManyMemberRelation;
 use Dms\Core\Persistence\Db\Mapping\Relation\ISeparateTableRelation;
 use Dms\Core\Persistence\Db\Query\Expression\Expr;
 
@@ -52,11 +53,9 @@ class LoadCriteriaMapper
     {
         $select = $this->criteriaMapper->mapCriteriaToSelect($criteria, $memberMappings, $criteria->getAliasNestedMemberMap());
         $select->setColumns([]);
-        $primaryKeyColumnName = $this->criteriaMapper->getMapper()->getPrimaryTable()->getPrimaryKeyColumnName();
 
         $columnIndexMap  = [];
         $relationsToLoad = [];
-        $requiresLoadId  = false;
 
         foreach ($criteria->getAliasNestedMemberMap() as $alias => $member) {
             /** @var MemberMappingWithTableAliases $memberMapping */
@@ -65,21 +64,22 @@ class LoadCriteriaMapper
 
             if ($mapping instanceof IFinalRelationMemberMapping) {
                 $memberRelation   = $mapping->asMemberRelation();
-                $parentTableAlias = !($memberRelation->getFirstRelation() instanceof ISeparateTableRelation) || count($memberMapping->getTableAliases()) === 1
+                $parentTableAlias = $memberRelation instanceof ToManyMemberRelation || !($memberRelation->getFirstRelation() instanceof ISeparateTableRelation) || count($memberMapping->getTableAliases()) === 1
                     ? $memberMapping->getLastTableAlias()
                     : $memberMapping->getSecondLastTableAlias();
                 $parentTable      = $select->getTableFromAlias($parentTableAlias);
                 $parentColumnMap  = [];
 
-                foreach ($memberRelation->getParentColumnsToLoad() as $column) {
+                $parentColumnsToLoad = $memberRelation->getParentColumnsToLoad();
+
+                if (!($mapping instanceof ToOneEmbeddedObjectMapping)) {
+                    $parentColumnsToLoad[] = $parentTable->getPrimaryKeyColumnName();
+                }
+
+                foreach ($parentColumnsToLoad as $column) {
                     $parentColumnMap[$alias . '_' . $column] = $column;
 
                     $select->addColumn($alias . '_' . $column, Expr::column($parentTableAlias, $parentTable->getColumn($column)));
-                }
-
-                if (!($mapping instanceof ToOneEmbeddedObjectMapping)) {
-                    $requiresLoadId = true;
-                    $parentColumnMap[$primaryKeyColumnName] = $primaryKeyColumnName;
                 }
 
                 $relationsToLoad[$alias] = [$memberRelation, $parentTable, $parentColumnMap];
@@ -94,9 +94,6 @@ class LoadCriteriaMapper
             $memberMappings[$key] = $memberMapping->getMapping();
         }
 
-        if ($requiresLoadId) {
-            $select->addRawColumn($primaryKeyColumnName);
-        }
 
         return new MappedLoadQuery($select, $columnIndexMap, $relationsToLoad);
     }

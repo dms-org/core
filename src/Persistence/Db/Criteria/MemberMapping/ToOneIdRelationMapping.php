@@ -20,11 +20,6 @@ use Dms\Core\Persistence\Db\Query\Select;
 class ToOneIdRelationMapping extends ToOneRelationMapping
 {
     /**
-     * @var IToOneRelation|ISeparateTableRelation|EntityRelation
-     */
-    protected $relation;
-
-    /**
      * ToOneIdRelationMapping constructor.
      *
      * @param IEntityMapper                                        $rootEntityMapper
@@ -36,8 +31,8 @@ class ToOneIdRelationMapping extends ToOneRelationMapping
         InvalidArgumentException::verifyInstanceOf(__METHOD__, 'relation', $relation, ISeparateTableRelation::class);
         InvalidArgumentException::verifyInstanceOf(__METHOD__, 'relation', $relation, EntityRelation::class);
         InvalidArgumentException::verify(
-                $relation->getReference() instanceof RelationIdentityReference,
-                'relation must be an id reference'
+            $relation->getReference() instanceof RelationIdentityReference,
+            'relation must be an id reference'
         );
 
         parent::__construct($rootEntityMapper, $relationsToSubSelect, $relation);
@@ -46,8 +41,11 @@ class ToOneIdRelationMapping extends ToOneRelationMapping
     /**
      * @inheritDoc
      */
-    protected function getSingleValueExpressionInSelect(Select $select, string $tableAlias) : \Dms\Core\Persistence\Db\Query\Expression\Expr
+    protected function getSingleValueExpressionInSelect(Select $select, string $tableAlias) : Expr
     {
-        return Expr::column($tableAlias, $this->relation->getRelatedPrimaryKey());
+        /** @var  ISeparateTableRelation|IToOneRelation|EntityRelation $relation */
+        $relation = $this->getRelation();
+
+        return Expr::column($tableAlias, $relation->getRelatedPrimaryKey());
     }
 }
