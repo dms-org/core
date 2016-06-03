@@ -3,6 +3,7 @@
 namespace Dms\Core\Form\Field\Processor\Validator;
 
 use Dms\Core\File\IUploadedFile;
+use Dms\Core\File\UploadedFileProxy;
 use Dms\Core\Form\Field\Processor\FieldValidator;
 use Dms\Core\Language\Message;
 use Dms\Core\Model\Type\IType;
@@ -33,6 +34,11 @@ class FileExtensionValidator extends FieldValidator
     protected function validate($input, array &$messages)
     {
         /** @var IUploadedFile $input */
+
+        if ($input instanceof UploadedFileProxy) {
+            return;
+        }
+
         $fileName = $input->getClientFileNameWithFallback();
 
         $extension = strpos($fileName, '.') === false
