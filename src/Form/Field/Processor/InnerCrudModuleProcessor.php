@@ -4,6 +4,7 @@ namespace Dms\Core\Form\Field\Processor;
 
 use Dms\Core\Common\Crud\Action\Object\IObjectAction;
 use Dms\Core\Common\Crud\ICrudModule;
+use Dms\Core\File\IFile;
 use Dms\Core\Form\Field\Type\FieldType;
 use Dms\Core\Form\IForm;
 use Dms\Core\Model\EntityCollection;
@@ -20,6 +21,10 @@ use Dms\Core\Model\Type\Builder\Type;
  */
 class InnerCrudModuleProcessor extends FieldProcessor
 {
+    const ALLOWED_CLASSES_FOR_SERIALIZATION = [
+        IFile::class,
+    ];
+
     /**
      * @var ICrudModule
      */
@@ -41,6 +46,8 @@ class InnerCrudModuleProcessor extends FieldProcessor
 
         $currentPosition = 1;
         foreach ($input as $item) {
+            $item = $this->unserializeAllowedClasses($item);
+
             if (isset($item[IObjectAction::OBJECT_FIELD_NAME])) {
                 $editedObject = $this->module->getEditAction()->runWithoutAuthorization($item);
                 $newObjects[] = $editedObject;
@@ -97,6 +104,8 @@ class InnerCrudModuleProcessor extends FieldProcessor
                 $objectData += $this->filterOutReadonlyFields($currentStageForm, $currentStageForm->unprocess($currentStageForm->getInitialValues()));
             }
 
+            $objectData = $this->serializeAllowedClasses($objectData);
+
             $unprocessedObjects[] = $objectData;
         }
 
@@ -112,5 +121,48 @@ class InnerCrudModuleProcessor extends FieldProcessor
         }
 
         return $values;
+    }
+
+    private function serializeAllowedClasses(array $item) : array
+    {
+        foreach ($item as $key => $value) {
+            if (is_array($value)) {
+                $value = $this->serializeAllowedClasses($value);
+            } elseif (is_object($value)) {
+                foreach (self::ALLOWED_CLASSES_FOR_SERIALIZATION as $class) {
+                    if ($value instanceof $class) {
+                        $value = [
+                            '__type' => get_class($value),
+                            '__data' => serialize($value),
+                        ];
+                        break;
+                    }
+                }
+            }
+
+            $item[$key] = $value;
+        }
+
+        return $item;
+    }
+
+    private function unserializeAllowedClasses(array $item) : array
+    {
+        foreach ($item as $key => $value) {
+            if (isset($value['__type']) && isset($value['__data'])) {
+                foreach (self::ALLOWED_CLASSES_FOR_SERIALIZATION as $class) {
+                    if (is_a($value['__type'], $class, true)) {
+                        $value = unserialize($value['__data']);
+                        break;
+                    }
+                }
+            } elseif (is_array($value)) {
+                $value = $this->unserializeAllowedClasses($value);
+            }
+
+            $item[$key] = $value;
+        }
+
+        return $item;
     }
 }
