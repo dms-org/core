@@ -149,15 +149,17 @@ class InnerCrudModuleProcessor extends FieldProcessor
     private function unserializeAllowedClasses(array $item) : array
     {
         foreach ($item as $key => $value) {
-            if (isset($value['__type']) && isset($value['__data'])) {
-                foreach (self::ALLOWED_CLASSES_FOR_SERIALIZATION as $class) {
-                    if (is_a($value['__type'], $class, true)) {
-                        $value = unserialize($value['__data']);
-                        break;
+            if (is_array($value)) {
+                if (isset($value['__type']) && isset($value['__data'])) {
+                    foreach (self::ALLOWED_CLASSES_FOR_SERIALIZATION as $class) {
+                        if (is_a($value['__type'], $class, true)) {
+                            $value = unserialize($value['__data']);
+                            break;
+                        }
                     }
+                } else {
+                    $value = $this->unserializeAllowedClasses($value);
                 }
-            } elseif (is_array($value)) {
-                $value = $this->unserializeAllowedClasses($value);
             }
 
             $item[$key] = $value;
