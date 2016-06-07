@@ -270,15 +270,17 @@ class CriteriaMapper
         $joinedRelationTableAliasMap = [];
 
         foreach ($memberMappings as $key => $mappingWithAlias) {
+            $relationKey = '';
             $mapping           = $mappingWithAlias->getMapping();
             $tableAliases      = [$initialTableAlias];
             $relationsToRemove = 0;
 
             foreach ($mapping->getRelationsToSubSelect() as $relation) {
+                $relationKey .= $relation->getIdString();
 
                 if ($relation instanceof IToOneRelation && $relation instanceof ISeparateTableRelation) {
-                    if (isset($joinedRelationTableAliasMap[$relation->getIdString()])) {
-                        $tableAliases[] = $joinedRelationTableAliasMap[$relation->getIdString()];
+                    if (isset($joinedRelationTableAliasMap[$relationKey])) {
+                        $tableAliases[] = $joinedRelationTableAliasMap[$relationKey];
                     } else {
                         $tableAliases[] = $tableAlias = $relation->joinSelectToRelatedTable(end($tableAliases), Join::LEFT, $select);
 

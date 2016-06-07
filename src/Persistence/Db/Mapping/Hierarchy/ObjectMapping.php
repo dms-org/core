@@ -16,6 +16,7 @@ use Dms\Core\Persistence\Db\Mapping\Relation\IEmbeddedToOneRelation;
 use Dms\Core\Persistence\Db\Mapping\Relation\IRelation;
 use Dms\Core\Persistence\Db\Mapping\Relation\IToManyRelation;
 use Dms\Core\Persistence\Db\Mapping\Relation\IToOneRelation;
+use Dms\Core\Persistence\Db\Mapping\Relation\Lazy\Collection\LazyCollectionFactory;
 use Dms\Core\Persistence\Db\PersistenceContext;
 use Dms\Core\Persistence\Db\Query\Delete;
 use Dms\Core\Persistence\Db\Query\Expression\Expr;
@@ -466,10 +467,10 @@ abstract class ObjectMapping implements IObjectMapping
      * @return void
      */
     private function loadRelations(
-        LoadingContext $context,
-        array $rows,
-        array $objects,
-        array &$objectProperties
+            LoadingContext $context,
+            array $rows,
+            array $objects,
+            array &$objectProperties
     ) {
         foreach ($this->definition->getToOneRelationMappings() as $relationMapping) {
             $relation = $relationMapping->getRelation();
@@ -492,6 +493,7 @@ abstract class ObjectMapping implements IObjectMapping
         }
 
         foreach ($this->definition->getToManyRelationMappings() as $relationMapping) {
+
             $relation = $relationMapping->getRelation();
             $accessor = $relationMapping->getAccessor();
 
@@ -503,12 +505,25 @@ abstract class ObjectMapping implements IObjectMapping
                 $rowKeyMap[$row] = $key;
             }
 
-            $relation->load($context, $map);
+            $hasLoaded = false;
 
             foreach ($map->getItems() as $item) {
                 $objectKey = $rowKeyMap[$item->getParent()];
 
-                $accessor->set($objects[$objectKey], $objectProperties[$objectKey], $relation->buildCollection($item->getChildren()));
+
+                $lazyCollection = LazyCollectionFactory::from(
+                        $relation->buildCollection([]),
+                        function () use (&$hasLoaded, $relation, $context, $map, $item) {
+                            if (!$hasLoaded) {
+                                $relation->load($context, $map);
+                                $hasLoaded = true;
+                            }
+
+                            return $item->getChildren();
+                        }
+                );
+
+                $accessor->set($objects[$objectKey], $objectProperties[$objectKey], $lazyCollection);
             }
         }
     }
@@ -520,10 +535,10 @@ abstract class ObjectMapping implements IObjectMapping
      * @param array|null         $extraData
      */
     public function persistAll(
-        PersistenceContext $context,
-        array $objects,
-        array $rows,
-        array $extraData = null
+            PersistenceContext $context,
+            array $objects,
+            array $rows,
+            array $extraData = null
     ) {
         $objectProperties = $this->persistObjectDataToRows($objects, $rows);
 
@@ -665,8 +680,13 @@ abstract class ObjectMapping implements IObjectMapping
         }
     }
 
-    final protected function persistRelations(PersistenceContext $context, $dependencyMode, array $rows, array $objects, array $objectProperties)
-    {
+    final protected function persistRelations(
+            PersistenceContext $context,
+            $dependencyMode,
+            array $rows,
+            array $objects,
+            array $objectProperties
+    ) {
         $definition = $this->definition;
 
         foreach ($definition->getRelationMappingsWith($dependencyMode) as $relationMapping) {
@@ -690,8 +710,9 @@ abstract class ObjectMapping implements IObjectMapping
 
                     if (!($propertyValue instanceof \Traversable)) {
                         throw PersistenceException::format(
-                            'Invalid value found for to-many relation to %s on type %s: expecting instance of %s, %s given',
-                            $relation->getMapper()->getObjectType(), $this->objectType, \Traversable::class, Debug::getType($propertyValue)
+                                'Invalid value found for to-many relation to %s on type %s: expecting instance of %s, %s given',
+                                $relation->getMapper()->getObjectType(), $this->objectType, \Traversable::class,
+                                Debug::getType($propertyValue)
                         );
                     }
 
@@ -721,8 +742,12 @@ abstract class ObjectMapping implements IObjectMapping
         return $relationMappings;
     }
 
-    final protected function persistEmbeddedRelationsBeforeParent(PersistenceContext $context, array $rows, array $objects, array $objectProperties)
-    {
+    final protected function persistEmbeddedRelationsBeforeParent(
+            PersistenceContext $context,
+            array $rows,
+            array $objects,
+            array $objectProperties
+    ) {
         foreach ($this->getRelationsToPersist($context) as $relationMapping) {
             $relation = $relationMapping->getRelation();
             $accessor = $relationMapping->getAccessor();
@@ -735,8 +760,12 @@ abstract class ObjectMapping implements IObjectMapping
         }
     }
 
-    final protected function persistEmbeddedRelationsAfterParent(PersistenceContext $context, array $rows, array $objects, array $objectProperties)
-    {
+    final protected function persistEmbeddedRelationsAfterParent(
+            PersistenceContext $context,
+            array $rows,
+            array $objects,
+            array $objectProperties
+    ) {
         foreach ($this->getRelationsToPersist($context) as $relationMapping) {
             $relation = $relationMapping->getRelation();
             $accessor = $relationMapping->getAccessor();

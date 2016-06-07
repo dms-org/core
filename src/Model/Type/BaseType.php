@@ -207,4 +207,12 @@ abstract class BaseType implements IType
     {
         return array_keys($this->getConditionOperatorTypes());
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function __debugInfo()
+    {
+        return ['type' =>  $this->asTypeString()];
+    }
 }

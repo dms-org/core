@@ -251,4 +251,5 @@ class Type
                 'Unknown type: %s', Debug::getType($default)
         );
     }
+
 }
