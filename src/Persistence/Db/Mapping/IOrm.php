@@ -130,4 +130,20 @@ interface IOrm extends IRelationPropertyIdTypeProvider
      * @return IOrm
      */
     public function inNamespace(string $prefix) : IOrm;
+
+    /**
+     * Returns whether lazy loading has been enabled.
+     *
+     * @return bool
+     */
+    public function isLazyLoadingEnabled() : bool;
+
+    /**
+     * Sets whether lazy-loading of relations should be enabled within the orm.
+     *
+     * @param bool $flag
+     *
+     * @return void
+     */
+    public function enableLazyLoading(bool $flag = true);
 }
