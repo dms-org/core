@@ -11,7 +11,7 @@ use Pinq\Iterators\IIteratorScheme;
  *
  * @author Elliot Levin <elliotlevin@hotmail.com>
  */
-class LazyEntityIdCollection extends EntityIdCollection
+class LazyEntityIdCollection extends EntityIdCollection implements ILazyCollection
 {
     use LazyCollectionTrait;
 

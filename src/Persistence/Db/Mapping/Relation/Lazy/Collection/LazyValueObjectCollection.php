@@ -10,7 +10,7 @@ use Pinq\Iterators\IIteratorScheme;
  *
  * @author Elliot Levin <elliotlevin@hotmail.com>
  */
-class LazyValueObjectCollection extends ValueObjectCollection
+class LazyValueObjectCollection extends ValueObjectCollection implements ILazyCollection
 {
     use LazyCollectionTrait;
 

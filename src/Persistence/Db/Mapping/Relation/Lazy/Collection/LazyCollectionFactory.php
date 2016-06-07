@@ -20,10 +20,10 @@ class LazyCollectionFactory
      * @param ITypedCollection $collection
      * @param callable         $objectLoaderCallback
      *
-     * @return ITypedCollection
+     * @return ILazyCollection
      * @throws InvalidArgumentException
      */
-    public static function from(ITypedCollection $collection, callable $objectLoaderCallback) : ITypedCollection
+    public static function from(ITypedCollection $collection, callable $objectLoaderCallback) : ILazyCollection
     {
         if ($collection instanceof EntityCollection) {
             return new LazyEntityCollection($collection->getEntityType(), $objectLoaderCallback);

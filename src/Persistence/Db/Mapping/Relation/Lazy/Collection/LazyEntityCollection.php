@@ -10,7 +10,7 @@ use Pinq\Iterators\IIteratorScheme;
  *
  * @author Elliot Levin <elliotlevin@hotmail.com>
  */
-class LazyEntityCollection extends EntityCollection
+class LazyEntityCollection extends EntityCollection implements ILazyCollection
 {
     use LazyCollectionTrait;
 

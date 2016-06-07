@@ -16,6 +16,7 @@ use Dms\Core\Persistence\Db\Mapping\Relation\IEmbeddedToOneRelation;
 use Dms\Core\Persistence\Db\Mapping\Relation\IRelation;
 use Dms\Core\Persistence\Db\Mapping\Relation\IToManyRelation;
 use Dms\Core\Persistence\Db\Mapping\Relation\IToOneRelation;
+use Dms\Core\Persistence\Db\Mapping\Relation\Lazy\Collection\ILazyCollection;
 use Dms\Core\Persistence\Db\Mapping\Relation\Lazy\Collection\LazyCollectionFactory;
 use Dms\Core\Persistence\Db\PersistenceContext;
 use Dms\Core\Persistence\Db\Query\Delete;
@@ -472,6 +473,8 @@ abstract class ObjectMapping implements IObjectMapping
             array $objects,
             array &$objectProperties
     ) {
+        $isLazyLoadingEnabled = $this->definition->getOrm()->isLazyLoadingEnabled();
+
         foreach ($this->definition->getToOneRelationMappings() as $relationMapping) {
             $relation = $relationMapping->getRelation();
             $accessor = $relationMapping->getAccessor();
@@ -507,23 +510,31 @@ abstract class ObjectMapping implements IObjectMapping
 
             $hasLoaded = false;
 
+            if (!$isLazyLoadingEnabled) {
+                $relation->load($context, $map);
+                $hasLoaded = true;
+            }
+
             foreach ($map->getItems() as $item) {
                 $objectKey = $rowKeyMap[$item->getParent()];
 
+                if ($hasLoaded) {
+                    $collection = $relation->buildCollection($item->getChildren());
+                } else {
+                    $collection = LazyCollectionFactory::from(
+                            $relation->buildCollection([]),
+                            function () use (&$hasLoaded, $relation, $context, $map, $item) {
+                                if (!$hasLoaded) {
+                                    $relation->load($context, $map);
+                                    $hasLoaded = true;
+                                }
 
-                $lazyCollection = LazyCollectionFactory::from(
-                        $relation->buildCollection([]),
-                        function () use (&$hasLoaded, $relation, $context, $map, $item) {
-                            if (!$hasLoaded) {
-                                $relation->load($context, $map);
-                                $hasLoaded = true;
+                                return $item->getChildren();
                             }
+                    );
+                }
 
-                            return $item->getChildren();
-                        }
-                );
-
-                $accessor->set($objects[$objectKey], $objectProperties[$objectKey], $lazyCollection);
+                $accessor->set($objects[$objectKey], $objectProperties[$objectKey], $collection);
             }
         }
     }
@@ -716,6 +727,10 @@ abstract class ObjectMapping implements IObjectMapping
                         );
                     }
 
+                    if ($propertyValue instanceof ILazyCollection && !$propertyValue->hasLoadedElements()) {
+                        continue;
+                    }
+                    
                     $map->add($rows[$key], iterator_to_array($propertyValue));
                 }
 
