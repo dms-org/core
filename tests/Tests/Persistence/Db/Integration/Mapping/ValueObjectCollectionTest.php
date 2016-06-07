@@ -3,8 +3,10 @@
 namespace Dms\Core\Tests\Persistence\Db\Integration\Mapping;
 
 use Dms\Core\Model\Criteria\SpecificationDefinition;
+use Dms\Core\Persistence\Db\Mapping\Relation\Lazy\Collection\LazyValueObjectCollection;
 use Dms\Core\Persistence\Db\Query\Delete;
 use Dms\Core\Persistence\Db\Query\Expression\Expr;
+use Dms\Core\Persistence\Db\Query\Select;
 use Dms\Core\Persistence\Db\Query\Upsert;
 use Dms\Core\Persistence\Db\Schema\Column;
 use Dms\Core\Persistence\Db\Schema\ForeignKey;
@@ -50,8 +52,8 @@ class ValueObjectCollectionTest extends DbIntegrationTest
     public function testForeignKeyIsCompatibleWithReferencedColumn()
     {
         $this->assertEquals(
-            $this->entities->getPrimaryKeyColumn()->getType(),
-            $this->emails->getColumn('entity_id')->getType()->autoIncrement()
+                $this->entities->getPrimaryKeyColumn()->getType(),
+                $this->emails->getColumn('entity_id')->getType()->autoIncrement()
         );
     }
 
@@ -283,30 +285,116 @@ class ValueObjectCollectionTest extends DbIntegrationTest
     public function testWhereHasAny()
     {
         $this->setDataInDb([
-            'entities' => [
-                ['id' => 1],
-                ['id' => 2],
-            ],
-            'emails'   => [
-                ['id' => 1, 'entity_id' => 1, 'email' => 'test@foo.com'],
-                ['id' => 2, 'entity_id' => 1, 'email' => 'gmail@foo.com'],
-                ['id' => 3, 'entity_id' => 2, 'email' => 'aaa@foo.com'],
-            ]
+                'entities' => [
+                        ['id' => 1],
+                        ['id' => 2],
+                ],
+                'emails'   => [
+                        ['id' => 1, 'entity_id' => 1, 'email' => 'test@foo.com'],
+                        ['id' => 2, 'entity_id' => 1, 'email' => 'gmail@foo.com'],
+                        ['id' => 3, 'entity_id' => 2, 'email' => 'aaa@foo.com'],
+                ]
         ]);
 
         $this->assertEquals(
-            [
-                new EntityWithEmails(
-                    1,
-                    [new EmbeddedEmailAddress('test@foo.com'), new EmbeddedEmailAddress('gmail@foo.com'),]
+                [
+                        new EntityWithEmails(
+                                1,
+                                [new EmbeddedEmailAddress('test@foo.com'), new EmbeddedEmailAddress('gmail@foo.com'),]
+                        )
+                ],
+                $this->repo->matching(
+                        $this->repo->criteria()
+                                ->whereHasAny('emails', EmbeddedEmailAddress::specification(function (SpecificationDefinition $match) {
+                                    $match->whereStringContains('email', 'gmail');
+                                }))
                 )
-            ],
-            $this->repo->matching(
-                $this->repo->criteria()
-                    ->whereHasAny('emails', EmbeddedEmailAddress::specification(function (SpecificationDefinition $match) {
-                        $match->whereStringContains('email', 'gmail');
-                    }))
-            )
         );
+    }
+
+    public function testLoadingInLazyMode()
+    {
+        $this->orm->enableLazyLoading();
+
+        $this->setDataInDb([
+                'entities' => [
+                        ['id' => 1],
+                        ['id' => 2],
+                ],
+                'emails'   => [
+                        ['id' => 1, 'entity_id' => 1, 'email' => 'test@foo.com'],
+                        ['id' => 2, 'entity_id' => 1, 'email' => 'gmail@foo.com'],
+                        ['id' => 3, 'entity_id' => 2, 'email' => 'aaa@foo.com'],
+                ]
+        ]);
+
+        /** @var EntityWithEmails[] $entities */
+        $entities = $this->repo->getAll();
+
+        foreach ($entities as $entity) {
+            /** @var LazyValueObjectCollection $collection */
+            $collection = $entity->emails;
+
+            $this->assertInstanceOf(LazyValueObjectCollection::class, $collection);
+            $this->assertSame(false, $collection->hasLoadedElements());
+        }
+
+        $this->assertExecutedQueryTypes([
+                'Load parent entities' => Select::class
+        ]);
+
+        $firstEmails  = $entities[0]->emails->asArray();
+        $secondEmails = $entities[1]->emails->asArray();
+
+        $this->assertExecutedQueryTypes([
+                'Load parent entities'             => Select::class,
+                'Load *all* related value objects' => Select::class,
+        ]);
+
+        $this->assertEquals([new EmbeddedEmailAddress('test@foo.com'), new EmbeddedEmailAddress('gmail@foo.com')], $firstEmails);
+        $this->assertEquals([new EmbeddedEmailAddress('aaa@foo.com')], $secondEmails);
+    }
+
+    public function testSaveLazyLoadedCollectionDoesNotPerformSyncQueries()
+    {
+        $this->orm->enableLazyLoading();
+
+        $this->setDataInDb([
+                'entities' => [
+                        ['id' => 1],
+                        ['id' => 2],
+                ],
+                'emails'   => [
+                        ['id' => 1, 'entity_id' => 1, 'email' => 'test@foo.com'],
+                        ['id' => 2, 'entity_id' => 1, 'email' => 'gmail@foo.com'],
+                        ['id' => 3, 'entity_id' => 2, 'email' => 'aaa@foo.com'],
+                ]
+        ]);
+
+        /** @var EntityWithEmails[] $entities */
+        $entities = $this->repo->getAll();
+
+        $this->assertExecutedQueryTypes([
+                'Load parent entities' => Select::class
+        ]);
+
+        $this->repo->saveAll($entities);
+
+        $this->assertExecutedQueryTypes([
+                'Load parent entities' => Select::class,
+                'Save parent entities' => Upsert::class,
+        ]);
+
+        $this->assertDatabaseDataSameAs([
+                'entities' => [
+                        ['id' => 1],
+                        ['id' => 2],
+                ],
+                'emails'   => [
+                        ['id' => 1, 'entity_id' => 1, 'email' => 'test@foo.com'],
+                        ['id' => 2, 'entity_id' => 1, 'email' => 'gmail@foo.com'],
+                        ['id' => 3, 'entity_id' => 2, 'email' => 'aaa@foo.com'],
+                ]
+        ]);
     }
 }
