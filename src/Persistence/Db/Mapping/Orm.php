@@ -70,7 +70,7 @@ abstract class Orm implements IOrm
         $definition         = new OrmDefinition($iocContainer);
         $this->define($definition);
 
-        $definition->finalize(function (array $entityMapperFactories, array $embeddedObjectMapperFactories, array $includedOrms) use (
+        $definition->finalize(function (array $entityMapperFactories, array $embeddedObjectMapperFactories, array $includedOrms, bool $enableLazyLoading) use (
                 $iocContainer
         ) {
             $this->includedOrms = $includedOrms;
@@ -83,6 +83,8 @@ abstract class Orm implements IOrm
             } else {
                 $this->initializeMappers($entityMapperFactories, $embeddedObjectMapperFactories);
             }
+
+            $this->enableLazyLoading($enableLazyLoading);
         });
     }
 
@@ -422,6 +424,6 @@ abstract class Orm implements IOrm
      */
     public function enableLazyLoading(bool $flag = true)
     {
-        $this->lazyLoadingEnabled = true;
+        $this->lazyLoadingEnabled = $flag;
     }
 }

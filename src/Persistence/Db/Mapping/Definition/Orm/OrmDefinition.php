@@ -34,6 +34,11 @@ class OrmDefinition
     protected $includedOrms = [];
 
     /**
+     * @var bool
+     */
+    protected $enableLazyLoading = false;
+
+    /**
      * OrmDefinition constructor.
      *
      * @param IIocContainer|null $iocContainer
@@ -142,12 +147,23 @@ class OrmDefinition
     }
 
     /**
+     * Sets whether lazy-loading of relations should be enabled within the orm.
+     * 
+     * @param bool $enableLazyLoading
+     */
+    public function enableLazyLoading(bool $enableLazyLoading = true)
+    {
+        $this->enableLazyLoading = $enableLazyLoading;
+    }
+    
+
+    /**
      * @param callable $loaderCallback
      *
      * @return void
      */
     public function finalize(callable $loaderCallback)
     {
-        $loaderCallback($this->entityMapperFactories, $this->embeddedObjectMapperFactories, $this->includedOrms);
+        $loaderCallback($this->entityMapperFactories, $this->embeddedObjectMapperFactories, $this->includedOrms, $this->enableLazyLoading);
     }
 }
