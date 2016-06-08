@@ -3,6 +3,7 @@
 namespace Dms\Core\Persistence\Db\Mapping\Relation\Lazy\Collection;
 
 use Pinq\Iterators\Generators\GeneratorScheme;
+use Snapfile\Domain\Entities\User\ProfileData;
 use Traversable;
 
 /**
@@ -38,6 +39,11 @@ trait LazyCollectionTrait
             protected $loadElementArrayCallback;
 
             /**
+             * @var array
+             */
+            protected $elementsCache;
+
+            /**
              * @param bool     $hasLoadedElements
              * @param callable $loadElementArrayCallback
              */
@@ -51,7 +57,11 @@ trait LazyCollectionTrait
             {
                 $this->hasLoadedElements = true;
 
-                return new \ArrayIterator(call_user_func($this->loadElementArrayCallback));
+                if ($this->elementsCache === null) {
+                    $this->elementsCache = call_user_func($this->loadElementArrayCallback);
+                }
+
+                return new \ArrayIterator($this->elementsCache);
             }
         };
     }

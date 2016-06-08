@@ -4,6 +4,7 @@ namespace Dms\Core\Tests\Persistence\Db\Integration\Domains;
 
 use Dms\Core\Model\Criteria\SpecificationDefinition;
 use Dms\Core\Persistence\Db\Mapping\IOrm;
+use Dms\Core\Persistence\Db\Query\Select;
 use Dms\Core\Persistence\Db\Schema\ForeignKey;
 use Dms\Core\Persistence\Db\Schema\ForeignKeyMode;
 use Dms\Core\Persistence\DbRepository;
@@ -961,5 +962,51 @@ class BlogTest extends DbIntegrationTest
                     }))
             )
         );
+    }
+
+    public function testLazyLoadWithMultipleRelations()
+    {
+        $this->orm->enableLazyLoading();
+
+        $this->setDataInDb([
+            'aliases'      => [],
+            'posts'        => [
+                ['id' => 1, 'author_id' => 1, 'content' => 'Hello World!'],
+                ['id' => 2, 'author_id' => 1, 'content' => 'Sup World!'],
+            ],
+            'comments'     => [
+                ['id' => 10, 'post_id' => 1, 'author_id' => 1, 'content' => 'Hello John!'],
+                ['id' => 11, 'post_id' => 2, 'author_id' => 1, 'content' => 'Sup John!'],
+            ],
+            'user_friends' => [],
+            'users'        => [
+                $this->dummyUserDbData(1),
+            ],
+        ]);
+
+        /** @var TestUser $user */
+        $user = $this->userRepo->get(1);
+
+        $this->assertExecutedQueryTypes([
+            'Load user'  => Select::class,
+            'Load alias' => Select::class,
+        ]);
+
+        $this->assertSame([1, 2], $user->postIds->asArray());
+
+        $this->assertExecutedQueryTypes([
+            'Load user'     => Select::class,
+            'Load alias'    => Select::class,
+            'Load post ids' => Select::class,
+        ]);
+
+        $this->assertSame([10, 11], $user->commentIds->asArray());
+
+        $this->assertExecutedQueryTypes([
+            'Load user'        => Select::class,
+            'Load alias'       => Select::class,
+            'Load post ids'    => Select::class,
+            'Load comment ids' => Select::class,
+        ]);
     }
 }

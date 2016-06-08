@@ -536,6 +536,8 @@ abstract class ObjectMapping implements IObjectMapping
 
                 $accessor->set($objects[$objectKey], $objectProperties[$objectKey], $collection);
             }
+
+            unset($hasLoaded);
         }
     }
 
