@@ -27,5 +27,6 @@ class LazyEntityCollection extends EntityCollection implements ILazyCollection
         parent::__construct($entityType, [], $scheme);
 
         $this->setLazyLoadingCallback($entityLoaderCallback);
+        $this->instanceMap = null;
     }
 }

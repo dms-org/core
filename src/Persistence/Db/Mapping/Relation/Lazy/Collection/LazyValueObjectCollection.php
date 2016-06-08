@@ -27,5 +27,6 @@ class LazyValueObjectCollection extends ValueObjectCollection implements ILazyCo
         parent::__construct($valueObjectType, [], $scheme);
 
         $this->setLazyLoadingCallback($valueObjectCallback);
+        $this->instanceMap = null;
     }
 }
