@@ -28,5 +28,6 @@ class LazyEntityCollection extends EntityCollection implements ILazyCollection
 
         $this->setLazyLoadingCallback($entityLoaderCallback);
         $this->instanceMap = null;
+        $this->identityMap = null;
     }
 }
