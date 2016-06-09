@@ -425,5 +425,9 @@ abstract class Orm implements IOrm
     public function enableLazyLoading(bool $flag = true)
     {
         $this->lazyLoadingEnabled = $flag;
+
+        foreach ($this->includedOrms as $includedOrm) {
+            $includedOrm->enableLazyLoading($flag);
+        }
     }
 }
