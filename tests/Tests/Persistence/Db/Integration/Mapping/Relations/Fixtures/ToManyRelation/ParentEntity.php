@@ -2,11 +2,9 @@
 
 namespace Dms\Core\Tests\Persistence\Db\Integration\Mapping\Relations\Fixtures\ToManyRelation;
 
-use Dms\Core\Model\EntityCollection;
 use Dms\Core\Model\IEntityCollection;
 use Dms\Core\Model\Object\ClassDefinition;
 use Dms\Core\Model\Object\Entity;
-use Dms\Core\Model\Type\Builder\Type;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>

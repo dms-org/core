@@ -468,10 +468,10 @@ abstract class ObjectMapping implements IObjectMapping
      * @return void
      */
     private function loadRelations(
-            LoadingContext $context,
-            array $rows,
-            array $objects,
-            array &$objectProperties
+        LoadingContext $context,
+        array $rows,
+        array $objects,
+        array &$objectProperties
     ) {
         $isLazyLoadingEnabled = $this->definition->getOrm()->isLazyLoadingEnabled();
 
@@ -517,24 +517,30 @@ abstract class ObjectMapping implements IObjectMapping
 
             foreach ($map->getItems() as $item) {
                 $objectKey = $rowKeyMap[$item->getParent()];
+                $object    = $objects[$objectKey];
 
                 if ($hasLoaded) {
                     $collection = $relation->buildCollection($item->getChildren());
                 } else {
                     $collection = LazyCollectionFactory::from(
-                            $relation->buildCollection([]),
-                            function () use (&$hasLoaded, $relation, $context, $map, $item) {
-                                if (!$hasLoaded) {
-                                    $relation->load($context, $map);
-                                    $hasLoaded = true;
-                                }
-
-                                return $item->getChildren();
+                        $relation->buildCollection([]),
+                        function () use (&$hasLoaded, $relation, $context, $map, $item) {
+                            if (!$hasLoaded) {
+                                $relation->load($context, $map);
+                                $hasLoaded = true;
                             }
+
+                            return $item->getChildren();
+                        }
                     );
+
+                    $collection->appendLazyMetadata([
+                        'parent'   => $object,
+                        'relation' => $relation,
+                    ]);
                 }
 
-                $accessor->set($objects[$objectKey], $objectProperties[$objectKey], $collection);
+                $accessor->set($object, $objectProperties[$objectKey], $collection);
             }
 
             unset($hasLoaded);
@@ -548,10 +554,10 @@ abstract class ObjectMapping implements IObjectMapping
      * @param array|null         $extraData
      */
     public function persistAll(
-            PersistenceContext $context,
-            array $objects,
-            array $rows,
-            array $extraData = null
+        PersistenceContext $context,
+        array $objects,
+        array $rows,
+        array $extraData = null
     ) {
         $objectProperties = $this->persistObjectDataToRows($objects, $rows);
 
@@ -694,11 +700,11 @@ abstract class ObjectMapping implements IObjectMapping
     }
 
     final protected function persistRelations(
-            PersistenceContext $context,
-            $dependencyMode,
-            array $rows,
-            array $objects,
-            array $objectProperties
+        PersistenceContext $context,
+        $dependencyMode,
+        array $rows,
+        array $objects,
+        array $objectProperties
     ) {
         $definition = $this->definition;
 
@@ -719,26 +725,44 @@ abstract class ObjectMapping implements IObjectMapping
                 $map = new ParentChildrenMap($this->primaryKeyColumnName);
 
                 foreach ($objectProperties as $key => $properties) {
+                    $parentRow     = $rows[$key];
                     $propertyValue = $accessor->get($objects[$key], $properties);
 
                     if (!($propertyValue instanceof \Traversable)) {
                         throw PersistenceException::format(
-                                'Invalid value found for to-many relation to %s on type %s: expecting instance of %s, %s given',
-                                $relation->getMapper()->getObjectType(), $this->objectType, \Traversable::class,
-                                Debug::getType($propertyValue)
+                            'Invalid value found for to-many relation to %s on type %s: expecting instance of %s, %s given',
+                            $relation->getMapper()->getObjectType(), $this->objectType, \Traversable::class,
+                            Debug::getType($propertyValue)
                         );
                     }
 
-                    if ($propertyValue instanceof ILazyCollection && !$propertyValue->hasLoadedElements()) {
+                    if ($propertyValue instanceof ILazyCollection
+                        && $this->isUnloadedLazyCollection($objects[$key], $relation, $propertyValue)
+                    ) {
                         continue;
                     }
-                    
-                    $map->add($rows[$key], iterator_to_array($propertyValue));
+
+                    $map->add($parentRow, iterator_to_array($propertyValue));
                 }
 
                 $relation->persist($context, $map);
             }
         }
+    }
+
+    protected function isUnloadedLazyCollection($parentObject, IRelation $relation, ILazyCollection $collection) : bool
+    {
+        if ($collection->hasLoadedElements()) {
+            return false;
+        }
+
+        $metadata = $collection->getLazyMetadata();
+
+        if (!isset($metadata['parent']) || !isset($metadata['relation'])) {
+            return false;
+        }
+
+        return $metadata['parent'] === $parentObject && $metadata['relation'] === $relation;
     }
 
     final protected function getRelationsToPersist(PersistenceContext $context)
@@ -760,10 +784,10 @@ abstract class ObjectMapping implements IObjectMapping
     }
 
     final protected function persistEmbeddedRelationsBeforeParent(
-            PersistenceContext $context,
-            array $rows,
-            array $objects,
-            array $objectProperties
+        PersistenceContext $context,
+        array $rows,
+        array $objects,
+        array $objectProperties
     ) {
         foreach ($this->getRelationsToPersist($context) as $relationMapping) {
             $relation = $relationMapping->getRelation();
@@ -778,10 +802,10 @@ abstract class ObjectMapping implements IObjectMapping
     }
 
     final protected function persistEmbeddedRelationsAfterParent(
-            PersistenceContext $context,
-            array $rows,
-            array $objects,
-            array $objectProperties
+        PersistenceContext $context,
+        array $rows,
+        array $objects,
+        array $objectProperties
     ) {
         foreach ($this->getRelationsToPersist($context) as $relationMapping) {
             $relation = $relationMapping->getRelation();

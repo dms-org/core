@@ -33,7 +33,7 @@ class ColumnExpr extends Expr
     {
         InvalidArgumentException::verify(is_string($table), 'Table must be string, %s given', gettype($table));
 
-        $this->table = $table;
+        $this->table  = $table;
         $this->column = $column;
     }
 
@@ -56,7 +56,7 @@ class ColumnExpr extends Expr
     /**
      * @return Column
      */
-    public function getColumn() : \Dms\Core\Persistence\Db\Schema\Column
+    public function getColumn() : Column
     {
         return $this->column;
     }
@@ -76,7 +76,7 @@ class ColumnExpr extends Expr
      *
      * @return Type
      */
-    public function getResultingType() : \Dms\Core\Persistence\Db\Schema\Type\Type
+    public function getResultingType() : Type
     {
         return $this->column->getType();
     }

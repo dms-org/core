@@ -17,6 +17,11 @@ trait LazyCollectionTrait
     protected $elements;
 
     /**
+     * @var array
+     */
+    protected $lazyMetadata = [];
+
+    /**
      * @var bool
      */
     protected $hasLoadedElements = false;
@@ -74,5 +79,23 @@ trait LazyCollectionTrait
     public function hasLoadedElements() : bool
     {
         return $this->hasLoadedElements;
+    }
+
+    /**
+     * @return array
+     */
+    public function getLazyMetadata() : array
+    {
+        return $this->lazyMetadata;
+    }
+
+    /**
+     * @param array $values
+     *
+     * @return void
+     */
+    public function appendLazyMetadata(array $values)
+    {
+        $this->lazyMetadata = $values + $this->lazyMetadata;
     }
 }
