@@ -161,6 +161,7 @@ abstract class BaseType implements IType
 
         $types = [];
 
+        /** @var UnionType $this */
         foreach ($this->getTypes() as $type) {
             if ($type instanceof NullType) {
                 continue;
@@ -211,8 +212,16 @@ abstract class BaseType implements IType
     /**
      * @inheritDoc
      */
+    public function supportsOperator(string $conditionOperator) : bool
+    {
+        return isset($this->getConditionOperatorTypes()[$conditionOperator]);
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function __debugInfo()
     {
-        return ['type' =>  $this->asTypeString()];
+        return ['type' => $this->asTypeString()];
     }
 }

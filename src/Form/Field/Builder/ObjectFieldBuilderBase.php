@@ -2,6 +2,8 @@
 
 namespace Dms\Core\Form\Field\Builder;
 
+use Dms\Core\Exception\InvalidOperationException;
+use Dms\Core\Form\Field\Options\EntityIdOptions;
 use Dms\Core\Form\Field\Options\ObjectIdentityOptions;
 
 /**
@@ -91,6 +93,31 @@ abstract class ObjectFieldBuilderBase extends FieldBuilderBase
     {
         $this->updateOptions(function (ObjectIdentityOptions $options) use ($disabledLabelCallback) {
             return $options->withDisabledLabelCallback($disabledLabelCallback);
+        });
+
+        return $this;
+    }
+
+    /**
+     * Specifies the member expressions which can be used to filter the options.
+     *
+     * Example:
+     * <code>
+     * ->searchableBy(Person::NAME, Person::EMAIL)
+     * </code>
+     *
+     * @param string[] $memberExpressions
+     *
+     * @return static
+     */
+    public function searchableBy(string ... $memberExpressions)
+    {
+        $this->updateOptions(function (ObjectIdentityOptions $options) use ($memberExpressions) {
+            if ($options instanceof EntityIdOptions) {
+                return $options->withFilterByMemberExpressions($memberExpressions);
+            }
+
+            throw InvalidOperationException::methodCall(__METHOD__, 'filtering is only supported on entity sets');
         });
 
         return $this;

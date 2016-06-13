@@ -2,8 +2,11 @@
 
 namespace Dms\Core\Form\Field\Options;
 
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Form\IFieldOption;
 use Dms\Core\Form\IFieldOptions;
 use Dms\Core\Model\IIdentifiableObjectSet;
+use Dms\Core\Model\ITypedObject;
 use Dms\Core\Model\Object\TypedObject;
 
 /**
@@ -48,11 +51,11 @@ abstract class ObjectIdentityOptions implements IFieldOptions
      * @param callable|null          $disabledLabelCallback
      */
     public function __construct(
-        IIdentifiableObjectSet $objects,
-        callable $labelCallback = null,
-        string $labelMemberExpression = null,
-        callable $enabledCallback = null,
-        callable $disabledLabelCallback = null
+            IIdentifiableObjectSet $objects,
+            callable $labelCallback = null,
+            string $labelMemberExpression = null,
+            callable $enabledCallback = null,
+            callable $disabledLabelCallback = null
     ) {
         $this->objects       = $objects;
         $this->labelCallback = $labelCallback;
@@ -61,8 +64,8 @@ abstract class ObjectIdentityOptions implements IFieldOptions
             $this->loadLabelCallbackFromMemberExpression($labelMemberExpression);
         }
 
-        $this->enabledCallback       = $enabledCallback;
-        $this->disabledLabelCallback = $disabledLabelCallback;
+        $this->enabledCallback           = $enabledCallback;
+        $this->disabledLabelCallback     = $disabledLabelCallback;
     }
 
     protected function loadLabelCallbackFromMemberExpression(string $labelMemberExpression)
@@ -71,14 +74,13 @@ abstract class ObjectIdentityOptions implements IFieldOptions
         /** @var TypedObject|string $objectType */
         $objectType = $this->objects->getObjectType();
         $callback   = $this->objects->criteria()->getMemberExpressionParser()
-            ->parse($objectType::definition(), $labelMemberExpression)
-            ->makeArrayGetterCallable();
+                ->parse($objectType::definition(), $labelMemberExpression)
+                ->makeArrayGetterCallable();
 
         $this->labelCallback = function ($object) use ($callback) {
             return $callback([$object])[0];
         };
     }
-
 
     /**
      * @return IIdentifiableObjectSet
@@ -96,18 +98,23 @@ abstract class ObjectIdentityOptions implements IFieldOptions
         $options = [];
 
         foreach ($this->objects->getAll() as $index => $object) {
-            $id       = $this->getObjectIdentity($index, $object);
-            $label    = (string)($this->labelCallback ? call_user_func($this->labelCallback, $object) : $id);
-            $disabled = $this->enabledCallback ? !call_user_func($this->enabledCallback, $object) : false;
-
-            if ($disabled && $this->disabledLabelCallback) {
-                $label = call_user_func($this->disabledLabelCallback, $label);
-            }
-
-            $options[] = new FieldOption($id, $label, $disabled);
+            $id        = $this->getObjectIdentity($index, $object);
+            $options[] = $this->getFieldOptionForObject($object, $id);
         }
 
         return $options;
+    }
+
+    protected function getFieldOptionForObject(ITypedObject $object, $id) : FieldOption
+    {
+        $label    = (string)($this->labelCallback ? call_user_func($this->labelCallback, $object) : $id);
+        $disabled = $this->enabledCallback ? !call_user_func($this->enabledCallback, $object) : false;
+
+        if ($disabled && $this->disabledLabelCallback) {
+            $label = call_user_func($this->disabledLabelCallback, $label);
+        }
+
+        return new FieldOption($id, $label, $disabled);
     }
 
     /**
@@ -143,6 +150,25 @@ abstract class ObjectIdentityOptions implements IFieldOptions
         }
     }
 
+    /**
+     * @inheritDoc
+     */
+    public function count()
+    {
+        return $this->objects->count();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getOptionForValue($value) : IFieldOption
+    {
+        $object = $this->objects->tryGet($value);
+        InvalidArgumentException::verify($object !== null, 'Invalid value supplied to %s: %s', __METHOD__, $value);
+
+        return $this->getFieldOptionForObject($object, $value);
+    }
+    
     /**
      * @param callable $callback
      *

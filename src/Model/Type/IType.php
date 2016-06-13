@@ -116,4 +116,13 @@ interface IType
      * @return string[]
      */
     public function getConditionOperators() : array;
+
+    /**
+     * Returns whether this type supports the supplied operator.
+     *
+     * @param string $conditionOperator
+     *
+     * @return bool
+     */
+    public function supportsOperator(string $conditionOperator) : bool;
 }

@@ -3,8 +3,10 @@
 namespace Dms\Core\Form\Field\Options;
 
 use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Exception\InvalidOperationException;
 use Dms\Core\Form\IFieldOption;
 use Dms\Core\Form\IFieldOptions;
+use Dms\Core\Util\Hashing\ValueHasher;
 
 /**
  * The field options class
@@ -40,8 +42,8 @@ class ArrayFieldOptions implements IFieldOptions
         foreach ($keyValueOptions as $value => $label) {
             settype($value, $valueType);
             $options[] = $label instanceof IFieldOption
-                ? $label
-                : new FieldOption($value, $label);
+                    ? $label
+                    : new FieldOption($value, $label);
         }
 
         return new self($options);
@@ -83,5 +85,50 @@ class ArrayFieldOptions implements IFieldOptions
         }
 
         return $values;
+    }
+
+    /**
+     * @return int
+     */
+    public function count()
+    {
+        return count($this->options);
+    }
+
+    /**
+     * Gets the field option with the supplied value.
+     *
+     * @param mixed $value
+     *
+     * @return IFieldOption
+     * @throws InvalidArgumentException
+     */
+    public function getOptionForValue($value) : IFieldOption
+    {
+        foreach ($this->getAll() as $option) {
+            if (ValueHasher::areEqual($value, $option->getValue())) {
+                return $option;
+            }
+        }
+
+        throw InvalidArgumentException::format('Invalid value supplied to %s', __METHOD__);
+    }
+
+    /**
+     * Returns whether the options are filterable.
+     *
+     * @return bool
+     */
+    public function canFilterOptions() : bool
+    {
+        return false;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getFilteredOptions(string $filter) : array
+    {
+        throw InvalidOperationException::format(__METHOD__);
     }
 }
