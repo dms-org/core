@@ -54,24 +54,24 @@ class LazyToManyRelationTest extends DbIntegrationTest
     public function testBulkLoad()
     {
         $this->setDataInDb([
-            'parent_entities' => [
-                ['id' => 1],
-                ['id' => 2],
-                ['id' => 3],
-            ],
-            'child_entities'  => [
-                ['id' => 1, 'parent_id' => 1, 'val' => 10],
-                ['id' => 2, 'parent_id' => 1, 'val' => 20],
-                ['id' => 3, 'parent_id' => 1, 'val' => 30],
+                'parent_entities' => [
+                        ['id' => 1],
+                        ['id' => 2],
+                        ['id' => 3],
+                ],
+                'child_entities'  => [
+                        ['id' => 1, 'parent_id' => 1, 'val' => 10],
+                        ['id' => 2, 'parent_id' => 1, 'val' => 20],
+                        ['id' => 3, 'parent_id' => 1, 'val' => 30],
 
-                ['id' => 4, 'parent_id' => 2, 'val' => 10],
-                ['id' => 5, 'parent_id' => 2, 'val' => 20],
-                ['id' => 6, 'parent_id' => 2, 'val' => 30],
+                        ['id' => 4, 'parent_id' => 2, 'val' => 10],
+                        ['id' => 5, 'parent_id' => 2, 'val' => 20],
+                        ['id' => 6, 'parent_id' => 2, 'val' => 30],
 
-                ['id' => 7, 'parent_id' => 3, 'val' => 10],
-                ['id' => 8, 'parent_id' => 3, 'val' => 20],
-                ['id' => 9, 'parent_id' => 3, 'val' => 30],
-            ],
+                        ['id' => 7, 'parent_id' => 3, 'val' => 10],
+                        ['id' => 8, 'parent_id' => 3, 'val' => 20],
+                        ['id' => 9, 'parent_id' => 3, 'val' => 30],
+                ],
         ]);
 
         /** @var ParentEntity[] $parentEntities */
@@ -86,7 +86,7 @@ class LazyToManyRelationTest extends DbIntegrationTest
         }
 
         $this->assertExecutedQueryTypes([
-            'Load parent entities' => Select::class,
+                'Load parent entities' => Select::class,
         ]);
 
         // Child entities should be lazy loaded but only the first
@@ -97,50 +97,50 @@ class LazyToManyRelationTest extends DbIntegrationTest
         $thirdChildren  = $parentEntities[2]->children->asArray();
 
         $this->assertExecutedQueryTypes([
-            'Load parent entities'      => Select::class,
-            'Load *all* child entities' => Select::class,
+                'Load parent entities'      => Select::class,
+                'Load *all* child entities' => Select::class,
         ]);
 
         $this->assertEquals([
-            new ChildEntity(1, 10),
-            new ChildEntity(2, 20),
-            new ChildEntity(3, 30),
+                new ChildEntity(1, 10),
+                new ChildEntity(2, 20),
+                new ChildEntity(3, 30),
         ], $firstChildren);
 
         $this->assertEquals([
-            new ChildEntity(4, 10),
-            new ChildEntity(5, 20),
-            new ChildEntity(6, 30),
+                new ChildEntity(4, 10),
+                new ChildEntity(5, 20),
+                new ChildEntity(6, 30),
         ], $secondChildren);
 
         $this->assertEquals([
-            new ChildEntity(7, 10),
-            new ChildEntity(8, 20),
-            new ChildEntity(9, 30),
+                new ChildEntity(7, 10),
+                new ChildEntity(8, 20),
+                new ChildEntity(9, 30),
         ], $thirdChildren);
     }
 
     public function testBulkPersistWithLazyCollectionsDoesNotPerformSyncQueries()
     {
         $this->setDataInDb([
-            'parent_entities' => [
-                ['id' => 1],
-                ['id' => 2],
-                ['id' => 3],
-            ],
-            'child_entities'  => [
-                ['id' => 1, 'parent_id' => 1, 'val' => 10],
-                ['id' => 2, 'parent_id' => 1, 'val' => 20],
-                ['id' => 3, 'parent_id' => 1, 'val' => 30],
+                'parent_entities' => [
+                        ['id' => 1],
+                        ['id' => 2],
+                        ['id' => 3],
+                ],
+                'child_entities'  => [
+                        ['id' => 1, 'parent_id' => 1, 'val' => 10],
+                        ['id' => 2, 'parent_id' => 1, 'val' => 20],
+                        ['id' => 3, 'parent_id' => 1, 'val' => 30],
 
-                ['id' => 4, 'parent_id' => 2, 'val' => 10],
-                ['id' => 5, 'parent_id' => 2, 'val' => 20],
-                ['id' => 6, 'parent_id' => 2, 'val' => 30],
+                        ['id' => 4, 'parent_id' => 2, 'val' => 10],
+                        ['id' => 5, 'parent_id' => 2, 'val' => 20],
+                        ['id' => 6, 'parent_id' => 2, 'val' => 30],
 
-                ['id' => 7, 'parent_id' => 3, 'val' => 10],
-                ['id' => 8, 'parent_id' => 3, 'val' => 20],
-                ['id' => 9, 'parent_id' => 3, 'val' => 30],
-            ],
+                        ['id' => 7, 'parent_id' => 3, 'val' => 10],
+                        ['id' => 8, 'parent_id' => 3, 'val' => 20],
+                        ['id' => 9, 'parent_id' => 3, 'val' => 30],
+                ],
         ]);
 
         /** @var ParentEntity[] $parentEntities */
@@ -149,32 +149,59 @@ class LazyToManyRelationTest extends DbIntegrationTest
         $this->repo->saveAll($parentEntities);
 
         $this->assertExecutedQueryTypes([
-            'Load parent entities' => Select::class,
-            'Save parent entities' => Upsert::class,
+                'Load parent entities' => Select::class,
+                'Save parent entities' => Upsert::class,
+        ]);
+    }
+
+    public function testClearCollectionOnLazyToManyRelation()
+    {
+        $this->setDataInDb([
+                'parent_entities' => [
+                        ['id' => 1],
+                ],
+                'child_entities'  => [
+                        ['id' => 1, 'parent_id' => 1, 'val' => 10],
+                        ['id' => 2, 'parent_id' => 1, 'val' => 20],
+                        ['id' => 3, 'parent_id' => 1, 'val' => 30],
+                ],
+        ]);
+
+        /** @var ParentEntity $parentEntity */
+        $parentEntity = $this->repo->get(1);
+        $parentEntity->children->clear();
+
+        $this->repo->save($parentEntity);
+
+        $this->assertDatabaseDataSameAs([
+                'parent_entities' => [
+                        ['id' => 1],
+                ],
+                'child_entities'  => []
         ]);
     }
 
     public function testReassociateLazyCollectionToDifferentParent()
     {
         $this->setDataInDb([
-            'parent_entities' => [
-                ['id' => 1],
-                ['id' => 2],
-                ['id' => 3],
-            ],
-            'child_entities'  => [
-                ['id' => 1, 'parent_id' => 1, 'val' => 10],
-                ['id' => 2, 'parent_id' => 1, 'val' => 20],
-                ['id' => 3, 'parent_id' => 1, 'val' => 30],
+                'parent_entities' => [
+                        ['id' => 1],
+                        ['id' => 2],
+                        ['id' => 3],
+                ],
+                'child_entities'  => [
+                        ['id' => 1, 'parent_id' => 1, 'val' => 10],
+                        ['id' => 2, 'parent_id' => 1, 'val' => 20],
+                        ['id' => 3, 'parent_id' => 1, 'val' => 30],
 
-                ['id' => 4, 'parent_id' => 2, 'val' => 10],
-                ['id' => 5, 'parent_id' => 2, 'val' => 20],
-                ['id' => 6, 'parent_id' => 2, 'val' => 30],
+                        ['id' => 4, 'parent_id' => 2, 'val' => 10],
+                        ['id' => 5, 'parent_id' => 2, 'val' => 20],
+                        ['id' => 6, 'parent_id' => 2, 'val' => 30],
 
-                ['id' => 7, 'parent_id' => 3, 'val' => 10],
-                ['id' => 8, 'parent_id' => 3, 'val' => 20],
-                ['id' => 9, 'parent_id' => 3, 'val' => 30],
-            ],
+                        ['id' => 7, 'parent_id' => 3, 'val' => 10],
+                        ['id' => 8, 'parent_id' => 3, 'val' => 20],
+                        ['id' => 9, 'parent_id' => 3, 'val' => 30],
+                ],
         ]);
 
         /** @var ParentEntity[] $parentEntities */
@@ -185,28 +212,28 @@ class LazyToManyRelationTest extends DbIntegrationTest
         $this->repo->save($parentEntities[0]);
 
         $this->assertDatabaseDataSameAs([
-            'parent_entities' => [
-                ['id' => 1],
-                ['id' => 2],
-                ['id' => 3],
-            ],
-            'child_entities'  => [
-                ['id' => 4, 'parent_id' => 1, 'val' => 10],
-                ['id' => 5, 'parent_id' => 1, 'val' => 20],
-                ['id' => 6, 'parent_id' => 1, 'val' => 30],
+                'parent_entities' => [
+                        ['id' => 1],
+                        ['id' => 2],
+                        ['id' => 3],
+                ],
+                'child_entities'  => [
+                        ['id' => 4, 'parent_id' => 1, 'val' => 10],
+                        ['id' => 5, 'parent_id' => 1, 'val' => 20],
+                        ['id' => 6, 'parent_id' => 1, 'val' => 30],
 
-                ['id' => 7, 'parent_id' => 3, 'val' => 10],
-                ['id' => 8, 'parent_id' => 3, 'val' => 20],
-                ['id' => 9, 'parent_id' => 3, 'val' => 30],
-            ],
+                        ['id' => 7, 'parent_id' => 3, 'val' => 10],
+                        ['id' => 8, 'parent_id' => 3, 'val' => 20],
+                        ['id' => 9, 'parent_id' => 3, 'val' => 30],
+                ],
         ]);
 
         $this->assertExecutedQueryTypes([
-            'Load parent entities'        => Select::class,
-            'Load child entities'         => Select::class,
-            'Save parent entities'        => Upsert::class,
-            'Delete other child entities' => Delete::class,
-            'Save child entities'         => Upsert::class,
+                'Load parent entities'        => Select::class,
+                'Load child entities'         => Select::class,
+                'Save parent entities'        => Upsert::class,
+                'Delete other child entities' => Delete::class,
+                'Save child entities'         => Upsert::class,
         ]);
     }
 }
