@@ -395,4 +395,40 @@ class ToManyIdRelationTest extends DbIntegrationTest
                                 ])
                 ));
     }
+
+    public function testCriteriaWhereCollectionContains()
+    {
+        $this->setDataInDb([
+            'parent_entities' => [
+                ['id' => 1],
+                ['id' => 2],
+                ['id' => 3],
+            ],
+            'child_entities'  => [
+                ['id' => 10, 'parent_id' => 1, 'val' => 100],
+                ['id' => 11, 'parent_id' => 1, 'val' => 200],
+                ['id' => 12, 'parent_id' => 2, 'val' => 300],
+            ],
+        ]);
+
+        $this->assertEquals(
+            [
+                ['parent_id' => 1],
+            ],
+            $this->repo->loadMatching(
+                $this->repo->loadCriteria()
+                    ->loadAll(['id' => 'parent_id'])
+                    ->whereCollectionContains('childIds', 10)
+            ));
+
+        $this->assertEquals(
+            [
+                ['parent_id' => 2],
+            ],
+            $this->repo->loadMatching(
+                $this->repo->loadCriteria()
+                    ->loadAll(['id' => 'parent_id'])
+                    ->whereCollectionContains('childIds', 12)
+            ));
+    }
 }

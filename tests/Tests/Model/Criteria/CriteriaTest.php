@@ -19,6 +19,7 @@ use Dms\Core\Model\Criteria\NestedMember;
 use Dms\Core\Model\Criteria\OrderingDirection;
 use Dms\Core\Model\Criteria\SpecificationDefinition;
 use Dms\Core\Tests\Model\Criteria\Fixtures\MockSpecification;
+use Dms\Core\Tests\Model\Criteria\Fixtures\ParentEntity;
 use Dms\Core\Tests\Model\Fixtures\SubObject;
 use Dms\Core\Tests\Model\Fixtures\TestEntity;
 
@@ -400,6 +401,45 @@ class CriteriaTest extends CmsTestCase
                 $spec
             ),
             $criteria->getCondition());
+    }
+
+
+    public function testWhereCollectionContainsOnScalarProperty()
+    {
+        $this->expectException(InvalidMemberExpressionException::class);
+
+        $criteria = TestEntity::criteria();
+
+        $criteria->whereCollectionContains('prop', 123);
+    }
+
+
+    public function testWhereCollectionContainsOnValueObject()
+    {
+        $criteria = TestEntity::criteria();
+
+        $criteria->whereCollectionContains('objects', $object = new SubObject());
+
+        $this->assertEquals(
+            new MemberCondition(
+                new NestedMember([
+                    new MemberPropertyExpression(TestEntity::definition()->getProperty('objects'), false),
+                ]),
+                ConditionOperator::ANY_SATISFIES,
+                SubObject::specification(function (SpecificationDefinition $match) use ($object) {
+                    $match->where('this', '=', $object);
+                })
+            ),
+            $criteria->getCondition());
+    }
+
+    public function testWhereCollectionContainsInvalidObject()
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        $criteria = TestEntity::criteria();
+
+        $criteria->whereCollectionContains('objects', 123);
     }
 
     public function testMergeCriteriaConditions()

@@ -12,7 +12,12 @@ use Dms\Core\Model\Criteria\Condition\InstanceOfCondition;
 use Dms\Core\Model\Criteria\Condition\MemberCondition;
 use Dms\Core\Model\Criteria\Condition\NotCondition;
 use Dms\Core\Model\Criteria\Condition\OrCondition;
+use Dms\Core\Model\EntityIdCollection;
 use Dms\Core\Model\ISpecification;
+use Dms\Core\Model\Object\Entity;
+use Dms\Core\Model\Object\TypedObject;
+use Dms\Core\Model\Type\Builder\Type;
+use Dms\Core\Model\Type\CollectionType;
 
 /**
  * The typed object specification definition class.
@@ -237,6 +242,67 @@ class SpecificationDefinition extends ObjectCriteriaBase
     final public function whereHasAny(string $collectionMemberExpression, ISpecification $specification)
     {
         return $this->where($collectionMemberExpression, ConditionOperator::ANY_SATISFIES, $specification);
+    }
+
+    /**
+     * Defines a condition that is satisfied when the collection
+     * contains the supplied item.
+     *
+     * @param string $collectionMemberExpression
+     * @param mixed  $item
+     *
+     * @return static
+     * @throws InvalidArgumentException
+     * @throws InvalidMemberExpressionException
+     */
+    public function whereCollectionContains(string $collectionMemberExpression, $item)
+    {
+        $expression           = $this->memberExpressionParser->parse($this->class, $collectionMemberExpression);
+        $isEntityIdCollection = $expression->getResultingType()->nonNullable()->isSubsetOf(EntityIdCollection::type());
+
+        if ($isEntityIdCollection) {
+            $collectionMemberExpression = 'loadAll(' . $collectionMemberExpression . ')';
+            $expression                 = $this->memberExpressionParser->parse($this->class, $collectionMemberExpression);
+        }
+
+        /** @var CollectionType $collectionType */
+        $collectionType = $expression->getResultingType()->nonNullable();
+        if (!$collectionType->isSubsetOf(Type::collectionOf(TypedObject::type()))) {
+            throw InvalidMemberExpressionException::format(
+                'Invalid collection member expression supplied to %s: expecting type %s, %s (\'%s\') given',
+                __METHOD__, Type::collectionOf(TypedObject::type())->asTypeString(),
+                $collectionType->asTypeString(), $collectionMemberExpression
+            );
+        }
+
+        /** @var string|TypedObject $objectType */
+        $objectType = $collectionType->getElementType()->asTypeString();
+
+        if ($isEntityIdCollection) {
+            if (!is_int($item)) {
+                throw InvalidArgumentException::format(
+                    'Invalid collection item supplied to %s: expecting type %s, %s given',
+                    __METHOD__, $objectType, Type::from($item)->asTypeString()
+                );
+            }
+
+            $specification = $objectType::specification(function (SpecificationDefinition $match) use ($item) {
+                $match->where(Entity::ID, '=', $item);
+            });
+        } else {
+            if (!($item instanceof $objectType)) {
+                throw InvalidArgumentException::format(
+                    'Invalid collection item supplied to %s: expecting type %s, %s given',
+                    __METHOD__, $objectType, Type::from($item)->asTypeString()
+                );
+            }
+
+            $specification = $objectType::specification(function (SpecificationDefinition $match) use ($item) {
+                $match->where('this', '=', $item);
+            });
+        }
+
+        return $this->whereHasAny($collectionMemberExpression, $specification);
     }
 
     /**
