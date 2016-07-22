@@ -268,7 +268,7 @@ class Field extends FieldBuilderBase
         return (new ObjectArrayFieldBuilder($this
             ->type(new ArrayOfObjectIdsType(
                 $entities,
-                Field::element()->entityIdFrom($entities)->required()->build(),
+                Field::element()->entityFrom($entities)->required()->build(),
                 $loadAsObjects = true
             ))
         ))->containsNoDuplicates();
