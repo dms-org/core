@@ -6,7 +6,7 @@ use Dms\Core\Exception\InvalidArgumentException;
 use Dms\Core\Model\EntityCollection;
 use Dms\Core\Model\EntityIdCollection;
 use Dms\Core\Model\ITypedCollection;
-use Dms\Core\Model\TypedCollection;
+use Dms\Core\Model\ObjectCollection;
 use Dms\Core\Model\ValueObjectCollection;
 
 /**
@@ -37,9 +37,13 @@ class LazyCollectionFactory
             return new LazyValueObjectCollection($collection->getObjectType(), $objectLoaderCallback);
         }
 
+        if ($collection instanceof ObjectCollection) {
+            return new LazyObjectCollection($collection->getObjectType(), $objectLoaderCallback);
+        }
+
         throw InvalidArgumentException::format(
-                'Invalid call to %s: unsupported collection type %s given',
-                __METHOD__, get_class($collection)
+            'Invalid call to %s: unsupported collection type %s given',
+            __METHOD__, get_class($collection)
         );
     }
 }
