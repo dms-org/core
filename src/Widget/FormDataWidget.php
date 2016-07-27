@@ -2,7 +2,7 @@
 
 namespace Dms\Core\Widget;
 
-use Dms\Core\Auth\IAuthSystem;
+use Dms\Core\Auth\IAuthSystemInPackageContext;
 use Dms\Core\Form\IForm;
 
 /**
@@ -20,7 +20,7 @@ class FormDataWidget extends Widget
     /**
      * @inheritDoc
      */
-    public function __construct(string $name, string $label, IAuthSystem $authSystem, array $requiredPermissions, IForm $form)
+    public function __construct(string $name, string $label, IAuthSystemInPackageContext $authSystem, array $requiredPermissions, IForm $form)
     {
         parent::__construct($name, $label, $authSystem, $requiredPermissions);
 

@@ -3,6 +3,7 @@
 namespace Dms\Core\Common\Crud\Action\Object;
 
 use Dms\Core\Auth\IAuthSystem;
+use Dms\Core\Auth\IAuthSystemInPackageContext;
 use Dms\Core\Exception\TypeMismatchException;
 use Dms\Core\Form\Field\Processor\FieldValidator;
 use Dms\Core\Model\Type\Builder\Type;
@@ -30,7 +31,7 @@ class ObjectAction extends ParameterizedAction implements IObjectAction
      */
     public function __construct(
             $name,
-            IAuthSystem $auth,
+            IAuthSystemInPackageContext $auth,
             array $requiredPermissions,
             IObjectActionFormMapping $formDtoMapping,
             IObjectActionHandler $handler

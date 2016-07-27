@@ -4,6 +4,7 @@ namespace Dms\Core\Tests\Widget;
 
 use Dms\Common\Testing\CmsTestCase;
 use Dms\Core\Auth\IAuthSystem;
+use Dms\Core\Auth\IAuthSystemInPackageContext;
 use Dms\Core\Auth\Permission;
 use Dms\Core\Module\IAction;
 use Dms\Core\Widget\ActionWidget;
@@ -17,7 +18,7 @@ class ActionWidgetTest extends CmsTestCase
     {
         $action = $this->getMockForAbstractClass(IAction::class);
 
-        $authSystem          = $this->getMockForAbstractClass(IAuthSystem::class);
+        $authSystem          = $this->getMockForAbstractClass(IAuthSystemInPackageContext::class);
         $requiredPermissions = ['abc' => Permission::named('abc')];
 
         $widget              = new ActionWidget('action-widget', 'Action', $authSystem, $requiredPermissions, $action);

@@ -4,6 +4,7 @@ namespace Dms\Core\Tests\Module\Action;
 
 use Dms\Common\Testing\CmsTestCase;
 use Dms\Core\Auth\IAuthSystem;
+use Dms\Core\Auth\IAuthSystemInPackageContext;
 use Dms\Core\Auth\IPermission;
 use Dms\Core\Auth\Permission;
 
@@ -27,6 +28,7 @@ abstract class ActionTest extends CmsTestCase
 
         return $permissions;
     }
+
     /**
      * @param IPermission[] $permissions
      *
@@ -42,17 +44,17 @@ abstract class ActionTest extends CmsTestCase
         }
 
         $auth->expects($this->once())
-                ->method('verifyAuthorized')
-                ->with($indexedPermissions);
+            ->method('verifyAuthorized')
+            ->with($indexedPermissions);
 
         return $auth;
     }
 
     /**
-     * @return IAuthSystem|\PHPUnit_Framework_MockObject_MockObject
+     * @return IAuthSystemInPackageContext|\PHPUnit_Framework_MockObject_MockObject
      */
     protected function mockAuth()
     {
-        return $this->getMockForAbstractClass(IAuthSystem::class);
+        return $this->getMockForAbstractClass(IAuthSystemInPackageContext::class);
     }
 }

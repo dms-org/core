@@ -4,6 +4,7 @@ namespace Dms\Core\Tests\Widget;
 
 use Dms\Common\Testing\CmsTestCase;
 use Dms\Core\Auth\IAuthSystem;
+use Dms\Core\Auth\IAuthSystemInPackageContext;
 use Dms\Core\Auth\Permission;
 use Dms\Core\Module\ITableDisplay;
 use Dms\Core\Table\IDataTable;
@@ -18,7 +19,7 @@ class TableWidgetTest extends CmsTestCase
 {
     public function testNewWithCriteria()
     {
-        $authSystem          = $this->getMockForAbstractClass(IAuthSystem::class);
+        $authSystem          = $this->getMockForAbstractClass(IAuthSystemInPackageContext::class);
         $requiredPermissions = ['abc' => Permission::named('abc')];
 
         $table      = $this->getMockForAbstractClass(ITableDisplay::class);
@@ -54,7 +55,7 @@ class TableWidgetTest extends CmsTestCase
 
     public function testNewWithoutCriteria()
     {
-        $authSystem          = $this->getMockForAbstractClass(IAuthSystem::class);
+        $authSystem          = $this->getMockForAbstractClass(IAuthSystemInPackageContext::class);
 
         $table      = $this->getMockForAbstractClass(ITableDisplay::class);
         $dataSource = $this->getMockForAbstractClass(ITableDataSource::class);

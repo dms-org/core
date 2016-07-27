@@ -3,6 +3,7 @@
 namespace Dms\Core\Common\Crud\Action\Crud;
 
 use Dms\Core\Auth\IAuthSystem;
+use Dms\Core\Auth\IAuthSystemInPackageContext;
 use Dms\Core\Auth\IPermission;
 use Dms\Core\Auth\Permission;
 use Dms\Core\Common\Crud\Definition\Form\FinalizedCrudFormDefinition;
@@ -35,7 +36,7 @@ class CreateAction extends SelfHandlingParameterizedAction
      */
     public function __construct(
         IMutableObjectSet $dataSource,
-        IAuthSystem $auth,
+        IAuthSystemInPackageContext $auth,
         FinalizedCrudFormDefinition $form
     )
     {

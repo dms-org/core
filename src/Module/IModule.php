@@ -26,16 +26,6 @@ interface IModule extends IMetadataProvider
     public function getPackageName();
 
     /**
-     * Sets the package name
-     *
-     * @param string $packageName
-     *
-     * @return void
-     * @throws InvalidOperationException if the package name has already been set.
-     */
-    public function setPackageName(string $packageName);
-
-    /**
      * Gets the name
      *
      * @return string

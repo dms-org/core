@@ -4,8 +4,9 @@ namespace Dms\Core\Tests\Module\Mock;
 
 use Dms\Core\Auth\AdminBannedException;
 use Dms\Core\Auth\AdminForbiddenException;
+use Dms\Core\Auth\AuthSystem;
 use Dms\Core\Auth\IAdmin;
-use Dms\Core\Auth\IAuthSystem;
+use Dms\Core\Auth\IAuthSystemInPackageContext;
 use Dms\Core\Auth\InvalidCredentialsException;
 use Dms\Core\Auth\IPermission;
 use Dms\Core\Auth\NotAuthenticatedException;
@@ -16,7 +17,7 @@ use Dms\Core\Tests\Helpers\Mock\MockingIocContainer;
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>
  */
-class MockAuthSystem implements IAuthSystem
+class MockAuthSystem extends AuthSystem implements IAuthSystemInPackageContext
 {
     protected $iocContainer;
     /**
@@ -34,24 +35,31 @@ class MockAuthSystem implements IAuthSystem
      * @var MockEventDispatcher
      */
     protected $dispatcher;
-    
+
     /**
      * @var \PHPUnit_Framework_TestCase
      */
     protected $test;
 
     /**
+     * @var string|null
+     */
+    protected $packageName;
+
+    /**
      * MockAuthSystem constructor.
      *
      * @param IAdmin                      $mockUser
      * @param \PHPUnit_Framework_TestCase $test
+     * @param string                      $packageName
      */
-    public function __construct(IAdmin $mockUser, \PHPUnit_Framework_TestCase $test)
+    public function __construct(IAdmin $mockUser, \PHPUnit_Framework_TestCase $test, string $packageName = 'test-package')
     {
         $this->mockUser     = $mockUser;
         $this->test         = $test;
         $this->dispatcher   = new MockEventDispatcher();
         $this->iocContainer = new MockingIocContainer($this->test);
+        $this->packageName  = $packageName;
     }
 
 
@@ -176,5 +184,15 @@ class MockAuthSystem implements IAuthSystem
     public function getEventDispatcher() : IEventDispatcher
     {
         return $this->dispatcher;
+    }
+
+    /**
+     * Gets the current package name.
+     *
+     * @return string
+     */
+    public function getPackageName() : string
+    {
+        return $this->packageName;
     }
 }

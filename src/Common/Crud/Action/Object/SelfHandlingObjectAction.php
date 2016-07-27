@@ -3,6 +3,7 @@
 namespace Dms\Core\Common\Crud\Action\Object;
 
 use Dms\Core\Auth\IAuthSystem;
+use Dms\Core\Auth\IAuthSystemInPackageContext;
 use Dms\Core\Auth\IPermission;
 
 /**
@@ -15,7 +16,7 @@ abstract class SelfHandlingObjectAction extends ObjectAction
     /**
      * @inheritDoc
      */
-    public function __construct(IAuthSystem $auth)
+    public function __construct(IAuthSystemInPackageContext $auth)
     {
         $formDtoMapping = $this->formMapping();
 

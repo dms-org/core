@@ -15,6 +15,7 @@ use Dms\Core\Module\ActionNotFoundException;
 use Dms\Core\Module\Definition\FinalizedModuleDefinition;
 use Dms\Core\Module\Definition\ModuleDefinition;
 use Dms\Core\Module\Module;
+use Dms\Core\Module\ModuleLoadingContext;
 use Dms\Core\Util\Debug;
 
 /**

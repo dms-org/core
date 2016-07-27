@@ -2,7 +2,7 @@
 
 namespace Dms\Core\Widget;
 
-use Dms\Core\Auth\IAuthSystem;
+use Dms\Core\Auth\IAuthSystemInPackageContext;
 use Dms\Core\Auth\IPermission;
 use Dms\Core\Module\ModuleItem;
 
@@ -26,12 +26,12 @@ abstract class Widget extends ModuleItem implements IWidget
     /**
      * Widget constructor.
      *
-     * @param string        $name
-     * @param string        $label
-     * @param IAuthSystem   $authSystem
-     * @param IPermission[] $requiredPermissions
+     * @param string                      $name
+     * @param string                      $label
+     * @param IAuthSystemInPackageContext $authSystem
+     * @param IPermission[]               $requiredPermissions
      */
-    public function __construct(string $name, string $label, IAuthSystem $authSystem, array $requiredPermissions)
+    public function __construct(string $name, string $label, IAuthSystemInPackageContext $authSystem, array $requiredPermissions)
     {
         parent::__construct($authSystem, $requiredPermissions);
 

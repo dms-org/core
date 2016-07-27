@@ -2,7 +2,7 @@
 
 namespace Dms\Core\Common\Crud\Definition;
 
-use Dms\Core\Auth\IAuthSystem;
+use Dms\Core\Auth\IAuthSystemInPackageContext;
 use Dms\Core\Common\Crud\Action\Crud\ViewDetailsAction;
 use Dms\Core\Common\Crud\Action\Object\IObjectAction;
 use Dms\Core\Common\Crud\Definition\Action\ObjectActionDefiner;
@@ -63,12 +63,12 @@ class ReadModuleDefinition extends ModuleDefinition
     /**
      * ReadModuleDefinition constructor.
      *
-     * @param IIdentifiableObjectSet $dataSource
-     * @param IAuthSystem            $authSystem
+     * @param IIdentifiableObjectSet      $dataSource
+     * @param IAuthSystemInPackageContext $authSystem
      *
      * @throws InvalidArgumentException
      */
-    public function __construct(IIdentifiableObjectSet $dataSource, IAuthSystem $authSystem)
+    public function __construct(IIdentifiableObjectSet $dataSource, IAuthSystemInPackageContext $authSystem)
     {
         parent::__construct($authSystem);
         $this->dataSource = $dataSource;

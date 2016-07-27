@@ -3,6 +3,7 @@
 namespace Dms\Core\Widget;
 
 use Dms\Core\Auth\IAuthSystem;
+use Dms\Core\Auth\IAuthSystemInPackageContext;
 use Dms\Core\Module\ITableDisplay;
 use Dms\Core\Table\IDataTable;
 use Dms\Core\Table\IRowCriteria;
@@ -27,7 +28,7 @@ class TableWidget extends Widget
     /**
      * @inheritDoc
      */
-    public function __construct(string $name, string $label, IAuthSystem $authSystem, array $requiredPermissions, ITableDisplay $tableDisplay, IRowCriteria $criteria = null)
+    public function __construct(string $name, string $label, IAuthSystemInPackageContext $authSystem, array $requiredPermissions, ITableDisplay $tableDisplay, IRowCriteria $criteria = null)
     {
         parent::__construct($name, $label, $authSystem, $requiredPermissions);
         $this->tableDisplay = $tableDisplay;

@@ -3,6 +3,8 @@
 namespace Dms\Core\Tests\Package;
 
 use Dms\Common\Testing\CmsTestCase;
+use Dms\Core\Auth\IAdmin;
+use Dms\Core\Auth\IAuthSystem;
 use Dms\Core\Auth\Permission;
 use Dms\Core\Exception\InvalidOperationException;
 use Dms\Core\Module\Module;
@@ -10,6 +12,7 @@ use Dms\Core\Module\ModuleNotFoundException;
 use Dms\Core\Tests\Helpers\Mock\MockingIocContainer;
 use Dms\Core\Tests\Module\Fixtures\ModuleWithActions;
 use Dms\Core\Tests\Module\Fixtures\ModuleWithCharts;
+use Dms\Core\Tests\Module\Mock\MockAuthSystem;
 use Dms\Core\Tests\Package\Fixtures\TestPackage;
 
 /**
@@ -25,6 +28,11 @@ class PackageTest extends CmsTestCase
     public function setUp()
     {
         $this->package = new TestPackage(new MockingIocContainer($this));
+
+        $this->package->getIocContainer()->bindValue(
+            IAuthSystem::class,
+            new MockAuthSystem($this->getMockForAbstractClass(IAdmin::class), $this, '')
+        );
     }
 
     public function testNew()
@@ -99,7 +107,7 @@ class PackageTest extends CmsTestCase
         }, ModuleNotFoundException::class);
     }
 
-    public function testLoadPermissionsInModuleNamespace()
+    public function testLoadPermissionsInPackageNamespace()
     {
         /**
          * @see ModuleWithActions Defined permissions in module

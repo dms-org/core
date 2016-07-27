@@ -3,7 +3,7 @@
 namespace Dms\Core\Module;
 
 use Dms\Core\Auth\AdminForbiddenException;
-use Dms\Core\Auth\IAuthSystem;
+use Dms\Core\Auth\IAuthSystemInPackageContext;
 use Dms\Core\Auth\IPermission;
 use Dms\Core\Auth\Permission;
 use Dms\Core\Exception\InvalidArgumentException;
@@ -29,7 +29,7 @@ abstract class ModuleItem implements IModuleItem
     protected $packageName;
 
     /**
-     * @var IAuthSystem
+     * @var IAuthSystemInPackageContext
      */
     protected $auth;
 
@@ -41,10 +41,10 @@ abstract class ModuleItem implements IModuleItem
     /**
      * ModuleItem constructor.
      *
-     * @param IAuthSystem   $auth
-     * @param IPermission[] $requiredPermissions
+     * @param IAuthSystemInPackageContext $auth
+     * @param IPermission[]               $requiredPermissions
      */
-    public function __construct(IAuthSystem $auth, array $requiredPermissions)
+    public function __construct(IAuthSystemInPackageContext $auth, array $requiredPermissions)
     {
         InvalidArgumentException::verifyAllInstanceOf(__METHOD__, 'requiredPermissions', $requiredPermissions, IPermission::class);
 

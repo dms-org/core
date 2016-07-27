@@ -2,6 +2,7 @@
 
 namespace Dms\Core\Tests\Helpers\Mock;
 
+use Dms\Core\Auth\IAuthSystem;
 use Dms\Core\Exception\NotImplementedException;
 use Dms\Core\Ioc\IIocContainer;
 use Interop\Container\ContainerInterface;
@@ -104,7 +105,7 @@ class MockingIocContainer implements IIocContainer
 
     public function bindValue(string $abstract, $concrete)
     {
-        throw NotImplementedException::method(__METHOD__);
+        $this->bindings[$abstract] = $concrete;
     }
 
     public function bindCallback(string $scope, string $abstract, callable $factory)
@@ -114,6 +115,10 @@ class MockingIocContainer implements IIocContainer
 
     public function bindForCallback(string $abstract, $concrete, callable $callback)
     {
-        return $callback();
+        $this->bindings[$abstract] = $concrete;
+        $result =  $callback();
+        unset($this->bindings[$abstract]);
+
+        return $result;
     }
 }

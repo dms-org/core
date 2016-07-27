@@ -3,6 +3,7 @@
 namespace Dms\Core\Module\Action;
 
 use Dms\Core\Auth\IAuthSystem;
+use Dms\Core\Auth\IAuthSystemInPackageContext;
 use Dms\Core\Auth\IPermission;
 use Dms\Core\Form;
 use Dms\Core\Module\Handler\CustomParameterizedActionHandler;
@@ -20,7 +21,7 @@ abstract class SelfHandlingParameterizedAction extends ParameterizedAction
      * @inheritDoc
      */
     public function __construct(
-            IAuthSystem $auth
+        IAuthSystemInPackageContext $auth
     ) {
         $formDtoMapping = $this->formMapping();
 

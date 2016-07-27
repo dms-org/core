@@ -2,7 +2,7 @@
 
 namespace Dms\Core\Module\Action;
 
-use Dms\Core\Auth\IAuthSystem;
+use Dms\Core\Auth\IAuthSystemInPackageContext;
 use Dms\Core\Auth\IPermission;
 use Dms\Core\Form;
 use Dms\Core\Module\IAction;
@@ -34,12 +34,12 @@ abstract class Action extends ModuleItem implements IAction
     /**
      * Action constructor.
      *
-     * @param string         $name
-     * @param IAuthSystem    $auth
-     * @param IPermission[]  $requiredPermissions
-     * @param IActionHandler $handler
+     * @param string                      $name
+     * @param IAuthSystemInPackageContext $auth
+     * @param IPermission[]               $requiredPermissions
+     * @param IActionHandler              $handler
      */
-    public function __construct(string $name, IAuthSystem $auth, array $requiredPermissions, IActionHandler $handler)
+    public function __construct(string $name, IAuthSystemInPackageContext $auth, array $requiredPermissions, IActionHandler $handler)
     {
         parent::__construct($auth, $requiredPermissions);
 

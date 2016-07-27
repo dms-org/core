@@ -3,12 +3,14 @@
 namespace Dms\Core\Tests\Cms;
 
 use Dms\Common\Testing\CmsTestCase;
+use Dms\Core\Auth\IAdmin;
 use Dms\Core\Auth\IAuthSystem;
 use Dms\Core\Auth\Permission;
 use Dms\Core\Language\ILanguageProvider;
 use Dms\Core\Package\PackageNotFoundException;
 use Dms\Core\Tests\Cms\Fixtures\TestCms;
 use Dms\Core\Tests\Helpers\Mock\MockingIocContainer;
+use Dms\Core\Tests\Module\Mock\MockAuthSystem;
 use Dms\Core\Tests\Package\Fixtures\TestPackage;
 use Psr\Cache\CacheItemPoolInterface;
 
@@ -25,6 +27,11 @@ class CmsTest extends CmsTestCase
     public function setUp()
     {
         $this->cms = new TestCms(new MockingIocContainer($this));
+
+        $this->cms->getIocContainer()->bindValue(
+            IAuthSystem::class,
+            new MockAuthSystem($this->getMockForAbstractClass(IAdmin::class), $this, '')
+        );
     }
 
     public function testGetters()

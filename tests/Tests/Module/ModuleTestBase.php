@@ -6,7 +6,6 @@ use Dms\Common\Testing\CmsTestCase;
 use Dms\Core\Auth\IAdmin;
 use Dms\Core\Auth\IPermission;
 use Dms\Core\Auth\Permission;
-use Dms\Core\Exception\InvalidOperationException;
 use Dms\Core\Module\Definition\ModuleDefinition;
 use Dms\Core\Module\IAction;
 use Dms\Core\Module\Module;
@@ -45,11 +44,9 @@ abstract class ModuleTestBase extends CmsTestCase
 
     public function setUp()
     {
-        $this->authSystem      = new MockAuthSystem($this->getMockForAbstractClass(IAdmin::class), $this);
+        $this->authSystem      = new MockAuthSystem($this->getMockForAbstractClass(IAdmin::class), $this, 'some-package');
         $this->iocContainer    = $this->authSystem->getIocContainer();
         $this->eventDispatcher = $this->authSystem->getEventDispatcher();
-
-        $this->iocContainer->bindings[ModuleLoadingContext::class] = new ModuleLoadingContext('some-package');
 
         $this->module = $this->buildModule($this->authSystem);
     }
@@ -81,15 +78,13 @@ abstract class ModuleTestBase extends CmsTestCase
         $this->assertSame($this->expectedName(), $this->module->getName());
     }
 
-    public function testPermissions($extraNamespace = null)
+    public function testPermissions()
     {
         $expected = $this->expectedPermissions();
 
         foreach ($expected as $key => $permission) {
             $permission = $permission->inNamespace($this->module->getName());
-            if ($extraNamespace) {
-                $permission = $permission->inNamespace($extraNamespace);
-            }
+            $permission = $permission->inNamespace($this->module->getPackageName());
 
             $expected[$key] = $permission;
         }
@@ -102,8 +97,6 @@ abstract class ModuleTestBase extends CmsTestCase
 
     public function testWidgetPermissions()
     {
-        $this->module->setPackageName('some-package');
-
         /** @var IWidget $widget */
         foreach ($this->module->getWidgets() as $widget) {
             $this->authSystem->setIsAuthorized(true);
@@ -147,16 +140,7 @@ abstract class ModuleTestBase extends CmsTestCase
 
     public function testPackageName()
     {
-        $this->assertSame(null, $this->module->getPackageName());
-
-        $this->module->setPackageName('some-package');
-
         $this->assertSame('some-package', $this->module->getPackageName());
-        $this->testPermissions('some-package');
-
-        $this->assertThrows(function () {
-            $this->module->setPackageName('abc');
-        }, InvalidOperationException::class);
 
         /** @var IAction $action */
         foreach ($this->module->getActions() as $action) {

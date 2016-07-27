@@ -3,6 +3,7 @@
 namespace Dms\Core\Common\Crud\Action\Crud;
 
 use Dms\Core\Auth\IAuthSystem;
+use Dms\Core\Auth\IAuthSystemInPackageContext;
 use Dms\Core\Auth\IPermission;
 use Dms\Core\Auth\Permission;
 use Dms\Core\Common\Crud\Action\Object\IObjectActionFormMapping;
@@ -39,7 +40,7 @@ class EditAction extends SelfHandlingObjectAction
      */
     public function __construct(
         IMutableObjectSet $dataSource,
-        IAuthSystem $auth,
+        IAuthSystemInPackageContext $auth,
         FinalizedCrudFormDefinition $form
     )
     {

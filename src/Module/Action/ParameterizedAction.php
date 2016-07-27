@@ -3,6 +3,7 @@
 namespace Dms\Core\Module\Action;
 
 use Dms\Core\Auth\IAuthSystem;
+use Dms\Core\Auth\IAuthSystemInPackageContext;
 use Dms\Core\Exception\TypeMismatchException;
 use Dms\Core\Form;
 use Dms\Core\Form\InvalidFormSubmissionException;
@@ -34,7 +35,7 @@ class ParameterizedAction extends Action implements IParameterizedAction
      */
     public function __construct(
             $name,
-            IAuthSystem $auth,
+            IAuthSystemInPackageContext $auth,
             array $requiredPermissions,
             IStagedFormDtoMapping $formDtoMapping,
             IParameterizedActionHandler $handler

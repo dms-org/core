@@ -3,6 +3,7 @@
 namespace Dms\Core\Common\Crud\Action\Table;
 
 use Dms\Core\Auth\IAuthSystem;
+use Dms\Core\Auth\IAuthSystemInPackageContext;
 use Dms\Core\Auth\IPermission;
 use Dms\Core\Common\Crud\Action\Object\CustomObjectActionHandler;
 use Dms\Core\Common\Crud\Action\Object\Mapping\ArrayObjectActionFormMapping;
@@ -34,7 +35,7 @@ class CallbackReorderAction extends ObjectAction implements IReorderAction
     public function __construct(
         IIdentifiableObjectSet $dataSource,
         string $name,
-        IAuthSystem $auth,
+        IAuthSystemInPackageContext $auth,
         array $requiredPermissions,
         callable $reorderCallback
     )

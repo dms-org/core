@@ -208,7 +208,10 @@ class SimpleCrudModuleTest extends CrudModuleTest
         $this->assertSame(SimpleEntity::class, $action->getObjectType());
         $this->assertSame(null, $action->getReturnTypeClass());
         $this->assertEquals(
-            [Permission::named(IReadModule::VIEW_PERMISSION), Permission::named(ICrudModule::EDIT_PERMISSION)],
+            [
+                Permission::named('some-package.simple-crud-module.' . IReadModule::VIEW_PERMISSION),
+                Permission::named('some-package.simple-crud-module.' . ICrudModule::EDIT_PERMISSION)
+            ],
             array_values($action->getRequiredPermissions())
         );
         $this->assertEquals($this->dataSource->getAll(), $action->getSupportedObjects($this->dataSource->getAll()));

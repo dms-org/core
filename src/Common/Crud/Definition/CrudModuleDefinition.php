@@ -3,6 +3,7 @@
 namespace Dms\Core\Common\Crud\Definition;
 
 use Dms\Core\Auth\IAuthSystem;
+use Dms\Core\Auth\IAuthSystemInPackageContext;
 use Dms\Core\Common\Crud\Action\Crud\CreateAction;
 use Dms\Core\Common\Crud\Action\Crud\EditAction;
 use Dms\Core\Common\Crud\Action\Object\IObjectAction;
@@ -27,7 +28,7 @@ class CrudModuleDefinition extends ReadModuleDefinition
     /**
      * @inheritDoc
      */
-    public function __construct(IMutableObjectSet $dataSource, IAuthSystem $authSystem)
+    public function __construct(IMutableObjectSet $dataSource, IAuthSystemInPackageContext $authSystem)
     {
         parent::__construct($dataSource, $authSystem);
     }

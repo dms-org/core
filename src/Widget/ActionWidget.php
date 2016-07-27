@@ -3,6 +3,7 @@
 namespace Dms\Core\Widget;
 
 use Dms\Core\Auth\IAuthSystem;
+use Dms\Core\Auth\IAuthSystemInPackageContext;
 use Dms\Core\Module\IAction;
 
 /**
@@ -20,7 +21,7 @@ class ActionWidget extends Widget
     /**
      * @inheritDoc
      */
-    public function __construct(string $name, string $label, IAuthSystem $authSystem, array $requiredPermissions, IAction $action)
+    public function __construct(string $name, string $label, IAuthSystemInPackageContext $authSystem, array $requiredPermissions, IAction $action)
     {
         parent::__construct($name, $label, $authSystem, $requiredPermissions);
 

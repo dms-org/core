@@ -4,6 +4,7 @@ namespace Dms\Core\Tests\Widget;
 
 use Dms\Common\Testing\CmsTestCase;
 use Dms\Core\Auth\IAuthSystem;
+use Dms\Core\Auth\IAuthSystemInPackageContext;
 use Dms\Core\Auth\Permission;
 use Dms\Core\Form\IForm;
 use Dms\Core\Widget\FormDataWidget;
@@ -17,7 +18,7 @@ class FormDataWidgetTest extends CmsTestCase
     {
         $form = $this->getMockForAbstractClass(IForm::class);
 
-        $authSystem          = $this->getMockForAbstractClass(IAuthSystem::class);
+        $authSystem          = $this->getMockForAbstractClass(IAuthSystemInPackageContext::class);
         $requiredPermissions = ['abc' => Permission::named('abc')];
 
         $widget = new FormDataWidget('form-widget', 'Data', $authSystem, $requiredPermissions, $form);

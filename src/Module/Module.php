@@ -3,6 +3,7 @@
 namespace Dms\Core\Module;
 
 use Dms\Core\Auth\IAuthSystem;
+use Dms\Core\Auth\IAuthSystemInPackageContext;
 use Dms\Core\Auth\IPermission;
 use Dms\Core\Auth\Permission;
 use Dms\Core\Event\IEventDispatcher;
@@ -25,7 +26,7 @@ abstract class Module implements IModule
     use MetadataTrait;
 
     /**
-     * @var IAuthSystem
+     * @var IAuthSystemInPackageContext
      */
     protected $authSystem;
 
@@ -94,6 +95,13 @@ abstract class Module implements IModule
      */
     public function __construct(IAuthSystem $authSystem)
     {
+        if (!($authSystem instanceof IAuthSystemInPackageContext)) {
+            throw InvalidArgumentException::format(
+                'Invalid auth system supplied to %s: expecting instance of %s, %s given',
+                __METHOD__, IAuthSystemInPackageContext::class, get_class($authSystem)
+            );
+        }
+
         $this->authSystem      = $authSystem;
         $this->eventDispatcher = $authSystem->getEventDispatcher();
 
@@ -102,6 +110,8 @@ abstract class Module implements IModule
         $this->definition = $definition->finalize();
 
         $this->loadFromDefinition($this->definition);
+
+        $this->setPackageName($this->authSystem->getPackageName());
     }
 
     protected function loadNewDefinition() : ModuleDefinition
@@ -175,7 +185,7 @@ abstract class Module implements IModule
     /**
      * @inheritDoc
      */
-    public function setPackageName(string $packageName)
+    protected function setPackageName(string $packageName)
     {
         if ($this->packageName) {
             throw InvalidOperationException::methodCall(__METHOD__, 'package name has already been set');

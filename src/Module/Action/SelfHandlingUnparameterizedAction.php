@@ -2,7 +2,7 @@
 
 namespace Dms\Core\Module\Action;
 
-use Dms\Core\Auth\IAuthSystem;
+use Dms\Core\Auth\IAuthSystemInPackageContext;
 use Dms\Core\Auth\IPermission;
 use Dms\Core\Form;
 use Dms\Core\Module\Handler\CustomUnparameterizedActionHandler;
@@ -19,18 +19,18 @@ abstract class SelfHandlingUnparameterizedAction extends UnparameterizedAction i
      * @inheritDoc
      */
     public function __construct(
-            IAuthSystem $auth
+        IAuthSystemInPackageContext $auth
     ) {
         parent::__construct(
-                $this->name(),
-                $auth,
-                $this->permissions(),
-                new CustomUnparameterizedActionHandler(
-                        function () {
-                            return $this->runHandler();
-                        },
-                        $this->returnType()
-                )
+            $this->name(),
+            $auth,
+            $this->permissions(),
+            new CustomUnparameterizedActionHandler(
+                function () {
+                    return $this->runHandler();
+                },
+                $this->returnType()
+            )
         );
     }
 

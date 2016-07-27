@@ -85,16 +85,12 @@ interface IAuthSystem
     public function verifyAuthorized(array $permissions);
 
     /**
-     * Gets the ioc container used by the auth system.
+     * Gets a wrapper auth system in the package context.
      *
-     * @return IIocContainer
-     */
-    public function getIocContainer() : IIocContainer;
-
-    /**
-     * Gets the event dispatcher used by the auth system.
+     * @param IIocContainer $iocContainer
+     * @param string        $packageName
      *
-     * @return IEventDispatcher
+     * @return IAuthSystemInPackageContext
      */
-    public function getEventDispatcher() : IEventDispatcher;
+    public function inPackageContext(IIocContainer $iocContainer, string $packageName) : IAuthSystemInPackageContext;
 }

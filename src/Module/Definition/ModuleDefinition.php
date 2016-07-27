@@ -3,6 +3,7 @@
 namespace Dms\Core\Module\Definition;
 
 use Dms\Core\Auth\IAuthSystem;
+use Dms\Core\Auth\IAuthSystemInPackageContext;
 use Dms\Core\Auth\IPermission;
 use Dms\Core\Auth\Permission;
 use Dms\Core\Event\IEventDispatcher;
@@ -13,7 +14,6 @@ use Dms\Core\Module\Definition\Widget\WidgetLabelDefiner;
 use Dms\Core\Module\IAction;
 use Dms\Core\Module\IChartDisplay;
 use Dms\Core\Module\ITableDisplay;
-use Dms\Core\Module\ModuleLoadingContext;
 use Dms\Core\Widget\IWidget;
 
 /**
@@ -76,15 +76,12 @@ class ModuleDefinition
     /**
      * ModuleDefinition constructor.
      *
-     * @param IAuthSystem $authSystem
+     * @param IAuthSystemInPackageContext $authSystem
      */
-    public function __construct(IAuthSystem $authSystem)
+    public function __construct(IAuthSystemInPackageContext $authSystem)
     {
-        $this->authSystem = $authSystem;
-        /** @var ModuleLoadingContext|null $loadingContext */
-        $loadingContext    = $authSystem->getIocContainer()->get(ModuleLoadingContext::class);
-        $this->packageName = $loadingContext ? $loadingContext->getPackageName() : null;
-
+        $this->authSystem      = $authSystem;
+        $this->packageName     = $authSystem->getPackageName();
         $this->eventDispatcher = $authSystem->getEventDispatcher();
     }
 

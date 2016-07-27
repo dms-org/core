@@ -3,6 +3,7 @@
 namespace Dms\Core\Module\Action;
 
 use Dms\Core\Auth\IAuthSystem;
+use Dms\Core\Auth\IAuthSystemInPackageContext;
 use Dms\Core\Form;
 use Dms\Core\Module\IActionHandler;
 use Dms\Core\Module\IUnparameterizedAction;
@@ -20,7 +21,7 @@ class UnparameterizedAction extends Action implements IUnparameterizedAction
      */
     public function __construct(
             $name,
-            IAuthSystem $auth,
+            IAuthSystemInPackageContext $auth,
             array $requiredPermissions,
             IUnparameterizedActionHandler $handler
     ) {

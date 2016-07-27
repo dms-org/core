@@ -4,6 +4,7 @@ namespace Dms\Core\Tests\Widget;
 
 use Dms\Common\Testing\CmsTestCase;
 use Dms\Core\Auth\IAuthSystem;
+use Dms\Core\Auth\IAuthSystemInPackageContext;
 use Dms\Core\Auth\Permission;
 use Dms\Core\Module\IChartDisplay;
 use Dms\Core\Table\Chart\IChartCriteria;
@@ -18,7 +19,7 @@ class ChartWidgetTest extends CmsTestCase
 {
     public function testNewWithCriteria()
     {
-        $authSystem          = $this->getMockForAbstractClass(IAuthSystem::class);
+        $authSystem          = $this->getMockForAbstractClass(IAuthSystemInPackageContext::class);
         $requiredPermissions = ['abc' => Permission::named('abc')];
 
         $chart      = $this->getMockForAbstractClass(IChartDisplay::class);
@@ -54,7 +55,7 @@ class ChartWidgetTest extends CmsTestCase
 
     public function testNewWithoutCriteria()
     {
-        $authSystem          = $this->getMockForAbstractClass(IAuthSystem::class);
+        $authSystem          = $this->getMockForAbstractClass(IAuthSystemInPackageContext::class);
 
         /** @var IChartDisplay $chart */
         $chart      = $this->getMockForAbstractClass(IChartDisplay::class);

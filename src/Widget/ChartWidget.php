@@ -2,7 +2,7 @@
 
 namespace Dms\Core\Widget;
 
-use Dms\Core\Auth\IAuthSystem;
+use Dms\Core\Auth\IAuthSystemInPackageContext;
 use Dms\Core\Module\IChartDisplay;
 use Dms\Core\Table\Chart\IChartCriteria;
 use Dms\Core\Table\Chart\IChartDataTable;
@@ -27,8 +27,14 @@ class ChartWidget extends Widget
     /**
      * @inheritDoc
      */
-    public function __construct(string $name, string $label, IAuthSystem $authSystem, array $requiredPermissions, IChartDisplay $chartDisplay, IChartCriteria $criteria = null)
-    {
+    public function __construct(
+        string $name,
+        string $label,
+        IAuthSystemInPackageContext $authSystem,
+        array $requiredPermissions,
+        IChartDisplay $chartDisplay,
+        IChartCriteria $criteria = null
+    ) {
         parent::__construct($name, $label, $authSystem, $requiredPermissions);
         $this->chartDisplay = $chartDisplay;
         $this->criteria     = $criteria;
