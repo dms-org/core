@@ -5,6 +5,7 @@ namespace Dms\Core\Module;
 use Dms\Core\Auth\IAuthSystem;
 use Dms\Core\Auth\IPermission;
 use Dms\Core\Auth\Permission;
+use Dms\Core\Event\IEventDispatcher;
 use Dms\Core\Exception\InvalidArgumentException;
 use Dms\Core\Exception\InvalidOperationException;
 use Dms\Core\Form;
@@ -27,6 +28,11 @@ abstract class Module implements IModule
      * @var IAuthSystem
      */
     protected $authSystem;
+
+    /**
+     * @var IEventDispatcher
+     */
+    protected $eventDispatcher;
 
     /**
      * @var string
@@ -88,19 +94,19 @@ abstract class Module implements IModule
      */
     public function __construct(IAuthSystem $authSystem)
     {
-        $this->authSystem = $authSystem;
+        $this->authSystem      = $authSystem;
+        $this->eventDispatcher = $authSystem->getEventDispatcher();
 
-        $definition         = new ModuleDefinition($authSystem);
-        $overrideDefinition = $this->define($definition);
-
-        if ($overrideDefinition) {
-            $this->definition = $overrideDefinition;
-        } else {
-
-            $this->definition = $definition->finalize();
-        }
+        $definition = $this->loadNewDefinition();
+        $this->define($definition);
+        $this->definition = $definition->finalize();
 
         $this->loadFromDefinition($this->definition);
+    }
+
+    protected function loadNewDefinition() : ModuleDefinition
+    {
+        return new ModuleDefinition($this->authSystem);
     }
 
     protected function loadFromDefinition(FinalizedModuleDefinition $definition)

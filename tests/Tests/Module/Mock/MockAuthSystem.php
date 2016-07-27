@@ -2,19 +2,23 @@
 
 namespace Dms\Core\Tests\Module\Mock;
 
+use Dms\Core\Auth\AdminBannedException;
+use Dms\Core\Auth\AdminForbiddenException;
+use Dms\Core\Auth\IAdmin;
 use Dms\Core\Auth\IAuthSystem;
 use Dms\Core\Auth\InvalidCredentialsException;
 use Dms\Core\Auth\IPermission;
-use Dms\Core\Auth\IAdmin;
-use Dms\Core\Auth\AdminBannedException;
-use Dms\Core\Auth\AdminForbiddenException;
 use Dms\Core\Auth\NotAuthenticatedException;
+use Dms\Core\Event\IEventDispatcher;
+use Dms\Core\Ioc\IIocContainer;
+use Dms\Core\Tests\Helpers\Mock\MockingIocContainer;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>
  */
 class MockAuthSystem implements IAuthSystem
 {
+    protected $iocContainer;
     /**
      * @var IAdmin
      */
@@ -25,14 +29,29 @@ class MockAuthSystem implements IAuthSystem
      */
     protected $authorized = true;
 
+
+    /**
+     * @var MockEventDispatcher
+     */
+    protected $dispatcher;
+    
+    /**
+     * @var \PHPUnit_Framework_TestCase
+     */
+    protected $test;
+
     /**
      * MockAuthSystem constructor.
      *
-     * @param IAdmin $mockUser
+     * @param IAdmin                      $mockUser
+     * @param \PHPUnit_Framework_TestCase $test
      */
-    public function __construct(IAdmin $mockUser)
+    public function __construct(IAdmin $mockUser, \PHPUnit_Framework_TestCase $test)
     {
-        $this->mockUser = $mockUser;
+        $this->mockUser     = $mockUser;
+        $this->test         = $test;
+        $this->dispatcher   = new MockEventDispatcher();
+        $this->iocContainer = new MockingIocContainer($this->test);
     }
 
 
@@ -139,5 +158,23 @@ class MockAuthSystem implements IAuthSystem
         if (!$this->isAuthorized($permissions)) {
             throw new AdminForbiddenException($this->mockUser, $permissions);
         }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getIocContainer() : IIocContainer
+    {
+        return $this->iocContainer;
+    }
+
+    /**
+     * Gets the event dispatcher used by the auth system.
+     *
+     * @return IEventDispatcher
+     */
+    public function getEventDispatcher() : IEventDispatcher
+    {
+        return $this->dispatcher;
     }
 }

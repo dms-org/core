@@ -8,6 +8,7 @@ use Dms\Core\Common\Crud\Action\Crud\EditAction;
 use Dms\Core\Common\Crud\Action\Object\IObjectAction;
 use Dms\Core\Common\Crud\Definition\Action\RemoveActionDefiner;
 use Dms\Core\Common\Crud\Definition\Form\CrudFormDefinition;
+use Dms\Core\Common\Crud\UnsupportedActionException;
 use Dms\Core\Model\IMutableObjectSet;
 use Dms\Core\Module\Definition\FinalizedModuleDefinition;
 
@@ -71,9 +72,17 @@ class CrudModuleDefinition extends ReadModuleDefinition
      */
     public function removeAction() : Action\RemoveActionDefiner
     {
-        return new RemoveActionDefiner($this->dataSource, $this->authSystem, $this->requiredPermissions, function (IObjectAction $action) {
-            $this->actions[$action->getName()] = $action;
-        });
+        try {
+            $this->eventDispatcher->emit(
+                $this->packageName . '.' . $this->name . '.define-remove', $this
+            );
+
+            return new RemoveActionDefiner($this->dataSource, $this->authSystem, $this->requiredPermissions, function (IObjectAction $action) {
+                $this->actions[$action->getName()] = $action;
+            });
+        } catch (UnsupportedActionException $e) {
+
+        }
     }
 
     /**
@@ -82,6 +91,10 @@ class CrudModuleDefinition extends ReadModuleDefinition
     public function finalize() : FinalizedModuleDefinition
     {
         $this->verifyCanBeFinalized();
+
+        $this->eventDispatcher->emit(
+            $this->packageName . '.' . $this->name . '.defined', $this
+        );
 
         return new FinalizedCrudModuleDefinition(
             $this->name,

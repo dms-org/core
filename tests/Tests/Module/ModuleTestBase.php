@@ -7,10 +7,14 @@ use Dms\Core\Auth\IAdmin;
 use Dms\Core\Auth\IPermission;
 use Dms\Core\Auth\Permission;
 use Dms\Core\Exception\InvalidOperationException;
+use Dms\Core\Module\Definition\ModuleDefinition;
 use Dms\Core\Module\IAction;
 use Dms\Core\Module\Module;
+use Dms\Core\Module\ModuleLoadingContext;
 use Dms\Core\Table\IDataTable;
+use Dms\Core\Tests\Helpers\Mock\MockingIocContainer;
 use Dms\Core\Tests\Module\Mock\MockAuthSystem;
+use Dms\Core\Tests\Module\Mock\MockEventDispatcher;
 use Dms\Core\Tests\Table\DataSource\DataTableHelper;
 use Dms\Core\Widget\IWidget;
 
@@ -19,6 +23,16 @@ use Dms\Core\Widget\IWidget;
  */
 abstract class ModuleTestBase extends CmsTestCase
 {
+    /**
+     * @var MockingIocContainer
+     */
+    protected $iocContainer;
+
+    /**
+     * @var MockEventDispatcher
+     */
+    protected $eventDispatcher;
+
     /**
      * @var MockAuthSystem
      */
@@ -31,8 +45,13 @@ abstract class ModuleTestBase extends CmsTestCase
 
     public function setUp()
     {
-        $this->authSystem = new MockAuthSystem($this->getMockForAbstractClass(IAdmin::class));
-        $this->module     = $this->buildModule($this->authSystem);
+        $this->authSystem      = new MockAuthSystem($this->getMockForAbstractClass(IAdmin::class), $this);
+        $this->iocContainer    = $this->authSystem->getIocContainer();
+        $this->eventDispatcher = $this->authSystem->getEventDispatcher();
+
+        $this->iocContainer->bindings[ModuleLoadingContext::class] = new ModuleLoadingContext('some-package');
+
+        $this->module = $this->buildModule($this->authSystem);
     }
 
     /**
@@ -152,5 +171,26 @@ abstract class ModuleTestBase extends CmsTestCase
 
         $this->authSystem->setIsAuthorized(false);
         $this->assertSame(false, $this->module->isAuthorized());
+    }
+
+    public function testDefineEventsAreEmitted()
+    {
+        $events = [];
+
+        foreach ($this->eventDispatcher->getEmittedEvents() as $event) {
+            $events[] = array_map(function ($i) {
+                return is_scalar($i) ? $i : get_class($i);
+            }, $event);
+        }
+
+        $this->assertEquals($this->expectedDefineEvents(), $events);
+    }
+
+    protected function expectedDefineEvents()
+    {
+        return [
+            ['some-package.' . $this->module->getName() . '.define', ModuleDefinition::class],
+            ['some-package.' . $this->module->getName() . '.defined', ModuleDefinition::class],
+        ];
     }
 }

@@ -12,6 +12,11 @@ use Interop\Container\ContainerInterface;
 class MockingIocContainer implements IIocContainer
 {
     /**
+     * @var array
+     */
+    public $bindings = [];
+
+    /**
      * @var \PHPUnit_Framework_TestCase
      */
     protected $test;
@@ -36,6 +41,10 @@ class MockingIocContainer implements IIocContainer
      */
     public function get($id)
     {
+        if (isset($this->bindings[$id])) {
+            return $this->bindings[$id];
+        }
+
         if (!class_exists($id) && !interface_exists($id)) {
             throw new \Exception("Class or interface {$id} does not exist");
         }
@@ -105,6 +114,6 @@ class MockingIocContainer implements IIocContainer
 
     public function bindForCallback(string $abstract, $concrete, callable $callback)
     {
-        throw NotImplementedException::method(__METHOD__);
+        return $callback();
     }
 }

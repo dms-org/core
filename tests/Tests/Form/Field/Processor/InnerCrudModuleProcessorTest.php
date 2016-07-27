@@ -27,7 +27,7 @@ class InnerCrudModuleProcessorTest extends FieldProcessorTest
             new PersonModule(Person::collection([
                 new Child(1, 'Jack', 'Baz', 15, TestColour::blue()),
                 new Adult(2, 'Kate', 'Costa', 28, 'Lawyer'),
-            ]), new MockAuthSystem($this->getMockForAbstractClass(IAdmin::class)))
+            ]), new MockAuthSystem($this->getMockForAbstractClass(IAdmin::class), $this))
         );
     }
 
@@ -47,7 +47,7 @@ class InnerCrudModuleProcessorTest extends FieldProcessorTest
         $this->module = new PersonModule(Person::collection([
             new Child(1, 'Jack', 'Baz', 15, TestColour::blue()),
             new Adult(2, 'Kate', 'Costa', 28, 'Lawyer'),
-        ]), new MockAuthSystem($this->getMockForAbstractClass(IAdmin::class)));
+        ]), new MockAuthSystem($this->getMockForAbstractClass(IAdmin::class), $this));
 
         return [
             [null, null],

@@ -8,6 +8,7 @@ use Dms\Core\Exception\InvalidOperationException;
 use Dms\Core\Exception\TypeMismatchException;
 use Dms\Core\Form\InvalidFormSubmissionException;
 use Dms\Core\Model\Object\ArrayDataObject;
+use Dms\Core\Model\Type\Builder\Type;
 use Dms\Core\Module\Action\ParameterizedAction;
 use Dms\Core\Module\Handler\CustomParameterizedActionHandler;
 use Dms\Core\Module\Mapping\ArrayDataObjectFormMapping;
@@ -18,6 +19,7 @@ use Dms\Core\Tests\Form\Object\Fixtures\CreatePageForm;
 use Dms\Core\Tests\Form\Object\Fixtures\SeoForm;
 use Dms\Core\Tests\Form\Object\Stage\Fixtures\ArrayOfIntsStagedForm;
 use Dms\Core\Tests\Module\Handler\Fixtures\ParamDto;
+use Dms\Core\Tests\Module\Mock\MockEventDispatcher;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>
@@ -27,12 +29,12 @@ class ParameterizedActionTest extends ActionTest
     public function testNewAction()
     {
         $action = new ParameterizedAction(
-                'name',
-                $this->mockAuth(),
-                [],
-                $mapping = new FormObjectMapping(ArrayOfInts::withLength(2)),
-                $handler = new CustomParameterizedActionHandler(function (ArrayOfInts $form) {
-                })
+            'name',
+            $this->mockAuth(),
+            [],
+            $mapping = new FormObjectMapping(ArrayOfInts::withLength(2)),
+            $handler = new CustomParameterizedActionHandler(function (ArrayOfInts $form) {
+            })
         );
 
         $this->assertSame('name', $action->getName());
@@ -52,14 +54,14 @@ class ParameterizedActionTest extends ActionTest
         $permission = $this->mockPermissions(['one'])[0];
 
         $action = new ParameterizedAction(
-                'name',
-                $this->mockAuth(),
-                [$permission],
-                new FormObjectMapping(ArrayOfInts::withLength(2)),
-                new CustomParameterizedActionHandler(function (ArrayOfInts $form) use (&$called) {
-                    $this->assertSame([10, 20], $form->data);
-                    $called = true;
-                })
+            'name',
+            $this->mockAuth(),
+            [$permission],
+            new FormObjectMapping(ArrayOfInts::withLength(2)),
+            new CustomParameterizedActionHandler(function (ArrayOfInts $form) use (&$called) {
+                $this->assertSame([10, 20], $form->data);
+                $called = true;
+            })
         );
 
         $this->assertSame(null, $action->getPackageName());
@@ -82,25 +84,25 @@ class ParameterizedActionTest extends ActionTest
         $this->setExpectedException(TypeMismatchException::class);
 
         new ParameterizedAction(
-                'name',
-                $this->mockAuth(),
-                [],
-                new FormObjectMapping(new CreatePageForm()),
-                new CustomParameterizedActionHandler(function (SeoForm $form) {
-                })
+            'name',
+            $this->mockAuth(),
+            [],
+            new FormObjectMapping(new CreatePageForm()),
+            new CustomParameterizedActionHandler(function (SeoForm $form) {
+            })
         );
     }
 
     public function testCorrectDtoTypes()
     {
         $action = new ParameterizedAction(
-                'name',
-                $this->mockAuth(),
-                [],
-                new FormObjectMapping(ArrayOfInts::withLength(2)),
-                new CustomParameterizedActionHandler(function (ArrayOfInts $form) {
+            'name',
+            $this->mockAuth(),
+            [],
+            new FormObjectMapping(ArrayOfInts::withLength(2)),
+            new CustomParameterizedActionHandler(function (ArrayOfInts $form) {
 
-                })
+            })
         );
 
         $this->assertFalse($action->hasReturnType());
@@ -110,13 +112,13 @@ class ParameterizedActionTest extends ActionTest
     public function testCorrectReturnDtoTypes()
     {
         $action = new ParameterizedAction(
-                'name',
-                $this->mockAuth(),
-                [],
-                new FormObjectMapping(ArrayOfInts::withLength(2)),
-                new CustomParameterizedActionHandler(function (ArrayOfInts $form) {
-                    return ParamDto::from('foo');
-                }, ParamDto::class)
+            'name',
+            $this->mockAuth(),
+            [],
+            new FormObjectMapping(ArrayOfInts::withLength(2)),
+            new CustomParameterizedActionHandler(function (ArrayOfInts $form) {
+                return ParamDto::from('foo');
+            }, ParamDto::class)
         );
 
         $this->assertTrue($action->hasReturnType());
@@ -129,14 +131,14 @@ class ParameterizedActionTest extends ActionTest
 
         $called = false;
         $action = new ParameterizedAction(
-                'name',
-                $this->mockAuthWithExpectedVerifyCall($permissions),
-                $permissions,
-                new FormObjectMapping(ArrayOfInts::withLength(2)),
-                new CustomParameterizedActionHandler(function (ArrayOfInts $form) use (&$called) {
-                    $this->assertSame([10, 20], $form->data);
-                    $called = true;
-                })
+            'name',
+            $this->mockAuthWithExpectedVerifyCall($permissions),
+            $permissions,
+            new FormObjectMapping(ArrayOfInts::withLength(2)),
+            new CustomParameterizedActionHandler(function (ArrayOfInts $form) use (&$called) {
+                $this->assertSame([10, 20], $form->data);
+                $called = true;
+            })
         );
 
         $action->run(['data' => ['10', '20']]);
@@ -147,15 +149,15 @@ class ParameterizedActionTest extends ActionTest
     {
         $called = false;
         $action = new ParameterizedAction(
-                'name',
-                $this->mockAuth(),
-                [],
-                new StagedFormObjectMapping(new ArrayOfIntsStagedForm()),
-                new CustomParameterizedActionHandler(function (ArrayOfIntsStagedForm $form) use (&$called) {
-                    $this->assertSame(3, $form->length);
-                    $this->assertSame([10, 20, 30], $form->ints);
-                    $called = true;
-                })
+            'name',
+            $this->mockAuth(),
+            [],
+            new StagedFormObjectMapping(new ArrayOfIntsStagedForm()),
+            new CustomParameterizedActionHandler(function (ArrayOfIntsStagedForm $form) use (&$called) {
+                $this->assertSame(3, $form->length);
+                $this->assertSame([10, 20, 30], $form->ints);
+                $called = true;
+            })
         );
 
         $this->assertSame(2, $action->getStagedForm()->getAmountOfStages());
@@ -174,15 +176,15 @@ class ParameterizedActionTest extends ActionTest
     {
         $called = false;
         $action = new ParameterizedAction(
-                'name',
-                $this->mockAuth(),
-                [],
-                new ArrayDataObjectFormMapping(new ArrayOfIntsStagedForm()),
-                new CustomParameterizedActionHandler(function (ArrayDataObject $form) use (&$called) {
-                    $this->assertSame(3, $form['length']);
-                    $this->assertSame([10, 20, 30], $form['ints']);
-                    $called = true;
-                })
+            'name',
+            $this->mockAuth(),
+            [],
+            new ArrayDataObjectFormMapping(new ArrayOfIntsStagedForm()),
+            new CustomParameterizedActionHandler(function (ArrayDataObject $form) use (&$called) {
+                $this->assertSame(3, $form['length']);
+                $this->assertSame([10, 20, 30], $form['ints']);
+                $called = true;
+            })
         );
 
         $this->assertSame(2, $action->getStagedForm()->getAmountOfStages());
@@ -228,5 +230,31 @@ class ParameterizedActionTest extends ActionTest
         $this->assertThrows(function () use ($action) {
             $action->withSubmittedFirstStage(['length' => '3 ']);
         }, InvalidArgumentException::class);
+    }
+
+    public function testRunAndRanEventsAreEmitted()
+    {
+        $events = new MockEventDispatcher();
+        $auth = $this->mockAuth();
+        $auth->method('getEventDispatcher')->willReturn($events);
+
+        $action = new ParameterizedAction(
+            'action',
+            $auth,
+            [],
+            new FormObjectMapping(ArrayOfInts::withLength(2)),
+            new CustomParameterizedActionHandler(function (ArrayOfInts $form) {
+                return (object)['returned' => 'value'];
+            }, \stdClass::class)
+        );
+
+        $action->setPackageAndModuleName('package', 'module');
+
+        $action->run(['data' => ['1', '1']]);
+
+        $this->assertEquals([
+            ['package.module.action.run', ArrayOfInts::withLength(2)->submit(['data' => ['1', '1']])],
+            ['package.module.action.ran', ArrayOfInts::withLength(2)->submit(['data' => ['1', '1']]), (object)['returned' => 'value']],
+        ], $events->getEmittedEvents());
     }
 }

@@ -2,6 +2,9 @@
 
 namespace Dms\Core\Tests\Common\Crud\Modules;
 
+use Dms\Core\Common\Crud\Definition\CrudModuleDefinition;
+use Dms\Core\Common\Crud\Definition\Form\CrudFormDefinition;
+use Dms\Core\Common\Crud\Definition\Table\SummaryTableDefinition;
 use Dms\Core\Common\Crud\ICrudModule;
 use Dms\Core\Common\Crud\IReadModule;
 use Dms\Core\Model\IEntitySet;
@@ -57,4 +60,27 @@ abstract class CrudModuleTest extends ReadModuleTest
      * @return ICrudModule
      */
     abstract protected function buildCrudModule(IMutableObjectSet $dataSource, MockAuthSystem $authSystem) : ICrudModule;
+
+    protected function expectedDefineEvents()
+    {
+        return [
+            ['some-package.' . $this->module->getName() . '.define', CrudModuleDefinition::class],
+            // Details action
+            ['some-package.' . $this->module->getName() . '.define-form', CrudFormDefinition::class],
+            ['some-package.' . $this->module->getName() . '.defined-form', CrudFormDefinition::class],
+            // Create action
+            ['some-package.' . $this->module->getName() . '.define-form', CrudFormDefinition::class],
+            ['some-package.' . $this->module->getName() . '.defined-form', CrudFormDefinition::class],
+            // Edit action
+            ['some-package.' . $this->module->getName() . '.define-form', CrudFormDefinition::class],
+            ['some-package.' . $this->module->getName() . '.defined-form', CrudFormDefinition::class],
+            // Remove action
+            ['some-package.' . $this->module->getName() . '.define-remove', CrudModuleDefinition::class],
+            // Summary table
+            ['some-package.' . $this->module->getName() . '.define-summary-table', SummaryTableDefinition::class],
+            ['some-package.' . $this->module->getName() . '.defined-summary-table', SummaryTableDefinition::class],
+            //
+            ['some-package.' . $this->module->getName() . '.defined', CrudModuleDefinition::class],
+        ];
+    }
 }

@@ -5,6 +5,7 @@ namespace Dms\Core\Module\Definition;
 use Dms\Core\Auth\IAuthSystem;
 use Dms\Core\Auth\IPermission;
 use Dms\Core\Auth\Permission;
+use Dms\Core\Event\IEventDispatcher;
 use Dms\Core\Exception\InvalidOperationException;
 use Dms\Core\Module\Definition\Chart\ChartDefiner;
 use Dms\Core\Module\Definition\Table\TableDefiner;
@@ -12,6 +13,7 @@ use Dms\Core\Module\Definition\Widget\WidgetLabelDefiner;
 use Dms\Core\Module\IAction;
 use Dms\Core\Module\IChartDisplay;
 use Dms\Core\Module\ITableDisplay;
+use Dms\Core\Module\ModuleLoadingContext;
 use Dms\Core\Widget\IWidget;
 
 /**
@@ -27,9 +29,19 @@ class ModuleDefinition
     protected $authSystem;
 
     /**
+     * @var IEventDispatcher
+     */
+    protected $eventDispatcher;
+
+    /**
      * @var array
      */
     protected $metadata = [];
+
+    /**
+     * @var string
+     */
+    protected $packageName;
 
     /**
      * @var string
@@ -69,6 +81,11 @@ class ModuleDefinition
     public function __construct(IAuthSystem $authSystem)
     {
         $this->authSystem = $authSystem;
+        /** @var ModuleLoadingContext|null $loadingContext */
+        $loadingContext    = $authSystem->getIocContainer()->get(ModuleLoadingContext::class);
+        $this->packageName = $loadingContext ? $loadingContext->getPackageName() : null;
+
+        $this->eventDispatcher = $authSystem->getEventDispatcher();
     }
 
     /**
@@ -89,6 +106,10 @@ class ModuleDefinition
     public function name(string $name)
     {
         $this->name = $name;
+
+        $this->eventDispatcher->emit(
+            $this->packageName . '.' . $this->name . '.define', $this
+        );
     }
 
     /**
@@ -116,7 +137,6 @@ class ModuleDefinition
             ? $permission
             : Permission::named($permission);
     }
-
 
     /**
      * Requires the supplied permissions to access this module
@@ -206,6 +226,10 @@ class ModuleDefinition
     public function finalize() : FinalizedModuleDefinition
     {
         $this->verifyCanBeFinalized();
+
+        $this->eventDispatcher->emit(
+            $this->packageName . '.' . $this->name . '.defined', $this
+        );
 
         return new FinalizedModuleDefinition(
             $this->name,

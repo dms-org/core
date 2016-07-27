@@ -26,7 +26,7 @@ class ValueObjectCrudModuleFieldTest extends FieldBuilderTestBase
             new SimpleValueObject('abc'),
             new SimpleValueObject('123'),
             new SimpleValueObject('xyz'),
-        ]), new MockAuthSystem($this->getMockForAbstractClass(IAdmin::class)));
+        ]), new MockAuthSystem($this->getMockForAbstractClass(IAdmin::class), $this));
     }
 
     public function field()

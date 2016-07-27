@@ -97,7 +97,17 @@ class ParameterizedAction extends Action implements IParameterizedAction
         /** @var IParameterizedActionHandler $handler */
         $handler = $this->getHandler();
 
-        return $handler->run($dto);
+        $this->auth->getEventDispatcher()->emit(
+            $this->packageName . '.' . $this->moduleName . '.' . $this->getName() . '.run', $dto
+        );
+
+        $result = $handler->run($dto);
+
+        $this->auth->getEventDispatcher()->emit(
+            $this->packageName . '.' . $this->moduleName . '.' . $this->getName() . '.ran', $dto, $result
+        );
+
+        return $result;
     }
 
     /**

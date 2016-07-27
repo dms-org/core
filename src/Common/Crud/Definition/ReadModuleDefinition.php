@@ -144,13 +144,13 @@ class ReadModuleDefinition extends ModuleDefinition
      *
      * If the form mode is not supported {@see CrudFormDefinition::isEditForm},
      * {@see CrudFormDefinition::isCreateForm}, {@see CrudFormDefinition::isDetailsForm},
-     * throw an exception of type {@see UnsupportedActionException}.
+     * throw an exception of type {@see UnsupportedActionException} or call {@see $form->unsupported()}.
      *
      * Example:
      * <code>
      * $module->crudForm(function (CrudFormDefinition $form) {
      *      if ($form->isEditForm()) {
-     *          throw new UnsupportedActionException();
+     *          $form->unsupported();
      *      }
      *      // ...
      * });
@@ -181,7 +181,15 @@ class ReadModuleDefinition extends ModuleDefinition
         $definition = new CrudFormDefinition($this->dataSource, $this->class, $mode);
 
         try {
+            $this->eventDispatcher->emit(
+                $this->packageName . '.' . $this->name . '.define-form', $definition
+            );
+
             $callback($definition);
+
+            $this->eventDispatcher->emit(
+                $this->packageName . '.' . $this->name . '.defined-form', $definition
+            );
         } catch (UnsupportedActionException $e) {
             return null;
         }
@@ -246,7 +254,15 @@ class ReadModuleDefinition extends ModuleDefinition
                 ->to($idField);
         }
 
+        $this->eventDispatcher->emit(
+            $this->packageName . '.' . $this->name . '.define-summary-table', $definition
+        );
+
         $summaryTableDefinitionCallback($definition);
+
+        $this->eventDispatcher->emit(
+            $this->packageName . '.' . $this->name . '.defined-summary-table', $definition
+        );
 
         $this->tables[IReadModule::SUMMARY_TABLE] = $this->summaryTable = $definition->finalize();
     }
@@ -258,6 +274,10 @@ class ReadModuleDefinition extends ModuleDefinition
     public function finalize() : FinalizedModuleDefinition
     {
         $this->verifyCanBeFinalized();
+
+        $this->eventDispatcher->emit(
+            $this->packageName . '.' . $this->name . '.defined', $this
+        );
 
         return new FinalizedReadModuleDefinition(
             $this->name,

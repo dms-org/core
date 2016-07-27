@@ -16,7 +16,6 @@ use Dms\Core\Module\IParameterizedAction;
 use Dms\Core\Persistence\ArrayRepository;
 use Dms\Core\Tests\Common\Crud\Modules\Fixtures\Simple\SimpleCrudModule;
 use Dms\Core\Tests\Common\Crud\Modules\Fixtures\Simple\SimpleEntity;
-use Dms\Core\Tests\Common\Crud\Modules\Fixtures\Simple\SimpleValueObjectCrudModule;
 use Dms\Core\Tests\Module\Mock\MockAuthSystem;
 
 /**

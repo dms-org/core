@@ -7,6 +7,7 @@ use Dms\Core\Exception\InvalidOperationException;
 use Dms\Core\ICms;
 use Dms\Core\Ioc\IIocContainer;
 use Dms\Core\Module\IModule;
+use Dms\Core\Module\ModuleLoadingContext;
 use Dms\Core\Module\ModuleNotFoundException;
 use Dms\Core\Package\Definition\PackageDefinition;
 use Dms\Core\Util\Debug;
@@ -175,7 +176,6 @@ abstract class Package implements IPackage
      */
     final public function loadModule(string $name) : IModule
     {
-
         if (!isset($this->nameModuleClassMap[$name])) {
             throw ModuleNotFoundException::format(
                 'Invalid module name supplied to %s: expecting one of (%s), \'%s\' given',
@@ -217,7 +217,11 @@ abstract class Package implements IPackage
         $this->loadingModules[$name] = true;
 
         /** @var IModule $module */
-        $module = $moduleFactory();
+        $module = $this->container->bindForCallback(
+            ModuleLoadingContext::class,
+            new ModuleLoadingContext($this->name),
+            $moduleFactory
+        );
 
         unset($this->loadingModules[$name]);
 

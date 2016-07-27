@@ -4,6 +4,7 @@ namespace Dms\Core;
 
 use Dms\Core\Auth\IAuthSystem;
 use Dms\Core\Auth\IPermission;
+use Dms\Core\Event\IEventDispatcher;
 use Dms\Core\Ioc\IIocContainer;
 use Dms\Core\Language\ILanguageProvider;
 use Dms\Core\Package\IPackage;
@@ -72,6 +73,13 @@ interface ICms
      * @return CacheItemPoolInterface
      */
     public function getCache() : CacheItemPoolInterface;
+
+    /**
+     * Gets the event dispatcher used within the cms instance.
+     *
+     * @return IEventDispatcher
+     */
+    public function getEventDispatcher() : IEventDispatcher;
 
     /**
      * Gets the inversion of control container used within this cms instance.

@@ -6,6 +6,7 @@ use Dms\Core\Exception\TypeMismatchException;
 use Dms\Core\Module\Action\UnparameterizedAction;
 use Dms\Core\Module\Handler\CustomUnparameterizedActionHandler;
 use Dms\Core\Tests\Module\Handler\Fixtures\ParamDto;
+use Dms\Core\Tests\Module\Mock\MockEventDispatcher;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>
@@ -115,5 +116,31 @@ class UnparameterizedActionTest extends ActionTest
             $return = null;
             $action->run();
         }, TypeMismatchException::class);
+    }
+
+    public function testRunAndRanEventsAreEmitted()
+    {
+        $events = new MockEventDispatcher();
+        $auth = $this->mockAuth();
+        $auth->method('getEventDispatcher')->willReturn($events);
+
+        $return = ParamDto::from('foo');
+        $action = new UnparameterizedAction(
+            'action',
+            $auth,
+            [],
+            new CustomUnparameterizedActionHandler(function () use (&$return) {
+                return (object)['returned' => 'value'];
+            }, \stdClass::class)
+        );
+
+        $action->setPackageAndModuleName('package', 'module');
+
+        $action->run();
+
+        $this->assertEquals([
+            ['package.module.action.run'],
+            ['package.module.action.ran', (object)['returned' => 'value']],
+        ], $events->getEmittedEvents());
     }
 }

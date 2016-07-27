@@ -26,7 +26,7 @@ class EntityCrudModuleFieldTest extends FieldBuilderTestBase
             new SimpleEntity(1, 'abc'),
             new SimpleEntity(2, '123'),
             new SimpleEntity(3, 'xyz'),
-        ]), new MockAuthSystem($this->getMockForAbstractClass(IAdmin::class)));
+        ]), new MockAuthSystem($this->getMockForAbstractClass(IAdmin::class), $this));
     }
 
     public function field()

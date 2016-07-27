@@ -4,8 +4,10 @@ namespace Dms\Core\Tests\Common\Crud\Modules;
 
 use Dms\Core\Auth\IPermission;
 use Dms\Core\Auth\Permission;
-use Dms\Core\Auth\AdminForbiddenException;
 use Dms\Core\Common\Crud\Action\Crud\ViewDetailsAction;
+use Dms\Core\Common\Crud\Definition\Form\CrudFormDefinition;
+use Dms\Core\Common\Crud\Definition\ReadModuleDefinition;
+use Dms\Core\Common\Crud\Definition\Table\SummaryTableDefinition;
 use Dms\Core\Common\Crud\IReadModule;
 use Dms\Core\Model\IEntitySet;
 use Dms\Core\Model\IIdentifiableObjectSet;
@@ -45,8 +47,8 @@ abstract class ReadModuleTest extends ModuleTestBase
     }
 
     /**
-     * @param IIdentifiableObjectSet     $dataSource
-     * @param MockAuthSystem $authSystem
+     * @param IIdentifiableObjectSet $dataSource
+     * @param MockAuthSystem         $authSystem
      *
      * @return IReadModule
      */
@@ -98,5 +100,20 @@ abstract class ReadModuleTest extends ModuleTestBase
         $this->assertThrows(function () {
             $this->module->getObjectAction('non-existent');
         }, ActionNotFoundException::class);
+    }
+
+    protected function expectedDefineEvents()
+    {
+        return [
+            ['some-package.' . $this->module->getName() . '.define', ReadModuleDefinition::class],
+            // Details action
+            ['some-package.' . $this->module->getName() . '.define-form', CrudFormDefinition::class],
+            ['some-package.' . $this->module->getName() . '.defined-form', CrudFormDefinition::class],
+            // Summary table
+            ['some-package.' . $this->module->getName() . '.define-summary-table', SummaryTableDefinition::class],
+            ['some-package.' . $this->module->getName() . '.defined-summary-table', SummaryTableDefinition::class],
+            //
+            ['some-package.' . $this->module->getName() . '.defined', ReadModuleDefinition::class],
+        ];
     }
 }

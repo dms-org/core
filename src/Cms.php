@@ -3,6 +3,7 @@
 namespace Dms\Core;
 
 use Dms\Core\Auth\IAuthSystem;
+use Dms\Core\Event\IEventDispatcher;
 use Dms\Core\Exception\InvalidArgumentException;
 use Dms\Core\Ioc\IIocContainer;
 use Dms\Core\Language\ILanguageProvider;
@@ -39,6 +40,11 @@ abstract class Cms implements ICms
     protected $cache;
 
     /**
+     * @var IEventDispatcher
+     */
+    protected $eventDispatcher;
+
+    /**
      * @var string[]
      */
     protected $namePackageClassMap;
@@ -55,9 +61,10 @@ abstract class Cms implements ICms
      */
     public function __construct(IIocContainer $container)
     {
-        $this->container = $container;
-        $this->lang      = $container->get(ILanguageProvider::class);
-        $this->cache     = $container->get(CacheItemPoolInterface::class);
+        $this->container       = $container;
+        $this->lang            = $container->get(ILanguageProvider::class);
+        $this->cache           = $container->get(CacheItemPoolInterface::class);
+        $this->eventDispatcher = $container->get(IEventDispatcher::class);
 
         $definition = new CmsDefinition();
         $this->define($definition);
@@ -84,9 +91,10 @@ abstract class Cms implements ICms
      */
     protected function bootPackages()
     {
-        foreach ($this->namePackageClassMap as $packageClass) {
+        foreach ($this->namePackageClassMap as $packageName => $packageClass) {
             if (is_callable([$packageClass, 'boot'])) {
                 $packageClass::boot($this);
+                $this->eventDispatcher->emit($packageName . '.boot');
             }
         }
     }
@@ -136,7 +144,9 @@ abstract class Cms implements ICms
         if (!isset($this->loadedPackages[$name])) {
             $packageClass = $this->namePackageClassMap[$name];
 
+            $this->eventDispatcher->emit($name . '.load');
             $this->loadedPackages[$name] = $this->loadPackageFromClass($name, $packageClass);
+            $this->eventDispatcher->emit($name . '.loaded', $this->loadedPackages[$name]);
         }
 
         return $this->loadedPackages[$name];
@@ -209,6 +219,14 @@ abstract class Cms implements ICms
     final public function getCache() : CacheItemPoolInterface
     {
         return $this->cache;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    final public function getEventDispatcher() : IEventDispatcher
+    {
+        return $this->eventDispatcher;
     }
 
     /**

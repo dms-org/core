@@ -54,6 +54,20 @@ abstract class ReadModule extends Module implements IReadModule
         parent::__construct($authSystem);
     }
 
+    protected function loadNewDefinition() : ModuleDefinition
+    {
+        return new ReadModuleDefinition($this->dataSource, $this->authSystem);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    final protected function define(ModuleDefinition $definition)
+    {
+        /** @var ReadModuleDefinition $definition */
+        $this->defineReadModule($definition);
+    }
+
     protected function loadFromDefinition(FinalizedModuleDefinition $definition)
     {
         /** @var FinalizedReadModuleDefinition $definition */
@@ -66,22 +80,6 @@ abstract class ReadModule extends Module implements IReadModule
                 $this->objectActions[$name] = $action;
             }
         }
-    }
-
-    /**
-     * @inheritDoc
-     */
-    final protected function define(ModuleDefinition $module)
-    {
-        $definition = new ReadModuleDefinition($this->dataSource, $this->authSystem);
-
-        $overrideDefinition = $this->defineReadModule($definition);
-
-        if ($overrideDefinition) {
-            return $overrideDefinition;
-        }
-
-        return $definition->finalize();
     }
 
     /**

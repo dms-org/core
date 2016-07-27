@@ -7,6 +7,7 @@ use Dms\Core\Common\Crud\Form\FormWithBinding;
 use Dms\Core\Common\Crud\Form\ObjectForm;
 use Dms\Core\Common\Crud\ICrudModule;
 use Dms\Core\Common\Crud\IReadModule;
+use Dms\Core\Common\Crud\UnsupportedActionException;
 use Dms\Core\Exception\InvalidArgumentException;
 use Dms\Core\Exception\InvalidOperationException;
 use Dms\Core\Exception\InvalidReturnValueException;
@@ -171,6 +172,17 @@ class CrudFormDefinition
     public function isEditForm() : bool
     {
         return $this->mode === self::MODE_EDIT;
+    }
+
+    /**
+     * Marks that the supplied action action is unsupported.
+     *
+     * @return void
+     * @throws UnsupportedActionException
+     */
+    public function unsupported()
+    {
+        throw new UnsupportedActionException();
     }
 
     /**

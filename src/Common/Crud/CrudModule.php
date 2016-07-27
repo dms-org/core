@@ -10,6 +10,7 @@ use Dms\Core\Common\Crud\Definition\ReadModuleDefinition;
 use Dms\Core\Exception\InvalidArgumentException;
 use Dms\Core\Model\IIdentifiableObjectSet;
 use Dms\Core\Model\IMutableObjectSet;
+use Dms\Core\Module\Definition\ModuleDefinition;
 use Dms\Core\Module\IParameterizedAction;
 
 /**
@@ -37,16 +38,18 @@ abstract class CrudModule extends ReadModule implements ICrudModule
         parent::__construct($dataSource, $authSystem);
     }
 
+    protected function loadNewDefinition() : ModuleDefinition
+    {
+        return new CrudModuleDefinition($this->dataSource, $this->authSystem);
+    }
+
     /**
      * @inheritDoc
      */
-    final protected function defineReadModule(ReadModuleDefinition $module)
+    final protected function defineReadModule(ReadModuleDefinition $definition)
     {
-        $definition = new CrudModuleDefinition($this->dataSource, $this->authSystem);
-
+        /** @var CrudModuleDefinition $definition */
         $this->defineCrudModule($definition);
-
-        return $definition->finalize();
     }
 
     /**
@@ -113,7 +116,7 @@ abstract class CrudModule extends ReadModule implements ICrudModule
     /**
      * @inheritDoc
      */
-    final  public function getRemoveAction() : IObjectAction
+    final public function getRemoveAction() : IObjectAction
     {
         if (!$this->hasObjectAction(self::REMOVE_ACTION)) {
             throw UnsupportedActionException::format(

@@ -54,6 +54,16 @@ class UnparameterizedAction extends Action implements IUnparameterizedAction
         /** @var IUnparameterizedActionHandler $handler */
         $handler = $this->getHandler();
 
-        return $handler->run();
+        $this->auth->getEventDispatcher()->emit(
+            $this->packageName . '.' . $this->moduleName . '.' . $this->getName() . '.run'
+        );
+
+        $result = $handler->run();
+
+        $this->auth->getEventDispatcher()->emit(
+            $this->packageName . '.' . $this->moduleName . '.' . $this->getName() . '.ran', $result
+        );
+
+        return $result;
     }
 }

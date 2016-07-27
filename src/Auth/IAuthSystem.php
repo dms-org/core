@@ -2,7 +2,9 @@
 
 namespace Dms\Core\Auth;
 
+use Dms\Core\Event\IEventDispatcher;
 use Dms\Core\Exception;
+use Dms\Core\Ioc\IIocContainer;
 
 /**
  * The authentication system interface.
@@ -81,4 +83,18 @@ interface IAuthSystem
      * @throws AdminBannedException
      */
     public function verifyAuthorized(array $permissions);
+
+    /**
+     * Gets the ioc container used by the auth system.
+     *
+     * @return IIocContainer
+     */
+    public function getIocContainer() : IIocContainer;
+
+    /**
+     * Gets the event dispatcher used by the auth system.
+     *
+     * @return IEventDispatcher
+     */
+    public function getEventDispatcher() : IEventDispatcher;
 }
