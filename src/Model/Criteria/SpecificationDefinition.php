@@ -261,7 +261,10 @@ class SpecificationDefinition extends ObjectCriteriaBase
         $isEntityIdCollection = $expression->getResultingType()->nonNullable()->isSubsetOf(EntityIdCollection::type());
 
         if ($isEntityIdCollection) {
-            $collectionMemberExpression = 'loadAll(' . $collectionMemberExpression . ')';
+            $memberParts                = explode('.', $collectionMemberExpression);
+            $lastPart                   = array_pop($memberParts);
+            $memberParts[]              = 'loadAll(' . $lastPart . ')';
+            $collectionMemberExpression = implode('.', $memberParts);
             $expression                 = $this->memberExpressionParser->parse($this->class, $collectionMemberExpression);
         }
 
