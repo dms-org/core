@@ -64,12 +64,12 @@ class ToManyRelation extends ToManyRelationBase
      * @throws InvalidRelationException
      */
     public function __construct(
-            string $idString,
-            IToManyRelationReference $reference,
-            string $parentForeignKey,
-            IRelationMode $mode,
-            array $orderByColumnNameDirectionMap = [],
-            string $orderPersistColumn = null
+        string $idString,
+        IToManyRelationReference $reference,
+        string $parentForeignKey,
+        IRelationMode $mode,
+        array $orderByColumnNameDirectionMap = [],
+        string $orderPersistColumn = null
     ) {
         parent::__construct($idString, $reference, $mode, self::DEPENDENT_CHILDREN);
         $this->foreignKeyToParent       = $parentForeignKey;
@@ -86,8 +86,8 @@ class ToManyRelation extends ToManyRelationBase
 
             if (!$this->orderPersistColumn) {
                 throw InvalidRelationException::format(
-                        'Invalid order persist column %s does not exist on related table %s',
-                        $orderPersistColumn, $this->relatedTable->getName()
+                    'Invalid order persist column %s does not exist on related table %s',
+                    $orderPersistColumn, $this->relatedTable->getName()
                 );
             }
         }
@@ -99,12 +99,12 @@ class ToManyRelation extends ToManyRelationBase
     public function withReference(IToManyRelationReference $reference)
     {
         return new self(
-                $this->idString,
-                $reference,
-                $this->foreignKeyToParent,
-                $this->mode,
-                $this->orderByColumnNameDirectionMap,
-                $this->orderPersistColumn ? $this->orderPersistColumn->getName() : null
+            $this->idString,
+            $reference,
+            $this->foreignKeyToParent,
+            $this->mode,
+            $this->orderByColumnNameDirectionMap,
+            $this->orderPersistColumn ? $this->orderPersistColumn->getName() : null
         );
     }
 
@@ -112,10 +112,10 @@ class ToManyRelation extends ToManyRelationBase
     {
         if ($map->hasAnyParentsWithPrimaryKeys()) {
             $this->mode->syncInvalidatedRelationsQuery(
-                    $context,
-                    $this->relatedTable,
-                    $this->foreignKeyToParentColumn,
-                    $this->getInvalidatedRelationExpr($map)
+                $context,
+                $this->relatedTable,
+                $this->foreignKeyToParentColumn,
+                $this->getInvalidatedRelationExpr($map)
             );
         }
 
@@ -125,12 +125,12 @@ class ToManyRelation extends ToManyRelationBase
     protected function deleteByParentQuery(PersistenceContext $context, Delete $parentDelete)
     {
         $this->mode->removeRelationsQuery(
-                $context,
-                $this->mapper,
-                $parentDelete,
-                $this->relatedTable,
-                $this->foreignKeyToParentColumn,
-                $parentDelete->getTable()->getPrimaryKeyColumn()
+            $context,
+            $this->mapper,
+            $parentDelete,
+            $this->relatedTable,
+            $this->foreignKeyToParentColumn,
+            $parentDelete->getTable()->getPrimaryKeyColumn()
         );
     }
 
@@ -163,9 +163,9 @@ class ToManyRelation extends ToManyRelationBase
         /** @var Row[][] $rowGroups */
         $rowGroups = [];
         $rows      = $this->reference->syncRelated(
-                $context,
-                array_filter([$this->foreignKeyToParentColumn, $this->orderPersistColumn]),
-                $children
+            $context,
+            array_filter([$this->foreignKeyToParentColumn, $this->orderPersistColumn]),
+            $children
         );
 
         foreach ($childKeyParentMap as $rowKey => $parentKey) {
@@ -207,8 +207,8 @@ class ToManyRelation extends ToManyRelationBase
             // only be known after inserting so the foreign key to itself
             // will have to be updated separately afterwards
             $context->bulkUpdate(new RowSet($this->relatedTable->withColumnsButIgnoringConstraints([
-                    $this->relatedPrimaryKey,
-                    $this->foreignKeyToParentColumn
+                $this->relatedPrimaryKey,
+                $this->foreignKeyToParentColumn,
             ]), $selfReferencingChildRows));
         }
     }
@@ -225,8 +225,8 @@ class ToManyRelation extends ToManyRelationBase
             if ($parent->hasColumn($primaryKey)) {
 
                 $equalsParentForeignKey = Expr::equal(
-                        $this->column($this->foreignKeyToParentColumn),
-                        Expr::idParam($parent->getColumn($primaryKey))
+                    $this->column($this->foreignKeyToParentColumn),
+                    Expr::idParam($parent->getColumn($primaryKey))
                 );
 
                 $childrenIds = [];
@@ -239,8 +239,8 @@ class ToManyRelation extends ToManyRelationBase
 
                 if ($childrenIds) {
                     $expressions[] = Expr::and_(
-                            $equalsParentForeignKey,
-                            Expr::notIn($this->column($this->relatedTable->getPrimaryKeyColumn()), Expr::tuple($childrenIds))
+                        $equalsParentForeignKey,
+                        Expr::notIn($this->column($this->relatedTable->getPrimaryKeyColumn()), Expr::tuple($childrenIds))
                     );
                 } else {
                     $expressions[] = $equalsParentForeignKey;
@@ -256,16 +256,11 @@ class ToManyRelation extends ToManyRelationBase
      */
     public function getRelationSelectFromParentRows(ParentMapBase $map, &$parentIdColumnName = null, &$mapIdColumn = null) : Select
     {
-        $primaryKey = $map->getPrimaryKeyColumn();
-        $parentIds  = [];
-
-        foreach ($map->getAllParents() as $parent) {
-            $parentIds[] = Expr::idParam($parent->getColumn($primaryKey));
-        }
+        $parentIds  = $map->getAllParentPrimaryKeys();
 
         $select = $this->select()
-                ->addRawColumn($this->foreignKeyToParent)
-                ->where(Expr::in($this->column($this->foreignKeyToParentColumn), Expr::tuple($parentIds)));
+            ->addRawColumn($this->foreignKeyToParent)
+            ->where(Expr::in($this->column($this->foreignKeyToParentColumn), Expr::idParamTuple($parentIds)));
 
         $this->addOrderByClausesToSelect($select, $this->relatedTable->getName());
 
@@ -278,11 +273,11 @@ class ToManyRelation extends ToManyRelationBase
      * @inheritDoc
      */
     public function loadFromSelect(
-            LoadingContext $context,
-            ParentChildrenMap $map,
-            Select $select,
-            string $relatedTableAlias,
-            string $parentIdColumnName
+        LoadingContext $context,
+        ParentChildrenMap $map,
+        Select $select,
+        string $relatedTableAlias,
+        string $parentIdColumnName
     ) {
         $primaryKey = $map->getPrimaryKeyColumn();
 
@@ -334,7 +329,7 @@ class ToManyRelation extends ToManyRelationBase
         $relatedTableAlias = $select->generateUniqueAliasFor($this->relatedTable->getName());
 
         $select->join(new Join($joinType, $this->relatedTable, $relatedTableAlias, [
-                $this->getRelationJoinCondition($parentTableAlias, $relatedTableAlias)
+            $this->getRelationJoinCondition($parentTableAlias, $relatedTableAlias),
         ]));
 
         $this->addOrderByClausesToSelect($select, $relatedTableAlias);
@@ -362,8 +357,8 @@ class ToManyRelation extends ToManyRelationBase
     public function getRelationJoinCondition(string $parentTableAlias, string $relatedTableAlias) : \Dms\Core\Persistence\Db\Query\Expression\Expr
     {
         return Expr::equal(
-                Expr::column($parentTableAlias, $this->relatedPrimaryKey),
-                Expr::column($relatedTableAlias, $this->foreignKeyToParentColumn)
+            Expr::column($parentTableAlias, $this->relatedPrimaryKey),
+            Expr::column($relatedTableAlias, $this->foreignKeyToParentColumn)
         );
     }
 }

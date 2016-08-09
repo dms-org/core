@@ -167,12 +167,12 @@ class ManyToOneRelation extends ToOneRelationBase
         $parentIds             = [];
 
         foreach ($map->getAllParents() as $parent) {
-            $parentIds[] = Expr::idParam($parent->getColumn($this->foreignKeyToRelated));
+            $parentIds[] = $parent->getColumn($this->foreignKeyToRelated);
         }
 
         $select = $this->select();
         $select->addRawColumn($relatedPrimaryKeyName);
-        $select->where(Expr::in($this->column($relatedPrimaryKey), Expr::tuple($parentIds)));
+        $select->where(Expr::in($this->column($relatedPrimaryKey), Expr::idParamTuple($parentIds)));
 
         $parentIdColumnName = $relatedPrimaryKeyName;
         $mapIdColumn        = $this->foreignKeyToRelated;

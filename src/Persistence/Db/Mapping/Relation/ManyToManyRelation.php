@@ -261,13 +261,8 @@ class ManyToManyRelation extends ToManyRelationBase
         // SELECT <related>.*, <parent id> FROM <related>
         // INNER JOIN <join table> ON <join table>.<related key> = <related>.<primary key>
         // WHERE <join table>.<parent key> IN <parent ids>
-        $primaryKey = $map->getPrimaryKeyColumn();
         $select     = $this->select();
-        $parentIds  = [];
-
-        foreach ($map->getAllParents() as $parent) {
-            $parentIds[] = Expr::idParam($parent->getColumn($primaryKey));
-        }
+        $parentIds  = $map->getAllParentPrimaryKeys();
 
         $alias = $select->generateUniqueAliasFor($this->joinTable->getName());
         $select->join(Join::inner($this->joinTable, $alias, [
@@ -275,7 +270,7 @@ class ManyToManyRelation extends ToManyRelationBase
         ]));
 
         $parentIdColumn = Expr::column($alias, $this->parentForeignKeyColumn);
-        $select->where(Expr::in($parentIdColumn, Expr::tuple($parentIds)));
+        $select->where(Expr::in($parentIdColumn, Expr::idParamTuple($parentIds)));
         $select->addColumn($this->parentForeignKeyColumn->getName(), $parentIdColumn);
 
         $parentIdColumnName = $parentIdColumn->getName();

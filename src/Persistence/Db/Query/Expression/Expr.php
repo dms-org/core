@@ -84,8 +84,8 @@ abstract class Expr
     {
         if (!$table->hasColumn($columnName)) {
             throw InvalidArgumentException::format(
-                    'Invalid table column name for table \'%s\': expecting one of (%s), \'%s\' given',
-                    $table->getName(), Debug::formatValues($table->getColumnNames()), $columnName
+                'Invalid table column name for table \'%s\': expecting one of (%s), \'%s\' given',
+                $table->getName(), Debug::formatValues($table->getColumnNames()), $columnName
             );
         }
 
@@ -110,6 +110,25 @@ abstract class Expr
     public static function idParam(int $value = null) : Parameter
     {
         return new Parameter(Integer::normal()->nullable(), $value);
+    }
+
+    /**
+     * @param int[] $values
+     *
+     * @return Tuple
+     */
+    public static function idParamTuple(array $values) : Tuple
+    {
+        $type = Integer::normal()->nullable();
+        $uniqueIds = [];
+
+        foreach ($values as $value) {
+            if (!isset($uniqueIds[$value])) {
+                $uniqueIds[$value] = new Parameter($type, $value);
+            }
+        }
+
+        return self::tuple(array_values($uniqueIds));
     }
 
     /**

@@ -177,16 +177,11 @@ class ToOneRelation extends ToOneRelationBase
      */
     public function getRelationSelectFromParentRows(ParentMapBase $map, &$parentIdColumnName = null, &$mapIdColumn = null) : \Dms\Core\Persistence\Db\Query\Select
     {
-        $primaryKey = $map->getPrimaryKeyColumn();
-        $parentIds  = [];
-
-        foreach ($map->getAllParents() as $parent) {
-            $parentIds[] = Expr::idParam($parent->getColumn($primaryKey));
-        }
+        $parentIds  = $map->getAllParentPrimaryKeys();
 
         $select = $this->select();
         $select->addRawColumn($this->foreignKeyToParent);
-        $select->where(Expr::in($this->column($this->foreignKeyColumn), Expr::tuple($parentIds)));
+        $select->where(Expr::in($this->column($this->foreignKeyColumn), Expr::idParamTuple($parentIds)));
 
         $parentIdColumnName = $this->foreignKeyToParent;
 

@@ -226,16 +226,12 @@ class EmbeddedCollectionRelation extends EmbeddedRelation implements ISeparateTo
     protected function getInvalidatedRelationExpr(ParentChildrenMap $map)
     {
         // foreign_key_to_parent IN (<parent keys>)
-        $parentIds = [];
-
-        foreach ($map->getAllParentPrimaryKeys() as $key) {
-            $parentIds[] = Expr::idParam($key);
-        }
+        $parentIds = $map->getAllParentPrimaryKeys();
 
         return $parentIds
                 ? Expr::in(
                         Expr::tableColumn($this->childrenTable, $this->foreignKeyToParent->getName()),
-                        Expr::tuple($parentIds)
+                        Expr::idParamTuple($parentIds)
                 )
                 : Expr::false();
     }
@@ -245,10 +241,7 @@ class EmbeddedCollectionRelation extends EmbeddedRelation implements ISeparateTo
      */
     public function getRelationSelectFromParentRows(ParentMapBase $map, &$parentIdColumnName = null, &$mapIdColumn = null) : \Dms\Core\Persistence\Db\Query\Select
     {
-        $parentIds = [];
-        foreach ($map->getAllParentPrimaryKeys() as $id) {
-            $parentIds[] = Expr::idParam($id);
-        }
+        $parentIds = $map->getAllParentPrimaryKeys();
 
         $foreignKeyName = $this->foreignKeyToParent->getName();
         $select         = Select::from($this->childrenTable);
@@ -258,7 +251,7 @@ class EmbeddedCollectionRelation extends EmbeddedRelation implements ISeparateTo
                         $this->childrenTable->getName(),
                         $this->foreignKeyToParent
                 ),
-                Expr::tuple($parentIds)
+                Expr::idParamTuple($parentIds)
         ));
 
         $parentIdColumnName = $foreignKeyName;
