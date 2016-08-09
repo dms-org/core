@@ -9,6 +9,7 @@ use Dms\Core\Model\ISpecification;
 use Dms\Core\Model\ITypedObjectCollection;
 use Dms\Core\Model\ObjectCollection;
 use Dms\Core\Util\Debug;
+use Dms\Core\Util\Hashing\ValueHasher;
 
 /**
  * The property condition operator enum class.
@@ -106,7 +107,7 @@ final class ConditionOperator
 
                     return $isScalar
                         ? $l === $r
-                        : $l == $r;
+                        : ValueHasher::areEqual($l, $r);
                 };
 
             case ConditionOperator::NOT_EQUALS:
