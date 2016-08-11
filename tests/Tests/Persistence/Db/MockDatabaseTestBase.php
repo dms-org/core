@@ -76,8 +76,8 @@ class MockDatabaseTestBase extends CmsTestCase
         }
 
         foreach ($this->db->getTables() as $table) {
-            if (!isset($tableRowSets[$table->getName()])) {
-                $tableRowSets[$table->getName()] = [];
+            if (!isset($prefixedTableData[$table->getName()])) {
+                $prefixedTableData[$table->getName()] = [];
             }
         }
 
