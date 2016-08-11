@@ -3,6 +3,7 @@
 namespace Dms\Core\Tests\Persistence\Db;
 
 use Dms\Common\Testing\CmsTestCase;
+use Dms\Core\Persistence\Db\Mapping\IOrm;
 use Dms\Core\Tests\Persistence\Db\Mock\MockDatabase;
 
 /**
@@ -72,6 +73,12 @@ class MockDatabaseTestBase extends CmsTestCase
 
         foreach ($tableRowSets as $tableName => $tableData) {
             $prefixedTableData[$namespace . $tableName] = $tableData;
+        }
+
+        foreach ($this->db->getTables() as $table) {
+            if (!isset($tableRowSets[$table->getName()])) {
+                $tableRowSets[$table->getName()] = [];
+            }
         }
 
         // Order does not matter
