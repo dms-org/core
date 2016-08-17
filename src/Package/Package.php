@@ -8,12 +8,10 @@ use Dms\Core\Exception\InvalidOperationException;
 use Dms\Core\ICms;
 use Dms\Core\Ioc\IIocContainer;
 use Dms\Core\Module\IModule;
-use Dms\Core\Module\ModuleLoadingContext;
 use Dms\Core\Module\ModuleNotFoundException;
 use Dms\Core\Package\Definition\PackageDefinition;
 use Dms\Core\Util\Debug;
 use Dms\Core\Util\Metadata\MetadataTrait;
-use Dms\Web\Laravel\Auth\LaravelAuthSystem;
 
 /**
  * The package base class.
@@ -203,11 +201,15 @@ abstract class Package implements IPackage
      */
     private function loadModuleFromClass(string $name, $moduleClass) : IModule
     {
-        $moduleFactory = is_callable($moduleClass)
-            ? $moduleClass
-            : function () use ($moduleClass) {
+        if (is_callable($moduleClass)) {
+            $moduleFactory = function () use ($moduleClass) {
+                return $moduleClass($this);
+            };
+        } else {
+            $moduleFactory = function () use ($moduleClass) {
                 return $this->container->get($moduleClass);
             };
+        }
 
         if (is_string($moduleClass) && !is_subclass_of($moduleClass, IModule::class, true)) {
             throw InvalidArgumentException::format(
