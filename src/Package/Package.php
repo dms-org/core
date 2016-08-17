@@ -202,8 +202,8 @@ abstract class Package implements IPackage
     private function loadModuleFromClass(string $name, $moduleClass) : IModule
     {
         if (is_callable($moduleClass)) {
-            $moduleFactory = function () use ($moduleClass) {
-                return $moduleClass($this);
+            $moduleFactory = function () use ($moduleClass, $name) {
+                return $moduleClass($this, $name);
             };
         } else {
             $moduleFactory = function () use ($moduleClass) {

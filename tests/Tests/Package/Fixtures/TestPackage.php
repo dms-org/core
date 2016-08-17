@@ -37,7 +37,7 @@ class TestPackage extends Package
         $package->modules([
             'test-module-with-actions' => ModuleWithActions::class,
             'test-module-with-charts'  => ModuleWithCharts::class,
-            'test-module-factory'      => function (TestPackage $package) {
+            'test-module-factory'      => function (TestPackage $package, string $moduleName) {
                 return new class($package->getIocContainer()->get(IAuthSystem::class)) extends Module
                 {
                     protected function define(ModuleDefinition $module)
