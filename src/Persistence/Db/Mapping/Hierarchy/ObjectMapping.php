@@ -143,6 +143,10 @@ abstract class ObjectMapping implements IObjectMapping
             $columns[] = $column;
         }
 
+        foreach ($this->definition->getColumnGetterMap() as $column => $callable) {
+            $columns[] = $column;
+        }
+
         foreach ($this->definition->getColumnSetterMap() as $column => $callable) {
             $columns[] = $column;
         }
