@@ -45,7 +45,7 @@ class ColumnMapping extends MemberMapping
     public function getWhereConditionExpr(Select $select, string $tableAlias, string $operator, $value) : \Dms\Core\Persistence\Db\Query\Expression\Expr
     {
         if ($this->phpToDbValueConverter) {
-            $value = call_user_func($this->phpToDbValueConverter);
+            $value = call_user_func($this->phpToDbValueConverter, $value);
         }
 
         return parent::getWhereConditionExpr($select, $tableAlias, $operator, $value);
