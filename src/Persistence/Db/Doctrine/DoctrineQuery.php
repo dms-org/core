@@ -44,13 +44,27 @@ class DoctrineQuery extends Query
      */
     protected function doSetParameter($parameter, $value)
     {
-        $success = $this->statement->bindValue($parameter, $value);
+        $success = $this->statement->bindValue($parameter, $value, $this->inferParamType($value));
 
         if (!$success) {
             throw PersistenceException::format('Could not bind parameter \'%s\'', $parameter);
         }
 
         return $this;
+    }
+
+    /**
+     * @param mixed $value
+     *
+     * @return int
+     */
+    protected function inferParamType($value) : int
+    {
+        if (is_bool($value) || is_int($value)) {
+            return  \PDO::PARAM_INT;
+        }
+
+        return  \PDO::PARAM_STR;
     }
 
     /**
