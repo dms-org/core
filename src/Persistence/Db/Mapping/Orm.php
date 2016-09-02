@@ -70,16 +70,24 @@ abstract class Orm implements IOrm
         $definition         = new OrmDefinition($iocContainer);
         $this->define($definition);
 
-        $definition->finalize(function (array $entityMapperFactories, array $embeddedObjectMapperFactories, array $includedOrms, bool $enableLazyLoading) use (
-                $iocContainer
+        $definition->finalize(function (
+            array $entityMapperFactories,
+            array $embeddedObjectMapperFactories,
+            array $includedOrms,
+            bool $enableLazyLoading
+        ) use (
+            $iocContainer
         ) {
             $this->includedOrms = $includedOrms;
 
             if ($iocContainer) {
-                $iocContainer->bindForCallback(IOrm::class, $this,
-                        function () use ($entityMapperFactories, $embeddedObjectMapperFactories) {
-                            $this->initializeMappers($entityMapperFactories, $embeddedObjectMapperFactories);
-                        });
+                $iocContainer->bindForCallback(
+                    IOrm::class,
+                    $this,
+                    function () use ($entityMapperFactories, $embeddedObjectMapperFactories) {
+                        $this->initializeMappers($entityMapperFactories, $embeddedObjectMapperFactories);
+                    }
+                );
             } else {
                 $this->initializeMappers($entityMapperFactories, $embeddedObjectMapperFactories);
             }
@@ -138,7 +146,11 @@ abstract class Orm implements IOrm
 
         $uniqueTables = [];
         foreach ($tables as $table) {
-            $uniqueTables[spl_object_hash($table)] = $table;
+            if (in_array($table, $uniqueTables)) {
+                continue;
+            }
+
+            $uniqueTables[] = $table;
         }
 
         $this->database = new Database($uniqueTables);
@@ -250,8 +262,8 @@ abstract class Orm implements IOrm
 
         if (!$mapper) {
             throw InvalidArgumentException::format(
-                    'Could not find entity mapper for %s %s',
-                    $entityClass, $tableName ? 'on table ' . $tableName : ''
+                'Could not find entity mapper for %s %s',
+                $entityClass, $tableName ? 'on table ' . $tableName : ''
             );
         }
 
@@ -271,8 +283,8 @@ abstract class Orm implements IOrm
         if ($tableName === null) {
             if (count($mappers) > 1) {
                 throw InvalidArgumentException::format(
-                        'Ambiguous entity mapper reference, %s is mapped to multiple tables: table must be one of (%s), none given',
-                        $entityClass, Debug::formatValues(array_keys($mappers))
+                    'Ambiguous entity mapper reference, %s is mapped to multiple tables: table must be one of (%s), none given',
+                    $entityClass, Debug::formatValues(array_keys($mappers))
                 );
             } elseif ($mappers) {
                 return reset($mappers) ?: null;
@@ -334,8 +346,8 @@ abstract class Orm implements IOrm
         }
 
         throw InvalidArgumentException::format(
-                'Could not find embedded object mapper for %s',
-                $valueObjectClass
+            'Could not find embedded object mapper for %s',
+            $valueObjectClass
         );
     }
 
@@ -382,9 +394,9 @@ abstract class Orm implements IOrm
 
             if (!isset($propertyRelationMap[$valueObjectProperty])) {
                 throw InvalidArgumentException::format(
-                        'Could not load related value object type for property %s::$%s: '
-                        . 'the property must mapped to a relation, expecting one of (%s), \'%s\' given',
-                        $sourceType, $idPropertyName, Debug::formatValues(array_keys($propertyRelationMap)), $valueObjectProperty
+                    'Could not load related value object type for property %s::$%s: '
+                    . 'the property must mapped to a relation, expecting one of (%s), \'%s\' given',
+                    $sourceType, $idPropertyName, Debug::formatValues(array_keys($propertyRelationMap)), $valueObjectProperty
                 );
             }
 
@@ -394,9 +406,9 @@ abstract class Orm implements IOrm
 
         if (!isset($propertyRelationMap[$idPropertyName])) {
             throw InvalidArgumentException::format(
-                    'Could not load related entity type for property %s::$%s: '
-                    . 'the property must mapped to a relation, expecting one of (%s), \'%s\' given',
-                    $entityType, $idPropertyName, Debug::formatValues(array_keys($propertyRelationMap)), $idPropertyName
+                'Could not load related entity type for property %s::$%s: '
+                . 'the property must mapped to a relation, expecting one of (%s), \'%s\' given',
+                $entityType, $idPropertyName, Debug::formatValues(array_keys($propertyRelationMap)), $idPropertyName
             );
         }
 
