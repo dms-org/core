@@ -76,7 +76,7 @@ class ArrayOfType extends FieldType
         if (count($this->elementField->getProcessors()) > 0) {
             $processors[] = new ArrayAllProcessor(
                 $this->elementField,
-                $this->getElementType()->getProcessedPhpType(),
+                $this->getElementField()->getProcessedType(),
                 $this->get(self::ATTR_INITIAL_VALUE)
             );
         }
