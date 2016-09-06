@@ -5,11 +5,10 @@ namespace Dms\Core\Table\DataSource;
 use Dms\Core\Exception\InvalidArgumentException;
 use Dms\Core\Model\Criteria\IMemberExpressionParser;
 use Dms\Core\Model\IObjectSet;
-use Dms\Core\Model\IObjectSetWithLoadCriteriaSupport;
 use Dms\Core\Model\ITypedObject;
 use Dms\Core\Model\Object\TypedObject;
 use Dms\Core\Table\Data\DataTable;
-use Dms\Core\Table\Data\TableRow;
+use Dms\Core\Table\Data\Object\TableRowWithObject;
 use Dms\Core\Table\Data\TableSection;
 use Dms\Core\Table\DataSource\Criteria\RowCriteriaMapper;
 use Dms\Core\Table\DataSource\Definition\FinalizedObjectTableDefinition;
@@ -17,7 +16,6 @@ use Dms\Core\Table\IColumn;
 use Dms\Core\Table\IColumnComponent;
 use Dms\Core\Table\IDataTable;
 use Dms\Core\Table\IRowCriteria;
-use Dms\Core\Table\ITableRow;
 use Dms\Core\Table\ITableSection;
 
 /**
@@ -126,20 +124,7 @@ class ObjectTableDataSource extends TableDataSource
 
         if ($criteria) {
             $mappedCriteria = $this->criteriaMapper->mapCriteria($criteria);
-
-            if ($criteria->getWhetherLoadsAllColumns()) {
-                $objects = $objectSource->matching($mappedCriteria);
-            } else {
-                $supportsPartialLoad = $objectSource instanceof IObjectSetWithLoadCriteriaSupport;
-                $definition          = $this->definition->forColumns($criteria->getColumnNamesToLoad());
-
-                if ($definition->requiresObjectInstanceForMapping() || !$supportsPartialLoad) {
-                    $objects = $objectSource->matching($mappedCriteria);
-                } else {
-                    /** @var IObjectSetWithLoadCriteriaSupport $objectSource */
-                    $objectProperties = $objectSource->loadMatching($mappedCriteria);
-                }
-            }
+            $objects        = $objectSource->matching($mappedCriteria);
         } else {
             $objects = $objectSource->getAll();
         }
@@ -148,7 +133,7 @@ class ObjectTableDataSource extends TableDataSource
             $objectProperties = $this->loadObjectProperties($objects);
         }
 
-        return $this->mapObjectsToRows($definition, $objectProperties, $objects);
+        return $this->mapObjectsToRows($definition, $objectProperties, $objects, $criteria);
     }
 
     /**
@@ -162,6 +147,7 @@ class ObjectTableDataSource extends TableDataSource
         $objectProperties = $this->loadObjectProperties($objects);
 
         $rows = $this->mapObjectsToRows($this->definition, $objectProperties, $objects);
+
         return new DataTable($this->structure, [new TableSection($this->structure, null, $rows)]);
     }
 
@@ -189,23 +175,45 @@ class ObjectTableDataSource extends TableDataSource
                 }
             }
         }
+
         return $objectProperties;
     }
 
     /**
      * @param FinalizedObjectTableDefinition $definition
      * @param array[]                        $objectProperties
-     * @param ITypedObject[]|null            $objects
+     * @param ITypedObject[]                 $objects
+     * @param IRowCriteria|null              $criteria
      *
-     * @return ITableRow[]
+     * @return array|\Dms\Core\Table\ITableRow[]
      */
-    private function mapObjectsToRows(FinalizedObjectTableDefinition $definition, array $objectProperties, array $objects = null) : array
+    private function mapObjectsToRows(
+        FinalizedObjectTableDefinition $definition,
+        array $objectProperties,
+        array $objects,
+        IRowCriteria $criteria = null
+    ) : array
     {
         $propertyComponentIdMap = $definition->getPropertyComponentIdMap();
         $indexComponentIdMap    = $definition->getIndexComponentIdMap();
         $componentIdCallableMap = $definition->getComponentIdCallableMap();
         $customCallables        = $definition->getCustomCallableMappers();
-        $rows                   = [];
+
+        if ($criteria) {
+            $componentIdsToLoad = [];
+
+            foreach ($criteria->getColumnsToLoad() as $column) {
+                foreach ($column->getComponents() as $component) {
+                    $componentIdsToLoad[] = $column->getComponentId($component->getName());
+                }
+            }
+            
+            $propertyComponentIdMap = array_intersect($propertyComponentIdMap, $componentIdsToLoad);
+            $indexComponentIdMap    = array_intersect($indexComponentIdMap, $componentIdsToLoad);
+            $componentIdCallableMap = array_intersect_key($componentIdCallableMap, array_flip($componentIdsToLoad));
+        }
+
+        $rows = [];
 
         $componentIdMap = [];
 
@@ -231,20 +239,18 @@ class ObjectTableDataSource extends TableDataSource
                 $row[$columnName][$componentName] = $key;
             }
 
-            if ($objects) {
-                $object = $objects[$key];
+            $object = $objects[$key];
 
-                foreach ($componentIdCallableMap as $componentId => $callable) {
-                    list($columnName, $componentName) = $componentIdMap[$componentId];
-                    $row[$columnName][$componentName] = $callable($object);
-                }
-
-                foreach ($customCallables as $customCallable) {
-                    $customCallable($row, $object);
-                }
+            foreach ($componentIdCallableMap as $componentId => $callable) {
+                list($columnName, $componentName) = $componentIdMap[$componentId];
+                $row[$columnName][$componentName] = $callable($object);
             }
 
-            $rows[] = new TableRow($row);
+            foreach ($customCallables as $customCallable) {
+                $customCallable($row, $object);
+            }
+
+            $rows[] = new TableRowWithObject($row, $object);
         }
 
         return $rows;
