@@ -83,7 +83,7 @@ class ObjectAction extends ParameterizedAction implements IObjectAction
             $this->objectValidators = [];
 
             foreach ($processors as $processor) {
-                if ($processor instanceof FieldValidator && $processor->getInputType()->isSubsetOf($objectType->nullable())) {
+                if ($processor instanceof FieldValidator && $processor->getInputType()->isSupersetOf($objectType)) {
                     $this->objectValidators[] = $processor;
                 }
             }
