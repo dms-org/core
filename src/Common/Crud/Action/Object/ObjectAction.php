@@ -2,7 +2,6 @@
 
 namespace Dms\Core\Common\Crud\Action\Object;
 
-use Dms\Core\Auth\IAuthSystem;
 use Dms\Core\Auth\IAuthSystemInPackageContext;
 use Dms\Core\Exception\TypeMismatchException;
 use Dms\Core\Form\Field\Processor\FieldValidator;
@@ -27,19 +26,24 @@ class ObjectAction extends ParameterizedAction implements IObjectAction
     protected $formDtoMapping;
 
     /**
+     * @var FieldValidator[]
+     */
+    protected $objectValidators;
+
+    /**
      * @inheritDoc
      */
     public function __construct(
-            $name,
-            IAuthSystemInPackageContext $auth,
-            array $requiredPermissions,
-            IObjectActionFormMapping $formDtoMapping,
-            IObjectActionHandler $handler
+        $name,
+        IAuthSystemInPackageContext $auth,
+        array $requiredPermissions,
+        IObjectActionFormMapping $formDtoMapping,
+        IObjectActionHandler $handler
     ) {
         if ($formDtoMapping->getDataDtoType() !== $handler->getDataDtoType()) {
             throw TypeMismatchException::format(
-                    'Cannot construct %s: data dto type %s does not match handler data dto type %s',
-                    __METHOD__, $formDtoMapping->getDtoType() ?: 'null', $handler->getParameterTypeClass() ?: 'null'
+                'Cannot construct %s: data dto type %s does not match handler data dto type %s',
+                __METHOD__, $formDtoMapping->getDtoType() ?: 'null', $handler->getParameterTypeClass() ?: 'null'
             );
         }
 
@@ -63,26 +67,40 @@ class ObjectAction extends ParameterizedAction implements IObjectAction
     }
 
     /**
+     * @return FieldValidator[]
+     */
+    protected function getObjectValidators() : array
+    {
+        if ($this->objectValidators === null) {
+            $objectType = Type::object($this->handler->getObjectType());
+
+            $processors = $this->formDtoMapping
+                ->getObjectForm()
+                ->getField(IObjectAction::OBJECT_FIELD_NAME)
+                ->getProcessors();
+
+            /** @var FieldValidator[] $objectValidators */
+            $this->objectValidators = [];
+
+            foreach ($processors as $processor) {
+                if ($processor instanceof FieldValidator && $processor->getInputType()->isSubsetOf($objectType->nullable())) {
+                    $this->objectValidators[] = $processor;
+                }
+            }
+        }
+
+        return $this->objectValidators;
+    }
+
+    /**
      * @inheritDoc
      */
     public function getSupportedObjects(array $objects) : array
     {
         TypeMismatchException::verifyAllInstanceOf(__METHOD__, 'objects', $objects, $this->handler->getObjectType());
-        $objectType = Type::object($this->handler->getObjectType());
-
-        $processors = $this->formDtoMapping
-                ->getObjectForm()
-                ->getField(IObjectAction::OBJECT_FIELD_NAME)
-                ->getProcessors();
 
         /** @var FieldValidator[] $objectValidators */
-        $objectValidators = [];
-
-        foreach ($processors as $processor) {
-            if ($processor instanceof FieldValidator && $processor->getInputType()->isSubsetOf($objectType->nullable())) {
-                $objectValidators[] = $processor;
-            }
-        }
+        $objectValidators = $this->getObjectValidators();
 
         $validObjects = [];
         foreach ($objects as $key => $object) {
@@ -106,7 +124,20 @@ class ObjectAction extends ParameterizedAction implements IObjectAction
      */
     public function isSupported($object) : bool
     {
-        return $this->getSupportedObjects([$object]) === [$object];
+        /** @var FieldValidator[] $objectValidators */
+        $objectValidators = $this->getObjectValidators();
+
+        $messages = [];
+
+        foreach ($objectValidators as $validator) {
+            $validator->process($object, $messages);
+
+            if (!empty($messages)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**
@@ -115,7 +146,7 @@ class ObjectAction extends ParameterizedAction implements IObjectAction
     public function runOnObject($object, array $data)
     {
         return $this
-                ->withSubmittedFirstStage([self::OBJECT_FIELD_NAME => $object])
-                ->run($data);
+            ->withSubmittedFirstStage([self::OBJECT_FIELD_NAME => $object])
+            ->run($data);
     }
 }
