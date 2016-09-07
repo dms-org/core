@@ -3,7 +3,6 @@
 namespace Dms\Core\Model\Object;
 
 use Dms\Core\Exception;
-use Dms\Core\Model\IImmutableTypedObject;
 use Dms\Core\Model\IValueObject;
 use Dms\Core\Model\Type\Builder\Type;
 use Dms\Core\Model\Type\CollectionType;
@@ -16,7 +15,7 @@ use Dms\Core\Util\Hashing\IHashable;
  *
  * @author Elliot Levin <elliotlevin@hotmail.com>
  */
-abstract class ValueObject extends TypedObject implements IValueObject, IHashable, IImmutableTypedObject
+abstract class MutableValueObject extends TypedObject implements IValueObject, IHashable
 {
     /**
      * Returns a value object collection with the element type

@@ -5,6 +5,7 @@ namespace Dms\Core\Model\Object;
 use Dms\Core\Exception\InvalidOperationException;
 use Dms\Core\Model\Criteria\Criteria;
 use Dms\Core\Model\Criteria\CustomSpecification;
+use Dms\Core\Model\IImmutableTypedObject;
 use Dms\Core\Model\ISpecification;
 use Dms\Core\Model\ITypedObject;
 use Dms\Core\Model\ObjectCollection;
@@ -65,7 +66,7 @@ abstract class TypedObject implements ITypedObject, \Serializable
                 $definitionInstance = $reflection->newInstanceWithoutConstructor();
             }
 
-            $definition         = new ClassDefinition($definitionInstance, $reflection, __CLASS__);
+            $definition         = new ClassDefinition($definitionInstance, $reflection, __CLASS__, $definitionInstance instanceof IImmutableTypedObject);
             $overrideDefinition = $definitionInstance->define($definition);
 
             if ($overrideDefinition instanceof ClassDefinition) {

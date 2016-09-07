@@ -42,11 +42,21 @@ class ClassDefinition
      */
     private $reflection;
 
-    public function __construct(TypedObject $definitionInstance, \ReflectionClass $reflection, $baseObjectClass = TypedObject::class)
-    {
-        $this->reflection = $reflection;
-        $this->class      = $reflection->getName();
-        $this->instance   = $definitionInstance;
+    /**
+     * @var bool
+     */
+    private $forceImmutability;
+
+    public function __construct(
+        TypedObject $definitionInstance,
+        \ReflectionClass $reflection,
+        $baseObjectClass = TypedObject::class,
+        bool $forceImmutability = false
+    ) {
+        $this->reflection        = $reflection;
+        $this->class             = $reflection->getName();
+        $this->instance          = $definitionInstance;
+        $this->forceImmutability = $forceImmutability;
 
         // Loads the class properties in the order of parent-most class to subclass
         $classes = [];
@@ -106,7 +116,7 @@ class ClassDefinition
             PropertyAccessibility::from($property)
         );
 
-        if (is_subclass_of($this->class, IImmutableTypedObject::class, true)) {
+        if ($this->forceImmutability) {
             $definition->setImmutable(true);
         }
 

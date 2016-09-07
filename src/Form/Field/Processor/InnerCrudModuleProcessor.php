@@ -10,7 +10,7 @@ use Dms\Core\Form\IForm;
 use Dms\Core\Model\EntityCollection;
 use Dms\Core\Model\IMutableObjectSet;
 use Dms\Core\Model\ITypedObjectCollection;
-use Dms\Core\Model\Object\ValueObject;
+use Dms\Core\Model\IValueObject;
 use Dms\Core\Model\ObjectCollection;
 use Dms\Core\Model\Type\Builder\Type;
 
@@ -89,7 +89,7 @@ class InnerCrudModuleProcessor extends FieldProcessor
             $processedData = [IObjectAction::OBJECT_FIELD_NAME => $object];
             $objectData    = [];
 
-            if (!($object instanceof ValueObject)) {
+            if (!($object instanceof IValueObject)) {
                 $objectId = $this->module->getDataSource()->getObjectId($object);
 
                 if (strpos((string)$objectId, EntityCollection::ENTITY_WITHOUT_ID_PREFIX) !== 0) {

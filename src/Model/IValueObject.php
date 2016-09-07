@@ -9,7 +9,7 @@ use Dms\Core\Exception;
  *
  * @author Elliot Levin <elliot@aanet.com.au>
  */
-interface IValueObject extends IImmutableTypedObject
+interface IValueObject extends ITypedObject
 {
 
 }
