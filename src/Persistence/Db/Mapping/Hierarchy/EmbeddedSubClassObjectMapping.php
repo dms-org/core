@@ -63,6 +63,21 @@ class EmbeddedSubClassObjectMapping extends SubClassObjectMapping implements IEm
         return [$this->classTypeColumnName];
     }
 
+    protected function addLoadClausesToSelect(Select $select, string $tableAlias) : string
+    {
+        $table = $select->getTableFromAlias($tableAlias);
+
+        foreach ($this->getAllColumnsToLoad() as $column) {
+            // If this column is already loading from a parent table, ignore
+            if (isset($select->getAliasColumnMap()[$column])) {
+                continue;
+            }
+
+            $select->addColumn($column, Expr::column($tableAlias, $table->getColumn($column)));
+        }
+
+        return $tableAlias;
+    }
 
     public function persistAllBeforeParent(PersistenceContext $context, array $objects, array $rows)
     {
