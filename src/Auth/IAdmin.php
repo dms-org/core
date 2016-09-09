@@ -29,22 +29,6 @@ interface IAdmin extends IEntity
     public function getUsername() : string;
 
     /**
-     * Gets the user's hashed password.
-     *
-     * @return IHashedPassword
-     */
-    public function getPassword() : IHashedPassword;
-
-    /**
-     * Sets the user's hashed password.
-     *
-     * @param IHashedPassword $password
-     *
-     * @return void
-     */
-    public function setPassword(IHashedPassword $password);
-
-    /**
      * Returns whether the user is a super user.
      *
      * @return boolean
