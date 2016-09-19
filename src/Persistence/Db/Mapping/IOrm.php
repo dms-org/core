@@ -17,6 +17,13 @@ use Dms\Core\Persistence\Db\Schema\Database;
 interface IOrm extends IRelationPropertyIdTypeProvider
 {
     /**
+     * Gets the root orm instance.
+     *
+     * @return IOrm
+     */
+    public function getRootOrm() : IOrm;
+
+    /**
      * Gets all the entity mappers registered in the orm.
      *
      * @return IEntityMapper[]

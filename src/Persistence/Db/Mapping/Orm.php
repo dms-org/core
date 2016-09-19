@@ -26,6 +26,11 @@ abstract class Orm implements IOrm
     protected $iocContainer;
 
     /**
+     * @var IOrm|null
+     */
+    protected $rootOrm;
+
+    /**
      * @var string
      */
     private $namespace = '';
@@ -85,6 +90,10 @@ abstract class Orm implements IOrm
         ) use (
             $iocContainer
         ) {
+            foreach($includedOrms as $orm) {
+                $orm->rootOrm = $this->rootOrm ?? $this;
+            }
+
             $this->includedOrms = $includedOrms;
             $this->plugins      = $plugins;
 
@@ -168,6 +177,14 @@ abstract class Orm implements IOrm
         }
 
         $this->database = new Database($uniqueTables);
+    }
+
+    /**
+     * @return IOrm|null
+     */
+    public function getRootOrm() : IOrm
+    {
+        return $this->rootOrm ?? $this;
     }
 
     /**
