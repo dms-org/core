@@ -69,6 +69,11 @@ interface IEntityMapper extends IObjectMapper
     public function getSelect() : Select;
 
     /**
+     * @return Select
+     */
+    public function getRawSelect() : Select;
+
+    /**
      * Adds a foreign key to the primary table of the entity mapper.
      *
      * @param ForeignKey $foreignKey

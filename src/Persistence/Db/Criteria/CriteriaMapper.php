@@ -143,7 +143,7 @@ class CriteriaMapper
         InvalidArgumentException::verifyAllInstanceOf(__METHOD__, 'extraRequiredMembers', $extraRequiredMembers, NestedMember::class);
         $criteria->verifyOfClass($this->getMappedObjectType()->getClassName());
 
-        $select = Select::from($this->primaryTable);
+        $select = $this->mapper->getRawSelect();
 
         return $this->mapCriteriaToExistingSelect($criteria, $select, $select->getTableAlias(), $memberMappings, $extraRequiredMembers);
     }

@@ -127,9 +127,19 @@ abstract class EntityMapperBase extends ObjectMapper implements IEntityMapper
      */
     final public function getSelect() : Select
     {
-        $select = Select::from($this->primaryTable);
+        $select = $this->getRawSelect();
 
         $this->mapping->addLoadToSelect($select, $select->getTableAlias());
+
+        return $select;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    final public function getRawSelect() : Select
+    {
+        $select = Select::from($this->primaryTable);
 
         foreach ($this->getDefinition()->getOrm()->getPlugins() as $plugin) {
             $plugin->loadSelect($this, $select);

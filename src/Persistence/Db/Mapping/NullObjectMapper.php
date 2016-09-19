@@ -87,6 +87,10 @@ class NullObjectMapper implements IEntityMapper
     {
     }
 
+    public function getRawSelect() : \Dms\Core\Persistence\Db\Query\Select
+    {
+    }
+
     public function addForeignKey(ForeignKey $foreignKey)
     {
     }

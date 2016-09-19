@@ -2,7 +2,6 @@
 
 namespace Dms\Core\Persistence\Db\Mapping\ReadModel;
 
-use Dms\Core\Exception\InvalidArgumentException;
 use Dms\Core\Exception\NotImplementedException;
 use Dms\Core\Model\IEntity;
 use Dms\Core\Model\ITypedObject;
@@ -136,8 +135,24 @@ class ReadModelMapper extends ObjectMapper implements IEntityMapper, IEmbeddedOb
      */
     public function getSelect() : Select
     {
-        $select = Select::from($this->getPrimaryTable());
+        $select = $this->getRawSelect();
+
         $this->getMapping()->addLoadToSelect($select, $select->getTableAlias());
+
+        return $select;
+    }
+
+
+    /**
+     * @return Select
+     */
+    public function getRawSelect() : Select
+    {
+        $select = Select::from($this->getPrimaryTable());
+
+        foreach ($this->getDefinition()->getOrm()->getPlugins() as $plugin) {
+            $plugin->loadSelect($this, $select);
+        }
 
         return $select;
     }
@@ -224,7 +239,12 @@ class ReadModelMapper extends ObjectMapper implements IEntityMapper, IEmbeddedOb
         throw NotImplementedException::method(__METHOD__);
     }
 
-    public function asSeparateTable(string $name, array $extraColumns = [], array $extraIndexes = [], array $extraForeignKeys = []) : IEmbeddedObjectMapper
+    public function asSeparateTable(
+        string $name,
+        array $extraColumns = [],
+        array $extraIndexes = [],
+        array $extraForeignKeys = []
+    ) : IEmbeddedObjectMapper
     {
         throw NotImplementedException::method(__METHOD__);
     }

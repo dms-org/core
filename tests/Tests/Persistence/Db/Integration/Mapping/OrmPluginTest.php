@@ -100,4 +100,30 @@ class OrmPluginTest extends DbIntegrationTest
                 )),
         ]);
     }
+
+    public function testCriteria()
+    {
+        $this->setDataInDb([
+            'data' => [
+                ['id' => 1, 'data' => 10],
+                ['id' => 2, 'data' => 100],
+                ['id' => 3, 'data' => 10],
+            ],
+        ]);
+
+        $this->assertEquals([
+            new EmptyEntity(1),
+            new EmptyEntity(3),
+        ], $this->repo->matching(
+            $this->repo->criteria()
+        ));
+
+        $this->assertExecutedQueries([
+            Select::allFrom($this->table->getStructure())
+                ->where(Expr::equal(
+                    Expr::tableColumn($this->table->getStructure(), 'data'),
+                    Expr::param(null, 10)
+                )),
+        ]);
+    }
 }
