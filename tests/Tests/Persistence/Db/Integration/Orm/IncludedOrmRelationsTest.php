@@ -21,10 +21,4 @@ class IncludedOrmRelationsTest extends OrmRelationsTest
             $orm->encompass(new ManyToManyOrm());
         });
     }
-
-    public function testGetRootOrm()
-    {
-        $this->assertSame($this->orm, $this->orm->getRootOrm());
-        $this->assertSame($this->orm, $this->orm->getIncludedOrms()[0]->getRootOrm());
-    }
 }

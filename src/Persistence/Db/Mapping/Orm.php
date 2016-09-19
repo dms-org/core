@@ -28,7 +28,7 @@ abstract class Orm implements IOrm
     /**
      * @var IOrm|null
      */
-    protected $rootOrm;
+    protected $parentOrm;
 
     /**
      * @var string
@@ -90,8 +90,8 @@ abstract class Orm implements IOrm
         ) use (
             $iocContainer
         ) {
-            foreach($includedOrms as $orm) {
-                $orm->rootOrm = $this->rootOrm ?? $this;
+            foreach ($includedOrms as $orm) {
+                $orm->parentOrm = $this;
             }
 
             $this->includedOrms = $includedOrms;
@@ -103,17 +103,7 @@ abstract class Orm implements IOrm
                 }
             }
 
-            if ($iocContainer) {
-                $iocContainer->bindForCallback(
-                    IOrm::class,
-                    $this,
-                    function () use ($entityMapperFactories, $embeddedObjectMapperFactories) {
-                        $this->initializeMappers($entityMapperFactories, $embeddedObjectMapperFactories);
-                    }
-                );
-            } else {
-                $this->initializeMappers($entityMapperFactories, $embeddedObjectMapperFactories);
-            }
+            $this->initializeMappers($entityMapperFactories, $embeddedObjectMapperFactories);
 
             $this->enableLazyLoading($enableLazyLoading);
         });
@@ -132,21 +122,29 @@ abstract class Orm implements IOrm
      */
     private function initializeEntityMappers()
     {
-        $this->entityMappers = [];
-        $this->database      = null;
+        $initializeEntityMappers = function () {
+            $this->entityMappers = [];
+            $this->database      = null;
 
-        foreach ($this->entityMapperFactories as $factory) {
-            /** @var IEntityMapper $mapper */
-            $mapper                = $factory($this);
-            $this->entityMappers[] = $mapper;
-        }
-
-        foreach ($this->entityMappers as $mapper) {
-            $mapper->initializeRelations();
-
-            foreach ($mapper->getNestedMappers() as $nestedMapper) {
-                $nestedMapper->initializeRelations();
+            foreach ($this->entityMapperFactories as $factory) {
+                /** @var IEntityMapper $mapper */
+                $mapper                = $factory($this);
+                $this->entityMappers[] = $mapper;
             }
+
+            foreach ($this->entityMappers as $mapper) {
+                $mapper->initializeRelations();
+
+                foreach ($mapper->getNestedMappers() as $nestedMapper) {
+                    $nestedMapper->initializeRelations();
+                }
+            }
+        };
+
+        if ($this->iocContainer) {
+            $this->iocContainer->bindForCallback(IOrm::class, $this, $initializeEntityMappers);
+        } else {
+            $initializeEntityMappers();
         }
     }
 
@@ -177,14 +175,6 @@ abstract class Orm implements IOrm
         }
 
         $this->database = new Database($uniqueTables);
-    }
-
-    /**
-     * @return IOrm|null
-     */
-    public function getRootOrm() : IOrm
-    {
-        return $this->rootOrm ?? $this;
     }
 
     /**
@@ -228,7 +218,9 @@ abstract class Orm implements IOrm
         $clone->plugins   = array_merge($clone->plugins, $plugins);
 
         foreach ($clone->includedOrms as $key => $orm) {
-            $clone->includedOrms[$key] = $orm->update($namespacePrefix, $plugins);
+            $includedOrm               = clone $orm;
+            $includedOrm->parentOrm    = $clone;
+            $clone->includedOrms[$key] = $includedOrm->update($namespacePrefix, $plugins);
         }
 
         $clone->initializeEntityMappers();
@@ -320,7 +312,7 @@ abstract class Orm implements IOrm
         return $mapper;
     }
 
-    final public function findEntityMapper(string $entityClass, string $tableName = null)
+    final public function findEntityMapper(string $entityClass, string $tableName = null, IOrm $ormToIgnore = null)
     {
         $mappers = [];
 
@@ -344,9 +336,17 @@ abstract class Orm implements IOrm
         }
 
         foreach ($this->includedOrms as $orm) {
-            if ($mapper = $orm->findEntityMapper($entityClass, $tableName)) {
+            if ($orm === $ormToIgnore) {
+                continue;
+            }
+
+            if ($mapper = $orm->findEntityMapper($entityClass, $tableName, $this)) {
                 return $mapper;
             }
+        }
+
+        if ($this->parentOrm && $this->parentOrm !== $ormToIgnore) {
+            return $this->parentOrm->findEntityMapper($entityClass, $tableName, $this);
         }
 
         return null;
