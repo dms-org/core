@@ -8,6 +8,7 @@ use Dms\Core\Model\Criteria\IEntitySetProvider;
 use Dms\Core\Persistence\Db\Connection\IConnection;
 use Dms\Core\Persistence\Db\Mapping\Definition\FinalizedMapperDefinition;
 use Dms\Core\Persistence\Db\Mapping\Definition\Orm\OrmDefinition;
+use Dms\Core\Persistence\Db\Mapping\Plugin\IOrmPlugin;
 use Dms\Core\Persistence\Db\Schema\Database;
 use Dms\Core\Persistence\Db\Schema\Table;
 use Dms\Core\Util\Debug;
@@ -45,6 +46,11 @@ abstract class Orm implements IOrm
     private $entityMappers = [];
 
     /**
+     * @var IOrmPlugin[]
+     */
+    private $plugins = [];
+
+    /**
      * @var IOrm[]
      */
     private $includedOrms = [];
@@ -74,11 +80,19 @@ abstract class Orm implements IOrm
             array $entityMapperFactories,
             array $embeddedObjectMapperFactories,
             array $includedOrms,
+            array $plugins,
             bool $enableLazyLoading
         ) use (
             $iocContainer
         ) {
             $this->includedOrms = $includedOrms;
+            $this->plugins      = $plugins;
+
+            if ($this->plugins) {
+                foreach ($this->includedOrms as $key => $orm) {
+                    $this->includedOrms[$key] = $orm->update('', $plugins);
+                }
+            }
 
             if ($iocContainer) {
                 $iocContainer->bindForCallback(
@@ -165,21 +179,40 @@ abstract class Orm implements IOrm
     }
 
     /**
+     * @return IOrmPlugin[]
+     */
+    public function getPlugins() : array
+    {
+        return $this->plugins;
+    }
+
+    /**
      * @inheritDoc
      */
     public function inNamespace(string $prefix) : IOrm
     {
-        if ($prefix === '') {
+        return $this->update($prefix, []);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function update(string $namespacePrefix, array $plugins) : IOrm
+    {
+        if ($namespacePrefix === '' && $plugins === []) {
             return $this;
         }
 
+        InvalidArgumentException::verifyAllInstanceOf(__METHOD__, 'plugins', $plugins, IOrmPlugin::class);
+
         $clone = clone $this;
 
-        foreach ($clone->includedOrms as $key => $orm) {
-            $clone->includedOrms[$key] = $orm->inNamespace($prefix);
-        }
+        $clone->namespace = $namespacePrefix . $this->namespace;
+        $clone->plugins   = array_merge($clone->plugins, $plugins);
 
-        $clone->namespace = $prefix . $this->namespace;
+        foreach ($clone->includedOrms as $key => $orm) {
+            $clone->includedOrms[$key] = $orm->update($namespacePrefix, $plugins);
+        }
 
         $clone->initializeEntityMappers();
 

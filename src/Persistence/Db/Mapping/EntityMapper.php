@@ -23,6 +23,11 @@ abstract class EntityMapper extends EntityMapperBase
     {
         $definition = new MapperDefinition($orm, null, $this);
         $this->define($definition);
+
+        foreach ($orm->getPlugins() as $plugin) {
+            $plugin->defineMapper($this, $definition);
+        }
+
         parent::__construct($definition->finalize($tableName));
     }
 

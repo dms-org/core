@@ -6,6 +6,7 @@ use Dms\Core\Exception\InvalidArgumentException;
 use Dms\Core\Model\Criteria\IEntitySetProvider;
 use Dms\Core\Model\Criteria\IRelationPropertyIdTypeProvider;
 use Dms\Core\Persistence\Db\Connection\IConnection;
+use Dms\Core\Persistence\Db\Mapping\Plugin\IOrmPlugin;
 use Dms\Core\Persistence\Db\Schema\Database;
 
 /**
@@ -120,6 +121,23 @@ interface IOrm extends IRelationPropertyIdTypeProvider
      * @return string
      */
     public function getNamespace() : string;
+
+    /**
+     * Gets the orm plugins
+     *
+     * @return IOrmPlugin[]
+     */
+    public function getPlugins() : array;
+
+    /**
+     * Returns an orm with the supplied namespace and plugins.
+     *
+     * @param string       $namespacePrefix
+     * @param IOrmPlugin[] $plugins
+     *
+     * @return IOrm
+     */
+    public function update(string $namespacePrefix, array $plugins) : IOrm;
 
     /**
      * Returns an equivalent orm with the table names and constraint names

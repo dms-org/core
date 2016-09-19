@@ -10,7 +10,6 @@ use Dms\Core\Persistence\Db\Mapping\Orm;
  */
 class OneToManyIdOrm extends Orm
 {
-
     /**
      * Defines the object mappers registered in the orm.
      *

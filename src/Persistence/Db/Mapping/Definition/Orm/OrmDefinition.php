@@ -5,6 +5,7 @@ namespace Dms\Core\Persistence\Db\Mapping\Definition\Orm;
 use Dms\Core\Exception\InvalidArgumentException;
 use Dms\Core\Ioc\IIocContainer;
 use Dms\Core\Persistence\Db\Mapping\IOrm;
+use Dms\Core\Persistence\Db\Mapping\Plugin\IOrmPlugin;
 
 /**
  * The orm definition class.
@@ -32,6 +33,11 @@ class OrmDefinition
      * @var IOrm[]
      */
     protected $includedOrms = [];
+
+    /**
+     * @var IOrmPlugin[]
+     */
+    protected $plugins = [];
 
     /**
      * @var bool
@@ -147,15 +153,49 @@ class OrmDefinition
     }
 
     /**
+     * Registers the supplied orm plugin.
+     *
+     * @param IOrmPlugin|string $plugin
+     *
+     * @return void
+     * @throws InvalidArgumentException
+     */
+    public function registerPlugin($plugin)
+    {
+        if ($plugin instanceof IOrmPlugin) {
+            $this->plugins[] = $plugin;
+        } elseif (is_string($plugin) && $this->iocContainer) {
+            $this->plugins[] = $this->iocContainer->get($plugin);
+        }
+
+        throw InvalidArgumentException::format(
+            'Invalid plugin supplied to %s: ioc container must be available to resolve class'
+        );
+    }
+
+    /**
+     * Registers the supplied orm plugins.
+     *
+     * @param IOrmPlugin[] $plugins
+     *
+     * @return void
+     */
+    public function registerPlugins(array $plugins)
+    {
+        foreach ($plugins as $plugin) {
+            $this->registerPlugin($plugin);
+        }
+    }
+
+    /**
      * Sets whether lazy-loading of relations should be enabled within the orm.
-     * 
+     *
      * @param bool $enableLazyLoading
      */
     public function enableLazyLoading(bool $enableLazyLoading = true)
     {
         $this->enableLazyLoading = $enableLazyLoading;
     }
-    
 
     /**
      * @param callable $loaderCallback
@@ -164,6 +204,6 @@ class OrmDefinition
      */
     public function finalize(callable $loaderCallback)
     {
-        $loaderCallback($this->entityMapperFactories, $this->embeddedObjectMapperFactories, $this->includedOrms, $this->enableLazyLoading);
+        $loaderCallback($this->entityMapperFactories, $this->embeddedObjectMapperFactories, $this->includedOrms, $this->plugins, $this->enableLazyLoading);
     }
 }

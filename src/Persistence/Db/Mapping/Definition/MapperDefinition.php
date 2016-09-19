@@ -747,7 +747,7 @@ class MapperDefinition extends MapperDefinitionBase
         foreach ($this->subClassMappingFactories as $factory) {
             $subClassMappings[] = $factory($table);
         }
-
+        
         return new FinalizedMapperDefinition(
             $this->orm,
             $this->class,

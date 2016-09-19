@@ -52,6 +52,10 @@ abstract class ValueObjectMapper extends ObjectMapper implements IEmbeddedObject
         $rootEntityMapper = $this->getRootEntityMapper();
         $tableName        = $rootEntityMapper ? $rootEntityMapper->getPrimaryTableName() : '__EMBEDDED__';
 
+        foreach ($orm->getPlugins() as $plugin) {
+            $plugin->defineMapper($this, $definition);
+        }
+
         parent::__construct($definition->finalize($tableName));
     }
 
