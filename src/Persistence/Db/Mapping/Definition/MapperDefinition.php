@@ -4,6 +4,7 @@ namespace Dms\Core\Persistence\Db\Mapping\Definition;
 
 use Dms\Core\Exception\InvalidArgumentException;
 use Dms\Core\Model\IEntity;
+use Dms\Core\Model\Object\FinalizedClassDefinition;
 use Dms\Core\Model\Object\TypedObject;
 use Dms\Core\Model\Type\ObjectType;
 use Dms\Core\Persistence\Db\Mapping\Definition\Column\ColumnTypeDefiner;
@@ -788,6 +789,14 @@ class MapperDefinition extends MapperDefinitionBase
     protected function buildPrimaryKeyColumn(string $name) : Column
     {
         return PrimaryKeyBuilder::incrementingInt($name);
+    }
+
+    /**
+     * @return string
+     */
+    public function getObjectType()
+    {
+        return $this->class->getClassName();
     }
 
     /**
