@@ -166,11 +166,12 @@ class OrmDefinition
             $this->plugins[] = $plugin;
         } elseif (is_string($plugin) && $this->iocContainer) {
             $this->plugins[] = $this->iocContainer->get($plugin);
+        } else {
+            throw InvalidArgumentException::format(
+                'Invalid plugin supplied to %s: ioc container must be available to resolve class',
+                __METHOD__
+            );
         }
-
-        throw InvalidArgumentException::format(
-            'Invalid plugin supplied to %s: ioc container must be available to resolve class'
-        );
     }
 
     /**
