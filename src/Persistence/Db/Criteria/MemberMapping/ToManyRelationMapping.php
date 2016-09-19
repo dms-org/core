@@ -8,6 +8,7 @@ use Dms\Core\Model\ISpecification;
 use Dms\Core\Persistence\Db\Criteria\CriteriaMapper;
 use Dms\Core\Persistence\Db\Criteria\EntityMapperProxy;
 use Dms\Core\Persistence\Db\Criteria\MemberExpressionMappingException;
+use Dms\Core\Persistence\Db\Mapping\Hierarchy\IObjectMapping;
 use Dms\Core\Persistence\Db\Mapping\IEntityMapper;
 use Dms\Core\Persistence\Db\Mapping\ReadModel\Relation\MemberRelation;
 use Dms\Core\Persistence\Db\Mapping\ReadModel\Relation\ToManyMemberRelation;
@@ -34,13 +35,18 @@ class ToManyRelationMapping extends RelationMapping implements IFinalRelationMem
     /**
      * ToManyRelationMapping constructor.
      *
-     * @param IEntityMapper   $rootEntityMapper
-     * @param IRelation[]     $relationsToSubSelect
-     * @param IToManyRelation $relation
+     * @param IEntityMapper    $rootEntityMapper
+     * @param IObjectMapping[] $subclassObjectMappings
+     * @param IRelation[]      $relationsToSubSelect
+     * @param IToManyRelation  $relation
      */
-    public function __construct(IEntityMapper $rootEntityMapper, array $relationsToSubSelect, IToManyRelation $relation)
-    {
-        parent::__construct($rootEntityMapper, $relationsToSubSelect, $relation);
+    public function __construct(
+        IEntityMapper $rootEntityMapper,
+        array $subclassObjectMappings,
+        array $relationsToSubSelect,
+        IToManyRelation $relation
+    ) {
+        parent::__construct($rootEntityMapper, $subclassObjectMappings, $relationsToSubSelect, $relation);
 
         $this->relationsToSubselectForWhereExpr = $this->relationsToSubSelect;
     }

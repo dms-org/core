@@ -657,4 +657,35 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
 
         return $columnName ? $columnName : null;
     }
+
+    /**
+     * @param string $class
+     *
+     * @return FinalizedMapperDefinition
+     * @throws InvalidArgumentException
+     */
+    public function getSpecificSubclassMapping(string $class) : self
+    {
+        if ($this->class->getClassName() === $class) {
+            return $this;
+        }
+
+        if (!is_subclass_of($class, $this->class->getClassName(), true)) {
+            throw InvalidArgumentException::format(
+                'Invalid class supplied to %s: must be a subclass of %s, %s given',
+                __METHOD__, $this->class->getClassName(), $class
+            );
+        }
+
+        foreach($this->subClassMappings as $mapping) {
+            if (is_subclass_of($class, $mapping->getDefinition()->getClassName(), true)) {
+                return $mapping->getDefinition()->getSpecificSubclassMapping($class);
+            }
+        }
+
+        throw InvalidArgumentException::format(
+            'Invalid class supplied to %s: cannot find mapping for %s',
+            __METHOD__, $class
+        );
+    }
 }

@@ -3,6 +3,7 @@
 namespace Dms\Core\Persistence\Db\Criteria\MemberMapping;
 
 use Dms\Core\Exception\InvalidOperationException;
+use Dms\Core\Persistence\Db\Mapping\Hierarchy\IObjectMapping;
 use Dms\Core\Persistence\Db\Mapping\IEntityMapper;
 use Dms\Core\Persistence\Db\Mapping\Relation\IRelation;
 use Dms\Core\Persistence\Db\Mapping\Relation\IToManyRelation;
@@ -23,13 +24,14 @@ abstract class RelationMapping extends MemberMapping
     /**
      * RelationMapping constructor.
      *
-     * @param IEntityMapper $rootEntityMapper
-     * @param IRelation[]   $relationsToSubSelect
-     * @param IRelation     $relation
+     * @param IEntityMapper    $rootEntityMapper
+     * @param IObjectMapping[] $subclassObjectMappings
+     * @param IRelation[]      $relationsToSubSelect
+     * @param IRelation        $relation
      */
-    public function __construct(IEntityMapper $rootEntityMapper, array $relationsToSubSelect, IRelation $relation)
+    public function __construct(IEntityMapper $rootEntityMapper, array $subclassObjectMappings, array $relationsToSubSelect, IRelation $relation)
     {
-        parent::__construct($rootEntityMapper, array_merge($relationsToSubSelect, [$relation]));
+        parent::__construct($rootEntityMapper, $subclassObjectMappings, array_merge($relationsToSubSelect, [$relation]));
 
         $this->lastRelation = $relation;
     }

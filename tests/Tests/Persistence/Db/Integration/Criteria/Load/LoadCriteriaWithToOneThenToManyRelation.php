@@ -42,7 +42,7 @@ class LoadCriteriaWithToOneThenToManyRelation extends LoadCriteriaMapperTestBase
             $this->select()->addRawColumn('id'),
             [], [
                 'to-many' => new ToManyMemberRelation(
-                    (new ToManyRelationMapping($objectMapper, [$subEntityRelation->withObjectReference()], $childRelation->withObjectReference()))
+                    (new ToManyRelationMapping($objectMapper, [], [$subEntityRelation->withObjectReference()], $childRelation->withObjectReference()))
                 ),
             ]
         ));

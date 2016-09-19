@@ -32,6 +32,6 @@ class RepositorySubset extends MutableObjectSetSubset implements IRepository
      */
     public function getEntityType() : string
     {
-        return $this->fullObjectSet->getEntityType();
+        return $this->getObjectType();
     }
 }

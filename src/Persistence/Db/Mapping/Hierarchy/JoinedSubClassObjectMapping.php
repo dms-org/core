@@ -134,7 +134,7 @@ class JoinedSubClassObjectMapping extends SubClassObjectMapping
     /**
      * {@inheritdoc}
      */
-    public function addSpecificLoadToQuery(Query $query, string $objectType)
+    public function addSpecificLoadToQuery(Query $query, string $objectType, array &$subclassTableAliases = [])
     {
         // To only load these classes we can just perform an
         // inner join which will only load rows with the correct
@@ -142,6 +142,8 @@ class JoinedSubClassObjectMapping extends SubClassObjectMapping
 
         $parentAlias = $this->parentTable->getName();
         $joinAlias   = $query->generateUniqueAliasFor($this->classTable->getName());
+
+        $subclassTableAliases[$this->getObjectType()] = $joinAlias;
 
         $query->join(Join::inner(
                 $this->classTable,
@@ -153,15 +155,17 @@ class JoinedSubClassObjectMapping extends SubClassObjectMapping
             $this->addPrefixedColumnsToSelect($query, $joinAlias);
         }
 
-        parent::addSpecificLoadToQuery($query, $objectType);
+        parent::addSpecificLoadToQuery($query, $objectType, $subclassTableAliases);
     }
 
     /**
      * {@inheritdoc}
      */
-    protected function addLoadClausesToSelect(Select $select, string $parentAlias) : string
+    protected function addLoadClausesToSelect(Select $select, string $parentAlias, array &$subclassTableAliases = []) : string
     {
         $joinAlias = $select->generateUniqueAliasFor($this->classTable->getName());
+
+        $subclassTableAliases[$this->getObjectType()] = $joinAlias;
 
         $select->join(Join::left(
                 $this->classTable,

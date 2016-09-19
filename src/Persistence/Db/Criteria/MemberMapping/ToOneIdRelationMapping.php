@@ -3,6 +3,7 @@
 namespace Dms\Core\Persistence\Db\Criteria\MemberMapping;
 
 use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Persistence\Db\Mapping\Hierarchy\IObjectMapping;
 use Dms\Core\Persistence\Db\Mapping\IEntityMapper;
 use Dms\Core\Persistence\Db\Mapping\Relation\EntityRelation;
 use Dms\Core\Persistence\Db\Mapping\Relation\IRelation;
@@ -23,10 +24,11 @@ class ToOneIdRelationMapping extends ToOneRelationMapping
      * ToOneIdRelationMapping constructor.
      *
      * @param IEntityMapper                                        $rootEntityMapper
+     * @param IObjectMapping[]                                     $subclassObjectMappings
      * @param IRelation[]                                          $relationsToSubSelect
      * @param ISeparateTableRelation|IToOneRelation|EntityRelation $relation
      */
-    public function __construct(IEntityMapper $rootEntityMapper, array $relationsToSubSelect, IToOneRelation $relation)
+    public function __construct(IEntityMapper $rootEntityMapper, array $subclassObjectMappings, array $relationsToSubSelect, IToOneRelation $relation)
     {
         InvalidArgumentException::verifyInstanceOf(__METHOD__, 'relation', $relation, ISeparateTableRelation::class);
         InvalidArgumentException::verifyInstanceOf(__METHOD__, 'relation', $relation, EntityRelation::class);
@@ -35,7 +37,7 @@ class ToOneIdRelationMapping extends ToOneRelationMapping
             'relation must be an id reference'
         );
 
-        parent::__construct($rootEntityMapper, $relationsToSubSelect, $relation);
+        parent::__construct($rootEntityMapper, $subclassObjectMappings, $relationsToSubSelect, $relation);
     }
 
     /**

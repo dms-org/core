@@ -3,6 +3,8 @@
 namespace Dms\Core\Tests\Persistence\Db\Integration\Domains;
 
 use Dms\Core\Persistence\Db\Mapping\IOrm;
+use Dms\Core\Persistence\Db\Query\Expression\Expr;
+use Dms\Core\Persistence\Db\Query\Select;
 use Dms\Core\Persistence\Db\Schema\Column;
 use Dms\Core\Persistence\Db\Schema\PrimaryKeyBuilder;
 use Dms\Core\Persistence\Db\Schema\Type\Enum;
@@ -200,5 +202,70 @@ class PlayerSingleTableInheritanceTest extends DbIntegrationTest
                         ],
                 ]
         ]);
+    }
+
+    //////////////
+    // Criteria //
+    //////////////
+
+    public function testLoadWithSubclassProperty()
+    {
+        $this->setDataInDb([
+            'players'     => [
+                [
+                    'id'              => 1,
+                    'type'            => 'bowler',
+                    'name'            => 'Joe',
+                    'club'            => null,
+                    'batting_average' => 14,
+                    'bowling_average' => 3
+                ],
+                [
+                    'id'              => 2,
+                    'type'            => 'bowler',
+                    'name'            => 'John',
+                    'club'            => null,
+                    'batting_average' => 2,
+                    'bowling_average' => 5
+                ],
+                [
+                    'id'              => 3,
+                    'type'            => 'footballer',
+                    'name'            => 'John',
+                    'club'            => 'Melbourne City',
+                    'batting_average' => null,
+                    'bowling_average' => null
+                ],
+            ],
+        ]);
+
+        $bowlers = $this->repo->matching(
+            $this->repo->criteria()
+                ->whereInstanceOf(Bowler::class)
+                ->where('bowlingAverage', '>', 4)
+        );
+
+        $this->assertEquals(
+            [$this->repo->get(2)],
+            $bowlers
+        );
+
+        $this->assertExecutedQueryNumber(
+            1,
+            Select::from($this->getSchemaTable('players'))
+                ->addRawColumn('id')
+                ->addRawColumn('type')
+                ->addRawColumn('name')
+                ->addRawColumn('batting_average')
+                ->addRawColumn('bowling_average')
+                ->where(Expr::equal(
+                    Expr::tableColumn($this->getSchemaTable('players'), 'type'),
+                    Expr::param($this->getSchemaTable('players')->getColumn('type')->getType(), 'bowler')
+                ))
+                ->where(Expr::greaterThan(
+                    Expr::tableColumn($this->getSchemaTable('players'), 'bowling_average'),
+                    Expr::param(null, 4)
+                ))
+        );
     }
 }

@@ -6,6 +6,7 @@ use Dms\Core\Exception\InvalidArgumentException;
 use Dms\Core\Exception\InvalidOperationException;
 use Dms\Core\Model\Criteria\Condition\ConditionOperator;
 use Dms\Core\Persistence\Db\Criteria\MemberExpressionMapper;
+use Dms\Core\Persistence\Db\Mapping\Hierarchy\IObjectMapping;
 use Dms\Core\Persistence\Db\Mapping\IEntityMapper;
 use Dms\Core\Persistence\Db\Mapping\Relation\IRelation;
 use Dms\Core\Persistence\Db\Mapping\Relation\ISeparateTableRelation;
@@ -15,7 +16,6 @@ use Dms\Core\Persistence\Db\Query\Clause\Ordering;
 use Dms\Core\Persistence\Db\Query\Expression\BinOp;
 use Dms\Core\Persistence\Db\Query\Expression\Expr;
 use Dms\Core\Persistence\Db\Query\Select;
-use Dms\Core\Persistence\Db\Schema\Type\Type;
 use Dms\Core\Util\Debug;
 
 /**
@@ -36,21 +36,32 @@ abstract class MemberMapping
     protected $relationsToSubSelect = [];
 
     /**
+     * @var IObjectMapping[]
+     */
+    protected $subclassObjectMappings = [];
+
+    /**
      * MemberMapping constructor.
      *
      * @param IEntityMapper $rootEntityMapper
      * @param IRelation[]   $relationsToSubSelect
+     * @param array         $subclassObjectMappings
      */
-    public function __construct(IEntityMapper $rootEntityMapper, array $relationsToSubSelect)
+    public function __construct(IEntityMapper $rootEntityMapper, array $subclassObjectMappings, array $relationsToSubSelect)
     {
-        InvalidArgumentException::verifyAllInstanceOf(__METHOD__, 'nestedRelations', $relationsToSubSelect, IRelation::class);
-        $this->rootEntityMapper     = $rootEntityMapper;
+        InvalidArgumentException::verifyAllInstanceOf(__METHOD__, 'subclassObjectMappings', $subclassObjectMappings, IObjectMapping::class);
+        InvalidArgumentException::verifyAllInstanceOf(__METHOD__, 'relationsToSubSelect', $relationsToSubSelect, IRelation::class);
+
+        $this->rootEntityMapper = $rootEntityMapper;
+
+        $this->subclassObjectMappings = $subclassObjectMappings;
 
         foreach ($relationsToSubSelect as $relation) {
             if ($relation->getIdString() !== MemberExpressionMapper::SELF_RELATION_ID) {
                 $this->relationsToSubSelect[] = $relation;
             }
         }
+
     }
 
     /**
@@ -59,6 +70,27 @@ abstract class MemberMapping
     public function getRootEntityMapper() : IEntityMapper
     {
         return $this->rootEntityMapper;
+    }
+
+    /**
+     * @return IObjectMapping[]
+     */
+    public function getSubclassObjectMappings() : array
+    {
+        return $this->subclassObjectMappings;
+    }
+
+    /**
+     * @param int $subClassMappingsToRemove
+     *
+     * @return static
+     */
+    public function withoutSubclassObjectMappings(int $subClassMappingsToRemove)
+    {
+        $clone                         = clone $this;
+        $clone->subclassObjectMappings = array_slice($clone->subclassObjectMappings, $subClassMappingsToRemove);
+
+        return $clone;
     }
 
     /**
@@ -102,21 +134,21 @@ abstract class MemberMapping
                 return Expr::isNotNull($operand);
             } else {
                 throw InvalidArgumentException::format(
-                        'Cannot use operator \'%s\' with NULL value, only (%s) are supported',
-                        $operator, Debug::formatValues([ConditionOperator::EQUALS, ConditionOperator::NOT_EQUALS])
+                    'Cannot use operator \'%s\' with NULL value, only (%s) are supported',
+                    $operator, Debug::formatValues([ConditionOperator::EQUALS, ConditionOperator::NOT_EQUALS])
                 );
             }
         } elseif ($operator === ConditionOperator::IN || $operator == ConditionOperator::NOT_IN) {
             return new BinOp(
-                    $operand,
-                    $this->mapConditionOperator($operator),
-                    Expr::tupleParams(null, $value)
+                $operand,
+                $this->mapConditionOperator($operator),
+                Expr::tupleParams(null, $value)
             );
         } else {
             return new BinOp(
-                    $operand,
-                    $this->mapConditionOperator($operator),
-                    Expr::param(null, $value)
+                $operand,
+                $this->mapConditionOperator($operator),
+                Expr::param(null, $value)
             );
         }
     }
@@ -133,16 +165,16 @@ abstract class MemberMapping
         ConditionOperator::validate($operator);
 
         static $dbOperatorMap = [
-                ConditionOperator::EQUALS                           => BinOp::EQUAL,
-                ConditionOperator::NOT_EQUALS                       => BinOp::NOT_EQUAL,
-                ConditionOperator::IN                               => BinOp::IN,
-                ConditionOperator::NOT_IN                           => BinOp::NOT_IN,
-                ConditionOperator::LESS_THAN                        => BinOp::LESS_THAN,
-                ConditionOperator::LESS_THAN_OR_EQUAL               => BinOp::LESS_THAN_OR_EQUAL,
-                ConditionOperator::GREATER_THAN                     => BinOp::GREATER_THAN,
-                ConditionOperator::GREATER_THAN_OR_EQUAL            => BinOp::GREATER_THAN_OR_EQUAL,
-                ConditionOperator::STRING_CONTAINS                  => BinOp::STR_CONTAINS,
-                ConditionOperator::STRING_CONTAINS_CASE_INSENSITIVE => BinOp::STR_CONTAINS_CASE_INSENSITIVE,
+            ConditionOperator::EQUALS                           => BinOp::EQUAL,
+            ConditionOperator::NOT_EQUALS                       => BinOp::NOT_EQUAL,
+            ConditionOperator::IN                               => BinOp::IN,
+            ConditionOperator::NOT_IN                           => BinOp::NOT_IN,
+            ConditionOperator::LESS_THAN                        => BinOp::LESS_THAN,
+            ConditionOperator::LESS_THAN_OR_EQUAL               => BinOp::LESS_THAN_OR_EQUAL,
+            ConditionOperator::GREATER_THAN                     => BinOp::GREATER_THAN,
+            ConditionOperator::GREATER_THAN_OR_EQUAL            => BinOp::GREATER_THAN_OR_EQUAL,
+            ConditionOperator::STRING_CONTAINS                  => BinOp::STR_CONTAINS,
+            ConditionOperator::STRING_CONTAINS_CASE_INSENSITIVE => BinOp::STR_CONTAINS_CASE_INSENSITIVE,
         ];
 
         return $dbOperatorMap[$operator];
@@ -164,8 +196,8 @@ abstract class MemberMapping
     protected function addOrderBy(Select $select, Expr $orderByExpression, $isAsc)
     {
         $select->orderBy(new Ordering(
-                $orderByExpression,
-                $isAsc ? Ordering::ASC : Ordering::DESC
+            $orderByExpression,
+            $isAsc ? Ordering::ASC : Ordering::DESC
         ));
     }
 
@@ -248,10 +280,10 @@ abstract class MemberMapping
      * @return Expr
      */
     protected function getExpressionByJoiningRelations(
-            Select $select,
-            string $tableAlias,
-            array $separateTableRelations,
-            callable $expressionLoader
+        Select $select,
+        string $tableAlias,
+        array $separateTableRelations,
+        callable $expressionLoader
     ) : Expr
     {
         /** @var Select $subSelect */
@@ -272,7 +304,7 @@ abstract class MemberMapping
     protected function getJoinedSubSelectAndTableAlias(Select $select, string $tableAlias, array $separateTableRelations) : array
     {
         InvalidArgumentException::verifyAllInstanceOf(
-                __METHOD__, 'separateTableRelations', $separateTableRelations, ISeparateTableRelation::class
+            __METHOD__, 'separateTableRelations', $separateTableRelations, ISeparateTableRelation::class
         );
 
         /** @var ISeparateTableRelation $firstRelation */
@@ -289,12 +321,12 @@ abstract class MemberMapping
             }
 
             $tableAlias = $relation->joinSelectToRelatedTable(
-                    $tableAlias,
-                    $joinType,
-                    $subSelect
+                $tableAlias,
+                $joinType,
+                $subSelect
             );
         }
-        
+
         return [$subSelect, $tableAlias];
     }
 }

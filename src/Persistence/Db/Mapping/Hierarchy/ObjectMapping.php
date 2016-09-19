@@ -265,23 +265,25 @@ abstract class ObjectMapping implements IObjectMapping
     /**
      * {@inheritdoc}
      */
-    final public function addLoadToSelect(Select $select, string $tableAlias)
+    final public function addLoadToSelect(Select $select, string $tableAlias, array &$subclassTableAliases = [])
     {
         $tableAlias = $this->addLoadClausesToSelect($select, $tableAlias);
 
+        $subclassTableAliases[$this->getObjectType()] = $tableAlias;
+
         foreach ($this->subClassMappings as $subType) {
-            $subType->addLoadToSelect($select, $tableAlias);
+            $subType->addLoadToSelect($select, $tableAlias, $subclassTableAliases);
         }
     }
 
     /**
      * {@inheritdoc}
      */
-    public function addSpecificLoadToQuery(Query $query, string $objectType)
+    public function addSpecificLoadToQuery(Query $query, string $objectType, array &$subclassTableAliases = [])
     {
         foreach ($this->subClassMappings as $subType) {
             if (is_a($objectType, $subType->getObjectType(), true)) {
-                $subType->addSpecificLoadToQuery($query, $objectType);
+                $subType->addSpecificLoadToQuery($query, $objectType, $subclassTableAliases);
             }
         }
     }
@@ -312,6 +314,7 @@ abstract class ObjectMapping implements IObjectMapping
      * @param string $tableAlias
      *
      * @return string
+     * @throws \Dms\Core\Exception\InvalidArgumentException
      */
     protected function addLoadClausesToSelect(Select $select, string $tableAlias) : string
     {

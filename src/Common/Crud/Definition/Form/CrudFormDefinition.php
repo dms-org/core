@@ -448,6 +448,10 @@ class CrudFormDefinition
             }
         }
 
+        if (is_subclass_of($this->class->getClassName(), $classType, true)) {
+            return;
+        }
+
         /** @var string|TypedObject $classType */
         $this->class = $classType::definition();
         $this->createObjectType()->asClass($classType);

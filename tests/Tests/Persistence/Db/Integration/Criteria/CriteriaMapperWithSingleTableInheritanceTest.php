@@ -62,6 +62,7 @@ class CriteriaMapperWithSingleTableInheritanceTest extends CriteriaMapperTestBas
                         ->addColumn('base_prop', $this->column('base_prop'))
                         ->addColumn('class_type', $this->column('class_type'))
                         ->addColumn('subclass3_prop', $this->column('subclass3_prop'))
+                        ->addColumn('subclass1_prop', $this->column('subclass1_prop'))
                         ->where(Expr::equal($this->column('class_type'), Expr::param($this->columnType('class_type'), 'subclass3')))
         );
     }

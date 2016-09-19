@@ -3,7 +3,6 @@
 namespace Dms\Core\Persistence\Db\Criteria\MemberMapping;
 
 use Dms\Core\Exception\InvalidOperationException;
-use Dms\Core\Exception\NotImplementedException;
 use Dms\Core\Model\Criteria\Condition\ConditionOperator;
 use Dms\Core\Persistence\Db\Criteria\MemberExpressionMappingException;
 use Dms\Core\Persistence\Db\Mapping\Hierarchy\EmbeddedParentObjectMapping;
@@ -30,13 +29,18 @@ class ToOneEmbeddedObjectMapping extends ToOneRelationMapping implements IFinalR
     /**
      * ToOneEmbeddedObjectMapping constructor.
      *
-     * @param IEntityMapper          $rootEntityMapper
-     * @param IRelation[]            $relationsToSubSelect
-     * @param EmbeddedObjectRelation $relation
+     * @param IEntityMapper               $rootEntityMapper
+     * @param InvalidOperationException[] $subclassObjectMappings
+     * @param IRelation[]                 $relationsToSubSelect
+     * @param EmbeddedObjectRelation      $relation
      */
-    public function __construct(IEntityMapper $rootEntityMapper, array $relationsToSubSelect, EmbeddedObjectRelation $relation)
-    {
-        parent::__construct($rootEntityMapper, $relationsToSubSelect, $relation);
+    public function __construct(
+        IEntityMapper $rootEntityMapper,
+        array $subclassObjectMappings,
+        array $relationsToSubSelect,
+        EmbeddedObjectRelation $relation
+    ) {
+        parent::__construct($rootEntityMapper, $subclassObjectMappings, $relationsToSubSelect, $relation);
     }
 
     /**
@@ -84,7 +88,7 @@ class ToOneEmbeddedObjectMapping extends ToOneRelationMapping implements IFinalR
             ConditionOperator::EQUALS,
             ConditionOperator::NOT_EQUALS,
             ConditionOperator::IN,
-            ConditionOperator::NOT_IN
+            ConditionOperator::NOT_IN,
         ];
 
         $isEqualityOperator = in_array($operator, $multiColumnOperators, true);
@@ -132,7 +136,7 @@ class ToOneEmbeddedObjectMapping extends ToOneRelationMapping implements IFinalR
         $table   = $select->getTableFromAlias($tableAlias);
         $rowData = $this->getColumnDataForObject($value);
 
-        $columnExpressions  = [];
+        $columnExpressions = [];
 
         foreach ($rowData->getColumnData() as $columnName => $value) {
             $column = $table->getColumn($columnName);

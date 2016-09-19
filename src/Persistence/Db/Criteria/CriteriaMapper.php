@@ -17,6 +17,7 @@ use Dms\Core\Model\ICriteria;
 use Dms\Core\Model\Object\FinalizedClassDefinition;
 use Dms\Core\Persistence\Db\Connection\IConnection;
 use Dms\Core\Persistence\Db\Mapping\Definition\FinalizedMapperDefinition;
+use Dms\Core\Persistence\Db\Mapping\Hierarchy\IObjectMapping;
 use Dms\Core\Persistence\Db\Mapping\IEntityMapper;
 use Dms\Core\Persistence\Db\Mapping\IObjectMapper;
 use Dms\Core\Persistence\Db\Mapping\Relation\ISeparateTableRelation;
@@ -179,25 +180,26 @@ class CriteriaMapper
         array &$memberMappings = null,
         array $extraRequiredMembers = []
     ) {
-        $memberMappings = $this->mapAllRequiredMembersFor($criteria, $tableAlias, $extraRequiredMembers);
-
-        $condition = null;
-        $loaded    = false;
+        $subclassTableAliases = [];
+        $condition            = null;
+        $loaded               = false;
 
         if ($criteria->hasCondition()) {
             $condition = $this->applySpecificInstanceOfCondition(
                 $criteria->getCondition(),
                 $select,
                 /* out */
-                $loaded
+                $loaded,
+                $subclassTableAliases
             );
         }
 
         if (!$loaded) {
-            $this->mapper->getMapping()->addLoadToSelect($select, $tableAlias);
+            $this->mapper->getMapping()->addLoadToSelect($select, $tableAlias, /* out */ $subclassTableAliases);
         }
 
-        $memberMappings = $this->optimizeOneToOneRelationsAsLeftJoins($select, $tableAlias, $memberMappings);
+        $memberMappings = $this->mapAllRequiredMembersFor($criteria, $tableAlias, $subclassTableAliases, $extraRequiredMembers);
+        $memberMappings = $this->optimizeOneToOneRelationsAsLeftJoins($select, $memberMappings);
 
         if ($condition) {
             $select->where($this->mapCondition($condition, $select, $memberMappings));
@@ -215,13 +217,19 @@ class CriteriaMapper
 
     /**
      * @param ICriteria      $criteria
-     * @param string         $tableAlias
+     * @param string         $sourceTableAlias
+     * @param array          $subclassTableAliases
      * @param NestedMember[] $extraRequiredMembers
      *
      * @return MemberMappingWithTableAliases[]
      * @throws MemberExpressionMappingException
      */
-    private function mapAllRequiredMembersFor(ICriteria $criteria, string $tableAlias, array $extraRequiredMembers) : array
+    private function mapAllRequiredMembersFor(
+        ICriteria $criteria,
+        string $sourceTableAlias,
+        array $subclassTableAliases,
+        array $extraRequiredMembers
+    ) : array
     {
         /** @var NestedMember[] $memberExpressions */
         $memberExpressions = [];
@@ -249,10 +257,17 @@ class CriteriaMapper
         $memberMappings = [];
 
         foreach ($memberExpressions as $key => $member) {
-            $memberMappings[$key] = new MemberMappingWithTableAliases(
-                $this->memberExpressionMapper->mapMemberExpression($member),
-                [$tableAlias]
-            );
+            $mapping = $this->memberExpressionMapper->mapMemberExpression($member);
+
+            if ($subclassMappings = $mapping->getSubclassObjectMappings()) {
+                /** @var IObjectMapping $subclassMapping */
+                $subclassMapping  = end($subclassMappings);
+                $memberTableAlias = $subclassTableAliases[$subclassMapping->getObjectType()];
+            } else {
+                $memberTableAlias = $sourceTableAlias;
+            }
+
+            $memberMappings[$key] = new MemberMappingWithTableAliases($mapping, [$memberTableAlias]);
         }
 
         return $memberMappings;
@@ -260,19 +275,18 @@ class CriteriaMapper
 
     /**
      * @param Select                          $select
-     * @param string                          $initialTableAlias
      * @param MemberMappingWithTableAliases[] $memberMappings
      *
      * @return array|MemberMappingWithTableAliases[]
      */
-    private function optimizeOneToOneRelationsAsLeftJoins(Select $select, string $initialTableAlias, array $memberMappings) : array
+    private function optimizeOneToOneRelationsAsLeftJoins(Select $select, array $memberMappings) : array
     {
         $joinedRelationTableAliasMap = [];
 
         foreach ($memberMappings as $key => $mappingWithAlias) {
-            $relationKey = '';
+            $relationKey       = '';
             $mapping           = $mappingWithAlias->getMapping();
-            $tableAliases      = [$initialTableAlias];
+            $tableAliases      = $mappingWithAlias->getTableAliases();
             $relationsToRemove = 0;
 
             foreach ($mapping->getRelationsToSubSelect() as $relation) {
@@ -306,10 +320,11 @@ class CriteriaMapper
      * @param Condition $condition
      * @param Select    $select
      * @param bool      &$loaded
+     * @param array     &$subclassTableAliases
      *
      * @return Condition|null
      */
-    private function applySpecificInstanceOfCondition(Condition $condition, Select $select, &$loaded)
+    private function applySpecificInstanceOfCondition(Condition $condition, Select $select, &$loaded, array &$subclassTableAliases)
     {
         if ($condition instanceof InstanceOfCondition) {
             $class = $condition->getClass();
@@ -318,7 +333,7 @@ class CriteriaMapper
                 return null;
             }
 
-            $this->mapper->getMapping()->addSpecificLoadToQuery($select, $class);
+            $this->mapper->getMapping()->addSpecificLoadToQuery($select, $class, $subclassTableAliases);
             $loaded = true;
 
             return null;
@@ -326,12 +341,12 @@ class CriteriaMapper
             $innerConditions = $condition->getConditions();
 
             foreach ($innerConditions as $key => $condition) {
-                $innerConditions[$key] = $this->applySpecificInstanceOfCondition($condition, $select, $loaded);
+                $innerConditions[$key] = $this->applySpecificInstanceOfCondition($condition, $select, $loaded, $subclassTableAliases);
             }
 
             $innerConditions = array_filter($innerConditions);
 
-            return count($innerConditions) === 1 ? reset($innerConditions) : new AndCondition($innerConditions);
+            return count($innerConditions) <= 1 ? reset($innerConditions) : new AndCondition($innerConditions);
         } else {
             return $condition;
         }

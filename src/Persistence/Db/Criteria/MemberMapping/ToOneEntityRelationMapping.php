@@ -8,6 +8,7 @@ use Dms\Core\Exception\NotImplementedException;
 use Dms\Core\Model\Criteria\Condition\ConditionOperator;
 use Dms\Core\Model\IEntity;
 use Dms\Core\Persistence\Db\Criteria\MemberExpressionMappingException;
+use Dms\Core\Persistence\Db\Mapping\Hierarchy\IObjectMapping;
 use Dms\Core\Persistence\Db\Mapping\IEntityMapper;
 use Dms\Core\Persistence\Db\Mapping\ReadModel\Relation\MemberRelation;
 use Dms\Core\Persistence\Db\Mapping\ReadModel\Relation\ToOneMemberRelation;
@@ -32,19 +33,20 @@ class ToOneEntityRelationMapping extends ToOneRelationMapping implements IFinalR
      * ToOneEntityRelationMapping constructor.
      *
      * @param IEntityMapper                                        $rootEntityMapper
+     * @param IObjectMapping[]                                     $subclassObjectMappings
      * @param IRelation[]                                          $relationsToSubSelect
      * @param ISeparateTableRelation|IToOneRelation|EntityRelation $relation
      */
-    public function __construct(IEntityMapper $rootEntityMapper, array $relationsToSubSelect, IToOneRelation $relation)
+    public function __construct(IEntityMapper $rootEntityMapper, array $subclassObjectMappings, array $relationsToSubSelect, IToOneRelation $relation)
     {
         InvalidArgumentException::verifyInstanceOf(__METHOD__, 'relation', $relation, ISeparateTableRelation::class);
         InvalidArgumentException::verifyInstanceOf(__METHOD__, 'relation', $relation, EntityRelation::class);
         InvalidArgumentException::verify(
-                $relation->getReference() instanceof RelationObjectReference,
-                'relation must be an id reference'
+            $relation->getReference() instanceof RelationObjectReference,
+            'relation must be an id reference'
         );
 
-        parent::__construct($rootEntityMapper, $relationsToSubSelect, $relation);
+        parent::__construct($rootEntityMapper, $subclassObjectMappings, $relationsToSubSelect, $relation);
     }
 
     /**
@@ -69,23 +71,23 @@ class ToOneEntityRelationMapping extends ToOneRelationMapping implements IFinalR
     public function getWhereConditionExpr(Select $select, string $tableAlias, string $operator, $value) : Expr
     {
         $allowedOperators = [
-                ConditionOperator::EQUALS,
-                ConditionOperator::NOT_EQUALS,
-                ConditionOperator::IN,
-                ConditionOperator::NOT_IN,
+            ConditionOperator::EQUALS,
+            ConditionOperator::NOT_EQUALS,
+            ConditionOperator::IN,
+            ConditionOperator::NOT_IN,
         ];
 
         if (!in_array($operator, $allowedOperators, true)) {
             throw MemberExpressionMappingException::format(
-                    'Cannot compare entity of type %s using the \'%s\' operator, only (%s) are supported',
-                    $this->getRelatedObjectType(), $operator, Debug::formatValues($allowedOperators)
+                'Cannot compare entity of type %s using the \'%s\' operator, only (%s) are supported',
+                $this->getRelatedObjectType(), $operator, Debug::formatValues($allowedOperators)
             );
         }
 
         return $this->loadExpressionWithNecessarySubselects($select, $tableAlias,
-                function (Select $select, $tableAlias) use ($operator, $value) {
-                    return $this->loadWhereConditionExpr($tableAlias, $operator, $value);
-                });
+            function (Select $select, $tableAlias) use ($operator, $value) {
+                return $this->loadWhereConditionExpr($tableAlias, $operator, $value);
+            });
     }
 
     protected function loadWhereConditionExpr($tableAlias, $operator, $value)
@@ -115,8 +117,8 @@ class ToOneEntityRelationMapping extends ToOneRelationMapping implements IFinalR
             }
         } else {
             throw InvalidArgumentException::format(
-                    'Invalid comparison value, expecting type %s, %s given',
-                    $entityType . '|' . 'null', Debug::getType($value)
+                'Invalid comparison value, expecting type %s, %s given',
+                $entityType . '|' . 'null', Debug::getType($value)
             );
         }
 
@@ -134,13 +136,13 @@ class ToOneEntityRelationMapping extends ToOneRelationMapping implements IFinalR
             }
         } elseif ($idValue === null) {
             return $operator === ConditionOperator::EQUALS
-                    ? Expr::isNull(Expr::column($tableAlias, $relatedPrimaryKey))
-                    : Expr::isNotNull(Expr::column($tableAlias, $relatedPrimaryKey));
+                ? Expr::isNull(Expr::column($tableAlias, $relatedPrimaryKey))
+                : Expr::isNotNull(Expr::column($tableAlias, $relatedPrimaryKey));
         } else {
             return new BinOp(
-                    Expr::column($tableAlias, $relatedPrimaryKey),
-                    $this->mapConditionOperator($operator),
-                    Expr::param(null, $idValue)
+                Expr::column($tableAlias, $relatedPrimaryKey),
+                $this->mapConditionOperator($operator),
+                Expr::param(null, $idValue)
             );
         }
     }

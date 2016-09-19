@@ -50,8 +50,8 @@ class EmbeddedSubClassObjectMapping extends SubClassObjectMapping implements IEm
 
         if (!$parentTable->hasColumn($classTypeColumnName)) {
             throw InvalidArgumentException::format(
-                    'Invalid class type column name: column %s does not exist on parent table',
-                    $classTypeColumnName
+                'Invalid class type column name: column %s does not exist on parent table',
+                $classTypeColumnName
             );
         }
 
@@ -157,35 +157,45 @@ class EmbeddedSubClassObjectMapping extends SubClassObjectMapping implements IEm
         $column      = $this->parentTable->findColumn($this->classTypeColumnName);
 
         return Expr::equal(
-                Expr::column($parentAlias, $column),
-                Expr::param($column->getType(), $this->classTypeValue)
+            Expr::column($parentAlias, $column),
+            Expr::param($column->getType(), $this->classTypeValue)
         );
     }
 
     /**
      * {@inheritdoc}
      */
-    public function addSpecificLoadToQuery(Query $query, string $objectType)
+    public function addSpecificLoadToQuery(Query $query, string $objectType, array &$subclassTableAliases = [])
     {
+        $parentAlias = $this->parentTable->getName();
+        
+        if ($query instanceof Select) {
+            foreach ($this->specificColumnsToLoad as $columnName) {
+                $query->addColumn($columnName, Expr::column($parentAlias, $this->parentTable->getColumn($columnName)));
+            }
+        }
+
         foreach ($this->subClassMappings as $mapping) {
             if ($mapping instanceof self && is_a($objectType, $mapping->getObjectType(), true)) {
-                $mapping->addSpecificLoadToQuery($query, $objectType);
+                $mapping->addSpecificLoadToQuery($query, $objectType, $subclassTableAliases);
+
                 return;
             }
         }
 
-        $parentAlias = $this->parentTable->getName();
         $column      = $this->parentTable->findColumn($this->classTypeColumnName);
 
+        $subclassTableAliases[$this->getObjectType()] = $parentAlias;
+
         $query->where(Expr::equal(
-                Expr::column($parentAlias, $column),
-                Expr::param($column->getType(), $this->classTypeValue)
+            Expr::column($parentAlias, $column),
+            Expr::param($column->getType(), $this->classTypeValue)
         ));
 
         if ($query instanceof Select) {
             $this->addLoadToSelect($query, $parentAlias);
         }
 
-        parent::addSpecificLoadToQuery($query, $objectType);
+        parent::addSpecificLoadToQuery($query, $objectType, $subclassTableAliases);
     }
 }

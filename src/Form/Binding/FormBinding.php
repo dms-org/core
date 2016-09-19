@@ -59,7 +59,7 @@ class FormBinding implements IFormBinding
             if (!is_a($this->objectType, $fieldBinding->getObjectType(), true)) {
                 throw InvalidArgumentException::format(
                         'Invalid form binding passed to %s: invalid object type, must be compatible with \'%s\', \'%s\' given',
-                        __METHOD__, $this->objectType, $fieldName
+                        __METHOD__, $this->objectType, $fieldBinding->getObjectType()
                 );
             }
 

@@ -2,6 +2,7 @@
 
 namespace Dms\Core\Persistence\Db\Criteria\MemberMapping;
 
+use Dms\Core\Persistence\Db\Mapping\Hierarchy\IObjectMapping;
 use Dms\Core\Persistence\Db\Mapping\IEntityMapper;
 use Dms\Core\Persistence\Db\Mapping\Relation\IRelation;
 use Dms\Core\Persistence\Db\Mapping\Relation\IToManyRelation;
@@ -31,20 +32,22 @@ class ToManyRelationAggregateMapping extends RelationMapping
     /**
      * ToManyRelationAggregateMapping constructor.
      *
-     * @param IEntityMapper   $rootEntityMapper
-     * @param IRelation[]     $relationsToSubSelect
-     * @param IToManyRelation $relation
-     * @param string          $aggregateType
-     * @param MemberMapping   $argumentMemberMapping
+     * @param IEntityMapper    $rootEntityMapper
+     * @param IObjectMapping[] $subclassObjectMappings
+     * @param IRelation[]      $relationsToSubSelect
+     * @param IToManyRelation  $relation
+     * @param string           $aggregateType
+     * @param MemberMapping    $argumentMemberMapping
      */
     public function __construct(
         IEntityMapper $rootEntityMapper,
+        array $subclassObjectMappings,
         array $relationsToSubSelect,
         IToManyRelation $relation,
         string $aggregateType,
         MemberMapping $argumentMemberMapping
     ) {
-        parent::__construct($rootEntityMapper, $relationsToSubSelect, $relation);
+        parent::__construct($rootEntityMapper, $subclassObjectMappings, $relationsToSubSelect, $relation);
         $this->aggregateType         = $aggregateType;
         $this->argumentMemberMapping = $argumentMemberMapping;
     }

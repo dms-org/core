@@ -64,7 +64,7 @@ class ObjectSetSubset implements IObjectSet, IObjectSetWithLoadCriteriaSupport
      */
     public function getObjectType() : string
     {
-        return $this->fullObjectSet->getObjectType();
+        return $this->criteria->getClass()->getClassName();
     }
 
     /**
@@ -80,7 +80,7 @@ class ObjectSetSubset implements IObjectSet, IObjectSetWithLoadCriteriaSupport
      */
     public function criteria() : Criteria
     {
-        return $this->fullObjectSet->criteria();
+        return $this->fullObjectSet->criteria()->whereInstanceOf($this->getObjectType());
     }
 
     /**
@@ -169,7 +169,7 @@ class ObjectSetSubset implements IObjectSet, IObjectSetWithLoadCriteriaSupport
     {
         $objectSet = $this->verifyObjectSetSupportsLoadCriteria(__METHOD__);
 
-        return $objectSet->loadCriteria();
+        return $objectSet->loadCriteria()->whereInstanceOf($this->getObjectType());
     }
 
     /**

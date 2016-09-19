@@ -14,6 +14,7 @@ use Dms\Core\Tests\Form\Field\Processor\Validator\Fixtures\TestEntity;
 use Dms\Core\Tests\Model\Criteria\Fixtures\MockSpecification;
 use Dms\Core\Tests\Persistence\Db\Fixtures\MockEntity;
 use Dms\Core\Tests\Persistence\Db\Integration\Mapping\Fixtures\Id\EmptyEntity;
+use Dms\Core\Tests\Persistence\Db\Integration\Mapping\Fixtures\Id\EmptyEntitySubclass;
 use Dms\Core\Tests\Persistence\Db\Integration\Mapping\Fixtures\Id\EmptyMapper;
 
 /**
@@ -511,5 +512,19 @@ class DbRepositoryTest extends DbIntegrationTest
             new EmptyEntity(9),
             new EmptyEntity(10)
         ], $this->repo->getAll());
+    }
+
+    public function testRepositorySubsetWithSpecificInstanceOf()
+    {
+        $entities = $this->makeEntities(10);
+
+        $this->repo->saveAll($entities);
+
+        $subset = $this->repo->subset(
+            EmptyEntity::criteria()
+                ->whereInstanceOf(EmptyEntitySubclass::class)
+        );
+
+        $this->assertEquals(EmptyEntitySubclass::class, $subset->getObjectType());
     }
 }

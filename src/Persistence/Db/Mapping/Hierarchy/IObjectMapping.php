@@ -42,10 +42,11 @@ interface IObjectMapping
      *
      * @param Select $select
      * @param string $tableAlias
+     * @param array  $subclassTableAliases
      *
      * @return void
      */
-    public function addLoadToSelect(Select $select, string $tableAlias);
+    public function addLoadToSelect(Select $select, string $tableAlias, array &$subclassTableAliases = []);
 
     /**
      * Adds the required clauses to load ONLY the instances of this class
@@ -53,10 +54,11 @@ interface IObjectMapping
      *
      * @param Query  $query
      * @param string $objectType
+     * @param array  $subclassTableAliases
      *
      * @return void
      */
-    public function addSpecificLoadToQuery(Query $query, string $objectType);
+    public function addSpecificLoadToQuery(Query $query, string $objectType, array &$subclassTableAliases = []);
 
     /**
      * Returns an expression to match only instances of this class.
@@ -133,7 +135,7 @@ interface IObjectMapping
      *
      * @param LoadingContext $context
      * @param Row[]          $rows
-     * @param ITypedObject[]     $objects
+     * @param ITypedObject[] $objects
      *
      * @return array[]
      */

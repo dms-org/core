@@ -169,7 +169,7 @@ class ParentObjectMapping extends ObjectMapping
     /**
      * @inheritDoc
      */
-    protected function makeClassConditionExpr(Query $query) : \Dms\Core\Persistence\Db\Query\Expression\Expr
+    protected function makeClassConditionExpr(Query $query) : Expr
     {
         return Expr::true();
     }
@@ -177,7 +177,7 @@ class ParentObjectMapping extends ObjectMapping
     /**
      * @inheritDoc
      */
-    public function addSpecificLoadToQuery(Query $query, string $objectType)
+    public function addSpecificLoadToQuery(Query $query, string $objectType, array &$subclassTableAliases = [])
     {
         if ($query instanceof Select) {
             foreach ($this->specificColumnsToLoad as $column) {
@@ -185,7 +185,7 @@ class ParentObjectMapping extends ObjectMapping
             }
         }
 
-        parent::addSpecificLoadToQuery($query, $objectType);
+        parent::addSpecificLoadToQuery($query, $objectType, $subclassTableAliases);
     }
 
 

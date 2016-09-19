@@ -2,6 +2,7 @@
 
 namespace Dms\Core\Persistence\Db\Criteria\MemberMapping;
 
+use Dms\Core\Persistence\Db\Mapping\Hierarchy\IObjectMapping;
 use Dms\Core\Persistence\Db\Mapping\IEntityMapper;
 use Dms\Core\Persistence\Db\Mapping\Relation\IRelation;
 use Dms\Core\Persistence\Db\Mapping\Relation\IToManyRelation;
@@ -18,15 +19,20 @@ class ToManyRelationCountMapping extends RelationMapping
     /**
      * ToManyRelationCountMapping constructor.
      *
-     * @param IEntityMapper   $rootEntityMapper
-     * @param IRelation[]     $relationsToSubSelect
-     * @param IToManyRelation $relation
+     * @param IEntityMapper    $rootEntityMapper
+     * @param IRelation[]      $relationsToSubSelect
+     * @param IObjectMapping[] $subclassObjectMappings
+     * @param IToManyRelation  $relation
      */
-    public function __construct(IEntityMapper $rootEntityMapper, array $relationsToSubSelect, IToManyRelation $relation)
-    {
-        parent::__construct($rootEntityMapper, $relationsToSubSelect, $relation);
+    public function __construct(
+        IEntityMapper $rootEntityMapper,
+        array $subclassObjectMappings,
+        array $relationsToSubSelect,
+        IToManyRelation $relation
+    ) {
+        parent::__construct($rootEntityMapper, $subclassObjectMappings, $relationsToSubSelect, $relation);
     }
-    
+
     /**
      * @return IToManyRelation
      */
@@ -34,11 +40,11 @@ class ToManyRelationCountMapping extends RelationMapping
     {
         return parent::getRelation();
     }
-    
+
     /**
      * @inheritDoc
      */
-    protected function getSingleValueExpressionInSelect(Select $select, string $tableAlias) : \Dms\Core\Persistence\Db\Query\Expression\Expr
+    protected function getSingleValueExpressionInSelect(Select $select, string $tableAlias) : Expr
     {
         return Expr::count();
     }

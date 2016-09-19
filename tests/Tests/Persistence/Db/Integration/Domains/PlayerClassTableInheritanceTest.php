@@ -3,6 +3,9 @@
 namespace Dms\Core\Tests\Persistence\Db\Integration\Domains;
 
 use Dms\Core\Persistence\Db\Mapping\IOrm;
+use Dms\Core\Persistence\Db\Query\Clause\Join;
+use Dms\Core\Persistence\Db\Query\Expression\Expr;
+use Dms\Core\Persistence\Db\Query\Select;
 use Dms\Core\Persistence\Db\Schema\Column;
 use Dms\Core\Persistence\Db\Schema\PrimaryKeyBuilder;
 use Dms\Core\Persistence\Db\Schema\Type\Integer;
@@ -196,5 +199,65 @@ class PlayerClassTableInheritanceTest extends DbIntegrationTest
                 'bowlers'     => [
                 ],
         ]);
+    }
+
+    //////////////
+    // Criteria //
+    //////////////
+
+    public function testLoadWithSubclassProperty()
+    {
+        $this->setDataInDb([
+            'players'     => [
+                ['id' => 1, 'name' => 'Joe'],
+                ['id' => 2, 'name' => 'Jack'],
+                ['id' => 3, 'name' => 'John'],
+            ],
+            'cricketers'  => [
+                ['id' => 1, 'batting_average' => 14],
+                ['id' => 2, 'batting_average' => 10],
+                ['id' => 3, 'batting_average' => 10],
+            ],
+            'bowlers'     => [
+                ['id' => 1, 'bowling_average' => 3],
+                ['id' => 2, 'bowling_average' => 5],
+            ],
+        ]);
+
+        $bowlers = $this->repo->matching(
+            $this->repo->criteria()
+                ->whereInstanceOf(Bowler::class)
+                ->where('bowlingAverage', '>', 4)
+        );
+
+        $this->assertEquals(
+            [$this->repo->get(2)],
+            $bowlers
+        );
+
+        $this->assertExecutedQueryNumber(
+            1,
+            Select::allFrom($this->getSchemaTable('players'))
+                ->addColumn('__cricketers__batting_average', Expr::tableColumn($this->getSchemaTable('cricketers'), 'batting_average'))
+                ->addColumn('__cricketers__id', Expr::tableColumn($this->getSchemaTable('cricketers'), 'id'))
+                ->addColumn('__bowlers__bowling_average', Expr::tableColumn($this->getSchemaTable('bowlers'), 'bowling_average'))
+                ->addColumn('__bowlers__id', Expr::tableColumn($this->getSchemaTable('bowlers'), 'id'))
+                ->join(Join::inner($this->getSchemaTable('cricketers'), 'cricketers', [
+                    Expr::equal(
+                        Expr::tableColumn($this->getSchemaTable('players'), 'id'),
+                        Expr::tableColumn($this->getSchemaTable('cricketers'), 'id')
+                    )
+                ]))
+                ->join(Join::inner($this->getSchemaTable('bowlers'), 'bowlers', [
+                    Expr::equal(
+                        Expr::tableColumn($this->getSchemaTable('cricketers'), 'id'),
+                        Expr::tableColumn($this->getSchemaTable('bowlers'), 'id')
+                    )
+                ]))
+                ->where(Expr::greaterThan(
+                    Expr::tableColumn($this->getSchemaTable('bowlers'), 'bowling_average'),
+                    Expr::param(null, 4)
+                ))
+            );
     }
 }

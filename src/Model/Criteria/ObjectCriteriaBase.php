@@ -61,7 +61,7 @@ class ObjectCriteriaBase
      */
     final public function verifyOfClass(string $class)
     {
-        if ($this->class->getClassName() !== $class) {
+        if (!is_a($this->class->getClassName(), $class, true)) {
             throw Exception\TypeMismatchException::format(
                     'Criteria instance must be for class %s, %s given',
                     $class, $this->class->getClassName()

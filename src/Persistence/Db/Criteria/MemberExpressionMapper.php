@@ -17,6 +17,7 @@ use Dms\Core\Model\Criteria\Member\ObjectSetSumMethodExpression;
 use Dms\Core\Model\Criteria\Member\SelfExpression;
 use Dms\Core\Model\Criteria\NestedMember;
 use Dms\Core\Model\Object\FinalizedPropertyDefinition;
+use Dms\Core\Model\Type\ObjectType;
 use Dms\Core\Persistence\Db\Criteria\MemberMapping\ColumnMapping;
 use Dms\Core\Persistence\Db\Criteria\MemberMapping\MemberMapping;
 use Dms\Core\Persistence\Db\Criteria\MemberMapping\ToManyRelationAggregateMapping;
@@ -25,6 +26,7 @@ use Dms\Core\Persistence\Db\Criteria\MemberMapping\ToManyRelationMapping;
 use Dms\Core\Persistence\Db\Criteria\MemberMapping\ToOneEmbeddedObjectMapping;
 use Dms\Core\Persistence\Db\Criteria\MemberMapping\ToOneEntityRelationMapping;
 use Dms\Core\Persistence\Db\Criteria\MemberMapping\ToOneIdRelationMapping;
+use Dms\Core\Persistence\Db\Mapping\Hierarchy\IObjectMapping;
 use Dms\Core\Persistence\Db\Mapping\IEntityMapper;
 use Dms\Core\Persistence\Db\Mapping\IObjectMapper;
 use Dms\Core\Persistence\Db\Mapping\Relation\Embedded\EmbeddedObjectRelation;
@@ -74,25 +76,30 @@ class MemberExpressionMapper
     public function mapMemberExpression(NestedMember $member) : MemberMapping
     {
         try {
-            $nestedRelations = $this->mapMemberExpressionsToRelations(
-                    $this->rootEntityMapper,
-                    $member->getPartsExceptLast(),
-                    $finalMapper
+            $subclassMappings = $this->findSubclassMappings(
+                $this->rootEntityMapper,
+                $member
             );
 
-            return $this->mapFinalMember($finalMapper, $nestedRelations, $member->getLastPart());
+            $nestedRelations = $this->mapMemberExpressionsToRelations(
+                $this->rootEntityMapper,
+                $member->getPartsExceptLast(),
+                $finalMapper
+            );
+
+            return $this->mapFinalMember($finalMapper, $subclassMappings, $nestedRelations, $member->getLastPart());
         } catch (BaseException $inner) {
             if ($inner instanceof MemberExpressionMappingException && $inner->getPrevious()) {
                 $inner = $inner->getPrevious();
             }
 
             throw new MemberExpressionMappingException(
-                    sprintf(
-                            'Could not map member expression \'%s\' of entity type %s: %s',
-                            $member->asString(), $this->rootEntityMapper->getObjectType(), $inner->getMessage()
-                    ),
-                    1,
-                    $inner
+                sprintf(
+                    'Could not map member expression \'%s\' of entity type %s: %s',
+                    $member->asString(), $this->rootEntityMapper->getObjectType(), $inner->getMessage()
+                ),
+                1,
+                $inner
             );
         }
     }
@@ -115,13 +122,19 @@ class MemberExpressionMapper
 
     /**
      * @param IObjectMapper     $mapper
+     * @param IObjectMapping[]  $subclassMappings
      * @param IRelation[]       $nestedRelations
      * @param IMemberExpression $lastPart
      *
      * @return MemberMapping
      * @throws InvalidArgumentException
      */
-    protected function mapFinalMember(IObjectMapper $mapper, array $nestedRelations, IMemberExpression $lastPart) : MemberMapping
+    protected function mapFinalMember(
+        IObjectMapper $mapper,
+        array $subclassMappings,
+        array $nestedRelations,
+        IMemberExpression $lastPart
+    ) : MemberMapping
     {
         switch (true) {
             case $lastPart instanceof SelfExpression:
@@ -129,29 +142,29 @@ class MemberExpressionMapper
                 return $this->mapFinalSelfRelation($mapper);
 
             case $lastPart instanceof MemberPropertyExpression:
-                return $this->mapFinalPropertyToMapping($nestedRelations, $lastPart->getProperty());
+                return $this->mapFinalPropertyToMapping($subclassMappings, $nestedRelations, $lastPart->getProperty());
 
             case $lastPart instanceof LoadIdFromEntitySetMethodExpression:
                 $relations    = $this->mapLoadExpressionToRelations($mapper, $lastPart);
                 $lastRelation = array_pop($relations);
 
-                return $this->mapFinalRelationToMapping(array_merge($nestedRelations, $relations), $lastRelation);
+                return $this->mapFinalRelationToMapping($subclassMappings, array_merge($nestedRelations, $relations), $lastRelation);
 
             case $lastPart instanceof CollectionCountMethodExpression:
                 $lastRelation = array_pop($nestedRelations);
 
-                return new ToManyRelationCountMapping($this->rootEntityMapper, $nestedRelations, $lastRelation);
+                return new ToManyRelationCountMapping($this->rootEntityMapper, $subclassMappings, $nestedRelations, $lastRelation);
 
             case $lastPart instanceof ObjectSetAggregateMethodExpression:
                 $lastRelation = array_pop($nestedRelations);
 
-                return $this->mapFinalAggregateExpression($nestedRelations, $lastRelation, $lastPart);
+                return $this->mapFinalAggregateExpression($nestedRelations, $subclassMappings, $lastRelation, $lastPart);
 
             case $lastPart instanceof ObjectSetFlattenMethodExpression:
                 $relations    = $this->mapMemberExpressionsToRelations($mapper, [$lastPart]);
                 $lastRelation = array_pop($relations);
 
-                return $this->mapFinalRelationToMapping(array_merge($nestedRelations, $relations), $lastRelation);
+                return $this->mapFinalRelationToMapping($subclassMappings, array_merge($nestedRelations, $relations), $lastRelation);
         }
 
         throw InvalidArgumentException::format('unknown final member expression type %s', Debug::getType($lastPart));
@@ -176,70 +189,86 @@ class MemberExpressionMapper
         return $entityMapper ?: $this->rootEntityMapper;
     }
 
-    protected function mapFinalPropertyToMapping(array $nestedRelations, FinalizedPropertyDefinition $property)
+    /**
+     * @param IObjectMapping[]            $subclassMappings
+     * @param IRelation[]                 $nestedRelations
+     * @param FinalizedPropertyDefinition $property
+     *
+     * @return ColumnMapping|MemberMapping
+     * @throws InvalidArgumentException
+     */
+    protected function mapFinalPropertyToMapping(array $subclassMappings, array $nestedRelations, FinalizedPropertyDefinition $property)
     {
         $propertyName = $property->getName();
 
         /** @var IRelation $lastRelation */
         $lastRelation = end($nestedRelations);
-        $definition   = $lastRelation ? $lastRelation->getMapper()->getDefinition() : $this->rootEntityMapper->getDefinition();
+        if ($lastRelation) {
+            $definition = $lastRelation->getMapper()->getDefinition();
+        } else {
+            $definition = $subclassMappings ? end($subclassMappings)->getDefinition() : $this->rootEntityMapper->getDefinition();
+        }
 
         if (isset($definition->getPropertyColumnMap()[$propertyName])) {
             $columnName                  = $definition->getPropertyColumnMap()[$propertyName];
             $phpToDbPropertyConverterMap = $definition->getPhpToDbPropertyConverterMap();
 
             return new ColumnMapping(
-                    $this->rootEntityMapper,
-                    $nestedRelations,
-                    $definition->getTable()->getColumn($columnName),
-                    isset($phpToDbPropertyConverterMap[$propertyName]) ? $phpToDbPropertyConverterMap[$propertyName] : null
+                $this->rootEntityMapper,
+                $subclassMappings,
+                $nestedRelations,
+                $definition->getTable()->getColumn($columnName),
+                isset($phpToDbPropertyConverterMap[$propertyName]) ? $phpToDbPropertyConverterMap[$propertyName] : null
             );
         } elseif ($relation = $definition->getRelationMappedToProperty($propertyName)) {
-            return $this->mapFinalRelationToMapping($nestedRelations, $relation);
+            return $this->mapFinalRelationToMapping($subclassMappings, $nestedRelations, $relation);
         }
 
         throw InvalidArgumentException::format(
-                'cannot map property \'%s\' of type %s, property is not mapped according to mapper definition for type %s',
-                $propertyName, $property->getType()->asTypeString(), $definition->getClassName()
+            'cannot map property \'%s\' of type %s, property is not mapped according to mapper definition for type %s',
+            $propertyName, $property->getType()->asTypeString(), $definition->getClassName()
         );
     }
 
     /**
-     * @param IRelation[] $nestedRelations
-     * @param IRelation   $lastRelation
+     * @param IObjectMapping[] $subclassMappings
+     * @param IRelation[]      $nestedRelations
+     * @param IRelation        $lastRelation
      *
      * @return MemberMapping
      */
-    protected function mapFinalRelationToMapping(array $nestedRelations, IRelation $lastRelation) : MemberMapping
+    protected function mapFinalRelationToMapping(array $subclassMappings, array $nestedRelations, IRelation $lastRelation) : MemberMapping
     {
         if ($lastRelation instanceof IToManyRelation) {
-            return new ToManyRelationMapping($this->rootEntityMapper, $nestedRelations, $lastRelation);
+            return new ToManyRelationMapping($this->rootEntityMapper, $subclassMappings, $nestedRelations, $lastRelation);
         } elseif ($lastRelation instanceof EntityRelation) {
             if ($lastRelation->getReference() instanceof RelationObjectReference) {
-                return new ToOneEntityRelationMapping($this->rootEntityMapper, $nestedRelations, $lastRelation);
+                return new ToOneEntityRelationMapping($this->rootEntityMapper, $subclassMappings, $nestedRelations, $lastRelation);
             } else {
-                return new ToOneIdRelationMapping($this->rootEntityMapper, $nestedRelations, $lastRelation);
+                return new ToOneIdRelationMapping($this->rootEntityMapper, $subclassMappings, $nestedRelations, $lastRelation);
             }
         } else {
             /** @var EmbeddedObjectRelation $lastRelation */
-            return new ToOneEmbeddedObjectMapping($this->rootEntityMapper, $nestedRelations, $lastRelation);
+            return new ToOneEmbeddedObjectMapping($this->rootEntityMapper, $subclassMappings, $nestedRelations, $lastRelation);
         }
     }
 
     /**
+     * @param IObjectMapping[]                   $subclassMappings
      * @param IRelation[]                        $nestedRelations
      * @param IToManyRelation                    $lastRelation
-     *
      * @param ObjectSetAggregateMethodExpression $lastPart
      *
      * @return MemberMapping
      * @throws InvalidArgumentException
      */
     protected function mapFinalAggregateExpression(
-            array $nestedRelations,
-            IToManyRelation $lastRelation,
-            ObjectSetAggregateMethodExpression $lastPart
-    ) : MemberMapping {
+        array $subclassMappings,
+        array $nestedRelations,
+        IToManyRelation $lastRelation,
+        ObjectSetAggregateMethodExpression $lastPart
+    ) : MemberMapping
+    {
         switch (true) {
             case $lastPart instanceof ObjectSetAverageMethodExpression:
                 $aggregateType = SimpleAggregate::AVG;
@@ -262,19 +291,49 @@ class MemberExpressionMapper
         }
 
         $argumentMapping = $this->withRootEntityMapper(
-                $this->getFinalEntityMapper(array_merge($nestedRelations, [$lastRelation])),
-                function () use ($lastPart) {
-                    return $this->mapMemberExpression($lastPart->getAggregatedMember());
-                }
+            $this->getFinalEntityMapper(array_merge($nestedRelations, [$lastRelation])),
+            function () use ($lastPart) {
+                return $this->mapMemberExpression($lastPart->getAggregatedMember());
+            }
         );
 
         return new ToManyRelationAggregateMapping(
-                $this->rootEntityMapper,
-                $nestedRelations,
-                $lastRelation,
-                $aggregateType,
-                $argumentMapping
+            $this->rootEntityMapper,
+            $subclassMappings,
+            $nestedRelations,
+            $lastRelation,
+            $aggregateType,
+            $argumentMapping
         );
+    }
+
+    /**
+     * @param IObjectMapper $mapper
+     * @param NestedMember  $member
+     *
+     * @return array
+     */
+    private function findSubclassMappings(IObjectMapper $mapper, NestedMember $member) : array
+    {
+        /** @var ObjectType $type */
+        $type  = $member->getParts()[0]->getSourceType();
+        $class = $type->getClass();
+
+        $subclassMappings = [];
+
+        $this->walkSubclassMappings($subclassMappings, $mapper->getMapping(), $class);
+
+        return $subclassMappings;
+    }
+
+    private function walkSubclassMappings(array &$subclassMappings, IObjectMapping $mapping, string $class)
+    {
+        foreach ($mapping->getDefinition()->getSubClassMappings() as $subClassMapping) {
+            if (is_a($class, $subClassMapping->getObjectType(), true)) {
+                $subclassMappings[] = $subClassMapping;
+                $this->walkSubclassMappings($subclassMappings, $subClassMapping, $class);
+            }
+        }
     }
 
     /**
@@ -324,7 +383,11 @@ class MemberExpressionMapper
      * @return IRelation[]
      * @throws InvalidArgumentException
      */
-    protected function mapLoadExpressionToRelations(IObjectMapper $mapper, LoadIdFromEntitySetMethodExpression $part, IObjectMapper &$finalMapper = null) : array
+    protected function mapLoadExpressionToRelations(
+        IObjectMapper $mapper,
+        LoadIdFromEntitySetMethodExpression $part,
+        IObjectMapper &$finalMapper = null
+    ) : array
     {
         /** @var EntityRelation $relationToLoadAsObject */
         $innerRelations         = $this->mapMemberExpressionsToRelations($mapper, $part->getIdMember()->getParts(), $finalMapper);
@@ -353,8 +416,8 @@ class MemberExpressionMapper
 
         if (!$relation) {
             throw BaseException::format(
-                    'invalid property \'%s\' of type %s, must be mapped to a relation',
-                    $property->getName(), $definition->getClassName()
+                'invalid property \'%s\' of type %s, must be mapped to a relation',
+                $property->getName(), $definition->getClassName()
             );
         }
 
@@ -369,13 +432,14 @@ class MemberExpressionMapper
     protected function mapFinalSelfRelation(IEntityMapper $mapper) : MemberMapping
     {
         return $this->mapFinalRelationToMapping(
-                [],
-                new ToOneRelation(
-                        self::SELF_RELATION_ID,
-                        new ToOneRelationObjectReference($mapper),
-                        $mapper->getDefinition()->getTable()->getPrimaryKeyColumnName(),
-                        new NonIdentifyingRelationMode()
-                )
+            [],
+            [],
+            new ToOneRelation(
+                self::SELF_RELATION_ID,
+                new ToOneRelationObjectReference($mapper),
+                $mapper->getDefinition()->getTable()->getPrimaryKeyColumnName(),
+                new NonIdentifyingRelationMode()
+            )
         );
     }
 }

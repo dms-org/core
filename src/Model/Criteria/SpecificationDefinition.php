@@ -319,6 +319,10 @@ class SpecificationDefinition extends ObjectCriteriaBase
      */
     final public function whereInstanceOf(string $class)
     {
+        if ($this->class === $class) {
+            return $this;
+        }
+
         if (!is_a($class, $this->class->getClassName(), true)) {
             throw InvalidArgumentException::format(
                 'Invalid class supplied to %s: must be an a subclass of %s, %s given',
@@ -327,6 +331,10 @@ class SpecificationDefinition extends ObjectCriteriaBase
         }
 
         $this->append(new InstanceOfCondition($class));
+        
+        if (!$this->isOrMode) {
+            $this->class = $class::definition();
+        }
 
         return $this;
     }

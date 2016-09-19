@@ -23,7 +23,7 @@ interface ICriteria
     public function getClass() : Object\FinalizedClassDefinition;
 
     /**
-     * Throws an exception if the criteria of not for the supplied class.
+     * Throws an exception if the criteria is not for the supplied class.
      *
      * @param string $class
      *

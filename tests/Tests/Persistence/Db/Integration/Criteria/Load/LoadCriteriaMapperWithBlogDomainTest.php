@@ -59,7 +59,7 @@ class LoadCriteriaMapperWithBlogDomainTest extends LoadCriteriaMapperTestBase
             [], [
                 'this' => [
                     new ToOneMemberRelation(
-                        new ToOneEntityRelationMapping($objectMapper, [], new ToOneRelation(
+                        new ToOneEntityRelationMapping($objectMapper, [], [], new ToOneRelation(
                             MemberExpressionMapper::SELF_RELATION_ID,
                             new ToOneRelationObjectReference($objectMapper),
                             $objectMapper->getPrimaryTable()->getPrimaryKeyColumnName(),
@@ -88,7 +88,7 @@ class LoadCriteriaMapperWithBlogDomainTest extends LoadCriteriaMapperTestBase
             [
                 'password' => [
                     new ToOneMemberRelation(
-                        (new ToOneEmbeddedObjectMapping($objectMapper, [],
+                        (new ToOneEmbeddedObjectMapping($objectMapper, [], [],
                             $objectMapper->getDefinition()->getRelationMappedToProperty('password')))->withoutRelationsToSubSelect(1)
                     ),
                     $this->tables['users'],
@@ -117,7 +117,7 @@ class LoadCriteriaMapperWithBlogDomainTest extends LoadCriteriaMapperTestBase
             [
                 'alias' => [
                     new ToOneMemberRelation(
-                        (new ToOneEntityRelationMapping($objectMapper, [],
+                        (new ToOneEntityRelationMapping($objectMapper, [], [],
                             $objectMapper->getDefinition()->getRelationMappedToProperty('alias')))->withoutRelationsToSubSelect(1)
                     ),
                     $this->tables['users'],
@@ -208,7 +208,7 @@ class LoadCriteriaMapperWithBlogDomainTest extends LoadCriteriaMapperTestBase
             [
                 'posts' => [
                     new ToManyMemberRelation(
-                        (new ToManyRelationMapping($objectMapper, [], $relation->withObjectReference()))
+                        (new ToManyRelationMapping($objectMapper, [], [], $relation->withObjectReference()))
                     ),
                     $this->tables['users'],
                     ['posts_id' => 'id'],
@@ -236,7 +236,7 @@ class LoadCriteriaMapperWithBlogDomainTest extends LoadCriteriaMapperTestBase
             [
                 'all-comments' => [
                     new ToManyMemberRelation(
-                        (new ToManyRelationMapping($objectMapper, [$postRelation->withObjectReference()], $commentRelation))
+                        (new ToManyRelationMapping($objectMapper, [], [$postRelation->withObjectReference()], $commentRelation))
                     ),
                     $this->tables['users'],
                     ['all-comments_id' => 'id'],
