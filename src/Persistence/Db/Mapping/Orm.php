@@ -56,7 +56,7 @@ abstract class Orm implements IOrm
     private $plugins = [];
 
     /**
-     * @var IOrm[]
+     * @var Orm[]
      */
     private $includedOrms = [];
 
@@ -90,8 +90,9 @@ abstract class Orm implements IOrm
         ) use (
             $iocContainer
         ) {
+            /** @var Orm[] $includedOrms */
             foreach ($includedOrms as $orm) {
-                $orm->parentOrm = $this;
+                $orm->parentOrm    = $this;
             }
 
             $this->includedOrms = $includedOrms;
@@ -99,7 +100,7 @@ abstract class Orm implements IOrm
 
             if ($this->plugins) {
                 foreach ($this->includedOrms as $key => $orm) {
-                    $this->includedOrms[$key] = $orm->update('', $plugins);
+                    $this->includedOrms[$key] = $orm->update('', $plugins, false);
                 }
             }
 
@@ -115,6 +116,7 @@ abstract class Orm implements IOrm
         $this->embeddedObjectMapperFactories = $embeddedObjectMapperFactories;
 
         $this->initializeEntityMappers();
+        $this->initializeEntityMapperRelations();
     }
 
     /**
@@ -132,12 +134,34 @@ abstract class Orm implements IOrm
                 $this->entityMappers[] = $mapper;
             }
 
+            foreach ($this->includedOrms as $orm) {
+                $orm->initializeEntityMappers();
+            }
+        };
+
+        if ($this->iocContainer) {
+            $this->iocContainer->bindForCallback(IOrm::class, $this, $initializeEntityMappers);
+        } else {
+            $initializeEntityMappers();
+        }
+    }
+
+    /**
+     * @return void
+     */
+    private function initializeEntityMapperRelations()
+    {
+        $initializeEntityMappers = function () {
             foreach ($this->entityMappers as $mapper) {
                 $mapper->initializeRelations();
 
                 foreach ($mapper->getNestedMappers() as $nestedMapper) {
                     $nestedMapper->initializeRelations();
                 }
+            }
+
+            foreach ($this->includedOrms as $orm) {
+                $orm->initializeEntityMapperRelations();
             }
         };
 
@@ -204,7 +228,7 @@ abstract class Orm implements IOrm
     /**
      * @inheritDoc
      */
-    public function update(string $namespacePrefix, array $plugins) : IOrm
+    public function update(string $namespacePrefix, array $plugins, bool $initializeMappers = true) : IOrm
     {
         if ($namespacePrefix === '' && $plugins === []) {
             return $this;
@@ -217,13 +241,17 @@ abstract class Orm implements IOrm
         $clone->namespace = $namespacePrefix . $this->namespace;
         $clone->plugins   = array_merge($clone->plugins, $plugins);
 
+
         foreach ($clone->includedOrms as $key => $orm) {
             $includedOrm               = clone $orm;
             $includedOrm->parentOrm    = $clone;
-            $clone->includedOrms[$key] = $includedOrm->update($namespacePrefix, $plugins);
+            $clone->includedOrms[$key] = $includedOrm->update($namespacePrefix, $plugins, false);
         }
 
-        $clone->initializeEntityMappers();
+        if ($initializeMappers) {
+            $clone->initializeEntityMappers();
+            $clone->initializeEntityMapperRelations();
+        }
 
         return $clone;
     }
