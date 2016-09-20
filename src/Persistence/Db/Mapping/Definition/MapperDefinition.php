@@ -675,6 +675,34 @@ class MapperDefinition extends MapperDefinitionBase
         });
     }
 
+    /**
+     * Appends the supplied column name to all the defined unique indexes.
+     * 
+     * @param string $columnName
+     *
+     * @return void
+     * @throws InvalidArgumentException
+     */
+    public function appendColumnToUniqueIndexes(string $columnName)
+    {
+        if (!isset($this->columns[$columnName])) {
+            throw InvalidArgumentException::format(
+                'Invalid column name supplied to %s: expecting one of (%s), \'%s\' given',
+                __METHOD__, Debug::formatValues(array_keys($this->columns)), $columnName
+            );
+        }
+
+        foreach ($this->indexes as $key => $index) {
+            if ($index->isUnique()) {
+                $this->indexes[$key] = new Index(
+                    $index->getName(),
+                    true,
+                    array_unique(array_merge($index->getColumnNames(), [$columnName]))
+                );
+            }
+        }
+    }
+
     protected function getAllMappedProperties()
     {
         return ($this->parent ? $this->parent->getAllMappedProperties() : []) + $this->mappedProperties;
