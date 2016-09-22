@@ -381,4 +381,23 @@ class Table
     {
         return new self($this->name, $this->columns, $this->indexes, $foreignKeys);
     }
+
+    /**
+     * @param string $localColumn
+     * @param string $relatedTableName
+     * @param string $relatedColumn
+     *
+     * @return ForeignKey
+     * @throws InvalidArgumentException
+     */
+    public function getForeignKeyFor(string $localColumn, string $relatedTableName, string $relatedColumn) : ForeignKey
+    {
+        foreach ($this->foreignKeys as $foreignKey) {
+            if ($foreignKey->getLocalColumnNames() === [$localColumn] && $foreignKey->getReferencedTableName() === $relatedTableName && $foreignKey->getReferencedColumnNames() === [$relatedColumn]) {
+                return $foreignKey;
+            }
+        }
+        
+        throw InvalidArgumentException::format('Cannot find matching foreign key');
+    }
 }

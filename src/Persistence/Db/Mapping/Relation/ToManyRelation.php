@@ -18,6 +18,7 @@ use Dms\Core\Persistence\Db\Query\Select;
 use Dms\Core\Persistence\Db\Row;
 use Dms\Core\Persistence\Db\RowSet;
 use Dms\Core\Persistence\Db\Schema\Column;
+use Dms\Core\Persistence\Db\Schema\ForeignKeyMode;
 
 /**
  * The to many relation class.
@@ -124,6 +125,17 @@ class ToManyRelation extends ToManyRelationBase
 
     protected function deleteByParentQuery(PersistenceContext $context, Delete $parentDelete)
     {
+        $isSelfReferencing = $parentDelete->getTable()->getName() === $this->mapper->getPrimaryTableName();
+        $foreignKey        = $this->relatedTable->getForeignKeyFor(
+            $this->foreignKeyToParent,
+            $parentDelete->getTable()->getName(),
+            $parentDelete->getTable()->getPrimaryKeyColumnName()
+        );
+
+        if ($isSelfReferencing && $foreignKey->getOnDeleteMode() === ForeignKeyMode::CASCADE) {
+            return;
+        }
+
         $this->mode->removeRelationsQuery(
             $context,
             $this->mapper,
@@ -256,7 +268,7 @@ class ToManyRelation extends ToManyRelationBase
      */
     public function getRelationSelectFromParentRows(ParentMapBase $map, &$parentIdColumnName = null, &$mapIdColumn = null) : Select
     {
-        $parentIds  = $map->getAllParentPrimaryKeys();
+        $parentIds = $map->getAllParentPrimaryKeys();
 
         $select = $this->select()
             ->addRawColumn($this->foreignKeyToParent)

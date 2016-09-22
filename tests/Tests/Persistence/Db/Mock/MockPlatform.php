@@ -24,6 +24,7 @@ use Dms\Core\Persistence\Db\Query\Query;
 use Dms\Core\Persistence\Db\Query\ResequenceOrderIndexColumn;
 use Dms\Core\Persistence\Db\Query\Select;
 use Dms\Core\Persistence\Db\Query\Update;
+use Dms\Core\Persistence\Db\Schema\ForeignKeyMode;
 use Dms\Core\Persistence\Db\Schema\Table;
 use Pinq\Collection;
 use Pinq\Direction;
