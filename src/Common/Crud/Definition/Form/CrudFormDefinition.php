@@ -343,7 +343,7 @@ class CrudFormDefinition
             $this->exitStage();
 
             return $form;
-        }, $fieldNamesDefinedInStage, array_unique($previousFieldNames));
+        }, $fieldNamesDefinedInStage, in_array('*', $previousFieldNames, true) ? null : array_unique($previousFieldNames));
     }
 
     /**
