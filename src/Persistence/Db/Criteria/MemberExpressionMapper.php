@@ -158,7 +158,7 @@ class MemberExpressionMapper
             case $lastPart instanceof ObjectSetAggregateMethodExpression:
                 $lastRelation = array_pop($nestedRelations);
 
-                return $this->mapFinalAggregateExpression($nestedRelations, $subclassMappings, $lastRelation, $lastPart);
+                return $this->mapFinalAggregateExpression($subclassMappings, $nestedRelations, $lastRelation, $lastPart);
 
             case $lastPart instanceof ObjectSetFlattenMethodExpression:
                 $relations    = $this->mapMemberExpressionsToRelations($mapper, [$lastPart]);
