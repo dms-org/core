@@ -207,8 +207,10 @@ class Form implements IForm
 
         if ($processedKeys !== $fieldKeys) {
             throw InvalidArgumentException::format(
-                'Invalid processed submission: expecting keys (%s), (%s) given',
-                Debug::formatValues($fieldKeys), Debug::formatValues($processedKeys)
+                'Invalid processed submission: expecting keys (%s), (%s) given, (%s) missing, (%s) added',
+                Debug::formatValues($fieldKeys), Debug::formatValues($processedKeys),
+                Debug::formatValues(array_diff($fieldKeys, $processedKeys)),
+                Debug::formatValues(array_diff($processedKeys, $fieldKeys))
             );
         }
 
