@@ -3,7 +3,6 @@
 namespace Dms\Core\Table\DataSource;
 
 use Dms\Core\Exception\InvalidArgumentException;
-use Dms\Core\Model\Collection;
 use Dms\Core\Table\Chart\DataSource\ChartTableDataSourceAdapter;
 use Dms\Core\Table\Chart\DataSource\Definition\ChartTableMapperDefinition;
 use Dms\Core\Table\Chart\IChartDataSource;
@@ -102,7 +101,7 @@ abstract class TableDataSource implements ITableDataSource
      */
     final public function count(IRowCriteria $criteria = null) : int
     {
-        $this->verifyCriteria($criteria);
+        $this->verifyCriteria($criteria, false);
 
         return $this->loadCount($criteria);
     }
@@ -121,7 +120,11 @@ abstract class TableDataSource implements ITableDataSource
      *
      * @return ITableSection[]
      */
-    protected function performRowGrouping(ITableStructure $structure, array $rows, IRowCriteria $criteria = null) : array
+    protected function performRowGrouping(
+        ITableStructure $structure,
+        array $rows,
+        IRowCriteria $criteria = null
+    ) : array
     {
         if (empty($rows)) {
             return [];
@@ -169,7 +172,7 @@ abstract class TableDataSource implements ITableDataSource
         return $sections;
     }
 
-    final protected function verifyCriteria(IRowCriteria $criteria = null)
+    final protected function verifyCriteria(IRowCriteria $criteria = null, bool $verifyHasColumns = true)
     {
         if (!$criteria) {
             return;
@@ -181,7 +184,7 @@ abstract class TableDataSource implements ITableDataSource
             );
         }
 
-        if (empty($criteria->getColumnsToLoad())) {
+        if ($verifyHasColumns && empty($criteria->getColumnsToLoad())) {
             throw InvalidArgumentException::format(
                 'Invalid criteria: no columns have been specified to load'
             );

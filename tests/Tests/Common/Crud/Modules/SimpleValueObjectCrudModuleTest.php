@@ -90,6 +90,11 @@ class SimpleValueObjectCrudModuleTest extends CrudModuleTest
         ], $data);
     }
 
+    public function testSummaryTableCount()
+    {
+        $this->assertSame(3, $this->module->getSummaryTable()->loadAmountOfRowsInView('default'));
+    }
+
     public function testCreateAction()
     {
         $this->assertTrue($this->module->allowsCreate());

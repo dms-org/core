@@ -142,4 +142,14 @@ class TableDisplay implements ITableDisplay
 
         return $this->dataSource->load($criteria);
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function loadAmountOfRowsInView(string $name) : int
+    {
+        $criteria = $this->getView($name)->getCriteriaCopy() ?: $this->dataSource->criteria();
+
+        return $this->dataSource->count($criteria);
+    }
 }

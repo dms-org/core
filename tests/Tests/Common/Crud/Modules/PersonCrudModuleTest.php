@@ -149,6 +149,12 @@ class PersonCrudModuleTest extends CrudModuleTest
         ], $data);
     }
 
+    public function testSummaryTableCount()
+    {
+        $this->assertSame(5, $this->module->getSummaryTable()->loadAmountOfRowsInView('default'));
+        $this->assertSame(5, $this->module->getSummaryTable()->loadAmountOfRowsInView('grouped-by-type'));
+    }
+
     public function testReorderAction()
     {
         $this->assertTrue($this->module->getSummaryTable()->hasReorderAction('default'));

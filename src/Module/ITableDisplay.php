@@ -70,4 +70,13 @@ interface ITableDisplay
      * @return IDataTable
      */
     public function loadView(string $name = null, int $skipRows = 0, int $limitRows = null) : IDataTable;
+
+    /**
+     * Loads the amount of rows from the view with the supplied name.
+     *
+     * @param string $name
+     *
+     * @return int
+     */
+    public function loadAmountOfRowsInView(string $name) : int;
 }
