@@ -247,4 +247,41 @@ class StringFieldBuilderTest extends FieldBuilderTestBase
         $this->assertSame(123, $field->process('123'));
         $this->assertSame(Type::int(), $field->getProcessedType());
     }
+
+    public function testOneOfFieldOptionsWithoutSpecificLoader()
+    {
+        $field = $this->field()->oneOfOptionsFromCallback(function (string $filter = null) {
+            return array_filter([
+                'value'         => 'Label',
+                'another-value' => 'Another Label',
+            ], function ($value) use ($filter) {
+                return $filter ? strpos($value, $filter) !== false : true;
+            });
+        })->build();
+
+        $this->assertSame('value', $field->process('value'));
+        $this->assertSame('another-value', $field->process('another-value'));
+        $this->assertFailsToProcess(['invalid'], $field);
+    }
+
+    public function testOneOfFieldOptionsWithSpecificLoader()
+    {
+        $field = $this->field()->oneOfOptionsFromCallback(function (string $filter = null) {
+            return array_filter([
+                'value'         => 'Label',
+                'another-value' => 'Another Label',
+            ], function ($value) use ($filter) {
+                return $filter ? strpos($value, $filter) !== false : true;
+            });
+        }, function (string $value) {
+            return [
+                'value'         => 'Label',
+                'another-value' => 'Another Label',
+            ][$value] ?? null;
+        })->build();
+
+        $this->assertSame('value', $field->process('value'));
+        $this->assertSame('another-value', $field->process('another-value'));
+        $this->assertFailsToProcess(['invalid'], $field);
+    }
 }

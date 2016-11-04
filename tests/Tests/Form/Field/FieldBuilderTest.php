@@ -6,6 +6,7 @@ use Dms\Core\File\IUploadedFile;
 use Dms\Core\File\IUploadedImage;
 use Dms\Core\Form\Field\Builder\Field as Field;
 use Dms\Core\Form\Field\Options\ArrayFieldOptions;
+use Dms\Core\Form\Field\Options\CallbackFieldOptions;
 use Dms\Core\Form\Field\Options\EntityIdOptions;
 use Dms\Core\Form\Field\Options\FieldOption;
 use Dms\Core\Form\Field\Options\ObjectIndexOptions;
@@ -121,6 +122,20 @@ class FieldBuilderTest extends FieldBuilderTestBase
             $field
         );
         $this->assertHasProcessor(new OneOfValidator(PhpType::string()->nullable(), $fieldOptions), $field);
+        $this->assertEquals(PhpType::string()->nullable(), $field->getProcessedType());
+    }
+
+
+    public function testOneOfOptionsFromCallbackField()
+    {
+        $field = $this->field()->string()->oneOfOptionsFromCallback(function (string $filter = null) {
+            return [
+                'value'         => 'Label',
+                'another-value' => 'Another Label',
+            ];
+        })->build();
+
+        $this->assertInstanceOf(CallbackFieldOptions::class, $field->getType()->get(FieldType::ATTR_OPTIONS));
         $this->assertEquals(PhpType::string()->nullable(), $field->getProcessedType());
     }
 

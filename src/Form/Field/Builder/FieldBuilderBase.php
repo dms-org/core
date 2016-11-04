@@ -6,6 +6,8 @@ use Dms\Core\Exception\InvalidArgumentException;
 use Dms\Core\Exception\InvalidOperationException;
 use Dms\Core\Form\Field\Field as ActualField;
 use Dms\Core\Form\Field\Options\ArrayFieldOptions;
+use Dms\Core\Form\Field\Options\CallbackFieldOptions;
+use Dms\Core\Form\Field\Options\FieldOption;
 use Dms\Core\Form\Field\Processor\CustomProcessor;
 use Dms\Core\Form\Field\Processor\FieldValidator;
 use Dms\Core\Form\Field\Processor\TypeProcessor;
@@ -122,7 +124,7 @@ abstract class FieldBuilderBase
         };
 
         if ($this->initialValue !== null) {
-            $messages = [];
+            $messages           = [];
             $this->initialValue = $processor->process($this->initialValue, $messages);
 
             if (!empty($messages)) {
@@ -285,6 +287,50 @@ abstract class FieldBuilderBase
     public function oneOf(array $valueLabelMap, string $valueType = 'string')
     {
         return $this->attr(FieldType::ATTR_OPTIONS, ArrayFieldOptions::fromAssocArray($valueLabelMap, $valueType));
+    }
+
+
+    /**
+     * Validates the input is one of the supplied values loaded from the supplied callback.
+     * This is useful for loading options from a external data source.
+     *
+     * Example:
+     * <code>
+     * ->oneOfOptionsFromCallback(function (string $filter = null) {
+     *      return [
+     *          'value'         => 'Label',
+     *          'another-value' => 'Another Label',
+     *      ];
+     * });
+     * </code>
+     *
+     *
+     * @param callable      $valueLabelMapCallback
+     * @param callable|null $labelFromValueLoader
+     *
+     * @return static
+     */
+    public function oneOfOptionsFromCallback(callable $valueLabelMapCallback, callable $labelFromValueLoader = null)
+    {
+        $valueLabelMapCallback = function (string $filter = null) use ($valueLabelMapCallback) {
+            $options = [];
+
+            foreach ($valueLabelMapCallback($filter) as $key => $value) {
+                $options[] = $value instanceof IFieldOption ? $value : new FieldOption($key, $value);
+            }
+
+            return $options;
+        };
+
+        if ($labelFromValueLoader) {
+            $labelFromValueLoader = function ($value) use ($labelFromValueLoader) {
+                $option = $labelFromValueLoader($value);
+
+                return $option ? new FieldOption($value, $option) : null;
+            };
+        }
+
+        return $this->attr(FieldType::ATTR_OPTIONS, new CallbackFieldOptions($valueLabelMapCallback, $labelFromValueLoader));
     }
 
     /**

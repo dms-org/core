@@ -74,6 +74,7 @@ abstract class Query implements IQuery
     public static function copyFrom(Query $otherQuery)
     {
         $self            = new static($otherQuery->table);
+        $self->alias     = $otherQuery->alias;
         $self->joins     = $otherQuery->joins;
         $self->where     = $otherQuery->where;
         $self->orderings = $otherQuery->orderings;
@@ -116,8 +117,8 @@ abstract class Query implements IQuery
         }
 
         throw InvalidArgumentException::format(
-                'Invalid alias supplied to %s: expecting one of (%s), \'%s\' given',
-                __METHOD__, Debug::formatValues($this->getAliases()), $alias
+            'Invalid alias supplied to %s: expecting one of (%s), \'%s\' given',
+            __METHOD__, Debug::formatValues($this->getAliases()), $alias
         );
     }
 
@@ -237,8 +238,8 @@ abstract class Query implements IQuery
 
         if (in_array($join->getAlias(), $takenAliases, true)) {
             throw InvalidArgumentException::format(
-                    'Invalid join supplied to %s::%s: alias \'%s\' is already taken, taken aliases are (%s)',
-                    get_class($this), __FUNCTION__, $join->getAlias(), Debug::formatValues($takenAliases)
+                'Invalid join supplied to %s::%s: alias \'%s\' is already taken, taken aliases are (%s)',
+                get_class($this), __FUNCTION__, $join->getAlias(), Debug::formatValues($takenAliases)
             );
         }
 

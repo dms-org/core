@@ -251,6 +251,10 @@ class EntityCollection extends ObjectCollection implements IEntityCollection
     {
         $this->toOrderedMap();
 
+        if (!is_scalar($id)) {
+            throw new \Exception();
+        }
+
         return isset($this->identityMap[$id]) ? $this->identityMap[$id] : null;
     }
 

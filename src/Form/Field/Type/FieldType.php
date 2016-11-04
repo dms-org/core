@@ -110,7 +110,7 @@ abstract class FieldType implements IFieldType
         $currentProcessedType = $lastProcessor ? $lastProcessor->getProcessedType() : $this->inputType;
 
         $options = $this->get(self::ATTR_OPTIONS);
-        if ($options instanceof ArrayFieldOptions && !$this->hasTypeSpecificOptionsValidator()) {
+        if ($options && !$this->hasTypeSpecificOptionsValidator()) {
             $processors[] = new OneOfValidator($currentProcessedType, $options);
         }
 

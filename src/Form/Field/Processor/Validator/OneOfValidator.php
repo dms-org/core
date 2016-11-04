@@ -2,6 +2,8 @@
 
 namespace Dms\Core\Form\Field\Processor\Validator;
 
+use Dms\Core\Exception\InvalidArgumentException;
+use Dms\Core\Form\Field\Options\ArrayFieldOptions;
 use Dms\Core\Form\Field\Processor\FieldValidator;
 use Dms\Core\Form\IFieldOptions;
 use Dms\Core\Language\Message;
@@ -33,9 +35,14 @@ class OneOfValidator extends FieldValidator
      */
     protected function validate($input, array &$messages)
     {
-        $allowedValues = $this->options->getEnabledValues();
-        if (!in_array($input, $allowedValues, true)) {
-            $messages[] = new Message(self::MESSAGE, ['options' => implode(', ', $allowedValues)]);
+        try {
+            $option = $this->options->getOptionForValue($input);
+
+            if ($option->isDisabled()) {
+                throw InvalidArgumentException::format('Option is disabled');
+            }
+        } catch (InvalidArgumentException $e) {
+            $messages[] = new Message(self::MESSAGE, ['options' => implode(', ', $this->options instanceof ArrayFieldOptions ? $this->options->getEnabledValues() : [])]);
         }
     }
 }

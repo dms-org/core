@@ -61,6 +61,14 @@ class ObjectIdType extends FieldType
     }
 
     /**
+     * @return bool
+     */
+    protected function hasTypeSpecificOptionsValidator() : bool
+    {
+        return true;
+    }
+
+    /**
      * @return IFieldProcessor[]
      */
     protected function buildProcessors() : array
