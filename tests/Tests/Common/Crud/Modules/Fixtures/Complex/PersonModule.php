@@ -37,26 +37,44 @@ class PersonModule extends CrudModule
         });
 
         $module->objectAction('swap-names')
-                ->authorize(self::EDIT_PERMISSION)
-                ->where(function (Person $person) {
-                    return $person instanceof Adult;
-                })
-                ->form(Form::create()->section('Details', [
-                        Field::name('swap_with')->label('Swap With')->entityFrom($this->dataSource)->required()
-                ]))
-                ->handler(function (Person $person, ArrayDataObject $input) {
-                    /** @var Person $otherPerson */
-                    $otherPerson = $input['swap_with'];
+            ->authorize(self::EDIT_PERMISSION)
+            ->where(function (Person $person) {
+                return $person instanceof Adult;
+            })
+            ->form(Form::create()->section('Details', [
+                Field::name('swap_with')->label('Swap With')->entityFrom($this->dataSource)->required()
+            ]))
+            ->handler(function (Person $person, ArrayDataObject $input) {
+                /** @var Person $otherPerson */
+                $otherPerson = $input['swap_with'];
 
-                    $tempFirstName          = $otherPerson->firstName;
-                    $tempLastName           = $otherPerson->lastName;
-                    $otherPerson->firstName = $person->firstName;
-                    $otherPerson->lastName  = $person->lastName;
-                    $person->firstName      = $tempFirstName;
-                    $person->lastName       = $tempLastName;
+                $tempFirstName          = $otherPerson->firstName;
+                $tempLastName           = $otherPerson->lastName;
+                $otherPerson->firstName = $person->firstName;
+                $otherPerson->lastName  = $person->lastName;
+                $person->firstName      = $tempFirstName;
+                $person->lastName       = $tempLastName;
 
-                    $this->dataSource->saveAll([$person, $otherPerson]);
-                });
+                $this->dataSource->saveAll([$person, $otherPerson]);
+            });
+
+
+        $module->objectAction('send-message')
+            ->authorize(self::EDIT_PERMISSION)
+            ->formDependentOnObject(function (Person $person) {
+                if ($person instanceof Adult) {
+                    return Form::create()->section('Letter', [
+                        Field::name('letter')->label('Letter')->string()->required()
+                    ]);
+                } else {
+                    return Form::create()->section('Email', [
+                        Field::name('email')->label('Email')->string()->required()
+                    ]);
+                }
+            })
+            ->handler(function (Person $person, ArrayDataObject $input) {
+                //
+            });
 
         $module->crudForm(function (CrudFormDefinition $form) {
             $form->section('Person Details', [

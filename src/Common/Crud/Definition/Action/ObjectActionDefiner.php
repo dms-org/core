@@ -4,6 +4,7 @@ namespace Dms\Core\Common\Crud\Definition\Action;
 
 use Dms\Core\Auth\IAuthSystem;
 use Dms\Core\Common\Crud\Action\Object\CustomObjectActionHandler;
+use Dms\Core\Common\Crud\Action\Object\IObjectAction;
 use Dms\Core\Common\Crud\Action\Object\IObjectActionFormMapping;
 use Dms\Core\Common\Crud\Action\Object\IObjectActionHandler;
 use Dms\Core\Common\Crud\Action\Object\Mapping\ArrayObjectActionFormMapping;
@@ -132,7 +133,7 @@ class ObjectActionDefiner extends ActionDefiner
      * <code>
      * ->form(function (StagedForm $form) {
      *      return $form->then(function (array $input) {
-     *          if ($input['object'] instance Person) {
+     *          if ($input['object'] instanceof Person) {
      *              return Form::create()->section('Person', [...]);
      *          } else {
      *              return Form::create()->section('Animal', [...]);
@@ -182,6 +183,38 @@ class ObjectActionDefiner extends ActionDefiner
         }
 
         return $this;
+    }
+
+
+    /**
+     * Defines the following form stages after the loading the entity
+     * in the first stage.
+     *
+     * Example:
+     * <code>
+     * ->form(function (Person $object) {
+     *      if ($input['object'] instanceof Person) {
+     *          return Form::create()->section('Person', [...]);
+     *      } else {
+     *          return Form::create()->section('Animal', [...]);
+     *      }
+     * })
+     * </code>
+     *
+     *
+     * @param callable $formCallback
+     *
+     * @return static
+     */
+    public function formDependentOnObject(callable $formCallback)
+    {
+       return $this->form(function (StagedForm $form) use ($formCallback) {
+           $form->then(function (array $input) use ($formCallback) {
+               $object = $input[IObjectAction::OBJECT_FIELD_NAME];
+
+               return $formCallback($object);
+           });
+       });
     }
 
     /**

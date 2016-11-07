@@ -384,4 +384,48 @@ class PersonCrudModuleTest extends CrudModuleTest
             ]);
         }, InvalidFormSubmissionException::class);
     }
+
+    public function testCustomObjectActionWithFormDependentOnObject()
+    {
+        $this->assertSame(true, $this->module->hasObjectAction('send-message'));
+
+        $action = $this->module->getObjectAction('send-message');
+
+        $this->assertSame('send-message', $action->getName());
+        $this->assertSame(Person::class, $action->getObjectType());
+        $this->assertSame(null, $action->getReturnTypeClass());
+        $this->assertEquals(
+            [
+                Permission::named('some-package.people-module.' . IReadModule::VIEW_PERMISSION),
+                Permission::named('some-package.people-module.random-permission'),
+                Permission::named('some-package.people-module.' . ICrudModule::EDIT_PERMISSION),
+            ],
+            array_values($action->getRequiredPermissions())
+        );
+
+        $action->run([
+            IObjectAction::OBJECT_FIELD_NAME => 1,
+            'email'                          => 'Test',
+        ]);
+
+        $action->run([
+            IObjectAction::OBJECT_FIELD_NAME => 4,
+            'letter'                          => 'Test',
+        ]);
+
+        $this->assertThrows(function () use ($action) {
+            $action->run([
+                IObjectAction::OBJECT_FIELD_NAME => 4,
+                'email'                          => 'Test',
+            ]);
+        }, InvalidFormSubmissionException::class);
+
+
+        $this->assertThrows(function () use ($action) {
+            $action->run([
+                IObjectAction::OBJECT_FIELD_NAME => 1,
+                'letter'                          => 'Test',
+            ]);
+        }, InvalidFormSubmissionException::class);
+    }
 }
