@@ -12,6 +12,7 @@ use Dms\Core\Form\IForm;
 use Dms\Core\Form\IStagedForm;
 use Dms\Core\Form\Object\FormObject;
 use Dms\Core\Form\Object\Stage\StagedFormObject;
+use Dms\Core\Model\Object\ArrayDataObject;
 use Dms\Core\Module\Action\ParameterizedAction;
 use Dms\Core\Module\Action\UnparameterizedAction;
 use Dms\Core\Module\Handler\CustomParameterizedActionHandler;
@@ -24,6 +25,7 @@ use Dms\Core\Module\Mapping\CustomStagedFormDtoMapping;
 use Dms\Core\Module\Mapping\FormObjectMapping;
 use Dms\Core\Module\Mapping\StagedFormObjectMapping;
 use Dms\Core\Util\Debug;
+use Dms\Core\Util\Reflection;
 
 /**
  * The action definer class.
@@ -231,7 +233,8 @@ class ActionDefiner
     {
         if ($this->formDtoMappingCallback) {
             if (!($handler instanceof IParameterizedActionHandler)) {
-                $handler = new CustomParameterizedActionHandler($handler, $this->returnDtoType);
+                list($handler, $parameterDtoType) = $this->wrapArrayParameterAsDto($handler);
+                $handler = new CustomParameterizedActionHandler($handler, $this->returnDtoType, $parameterDtoType);
             }
 
             /** @var IStagedFormDtoMapping $mapping */
@@ -257,5 +260,22 @@ class ActionDefiner
                 $handler
             ));
         }
+    }
+
+    private function wrapArrayParameterAsDto(callable $handler) : array
+    {
+        $reflection = Reflection::fromCallable($handler);
+
+        $parameter = $reflection->getParameters()[0] ?? null;
+
+        if (!$parameter || !$parameter->isArray()) {
+            return [$handler, null];
+        }
+
+        $handler = function (ArrayDataObject $array) use ($handler) {
+            return $handler($array->getArray());
+        };
+
+        return [$handler, ArrayDataObject::class];
     }
 }

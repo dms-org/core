@@ -15,16 +15,17 @@ use Dms\Core\Common\Crud\Form\ObjectForm;
 use Dms\Core\Common\Crud\Form\ObjectStagedFormObject;
 use Dms\Core\Exception\InvalidArgumentException;
 use Dms\Core\Form\Builder\Form as FormBuilder;
-use Dms\Core\Form\Builder\StagedForm as StagedFormBuilder;
 use Dms\Core\Form\Builder\StagedForm;
+use Dms\Core\Form\Builder\StagedForm as StagedFormBuilder;
 use Dms\Core\Form\IForm;
 use Dms\Core\Form\IStagedForm;
 use Dms\Core\Form\Object\FormObject;
 use Dms\Core\Form\Object\Stage\StagedFormObject;
-use Dms\Core\Model\IEntitySet;
 use Dms\Core\Model\IIdentifiableObjectSet;
+use Dms\Core\Model\Object\ArrayDataObject;
 use Dms\Core\Module\Definition\ActionDefiner;
 use Dms\Core\Module\IStagedFormDtoMapping;
+use Dms\Core\Util\Reflection;
 
 /**
  * The object action definer class.
@@ -208,13 +209,13 @@ class ObjectActionDefiner extends ActionDefiner
      */
     public function formDependentOnObject(callable $formCallback)
     {
-       return $this->form(function (StagedForm $form) use ($formCallback) {
-           $form->then(function (array $input) use ($formCallback) {
-               $object = $input[IObjectAction::OBJECT_FIELD_NAME];
+        return $this->form(function (StagedForm $form) use ($formCallback) {
+            $form->then(function (array $input) use ($formCallback) {
+                $object = $input[IObjectAction::OBJECT_FIELD_NAME];
 
-               return $formCallback($object);
-           });
-       });
+                return $formCallback($object);
+            });
+        });
     }
 
     /**
@@ -243,7 +244,13 @@ class ObjectActionDefiner extends ActionDefiner
     public function handler($handler)
     {
         if (!($handler instanceof IObjectActionHandler)) {
-            $handler = new CustomObjectActionHandler($handler, $this->returnDtoType, $this->currentObjectType, $this->currentDataDtoType);
+            list($handler, $currentObjectType, $currentDataDtoType) = $this->wrapArrayParameterAsDto($handler);
+            $handler = new CustomObjectActionHandler(
+                $handler,
+                $this->returnDtoType,
+                $currentObjectType ?? $this->currentObjectType,
+                $currentDataDtoType?? $this->currentDataDtoType
+            );
         }
 
         if (!$this->formDtoMappingCallback) {
@@ -254,11 +261,30 @@ class ObjectActionDefiner extends ActionDefiner
         /** @var IObjectActionFormMapping $formMapping */
 
         call_user_func($this->callback, new ObjectAction(
-                $this->name,
-                $this->authSystem,
-                $this->requiredPermissions,
-                $formMapping,
-                $handler
+            $this->name,
+            $this->authSystem,
+            $this->requiredPermissions,
+            $formMapping,
+            $handler
         ));
+    }
+
+    private function wrapArrayParameterAsDto(callable $handler) : array
+    {
+        $reflection           = Reflection::fromCallable($handler);
+        $reflectionParameters = $reflection->getParameters();
+
+        $objectParameter = $reflectionParameters[0] ?? null;
+        $dtoParameter    = $reflectionParameters[1] ?? null;
+
+        if (!$objectParameter || !$objectParameter->getClass() || !$dtoParameter || !$dtoParameter->isArray()) {
+            return [$handler, null, null];
+        }
+
+        $handler = function ($object, ArrayDataObject $array) use ($handler) {
+            return $handler($object, $array->getArray());
+        };
+
+        return [$handler, $objectParameter->getClass()->getName(), ArrayDataObject::class];
     }
 }

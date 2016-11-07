@@ -76,6 +76,29 @@ class PersonModule extends CrudModule
                 //
             });
 
+
+        $module->objectAction('array-parameter-on-object-action')
+            ->authorize(self::EDIT_PERMISSION)
+            ->form( Form::create()->section('Data', [
+                Field::name('data')->label('Data')->string()->required()
+            ]))
+            ->handler(function (Person $person, array $input) {
+                if (!$input['data']) {
+                    throw new \Exception();
+                }
+            });
+
+        $module->action('array-parameter')
+            ->authorize(self::EDIT_PERMISSION)
+            ->form( Form::create()->section('Data', [
+                Field::name('data')->label('Data')->string()->required()
+            ]))
+            ->handler(function (array $input) {
+                if (!$input['data']) {
+                    throw new \Exception();
+                }
+            });
+
         $module->crudForm(function (CrudFormDefinition $form) {
             $form->section('Person Details', [
                     $form->field(Field::name('first_name')->label('First Name')->string()->required())

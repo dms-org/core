@@ -410,7 +410,7 @@ class PersonCrudModuleTest extends CrudModuleTest
 
         $action->run([
             IObjectAction::OBJECT_FIELD_NAME => 4,
-            'letter'                          => 'Test',
+            'letter'                         => 'Test',
         ]);
 
         $this->assertThrows(function () use ($action) {
@@ -424,8 +424,50 @@ class PersonCrudModuleTest extends CrudModuleTest
         $this->assertThrows(function () use ($action) {
             $action->run([
                 IObjectAction::OBJECT_FIELD_NAME => 1,
-                'letter'                          => 'Test',
+                'letter'                         => 'Test',
             ]);
         }, InvalidFormSubmissionException::class);
+    }
+
+    public function testArrayParameterOnAction()
+    {
+        $this->assertSame(true, $this->module->hasParameterizedAction('array-parameter'));
+
+        $action = $this->module->getParameterizedAction('array-parameter');
+
+        $this->assertSame('array-parameter', $action->getName());
+
+        $action->run([
+            'data' => 'Test',
+        ]);
+
+        $this->assertThrows(function () use ($action) {
+            $action->run([
+                'data' => '',
+            ]);
+        }, InvalidFormSubmissionException::class);
+
+    }
+
+    public function testArrayParameterOnObjectAction()
+    {
+        $this->assertSame(true, $this->module->hasParameterizedAction('array-parameter-on-object-action'));
+
+        $action = $this->module->getParameterizedAction('array-parameter-on-object-action');
+
+        $this->assertSame('array-parameter-on-object-action', $action->getName());
+
+        $action->run([
+            IObjectAction::OBJECT_FIELD_NAME => 1,
+            'data'                           => 'Test',
+        ]);
+
+        $this->assertThrows(function () use ($action) {
+            $action->run([
+                IObjectAction::OBJECT_FIELD_NAME => 1,
+                'data'                           => '',
+            ]);
+        }, InvalidFormSubmissionException::class);
+
     }
 }

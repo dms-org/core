@@ -28,8 +28,9 @@ class CustomParameterizedActionHandler extends ReflectionBasedActionHandler
      */
     public function __construct(callable $handlerCallback, string $returnType = null, string $parameterType = null)
     {
+        $dtoType = $parameterType ?: $this->getTypeFromParameter(Reflection::fromCallable($handlerCallback), 'function');
         parent::__construct(
-                $parameterType ?: $this->getTypeFromParameter(Reflection::fromCallable($handlerCallback), 'function'),
+                $dtoType,
                 $returnType
         );
         $this->handlerCallback = $handlerCallback;
