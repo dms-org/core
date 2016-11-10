@@ -47,10 +47,24 @@ class FileMoverProcessor extends FieldProcessor
         });
     }
 
+    public static function withFileNameWithClientExtension(string $processedFileClass, string $path, string $fileName)
+    {
+        return new self($processedFileClass, $path, function (IUploadedFile $file) use ($fileName) {
+            if (strpos($file->getClientFileNameWithFallback(), '.') === false) {
+                $extension = null;
+            } else {
+                $parts     = explode('.', $file->getClientFileNameWithFallback());
+                $extension = end($parts) ?: null;
+            }
+
+            return $fileName . ($extension ? '.' . $extension : '');
+        });
+    }
+
     public static function withClientFileName(string $processedFileClass, string $path)
     {
         return new self($processedFileClass, $path, function (IUploadedFile $file) {
-            return $file->getClientFileName() ?: $file->getName();
+            return $file->getClientFileNameWithFallback();
         });
     }
 

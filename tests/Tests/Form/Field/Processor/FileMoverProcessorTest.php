@@ -62,8 +62,12 @@ class FileMoverProcessorTest extends FieldProcessorTest
         $mock = $this->getMockForAbstractClass(IUploadedFile::class);
 
         $mock->expects($this->any())
-                ->method('getClientFileName')
-                ->willReturn($clientFileName);
+            ->method('getClientFileName')
+            ->willReturn($clientFileName);
+
+        $mock->expects($this->any())
+            ->method('getClientFileNameWithFallback')
+            ->willReturn($clientFileName);
 
         if ($expectedMoveToPath) {
             $mock->expects($this->once())
@@ -125,6 +129,24 @@ class FileMoverProcessorTest extends FieldProcessorTest
         $this->assertSame($file1, $return1);
         $this->assertSame($file2, $return2);
     }
+
+    public function testStaticFileNameWithClientExtension()
+    {
+        $processor = FileMoverProcessor::withFileNameWithClientExtension(IFile::class, '/some/dir', 'some-name');
+        $messages  = [];
+
+        $return1 = $processor->process($this->mockUploadedFile('foo', null, $file1 = $this->mockFile(), $filePath1), $messages);
+        $return2 = $processor->process($this->mockUploadedFile('bar.txt', null, $file2 = $this->mockFile(), $filePath2), $messages);
+        $return3 = $processor->process($this->mockUploadedFile('bar.txt.zip', null, $file3 = $this->mockFile(), $filePath3), $messages);
+
+        $this->assertSame('/some/dir' . DIRECTORY_SEPARATOR . 'some-name', $filePath1);
+        $this->assertSame('/some/dir' . DIRECTORY_SEPARATOR . 'some-name.txt', $filePath2);
+        $this->assertSame('/some/dir' . DIRECTORY_SEPARATOR . 'some-name.zip', $filePath3);
+        $this->assertSame($file1, $return1);
+        $this->assertSame($file2, $return2);
+        $this->assertSame($file3, $return3);
+    }
+
     public function testImage()
     {
         $processor = FileMoverProcessor::withClientFileName(IImage::class, '/some/dir');

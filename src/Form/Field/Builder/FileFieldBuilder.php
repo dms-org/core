@@ -78,6 +78,19 @@ class FileFieldBuilder extends FieldBuilderBase
      * Moves the file to the supplied file path.
      *
      * @param string $path
+     * @param string $fileName
+     *
+     * @return static
+     */
+    public function moveToPathWithStaticFileNameAndClientExtension(string $path, string $fileName)
+    {
+        return $this->process(FileMoverProcessor::withFileNameWithClientExtension($this->movedClassName(), $path, $fileName));
+    }
+
+    /**
+     * Moves the file to the supplied file path.
+     *
+     * @param string $path
      *
      * @return static
      */
