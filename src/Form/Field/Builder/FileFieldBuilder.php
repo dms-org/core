@@ -112,6 +112,26 @@ class FileFieldBuilder extends FieldBuilderBase
         return $this->process(FileMoverProcessor::withRandomFileName($this->movedClassName(), $path, $fileNameLength));
     }
 
+    /**
+     * Moves the file to the supplied file path.
+     *
+     * Example:
+     * <code>
+     * ->moveToPathWithCustomFileName('some/path', function (IFile $file) {
+     *    return 'some-file-prefix' . $file->getName();
+     * });
+     * </code>
+     *
+     * @param string   $path
+     * @param callable $fileNameCallback
+     *
+     * @return static
+     */
+    public function moveToPathWithCustomFileName(string $path, callable $fileNameCallback)
+    {
+        return $this->process(new FileMoverProcessor($this->movedClassName(), $path, $fileNameCallback));
+    }
+
     protected function movedClassName() : string
     {
         return IFile::class;
