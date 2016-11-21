@@ -28,10 +28,10 @@ class ModuleWithActions extends Module
         $module->authorizeAll(['some-permission']);
 
         $module->action('unparameterized-action-no-return')
-                ->authorize('permission.name')
-                ->handler(function () {
+            ->authorize('permission.name')
+            ->handler(function () {
 
-                });
+            });
 
         $module->action('unparameterized-action-with-return')
                 ->authorize('permission.name')
@@ -83,5 +83,13 @@ class ModuleWithActions extends Module
                 ->handler(function (TestStagedFormObject $input) {
                     return new TestDto($input->data . '-handled-staged');
                 });
+
+        $module->action('action-with-metadata')
+            ->metadata([
+                'some' => 'metadata'
+            ])
+            ->handler(function () {
+
+            });
     }
 }

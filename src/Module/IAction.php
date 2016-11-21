@@ -100,4 +100,11 @@ interface IAction extends IModuleItem
      * @return IActionHandler
      */
     public function getHandler() : IActionHandler;
+
+    /**
+     * Gets an array of metadata
+     *
+     * @return array
+     */
+    public function getMetadata() : array;
 }

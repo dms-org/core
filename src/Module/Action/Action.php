@@ -4,7 +4,6 @@ namespace Dms\Core\Module\Action;
 
 use Dms\Core\Auth\IAuthSystemInPackageContext;
 use Dms\Core\Auth\IPermission;
-use Dms\Core\Form;
 use Dms\Core\Module\IAction;
 use Dms\Core\Module\IActionHandler;
 use Dms\Core\Module\ModuleItem;
@@ -32,20 +31,27 @@ abstract class Action extends ModuleItem implements IAction
     private $returnType;
 
     /**
+     * @var array
+     */
+    private $metadata;
+
+    /**
      * Action constructor.
      *
      * @param string                      $name
      * @param IAuthSystemInPackageContext $auth
      * @param IPermission[]               $requiredPermissions
      * @param IActionHandler              $handler
+     * @param array                       $metadata
      */
-    public function __construct(string $name, IAuthSystemInPackageContext $auth, array $requiredPermissions, IActionHandler $handler)
+    public function __construct(string $name, IAuthSystemInPackageContext $auth, array $requiredPermissions, IActionHandler $handler, array $metadata)
     {
         parent::__construct($auth, $requiredPermissions);
 
         $this->name       = $name;
         $this->handler    = $handler;
         $this->returnType = $handler->getReturnTypeClass();
+        $this->metadata   = $metadata;
     }
 
     /**
@@ -78,5 +84,13 @@ abstract class Action extends ModuleItem implements IAction
     final public function getReturnTypeClass()
     {
         return $this->returnType;
+    }
+
+    /**
+     * @return array
+     */
+    final public function getMetadata(): array
+    {
+        return $this->metadata;
     }
 }

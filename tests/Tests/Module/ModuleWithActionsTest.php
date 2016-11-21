@@ -67,13 +67,13 @@ class ModuleWithActionsTest extends ModuleTestBase
      */
     public function testActionGetters()
     {
-        $this->assertCount(6, $this->module->getActions());
+        $this->assertCount(7, $this->module->getActions());
         $this->assertContainsOnlyInstancesOf(IAction::class, $this->module->getParameterizedActions());
 
         $this->assertCount(4, $this->module->getParameterizedActions());
         $this->assertContainsOnlyInstancesOf(IParameterizedAction::class, $this->module->getParameterizedActions());
 
-        $this->assertCount(2, $this->module->getUnparameterizedActions());
+        $this->assertCount(3, $this->module->getUnparameterizedActions());
         $this->assertContainsOnlyInstancesOf(IUnparameterizedAction::class, $this->module->getUnparameterizedActions());
 
 
@@ -111,6 +111,7 @@ class ModuleWithActionsTest extends ModuleTestBase
         $action = $this->module->getUnparameterizedAction('unparameterized-action-no-return');
 
         $this->assertInstanceOf(IUnparameterizedAction::class, $action);
+        $this->assertSame([], $action->getMetadata());
         $this->assertSame('unparameterized-action-no-return', $action->getName());
         $this->assertEquals(
             [
@@ -207,5 +208,12 @@ class ModuleWithActionsTest extends ModuleTestBase
         $this->assertEquals(TestDto::class, $action->getReturnTypeClass());
         $this->assertEquals(true, $action->hasReturnType());
         $this->assertEquals(new TestDto('some-input-handled-staged'), $action->run(['data' => 'some-input']));
+    }
+
+    public function testActioNWithMetadata()
+    {
+        $action = $this->module->getAction('action-with-metadata');
+
+        $this->assertSame(['some' => 'metadata'], $action->getMetadata());
     }
 }

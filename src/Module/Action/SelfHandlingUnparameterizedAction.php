@@ -30,7 +30,8 @@ abstract class SelfHandlingUnparameterizedAction extends UnparameterizedAction i
                     return $this->runHandler();
                 },
                 $this->returnType()
-            )
+            ),
+            $this->metadata()
         );
     }
 
@@ -47,6 +48,17 @@ abstract class SelfHandlingUnparameterizedAction extends UnparameterizedAction i
      * @return IPermission[]
      */
     abstract protected function permissions() : array;
+
+
+    /**
+     * Gets the action metadata.
+     *
+     * @return array
+     */
+    protected function metadata() : array
+    {
+        return [];
+    }
 
     /**
      * Gets the return dto type.

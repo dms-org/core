@@ -10,7 +10,7 @@ use Dms\Core\Model\Object\ClassDefinition;
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>
  */
-class TestObjectForm extends ObjectStagedFormObject
+class TestFormObject extends ObjectStagedFormObject
 {
     /**
      * @var string

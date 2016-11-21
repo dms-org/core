@@ -2,11 +2,8 @@
 
 namespace Dms\Core\Module\Action;
 
-use Dms\Core\Auth\IAuthSystem;
 use Dms\Core\Auth\IAuthSystemInPackageContext;
 use Dms\Core\Exception\TypeMismatchException;
-use Dms\Core\Form;
-use Dms\Core\Form\InvalidFormSubmissionException;
 use Dms\Core\Form\IStagedForm;
 use Dms\Core\Module\IActionHandler;
 use Dms\Core\Module\IParameterizedAction;
@@ -34,18 +31,19 @@ class ParameterizedAction extends Action implements IParameterizedAction
      * {@inheritDoc}
      */
     public function __construct(
-            $name,
-            IAuthSystemInPackageContext $auth,
-            array $requiredPermissions,
-            IStagedFormDtoMapping $formDtoMapping,
-            IParameterizedActionHandler $handler
+        $name,
+        IAuthSystemInPackageContext $auth,
+        array $requiredPermissions,
+        IStagedFormDtoMapping $formDtoMapping,
+        IParameterizedActionHandler $handler,
+        array $metadata = []
     ) {
-        parent::__construct($name, $auth, $requiredPermissions, $handler);
+        parent::__construct($name, $auth, $requiredPermissions, $handler, $metadata);
 
         if ($formDtoMapping->getDtoType() !== $handler->getParameterTypeClass()) {
             throw TypeMismatchException::format(
-                    "Cannot construct %s: form dto type %s does not match handler dto type %s",
-                    __METHOD__, $formDtoMapping->getDtoType() ?: 'null', $handler->getParameterTypeClass() ?: 'null'
+                "Cannot construct %s: form dto type %s does not match handler dto type %s",
+                __METHOD__, $formDtoMapping->getDtoType() ?: 'null', $handler->getParameterTypeClass() ?: 'null'
             );
         }
 
@@ -117,7 +115,7 @@ class ParameterizedAction extends Action implements IParameterizedAction
     public function submitFirstStage(array $data)
     {
         return $this->withSubmittedFirstStage(
-                $this->formDtoMapping->getStagedForm()->getFirstForm()->process($data)
+            $this->formDtoMapping->getStagedForm()->getFirstForm()->process($data)
         );
     }
 

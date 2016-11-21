@@ -26,12 +26,13 @@ class SelfHandlingParameterizedActionTest extends ActionTest
         $this->assertInstanceOf(ArrayDataObjectFormMapping::class, $action->getFormDtoMapping());
         $this->assertSame(ArrayDataObject::class, $action->getParameterTypeClass());
         $this->assertInstanceOf(CustomParameterizedActionHandler::class, $action->getHandler());
+        $this->assertSame(['some' => 'metadata'], $action->getMetadata());
     }
 
     public function testRun()
     {
         $action = new TestSelfHandlingParameterizedAction(
-                $this->mockAuthWithExpectedVerifyCall([Permission::named('test-permission')])
+            $this->mockAuthWithExpectedVerifyCall([Permission::named('test-permission')])
         );
 
         /** @var TestDto $result */

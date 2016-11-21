@@ -265,7 +265,8 @@ class ObjectActionDefiner extends ActionDefiner
             $this->authSystem,
             $this->requiredPermissions,
             $formMapping,
-            $handler
+            $handler,
+            $this->metadata
         ));
     }
 

@@ -331,6 +331,7 @@ class PersonCrudModuleTest extends CrudModuleTest
         $action = $this->module->getRemoveAction();
 
         $this->assertInstanceOf(IObjectAction::class, $action);
+        $this->assertSame(['some' => 'metadata'], $action->getMetadata());
 
         $person = $action->run([IObjectAction::OBJECT_FIELD_NAME => 1]);
         $this->assertInstanceOf(Person::class, $person);
@@ -350,6 +351,7 @@ class PersonCrudModuleTest extends CrudModuleTest
         $action = $this->module->getObjectAction('swap-names');
 
         $this->assertSame('swap-names', $action->getName());
+        $this->assertSame(['some' => 'metadata'], $action->getMetadata());
         $this->assertSame(Person::class, $action->getObjectType());
         $this->assertSame(null, $action->getReturnTypeClass());
         $this->assertEquals(

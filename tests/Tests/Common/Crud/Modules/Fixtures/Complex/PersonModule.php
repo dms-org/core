@@ -38,6 +38,9 @@ class PersonModule extends CrudModule
 
         $module->objectAction('swap-names')
             ->authorize(self::EDIT_PERMISSION)
+            ->metadata([
+                'some' => 'metadata'
+            ])
             ->where(function (Person $person) {
                 return $person instanceof Adult;
             })
@@ -147,7 +150,12 @@ class PersonModule extends CrudModule
         });
 
 
-        $module->removeAction()->deleteFromDataSource();
+        $module
+            ->removeAction()
+            ->metadata([
+                'some' => 'metadata'
+            ])
+            ->deleteFromDataSource();
 
         $module->summaryTable(function (SummaryTableDefinition $table) {
             $table->mapCallback(function (Person $person) {

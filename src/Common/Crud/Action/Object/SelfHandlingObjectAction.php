@@ -2,7 +2,6 @@
 
 namespace Dms\Core\Common\Crud\Action\Object;
 
-use Dms\Core\Auth\IAuthSystem;
 use Dms\Core\Auth\IAuthSystemInPackageContext;
 use Dms\Core\Auth\IPermission;
 
@@ -21,18 +20,19 @@ abstract class SelfHandlingObjectAction extends ObjectAction
         $formDtoMapping = $this->formMapping();
 
         parent::__construct(
-                $this->name(),
-                $auth,
-                $this->permissions(),
-                $formDtoMapping,
-                new CustomObjectActionHandler(
-                        function ($object, $data = null) {
-                            return $this->runHandler($object, $data);
-                        },
-                        $this->returnType(),
-                        $this->objectType(),
-                        $formDtoMapping->getDataDtoType()
-                )
+            $this->name(),
+            $auth,
+            $this->permissions(),
+            $formDtoMapping,
+            new CustomObjectActionHandler(
+                function ($object, $data = null) {
+                    return $this->runHandler($object, $data);
+                },
+                $this->returnType(),
+                $this->objectType(),
+                $formDtoMapping->getDataDtoType()
+            ),
+            $this->metadata()
         );
     }
 
@@ -49,6 +49,17 @@ abstract class SelfHandlingObjectAction extends ObjectAction
      * @return IPermission[]
      */
     abstract protected function permissions() : array;
+
+
+    /**
+     * Gets the action metadata.
+     *
+     * @return array
+     */
+    protected function metadata() : array
+    {
+        return [];
+    }
 
     /**
      * Gets the action form mapping.

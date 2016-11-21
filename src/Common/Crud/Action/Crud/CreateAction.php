@@ -71,6 +71,18 @@ class CreateAction extends SelfHandlingParameterizedAction
     }
 
     /**
+     * Gets the action metadata.
+     *
+     * @return array
+     */
+    protected function metadata() : array
+    {
+        return [
+            'submit-button-text' => 'Save'
+        ];
+    }
+
+    /**
      * Gets the action form mapping.
      *
      * @return IStagedFormDtoMapping

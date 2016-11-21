@@ -36,7 +36,14 @@ class TestSelfHandlingParameterizedAction extends SelfHandlingParameterizedActio
     protected function permissions() : array
     {
         return [
-                Permission::named('test-permission')
+            Permission::named('test-permission'),
+        ];
+    }
+
+    protected function metadata() : array
+    {
+        return [
+            'some' => 'metadata'
         ];
     }
 
@@ -48,9 +55,9 @@ class TestSelfHandlingParameterizedAction extends SelfHandlingParameterizedActio
     protected function formMapping() : IStagedFormDtoMapping
     {
         return new ArrayDataObjectFormMapping(
-                Form::create()->section('Input', [
-                        Field::name('string')->label('String')->string()->required()
-                ])->build()->asStagedForm()
+            Form::create()->section('Input', [
+                Field::name('string')->label('String')->string()->required(),
+            ])->build()->asStagedForm()
         );
     }
 
@@ -77,5 +84,4 @@ class TestSelfHandlingParameterizedAction extends SelfHandlingParameterizedActio
         /** @var ArrayDataObject $data */
         return new TestDto(strtoupper($data['string']));
     }
-
 }

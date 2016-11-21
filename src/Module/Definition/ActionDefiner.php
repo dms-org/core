@@ -65,6 +65,11 @@ class ActionDefiner
     protected $returnDtoType = null;
 
     /**
+     * @var array
+     */
+    protected $metadata = [];
+
+    /**
      * ActionDefiner constructor.
      *
      * @param IAuthSystem $authSystem
@@ -209,6 +214,20 @@ class ActionDefiner
     }
 
     /**
+     * Sets the action's metadata
+     *
+     * @param array $metadata
+     *
+     * @return static
+     */
+    public function metadata(array $metadata)
+    {
+        $this->metadata += $metadata;
+
+        return $this;
+    }
+
+    /**
      * Sets the return dto class type for the action.
      *
      * @param string $returnDtoType
@@ -245,7 +264,8 @@ class ActionDefiner
                 $this->authSystem,
                 $this->requiredPermissions,
                 $mapping,
-                $handler
+                $handler,
+                $this->metadata
             ));
         } else {
 
@@ -257,7 +277,8 @@ class ActionDefiner
                 $this->name,
                 $this->authSystem,
                 $this->requiredPermissions,
-                $handler
+                $handler,
+                $this->metadata
             ));
         }
     }

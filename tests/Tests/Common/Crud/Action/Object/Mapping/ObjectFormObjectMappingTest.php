@@ -7,7 +7,7 @@ use Dms\Core\Common\Crud\Action\Object\Mapping\ObjectActionFormMapping;
 use Dms\Core\Common\Crud\Action\Object\Mapping\ObjectFormObjectMapping;
 use Dms\Core\Common\Crud\Action\Object\ObjectActionParameter;
 use Dms\Core\Tests\Common\Crud\Action\Object\Mapping\Fixtures\TestEntity;
-use Dms\Core\Tests\Common\Crud\Action\Object\Mapping\Fixtures\TestObjectForm;
+use Dms\Core\Tests\Common\Crud\Action\Object\Mapping\Fixtures\TestFormObject;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>
@@ -20,7 +20,7 @@ class ObjectFormObjectMappingTest extends ObjectActionFormMappingTest
      */
     protected function objectFormMapping()
     {
-        return new ObjectFormObjectMapping(new TestObjectForm(TestEntity::getTestCollection()));
+        return new ObjectFormObjectMapping(new TestFormObject(TestEntity::getTestCollection()));
     }
 
     /**
@@ -28,15 +28,15 @@ class ObjectFormObjectMappingTest extends ObjectActionFormMappingTest
      */
     protected function expectedDataDtoType()
     {
-        return TestObjectForm::class;
+        return TestFormObject::class;
     }
 
     /**
-     * @return TestObjectForm
+     * @return TestFormObject
      */
     protected function expectedForm()
     {
-        return new TestObjectForm(TestEntity::getTestCollection());
+        return new TestFormObject(TestEntity::getTestCollection());
     }
 
     /**

@@ -9,18 +9,18 @@ use Dms\Core\Exception\TypeMismatchException;
 use Dms\Core\Form\Builder\Form;
 use Dms\Core\Form\Field\Builder\Field;
 use Dms\Core\Tests\Common\Crud\Action\Object\Mapping\Fixtures\TestEntity;
-use Dms\Core\Tests\Common\Crud\Action\Object\Mapping\Fixtures\TestObjectForm;
+use Dms\Core\Tests\Common\Crud\Action\Object\Mapping\Fixtures\TestFormObject;
 use Dms\Core\Tests\Form\Field\Processor\Validator\Fixtures\TestEntity as AnotherTestEntity;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>
  */
-class StagedObjectFormTest extends CmsTestCase
+class StagedFormObjectTest extends CmsTestCase
 {
     public function testNew()
     {
         $dataSource = TestEntity::getTestCollection();
-        $form       = new TestObjectForm($dataSource);
+        $form       = new TestFormObject($dataSource);
 
         $this->assertSame($dataSource, $form->getDataSource());
         $this->assertSame(null, $form->getObject());
@@ -40,16 +40,16 @@ class StagedObjectFormTest extends CmsTestCase
     {
         $this->setExpectedException(TypeMismatchException::class);
 
-        new TestObjectForm(AnotherTestEntity::collection());
+        new TestFormObject(AnotherTestEntity::collection());
     }
 
     public function testSubmitFirstStage()
     {
-        $form = new TestObjectForm(TestEntity::getTestCollection());
+        $form = new TestFormObject(TestEntity::getTestCollection());
 
         $form = $form->submitFirstStage([IObjectAction::OBJECT_FIELD_NAME => 2]);
 
-        $this->assertInstanceOf(TestObjectForm::class, $form);
+        $this->assertInstanceOf(TestFormObject::class, $form);
         $this->assertEquals(TestEntity::withId(2), $form->getObject());
         $this->assertSame(null, $form->string);
         $this->assertSame(1, $form->getAmountOfStages());

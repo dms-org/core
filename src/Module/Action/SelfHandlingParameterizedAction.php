@@ -2,10 +2,8 @@
 
 namespace Dms\Core\Module\Action;
 
-use Dms\Core\Auth\IAuthSystem;
 use Dms\Core\Auth\IAuthSystemInPackageContext;
 use Dms\Core\Auth\IPermission;
-use Dms\Core\Form;
 use Dms\Core\Module\Handler\CustomParameterizedActionHandler;
 use Dms\Core\Module\IParameterizedActionHandler;
 use Dms\Core\Module\IStagedFormDtoMapping;
@@ -26,17 +24,18 @@ abstract class SelfHandlingParameterizedAction extends ParameterizedAction
         $formDtoMapping = $this->formMapping();
 
         parent::__construct(
-                $this->name(),
-                $auth,
-                $this->permissions(),
-                $formDtoMapping,
-                new CustomParameterizedActionHandler(
-                        function ($data) {
-                            return $this->runHandler($data);
-                        },
-                        $this->returnType(),
-                        $formDtoMapping->getDtoType()
-                )
+            $this->name(),
+            $auth,
+            $this->permissions(),
+            $formDtoMapping,
+            new CustomParameterizedActionHandler(
+                function ($data) {
+                    return $this->runHandler($data);
+                },
+                $this->returnType(),
+                $formDtoMapping->getDtoType()
+            ),
+            $this->metadata()
         );
     }
 
@@ -53,6 +52,16 @@ abstract class SelfHandlingParameterizedAction extends ParameterizedAction
      * @return IPermission[]
      */
     abstract protected function permissions() : array;
+
+    /**
+     * Gets the action metadata.
+     *
+     * @return array
+     */
+    protected function metadata() : array
+    {
+        return [];
+    }
 
     /**
      * Gets the action form mapping.

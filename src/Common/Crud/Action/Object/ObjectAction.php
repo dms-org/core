@@ -38,7 +38,8 @@ class ObjectAction extends ParameterizedAction implements IObjectAction
         IAuthSystemInPackageContext $auth,
         array $requiredPermissions,
         IObjectActionFormMapping $formDtoMapping,
-        IObjectActionHandler $handler
+        IObjectActionHandler $handler,
+        array $metadata = []
     ) {
         if ($formDtoMapping->getDataDtoType() !== $handler->getDataDtoType()) {
             throw TypeMismatchException::format(
@@ -47,7 +48,7 @@ class ObjectAction extends ParameterizedAction implements IObjectAction
             );
         }
 
-        parent::__construct($name, $auth, $requiredPermissions, $formDtoMapping, $handler);
+        parent::__construct($name, $auth, $requiredPermissions, $formDtoMapping, $handler, $metadata);
     }
 
     /**
