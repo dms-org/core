@@ -4,6 +4,7 @@ namespace Dms\Core\Form\Field\Type;
 
 use Dms\Core\Form\Field\Options\ArrayFieldOptions;
 use Dms\Core\Form\Field\Processor\DefaultValueProcessor;
+use Dms\Core\Form\Field\Processor\EmptyStringToNullProcessor;
 use Dms\Core\Form\Field\Processor\OverrideValueProcessor;
 use Dms\Core\Form\Field\Processor\Validator\OneOfValidator;
 use Dms\Core\Form\Field\Processor\Validator\RequiredValidator;
@@ -111,6 +112,7 @@ abstract class FieldType implements IFieldType
 
         $options = $this->get(self::ATTR_OPTIONS);
         if ($options && !$this->hasTypeSpecificOptionsValidator()) {
+            $processors[] = new EmptyStringToNullProcessor($currentProcessedType);
             $processors[] = new OneOfValidator($currentProcessedType, $options);
         }
 
