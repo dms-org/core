@@ -44,12 +44,13 @@ class CmsTest extends CmsTestCase
 
     public function testPackageNames()
     {
-        $this->assertSame(['test-package'], $this->cms->getPackageNames());
+        $this->assertSame(['test-package', 'test-package-factory'], $this->cms->getPackageNames());
     }
 
     public function testHasPackage()
     {
         $this->assertSame(true, $this->cms->hasPackage('test-package'));
+        $this->assertSame(true, $this->cms->hasPackage('test-package-factory'));
         $this->assertSame(false, $this->cms->hasPackage('non-existent'));
     }
 
@@ -57,9 +58,10 @@ class CmsTest extends CmsTestCase
     {
         $packages = $this->cms->loadPackages();
 
-        $this->assertSame(['test-package'], array_keys($packages));
+        $this->assertSame(['test-package', 'test-package-factory'], array_keys($packages));
 
         $this->assertInstanceOf(TestPackage::class, $packages['test-package']);
+        $this->assertInstanceOf(TestPackage::class, $packages['test-package-factory']);
     }
 
     public function testLoadPackage()
@@ -74,16 +76,29 @@ class CmsTest extends CmsTestCase
         }, PackageNotFoundException::class);
     }
 
+    public function testLoadPackageFromFactory()
+    {
+        $this->assertInstanceOf(TestPackage::class, $package1 = $this->cms->loadPackage('test-package-factory'));
+
+        // Should cache packages
+        $this->assertSame($package1, $this->cms->loadPackage('test-package-factory'));
+    }
+
     public function testLoadPermissionsInPackageNamespace()
     {
         /**
          * @see PackageWithActions Defined permissions in package
          */
         $this->assertEquals([
-                Permission::named('test-package.test-module-with-actions.some-permission'),
-                Permission::named('test-package.test-module-with-actions.permission.name'),
-                Permission::named('test-package.test-module-with-actions.permission.one'),
-                Permission::named('test-package.test-module-with-actions.permission.two'),
+            Permission::named('test-package.test-module-with-actions.some-permission'),
+            Permission::named('test-package.test-module-with-actions.permission.name'),
+            Permission::named('test-package.test-module-with-actions.permission.one'),
+            Permission::named('test-package.test-module-with-actions.permission.two'),
+            //
+            Permission::named('test-package-factory.test-module-with-actions.some-permission'),
+            Permission::named('test-package-factory.test-module-with-actions.permission.name'),
+            Permission::named('test-package-factory.test-module-with-actions.permission.one'),
+            Permission::named('test-package-factory.test-module-with-actions.permission.two'),
         ], $this->cms->loadPermissions());
     }
 }

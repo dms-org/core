@@ -3,6 +3,7 @@
 namespace Dms\Core\Tests\Package\Fixtures;
 
 use Dms\Core\Auth\IAuthSystem;
+use Dms\Core\Ioc\IIocContainer;
 use Dms\Core\Module\Definition\ModuleDefinition;
 use Dms\Core\Module\Module;
 use Dms\Core\Package\Definition\PackageDefinition;
@@ -16,6 +17,22 @@ use Dms\Core\Tests\Module\Fixtures\ModuleWithCharts;
 class TestPackage extends Package
 {
     /**
+     * @var string
+     */
+    protected $nameOverride;
+
+    /**
+     * Package constructor.
+     *
+     * @param IIocContainer $container
+     */
+    public function __construct(IIocContainer $container, string $name = 'test-package')
+    {
+        $this->nameOverride = $name;
+        parent::__construct($container);
+    }
+
+    /**
      * Defines the structure of this cms package.
      *
      * @param PackageDefinition $package
@@ -24,7 +41,7 @@ class TestPackage extends Package
      */
     protected function define(PackageDefinition $package)
     {
-        $package->name('test-package');
+        $package->name($this->nameOverride);
 
         $package->metadata([
             'key' => 'some-metadata',

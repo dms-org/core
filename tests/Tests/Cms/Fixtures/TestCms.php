@@ -21,7 +21,10 @@ class TestCms extends Cms
     protected function define(CmsDefinition $cms)
     {
         $cms->packages([
-                'test-package' => TestPackage::class,
+            'test-package'         => TestPackage::class,
+            'test-package-factory' => function (self $cms) {
+                return new TestPackage($cms->getIocContainer(), 'test-package-factory');
+            },
         ]);
     }
 }

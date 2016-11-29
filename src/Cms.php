@@ -153,14 +153,21 @@ abstract class Cms implements ICms
     }
 
     /**
-     * @param string $name
-     * @param string $packageClass
+     * @param string          $name
+     * @param string|callable $packageClass
      *
      * @return IPackage
      * @throws InvalidArgumentException
      */
-    private function loadPackageFromClass(string $name, string $packageClass) : Package\IPackage
+    private function loadPackageFromClass(string $name, $packageClass) : Package\IPackage
     {
+        if (is_callable($packageClass)) {
+            $package      = $packageClass($this, $name);
+            $packageClass = is_scalar($package) ? gettype($package) : get_class($package);
+        } else {
+            $package = null;
+        }
+
         if (!is_subclass_of($packageClass, IPackage::class, true)) {
             throw InvalidArgumentException::format(
                 'Invalid package class defined within cms: expecting subclass of %s, %s given',
@@ -169,7 +176,9 @@ abstract class Cms implements ICms
         }
 
         /** @var IPackage $package */
-        $package = $this->container->get($packageClass);
+        if (!$package) {
+            $package = $this->container->get($packageClass);
+        }
 
         if ($package->getName() !== $name) {
             throw InvalidArgumentException::format(

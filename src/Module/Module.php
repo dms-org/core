@@ -110,7 +110,7 @@ abstract class Module implements IModule
         $this->definition = $definition->finalize();
 
         $this->loadFromDefinition($this->definition);
-
+        
         $this->setPackageName($this->authSystem->getPackageName());
     }
 
