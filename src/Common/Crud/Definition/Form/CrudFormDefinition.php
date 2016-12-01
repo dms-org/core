@@ -29,7 +29,7 @@ use Dms\Core\Util\Reflection;
 /**
  * The CRUD form definition class.
  *
- * Provides a readable API for definition forms bound to
+ * Provides a readable API for defining forms bound to
  * objects, for creation, viewing and updating.
  *
  * This constructs a staged form contains instances of {@see FormWithBinding}
@@ -209,22 +209,10 @@ class CrudFormDefinition
 
         $fields = [];
         foreach ($fieldBindings as $fieldBinding) {
-            if ($fieldBinding instanceof FormFieldBindingDefinition) {
-                $fields[] = $fieldBinding->getField();
+            $fields[] = $fieldBinding->getField();
 
-                if ($fieldBinding->hasBinding()) {
-                    $this->currentStageFieldBindings[] = $fieldBinding->getBinding();
-                }
-            } elseif ($fieldBinding instanceof FieldBuilderBase) {
-                $fields[] = $fieldBinding->build();
-            } elseif ($fieldBinding instanceof IField) {
-                $fields[] = $fieldBinding;
-            } else {
-                throw InvalidArgumentException::format(
-                    'Invalid call to %s: parameter $fieldBindings must only contain instances of %s, %s found',
-                    __METHOD__, implode('|', [FormFieldBindingDefinition::class, FieldBuilderBase::class, IField::class]),
-                    Debug::getType($fieldBinding)
-                );
+            if ($fieldBinding->hasBinding()) {
+                $this->currentStageFieldBindings[] = $fieldBinding->getBinding();
             }
         }
 
