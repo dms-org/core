@@ -196,10 +196,12 @@ class TypeTest extends CmsTestCase
         $arrayOfInts = new ArrayType(new ScalarType(ScalarType::INT));
 
         $this->assertTrue($arrayOfInts->isSubsetOf($array));
+        $this->assertTrue($arrayOfInts->isSubsetOf($array->nullable()));
         $this->assertFalse($array->isSubsetOf($arrayOfInts));
 
         $this->assertFalse($arrayOfInts->isSupersetOf($array));
         $this->assertTrue($array->isSupersetOf($arrayOfInts));
+        $this->assertFalse($array->isSupersetOf($arrayOfInts->nullable()));
     }
 
     public function testIsSetOfWithCollections()
@@ -208,10 +210,12 @@ class TypeTest extends CmsTestCase
         $collectionOfInts = new CollectionType(new ScalarType(ScalarType::INT));
 
         $this->assertTrue($collectionOfInts->isSubsetOf($collection));
+        $this->assertTrue($collectionOfInts->isSubsetOf($collection->nullable()));
         $this->assertFalse($collection->isSubsetOf($collectionOfInts));
 
         $this->assertFalse($collectionOfInts->isSupersetOf($collection));
         $this->assertTrue($collection->isSupersetOf($collectionOfInts));
+        $this->assertFalse($collection->isSupersetOf($collectionOfInts->nullable()));
     }
 
     public function testSetsWithUnions()

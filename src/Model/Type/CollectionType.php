@@ -47,8 +47,15 @@ class CollectionType extends WithElementsType
      */
     protected function checkThisIsSubsetOf(IType $type) : bool
     {
-        /** @var static $type */
-        return parent::checkThisIsSubsetOf($type) && is_a($this->collectionClass, $type->collectionClass, true);
+        if (parent::checkThisIsSubsetOf($type) ) {
+            if ($type instanceof self) {
+                return is_a($this->collectionClass, $type->collectionClass, true);
+            }
+
+            return true;
+        }
+
+        return false;
     }
 
     /**

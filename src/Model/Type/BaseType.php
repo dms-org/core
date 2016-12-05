@@ -85,7 +85,17 @@ abstract class BaseType implements IType
         if ($type instanceof MixedType) {
             return true;
         } elseif ($type instanceof UnionType) {
-            return $type->hasUnionedType($this);
+            if ( $type->hasUnionedType($this)) {
+                return true;
+            }
+
+            foreach ($type->getTypes() as $type) {
+                if ($this->isSubsetOf($type)) {
+                    return true;
+                }
+            }
+
+            return false;
         } elseif ($type instanceof NotType) {
             return !$type->getType()->isSubsetOf($this);
         } else {
