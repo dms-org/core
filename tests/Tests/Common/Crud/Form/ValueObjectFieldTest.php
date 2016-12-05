@@ -7,6 +7,7 @@ use Dms\Core\Common\Crud\Form\FormWithBinding;
 use Dms\Core\Form\Binding\Field\FieldPropertyBinding;
 use Dms\Core\Form\Field\Type\InnerFormType;
 use Dms\Core\Form\InvalidFormSubmissionException;
+use Dms\Core\Form\InvalidInputException;
 use Dms\Core\Tests\Common\Crud\Form\Fixtures\TestValueObject;
 use Dms\Core\Tests\Common\Crud\Form\Fixtures\TestValueObjectField;
 
@@ -56,6 +57,8 @@ class ValueObjectFieldTest extends CmsTestCase
             $field->process(['string' => 'abc', 'int' => 10])
         );
 
+        $this->assertSame(null, $field->process(null));
+
         $this->assertThrows(function () use ($field) {
             $field->process(['string' => null, 'int' => null]);
         }, InvalidFormSubmissionException::class);
@@ -69,5 +72,21 @@ class ValueObjectFieldTest extends CmsTestCase
             'string' => 'abc',
             'int'    => 10,
         ], $field->unprocess(new TestValueObject('abc', 10)));
+
+        $this->assertSame(null, $field->unprocess(null));
+    }
+
+    public function testRequired()
+    {
+        $field = (new TestValueObjectField('name', 'Label'))->required();
+
+        $this->assertEquals(
+            new TestValueObject('abc', 10),
+            $field->process(['string' => 'abc', 'int' => 10])
+        );
+
+        $this->assertThrows(function () use ($field) {
+            $field->process(null);
+        }, InvalidInputException::class);
     }
 }

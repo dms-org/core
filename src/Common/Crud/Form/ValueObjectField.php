@@ -6,6 +6,7 @@ use Dms\Core\Common\Crud\Definition\Form\FinalizedValueObjectFieldDefinition;
 use Dms\Core\Common\Crud\Definition\Form\ValueObjectFieldDefinition;
 use Dms\Core\Form\Field\Field;
 use Dms\Core\Form\Field\Processor\CustomProcessor;
+use Dms\Core\Form\Field\Type\FieldType;
 use Dms\Core\Form\Field\Type\InnerFormType;
 use Dms\Core\Model\IValueObject;
 use Dms\Core\Model\Type\Builder\Type;
@@ -73,5 +74,15 @@ abstract class ValueObjectField extends Field
     final public function getFieldDefinition(): FinalizedValueObjectFieldDefinition
     {
         return $this->fieldDefinition;
+    }
+
+    /**
+     * @return static
+     */
+    public function required()
+    {
+        return $this->withTypeAttributes([
+            FieldType::ATTR_REQUIRED => true,
+        ]);
     }
 }
