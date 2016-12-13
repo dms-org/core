@@ -70,13 +70,7 @@ class Field implements IField
         $this->customProcessors = $processors;
         $this->type             = $type;
 
-        $this->processedType = $processors
-            ? end($processors)->getProcessedType()
-            : $type->getProcessedPhpType();
-
-        if ($this->type->get(FieldType::ATTR_REQUIRED) || $this->type->has(FieldType::ATTR_DEFAULT)) {
-            $this->processedType = $this->processedType->nonNullable();
-        }
+        $this->loadProcessedType();
 
         $this->setInitialValue($initialValue);
 
@@ -275,7 +269,19 @@ class Field implements IField
     {
         $clone = clone $this;
         $clone->type = $clone->type->withAll($attributes);
+        $clone->loadProcessedType();
 
         return $clone;
+    }
+
+    private function loadProcessedType()
+    {
+        $this->processedType = $this->customProcessors
+            ? end($this->customProcessors)->getProcessedType()
+            : $this->type->getProcessedPhpType();
+
+        if ($this->type->get(FieldType::ATTR_REQUIRED) || $this->type->has(FieldType::ATTR_DEFAULT)) {
+            $this->processedType = $this->processedType->nonNullable();
+        }
     }
 }

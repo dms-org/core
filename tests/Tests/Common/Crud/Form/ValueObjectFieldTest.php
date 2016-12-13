@@ -33,6 +33,7 @@ class ValueObjectFieldTest extends CmsTestCase
         $this->assertSame('Label', $field->getLabel());
         $this->assertEquals($formWithBinding, $field->getFieldDefinition()->getForm());
         $this->assertEquals(null, $field->getInitialValue());
+        $this->assertEquals(TestValueObject::type()->nullable(), $field->getProcessedType());
     }
 
     public function testNewWithInitialValue()
@@ -46,6 +47,7 @@ class ValueObjectFieldTest extends CmsTestCase
         $this->assertEquals('abc', $fieldType->getForm()->getField('string')->getInitialValue());
         $this->assertEquals(10, $fieldType->getForm()->getField('int')->getInitialValue());
         $this->assertEquals($field, (new TestValueObjectField('name', 'Label'))->withInitialValue(new TestValueObject('abc', 10)));
+        $this->assertEquals(TestValueObject::type()->nullable(), $field->getProcessedType());
     }
 
     public function testProcess()
@@ -88,5 +90,7 @@ class ValueObjectFieldTest extends CmsTestCase
         $this->assertThrows(function () use ($field) {
             $field->process(null);
         }, InvalidInputException::class);
+
+        $this->assertEquals(TestValueObject::type(), $field->getProcessedType());
     }
 }
