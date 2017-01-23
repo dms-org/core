@@ -44,8 +44,6 @@ class DefaultPropertyValues extends TypedObject
         $class->property($this->number)->asFloat();
 
         $class->property($this->dateTime)->asObject(\DateTime::class);
-
-        $this->dateTime = new \DateTime('2000-01-01');
     }
 
     public static function build()

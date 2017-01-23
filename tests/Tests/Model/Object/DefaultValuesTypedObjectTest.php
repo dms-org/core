@@ -27,6 +27,5 @@ class TypedObjectDefaultValuesTest extends TypedObjectTest
         $this->assertSame(['abc'], $this->object->one);
         $this->assertSame('bar', $this->object->foo);
         $this->assertSame(123.4, $this->object->number);
-        $this->assertEquals(new \DateTime('2000-01-01'), $this->object->dateTime);
     }
 }
