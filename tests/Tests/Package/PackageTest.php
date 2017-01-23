@@ -6,13 +6,16 @@ use Dms\Common\Testing\CmsTestCase;
 use Dms\Core\Auth\IAdmin;
 use Dms\Core\Auth\IAuthSystem;
 use Dms\Core\Auth\Permission;
+use Dms\Core\Event\IEventDispatcher;
 use Dms\Core\Exception\InvalidOperationException;
 use Dms\Core\Module\Module;
 use Dms\Core\Module\ModuleNotFoundException;
+use Dms\Core\Package\Definition\PackageDefinition;
 use Dms\Core\Tests\Helpers\Mock\MockingIocContainer;
 use Dms\Core\Tests\Module\Fixtures\ModuleWithActions;
 use Dms\Core\Tests\Module\Fixtures\ModuleWithCharts;
 use Dms\Core\Tests\Module\Mock\MockAuthSystem;
+use Dms\Core\Tests\Module\Mock\MockEventDispatcher;
 use Dms\Core\Tests\Package\Fixtures\TestPackage;
 
 /**
@@ -25,14 +28,27 @@ class PackageTest extends CmsTestCase
      */
     protected $package;
 
+    /**
+     * @var MockEventDispatcher
+     */
+    protected $eventDispatcher;
+
     public function setUp()
     {
-        $this->package = new TestPackage(new MockingIocContainer($this));
+        $iocContainer  = new MockingIocContainer($this);
 
-        $this->package->getIocContainer()->bindValue(
+        $iocContainer->bindValue(
             IAuthSystem::class,
             new MockAuthSystem($this->getMockForAbstractClass(IAdmin::class), $this, '')
         );
+
+        $iocContainer->bindValue(
+            IEventDispatcher::class,
+            $this->eventDispatcher = new MockEventDispatcher()
+        );
+
+        $this->package = new TestPackage($iocContainer);
+
     }
 
     public function testNew()
@@ -118,5 +134,21 @@ class PackageTest extends CmsTestCase
                 Permission::named('test-package.test-module-with-actions.permission.one'),
                 Permission::named('test-package.test-module-with-actions.permission.two'),
         ], $this->package->loadPermissions());
+    }
+
+    public function testDefineEventsAreEmitted()
+    {
+        $events = [];
+
+        foreach ($this->eventDispatcher->getEmittedEvents() as $event) {
+            $events[] = array_map(function ($i) {
+                return is_scalar($i) ? $i : get_class($i);
+            }, $event);
+        }
+
+        $this->assertEquals([
+            ['test-package.define', PackageDefinition::class],
+            ['test-package.defined', PackageDefinition::class],
+        ], $events);
     }
 }

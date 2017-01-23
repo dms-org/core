@@ -2,6 +2,7 @@
 
 namespace Dms\Core\Package\Definition;
 
+use Dms\Core\Event\IEventDispatcher;
 use Dms\Core\Exception\InvalidOperationException;
 
 /**
@@ -11,6 +12,11 @@ use Dms\Core\Exception\InvalidOperationException;
  */
 class PackageDefinition
 {
+    /**
+     * @var IEventDispatcher
+     */
+    protected $eventDispatcher;
+
     /**
      * @var string
      */
@@ -33,9 +39,12 @@ class PackageDefinition
 
     /**
      * PackageDefinition constructor.
+     *
+     * @param IEventDispatcher $eventDispatcher
      */
-    public function __construct()
+    public function __construct(IEventDispatcher $eventDispatcher)
     {
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     /**
@@ -48,6 +57,7 @@ class PackageDefinition
     public function name(string $name)
     {
         $this->name = $name;
+        $this->eventDispatcher->emit($name . '.define', $this);
     }
 
     /**
@@ -111,15 +121,17 @@ class PackageDefinition
     {
         if (!$this->name) {
             throw InvalidOperationException::format(
-                    'Cannot finalize package definition: name has not been defined'
+                'Cannot finalize package definition: name has not been defined'
             );
         }
 
         if (!$this->nameModuleClassMap) {
             throw InvalidOperationException::format(
-                    'Cannot finalize package definition: modules have not been defined'
+                'Cannot finalize package definition: modules have not been defined'
             );
         }
+
+        $this->eventDispatcher->emit($this->name . '.defined', $this);
 
         return new FinalizedPackageDefinition($this->name, $this->metadata, $this->nameModuleClassMap, $this->dashboardWidgetNames);
     }

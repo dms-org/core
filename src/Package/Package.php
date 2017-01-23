@@ -3,6 +3,7 @@
 namespace Dms\Core\Package;
 
 use Dms\Core\Auth\IAuthSystem;
+use Dms\Core\Event\IEventDispatcher;
 use Dms\Core\Exception\InvalidArgumentException;
 use Dms\Core\Exception\InvalidOperationException;
 use Dms\Core\ICms;
@@ -70,14 +71,14 @@ abstract class Package implements IPackage
     {
         $this->container = $container;
 
-        $definition = new PackageDefinition();
+        $definition = new PackageDefinition($container->get(IEventDispatcher::class));
         $this->define($definition);
         $finalizedDefinition = $definition->finalize();
 
-        $this->name = $finalizedDefinition->getName();
-        $this->metadata = $finalizedDefinition->getMetadata();
+        $this->name                 = $finalizedDefinition->getName();
+        $this->metadata             = $finalizedDefinition->getMetadata();
         $this->dashboardWidgetNames = $finalizedDefinition->getDashboardWidgetNames();
-        $this->nameModuleClassMap = $finalizedDefinition->getNameModuleClassMap();
+        $this->nameModuleClassMap   = $finalizedDefinition->getNameModuleClassMap();
     }
 
     /**
@@ -155,7 +156,7 @@ abstract class Package implements IPackage
                     $widgets[] = new DashboardWidget($module, $widget);
                 }
             } else {
-                $widget = $module->getWidget($widgetName);
+                $widget    = $module->getWidget($widgetName);
                 $widgets[] = new DashboardWidget($module, $widget);
             }
         }
@@ -193,7 +194,7 @@ abstract class Package implements IPackage
     }
 
     /**
-     * @param string $name
+     * @param string          $name
      * @param string|callable $moduleClass
      *
      * @return IModule
