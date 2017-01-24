@@ -442,6 +442,11 @@ abstract class ObjectMapping implements IObjectMapping
             unset($properties);
         }
 
+        foreach ($objectProperties as $key => $properties) {
+            $objects[$key]->hydrate($properties);
+            $objectProperties[$key] = [];
+        }
+
         foreach ($columnSetterMap as $column => $setterCallback) {
             foreach ($objects as $key => $object) {
                 $setterCallback($object, $rows[$key]->getColumn($column));
