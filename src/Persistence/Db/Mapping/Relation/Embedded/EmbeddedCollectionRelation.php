@@ -5,7 +5,6 @@ namespace Dms\Core\Persistence\Db\Mapping\Relation\Embedded;
 use Dms\Core\Exception\NotImplementedException;
 use Dms\Core\Exception\TypeMismatchException;
 use Dms\Core\Model\ITypedCollection;
-use Dms\Core\Model\ValueObjectCollection;
 use Dms\Core\Persistence\Db\LoadingContext;
 use Dms\Core\Persistence\Db\Mapping\IEmbeddedObjectMapper;
 use Dms\Core\Persistence\Db\Mapping\ParentChildrenMap;
@@ -74,20 +73,20 @@ class EmbeddedCollectionRelation extends EmbeddedRelation implements ISeparateTo
      * @param Column                $parentPrimaryKey
      */
     public function __construct(
-            string $idString,
-            IEmbeddedObjectMapper $mapper,
-            string $parentTableName,
-            string $tableName,
-            Column $childPrimaryKey,
-            Column $foreignKeyToParentColumn,
-            Column $parentPrimaryKey
+        string $idString,
+        IEmbeddedObjectMapper $mapper,
+        string $parentTableName,
+        string $tableName,
+        Column $childPrimaryKey,
+        Column $foreignKeyToParentColumn,
+        Column $parentPrimaryKey
     ) {
         $this->parentTableName    = $parentTableName;
         $this->parentPrimaryKey   = $parentPrimaryKey;
         $this->primaryKey         = $childPrimaryKey;
         $this->foreignKeyToParent = $foreignKeyToParentColumn;
         $mapper                   = $this->loadMapperAsSeparateTable($mapper, $tableName);
-        $this->childrenTable      = $mapper->getDefinition()->getTable();
+        $this->childrenTable = $mapper->getDefinition()->getTable();
 
 
         parent::__construct($idString, $mapper->getCollectionType(), $mapper, self::DEPENDENT_CHILDREN, [$this->childrenTable], [$parentPrimaryKey->getName()]);
@@ -109,19 +108,19 @@ class EmbeddedCollectionRelation extends EmbeddedRelation implements ISeparateTo
     private function loadMapperAsSeparateTable(IEmbeddedObjectMapper $mapper, $tableName)
     {
         return $mapper->asSeparateTable(
-                $tableName,
-                [$this->primaryKey, $this->foreignKeyToParent],
-                [],
-                [
-                        ForeignKey::createWithNamingConvention(
-                                $tableName,
-                                [$this->foreignKeyToParent->getName()],
-                                $this->parentTableName,
-                                [$this->parentPrimaryKey->getName()],
-                                ForeignKeyMode::CASCADE,
-                                ForeignKeyMode::CASCADE
-                        )
-                ]
+            $tableName,
+            [$this->primaryKey, $this->foreignKeyToParent],
+            [],
+            [
+                ForeignKey::createWithNamingConvention(
+                    $tableName,
+                    [$this->foreignKeyToParent->getName()],
+                    $this->parentTableName,
+                    [$this->parentPrimaryKey->getName()],
+                    ForeignKeyMode::CASCADE,
+                    ForeignKeyMode::CASCADE
+                ),
+            ]
         );
     }
 
@@ -130,7 +129,7 @@ class EmbeddedCollectionRelation extends EmbeddedRelation implements ISeparateTo
      *
      * @return ITypedCollection
      */
-    public function buildCollection(array $children) : ITypedCollection
+    public function buildCollection(array $children): ITypedCollection
     {
         return $this->mapper->buildCollection($children);
     }
@@ -144,12 +143,12 @@ class EmbeddedCollectionRelation extends EmbeddedRelation implements ISeparateTo
     public function delete(PersistenceContext $context, Delete $parentDelete)
     {
         $this->mode->removeRelationsQuery(
-                $context,
-                $this->mapper,
-                $parentDelete,
-                $this->childrenTable,
-                $this->foreignKeyToParent,
-                $parentDelete->getTable()->getPrimaryKeyColumn()
+            $context,
+            $this->mapper,
+            $parentDelete,
+            $this->childrenTable,
+            $this->foreignKeyToParent,
+            $parentDelete->getTable()->getPrimaryKeyColumn()
         );
     }
 
@@ -164,10 +163,10 @@ class EmbeddedCollectionRelation extends EmbeddedRelation implements ISeparateTo
     {
         if ($map->hasAnyParentsWithPrimaryKeys()) {
             $this->mode->syncInvalidatedRelationsQuery(
-                    $context,
-                    $this->childrenTable,
-                    $this->foreignKeyToParent,
-                    $this->getInvalidatedRelationExpr($map)
+                $context,
+                $this->childrenTable,
+                $this->foreignKeyToParent,
+                $this->getInvalidatedRelationExpr($map)
             );
         }
 
@@ -229,17 +228,17 @@ class EmbeddedCollectionRelation extends EmbeddedRelation implements ISeparateTo
         $parentIds = $map->getAllParentPrimaryKeys();
 
         return $parentIds
-                ? Expr::in(
-                        Expr::tableColumn($this->childrenTable, $this->foreignKeyToParent->getName()),
-                        Expr::idParamTuple($parentIds)
-                )
-                : Expr::false();
+            ? Expr::in(
+                Expr::tableColumn($this->childrenTable, $this->foreignKeyToParent->getName()),
+                Expr::idParamTuple($parentIds)
+            )
+            : Expr::false();
     }
 
     /**
      * @inheritDoc
      */
-    public function getRelationSelectFromParentRows(ParentMapBase $map, &$parentIdColumnName = null, &$mapIdColumn = null) : \Dms\Core\Persistence\Db\Query\Select
+    public function getRelationSelectFromParentRows(ParentMapBase $map, &$parentIdColumnName = null, &$mapIdColumn = null): \Dms\Core\Persistence\Db\Query\Select
     {
         $parentIds = $map->getAllParentPrimaryKeys();
 
@@ -247,11 +246,11 @@ class EmbeddedCollectionRelation extends EmbeddedRelation implements ISeparateTo
         $select         = Select::from($this->childrenTable);
         $select->addRawColumn($foreignKeyName);
         $select->where(Expr::in(
-                Expr::column(
-                        $this->childrenTable->getName(),
-                        $this->foreignKeyToParent
-                ),
-                Expr::idParamTuple($parentIds)
+            Expr::column(
+                $this->childrenTable->getName(),
+                $this->foreignKeyToParent
+            ),
+            Expr::idParamTuple($parentIds)
         ));
 
         $parentIdColumnName = $foreignKeyName;
@@ -270,7 +269,7 @@ class EmbeddedCollectionRelation extends EmbeddedRelation implements ISeparateTo
         if (!$map->getItems()) {
             return;
         }
-        
+
         $select = $this->getRelationSelectFromParentRows($map, $parentIdColumnName);
 
         $this->loadFromSelect($context, $map, $select, $select->getTableAlias(), $parentIdColumnName);
@@ -280,11 +279,11 @@ class EmbeddedCollectionRelation extends EmbeddedRelation implements ISeparateTo
      * @inheritDoc
      */
     public function loadFromSelect(
-            LoadingContext $context,
-            ParentChildrenMap $map,
-            Select $select,
-            string $relatedTableAlias,
-            string $parentIdColumnName
+        LoadingContext $context,
+        ParentChildrenMap $map,
+        Select $select,
+        string $relatedTableAlias,
+        string $parentIdColumnName
     ) {
         $primaryKey = $map->getPrimaryKeyColumn();
 
@@ -326,12 +325,12 @@ class EmbeddedCollectionRelation extends EmbeddedRelation implements ISeparateTo
     /**
      * @inheritDoc
      */
-    public function joinSelectToRelatedTable(string $parentTableAlias, string $joinType, Select $select) : string
+    public function joinSelectToRelatedTable(string $parentTableAlias, string $joinType, Select $select): string
     {
         $childTableAlias = $select->generateUniqueAliasFor($this->childrenTable->getName());
 
         $select->join(new Join($joinType, $this->childrenTable, $childTableAlias, [
-                $this->getRelationJoinCondition($parentTableAlias, $childTableAlias)
+            $this->getRelationJoinCondition($parentTableAlias, $childTableAlias),
         ]));
 
         return $childTableAlias;
@@ -340,22 +339,22 @@ class EmbeddedCollectionRelation extends EmbeddedRelation implements ISeparateTo
     /**
      * @inheritDoc
      */
-    public function getRelationSubSelect(Select $outerSelect, string $parentTableAlias) : \Dms\Core\Persistence\Db\Query\Select
+    public function getRelationSubSelect(Select $outerSelect, string $parentTableAlias): \Dms\Core\Persistence\Db\Query\Select
     {
         $subSelect = $outerSelect->buildSubSelect($this->childrenTable);
 
         return $subSelect
-                ->where($this->getRelationJoinCondition($parentTableAlias, $subSelect->getTableAlias()));
+            ->where($this->getRelationJoinCondition($parentTableAlias, $subSelect->getTableAlias()));
     }
 
     /**
      * @inheritDoc
      */
-    public function getRelationJoinCondition(string $parentTableAlias, string $relatedTableAlias) : \Dms\Core\Persistence\Db\Query\Expression\Expr
+    public function getRelationJoinCondition(string $parentTableAlias, string $relatedTableAlias): \Dms\Core\Persistence\Db\Query\Expression\Expr
     {
         return Expr::equal(
-                Expr::column($parentTableAlias, $this->parentPrimaryKey),
-                Expr::column($relatedTableAlias, $this->foreignKeyToParent)
+            Expr::column($parentTableAlias, $this->parentPrimaryKey),
+            Expr::column($relatedTableAlias, $this->foreignKeyToParent)
         );
     }
 }

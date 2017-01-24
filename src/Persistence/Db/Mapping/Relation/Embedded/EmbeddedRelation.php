@@ -39,6 +39,7 @@ abstract class EmbeddedRelation extends Relation implements IRelation
             array $parentColumnsToLoad
     ) {
         parent::__construct($idString, $valueType, $mapper, $dependencyMode, $relationshipTables, $parentColumnsToLoad);
+        $mapper->initializeRelations();
     }
 
     /**
