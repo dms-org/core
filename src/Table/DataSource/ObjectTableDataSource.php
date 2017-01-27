@@ -7,6 +7,8 @@ use Dms\Core\Model\Criteria\IMemberExpressionParser;
 use Dms\Core\Model\IObjectSet;
 use Dms\Core\Model\ITypedObject;
 use Dms\Core\Model\Object\TypedObject;
+use Dms\Core\Table\Criteria\ObjectRowCriteria;
+use Dms\Core\Table\Criteria\RowCriteria;
 use Dms\Core\Table\Data\DataTable;
 use Dms\Core\Table\Data\Object\TableRowWithObject;
 use Dms\Core\Table\Data\TableSection;
@@ -61,6 +63,14 @@ class ObjectTableDataSource extends TableDataSource
         $this->definition     = $definition;
 
         $this->validateMapping();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function criteria() : RowCriteria
+    {
+        return new ObjectRowCriteria($this->structure, $this->objectSource);
     }
 
     /**

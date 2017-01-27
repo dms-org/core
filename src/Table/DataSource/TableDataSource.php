@@ -51,7 +51,7 @@ abstract class TableDataSource implements ITableDataSource
     /**
      * @inheritDoc
      */
-    final public function criteria() : RowCriteria
+    public function criteria() : RowCriteria
     {
         return new RowCriteria($this->structure);
     }

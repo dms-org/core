@@ -226,19 +226,6 @@ class RowCriteriaTest extends CmsTestCase
         $this->assertSame(25, $this->criteria->getAmountOfRows());
     }
 
-    public function testFromExisting()
-    {
-        $this->criteria
-            ->loadAll()
-            ->where('name.last_name', '!=', null)
-            ->groupBy('age')
-            ->orderByAsc('name.first_name')
-            ->skipRows(10)
-            ->maxRows(25);
-
-        $this->assertEquals(RowCriteria::fromExisting($this->criteria), $this->criteria);
-    }
-
     public function testClear()
     {
         $this->criteria

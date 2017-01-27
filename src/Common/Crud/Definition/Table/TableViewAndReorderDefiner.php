@@ -3,7 +3,10 @@
 namespace Dms\Core\Common\Crud\Definition\Table;
 
 use Dms\Core\Auth\IPermission;
+use Dms\Core\Model\Criteria\Criteria;
+use Dms\Core\Model\IObjectSet;
 use Dms\Core\Module\Definition\Table\TableViewDefiner;
+use Dms\Core\Table\Criteria\ObjectRowCriteria;
 use Dms\Core\Table\ITableDataSource;
 
 /**
@@ -13,6 +16,11 @@ use Dms\Core\Table\ITableDataSource;
  */
 class TableViewAndReorderDefiner extends TableViewDefiner
 {
+    /**
+     * @var ObjectRowCriteria
+     */
+    protected $rowCriteria;
+
     /**
      * @var callable
      */
@@ -27,7 +35,33 @@ class TableViewAndReorderDefiner extends TableViewDefiner
         $this->reorderActionCallback = $reorderActionCallback;
     }
 
+    /**
+     * @return IObjectSet
+     */
+    public function getObjectSet() : IObjectSet
+    {
+        return $this->rowCriteria->getObjectSet();
+    }
 
+    /**
+     * @return Criteria
+     */
+    public function getObjectCriteria() : Criteria
+    {
+        return $this->rowCriteria->getObjectCriteria();
+    }
+
+    /**
+     * @param callable $objectCriteriaCallback
+     *
+     * @return self
+     */
+    public function matches(callable $objectCriteriaCallback)
+    {
+        $this->rowCriteria->matches($objectCriteriaCallback);
+
+        return $this;
+    }
 
     /**
      * Defines that, when viewed with the this criteria, the table

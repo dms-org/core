@@ -10,6 +10,7 @@ use Dms\Core\Model\IObjectSetWithLoadCriteriaSupport;
 use Dms\Core\Table\Criteria\ColumnConditionGroup;
 use Dms\Core\Table\Criteria\ColumnCriterion;
 use Dms\Core\Table\DataSource\Definition\FinalizedObjectTableDefinition;
+use Dms\Core\Table\IObjectRowCriteria;
 use Dms\Core\Table\IRowCriteria;
 
 /**
@@ -61,6 +62,10 @@ class RowCriteriaMapper
         $objectCriteria = $this->objectSet instanceof IObjectSetWithLoadCriteriaSupport
             ? $this->objectSet->loadCriteria()
             : new LoadCriteria($this->definition->getClass());
+
+        if ($criteria instanceof IObjectRowCriteria) {
+            $objectCriteria = $objectCriteria->merge($criteria->getObjectCriteria());
+        }
 
         foreach ($criteria->getColumnsToLoad() as $column) {
             $objectCriteria->loadAll($this->definition->getPropertiesRequiredFor($column->getName()));

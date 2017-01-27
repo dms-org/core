@@ -68,26 +68,6 @@ class RowCriteria implements IRowCriteria
     }
 
     /**
-     * @param IRowCriteria $criteria
-     *
-     * @return RowCriteria
-     */
-    public static function fromExisting(IRowCriteria $criteria) : RowCriteria
-    {
-        $self = new self($criteria->getStructure());
-
-        $self->columnsToLoad   = $criteria->getColumnsToLoad();
-        $self->conditionMode   = $criteria->getConditionMode();
-        $self->conditionGroups = $criteria->getConditionGroups();
-        $self->orderings       = $criteria->getOrderings();
-        $self->groupings       = $criteria->getGroupings();
-        $self->rowsToSkip      = $criteria->getRowsToSkip();
-        $self->amountOfRows    = $criteria->getAmountOfRows();
-
-        return $self;
-    }
-
-    /**
      * {@inheritDoc}
      */
     public function getStructure() : ITableStructure

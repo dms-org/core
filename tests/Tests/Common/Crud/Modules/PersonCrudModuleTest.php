@@ -149,6 +149,33 @@ class PersonCrudModuleTest extends CrudModuleTest
         ], $data);
     }
 
+    public function testSummaryTableFilteredByObjectCriteria()
+    {
+        $data = $this->module->getSummaryTable()->loadView('adults');
+        $id   = IReadModule::SUMMARY_TABLE_ID_COLUMN;
+
+        $this->assertDataTableEquals([
+            [
+                [$id => 4, 'type' => 'adult', 'name' => ['first' => 'Joe', 'last' => 'Quarter'], 'age' => 25],
+                [$id => 5, 'type' => 'adult', 'name' => ['first' => 'Kate', 'last' => 'Costa'], 'age' => 28],
+            ],
+        ], $data);
+    }
+
+    public function testSummaryTableFilteredByObjectCriteriaViaMatchesMethod()
+    {
+        $data = $this->module->getSummaryTable()->loadView('children');
+        $id   = IReadModule::SUMMARY_TABLE_ID_COLUMN;
+
+        $this->assertDataTableEquals([
+            [
+                [$id => 1, 'type' => 'child', 'name' => ['first' => 'Jack', 'last' => 'Baz'], 'age' => 15],
+                [$id => 2, 'type' => 'child', 'name' => ['first' => 'Samantha', 'last' => 'Williams'], 'age' => 12],
+                [$id => 3, 'type' => 'child', 'name' => ['first' => 'Casey', 'last' => 'Low'], 'age' => 15],
+            ],
+        ], $data);
+    }
+
     public function testSummaryTableCount()
     {
         $this->assertSame(5, $this->module->getSummaryTable()->loadAmountOfRowsInView('default'));
