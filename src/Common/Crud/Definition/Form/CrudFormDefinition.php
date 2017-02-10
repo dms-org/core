@@ -87,6 +87,11 @@ class CrudFormDefinition
     /**
      * @var callable[]
      */
+    protected $beforeSubmitCallbacks = [];
+
+    /**
+     * @var callable[]
+     */
     protected $onSubmitCallbacks = [];
 
     /**
@@ -483,7 +488,38 @@ class CrudFormDefinition
      * Defines an form submission callback.
      *
      * This will be executed when the form is submitted
-     * after the form data has been bound to the object.
+     * *before* the form data has been bound to the object.
+     *
+     * This will NOT be called on a details form.
+     *
+     * Example:
+     * <code>
+     * $form->beforeSubmit(function (Person $object, array $input) {
+     *      $object->initializeSomething($input['data']);
+     * });
+     * </code>
+     *
+     * @param callable $callback
+     *
+     * @return void
+     * @throws InvalidOperationException
+     */
+    public function beforeSubmit(callable $callback)
+    {
+        if ($this->isDependent) {
+            throw InvalidOperationException::format(
+                'Invalid call to %s: cannot add form callbacks in dependent form sections', __METHOD__
+            );
+        }
+
+        $this->beforeSubmitCallbacks[] = $callback;
+    }
+
+    /**
+     * Defines an form submission callback.
+     *
+     * This will be executed when the form is submitted
+     * *after* the form data has been bound to the object.
      *
      * This will NOT be called on a details form.
      *
@@ -565,6 +601,7 @@ class CrudFormDefinition
             $this->mode,
             $stagedForm,
             $this->createObjectCallback,
+            $this->beforeSubmitCallbacks,
             $this->onSubmitCallbacks,
             $this->onSaveCallbacks
         );

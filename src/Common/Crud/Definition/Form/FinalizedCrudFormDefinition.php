@@ -32,6 +32,11 @@ class FinalizedCrudFormDefinition
     /**
      * @var callable[]
      */
+    protected $beforeSubmitCallbacks;
+
+    /**
+     * @var callable[]
+     */
     protected $onSubmitCallbacks;
 
     /**
@@ -45,6 +50,7 @@ class FinalizedCrudFormDefinition
      * @param string        $mode
      * @param IStagedForm   $stagedForm
      * @param callable|null $createObjectCallback
+     * @param callable[]    $beforeSubmitCallbacks
      * @param callable[]    $onSubmitCallbacks
      * @param callable[]    $onSaveCallbacks
      */
@@ -52,25 +58,26 @@ class FinalizedCrudFormDefinition
         string $mode,
         IStagedForm $stagedForm,
         callable $createObjectCallback = null,
+        array $beforeSubmitCallbacks,
         array $onSubmitCallbacks,
         array $onSaveCallbacks
-    )
-    {
+    ) {
         InvalidArgumentException::verify(
             $createObjectCallback || $mode !== CrudFormDefinition::MODE_CREATE,
             'create callback cannot be null for create form'
         );
-        $this->mode                 = $mode;
-        $this->stagedForm           = $stagedForm;
-        $this->createObjectCallback = $createObjectCallback;
-        $this->onSubmitCallbacks    = $onSubmitCallbacks;
-        $this->onSaveCallbacks      = $onSaveCallbacks;
+        $this->mode                  = $mode;
+        $this->stagedForm            = $stagedForm;
+        $this->createObjectCallback  = $createObjectCallback;
+        $this->beforeSubmitCallbacks = $beforeSubmitCallbacks;
+        $this->onSubmitCallbacks     = $onSubmitCallbacks;
+        $this->onSaveCallbacks       = $onSaveCallbacks;
     }
 
     /**
      * @return string
      */
-    public function getMode() : string
+    public function getMode(): string
     {
         return $this->mode;
     }
@@ -78,7 +85,7 @@ class FinalizedCrudFormDefinition
     /**
      * @return IStagedForm
      */
-    public function getStagedForm() : IStagedForm
+    public function getStagedForm(): IStagedForm
     {
         return $this->stagedForm;
     }
@@ -94,7 +101,15 @@ class FinalizedCrudFormDefinition
     /**
      * @return callable[]
      */
-    public function getOnSubmitCallbacks() : array
+    public function getBeforeSubmitCallbacks(): array
+    {
+        return $this->beforeSubmitCallbacks;
+    }
+
+    /**
+     * @return callable[]
+     */
+    public function getOnSubmitCallbacks(): array
     {
         return $this->onSubmitCallbacks;
     }
@@ -102,7 +117,7 @@ class FinalizedCrudFormDefinition
     /**
      * @return callable[]
      */
-    public function getOnSaveCallbacks() : array
+    public function getOnSaveCallbacks(): array
     {
         return $this->onSaveCallbacks;
     }
@@ -112,9 +127,22 @@ class FinalizedCrudFormDefinition
      *
      * @return ITypedObject
      */
-    public function createNewObjectFromInput(array $input) : ITypedObject
+    public function createNewObjectFromInput(array $input): ITypedObject
     {
         return call_user_func($this->createObjectCallback, $input);
+    }
+
+    /**
+     * @param ITypedObject $object
+     * @param array        $input
+     *
+     * @return void
+     */
+    public function invokeBeforeSubmitCallbacks(ITypedObject $object, array $input)
+    {
+        foreach ($this->beforeSubmitCallbacks as $callback) {
+            $callback($object, $input);
+        }
     }
 
     /**

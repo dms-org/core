@@ -117,6 +117,7 @@ class CreateAction extends SelfHandlingParameterizedAction
         $input     = $data->getArray();
         $newObject = $this->form->createNewObjectFromInput($input);
 
+        $this->form->invokeBeforeSubmitCallbacks($newObject, $input);
         $this->form->bindToObject($newObject, $input);
         $this->form->invokeOnSubmitCallbacks($newObject, $input);
 

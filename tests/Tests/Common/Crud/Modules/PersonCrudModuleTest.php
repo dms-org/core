@@ -499,4 +499,15 @@ class PersonCrudModuleTest extends CrudModuleTest
         }, InvalidFormSubmissionException::class);
 
     }
+
+    public function testCrudFormCallbacks()
+    {
+        $this->testEditChildAction();
+
+        $this->assertSame($this->module->callbackLog, [
+            'before-submit',
+            'on-submit',
+            'on-save',
+        ]);
+    }
 }

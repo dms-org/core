@@ -23,6 +23,11 @@ use Dms\Core\Tests\Common\Crud\Modules\Fixtures\Complex\Domain\TestColour;
 class PersonModule extends CrudModule
 {
     /**
+     * @var array
+     */
+    public $callbackLog = [];
+
+    /**
      * Defines the structure of this module.
      *
      * @param CrudModuleDefinition $module
@@ -147,6 +152,18 @@ class PersonModule extends CrudModule
                             ->bindToProperty(Adult::PROFESSION),
                     ]);
                 }
+            });
+
+            $form->beforeSubmit(function () {
+                $this->callbackLog[] = 'before-submit';
+            });
+
+            $form->onSubmit(function () {
+                $this->callbackLog[] = 'on-submit';
+            });
+
+            $form->onSave(function () {
+                $this->callbackLog[] = 'on-save';
             });
         });
 
