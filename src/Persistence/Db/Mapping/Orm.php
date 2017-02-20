@@ -20,6 +20,10 @@ use Dms\Core\Util\Debug;
  */
 abstract class Orm implements IOrm
 {
+    const NOT_INITIALIZED = 0;
+    const INITIALIZED_FACTORIES = 1;
+    const INITIALIZED_MAPPERS = 2;
+
     /**
      * @var IIocContainer|null
      */
@@ -48,7 +52,7 @@ abstract class Orm implements IOrm
     /**
      * @var IEntityMapper[]
      */
-    private $entityMappers = [];
+    private $entityMappers;
 
     /**
      * @var IOrmPlugin[]
@@ -78,7 +82,24 @@ abstract class Orm implements IOrm
     public function __construct(IIocContainer $iocContainer = null)
     {
         $this->iocContainer = $iocContainer;
-        $definition         = new OrmDefinition($iocContainer);
+    }
+
+    protected function getInitializedState()
+    {
+        if ($this->entityMappers !== null) {
+            return self::INITIALIZED_MAPPERS;
+        }
+
+        if ($this->entityMapperFactories !== null || $this->embeddedObjectMapperFactories !== null) {
+            return self::INITIALIZED_FACTORIES;
+        }
+
+        return self::NOT_INITIALIZED;
+    }
+
+    protected function initializeFromDefinition()
+    {
+        $definition = new OrmDefinition($this->iocContainer);
         $this->define($definition);
 
         $definition->finalize(function (
@@ -87,36 +108,43 @@ abstract class Orm implements IOrm
             array $includedOrms,
             array $plugins,
             bool $enableLazyLoading
-        ) use (
-            $iocContainer
         ) {
             /** @var Orm[] $includedOrms */
             foreach ($includedOrms as $orm) {
-                $orm->parentOrm    = $this;
+                $orm->parentOrm = $this;
             }
 
             $this->includedOrms = $includedOrms;
             $this->plugins      = $plugins;
 
-            if ($this->plugins) {
-                foreach ($this->includedOrms as $key => $orm) {
-                    $this->includedOrms[$key] = $orm->update('', $plugins, false);
-                }
+            foreach ($this->includedOrms as $key => $orm) {
+                $this->includedOrms[$key] = $orm->update($this->namespace, $this->plugins);
             }
 
-            $this->initializeMappers($entityMapperFactories, $embeddedObjectMapperFactories);
+            $this->entityMapperFactories         = $entityMapperFactories;
+            $this->embeddedObjectMapperFactories = $embeddedObjectMapperFactories;
 
-            $this->enableLazyLoading($enableLazyLoading);
+            if (!$this->lazyLoadingEnabled && $enableLazyLoading) {
+                $this->enableLazyLoading();
+            }
         });
     }
 
-    private function initializeMappers(array $entityMapperFactories, array $embeddedObjectMapperFactories)
+    protected function initialize()
     {
-        $this->entityMapperFactories         = $entityMapperFactories;
-        $this->embeddedObjectMapperFactories = $embeddedObjectMapperFactories;
+        switch ($this->getInitializedState()) {
+            case self::NOT_INITIALIZED:
+                $this->initializeFromDefinition();
+            // fall-through
 
-        $this->initializeEntityMappers();
-        $this->initializeEntityMapperRelations();
+            case self::INITIALIZED_FACTORIES:
+                $this->initializeEntityMappers();
+                $this->initializeEntityMapperRelations();
+            // fall-through
+
+            case self::INITIALIZED_MAPPERS:
+                return;
+        }
     }
 
     /**
@@ -135,7 +163,7 @@ abstract class Orm implements IOrm
             }
 
             foreach ($this->includedOrms as $orm) {
-                $orm->initializeEntityMappers();
+                $orm->initialize();
             }
         };
 
@@ -204,23 +232,27 @@ abstract class Orm implements IOrm
     /**
      * @return string
      */
-    public function getNamespace() : string
+    public function getNamespace(): string
     {
+        $this->initialize();
+
         return $this->namespace;
     }
 
     /**
      * @return IOrmPlugin[]
      */
-    public function getPlugins() : array
+    public function getPlugins(): array
     {
+        $this->initialize();
+
         return $this->plugins;
     }
 
     /**
      * @inheritDoc
      */
-    public function inNamespace(string $prefix) : IOrm
+    public function inNamespace(string $prefix): IOrm
     {
         return $this->update($prefix, []);
     }
@@ -228,7 +260,7 @@ abstract class Orm implements IOrm
     /**
      * @inheritDoc
      */
-    public function update(string $namespacePrefix, array $plugins, bool $initializeMappers = true) : IOrm
+    public function update(string $namespacePrefix, array $plugins): IOrm
     {
         if ($namespacePrefix === '' && $plugins === []) {
             return $this;
@@ -238,20 +270,18 @@ abstract class Orm implements IOrm
 
         $clone = clone $this;
 
+        $clone->initializeFromDefinition();
+
         $clone->namespace = $namespacePrefix . $this->namespace;
         $clone->plugins   = array_merge($clone->plugins, $plugins);
-
 
         foreach ($clone->includedOrms as $key => $orm) {
             $includedOrm               = clone $orm;
             $includedOrm->parentOrm    = $clone;
-            $clone->includedOrms[$key] = $includedOrm->update($namespacePrefix, $plugins, false);
+            $clone->includedOrms[$key] = $includedOrm->update($namespacePrefix, $plugins);
         }
 
-        if ($initializeMappers) {
-            $clone->initializeEntityMappers();
-            $clone->initializeEntityMapperRelations();
-        }
+        $clone->entityMappers = null;
 
         return $clone;
     }
@@ -310,24 +340,30 @@ abstract class Orm implements IOrm
     /**
      * @inheritDoc
      */
-    final public function getEntityMappers() : array
+    final public function getEntityMappers(): array
     {
+        $this->initialize();
+
         return $this->entityMappers;
     }
 
     /**
      * @inheritDoc
      */
-    final  public function hasEntityMapper(string $entityClass, string $tableName = null) : bool
+    final  public function hasEntityMapper(string $entityClass, string $tableName = null): bool
     {
+        $this->initialize();
+
         return $this->findEntityMapper($entityClass, $tableName) !== null;
     }
 
     /**
      * @inheritDoc
      */
-    final public function getEntityMapper(string $entityClass, string $tableName = null) : IEntityMapper
+    final public function getEntityMapper(string $entityClass, string $tableName = null): IEntityMapper
     {
+        $this->initialize();
+
         $mapper = $this->findEntityMapper($entityClass, $tableName);
 
         if (!$mapper) {
@@ -342,6 +378,8 @@ abstract class Orm implements IOrm
 
     final public function findEntityMapper(string $entityClass, string $tableName = null, IOrm $ormToIgnore = null)
     {
+        $this->initialize();
+
         $mappers = [];
 
         foreach ($this->entityMappers as $mapper) {
@@ -383,16 +421,20 @@ abstract class Orm implements IOrm
     /**
      * @inheritDoc
      */
-    final public function getEmbeddedObjectTypes() : array
+    final public function getEmbeddedObjectTypes(): array
     {
+        $this->initialize();
+
         return array_keys($this->embeddedObjectMapperFactories);
     }
 
     /**
      * @inheritDoc
      */
-    final public function hasEmbeddedObjectMapper(string $valueObjectClass) : bool
+    final public function hasEmbeddedObjectMapper(string $valueObjectClass): bool
     {
+        $this->initialize();
+
         if ($this->findEmbeddedObjectMapperFactory($valueObjectClass) !== null) {
             return true;
         }
@@ -409,8 +451,10 @@ abstract class Orm implements IOrm
     /**
      * @inheritDoc
      */
-    final public function loadEmbeddedObjectMapper(IObjectMapper $parentMapper, string $valueObjectClass) : IEmbeddedObjectMapper
+    final public function loadEmbeddedObjectMapper(IObjectMapper $parentMapper, string $valueObjectClass): IEmbeddedObjectMapper
     {
+        $this->initialize();
+
         $factory = $this->findEmbeddedObjectMapperFactory($valueObjectClass);
 
         if ($factory) {
@@ -441,16 +485,20 @@ abstract class Orm implements IOrm
     /**
      * @inheritDoc
      */
-    final public function getIncludedOrms() : array
+    final public function getIncludedOrms(): array
     {
+        $this->initialize();
+
         return $this->includedOrms;
     }
 
     /**
      * @inheritDoc
      */
-    final public function getDatabase() : Database
+    final public function getDatabase(): Database
     {
+        $this->initialize();
+
         if (!$this->database) {
             $this->initializeDb();
         }
@@ -461,8 +509,10 @@ abstract class Orm implements IOrm
     /**
      * @inheritDoc
      */
-    public function loadRelatedEntityType(string $entityType, array $valueObjectProperties, string $idPropertyName) : string
+    public function loadRelatedEntityType(string $entityType, array $valueObjectProperties, string $idPropertyName): string
     {
+        $this->initialize();
+
         $sourceType = $entityType;
         $mapper     = $this->getEntityMapper($entityType);
 
@@ -496,16 +546,20 @@ abstract class Orm implements IOrm
     /**
      * @inheritDoc
      */
-    public function getEntityDataSourceProvider(IConnection $connection) : IEntitySetProvider
+    public function getEntityDataSourceProvider(IConnection $connection): IEntitySetProvider
     {
+        $this->initialize();
+
         return new EntityRepositoryProvider($this, $connection);
     }
 
     /**
      * @inheritDoc
      */
-    public function isLazyLoadingEnabled() : bool
+    public function isLazyLoadingEnabled(): bool
     {
+        $this->initialize();
+
         return $this->lazyLoadingEnabled;
     }
 
