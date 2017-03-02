@@ -9,6 +9,7 @@ use Dms\Core\Persistence\Db\LoadingContext;
 use Dms\Core\Persistence\Db\Mapping\Hook\IPersistHook;
 use Dms\Core\Persistence\Db\PersistenceContext;
 use Dms\Core\Persistence\Db\Query\Delete;
+use Dms\Core\Persistence\Db\Query\Select;
 use Dms\Core\Persistence\Db\Row;
 use Dms\Core\Persistence\Db\Schema\ForeignKey;
 
@@ -128,5 +129,15 @@ class NullObjectMapper implements IEntityMapper
     public function getCollectionType() : IType
     {
 
+    }
+
+    /**
+     * @param Select $select
+     *
+     * @return Select
+     */
+    public function loadSelect(Select $select)
+    {
+        // TODO: Implement loadSelect() method.
     }
 }

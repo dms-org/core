@@ -150,11 +150,16 @@ class ReadModelMapper extends ObjectMapper implements IEntityMapper, IEmbeddedOb
     {
         $select = Select::from($this->getPrimaryTable());
 
+        $this->loadSelect($select);
+
+        return $select;
+    }
+
+    public function loadSelect(Select $select)
+    {
         foreach ($this->getDefinition()->getOrm()->getPlugins() as $plugin) {
             $plugin->loadSelect($this, $select);
         }
-
-        return $select;
     }
 
     /**

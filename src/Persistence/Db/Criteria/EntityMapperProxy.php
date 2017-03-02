@@ -105,7 +105,21 @@ class EntityMapperProxy extends ReadOnlyObjectMapperProxy implements IEntityMapp
      */
     public function getRawSelect() : Select
     {
-        return Select::from($this->getPrimaryTable());
+        $select = Select::from($this->getPrimaryTable());
+
+        $this->loadSelect($select);
+
+        return $select;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function loadSelect(Select $select)
+    {
+        foreach ($this->getDefinition()->getOrm()->getPlugins() as $plugin) {
+            $plugin->loadSelect($this, $select);
+        }
     }
 
     /**

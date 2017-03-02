@@ -158,7 +158,7 @@ abstract class EntityRelation extends Relation implements ISeparateTableRelation
      */
     final protected function select() : Select
     {
-        return Select::from($this->relatedTable);
+        return $this->mapper->getRawSelect();
     }
 
     /**

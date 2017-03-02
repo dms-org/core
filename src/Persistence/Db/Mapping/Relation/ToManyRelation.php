@@ -356,6 +356,7 @@ class ToManyRelation extends ToManyRelationBase
     {
         $subSelect = $outerSelect->buildSubSelect($this->relatedTable);
 
+        $this->mapper->loadSelect($subSelect);
         $subSelect->where($this->getRelationJoinCondition($parentTableAlias, $subSelect->getTableAlias()));
 
         $this->addOrderByClausesToSelect($subSelect, $subSelect->getTableAlias());
