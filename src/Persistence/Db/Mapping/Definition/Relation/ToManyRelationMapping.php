@@ -16,10 +16,11 @@ class ToManyRelationMapping extends RelationMapping
      *
      * @param IAccessor       $accessor
      * @param IToManyRelation $relation
+     * @param bool            $ignoreTypeMismatch
      */
-    public function __construct(IAccessor $accessor, IToManyRelation $relation)
+    public function __construct(IAccessor $accessor, IToManyRelation $relation, bool $ignoreTypeMismatch)
     {
-        parent::__construct($accessor, $relation);
+        parent::__construct($accessor, $relation, false, $ignoreTypeMismatch);
     }
 
     /**

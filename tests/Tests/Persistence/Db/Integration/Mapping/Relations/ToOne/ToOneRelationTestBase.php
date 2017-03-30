@@ -73,7 +73,8 @@ abstract class ToOneRelationTestBase extends DbIntegrationTest
 
     public function testPersistWithNoChild()
     {
-        $entity = new ParentEntity();
+        $entity = $this->buildTestEntity();
+        $entity->child = null;
 
         $this->repo->save($entity);
 

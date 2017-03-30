@@ -51,6 +51,19 @@ class RelationUsingDefiner
     }
 
     /**
+     * @return RelationUsingDefiner
+     */
+    public function ignoreTypeMismatch() : RelationUsingDefiner
+    {
+        $originalCallback = $this->callback;
+        $this->callback = function (callable $relationFactory, callable $foreignKeyFactory = null) use ($originalCallback) {
+            $originalCallback($relationFactory, $foreignKeyFactory, true);
+        };
+
+        return $this;
+    }
+
+    /**
      * Sets the relation to use the supplied mapper.
      *
      * @param IEntityMapper $mapper

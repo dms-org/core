@@ -28,15 +28,16 @@ abstract class RelationMapping
      * @param IAccessor $accessor
      * @param IRelation $relation
      * @param bool      $ignoreNullabilityMismatch
+     * @param bool      $ignoreTypeMismatch
      *
      * @throws IncompatiblePropertyMappingException
      */
-    public function __construct(IAccessor $accessor, IRelation $relation, bool $ignoreNullabilityMismatch = false)
+    public function __construct(IAccessor $accessor, IRelation $relation, bool $ignoreNullabilityMismatch = false, bool $ignoreTypeMismatch)
     {
         $accessorType = $accessor->getCompatibleType();
         $relationType = $relation->getValueType();
 
-        if ($accessorType !== null) {
+        if ($accessorType !== null && !$ignoreTypeMismatch) {
             if ($ignoreNullabilityMismatch) {
                 $accessorType = $accessorType->nonNullable();
                 $relationType = $relationType->nonNullable();

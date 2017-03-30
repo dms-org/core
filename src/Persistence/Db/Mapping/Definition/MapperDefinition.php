@@ -527,8 +527,8 @@ class MapperDefinition extends MapperDefinitionBase
             $this,
             $this->orm,
             $accessor,
-            function (callable $relationFactory, callable $foreignKeyFactory = null) use ($accessor, $definedCallback) {
-                $this->createRelationMappingFactory($accessor, $relationFactory);
+            function (callable $relationFactory, callable $foreignKeyFactory = null, bool $ignoreTypeMismatch = false) use ($accessor, $definedCallback) {
+                $this->createRelationMappingFactory($accessor, $relationFactory, $ignoreTypeMismatch);
 
                 if ($foreignKeyFactory) {
                     $this->foreignKeyFactories[] = $foreignKeyFactory;
@@ -541,15 +541,15 @@ class MapperDefinition extends MapperDefinitionBase
         );
     }
 
-    protected function createRelationMappingFactory(IAccessor $accessor, callable $relationFactory)
+    protected function createRelationMappingFactory(IAccessor $accessor, callable $relationFactory, $ignoreTypeMismatch)
     {
-        $this->relationFactories[] = function ($idString, Table $table, IObjectMapper $parentMapper) use ($accessor, $relationFactory) {
+        $this->relationFactories[] = function ($idString, Table $table, IObjectMapper $parentMapper) use ($accessor, $relationFactory, $ignoreTypeMismatch) {
             $relation = $relationFactory($idString, $table, $parentMapper);
 
             if ($relation instanceof IToOneRelation) {
-                return new ToOneRelationMapping($accessor, $relation);
+                return new ToOneRelationMapping($accessor, $relation, $ignoreTypeMismatch);
             } elseif ($relation instanceof IToManyRelation) {
-                return new ToManyRelationMapping($accessor, $relation);
+                return new ToManyRelationMapping($accessor, $relation, $ignoreTypeMismatch);
             }
 
             throw InvalidArgumentException::format('Unknown relation type: %s', Debug::getType($relation));

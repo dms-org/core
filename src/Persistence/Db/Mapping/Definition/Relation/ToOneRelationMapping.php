@@ -17,10 +17,11 @@ class ToOneRelationMapping extends RelationMapping
      *
      * @param IAccessor      $accessor
      * @param IToOneRelation $relation
+     * @param bool           $ignoreTypeMismatch
      */
-    public function __construct(IAccessor $accessor, IToOneRelation $relation)
+    public function __construct(IAccessor $accessor, IToOneRelation $relation, bool $ignoreTypeMismatch)
     {
-        parent::__construct($accessor, $relation, true);
+        parent::__construct($accessor, $relation, true, $ignoreTypeMismatch);
     }
 
     /**
