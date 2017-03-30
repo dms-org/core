@@ -202,10 +202,11 @@ class EmbeddedObjectRelation extends EmbeddedRelation implements IEmbeddedToOneR
 
     protected function getRequiredColumnLookup() : array
     {
+        $table = $this->mapper->getTableWhichThisIsEmbeddedWithin();
         $lookup = [];
 
         foreach ($this->parentColumnsToLoad as $parentColumn) {
-            if (!$this->mapper->getTableWhichThisIsEmbeddedWithin()->getColumn($parentColumn)->getType()->isNullable()) {
+            if ($table->hasColumn($parentColumn) && !$table->getColumn($parentColumn)->getType()->isNullable()) {
                 $lookup[$parentColumn] = true;
             }
         }
