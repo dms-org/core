@@ -111,7 +111,7 @@ class ToManyRelation extends ToManyRelationBase
 
     public function persist(PersistenceContext $context, ParentChildrenMap $map)
     {
-        if ($map->hasAnyParentsWithPrimaryKeys()) {
+        if ($map->hasAnyParentsWithPrimaryKeys() && !$context->getConnection()->getPlatform()->supportsForeignKeys()) {
             $this->mode->syncInvalidatedRelationsQuery(
                 $context,
                 $this->relatedTable,

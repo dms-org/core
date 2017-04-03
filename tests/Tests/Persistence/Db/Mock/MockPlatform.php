@@ -659,4 +659,14 @@ class MockPlatform extends Platform
     {
 
     }
+
+    /**
+     * Whether the platform supports foreign key columns with cascade updates / removals.
+     *
+     * @return bool
+     */
+    public function supportsForeignKeys(): bool
+    {
+        return false;
+    }
 }

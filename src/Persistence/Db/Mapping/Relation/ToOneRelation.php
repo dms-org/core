@@ -1,4 +1,4 @@
-<?php declare(strict_types = 1);
+<?php declare(strict_types=1);
 
 namespace Dms\Core\Persistence\Db\Mapping\Relation;
 
@@ -49,8 +49,8 @@ class ToOneRelation extends ToOneRelationBase
 
         if (!$this->foreignKeyColumn) {
             throw InvalidRelationException::format(
-                    'Invalid parent foreign key column %s does not exist on related table %s',
-                    $this->foreignKeyToParent, $this->mapper->getPrimaryTableName()
+                'Invalid parent foreign key column %s does not exist on related table %s',
+                $this->foreignKeyToParent, $this->mapper->getPrimaryTableName()
             );
         }
     }
@@ -65,12 +65,12 @@ class ToOneRelation extends ToOneRelationBase
 
     public function persist(PersistenceContext $context, ParentChildMap $map)
     {
-        if ($map->hasAnyParentsWithPrimaryKeys()) {
+        if ($map->hasAnyParentsWithPrimaryKeys() && !$context->getConnection()->getPlatform()->supportsForeignKeys()) {
             $this->mode->syncInvalidatedRelationsQuery(
-                    $context,
-                    $this->relatedTable,
-                    $this->foreignKeyColumn,
-                    $this->getInvalidatedRelationExpr($map)
+                $context,
+                $this->relatedTable,
+                $this->foreignKeyColumn,
+                $this->getInvalidatedRelationExpr($map)
             );
         }
 
@@ -80,12 +80,12 @@ class ToOneRelation extends ToOneRelationBase
     protected function deleteByParentQuery(PersistenceContext $context, Delete $parentDelete)
     {
         $this->mode->removeRelationsQuery(
-                $context,
-                $this->mapper,
-                $parentDelete,
-                $this->relatedTable,
-                $this->foreignKeyColumn,
-                $parentDelete->getTable()->getPrimaryKeyColumn()
+            $context,
+            $this->mapper,
+            $parentDelete,
+            $this->relatedTable,
+            $this->foreignKeyColumn,
+            $parentDelete->getTable()->getPrimaryKeyColumn()
         );
     }
 
@@ -134,8 +134,8 @@ class ToOneRelation extends ToOneRelationBase
             // only be known after inserting so the foreign key to itself
             // will have to be updated separately afterwards
             $context->bulkUpdate(new RowSet($this->relatedTable->withColumnsButIgnoringConstraints([
-                    $this->relatedPrimaryKey,
-                    $this->foreignKeyColumn
+                $this->relatedPrimaryKey,
+                $this->foreignKeyColumn,
             ]), $selfReferencingChildRows));
         }
     }
@@ -154,14 +154,14 @@ class ToOneRelation extends ToOneRelationBase
                 $childId = $this->reference->getIdFromValue($item->getChild());
 
                 $equalsParentForeignKey = Expr::equal(
-                        $this->column($this->foreignKeyColumn),
-                        Expr::idParam($parent->getColumn($primaryKey))
+                    $this->column($this->foreignKeyColumn),
+                    Expr::idParam($parent->getColumn($primaryKey))
                 );
 
                 if ($childId !== null) {
                     $expressions[] = Expr::and_(
-                            $equalsParentForeignKey,
-                            Expr::notEqual($this->column($this->relatedPrimaryKey), Expr::idParam($childId))
+                        $equalsParentForeignKey,
+                        Expr::notEqual($this->column($this->relatedPrimaryKey), Expr::idParam($childId))
                     );
                 } else {
                     $expressions[] = $equalsParentForeignKey;
@@ -175,9 +175,9 @@ class ToOneRelation extends ToOneRelationBase
     /**
      * @inheritDoc
      */
-    public function getRelationSelectFromParentRows(ParentMapBase $map, &$parentIdColumnName = null, &$mapIdColumn = null) : \Dms\Core\Persistence\Db\Query\Select
+    public function getRelationSelectFromParentRows(ParentMapBase $map, &$parentIdColumnName = null, &$mapIdColumn = null): \Dms\Core\Persistence\Db\Query\Select
     {
-        $parentIds  = $map->getAllParentPrimaryKeys();
+        $parentIds = $map->getAllParentPrimaryKeys();
 
         $select = $this->select();
         $select->addRawColumn($this->foreignKeyToParent);
@@ -214,12 +214,12 @@ class ToOneRelation extends ToOneRelationBase
     /**
      * @inheritDoc
      */
-    public function joinSelectToRelatedTable(string $parentTableAlias, string $joinType, Select $select) : string
+    public function joinSelectToRelatedTable(string $parentTableAlias, string $joinType, Select $select): string
     {
         $relatedTableAlias = $select->generateUniqueAliasFor($this->relatedTable->getName());
 
         $select->join(new Join($joinType, $this->relatedTable, $relatedTableAlias, [
-                $this->getRelationJoinCondition($parentTableAlias, $relatedTableAlias)
+            $this->getRelationJoinCondition($parentTableAlias, $relatedTableAlias),
         ]));
 
         return $relatedTableAlias;
@@ -228,11 +228,11 @@ class ToOneRelation extends ToOneRelationBase
     /**
      * @inheritDoc
      */
-    public function getRelationJoinCondition(string $parentTableAlias, string $relatedTableAlias) : \Dms\Core\Persistence\Db\Query\Expression\Expr
+    public function getRelationJoinCondition(string $parentTableAlias, string $relatedTableAlias): \Dms\Core\Persistence\Db\Query\Expression\Expr
     {
         return Expr::equal(
-                Expr::column($parentTableAlias, $this->relatedPrimaryKey),
-                Expr::column($relatedTableAlias, $this->foreignKeyColumn)
+            Expr::column($parentTableAlias, $this->relatedPrimaryKey),
+            Expr::column($relatedTableAlias, $this->foreignKeyColumn)
         );
     }
 }

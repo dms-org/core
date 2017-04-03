@@ -402,4 +402,14 @@ class DoctrinePlatform extends Platform
     {
         return $this->doctrinePlatform->quoteSingleIdentifier($identifier);
     }
+
+    /**
+     * Whether the platform supports foreign key columns with cascade updates / removals.
+     *
+     * @return bool
+     */
+    public function supportsForeignKeys(): bool
+    {
+        return $this->doctrinePlatform->supportsForeignKeyConstraints();
+    }
 }

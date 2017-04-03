@@ -119,4 +119,11 @@ interface IPlatform
      * @return string
      */
     public function compilePreparedUpdate(Table $table, array $updateColumns, array $whereColumnNameParameterMap);
+
+    /**
+     * Whether the platform supports foreign key columns with cascade updates / removals.
+     *
+     * @return bool
+     */
+    public function supportsForeignKeys() : bool;
 }
