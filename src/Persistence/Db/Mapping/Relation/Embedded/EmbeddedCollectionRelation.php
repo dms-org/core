@@ -161,7 +161,7 @@ class EmbeddedCollectionRelation extends EmbeddedRelation implements ISeparateTo
      */
     public function persist(PersistenceContext $context, ParentChildrenMap $map)
     {
-        if ($map->hasAnyParentsWithPrimaryKeys() && !$context->getConnection()->getPlatform()->supportsForeignKeys()) {
+        if ($map->hasAnyParentsWithPrimaryKeys()) {
             $this->mode->syncInvalidatedRelationsQuery(
                 $context,
                 $this->childrenTable,
