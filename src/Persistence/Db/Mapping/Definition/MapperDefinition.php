@@ -844,6 +844,14 @@ class MapperDefinition extends MapperDefinitionBase
     }
 
     /**
+     * @return Column[]
+     */
+    public function getAllColumns()
+    {
+        return ($this->parent ? $this->parent->getAllColumns() : []) + $this->columns;
+    }
+
+    /**
      * @param Column[] $columns
      *
      * @return void

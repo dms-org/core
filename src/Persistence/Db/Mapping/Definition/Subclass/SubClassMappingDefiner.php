@@ -1,4 +1,4 @@
-<?php declare(strict_types = 1);
+<?php declare(strict_types=1);
 
 namespace Dms\Core\Persistence\Db\Mapping\Definition\Subclass;
 
@@ -62,32 +62,32 @@ class SubClassMappingDefiner extends SubClassDefinerBase
      *
      * @return SubClassDefinitionDefiner
      */
-    public function withTypeInColumn(string $columnName, $classTypeValue) : SubClassDefinitionDefiner
+    public function withTypeInColumn(string $columnName, $classTypeValue): SubClassDefinitionDefiner
     {
         return new SubClassDefinitionDefiner(
-                $this->orm,
-                $this->parentDefinition,
-                function (MapperDefinition $subClassDefinition) use ($columnName, $classTypeValue) {
-                    foreach ($subClassDefinition->getColumns() as $column) {
-                        $this->parentDefinition->addColumn($column->asNullable());
-                    }
-                    $subClassDefinition->setColumns($this->parentDefinition->getColumns());
-
-                    call_user_func(
-                            $this->callback,
-                            function (Table $parentTable) use ($subClassDefinition, $columnName, $classTypeValue) {
-                                $finalizedSubClassDefinition = $subClassDefinition->finalize($parentTable->getName());
-
-                                return new EmbeddedSubClassObjectMapping(
-                                        $parentTable,
-                                        $finalizedSubClassDefinition,
-                                        $columnName,
-                                        $classTypeValue
-                                );
-                            },
-                            $subClassDefinition
-                    );
+            $this->orm,
+            $this->parentDefinition,
+            function (MapperDefinition $subClassDefinition) use ($columnName, $classTypeValue) {
+                foreach ($subClassDefinition->getColumns() as $column) {
+                    $this->parentDefinition->addColumn($column->asNullable());
                 }
+                $subClassDefinition->setColumns($this->parentDefinition->getColumns());
+
+                call_user_func(
+                    $this->callback,
+                    function (Table $parentTable) use ($subClassDefinition, $columnName, $classTypeValue) {
+                        $finalizedSubClassDefinition = $subClassDefinition->finalize($parentTable->getName());
+
+                        return new EmbeddedSubClassObjectMapping(
+                            $parentTable,
+                            $finalizedSubClassDefinition,
+                            $columnName,
+                            $classTypeValue
+                        );
+                    },
+                    $subClassDefinition
+                );
+            }
         );
     }
 
@@ -136,7 +136,9 @@ class SubClassMappingDefiner extends SubClassDefinerBase
             $this->withTypeInColumn($columnName, $columnValue)->asType($classType);
         }
 
-        $this->parentDefinition->column($columnName)->asEnum(array_keys($columnValueClassTypeMap));
+        if (!isset($this->parentDefinition->getAllColumns()[$columnName])) {
+            $this->parentDefinition->column($columnName)->asEnum(array_keys($columnValueClassTypeMap));
+        }
     }
 
     /**
@@ -200,27 +202,27 @@ class SubClassMappingDefiner extends SubClassDefinerBase
      *
      * @return SubClassDefinitionDefiner
      */
-    public function asSeparateTable(string $tableName) : SubClassDefinitionDefiner
+    public function asSeparateTable(string $tableName): SubClassDefinitionDefiner
     {
         return new SubClassDefinitionDefiner(
-                $this->orm,
-                $this->parentDefinition,
-                function (MapperDefinition $subClassDefinition) use ($tableName) {
+            $this->orm,
+            $this->parentDefinition,
+            function (MapperDefinition $subClassDefinition) use ($tableName) {
 
-                    call_user_func(
-                            $this->callback,
-                            function (Table $parentTable) use ($subClassDefinition, $tableName) {
-                                $subClassDefinition->idToPrimaryKey($parentTable->getPrimaryKeyColumnName());
-                                $finalizedSubClassDefinition = $subClassDefinition->finalize($tableName);
+                call_user_func(
+                    $this->callback,
+                    function (Table $parentTable) use ($subClassDefinition, $tableName) {
+                        $subClassDefinition->idToPrimaryKey($parentTable->getPrimaryKeyColumnName());
+                        $finalizedSubClassDefinition = $subClassDefinition->finalize($tableName);
 
-                                return new JoinedSubClassObjectMapping(
-                                        $parentTable,
-                                        $finalizedSubClassDefinition
-                                );
-                            },
-                            $subClassDefinition
-                    );
-                }
+                        return new JoinedSubClassObjectMapping(
+                            $parentTable,
+                            $finalizedSubClassDefinition
+                        );
+                    },
+                    $subClassDefinition
+                );
+            }
         );
     }
 }
