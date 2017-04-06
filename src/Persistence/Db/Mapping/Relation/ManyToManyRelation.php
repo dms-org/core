@@ -190,7 +190,7 @@ class ManyToManyRelation extends ToManyRelationBase
         }
 
         // Clear join rows and reinsert to sync
-        if ($map->hasAnyParentsWithPrimaryKeys() && !$context->getConnection()->getPlatform()->supportsForeignKeys()) {
+        if ($map->hasAnyParentsWithPrimaryKeys()) {
             $delete = Delete::from($this->joinTable)
                 ->where($this->getInvalidatedRelationExpr($map));
             $context->queue($delete);
