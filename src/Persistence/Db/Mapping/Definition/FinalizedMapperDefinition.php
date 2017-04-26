@@ -8,6 +8,7 @@ use Dms\Core\Persistence\Db\Mapping\Definition\Relation\Accessor\PropertyAccesso
 use Dms\Core\Persistence\Db\Mapping\Definition\Relation\RelationMapping;
 use Dms\Core\Persistence\Db\Mapping\Definition\Relation\ToManyRelationMapping;
 use Dms\Core\Persistence\Db\Mapping\Definition\Relation\ToOneRelationMapping;
+use Dms\Core\Persistence\Db\Mapping\Hierarchy\IEmbeddedObjectMapping;
 use Dms\Core\Persistence\Db\Mapping\Hierarchy\IObjectMapping;
 use Dms\Core\Persistence\Db\Mapping\Hook\IPersistHook;
 use Dms\Core\Persistence\Db\Mapping\IEmbeddedObjectMapper;
@@ -238,8 +239,46 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
             $mapping->initializeRelations($mapper);
         }
 
+        $subclassForeignKeys = [];
+
+        foreach ($this->findEmbeddedSubclassMappings($this->subClassMappings) as $subClassMapping) {
+            foreach ($subClassMapping->getDefinition()->getTable()->getForeignKeys() as $foreignKey) {
+                $subclassForeignKeys[] = $foreignKey;
+            }
+        }
+
+        $this->table = $this->table->withForeignKeys(array_merge(
+            $this->table->getForeignKeys(),
+            $subclassForeignKeys
+        ));
+
+
         $this->hasInitializedRelations = true;
     }
+
+    /**
+     * @param array $mappings
+     *
+     * @return IEmbeddedObjectMapping[]
+     */
+    protected function findEmbeddedSubclassMappings(array $mappings): array
+    {
+        $embeddedMappings = [];
+
+        foreach ($mappings as $subClassMapping) {
+            if ($subClassMapping instanceof IEmbeddedObjectMapping) {
+                $embeddedMappings[] = $subClassMapping;
+
+                $embeddedMappings = array_merge(
+                    $embeddedMappings,
+                    $this->findEmbeddedSubclassMappings($subClassMapping->getDefinition()->getSubClassMappings())
+                );
+            }
+        }
+
+        return $embeddedMappings;
+    }
+
 
     /**
      * @param ForeignKey $foreignKey
