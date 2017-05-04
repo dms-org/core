@@ -236,6 +236,10 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
             call_user_func($this->foreignKeysFactory, $this->table)
         ));
 
+        foreach ($this->subClassMappings as $subClassMapping) {
+            $subClassMapping->initializeRelations($mapper);
+        }
+
         $embeddedForeignKeys = [];
 
         foreach ($this->findEmbeddedObjectRelations($this->toOneRelations) as $relation) {
@@ -248,10 +252,6 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
             foreach ($subClassMapping->getDefinition()->getTable()->getForeignKeys() as $foreignKey) {
                 $embeddedForeignKeys[] = $foreignKey;
             }
-        }
-
-        foreach ($this->subClassMappings as $subClassMapping) {
-            $subClassMapping->initializeRelations($mapper);
         }
 
         $this->table = $this->table->withForeignKeys(array_merge(
