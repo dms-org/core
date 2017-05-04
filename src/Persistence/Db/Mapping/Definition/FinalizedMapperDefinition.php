@@ -16,6 +16,7 @@ use Dms\Core\Persistence\Db\Mapping\IObjectMapper;
 use Dms\Core\Persistence\Db\Mapping\IOrm;
 use Dms\Core\Persistence\Db\Mapping\Locking\IOptimisticLockingStrategy;
 use Dms\Core\Persistence\Db\Mapping\NullObjectMapper;
+use Dms\Core\Persistence\Db\Mapping\Relation\Embedded\EmbeddedObjectRelation;
 use Dms\Core\Persistence\Db\Mapping\Relation\IRelation;
 use Dms\Core\Persistence\Db\Schema\ForeignKey;
 use Dms\Core\Persistence\Db\Schema\Table;
@@ -235,25 +236,53 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
             call_user_func($this->foreignKeysFactory, $this->table)
         ));
 
-        foreach ($this->subClassMappings as $mapping) {
-            $mapping->initializeRelations($mapper);
-        }
+        $embeddedForeignKeys = [];
 
-        $subclassForeignKeys = [];
+        foreach ($this->findEmbeddedObjectRelations($this->toOneRelations) as $relation) {
+            foreach ($relation->getMapper()->getDefinition()->getTable()->getForeignKeys() as $foreignKey) {
+                $embeddedForeignKeys[] = $foreignKey;
+            }
+        }
 
         foreach ($this->findEmbeddedSubclassMappings($this->subClassMappings) as $subClassMapping) {
             foreach ($subClassMapping->getDefinition()->getTable()->getForeignKeys() as $foreignKey) {
-                $subclassForeignKeys[] = $foreignKey;
+                $embeddedForeignKeys[] = $foreignKey;
             }
+        }
+
+        foreach ($this->subClassMappings as $subClassMapping) {
+            $subClassMapping->initializeRelations($mapper);
         }
 
         $this->table = $this->table->withForeignKeys(array_merge(
             $this->table->getForeignKeys(),
-            $subclassForeignKeys
+            $embeddedForeignKeys
         ));
 
-
         $this->hasInitializedRelations = true;
+    }
+
+    /**
+     * @param RelationMapping[] $relations
+     *
+     * @return EmbeddedObjectRelation[]
+     */
+    protected function findEmbeddedObjectRelations(array $relations): array
+    {
+        $embeddedRelations = [];
+
+        foreach ($relations as $relation) {
+            if ($relation->getRelation() instanceof EmbeddedObjectRelation) {
+                $embeddedRelations[] = $relation->getRelation();
+
+                $embeddedRelations = array_merge(
+                    $embeddedRelations,
+                    $this->findEmbeddedObjectRelations($relation->getRelation()->getMapper()->getDefinition()->getToOneRelationMappings())
+                );
+            }
+        }
+
+        return $embeddedRelations;
     }
 
     /**
