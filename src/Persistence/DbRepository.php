@@ -98,6 +98,40 @@ class DbRepository extends DbRepositoryBase implements IRepository
     }
 
     /**
+     * Reorders the entity with the supplied id.
+     *
+     * @param int         $id
+     * @param int         $newIndex The new index of the entity
+     * @param string      $propertyName The property which contains the order index
+     * @param string|null $groupingPropertyName The property which groups the orderings
+     *
+     * @throws InvalidArgumentException
+     */
+    public function reorderOnProperty(int $id, int $newIndex, string $propertyName, string $groupingPropertyName = null)
+    {
+        $columnName = $this->mapper->getDefinition()->getPropertyColumnMap()[$propertyName] ?? null;
+
+        if (!$columnName) {
+            throw InvalidArgumentException::format(
+                'Invalid call to %s::%s: could not find column linked to property %s::$%s',
+                get_class($this), __FUNCTION__, $this->getEntityType(), $propertyName
+            );
+        }
+
+        $query = $this->reorder($columnName)
+            ->withPrimaryKey($id)
+            ->toNewIndex($newIndex);
+
+        if ($groupingPropertyName) {
+            $groupingColumnNames = $this->mapper->getDefinition()->getEmbeddedColumnsMappedTo($groupingPropertyName);
+
+            $query->groupedBy(...$groupingColumnNames);
+        }
+
+        $query->executeOn($this->connection);
+    }
+
+    /**
      * {@inheritDoc}
      */
     public function getAll() : array

@@ -135,7 +135,7 @@ class OrderIndexPropertyLoaderHook extends PersistHook
 
             $indexedOrderIndexes[$groupHash] = $orderIndexRow['order_index'];
         }
-
+        
         $orderColumn = $this->orderColumn->getName();
 
         foreach ($groupedRows as $groupHash => $rows) {

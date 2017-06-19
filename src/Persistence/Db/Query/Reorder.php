@@ -1,4 +1,4 @@
-<?php declare(strict_types = 1);
+<?php declare(strict_types=1);
 
 namespace Dms\Core\Persistence\Db\Query;
 
@@ -31,9 +31,9 @@ class Reorder implements IQuery
     private $orderIndexColumn;
 
     /**
-     * @var Column|null
+     * @var Column[]
      */
-    private $groupingColumn;
+    private $groupingColumns = [];
 
     /**
      * @var int
@@ -81,8 +81,8 @@ class Reorder implements IQuery
     {
         if ($newIndex <= 0) {
             throw InvalidArgumentException::format(
-                    'Invalid call to %s: new order index must be >=1, %d given',
-                    __METHOD__, $newIndex
+                'Invalid call to %s: new order index must be >=1, %d given',
+                __METHOD__, $newIndex
             );
         }
 
@@ -94,14 +94,17 @@ class Reorder implements IQuery
     /**
      * Sets the column which the order indexes are grouped by.
      *
-     * @param string $groupingColumnName
+     * @param \string[] $groupingColumnNames
      *
      * @return static
-     * @throws InvalidArgumentException
+     * @internal param $string ... $groupingColumnNames
+     *
      */
-    public function groupedBy(string $groupingColumnName)
+    public function groupedBy(string ... $groupingColumnNames)
     {
-        $this->groupingColumn = $this->table->getColumn($groupingColumnName);
+        foreach ($groupingColumnNames as $name) {
+            $this->groupingColumns[$name] = $this->table->getColumn($name);
+        }
 
         return $this;
     }
@@ -116,23 +119,23 @@ class Reorder implements IQuery
         }
 
         $select = Select::from($this->table)
-                ->addRawColumn($this->orderIndexColumn->getName());
+            ->addRawColumn($this->orderIndexColumn->getName());
 
-        if ($this->groupingColumn) {
-            $select->addRawColumn($this->groupingColumn->getName());
+        foreach ($this->groupingColumns as $groupingColumn) {
+            $select->addRawColumn($groupingColumn->getName());
         }
 
         $select->where(Expr::equal(
-                Expr::column($this->table->getName(), $this->table->getPrimaryKeyColumn()),
-                Expr::idParam($this->primaryKey)
+            Expr::column($this->table->getName(), $this->table->getPrimaryKeyColumn()),
+            Expr::idParam($this->primaryKey)
         ));
 
         $currentData = $connection->load($select)->getFirstRowOrNull();
 
         if (!$currentData) {
             throw PersistenceException::format(
-                    'Could not reorder row on table \'%s\', row with primary key \'%s\' no longer exists',
-                    $this->table->getName(), $this->primaryKey
+                'Could not reorder row on table \'%s\', row with primary key \'%s\' no longer exists',
+                $this->table->getName(), $this->primaryKey
             );
         }
 
@@ -158,29 +161,29 @@ class Reorder implements IQuery
             if ($this->newIndex > $oldIndexValue) {
                 // UPDATE _ SET index = index - 1 WHERE index <= :new_index AND index > :old_index
                 $update = Update::from($this->table)
-                        ->set($columnName, Expr::subtract($orderIndex, $one))
-                        ->where(Expr::lessThanOrEqual($orderIndex, $newIndex))
-                        ->where(Expr::greaterThan($orderIndex, $oldIndex));
+                    ->set($columnName, Expr::subtract($orderIndex, $one))
+                    ->where(Expr::lessThanOrEqual($orderIndex, $newIndex))
+                    ->where(Expr::greaterThan($orderIndex, $oldIndex));
             } else {
                 // UPDATE _ SET index = index + 1 WHERE index >= :new_index AND index < :old_index
                 $update = Update::from($this->table)
-                        ->set($columnName, Expr::add($orderIndex, $one))
-                        ->where(Expr::greaterThanOrEqual($orderIndex, $newIndex))
-                        ->where(Expr::lessThan($orderIndex, $oldIndex));
+                    ->set($columnName, Expr::add($orderIndex, $one))
+                    ->where(Expr::greaterThanOrEqual($orderIndex, $newIndex))
+                    ->where(Expr::lessThan($orderIndex, $oldIndex));
             }
 
             // Second update: actually move desired row
             $updateRow = Update::from($this->table)
-                    ->set($columnName, $newIndex)
-                    ->where(Expr::equal($primaryKey, $rowId));
+                ->set($columnName, $newIndex)
+                ->where(Expr::equal($primaryKey, $rowId));
 
-
-            if ($this->groupingColumn) {
-                $currentGroup = $currentData->getColumn($this->groupingColumn->getName());
-                $grouping     = Expr::column($this->table->getName(), $this->groupingColumn);
-                $inGroup      = Expr::equal(
-                        $grouping,
-                        Expr::param($grouping->getResultingType(), $currentGroup)
+            // Restrict updated rows to the current group
+            foreach ($this->groupingColumns as $groupingColumn) {
+                $currentGroupItem = $currentData->getColumn($groupingColumn->getName());
+                $grouping         = Expr::column($this->table->getName(), $groupingColumn);
+                $inGroup          = Expr::equal(
+                    $grouping,
+                    Expr::param($grouping->getResultingType(), $currentGroupItem)
                 );
 
                 $update->where($inGroup);
