@@ -249,7 +249,7 @@ class FieldBuilderTest extends FieldBuilderTestBase
 
     public function testEntityLabelledByCallback()
     {
-        $entity = $this->getMock(IEntity::class);
+        $entity = $this->createMock(IEntity::class);
         $entity->method('getId')->willReturn(5);
 
         $entities = new EntityCollection(IEntity::class, [$entity]);
@@ -268,7 +268,7 @@ class FieldBuilderTest extends FieldBuilderTestBase
 
     public function testEntityLabelledByMemberExpression()
     {
-        $entity = $this->getMock(Entity::class);
+        $entity = $this->createMock(Entity::class);
         $entity->setId(5);
 
         $entities = new EntityCollection(Entity::class, [$entity]);
@@ -285,9 +285,9 @@ class FieldBuilderTest extends FieldBuilderTestBase
 
     public function testEntityWithDisabledOptions()
     {
-        $entity1 = $this->getMock(Entity::class);
+        $entity1 = $this->createMock(Entity::class);
         $entity1->setId(1);
-        $entity2 = $this->getMock(Entity::class);
+        $entity2 = $this->createMock(Entity::class);
         $entity2->setId(2);
 
         $entities = new EntityCollection(Entity::class, [$entity1, $entity2]);
@@ -308,9 +308,9 @@ class FieldBuilderTest extends FieldBuilderTestBase
 
     public function testEntityArrayWithDisabledOptions()
     {
-        $entity1 = $this->getMock(Entity::class);
+        $entity1 = $this->createMock(Entity::class);
         $entity1->setId(1);
-        $entity2 = $this->getMock(Entity::class);
+        $entity2 = $this->createMock(Entity::class);
         $entity2->setId(2);
 
         $entities = new EntityCollection(Entity::class, [$entity1, $entity2]);
@@ -349,7 +349,7 @@ class FieldBuilderTest extends FieldBuilderTestBase
 
     public function testEntityArrayLabelledByMemberExpression()
     {
-        $entity = $this->getMock(Entity::class);
+        $entity = $this->createMock(Entity::class);
         $entity->setId(5);
 
         $entities = new EntityCollection(Entity::class, [$entity]);
@@ -366,7 +366,7 @@ class FieldBuilderTest extends FieldBuilderTestBase
 
     public function testEntityArrayLabelledByCallback()
     {
-        $entity = $this->getMock(IEntity::class);
+        $entity = $this->createMock(IEntity::class);
         $entity->method('getId')->willReturn(5);
 
         $entities = new EntityCollection(IEntity::class, [$entity]);
@@ -385,7 +385,7 @@ class FieldBuilderTest extends FieldBuilderTestBase
 
     public function testEntityFieldMappedToObjectCollection()
     {
-        $entity = $this->getMock(Entity::class);
+        $entity = $this->getMockBuilder(Entity::class)->getMockForAbstractClass();
         $entity->hydrate(['id' => 1]);
 
         $entities = new EntityCollection(Entity::class, [$entity]);
@@ -420,7 +420,7 @@ class FieldBuilderTest extends FieldBuilderTestBase
 
     public function testEntityIdFieldMappedToCollection()
     {
-        $entity = $this->getMock(IEntity::class);
+        $entity = $this->createMock(IEntity::class);
         $entity->method('hasId')->willReturn(true);
         $entity->method('getId')->willReturn(1);
 
@@ -448,7 +448,7 @@ class FieldBuilderTest extends FieldBuilderTestBase
 
     public function testEntityIdsFieldMappedToObjectCollection()
     {
-        $entity = $this->getMock(Entity::class);
+        $entity = $this->getMockBuilder(Entity::class)->getMockForAbstractClass();
         $entity->hydrate(['id' => 1]);
 
         $entities = new EntityCollection(Entity::class, [$entity]);

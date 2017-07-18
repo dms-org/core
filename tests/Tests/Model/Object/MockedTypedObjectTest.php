@@ -19,7 +19,7 @@ class MockedTypedObjectTest extends TypedObjectTest
      */
     protected function buildObject()
     {
-        return $this->getMock(BlankTypedObject::class);
+        return $this->createMock(BlankTypedObject::class);
     }
 
     public function testLoads()

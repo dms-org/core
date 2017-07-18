@@ -41,7 +41,7 @@ class ChartWidgetTest extends CmsTestCase
         $dataSource->expects(self::once())
                 ->method('load')
                 ->with($criteria)
-                ->willReturn($mock = $this->getMock(IChartDataTable::class));
+                ->willReturn($mock = $this->createMock(IChartDataTable::class));
 
         $this->assertSame($mock, $widget->loadData());
 
@@ -76,7 +76,7 @@ class ChartWidgetTest extends CmsTestCase
         $dataSource->expects(self::once())
                 ->method('load')
                 ->with(null)
-                ->willReturn($mock = $this->getMock(IChartDataTable::class));
+                ->willReturn($mock = $this->createMock(IChartDataTable::class));
 
         $this->assertSame($mock, $widget->loadData());
     }

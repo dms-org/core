@@ -54,7 +54,13 @@ class MockingIocContainer implements IIocContainer
         }
 
         if (interface_exists($id)) {
-            return $this->test->getMockForAbstractClass($id);
+            $test = $this->test;
+
+            $callback = (function () use ($id, $test) {
+                return $test->getMockForAbstractClass($id);
+            })->bindTo($this, \PHPUnit_Framework_TestCase::class);
+
+            return $callback();
         }
 
         $mock = $this->test->getMockBuilder($id);

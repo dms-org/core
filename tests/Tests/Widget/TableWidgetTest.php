@@ -41,7 +41,7 @@ class TableWidgetTest extends CmsTestCase
         $dataSource->expects(self::once())
                 ->method('load')
                 ->with($criteria)
-                ->willReturn($mock = $this->getMock(IDataTable::class));
+                ->willReturn($mock = $this->createMock(IDataTable::class));
 
         $this->assertSame($mock, $widget->loadData());
 
@@ -75,7 +75,7 @@ class TableWidgetTest extends CmsTestCase
         $dataSource->expects(self::once())
                 ->method('load')
                 ->with(null)
-                ->willReturn($mock = $this->getMock(IDataTable::class));
+                ->willReturn($mock = $this->createMock(IDataTable::class));
 
         $this->assertSame($mock, $widget->loadData());
     }
