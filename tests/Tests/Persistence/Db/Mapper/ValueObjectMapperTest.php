@@ -58,7 +58,7 @@ abstract class ValueObjectMapperTest extends CmsTestCase
         $row = new Row($this->mapper->getDefinition()->getTable(), []);
 
         /** @var PersistenceContext $context */
-        $context = $this->getMockBuilder(PersistenceContext::class)->disableOriginalConstructor()->createMock();
+        $context = $this->getMockBuilder(PersistenceContext::class)->disableOriginalConstructor()->getMock();
         $this->mapper->persistAllToRowsBeforeParent(
                 $context,
                 [$object],
