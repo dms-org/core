@@ -1,6 +1,7 @@
 {
-    "name": "dms/core",
-    "description": "The core library for the dms",
+    "name": "dms-org/core",
+    "description": "The core library for the DMS",
+    "license": "MIT",
     "authors": [
         {
             "name": "Elliot Levin",
@@ -8,12 +9,6 @@
         }
     ],
     "minimum-stability": "stable",
-    "repositories": [
-        {
-            "type": "composer",
-            "url": "https://api.package.studio/meta/composer"
-        }
-    ],
     "autoload": {
         "psr-4": {
             "Dms\\Core\\": "src/"
@@ -32,6 +27,6 @@
         }
     },
     "require-dev": {
-        "dms/common.testing": "dev-master"
+        "dms-org/common.testing": "dev-master"
     }
 }
