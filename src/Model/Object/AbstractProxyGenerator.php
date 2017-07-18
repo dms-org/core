@@ -104,9 +104,24 @@ PHP;
     protected static function getParameterTypeHint(\ReflectionParameter $parameter) : string
     {
         if ($parameter->getClass()) {
+            if (
+                $parameter->allowsNull()
+                && version_compare(PHP_VERSION, '7.1.0', '>=')) {
+                return '?\\' . $parameter->getClass()->getName();
+            }
+
             return '\\' . $parameter->getClass()->getName();
         } elseif ($parameter->hasType()) {
-            return $parameter->getType()->__toString();
+            $type = $parameter->getType();
+
+            if (
+                $type->allowsNull()
+                && $type->__toString()[0] !== '?'
+                && version_compare(PHP_VERSION, '7.1.0', '>=')) {
+                return '?' . $type->__toString();
+            }
+
+            return $type->__toString();
         } else {
             return '';
         }
