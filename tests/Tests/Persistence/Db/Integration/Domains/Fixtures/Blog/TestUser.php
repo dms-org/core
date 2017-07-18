@@ -48,17 +48,17 @@ class TestUser extends Entity
     public $status;
 
     /**
-     * @var EntityIdCollection|int[]
+     * @var EntityIdCollection
      */
     public $postIds;
 
     /**
-     * @var EntityIdCollection|int[]
+     * @var EntityIdCollection
      */
     public $friendIds;
 
     /**
-     * @var EntityIdCollection|int[]
+     * @var EntityIdCollection
      */
     public $commentIds;
 
@@ -156,8 +156,8 @@ class TestUser extends Entity
      */
     public function makeFriends(TestUser $otherUser)
     {
-        $this->friendIds[]      = $otherUser->getId();
-        $otherUser->friendIds[] = $this->getId();
+        $this->friendIds->addRange([$otherUser->getId()]);
+        $otherUser->friendIds->addRange([$this->getId()]);
     }
 
     /**
@@ -181,6 +181,6 @@ class TestUser extends Entity
     {
         $post->authorId = $otherUser->getId();
         $this->postIds->remove($post->getId());
-        $otherUser->postIds[] = $post->getId();
+        $otherUser->postIds->addRange([$post->getId()]);
     }
 }
