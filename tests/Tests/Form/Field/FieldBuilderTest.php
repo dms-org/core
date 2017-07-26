@@ -397,7 +397,7 @@ class FieldBuilderTest extends FieldBuilderTestBase
         /** @var ArrayOfObjectIdsType $type */
         $this->assertEquals(Entity::collectionType(), $field->getProcessedType());
 
-        $this->assertEquals(Entity::collection([1 => $entity]), $field->process(['1']));
+        $this->assertEquals(Entity::collection([$entity]), $field->process(['1']));
         $this->assertEquals([1], $field->unprocess(Entity::collection([$entity])));
     }
 

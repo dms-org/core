@@ -32,15 +32,25 @@ class ObjectArrayLoaderProcessorTest extends FieldProcessorTest
                 $entities = [];
 
                 foreach ($ids as $id) {
-                    $entities[] = (object)['id' => $id];
+                    $entities[] = $this->entityMock($id);
                 }
 
                 return $entities;
             }));
 
         $entitiesMock->expects($this->any())
-            ->method('contains')
-            ->willReturn(true);
+            ->method('tryGetAll')
+            ->will($this->returnCallback(function (array $ids) {
+                $entities = [];
+
+                foreach ($ids as $id) {
+                    if ($id < 5) {
+                        $entities[] = $this->entityMock($id);
+                    }
+                }
+
+                return $entities;
+            }));
 
         $entitiesMock->expects($this->any())
             ->method('getObjectId')
@@ -66,8 +76,8 @@ class ObjectArrayLoaderProcessorTest extends FieldProcessorTest
     {
         return [
             [null, null],
-            [[1], [(object)['id' => 1]]],
-            [[1, 2, 6], [(object)['id' => 1], (object)['id' => 2], (object)['id' => 6]]],
+            [[1], [$this->entityMock(1)]],
+            [[1, 2, 6], [$this->entityMock(1), $this->entityMock(2), $this->entityMock(6)]],
         ];
     }
 
@@ -79,7 +89,7 @@ class ObjectArrayLoaderProcessorTest extends FieldProcessorTest
         return [
             [null, null],
             [[$this->entityMock(1)], [1]],
-            [[$this->entityMock(1), $this->entityMock(4), $this->entityMock(1234)], [1, 4, 1234]],
+            [[$this->entityMock(1), $this->entityMock(4), $this->entityMock(1234)], [1, 4]],
         ];
     }
 
