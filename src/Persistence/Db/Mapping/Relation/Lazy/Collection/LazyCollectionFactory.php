@@ -25,6 +25,10 @@ class LazyCollectionFactory
      */
     public static function from(ITypedCollection $collection, callable $objectLoaderCallback) : ILazyCollection
     {
+        if (method_exists($collection, 'createLazyCollection')) {
+            return $collection->createLazyCollection($objectLoaderCallback);
+        }
+
         if ($collection instanceof EntityCollection) {
             return new LazyEntityCollection($collection->getEntityType(), $objectLoaderCallback);
         }
