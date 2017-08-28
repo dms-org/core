@@ -1,16 +1,18 @@
 <?php
 
-namespace Dms\Core\Tests\Form\Binding\Field;
+namespace Dms\Core\Tests\Form\Binding\Accessor;
 
 use Dms\Common\Testing\CmsTestCase;
 use Dms\Core\Exception\TypeMismatchException;
+use Dms\Core\Form\Binding\Accessor\IFieldAccessor;
+use Dms\Core\Form\Binding\FieldBinding;
 use Dms\Core\Form\Binding\IFieldBinding;
 use Dms\Core\Form\IField;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>
  */
-abstract class FieldBindingTest extends CmsTestCase
+abstract class FieldAccessorTest extends CmsTestCase
 {
     /**
      * @var IField
@@ -39,18 +41,17 @@ abstract class FieldBindingTest extends CmsTestCase
 
 
     /**
-     * @param IField $field
      * @param string $objectType
      *
-     * @return IFieldBinding
+     * @return IFieldAccessor
      */
-    abstract protected function buildFormBinding(IField $field, $objectType);
+    abstract protected function buildFieldAccessor($objectType) : IFieldAccessor;
 
     public function setUp()
     {
         $this->field      = $this->buildField();
         $this->objectType = $this->getObjectType();
-        $this->binding    = $this->buildFormBinding($this->field, $this->objectType);
+        $this->binding    = new FieldBinding($this->field->getName(), $this->buildFieldAccessor($this->objectType));
     }
 
     public function testGetters()
@@ -62,22 +63,22 @@ abstract class FieldBindingTest extends CmsTestCase
     public function testInvalidObjectInGetter()
     {
         $this->assertThrows(function () {
-            $this->binding->getFieldValueFromObject(new \stdClass());
+            $this->binding->getAccessor()->getValueFromObject(new \stdClass());
         }, TypeMismatchException::class);
 
         $this->assertThrows(function () {
-            $this->binding->getFieldValueFromObject(null);
+            $this->binding->getAccessor()->getValueFromObject(null);
         }, TypeMismatchException::class);
     }
 
     public function testInvalidObjectInSetter()
     {
         $this->assertThrows(function () {
-            $this->binding->bindFieldValueToObject(new \stdClass(), null);
+            $this->binding->getAccessor()->bindValueToObject(new \stdClass(), null);
         }, TypeMismatchException::class);
 
         $this->assertThrows(function () {
-            $this->binding->bindFieldValueToObject(null, null);
+            $this->binding->getAccessor()->bindValueToObject(null, null);
         }, TypeMismatchException::class);
     }
 }

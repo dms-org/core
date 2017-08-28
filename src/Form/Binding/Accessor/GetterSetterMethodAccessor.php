@@ -1,15 +1,15 @@
 <?php declare(strict_types = 1);
 
-namespace Dms\Core\Form\Binding\Field;
+namespace Dms\Core\Form\Binding\Accessor;
 
 use Dms\Core\Exception\InvalidArgumentException;
 
 /**
- * The getter and setter method property binding class.
+ * The getter and setter method property accessor class.
  *
  * @author Elliot Levin <elliotlevin@hotmail.com>
  */
-class GetterSetterMethodBinding extends FieldBinding
+class GetterSetterMethodAccessor extends FieldAccessor
 {
     /**
      * @var string
@@ -24,9 +24,9 @@ class GetterSetterMethodBinding extends FieldBinding
     /**
      * @inheritDoc
      */
-    public function __construct($fieldName, $objectType, $getterMethodName, $setterMethodName)
+    public function __construct(string $objectType, string $getterMethodName, string $setterMethodName)
     {
-        parent::__construct($fieldName, $objectType);
+        parent::__construct($objectType);
 
         foreach ([$getterMethodName, $setterMethodName] as $methodName) {
             if (!method_exists($objectType, $methodName)) {
@@ -44,7 +44,7 @@ class GetterSetterMethodBinding extends FieldBinding
     /**
      * @inheritDoc
      */
-    protected function getFieldValueFrom($object)
+    protected function getValueFrom($object)
     {
         return $object->{$this->getterMethodName}();
     }
@@ -52,7 +52,7 @@ class GetterSetterMethodBinding extends FieldBinding
     /**
      * @inheritDoc
      */
-    protected function bindFieldValueTo($object, $processedFieldValue)
+    protected function bindValueTo($object, $processedFieldValue)
     {
         $object->{$this->setterMethodName}($processedFieldValue);
     }

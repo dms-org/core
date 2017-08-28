@@ -4,7 +4,8 @@ namespace Dms\Core\Tests\Common\Crud\Form;
 
 use Dms\Common\Testing\CmsTestCase;
 use Dms\Core\Common\Crud\Form\FormWithBinding;
-use Dms\Core\Form\Binding\Field\FieldPropertyBinding;
+use Dms\Core\Form\Binding\Accessor\FieldPropertyAccessor;
+use Dms\Core\Form\Binding\FieldBinding;
 use Dms\Core\Form\Field\Type\InnerFormType;
 use Dms\Core\Form\InvalidFormSubmissionException;
 use Dms\Core\Form\InvalidInputException;
@@ -24,8 +25,8 @@ class ValueObjectFieldTest extends CmsTestCase
             $field->getType()->getForm()->getSections(), [],
             TestValueObject::class,
             $fieldBindings = [
-                new FieldPropertyBinding('string', TestValueObject::definition(), 'string'),
-                new FieldPropertyBinding('int', TestValueObject::definition(), 'int'),
+                new FieldBinding('string', new FieldPropertyAccessor(TestValueObject::definition(), 'string')),
+                new FieldBinding('int', new FieldPropertyAccessor(TestValueObject::definition(), 'int')),
             ]
         );
 

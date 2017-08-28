@@ -88,7 +88,7 @@ class FormBinding implements IFormBinding
             $formValues = [];
 
             foreach ($this->fieldBindings as $fieldName => $binding) {
-                $formValues[$fieldName] = $binding->getFieldValueFromObject($object);
+                $formValues[$fieldName] = $binding->getAccessor()->getValueFromObject($object);
             }
 
             return $this->form->withInitialValues($formValues);
@@ -109,7 +109,7 @@ class FormBinding implements IFormBinding
         $processedSubmission = $this->form->process($formSubmission);
 
         foreach ($this->fieldBindings as $fieldName => $binding) {
-            $binding->bindFieldValueToObject($object, $processedSubmission[$fieldName]);
+            $binding->getAccessor()->bindValueToObject($object, $processedSubmission[$fieldName]);
         }
     }
 
@@ -121,7 +121,7 @@ class FormBinding implements IFormBinding
         $this->form->validateProcessedValues($processedSubmission);
 
         foreach ($this->fieldBindings as $fieldName => $binding) {
-            $binding->bindFieldValueToObject($object, $processedSubmission[$fieldName]);
+            $binding->getAccessor()->bindValueToObject($object, $processedSubmission[$fieldName]);
         }
     }
 

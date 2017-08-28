@@ -4,9 +4,11 @@ namespace Dms\Core\Common\Crud\Definition\Form;
 
 use Dms\Core\Exception\InvalidArgumentException;
 use Dms\Core\Exception\TypeMismatchException;
-use Dms\Core\Form\Binding\Field\CustomFieldBinding;
-use Dms\Core\Form\Binding\Field\FieldPropertyBinding;
-use Dms\Core\Form\Binding\Field\GetterSetterMethodBinding;
+use Dms\Core\Form\Binding\Accessor\CustomFieldAccessor;
+use Dms\Core\Form\Binding\Accessor\FieldPropertyAccessor;
+use Dms\Core\Form\Binding\Accessor\GetterSetterMethodAccessor;
+use Dms\Core\Form\Binding\Accessor\IFieldAccessor;
+use Dms\Core\Form\Binding\FieldBinding;
 use Dms\Core\Form\Binding\IFieldBinding;
 use Dms\Core\Form\IField;
 use Dms\Core\Model\Object\FinalizedClassDefinition;
@@ -41,15 +43,15 @@ class FormFieldBindingDefiner
     }
 
     /**
-     * Binds the field using the supplied form binding.
+     * Binds the field using the supplied field accessor.
      *
-     * @param IFieldBinding $binding
+     * @param IFieldAccessor $accessor
      *
      * @return FormFieldBindingDefinition
      */
-    public function bindTo(IFieldBinding $binding) : FormFieldBindingDefinition
+    public function bindTo(IFieldAccessor $accessor) : FormFieldBindingDefinition
     {
-        return new FormFieldBindingDefinition($this->field, $binding);
+        return new FormFieldBindingDefinition($this->field, new FieldBinding($this->field->getName(), $accessor));
     }
 
     /**
@@ -71,7 +73,7 @@ class FormFieldBindingDefiner
             );
         }
 
-        return $this->bindTo(new FieldPropertyBinding($this->field->getName(), $this->class, $name));
+        return $this->bindTo(new FieldPropertyAccessor($this->class, $name));
     }
 
     /**
@@ -84,8 +86,7 @@ class FormFieldBindingDefiner
      */
     public function bindToGetSetMethods(string $getterMethodName, string $setterMethodName) : FormFieldBindingDefinition
     {
-        return $this->bindTo(new GetterSetterMethodBinding(
-                $this->field->getName(),
+        return $this->bindTo(new GetterSetterMethodAccessor(
                 $this->class->getClassName(),
                 $getterMethodName,
                 $setterMethodName
@@ -111,8 +112,7 @@ class FormFieldBindingDefiner
      */
     public function bindToCallbacks(callable $getterCallback, callable $setterCallback) : FormFieldBindingDefinition
     {
-        return $this->bindTo(new CustomFieldBinding(
-                $this->field->getName(),
+        return $this->bindTo(new CustomFieldAccessor(
                 $this->class->getClassName(),
                 $getterCallback,
                 $setterCallback

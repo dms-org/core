@@ -2,7 +2,7 @@
 
 namespace Dms\Core\Form\Binding;
 
-use Dms\Core\Exception\TypeMismatchException;
+use Dms\Core\Form\Binding\Accessor\IFieldAccessor;
 
 /**
  * The field binding interface.
@@ -26,23 +26,9 @@ interface IFieldBinding
     public function getObjectType() : string;
 
     /**
-     * Gets processed field value from the supplied object.
+     * Gets the field accessor
      *
-     * @param mixed $object
-     *
-     * @return mixed
-     * @throws TypeMismatchException
+     * @return IFieldAccessor
      */
-    public function getFieldValueFromObject($object);
-
-    /**
-     * Binds the processed field value on the supplied object.
-     *
-     * @param mixed $object
-     * @param mixed $processedFieldValue
-     *
-     * @return mixed
-     * @throws TypeMismatchException
-     */
-    public function bindFieldValueToObject($object, $processedFieldValue);
+    public function getAccessor() : IFieldAccessor;
 }

@@ -1,8 +1,9 @@
 <?php
 
-namespace Dms\Core\Tests\Form\Binding\Field;
+namespace Dms\Core\Tests\Form\Binding\Accessor;
 
-use Dms\Core\Form\Binding\Field\CustomFieldBinding;
+use Dms\Core\Form\Binding\Accessor\CustomFieldAccessor;
+use Dms\Core\Form\Binding\Accessor\IFieldAccessor;
 use Dms\Core\Form\Binding\IFieldBinding;
 use Dms\Core\Form\Field\Builder\Field;
 use Dms\Core\Form\IField;
@@ -11,7 +12,7 @@ use Dms\Core\Tests\Form\Binding\Fixtures\TestFormBoundClass;
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>
  */
-class CustomFieldBindingTest extends FieldBindingTest
+class CustomFieldAccessorTest extends FieldAccessorTest
 {
     /**
      * @return IField
@@ -30,15 +31,13 @@ class CustomFieldBindingTest extends FieldBindingTest
     }
 
     /**
-     * @param IField $field
      * @param string $objectType
      *
-     * @return IFieldBinding
+     * @return IFieldAccessor
      */
-    protected function buildFormBinding(IField $field, $objectType)
+    protected function buildFieldAccessor($objectType) : IFieldAccessor
     {
-        return new CustomFieldBinding(
-                $field->getName(),
+        return new CustomFieldAccessor(
                 $objectType,
                 function (TestFormBoundClass $object) {
                     return substr($object->string, strlen('prefix:'));
@@ -53,14 +52,14 @@ class CustomFieldBindingTest extends FieldBindingTest
     {
         $object = new TestFormBoundClass('prefix:abc', 10, false);
 
-        $this->assertSame('abc', $this->binding->getFieldValueFromObject($object));
+        $this->assertSame('abc', $this->binding->getAccessor()->getValueFromObject($object));
     }
 
     public function testSet()
     {
         $object = new TestFormBoundClass('prefix:abc', 10, false);
 
-        $this->binding->bindFieldValueToObject($object, 'foobar');
+        $this->binding->getAccessor()->bindValueToObject($object, 'foobar');
 
         $this->assertSame('prefix:foobar', $object->string);
     }

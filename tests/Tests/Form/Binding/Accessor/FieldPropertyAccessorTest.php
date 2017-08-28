@@ -1,11 +1,10 @@
 <?php
 
-namespace Dms\Core\Tests\Form\Binding\Field;
+namespace Dms\Core\Tests\Form\Binding\Accessor;
 
 use Dms\Core\Exception\InvalidArgumentException;
-use Dms\Core\Exception\TypeMismatchException;
-use Dms\Core\Form\Binding\Field\FieldPropertyBinding;
-use Dms\Core\Form\Binding\IFieldBinding;
+use Dms\Core\Form\Binding\Accessor\FieldPropertyAccessor;
+use Dms\Core\Form\Binding\Accessor\IFieldAccessor;
 use Dms\Core\Form\Field\Builder\Field;
 use Dms\Core\Form\IField;
 use Dms\Core\Tests\Form\Binding\Fixtures\TestFormBoundClass;
@@ -13,7 +12,7 @@ use Dms\Core\Tests\Form\Binding\Fixtures\TestFormBoundClass;
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>
  */
-class FieldPropertyBindingTest extends FieldBindingTest
+class FieldPropertyAccessorTest extends FieldAccessorTest
 {
     /**
      * @return IField
@@ -32,17 +31,15 @@ class FieldPropertyBindingTest extends FieldBindingTest
     }
 
     /**
-     * @param IField $field
      * @param string $objectType
      *
-     * @return IFieldBinding
+     * @return IFieldAccessor
      */
-    protected function buildFormBinding(IField $field, $objectType)
+    protected function buildFieldAccessor($objectType): IFieldAccessor
     {
-        return new FieldPropertyBinding(
-                $field->getName(),
-                TestFormBoundClass::definition(),
-                'string'
+        return new FieldPropertyAccessor(
+            TestFormBoundClass::definition(),
+            'string'
         );
     }
 
@@ -50,14 +47,14 @@ class FieldPropertyBindingTest extends FieldBindingTest
     {
         $object = new TestFormBoundClass('abc', 10, false);
 
-        $this->assertSame('abc', $this->binding->getFieldValueFromObject($object));
+        $this->assertSame('abc', $this->binding->getAccessor()->getValueFromObject($object));
     }
 
     public function testSet()
     {
         $object = new TestFormBoundClass('abc', 10, false);
 
-        $this->binding->bindFieldValueToObject($object, 'foobar');
+        $this->binding->getAccessor()->bindValueToObject($object, 'foobar');
 
         $this->assertSame('foobar', $object->string);
     }
@@ -66,10 +63,9 @@ class FieldPropertyBindingTest extends FieldBindingTest
     {
         $this->setExpectedException(InvalidArgumentException::class);
 
-        new FieldPropertyBinding(
-                $this->buildField()->getName(),
-                TestFormBoundClass::definition(),
-                'invalid-property-name'
+        new FieldPropertyAccessor(
+            TestFormBoundClass::definition(),
+            'invalid-property-name'
         );
     }
 }

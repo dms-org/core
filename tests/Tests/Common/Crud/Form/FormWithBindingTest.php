@@ -4,8 +4,9 @@ namespace Dms\Core\Tests\Common\Crud\Form;
 
 use Dms\Common\Testing\CmsTestCase;
 use Dms\Core\Common\Crud\Form\FormWithBinding;
-use Dms\Core\Form\Binding\Field\FieldPropertyBinding;
-use Dms\Core\Form\Binding\Field\GetterSetterMethodBinding;
+use Dms\Core\Form\Binding\Accessor\FieldPropertyAccessor;
+use Dms\Core\Form\Binding\Accessor\GetterSetterMethodAccessor;
+use Dms\Core\Form\Binding\FieldBinding;
 use Dms\Core\Form\Binding\IFormBinding;
 use Dms\Core\Form\Builder\Form;
 use Dms\Core\Form\Field\Builder\Field;
@@ -30,9 +31,9 @@ class FormWithBindingTest extends CmsTestCase
                 $form->getSections(), [],
                 TestFormBoundClass::class,
                 $fieldBindings = [
-                        new FieldPropertyBinding('string', TestFormBoundClass::definition(), 'string'),
-                        new GetterSetterMethodBinding('int', TestFormBoundClass::class, 'getInt', 'setInt'),
-                        new FieldPropertyBinding('bool', TestFormBoundClass::definition(), 'bool'),
+                    new FieldBinding('string', new FieldPropertyAccessor( TestFormBoundClass::definition(), 'string')),
+                    new FieldBinding('int', new GetterSetterMethodAccessor( TestFormBoundClass::class, 'getInt', 'setInt')),
+                    new FieldBinding('bool', new FieldPropertyAccessor( TestFormBoundClass::definition(), 'bool')),
                 ]
         );
 

@@ -1,13 +1,13 @@
 <?php declare(strict_types = 1);
 
-namespace Dms\Core\Form\Binding\Field;
+namespace Dms\Core\Form\Binding\Accessor;
 
 /**
- * The custom property binding class.
+ * The custom property accessor class.
  *
  * @author Elliot Levin <elliotlevin@hotmail.com>
  */
-class CustomFieldBinding extends FieldBinding
+class CustomFieldAccessor extends FieldAccessor
 {
     /**
      * @var callable
@@ -22,9 +22,9 @@ class CustomFieldBinding extends FieldBinding
     /**
      * @inheritDoc
      */
-    public function __construct($fieldName, $objectType, callable $getterCallback, callable $setterCallback)
+    public function __construct(string $objectType, callable $getterCallback, callable $setterCallback)
     {
-        parent::__construct($fieldName, $objectType);
+        parent::__construct($objectType);
         $this->getterCallback = $getterCallback;
         $this->setterCallback = $setterCallback;
     }
@@ -32,7 +32,7 @@ class CustomFieldBinding extends FieldBinding
     /**
      * @inheritDoc
      */
-    protected function getFieldValueFrom($object)
+    protected function getValueFrom($object)
     {
         return call_user_func($this->getterCallback, $object);
     }
@@ -40,8 +40,9 @@ class CustomFieldBinding extends FieldBinding
     /**
      * @inheritDoc
      */
-    protected function bindFieldValueTo($object, $processedFieldValue)
+    protected function bindValueTo($object, $processedFieldValue)
     {
         call_user_func($this->setterCallback, $object, $processedFieldValue);
     }
+
 }

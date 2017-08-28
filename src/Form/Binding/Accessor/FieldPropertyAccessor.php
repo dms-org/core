@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-namespace Dms\Core\Form\Binding\Field;
+namespace Dms\Core\Form\Binding\Accessor;
 
 use Dms\Core\Exception\InvalidArgumentException;
 use Dms\Core\Exception\TypeMismatchException;
@@ -8,11 +8,11 @@ use Dms\Core\Model\Object\FinalizedClassDefinition;
 use Dms\Core\Model\Object\FinalizedPropertyDefinition;
 
 /**
- * The field to property binding class.
+ * The field to property accessor class.
  *
  * @author Elliot Levin <elliotlevin@hotmail.com>
  */
-class FieldPropertyBinding extends FieldBinding
+class FieldPropertyAccessor extends FieldAccessor
 {
     /**
      * @var FinalizedPropertyDefinition
@@ -20,23 +20,22 @@ class FieldPropertyBinding extends FieldBinding
     protected $property;
 
     /**
-     * @param string                   $fieldName
      * @param FinalizedClassDefinition $classDefinition
      * @param string                   $propertyName
      *
      * @throws InvalidArgumentException
      * @throws TypeMismatchException
      */
-    public function __construct(string $fieldName, FinalizedClassDefinition $classDefinition, string $propertyName)
+    public function __construct(FinalizedClassDefinition $classDefinition, string $propertyName)
     {
-        parent::__construct($fieldName, $classDefinition->getClassName());
+        parent::__construct($classDefinition->getClassName());
         $this->property = $classDefinition->getProperty($propertyName);
     }
 
     /**
      * @inheritDoc
      */
-    protected function getFieldValueFrom($object)
+    protected function getValueFrom($object)
     {
         return $this->ensureAccessible(function ($propertyName) use ($object) {
             return $object->{$propertyName};
@@ -46,7 +45,7 @@ class FieldPropertyBinding extends FieldBinding
     /**
      * @inheritDoc
      */
-    protected function bindFieldValueTo($object, $processedFieldValue)
+    protected function bindValueTo($object, $processedFieldValue)
     {
         $this->ensureAccessible(function ($propertyName) use ($object, $processedFieldValue) {
             $object->{$propertyName} = $processedFieldValue;

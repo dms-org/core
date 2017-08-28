@@ -4,8 +4,9 @@ namespace Dms\Core\Tests\Form\Binding;
 
 use Dms\Common\Testing\CmsTestCase;
 use Dms\Core\Exception\InvalidArgumentException;
-use Dms\Core\Form\Binding\Field\FieldPropertyBinding;
-use Dms\Core\Form\Binding\Field\GetterSetterMethodBinding;
+use Dms\Core\Form\Binding\Accessor\FieldPropertyAccessor;
+use Dms\Core\Form\Binding\Accessor\GetterSetterMethodAccessor;
+use Dms\Core\Form\Binding\FieldBinding;
 use Dms\Core\Form\Binding\FormBinding;
 use Dms\Core\Form\Binding\IFieldBinding;
 use Dms\Core\Form\Binding\IFormBinding;
@@ -33,21 +34,21 @@ class FormBindingTest extends CmsTestCase
     public function setUp()
     {
         $this->form = Form::create()
-                ->section('Input', [
-                        Field::name('string')->label('String')->string()->required(),
-                        Field::name('int')->label('Int')->int()->required(),
-                        Field::name('bool')->label('Bool')->bool()->required(),
-                ])
-                ->build();
+            ->section('Input', [
+                Field::name('string')->label('String')->string()->required(),
+                Field::name('int')->label('Int')->int()->required(),
+                Field::name('bool')->label('Bool')->bool()->required(),
+            ])
+            ->build();
 
         $this->binding = new FormBinding(
-                $this->form,
-                TestFormBoundClass::class,
-                [
-                        new FieldPropertyBinding('string', TestFormBoundClass::definition(), 'string'),
-                        new GetterSetterMethodBinding('int', TestFormBoundClass::class, 'getInt', 'setInt'),
-                        new FieldPropertyBinding('bool', TestFormBoundClass::definition(), 'bool'),
-                ]
+            $this->form,
+            TestFormBoundClass::class,
+            [
+                new FieldBinding('string', new FieldPropertyAccessor(TestFormBoundClass::definition(), 'string')),
+                new FieldBinding('int', new GetterSetterMethodAccessor(TestFormBoundClass::class, 'getInt', 'setInt')),
+                new FieldBinding('bool', new FieldPropertyAccessor(TestFormBoundClass::definition(), 'bool')),
+            ]
         );
     }
 
@@ -59,8 +60,8 @@ class FormBindingTest extends CmsTestCase
         $this->assertSame(true, $this->binding->hasFieldBinding('string'));
         $this->assertSame(true, $this->binding->hasFieldBinding('int'));
         $this->assertSame(false, $this->binding->hasFieldBinding('non-existent'));
-        $this->assertInstanceOf(FieldPropertyBinding::class, $this->binding->getFieldBinding('string'));
-        $this->assertInstanceOf(GetterSetterMethodBinding::class, $this->binding->getFieldBinding('int'));
+        $this->assertInstanceOf(FieldPropertyAccessor::class, $this->binding->getFieldBinding('string')->getAccessor());
+        $this->assertInstanceOf(GetterSetterMethodAccessor::class, $this->binding->getFieldBinding('int')->getAccessor());
         $this->assertThrows(function () {
             $this->binding->getFieldBinding('non-existent');
         }, InvalidArgumentException::class);
@@ -78,9 +79,9 @@ class FormBindingTest extends CmsTestCase
 
         $this->assertNotEquals($this->form, $form);
         $this->assertSame([
-                'string' => 'foobar',
-                'int'    => 5,
-                'bool'   => true,
+            'string' => 'foobar',
+            'int'    => 5,
+            'bool'   => true,
         ], $form->getInitialValues());
     }
 
@@ -88,11 +89,11 @@ class FormBindingTest extends CmsTestCase
     {
         $object = new TestFormBoundClass('foobar', 5, true);
 
-         $this->binding->bindTo($object, [
-                 'string' => 'abc',
-                 'int'    => '123',
-                 'bool'   => '1',
-         ]);
+        $this->binding->bindTo($object, [
+            'string' => 'abc',
+            'int'    => '123',
+            'bool'   => '1',
+        ]);
 
         $this->assertSame('abc', $object->string);
         $this->assertSame(123, $object->int);
@@ -105,9 +106,9 @@ class FormBindingTest extends CmsTestCase
         $object = new TestFormBoundClass('foobar', 5, true);
 
         $this->binding->bindProcessedTo($object, [
-                'string' => 'abc',
-                'int'    => 123,
-                'bool'   => true,
+            'string' => 'abc',
+            'int'    => 123,
+            'bool'   => true,
         ]);
 
         $this->assertSame('abc', $object->string);
@@ -122,9 +123,9 @@ class FormBindingTest extends CmsTestCase
         $object = new TestFormBoundClass('foobar', 5, true);
 
         $this->binding->bindTo($object, [
-                'string' => '1',
-                'int'    => 'invalid-int',
-                'bool'   => '1',
+            'string' => '1',
+            'int'    => 'invalid-int',
+            'bool'   => '1',
         ]);
     }
 
@@ -135,9 +136,9 @@ class FormBindingTest extends CmsTestCase
         $object = new TestFormBoundClass('foobar', 5, true);
 
         $this->binding->bindProcessedTo($object, [
-                'string' => '1',
-                'int'    => 'invalid-int',
-                'bool'   => '1',
+            'string' => '1',
+            'int'    => 'invalid-int',
+            'bool'   => '1',
         ]);
     }
 }

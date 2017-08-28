@@ -1,11 +1,10 @@
 <?php
 
-namespace Dms\Core\Tests\Form\Binding\Field;
+namespace Dms\Core\Tests\Form\Binding\Accessor;
 
 use Dms\Core\Exception\InvalidArgumentException;
-use Dms\Core\Exception\TypeMismatchException;
-use Dms\Core\Form\Binding\Field\FieldPropertyBinding;
-use Dms\Core\Form\Binding\Field\GetterSetterMethodBinding;
+use Dms\Core\Form\Binding\Accessor\GetterSetterMethodAccessor;
+use Dms\Core\Form\Binding\Accessor\IFieldAccessor;
 use Dms\Core\Form\Binding\IFieldBinding;
 use Dms\Core\Form\Field\Builder\Field;
 use Dms\Core\Form\IField;
@@ -14,7 +13,7 @@ use Dms\Core\Tests\Form\Binding\Fixtures\TestFormBoundClass;
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>
  */
-class GetterSetterMethodBindingTest extends FieldBindingTest
+class GetterSetterMethodAccessorTest extends FieldAccessorTest
 {
     /**
      * @return IField
@@ -33,15 +32,13 @@ class GetterSetterMethodBindingTest extends FieldBindingTest
     }
 
     /**
-     * @param IField $field
      * @param string $objectType
      *
-     * @return IFieldBinding
+     * @return IFieldAccessor
      */
-    protected function buildFormBinding(IField $field, $objectType)
+    protected function buildFieldAccessor($objectType) : IFieldAccessor
     {
-        return new GetterSetterMethodBinding(
-                $field->getName(),
+        return new GetterSetterMethodAccessor(
                 TestFormBoundClass::class,
                 'getInt', 'setInt'
         );
@@ -51,14 +48,14 @@ class GetterSetterMethodBindingTest extends FieldBindingTest
     {
         $object = new TestFormBoundClass('abc', 10, false);
 
-        $this->assertSame(10, $this->binding->getFieldValueFromObject($object));
+        $this->assertSame(10, $this->binding->getAccessor()->getValueFromObject($object));
     }
 
     public function testSet()
     {
         $object = new TestFormBoundClass('abc', 10, false);
 
-        $this->binding->bindFieldValueToObject($object, 123);
+        $this->binding->getAccessor()->bindValueToObject($object, 123);
 
         $this->assertSame(123, $object->int);
     }
@@ -67,7 +64,7 @@ class GetterSetterMethodBindingTest extends FieldBindingTest
     {
         $this->setExpectedException(InvalidArgumentException::class);
 
-        return new GetterSetterMethodBinding(
+        return new GetterSetterMethodAccessor(
                 $this->buildField()->getName(),
                 TestFormBoundClass::class,
                 'nonExistentMethod', 'setInt'
@@ -78,7 +75,7 @@ class GetterSetterMethodBindingTest extends FieldBindingTest
     {
         $this->setExpectedException(InvalidArgumentException::class);
 
-        return new GetterSetterMethodBinding(
+        return new GetterSetterMethodAccessor(
                 $this->buildField()->getName(),
                 TestFormBoundClass::class,
                 'getInt', 'nonExistentMethod'
