@@ -58,7 +58,7 @@ class ColumnOrderingTest extends CmsTestCase
 
     public function testInvalidDirection()
     {
-        $this->setExpectedException(InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
 
         $structure = $this->makeStructure();
         list($column, $component) = $structure->getColumnAndComponent('column');

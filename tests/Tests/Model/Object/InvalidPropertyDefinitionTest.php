@@ -13,7 +13,7 @@ class InvalidPropertyObjectDefinitionTest extends CmsTestCase
 {
     public function testIncompleteDefinition()
     {
-        $this->setExpectedException(InvalidPropertyDefinitionException::class);
+        $this->expectException(InvalidPropertyDefinitionException::class);
         InvalidPropertyDefinition::build();
     }
 }

@@ -45,7 +45,7 @@ class DatabaseTest extends CmsTestCase
 
     public function testThrowsExceptionForDuplicateTableName()
     {
-        $this->setExpectedException(InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
 
         new Database([$this->getTestTable('table'), $this->getTestTable('table')]);
     }

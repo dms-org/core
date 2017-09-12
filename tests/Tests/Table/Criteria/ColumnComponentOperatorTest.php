@@ -23,7 +23,7 @@ class ColumnComponentOperatorTest extends CmsTestCase
 
     public function testInvalidOperatorString()
     {
-        $this->setExpectedException(InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
 
         new ColumnComponentOperator('invalid-operator', $this->mockField());
     }

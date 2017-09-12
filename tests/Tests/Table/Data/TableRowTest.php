@@ -77,7 +77,7 @@ class TableRowTest extends CmsTestCase
 
     public function testMustOnlyContainArrays()
     {
-        $this->setExpectedException(InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
 
         new TableRow(['column' => 'data']);
     }

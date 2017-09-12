@@ -327,7 +327,7 @@ class PersonCrudModuleTest extends CrudModuleTest
 
     public function testEditingChildToBeAnAdultsAgeThrowsInvalidForm()
     {
-        $this->setExpectedException(InvalidFormSubmissionException::class);
+        $this->expectException(InvalidFormSubmissionException::class);
 
         $this->module->getEditAction()->run([
             IObjectAction::OBJECT_FIELD_NAME => 1,
@@ -340,7 +340,7 @@ class PersonCrudModuleTest extends CrudModuleTest
 
     public function testEditingAdultToBeChildThrowsInvalidForm()
     {
-        $this->setExpectedException(InvalidFormSubmissionException::class);
+        $this->expectException(InvalidFormSubmissionException::class);
 
         $this->module->getEditAction()->run([
             IObjectAction::OBJECT_FIELD_NAME => 5,

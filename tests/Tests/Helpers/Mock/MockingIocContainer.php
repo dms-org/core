@@ -5,6 +5,7 @@ namespace Dms\Core\Tests\Helpers\Mock;
 use Dms\Core\Exception\NotImplementedException;
 use Dms\Core\Ioc\IIocContainer;
 use Interop\Container\ContainerInterface;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>
@@ -17,16 +18,16 @@ class MockingIocContainer implements IIocContainer
     public $bindings = [];
 
     /**
-     * @var \PHPUnit_Framework_TestCase
+     * @var TestCase
      */
     protected $test;
 
     /**
      * MockingIocContainer constructor.
      *
-     * @param \PHPUnit_Framework_TestCase $test
+     * @param TestCase $test
      */
-    public function __construct(\PHPUnit_Framework_TestCase $test)
+    public function __construct(TestCase $test)
     {
         $this->test = $test;
     }
@@ -58,7 +59,7 @@ class MockingIocContainer implements IIocContainer
 
             $callback = (function () use ($id, $test) {
                 return $test->getMockForAbstractClass($id);
-            })->bindTo($this, \PHPUnit_Framework_TestCase::class);
+            })->bindTo($this, TestCase::class);
 
             return $callback();
         }

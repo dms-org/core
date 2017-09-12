@@ -101,7 +101,7 @@ class ArrayOfIntsStagedFormTest extends CmsTestCase
 
     public function testInvalidSubmission()
     {
-        $this->setExpectedException(InvalidFormSubmissionException::class);
+        $this->expectException(InvalidFormSubmissionException::class);
 
         $this->form->submit([
                 'length' => '1',
@@ -111,7 +111,7 @@ class ArrayOfIntsStagedFormTest extends CmsTestCase
 
     public function testInvalidSubmissionWithSubmitNew()
     {
-        $this->setExpectedException(InvalidFormSubmissionException::class);
+        $this->expectException(InvalidFormSubmissionException::class);
 
         $this->form->submitNew([
                 'length' => '1',

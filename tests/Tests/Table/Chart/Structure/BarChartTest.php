@@ -37,7 +37,7 @@ class BarChartTest extends CmsTestCase
 
     public function testHorizontalAxisMustHaveOnlyOneComponent()
     {
-        $this->setExpectedException(InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
 
         new BarChart(
             new ChartAxis('x', 'X-Axis', [

@@ -84,7 +84,7 @@ class ColumnTest extends CmsTestCase
 
     public function testInvalidComponent()
     {
-        $this->setExpectedException(InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         new Column('name', 'Label', false, [1]);
     }
 

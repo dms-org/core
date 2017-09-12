@@ -30,7 +30,7 @@ class TableStructureBuilderTest extends CmsTestCase
 
     public function testInvalidColumnValue()
     {
-        $this->setExpectedException(InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
 
         Table::create([
                 new \DateTime()

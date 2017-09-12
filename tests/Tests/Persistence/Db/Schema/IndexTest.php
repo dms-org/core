@@ -32,7 +32,7 @@ class IndexTest extends CmsTestCase
 
     public function testNoColumns()
     {
-        $this->setExpectedException(InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
 
         new Index('foo', false, []);
     }

@@ -29,7 +29,7 @@ class TableSectionTest extends CmsTestCase
 
     public function testInvalidRowsArray()
     {
-        $this->setExpectedException(InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
 
         $structure = $this->getMockForAbstractClass(ITableStructure::class);
         new TableSection($structure, null, [1, 2]);

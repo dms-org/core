@@ -66,7 +66,7 @@ class FormTest extends FormBuilderTestBase
 
     public function testUnprocessThrowsOnMissingKeys()
     {
-        $this->setExpectedException(InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
 
         $form = Form::create()
                 ->section('Details', [
@@ -79,7 +79,7 @@ class FormTest extends FormBuilderTestBase
 
     public function testUnprocessThrowsOnExtraKeys()
     {
-        $this->setExpectedException(InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
 
         $form = Form::create()
                 ->section('Details', [

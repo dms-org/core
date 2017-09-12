@@ -39,7 +39,7 @@ class AxisOrderingTest extends CmsTestCase
 
     public function testInvalidOrderingDirection()
     {
-        $this->setExpectedException(InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
 
         $structure = $this->makeStructure();
 

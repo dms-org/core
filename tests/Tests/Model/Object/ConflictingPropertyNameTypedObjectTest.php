@@ -13,7 +13,7 @@ class ConflictingPropertyNameTypedObjectTest extends CmsTestCase
 {
     public function testConflictingProperty()
     {
-        $this->setExpectedException(ConflictingPropertyNameException::class);
+        $this->expectException(ConflictingPropertyNameException::class);
         new ConflictingPropertyName();
     }
 }

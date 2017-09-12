@@ -15,7 +15,7 @@ class EnumTest extends CmsTestCase
 {
     public function testInvalidType()
     {
-        $this->setExpectedException(InvalidEnumValueException::class);
+        $this->expectException(InvalidEnumValueException::class);
 
         InvalidTypeEnum::getOptions();
     }
@@ -98,7 +98,7 @@ class EnumTest extends CmsTestCase
 
     public function testThrowsOnInvalidValue()
     {
-        $this->setExpectedException(InvalidEnumValueException::class);
+        $this->expectException(InvalidEnumValueException::class);
         new TestEnum('four');
     }
 

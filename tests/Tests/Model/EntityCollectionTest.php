@@ -32,13 +32,13 @@ class EntityCollectionTest extends IEntitySetTest
 
     public function testOffsetSetThrowsOnInvalidValue()
     {
-        $this->setExpectedException(InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->collection[] = new \stdClass();
     }
 
     public function testInvalidEntityType()
     {
-        $this->setExpectedException(InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         new EntityCollection(\stdClass::class);
     }
 

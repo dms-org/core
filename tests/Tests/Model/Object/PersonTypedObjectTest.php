@@ -62,19 +62,19 @@ class PersonTypedObjectTest extends TypedObjectTest
 
     public function testGetPropertyWithInvalidName()
     {
-        $this->setExpectedException(UndefinedPropertyException::class);
+        $this->expectException(UndefinedPropertyException::class);
         $this->object->blah;
     }
 
     public function testPropertyUpdatingWithInvalidValue()
     {
-        $this->setExpectedException(InvalidPropertyValueException::class);
+        $this->expectException(InvalidPropertyValueException::class);
         $this->object->firstName = null;
     }
 
     public function testObjectPropertyUpdatingWithInvalidValue()
     {
-        $this->setExpectedException(InvalidPropertyValueException::class);
+        $this->expectException(InvalidPropertyValueException::class);
         $this->object->dateOfBirth = new \stdClass();
     }
 }

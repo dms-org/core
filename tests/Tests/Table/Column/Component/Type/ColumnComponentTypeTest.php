@@ -36,7 +36,7 @@ class ColumnComponentTypeTest extends CmsTestCase
 
     public function testInvalidOperators()
     {
-        $this->setExpectedException(InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
 
         new ColumnComponentType(Type::string(), [
                 new \stdClass()

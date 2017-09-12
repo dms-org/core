@@ -45,7 +45,7 @@ class CustomMethodActionHandlerTest extends ParameterizedActionHandlerTest
 
     public function testNoParameterMethodThrows()
     {
-        $this->setExpectedException(InvalidHandlerClassException::class);
+        $this->expectException(InvalidHandlerClassException::class);
         new CustomParameterizedActionHandler(function () {
             return ParamDto::from('foo');
         });
@@ -53,7 +53,7 @@ class CustomMethodActionHandlerTest extends ParameterizedActionHandlerTest
 
     public function testNoTypeHintMethodThrows()
     {
-        $this->setExpectedException(InvalidHandlerClassException::class);
+        $this->expectException(InvalidHandlerClassException::class);
         new CustomParameterizedActionHandler(function ($foo) {
             return ParamDto::from('foo');
         });

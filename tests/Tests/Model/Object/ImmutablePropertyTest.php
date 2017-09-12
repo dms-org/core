@@ -26,7 +26,7 @@ class ImmutablePropertyTest extends CmsTestCase
 
         $object->two = 'abc';
 
-        $this->setExpectedException(ImmutablePropertyException::class);
+        $this->expectException(ImmutablePropertyException::class);
 
         $object->two = '123';
     }

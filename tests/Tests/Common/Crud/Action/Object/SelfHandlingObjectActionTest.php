@@ -84,7 +84,7 @@ class SelfHandlingObjectActionTest extends ActionTest
 
     public function testInvalidParamDto()
     {
-        $this->setExpectedException(TypeMismatchException::class);
+        $this->expectException(TypeMismatchException::class);
 
         $action = new TestSelfHandlingObjectAction($this->mockAuth());
 
@@ -96,7 +96,7 @@ class SelfHandlingObjectActionTest extends ActionTest
         /**
          * @see TestEntity::getTestCollection - valid ids are 1, 2, 3
          */
-        $this->setExpectedException(InvalidFormSubmissionException::class);
+        $this->expectException(InvalidFormSubmissionException::class);
 
         $action = new TestSelfHandlingObjectAction($this->mockAuth());
         $action->run([IObjectAction::OBJECT_FIELD_NAME => 4, 'string' => 'abc']);

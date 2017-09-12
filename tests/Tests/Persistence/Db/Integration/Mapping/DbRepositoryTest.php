@@ -128,7 +128,7 @@ class DbRepositoryTest extends DbIntegrationTest
 
         $this->assertSame(1, $entity->getId());
 
-        $this->setExpectedException(EntityNotFoundException::class);
+        $this->expectException(EntityNotFoundException::class);
         $this->repo->get(2);
     }
 
@@ -272,14 +272,14 @@ class DbRepositoryTest extends DbIntegrationTest
 
     public function testInvalidCriteriaType()
     {
-        $this->setExpectedException(TypeMismatchException::class);
+        $this->expectException(TypeMismatchException::class);
 
         $this->repo->matching(MockEntity::criteria());
     }
 
     public function testInvalidCriteriaTypeForCount()
     {
-        $this->setExpectedException(TypeMismatchException::class);
+        $this->expectException(TypeMismatchException::class);
 
         $this->repo->countMatching(MockEntity::criteria());
     }

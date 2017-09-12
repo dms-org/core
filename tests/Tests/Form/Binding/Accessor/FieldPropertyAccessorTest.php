@@ -61,7 +61,7 @@ class FieldPropertyAccessorTest extends FieldAccessorTest
 
     public function testInvalidProperty()
     {
-        $this->setExpectedException(InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
 
         new FieldPropertyAccessor(
             TestFormBoundClass::definition(),

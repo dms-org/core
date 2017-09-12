@@ -31,7 +31,7 @@ class DataTableTest extends CmsTestCase
 
     public function testSectionsMustHaveSameStructure()
     {
-        $this->setExpectedException(InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
 
         $structure = new TableStructure([
                 Column::from(Field::name('foo')->label('Foo')->string())

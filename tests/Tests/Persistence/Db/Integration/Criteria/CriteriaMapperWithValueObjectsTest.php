@@ -37,7 +37,7 @@ class CriteriaMapperWithValueObjectsTest extends CriteriaMapperTestBase
     public function testWhereEqualsNull()
     {
         // Should throw be 'one' is a non-nullable property
-        $this->setExpectedException(TypeMismatchException::class);
+        $this->expectException(TypeMismatchException::class);
 
         $this->mapper->newCriteria()
                 ->where('one', '=', null);

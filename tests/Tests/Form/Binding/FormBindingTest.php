@@ -118,7 +118,7 @@ class FormBindingTest extends CmsTestCase
 
     public function testInvalidFormSubmission()
     {
-        $this->setExpectedException(InvalidFormSubmissionException::class);
+        $this->expectException(InvalidFormSubmissionException::class);
 
         $object = new TestFormBoundClass('foobar', 5, true);
 
@@ -131,7 +131,7 @@ class FormBindingTest extends CmsTestCase
 
     public function testInvalidProcessedSubmission()
     {
-        $this->setExpectedException(InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
 
         $object = new TestFormBoundClass('foobar', 5, true);
 

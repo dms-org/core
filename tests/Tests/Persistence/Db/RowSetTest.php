@@ -93,7 +93,7 @@ class RowSetTest extends CmsTestCase
 
     public function testThrowsOnWrongTableRow()
     {
-        $this->setExpectedException(InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
 
         $rows = new RowSet($this->table());
         $rows->add(new Row(new Table('other_table', []), ['id' => null]));

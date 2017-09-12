@@ -29,7 +29,7 @@ class FormBuilderTest extends FormBuilderTestBase
 
     public function testConflictingFieldNames()
     {
-        $this->setExpectedException(ConflictingFieldNameException::class);
+        $this->expectException(ConflictingFieldNameException::class);
 
         Form::create()
                 ->section('One', [

@@ -24,7 +24,7 @@ class DashboardTest extends CmsTestCase
 
     public function testInvalidWidget()
     {
-        $this->setExpectedException(InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
 
         new Dashboard([
                 $this

@@ -51,7 +51,7 @@ class CriteriaTest extends CmsTestCase
 
     public function testInvalidVerifyClass()
     {
-        $this->setExpectedException(TypeMismatchException::class);
+        $this->expectException(TypeMismatchException::class);
         $criteria = TestEntity::criteria();
 
         $criteria->verifyOfClass(\stdClass::class);
@@ -107,7 +107,7 @@ class CriteriaTest extends CmsTestCase
 
     public function testInvalidMemberExpression()
     {
-        $this->setExpectedException(InvalidMemberExpressionException::class);
+        $this->expectException(InvalidMemberExpressionException::class);
         $criteria = TestEntity::criteria();
 
         $criteria->where('some_invalid_property', '=', 'foo');
@@ -147,7 +147,7 @@ class CriteriaTest extends CmsTestCase
 
     public function testInvalidOrderBy()
     {
-        $this->setExpectedException(InvalidMemberExpressionException::class);
+        $this->expectException(InvalidMemberExpressionException::class);
         $criteria = TestEntity::criteria();
 
         $criteria->orderByAsc('some_invalid_property');
@@ -203,7 +203,7 @@ class CriteriaTest extends CmsTestCase
 
     public function testWhereSatisfiesWrongClass()
     {
-        $this->setExpectedException(TypeMismatchException::class);
+        $this->expectException(TypeMismatchException::class);
 
         $criteria = TestEntity::criteria();
 

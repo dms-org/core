@@ -116,7 +116,7 @@ class TypeBuilderTest extends CmsTestCase
 
     public function testInvalidCollectionClass()
     {
-        $this->setExpectedException(InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
 
         Type::collectionOf(Type::mixed(), \stdClass::class);
     }

@@ -212,7 +212,7 @@ class GlobalOrderIndexTest extends DbIntegrationTest
 
     public function testThrowsExceptionOnNonExistentRow()
     {
-        $this->setExpectedException(PersistenceException::class);
+        $this->expectException(PersistenceException::class);
 
         $this->setDataInDb([
                 'data' => [
@@ -229,7 +229,7 @@ class GlobalOrderIndexTest extends DbIntegrationTest
 
     public function testInvalidIndexThrowsException()
     {
-        $this->setExpectedException(InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
 
         (new Reorder($this->table->getStructure(), 'order_index'))
                 ->withPrimaryKey(3)

@@ -25,7 +25,7 @@ class IdentityMapTest extends CmsTestCase
 
     public function testThrowsOnWrongEntityType()
     {
-        $this->setExpectedException(TypeMismatchException::class);
+        $this->expectException(TypeMismatchException::class);
         $map = new IdentityMap(MockEntity::class);
         $map->add($this->getMockForAbstractClass(IEntity::class));
     }

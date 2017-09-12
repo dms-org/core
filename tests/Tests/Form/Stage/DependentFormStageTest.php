@@ -47,7 +47,7 @@ class DependentFormStageTest extends CmsTestCase
 
     public function testEmptyRequiredFields()
     {
-        $this->setExpectedException(InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
 
         new DependentFormStage(function (array $previousData) {
             return Form::create();

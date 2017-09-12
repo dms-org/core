@@ -57,14 +57,14 @@ class CustomObjectActionHandlerWithExplicitTypeseTest extends ObjectActionHandle
 
     public function testInvalidObjectType()
     {
-        $this->setExpectedException(TypeMismatchException::class);
+        $this->expectException(TypeMismatchException::class);
 
         $this->handler->runOnObject(ParamDto::from(1), ParamDto::from(1));
     }
 
     public function testInvalidParameterType()
     {
-        $this->setExpectedException(TypeMismatchException::class);
+        $this->expectException(TypeMismatchException::class);
 
         $this->handler->runOnObject(TestEntity::withId(1), TestEntity::withId(1));
     }

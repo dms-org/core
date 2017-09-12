@@ -26,7 +26,7 @@ class ValueObjectCollectionTest extends CmsTestCase
 
     public function testInvalidType()
     {
-        $this->setExpectedException(InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         new  ValueObjectCollection(\stdClass::class);
     }
 

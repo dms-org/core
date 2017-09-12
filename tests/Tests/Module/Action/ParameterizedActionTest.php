@@ -81,7 +81,7 @@ class ParameterizedActionTest extends ActionTest
 
     public function testDtoTypeMismatch()
     {
-        $this->setExpectedException(TypeMismatchException::class);
+        $this->expectException(TypeMismatchException::class);
 
         new ParameterizedAction(
             'name',

@@ -53,7 +53,7 @@ abstract class IEntitySetTest extends CmsTestCase
 
     public function testInvalidEntitiesInConstructorThrows()
     {
-        $this->setExpectedException(InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
 
         new EntityCollection(\DateTime::class, [
                 $this->entityMock(1),
@@ -130,7 +130,7 @@ abstract class IEntitySetTest extends CmsTestCase
 
     public function testGetEntityByValidIdThrows()
     {
-        $this->setExpectedException(EntityNotFoundException::class);
+        $this->expectException(EntityNotFoundException::class);
         $this->collection->get(45354);
     }
 
@@ -166,14 +166,14 @@ abstract class IEntitySetTest extends CmsTestCase
 
     public function testInvalidCriteriaType()
     {
-        $this->setExpectedException(TypeMismatchException::class);
+        $this->expectException(TypeMismatchException::class);
 
         $this->collection->matching(SubObject::criteria());
     }
 
     public function testInvalidCriteriaTypeForCount()
     {
-        $this->setExpectedException(TypeMismatchException::class);
+        $this->expectException(TypeMismatchException::class);
 
         $this->collection->countMatching(SubObject::criteria());
     }

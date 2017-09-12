@@ -67,7 +67,7 @@ class PageEntityFormObjectTest extends FormObjectTest
 
     public function testInvalidEntityType()
     {
-        $this->setExpectedException(InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
 
         new PageEntityForm($this->getMockForAbstractClass(IEntity::class));
     }

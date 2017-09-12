@@ -179,7 +179,7 @@ class MemberExpressionParserTest extends CmsTestCase
      */
     public function testParsingInvalidMemberString($string)
     {
-        $this->setExpectedException(InvalidMemberExpressionException::class);
+        $this->expectException(InvalidMemberExpressionException::class);
 
         $parser = new MemberExpressionParser();
 

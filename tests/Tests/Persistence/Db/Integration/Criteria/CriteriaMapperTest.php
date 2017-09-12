@@ -26,7 +26,7 @@ class CriteriaMapperTest extends CriteriaMapperTestBase
 
     public function testInvalidCriteria()
     {
-        $this->setExpectedException(TypeMismatchException::class);
+        $this->expectException(TypeMismatchException::class);
         $criteria = new Criteria(MockEntity::definition());
 
         $this->mapper->mapCriteriaToSelect($criteria);

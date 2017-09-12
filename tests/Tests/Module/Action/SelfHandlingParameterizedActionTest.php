@@ -55,7 +55,7 @@ class SelfHandlingParameterizedActionTest extends ActionTest
 
     public function testInvalidDto()
     {
-        $this->setExpectedException(TypeMismatchException::class);
+        $this->expectException(TypeMismatchException::class);
 
         $action = new TestSelfHandlingParameterizedAction($this->mockAuth());
 

@@ -13,7 +13,7 @@ class InvalidFieldDefinitionFormObjectTest extends CmsTestCase
 {
     public function testInvalidFieldDefinition()
     {
-        $this->setExpectedException(InvalidFieldDefinitionException::class);
+        $this->expectException(InvalidFieldDefinitionException::class);
         InvalidFieldDefinition::formDefinition();
     }
 }

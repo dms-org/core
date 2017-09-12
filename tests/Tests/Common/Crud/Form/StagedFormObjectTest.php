@@ -38,7 +38,7 @@ class StagedFormObjectTest extends CmsTestCase
 
     public function testInvalidDataSource()
     {
-        $this->setExpectedException(TypeMismatchException::class);
+        $this->expectException(TypeMismatchException::class);
 
         new TestFormObject(AnotherTestEntity::collection());
     }

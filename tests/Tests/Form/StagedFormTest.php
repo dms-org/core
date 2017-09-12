@@ -234,7 +234,7 @@ class StagedFormTest extends FormBuilderTestBase
 
     public function testThrowsExceptionForDependingOnFutureStage()
     {
-        $this->setExpectedException(InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
 
         StagedForm::begin(
                 Form::create()
@@ -256,7 +256,7 @@ class StagedFormTest extends FormBuilderTestBase
 
     public function testThrowsExceptionForDependingOnNonExistentField()
     {
-        $this->setExpectedException(InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
 
         StagedForm::begin(
                 Form::create()
@@ -403,7 +403,7 @@ class StagedFormTest extends FormBuilderTestBase
 
     public function testWithSubmittedFirstStageThrowsIfOnlyOneStage()
     {
-        $this->setExpectedException(InvalidOperationException::class);
+        $this->expectException(InvalidOperationException::class);
 
         $form = StagedForm::begin(
                 Form::create()

@@ -71,7 +71,7 @@ class MockDatabaseTest extends CmsTestCase
 
     public function testTableInsertDuplicateKey()
     {
-        $this->setExpectedException(DuplicateKeyException::class);
+        $this->expectException(DuplicateKeyException::class);
         $table = $this->db->createTable(new Table('foo', [new Column('id', Integer::normal(), true)]));
 
         $table->insert(['id' => 1]);
@@ -143,7 +143,7 @@ class MockDatabaseTest extends CmsTestCase
         $bar->insert(['id' => null, 'foreign' => null]);
         $bar->validateConstraints();
 
-        $this->setExpectedException(ForeignKeyConstraintException::class);
+        $this->expectException(ForeignKeyConstraintException::class);
         $bar->insert(['id' => null, 'foreign' => 2]);
         $bar->validateConstraints();
     }

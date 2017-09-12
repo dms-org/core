@@ -30,7 +30,7 @@ class PermissionTest extends CmsTestCase
 
     public function testEmptyName()
     {
-        $this->setExpectedException(InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
 
         new Permission('');
     }

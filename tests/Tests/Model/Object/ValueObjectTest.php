@@ -37,7 +37,7 @@ class ValueObjectTest extends CmsTestCase
 
         $object->one = 'abc';
 
-        $this->setExpectedException(ImmutablePropertyException::class);
+        $this->expectException(ImmutablePropertyException::class);
 
         $object->one = '123';
     }

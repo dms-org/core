@@ -115,7 +115,7 @@ class TableTest extends CmsTestCase
 
     public function testInvalidIndexColumn()
     {
-        $this->setExpectedException(InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
 
         new Table(
                 'table',
@@ -127,7 +127,7 @@ class TableTest extends CmsTestCase
 
     public function testInvalidForeignKeyColumn()
     {
-        $this->setExpectedException(InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
 
         new Table(
                 'table',

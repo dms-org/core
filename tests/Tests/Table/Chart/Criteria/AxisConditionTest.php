@@ -39,7 +39,7 @@ class AxisConditionTest extends CmsTestCase
 
     public function testInvalidType()
     {
-        $this->setExpectedException(TypeMismatchException::class);
+        $this->expectException(TypeMismatchException::class);
 
         $structure = $this->makeStructure();
 

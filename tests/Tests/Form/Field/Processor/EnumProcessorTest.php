@@ -55,7 +55,7 @@ class EnumProcessorTest extends FieldProcessorTest
 
     public function testInvalidEnumClass()
     {
-        $this->setExpectedException(InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
 
         new EnumProcessor(\DateTime::class);
     }

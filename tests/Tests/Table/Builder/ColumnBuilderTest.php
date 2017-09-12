@@ -27,7 +27,7 @@ class ColumnBuilderTest extends CmsTestCase
 
     public function testInvalidFrom()
     {
-        $this->setExpectedException(TypeMismatchException::class);
+        $this->expectException(TypeMismatchException::class);
 
         Column::from(new \stdClass());
     }
@@ -52,7 +52,7 @@ class ColumnBuilderTest extends CmsTestCase
 
     public function testChainedMethodWithInvalidValue()
     {
-        $this->setExpectedException(TypeMismatchException::class);
+        $this->expectException(TypeMismatchException::class);
 
         Column::name('column_name')->label('Column Label')->components([
                 null

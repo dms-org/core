@@ -30,7 +30,7 @@ class NullablePropertyTest extends CmsTestCase
 
     public function testThrowsExceptionIfSetToInvalidType()
     {
-        $this->setExpectedException(InvalidPropertyValueException::class);
+        $this->expectException(InvalidPropertyValueException::class);
         $object = new NullableProperty();
 
         $object->prop = 'string';

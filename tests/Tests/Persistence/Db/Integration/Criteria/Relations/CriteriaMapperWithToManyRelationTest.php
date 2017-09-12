@@ -43,7 +43,7 @@ class CriteriaMapperWithToManyRelationTest extends CriteriaMapperTestBase
 
     public function testConditionWithToManyCollectionThrows()
     {
-        $this->setExpectedException(MemberExpressionMappingException::class);
+        $this->expectException(MemberExpressionMappingException::class);
 
         $this->mapper->mapCriteriaToSelect(
             $this->mapper->newCriteria()
@@ -53,7 +53,7 @@ class CriteriaMapperWithToManyRelationTest extends CriteriaMapperTestBase
 
     public function testOrderByWithToManyCollectionThrows()
     {
-        $this->setExpectedException(MemberExpressionMappingException::class);
+        $this->expectException(MemberExpressionMappingException::class);
 
         $this->mapper->mapCriteriaToSelect(
             $this->mapper->newCriteria()

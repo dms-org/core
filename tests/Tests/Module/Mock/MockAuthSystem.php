@@ -13,6 +13,7 @@ use Dms\Core\Auth\NotAuthenticatedException;
 use Dms\Core\Event\IEventDispatcher;
 use Dms\Core\Ioc\IIocContainer;
 use Dms\Core\Tests\Helpers\Mock\MockingIocContainer;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>
@@ -37,7 +38,7 @@ class MockAuthSystem extends AuthSystem implements IAuthSystemInPackageContext
     protected $dispatcher;
 
     /**
-     * @var \PHPUnit_Framework_TestCase
+     * @var TestCase
      */
     protected $test;
 
@@ -49,11 +50,11 @@ class MockAuthSystem extends AuthSystem implements IAuthSystemInPackageContext
     /**
      * MockAuthSystem constructor.
      *
-     * @param IAdmin                      $mockUser
-     * @param \PHPUnit_Framework_TestCase $test
-     * @param string                      $packageName
+     * @param IAdmin   $mockUser
+     * @param TestCase $test
+     * @param string   $packageName
      */
-    public function __construct(IAdmin $mockUser, \PHPUnit_Framework_TestCase $test, string $packageName = 'test-package')
+    public function __construct(IAdmin $mockUser, TestCase $test, string $packageName = 'test-package')
     {
         $this->mockUser     = $mockUser;
         $this->test         = $test;
@@ -110,7 +111,7 @@ class MockAuthSystem extends AuthSystem implements IAuthSystemInPackageContext
      *
      * @return boolean
      */
-    public function isAuthenticated() : bool
+    public function isAuthenticated(): bool
     {
         return true;
     }
@@ -121,7 +122,7 @@ class MockAuthSystem extends AuthSystem implements IAuthSystemInPackageContext
      * @return IAdmin
      * @throws NotAuthenticatedException
      */
-    public function getAuthenticatedUser() : IAdmin
+    public function getAuthenticatedUser(): IAdmin
     {
         return $this->mockUser;
     }
@@ -134,7 +135,7 @@ class MockAuthSystem extends AuthSystem implements IAuthSystemInPackageContext
      *
      * @return boolean
      */
-    public function isAuthorized(array $permissions) : bool
+    public function isAuthorized(array $permissions): bool
     {
         return $this->authorized;
     }
@@ -171,7 +172,7 @@ class MockAuthSystem extends AuthSystem implements IAuthSystemInPackageContext
     /**
      * @inheritDoc
      */
-    public function getIocContainer() : IIocContainer
+    public function getIocContainer(): IIocContainer
     {
         return $this->iocContainer;
     }
@@ -181,7 +182,7 @@ class MockAuthSystem extends AuthSystem implements IAuthSystemInPackageContext
      *
      * @return IEventDispatcher
      */
-    public function getEventDispatcher() : IEventDispatcher
+    public function getEventDispatcher(): IEventDispatcher
     {
         return $this->dispatcher;
     }
@@ -191,7 +192,7 @@ class MockAuthSystem extends AuthSystem implements IAuthSystemInPackageContext
      *
      * @return string
      */
-    public function getPackageName() : string
+    public function getPackageName(): string
     {
         return $this->packageName;
     }

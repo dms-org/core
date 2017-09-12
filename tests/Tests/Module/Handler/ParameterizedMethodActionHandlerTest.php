@@ -49,25 +49,25 @@ class ParameterizedMethodActionHandlerTest extends ParameterizedActionHandlerTes
 
     public function testNoHandleMethodThrows()
     {
-        $this->setExpectedException(InvalidHandlerClassException::class);
+        $this->expectException(InvalidHandlerClassException::class);
         new NoHandleMethodActionHandler();
     }
 
     public function testPrivateHandleMethodThrows()
     {
-        $this->setExpectedException(InvalidHandlerClassException::class);
+        $this->expectException(InvalidHandlerClassException::class);
         new PrivateMethodActionHandler();
     }
 
     public function testNoParameterMethodThrows()
     {
-        $this->setExpectedException(InvalidHandlerClassException::class);
+        $this->expectException(InvalidHandlerClassException::class);
         new NoParameterMethodActionHandler();
     }
 
     public function testNoTypeHintMethodThrows()
     {
-        $this->setExpectedException(InvalidHandlerClassException::class);
+        $this->expectException(InvalidHandlerClassException::class);
         new NoTypeHintMethodActionHandler();
     }
 

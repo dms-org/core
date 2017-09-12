@@ -34,7 +34,7 @@ class ForeignKeyTest extends CmsTestCase
 
     public function testMismatchedColumns()
     {
-        $this->setExpectedException(InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
 
         new ForeignKey(
                 'fk',
@@ -48,7 +48,7 @@ class ForeignKeyTest extends CmsTestCase
 
     public function testInvalidDeleteMode()
     {
-        $this->setExpectedException(InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
 
         new ForeignKey(
                 'fk',
@@ -62,7 +62,7 @@ class ForeignKeyTest extends CmsTestCase
 
     public function testInvalidUpdateMode()
     {
-        $this->setExpectedException(InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
 
         new ForeignKey(
                 'fk',
@@ -97,7 +97,7 @@ class ForeignKeyTest extends CmsTestCase
 
     public function testNoColumns()
     {
-        $this->setExpectedException(InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
 
         new ForeignKey(
                 'fk',

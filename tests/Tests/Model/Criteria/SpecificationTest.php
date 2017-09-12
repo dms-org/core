@@ -26,7 +26,7 @@ class SpecificationTest extends CmsTestCase
 {
     public function testEmptySpecThrowsException()
     {
-        $this->setExpectedException(InvalidOperationException::class);
+        $this->expectException(InvalidOperationException::class);
 
         $spec = new MockSpecification(TestEntity::class, function (SpecificationDefinition $match) {
 
@@ -58,7 +58,7 @@ class SpecificationTest extends CmsTestCase
 
     public function testInvalidVerifyClass()
     {
-        $this->setExpectedException(TypeMismatchException::class);
+        $this->expectException(TypeMismatchException::class);
         $spec = new MockSpecification(TestEntity::class, function (SpecificationDefinition $match) {
             $match->where('prop', '=', 'foo');
         });
@@ -109,7 +109,7 @@ class SpecificationTest extends CmsTestCase
 
     public function testInvalidPropertyCondition()
     {
-        $this->setExpectedException(InvalidMemberExpressionException::class);
+        $this->expectException(InvalidMemberExpressionException::class);
 
         $spec = new MockSpecification(TestEntity::class, function (SpecificationDefinition $match) {
             $match->where('some_invalid_property', '=', 'foo');
@@ -158,7 +158,7 @@ class SpecificationTest extends CmsTestCase
 
     public function testWrongObjectType()
     {
-        $this->setExpectedException(TypeMismatchException::class);
+        $this->expectException(TypeMismatchException::class);
 
         $spec = new MockSpecification(TestEntity::class, function (SpecificationDefinition $match) {
             $match->where('prop', '=', 'foo');

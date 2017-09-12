@@ -62,7 +62,7 @@ class GetterSetterMethodAccessorTest extends FieldAccessorTest
 
     public function testInvalidGetterMethod()
     {
-        $this->setExpectedException(InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
 
         return new GetterSetterMethodAccessor(
                 $this->buildField()->getName(),
@@ -73,7 +73,7 @@ class GetterSetterMethodAccessorTest extends FieldAccessorTest
 
     public function testInvalidSetterMethod()
     {
-        $this->setExpectedException(InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
 
         return new GetterSetterMethodAccessor(
                 $this->buildField()->getName(),

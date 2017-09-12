@@ -35,7 +35,7 @@ class ChartAxisTest extends CmsTestCase
 
     public function testAxisWithComponentsOfMultipleTypesThrows()
     {
-        $this->setExpectedException(InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
 
         new ChartAxis('name', 'Label', [
                 ColumnComponent::forField(Field::name('component')->label('Component')->string()->build()),

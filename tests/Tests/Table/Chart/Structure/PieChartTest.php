@@ -38,7 +38,7 @@ class PieChartTest extends CmsTestCase
 
     public function testTypeAxisMustHaveOnlyOneComponent()
     {
-        $this->setExpectedException(InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
 
         new PieChart(
                 new ChartAxis('type', 'Type', [
@@ -51,7 +51,7 @@ class PieChartTest extends CmsTestCase
 
     public function testValueAxisMustHaveOnlyOneComponent()
     {
-        $this->setExpectedException(InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
 
         new PieChart(
                 ChartAxis::forField(Field::name('type')->label('Type')->int()->build()),

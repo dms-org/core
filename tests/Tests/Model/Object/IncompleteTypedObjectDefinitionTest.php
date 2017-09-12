@@ -13,7 +13,7 @@ class IncompleteTypedObjectDefinitionTest extends CmsTestCase
 {
     public function testIncompleteDefinition()
     {
-        $this->setExpectedException(IncompleteClassDefinitionException::class);
+        $this->expectException(IncompleteClassDefinitionException::class);
         IncompleteClassDefinition::build();
     }
 }

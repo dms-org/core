@@ -36,7 +36,7 @@ class UpsertTest extends CmsTestCase
 
     public function testInvalidLockingColumn()
     {
-        $this->setExpectedException(InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
 
         new Upsert(new RowSet($this->table()), ['non_existent_column']);
     }

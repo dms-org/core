@@ -37,7 +37,7 @@ class LineChartTest extends CmsTestCase
 
     public function testHorizontalAxisMustHaveOnlyOneComponent()
     {
-        $this->setExpectedException(InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
 
         new LineChart(
             new ChartAxis('x', 'X-Axis', [

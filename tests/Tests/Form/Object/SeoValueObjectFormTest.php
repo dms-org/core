@@ -64,7 +64,7 @@ class SeoValueObjectFormTest extends FormObjectTest
 
     public function testInvalidValueObjectType()
     {
-        $this->setExpectedException(InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
 
         new SeoValueObjectForm($this->getMockForAbstractClass(IValueObject::class));
     }

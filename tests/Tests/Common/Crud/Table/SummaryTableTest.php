@@ -52,7 +52,7 @@ class SummaryTableTest extends CmsTestCase
 
     public function testReorderActionWithInvalidViewName()
     {
-        $this->setExpectedException(InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
 
         new SummaryTable('name', $this->getMockForAbstractClass(ITableDataSource::class), [
                 new TableView('view-1', 'Label', true),
@@ -63,7 +63,7 @@ class SummaryTableTest extends CmsTestCase
 
     public function testInvalidActionClass()
     {
-        $this->setExpectedException(InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
 
         new SummaryTable('name', $this->getMockForAbstractClass(ITableDataSource::class), [
                 new TableView('view-1', 'Label', true),

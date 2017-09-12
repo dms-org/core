@@ -59,7 +59,7 @@ abstract class TableDataSourceTest extends CmsTestCase
 
     public function testLoadInvalidCriteria()
     {
-        $this->setExpectedException(InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
 
         $invalidCriteria = new RowCriteria(Table::create([]));
         $this->dataSource->load($invalidCriteria);
@@ -67,7 +67,7 @@ abstract class TableDataSourceTest extends CmsTestCase
 
     public function testCountInvalidCriteria()
     {
-        $this->setExpectedException(InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
 
         $invalidCriteria = new RowCriteria(Table::create([]));
         $this->dataSource->count($invalidCriteria);
