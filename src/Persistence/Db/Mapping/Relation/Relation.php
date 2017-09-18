@@ -146,4 +146,22 @@ abstract class Relation implements IRelation
             $row->setColumn($foreignKey, $value);
         }
     }
+
+    /**
+     * @param callable $callback
+     *
+     * @return mixed
+     */
+    final protected function disableLazyLoadingFor(callable $callback)
+    {
+        $orm             = $this->mapper->getDefinition()->getOrm();
+        $originalSetting = $orm->isLazyLoadingEnabled();
+
+        try {
+            $orm->enableLazyLoading(false);
+            return $callback();
+        } finally {
+            $orm->enableLazyLoading($originalSetting);
+        }
+    }
 }
