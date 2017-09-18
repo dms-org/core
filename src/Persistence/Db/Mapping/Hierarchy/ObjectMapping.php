@@ -1,4 +1,4 @@
-<?php declare(strict_types = 1);
+<?php declare(strict_types=1);
 
 namespace Dms\Core\Persistence\Db\Mapping\Hierarchy;
 
@@ -131,7 +131,7 @@ abstract class ObjectMapping implements IObjectMapping
     /**
      * @return string[]
      */
-    protected function findAllColumnsToLoad() : array
+    protected function findAllColumnsToLoad(): array
     {
         $columns = [];
 
@@ -188,7 +188,7 @@ abstract class ObjectMapping implements IObjectMapping
     /**
      * @return bool
      */
-    final protected function hasEntityRelations() : bool
+    final protected function hasEntityRelations(): bool
     {
         foreach ($this->definition->getRelationMappings() as $relation) {
             if ($relation->getRelation() instanceof EntityRelation) {
@@ -202,7 +202,7 @@ abstract class ObjectMapping implements IObjectMapping
     /**
      * {@inheritDoc}
      */
-    final public function getDefinition() : FinalizedMapperDefinition
+    final public function getDefinition(): FinalizedMapperDefinition
     {
         return $this->definition;
     }
@@ -210,7 +210,7 @@ abstract class ObjectMapping implements IObjectMapping
     /**
      * {@inheritDoc}
      */
-    final public function getObjectType() : string
+    final public function getObjectType(): string
     {
         return $this->objectType;
     }
@@ -226,7 +226,7 @@ abstract class ObjectMapping implements IObjectMapping
     /**
      * {@inheritDoc}
      */
-    final public function getMappingTables() : array
+    final public function getMappingTables(): array
     {
         $tables = $this->mappingTables;
 
@@ -291,7 +291,7 @@ abstract class ObjectMapping implements IObjectMapping
     /**
      * {@inheritdoc}
      */
-    final public function getClassConditionExpr(Query $query, string $objectType) : Expr
+    final public function getClassConditionExpr(Query $query, string $objectType): Expr
     {
         foreach ($this->subClassMappings as $subType) {
             if (is_a($objectType, $subType->getObjectType(), true)) {
@@ -307,7 +307,7 @@ abstract class ObjectMapping implements IObjectMapping
      *
      * @return Expr
      */
-    abstract protected function makeClassConditionExpr(Query $query) : Expr;
+    abstract protected function makeClassConditionExpr(Query $query): Expr;
 
     /**
      * @param Select $select
@@ -316,7 +316,7 @@ abstract class ObjectMapping implements IObjectMapping
      * @return string
      * @throws \Dms\Core\Exception\InvalidArgumentException
      */
-    protected function addLoadClausesToSelect(Select $select, string $tableAlias) : string
+    protected function addLoadClausesToSelect(Select $select, string $tableAlias): string
     {
         $table = $select->getTableFromAlias($tableAlias);
 
@@ -330,7 +330,7 @@ abstract class ObjectMapping implements IObjectMapping
     /**
      * @return string[]
      */
-    final public function getAllColumnsToLoad() : array
+    final public function getAllColumnsToLoad(): array
     {
         return $this->allColumnsToLoad;
     }
@@ -338,7 +338,7 @@ abstract class ObjectMapping implements IObjectMapping
     /**
      * {@inheritdoc}
      */
-    final public function constructNewObjectFromRow(Row $row) : ITypedObject
+    final public function constructNewObjectFromRow(Row $row): ITypedObject
     {
         $subClassRow = $this->processRowBeforeLoadSubclass($row);
         foreach ($this->subClassMappings as $subType) {
@@ -363,7 +363,7 @@ abstract class ObjectMapping implements IObjectMapping
     /**
      * {@inheritdoc}
      */
-    final public function rowMatchesType(Row $row) : bool
+    final public function rowMatchesType(Row $row): bool
     {
         foreach ($this->subClassMappings as $subType) {
             if ($subType->rowMatchesType($row)) {
@@ -379,7 +379,7 @@ abstract class ObjectMapping implements IObjectMapping
      *
      * @return bool
      */
-    abstract protected function rowMatchesObjectType(Row $row) : bool;
+    abstract protected function rowMatchesObjectType(Row $row): bool;
 
     /**
      * @param LoadingContext $context
@@ -406,7 +406,7 @@ abstract class ObjectMapping implements IObjectMapping
      *
      * @return array[]
      */
-    public function loadAllProperties(LoadingContext $context, array $rows, array $objects) : array
+    public function loadAllProperties(LoadingContext $context, array $rows, array $objects): array
     {
         /** @var Row[] $rows */
         foreach ($rows as $key => $row) {
@@ -627,7 +627,7 @@ abstract class ObjectMapping implements IObjectMapping
      *
      * @return array[]
      */
-    protected function getObjectProperties(array $objects) : array
+    protected function getObjectProperties(array $objects): array
     {
         $objectProperties = [];
         /** @var ITypedObject[] $objects */
@@ -718,7 +718,8 @@ abstract class ObjectMapping implements IObjectMapping
         array $objects,
         array $objectProperties
     ) {
-        $definition = $this->definition;
+        $definition           = $this->definition;
+        $isLazyLoadingEnabled = $definition->getOrm()->isLazyLoadingEnabled();
 
         foreach ($definition->getRelationMappingsWith($dependencyMode) as $relationMapping) {
             $relation = $relationMapping->getRelation();
@@ -749,6 +750,7 @@ abstract class ObjectMapping implements IObjectMapping
                     }
 
                     if ($propertyValue instanceof ILazyCollection
+                        && $isLazyLoadingEnabled
                         && $this->isUnloadedLazyCollection($objects[$key], $relation, $propertyValue)
                     ) {
                         continue;
@@ -762,7 +764,7 @@ abstract class ObjectMapping implements IObjectMapping
         }
     }
 
-    protected function isUnloadedLazyCollection($parentObject, IRelation $relation, ILazyCollection $collection) : bool
+    protected function isUnloadedLazyCollection($parentObject, IRelation $relation, ILazyCollection $collection): bool
     {
         if ($collection->hasLoadedElements()) {
             return false;
@@ -1001,7 +1003,7 @@ abstract class ObjectMapping implements IObjectMapping
      *
      * @return array
      */
-    protected function loadInstancesForSubclass(IObjectMapping $mapping, array $rows, array $objects) : array
+    protected function loadInstancesForSubclass(IObjectMapping $mapping, array $rows, array $objects): array
     {
         $subClass          = $mapping->getObjectType();
         $objectsOfSubClass = [];
@@ -1024,7 +1026,7 @@ abstract class ObjectMapping implements IObjectMapping
      *
      * @return array
      */
-    protected function loadPropertiesForSubclass(IObjectMapping $mapping, array $rows, array $objectProperties) : array
+    protected function loadPropertiesForSubclass(IObjectMapping $mapping, array $rows, array $objectProperties): array
     {
         $objectsPropertiesOfSubClass = [];
         $rowsForSubClass             = [];
