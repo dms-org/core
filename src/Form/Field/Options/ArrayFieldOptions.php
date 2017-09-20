@@ -115,6 +115,34 @@ class ArrayFieldOptions implements IFieldOptions
     }
 
     /**
+     * Gets the field options for the supplied values.
+     *
+     * @param array $values
+     *
+     * @return IFieldOption[]
+     */
+    public function tryGetOptionsForValues(array $values): array
+    {
+        $optionsIndexedByHash = [];
+
+        foreach ($this->getAll() as $option) {
+            $optionsIndexedByHash[ValueHasher::hash($option->getValue())] = $option;
+        }
+
+        $options = [];
+
+        foreach ($values as $value) {
+            $hash = ValueHasher::hash($value);
+
+            if (isset($optionsIndexedByHash[$hash])) {
+                $options[] = $optionsIndexedByHash[$hash];
+            }
+        }
+
+        return $options;
+    }
+
+    /**
      * Returns whether the options are filterable.
      *
      * @return bool

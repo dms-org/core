@@ -97,6 +97,22 @@ class CallbackFieldOptions implements IFieldOptions
     }
 
     /**
+     * Gets the field options for the supplied values.
+     *
+     * @param array $values
+     *
+     * @return IFieldOption[]
+     */
+    public function tryGetOptionsForValues(array $values): array
+    {
+        if ($this->specificFieldOptionLoader) {
+            return array_filter(array_map($this->specificFieldOptionLoader, $values));
+        } else {
+            return (new ArrayFieldOptions(call_user_func($this->fieldOptionsLoader)))->tryGetOptionsForValues($value);
+        }
+    }
+
+    /**
      * Returns whether the options are filterable.
      *
      * @return bool

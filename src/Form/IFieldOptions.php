@@ -44,6 +44,16 @@ interface IFieldOptions extends \Countable
     public function getOptionForValue($value) : IFieldOption;
 
     /**
+     * Gets the field options for the supplied values.
+     * Invalid values will be ignored.
+     *
+     * @param array $values
+     *
+     * @return IFieldOption[]
+     */
+    public function tryGetOptionsForValues(array $values) : array;
+
+    /**
      * Returns whether the options are filterable.
      *
      * @return bool

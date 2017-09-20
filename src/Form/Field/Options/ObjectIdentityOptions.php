@@ -168,7 +168,29 @@ abstract class ObjectIdentityOptions implements IFieldOptions
 
         return $this->getFieldOptionForObject($object, $value);
     }
-    
+
+    /**
+     * Gets the field options for the supplied values.
+     * Invalid values will be ignored.
+     *
+     * @param array $values
+     *
+     * @return IFieldOption[]
+     */
+    public function tryGetOptionsForValues(array $values): array
+    {
+        $objects = $this->objects->tryGetAll($values);
+
+        $options = [];
+
+        foreach ($objects as $index => $object) {
+            $id        = $this->getObjectIdentity($index, $object);
+            $options[] = $this->getFieldOptionForObject($object, $id);
+        }
+
+        return $options;
+    }
+
     /**
      * @param callable $callback
      *
