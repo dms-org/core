@@ -2,6 +2,7 @@
 
 namespace Dms\Core\Persistence\Db\Mapping\Hierarchy;
 
+use Dms\Core\Model\IEntity;
 use Dms\Core\Model\ITypedObject;
 use Dms\Core\Persistence\Db\Exception\InvalidRowException;
 use Dms\Core\Persistence\Db\LoadingContext;
@@ -559,6 +560,7 @@ abstract class ObjectMapping implements IObjectMapping
         }
     }
 
+
     /**
      * @param PersistenceContext $context
      * @param ITypedObject[]     $objects
@@ -566,11 +568,13 @@ abstract class ObjectMapping implements IObjectMapping
      * @param array|null         $extraData
      */
     public function persistAll(
-        PersistenceContext $context,
-        array $objects,
-        array $rows,
-        array $extraData = null
+            PersistenceContext $context,
+            array $objects,
+            array $rows,
+            array $extraData = null
     ) {
+        $this->deduplicateEntities($objects, $rows);
+
         $objectProperties = $this->persistObjectDataToRows($objects, $rows);
 
         $this->performLockingOperations($context, $objects, $rows);
@@ -580,6 +584,36 @@ abstract class ObjectMapping implements IObjectMapping
         $this->performPersist($context, $rows, $extraData);
 
         $this->performPostPersist($context, $objects, $rows, $objectProperties);
+    }
+
+    /**
+     * @param ITypedObject[]     $objects
+     * @param Row[]              $rows
+     */
+    protected function deduplicateEntities(array &$objects, array &$rows)
+    {
+        if (!is_subclass_of($this->definition->getClassName(), IEntity::class, true)) {
+            return;
+        }
+
+        $seenIdLookup = [];
+
+        /** @var IEntity[] $objects */
+        foreach ($objects as $key => $entity) {
+            $id = $entity->getId();
+
+            if ($id === null) {
+                continue;
+            }
+
+            if (isset($seenIdLookup[$id])) {
+                unset($objects[$key]);
+                unset($rows[$key]);
+                continue;
+            }
+
+            $seenIdLookup[$id] = true;
+        }
     }
 
     protected function performLockingOperations(PersistenceContext $context, array $objects, array $rows)
