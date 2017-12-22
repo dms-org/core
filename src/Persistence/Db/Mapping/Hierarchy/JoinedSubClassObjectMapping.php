@@ -212,7 +212,8 @@ class JoinedSubClassObjectMapping extends SubClassObjectMapping
     public function persistAll(
             PersistenceContext $context,
             array $objects,
-            array $rows
+            array $rows,
+            array $extraData = null
     ) {
         // Map to separate rows in class table
         $classTableRows = [];

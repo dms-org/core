@@ -84,8 +84,15 @@ class EmbeddedSubClassObjectMapping extends SubClassObjectMapping implements IEm
         $this->performPrePersist($context, $objects, $rows, $this->getObjectProperties($objects));
     }
 
-    public function persistAll(PersistenceContext $context, array $objects, array $rows)
-    {
+    /**
+     * @inheritDoc
+     */
+    public function persistAll(
+            PersistenceContext $context,
+            array $objects,
+            array $rows,
+            array $extraData = null
+    ) {
         /** @var Row[] $rows */
         foreach ($rows as $row) {
             $row->setColumn($this->classTypeColumnName, $this->classTypeValue);
@@ -110,7 +117,7 @@ class EmbeddedSubClassObjectMapping extends SubClassObjectMapping implements IEm
     }
 
 
-    public function delete(PersistenceContext $context, Delete $deleteQuery)
+    public function delete(PersistenceContext $context, Delete $deleteQuery, $dependencyMode = null)
     {
 
     }
