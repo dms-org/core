@@ -88,8 +88,15 @@ class EmbeddedParentObjectMapping extends ParentObjectMapping implements IEmbedd
         $this->performPrePersist($context, $objects, $rows, $this->getObjectProperties($objects));
     }
 
-    public function persistAll(PersistenceContext $context, array $objects, array $rows)
-    {
+    /**
+     * @inheritDoc
+     */
+    public function persistAll(
+            PersistenceContext $context,
+            array $objects,
+            array $rows,
+            array $extraData = null
+    ) {
         $this->persistObjectDataToRows($objects, $rows);
         $this->performLockingOperations($context, $objects, $rows);
     }
@@ -109,7 +116,7 @@ class EmbeddedParentObjectMapping extends ParentObjectMapping implements IEmbedd
         $this->performPreDelete($context, $deleteQuery);
     }
 
-    public function delete(PersistenceContext $context, Delete $deleteQuery)
+    public function delete(PersistenceContext $context, Delete $deleteQuery, $dependencyMode = null)
     {
 
     }
