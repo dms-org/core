@@ -204,7 +204,7 @@ class EmbeddedCollectionRelation extends EmbeddedRelation implements ISeparateTo
         // Since all the rows are deleted then reinserted, we have to disable lazy loading
         // for all child relations as these will have been deleted via the foreign key
         // and need to be re-inserted
-        $this->disableLazyLoadingFor(function () use ($context, $children, $childRows) {
+        $this->disableLazyLoadingForRelations(function () use ($context, $children, $childRows) {
             $this->mapper->persistAllToRows($context, $children, $childRows);
         });
 

@@ -122,7 +122,8 @@ class MockTable implements \Serializable
                     $this,
                     $this->structure->findColumn($fk->getLocalColumnNames()[0]),
                     $referencedTable,
-                    $referencedColumn
+                    $referencedColumn,
+                    $fk->getOnDeleteMode()
             );
         }
 
@@ -133,13 +134,14 @@ class MockTable implements \Serializable
      * @param Column    $column
      * @param MockTable $referencedTable
      * @param Column    $referencedColumn
+     * @param string    $deleteMode
      *
      * @return void
      * @throws ForeignKeyConstraintException
      */
-    public function addForeignKey(Column $column, MockTable $referencedTable, Column $referencedColumn)
+    public function addForeignKey(Column $column, MockTable $referencedTable, Column $referencedColumn, string $deleteMode)
     {
-        $foreignKey = new MockForeignKey($this, $column, $referencedTable, $referencedColumn);
+        $foreignKey = new MockForeignKey($this, $column, $referencedTable, $referencedColumn, $deleteMode);
         $foreignKey->validate();
         $this->foreignKeys[] = $foreignKey;
     }
@@ -336,5 +338,23 @@ class MockTable implements \Serializable
 
         // Ensure correct order
         return array_merge($expected, $row);
+    }
+
+    /**
+     * @param MockTable $table
+     *
+     * @return MockForeignKey[]
+     */
+    public function getForeignKeysToTable(MockTable $table) : array
+    {
+        $foreignKeys = [];
+
+        foreach ($this->foreignKeys as $foreignKey) {
+            if ($foreignKey->getReferencedTable()->getName() === $table->getName()) {
+                $foreignKeys[] = $foreignKey;
+            }
+        }
+
+        return $foreignKeys;
     }
 }

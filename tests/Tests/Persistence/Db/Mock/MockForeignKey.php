@@ -3,6 +3,7 @@
 namespace Dms\Core\Tests\Persistence\Db\Mock;
 
 use Dms\Core\Persistence\Db\Schema\Column;
+use Dms\Core\Persistence\Db\Schema\ForeignKeyMode;
 use Dms\Core\Persistence\Db\Schema\Table;
 
 /**
@@ -30,12 +31,18 @@ class MockForeignKey
      */
     private $referencedColumn;
 
-    public function __construct(MockTable $mainTable, Column $mainColumn, MockTable $referencedTable, Column $referencedColumn)
+    /**
+     * @var string
+     */
+    private $deleteMode;
+
+    public function __construct(MockTable $mainTable, Column $mainColumn, MockTable $referencedTable, Column $referencedColumn, string $deleteMode)
     {
         $this->mainTable      = $mainTable;
         $this->mainColumn     = $mainColumn;
         $this->referencedTable  = $referencedTable;
         $this->referencedColumn = $referencedColumn;
+        $this->deleteMode = $deleteMode;
     }
 
     /**
@@ -68,6 +75,14 @@ class MockForeignKey
     public function getReferencedColumn()
     {
         return $this->referencedColumn;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDeleteMode(): string
+    {
+        return $this->deleteMode;
     }
 
     public function validate()

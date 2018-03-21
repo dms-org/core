@@ -3,6 +3,7 @@
 namespace Dms\Core\Tests\Persistence\Db\Integration\Mapping;
 
 use Dms\Core\Persistence\Db\Mapping\IOrm;
+use Dms\Core\Persistence\Db\Query\Update;
 use Dms\Core\Persistence\Db\Schema\Column;
 use Dms\Core\Persistence\Db\Schema\ForeignKey;
 use Dms\Core\Persistence\Db\Schema\ForeignKeyMode;
@@ -65,22 +66,51 @@ class ValueObjectWithToManyRelationTest extends DbIntegrationTest
     public function testPersist()
     {
         $entity = new EntityWithValueObject(null, new EmbeddedObject([
-                new ChildEntity(),
-                new ChildEntity(),
-                new ChildEntity(),
+            new ChildEntity(),
+            new ChildEntity(),
+            new ChildEntity(),
         ]));
 
         $this->repo->save($entity);
 
         $this->assertDatabaseDataSameAs([
-                'entities' => [
-                        ['id' => 1]
-                ],
-                'children' => [
-                        ['id' => 1, 'parent_id' => 1],
-                        ['id' => 2, 'parent_id' => 1],
-                        ['id' => 3, 'parent_id' => 1],
-                ],
+            'entities' => [
+                ['id' => 1]
+            ],
+            'children' => [
+                ['id' => 1, 'parent_id' => 1],
+                ['id' => 2, 'parent_id' => 1],
+                ['id' => 3, 'parent_id' => 1],
+            ],
+        ]);
+    }
+
+    public function testPersistExisting()
+    {
+        $this->orm->enableLazyLoading(true);
+
+        $this->setDataInDb([
+            'entities' => [
+                ['id' => 1]
+            ],
+            'children' => [
+                ['id' => 1, 'parent_id' => 1],
+                ['id' => 2, 'parent_id' => 1],
+                ['id' => 3, 'parent_id' => 1],
+            ],
+        ]);
+
+        $this->repo->save($this->repo->get(1));
+
+        $this->assertDatabaseDataSameAs([
+            'entities' => [
+                ['id' => 1]
+            ],
+            'children' => [
+                ['id' => 1, 'parent_id' => 1],
+                ['id' => 2, 'parent_id' => 1],
+                ['id' => 3, 'parent_id' => 1],
+            ],
         ]);
     }
 

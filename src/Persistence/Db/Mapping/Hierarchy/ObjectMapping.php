@@ -486,7 +486,7 @@ abstract class ObjectMapping implements IObjectMapping
         array $objects,
         array &$objectProperties
     ) {
-        $isLazyLoadingEnabled = $this->definition->getOrm()->isLazyLoadingEnabled();
+        $isLazyLoadingEnabled = $this->definition->isLazyLoadingEnabled();
 
         foreach ($this->definition->getToOneRelationMappings() as $relationMapping) {
             $relation = $relationMapping->getRelation();
@@ -753,7 +753,7 @@ abstract class ObjectMapping implements IObjectMapping
         array $objectProperties
     ) {
         $definition           = $this->definition;
-        $isLazyLoadingEnabled = $definition->getOrm()->isLazyLoadingEnabled();
+        $isLazyLoadingEnabled = $definition->isLazyLoadingEnabled();
 
         foreach ($definition->getRelationMappingsWith($dependencyMode) as $relationMapping) {
             $relation = $relationMapping->getRelation();

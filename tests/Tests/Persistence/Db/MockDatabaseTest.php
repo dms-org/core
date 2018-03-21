@@ -179,7 +179,8 @@ class MockDatabaseTest extends CmsTestCase
                         $bar,
                         $bar->getStructure()->findColumn('foreign'),
                         $foo,
-                        $foo->getStructure()->findColumn('id')
+                        $foo->getStructure()->findColumn('id'),
+                        ForeignKeyMode::CASCADE
                 )
         ], $this->db->getTable('bar')->getForeignKeys());
     }

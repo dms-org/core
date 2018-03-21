@@ -168,7 +168,9 @@ class EmbeddedObjectRelation extends EmbeddedRelation implements IEmbeddedToOneR
             }
         }
 
-        $this->mapper->persistAllToRows($context, $children, $parentRows);
+        $this->disableLazyLoadingForRelations(function () use ($context, $children, $parentRows) {
+            $this->mapper->persistAllToRows($context, $children, $parentRows);
+        });
     }
 
     public function persistAfterParent(PersistenceContext $context, ParentChildMap $map)

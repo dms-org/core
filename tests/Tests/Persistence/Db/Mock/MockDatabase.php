@@ -4,6 +4,7 @@ namespace Dms\Core\Tests\Persistence\Db\Mock;
 
 use Dms\Core\Exception\InvalidArgumentException;
 use Dms\Core\Persistence\Db\Schema\Column;
+use Dms\Core\Persistence\Db\Schema\ForeignKeyMode;
 use Dms\Core\Persistence\Db\Schema\Table;
 
 /**
@@ -174,7 +175,8 @@ class MockDatabase
     {
         return $this->impliedTransaction(function () use ($query) {
             $results = $query->executeOn($this);
-            $this->validateConstraints();
+
+                $this->validateConstraints();
 
             return $results;
         });
@@ -250,7 +252,7 @@ class MockDatabase
                 : null;
     }
 
-    public function createForeignKey($mainColumnIdentifier, $referencedColumnIdentifier)
+    public function createForeignKey($mainColumnIdentifier, $referencedColumnIdentifier, string $deleteMode = ForeignKeyMode::CASCADE)
     {
         /** @var MockTable $mainTable */
         list($mainTable, $mainColumn) = $this->getTableAndColumn($mainColumnIdentifier);
@@ -264,8 +266,8 @@ class MockDatabase
             throw InvalidArgumentException::format('Cannot create foreign key: invalid identifier %s', $referencedColumnIdentifier);
         }
 
-        $this->impliedTransaction(function () use ($mainTable, $mainColumn, $referencedTable, $referencedColumn) {
-            $mainTable->addForeignKey($mainColumn, $referencedTable, $referencedColumn);
+        $this->impliedTransaction(function () use ($mainTable, $mainColumn, $referencedTable, $referencedColumn, $deleteMode) {
+            $mainTable->addForeignKey($mainColumn, $referencedTable, $referencedColumn, $deleteMode);
         });
     }
 

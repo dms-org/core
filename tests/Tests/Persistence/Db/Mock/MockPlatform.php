@@ -39,7 +39,7 @@ class MockPlatform extends Platform
     /**
      * @return string
      */
-    protected function dateFormatString() : string
+    protected function dateFormatString(): string
     {
         return 'Y-m-d';
     }
@@ -47,7 +47,7 @@ class MockPlatform extends Platform
     /**
      * @return string
      */
-    protected function dateTimeFormatString() : string
+    protected function dateTimeFormatString(): string
     {
         return 'Y-m-d H:i:s';
     }
@@ -55,7 +55,7 @@ class MockPlatform extends Platform
     /**
      * @return string
      */
-    protected function timeFormatString() : string
+    protected function timeFormatString(): string
     {
         return 'H:i:s';
     }
@@ -63,7 +63,7 @@ class MockPlatform extends Platform
     /**
      * @inheritDoc
      */
-    public function quoteIdentifier(string $value) : string
+    public function quoteIdentifier(string $value): string
     {
         return '!!' . $value . '!!';
     }
@@ -328,7 +328,7 @@ class MockPlatform extends Platform
     /**
      * @inheritDoc
      */
-    public function compileSelect(Select $query) : CompiledQuery
+    public function compileSelect(Select $query): CompiledQuery
     {
         $compiledQuery = function (MockDatabase $database, array $outerData = null) use ($query) {
             $rows = $this->loadFromTableRows($query, $database);
@@ -508,7 +508,7 @@ class MockPlatform extends Platform
     /**
      * @inheritDoc
      */
-    public function compileUpdate(Update $query) : CompiledQuery
+    public function compileUpdate(Update $query): CompiledQuery
     {
         $compiledQuery = function (MockDatabase $database) use ($query) {
             $allRows = $rows = $this->loadFromTableRows($query, $database);
@@ -554,7 +554,7 @@ class MockPlatform extends Platform
     /**
      * @inheritDoc
      */
-    public function compileDelete(Delete $query) : CompiledQuery
+    public function compileDelete(Delete $query): CompiledQuery
     {
         $compiledQuery = function (MockDatabase $database) use ($query) {
             $allRows = $rows = $this->loadFromTableRows($query, $database);
@@ -582,16 +582,51 @@ class MockPlatform extends Platform
 
             $database->getTable($query->getTableName())->setRows($newRows->asArray());
 
+            $this->deleteCascadingForeignKeys($database, $database->getTable($query->getTableName()), $idsToDelete);
+
             return $deletedRows;
         };
 
         return new PhpCompiledQuery($compiledQuery);
     }
 
+    protected function deleteCascadingForeignKeys(MockDatabase $database, MockTable $originalTable, array $idsToDelete)
+    {
+        foreach ($database->getTables() as $table) {
+            $foreignKeys = $table->getForeignKeysToTable($originalTable);
+
+            foreach ($foreignKeys as $foreignKey) {
+                $foreignKeyName = $foreignKey->getMainColumn()->getName();
+                $rows           = $table->getRows();
+                $newRows        = [];
+
+                if ($foreignKey->getDeleteMode() === ForeignKeyMode::CASCADE) {
+                    foreach ($rows as $row) {
+                        if (!isset($idsToDelete[$row[$foreignKeyName]])) {
+                            $newRows[] = $row;
+                        }
+                    }
+                }
+
+                if ($foreignKey->getDeleteMode() === ForeignKeyMode::SET_NULL) {
+                    foreach ($rows as $row) {
+                        if (isset($idsToDelete[$row[$foreignKeyName]])) {
+                            $row[$foreignKeyName] = null;
+                        }
+
+                        $newRows[] = $row;
+                    }
+                }
+
+                $table->setRows($newRows);
+            }
+        }
+    }
+
     /**
      * @inheritDoc
      */
-    public function compileResequenceOrderIndexColumn(ResequenceOrderIndexColumn $query) : CompiledQuery
+    public function compileResequenceOrderIndexColumn(ResequenceOrderIndexColumn $query): CompiledQuery
     {
         $compiledQuery = function (MockDatabase $database) use ($query) {
             $tableName  = $query->getTable()->getName();

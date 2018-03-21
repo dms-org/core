@@ -152,16 +152,16 @@ abstract class Relation implements IRelation
      *
      * @return mixed
      */
-    final protected function disableLazyLoadingFor(callable $callback)
+    final protected function disableLazyLoadingForRelations(callable $callback)
     {
-        $orm             = $this->mapper->getDefinition()->getOrm();
-        $originalSetting = $orm->isLazyLoadingEnabled();
+        $definition      = $this->mapper->getDefinition();
+        $originalSetting = $definition->getLazyLoadingOverride();
 
         try {
-            $orm->enableLazyLoading(false);
+            $definition->setLazyLoadingOverride(false);
             return $callback();
         } finally {
-            $orm->enableLazyLoading($originalSetting);
+            $definition->setLazyLoadingOverride($originalSetting);
         }
     }
 }

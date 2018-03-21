@@ -114,10 +114,16 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
      * @var callable
      */
     private $foreignKeysFactory;
+
     /**
      * @var array|\callable[]
      */
     private $customLoadMappingCallbacks;
+
+    /**
+     * @var bool|null
+     */
+    private $lazyLoadingOverride;
 
     /**
      * FinalizedMapperDefinition constructor.
@@ -779,5 +785,29 @@ class FinalizedMapperDefinition extends MapperDefinitionBase
         }
 
         throw InvalidOperationException::format('No columns mapped to property \'%s\'', $propertyName);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isLazyLoadingEnabled() : bool
+    {
+        return $this->lazyLoadingOverride ?? $this->orm->isLazyLoadingEnabled();
+    }
+
+    /**
+     * @return bool|null
+     */
+    public function getLazyLoadingOverride()
+    {
+        return $this->lazyLoadingOverride;
+    }
+
+    /**
+     * @param bool|null $lazyLoadingOverride
+     */
+    public function setLazyLoadingOverride(bool $lazyLoadingOverride = null)
+    {
+        $this->lazyLoadingOverride = $lazyLoadingOverride;
     }
 }
