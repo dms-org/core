@@ -12,7 +12,7 @@ class AndCondition extends CompositeCondition
     /**
      * @inheritdoc
      */
-    protected function makeArrayFilterCallable() : callable
+    protected function makeArrayFilterCallable(): callable
     {
         $conditions = $this->getConditions();
         /** @var Condition $firstCondition */

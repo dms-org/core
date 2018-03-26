@@ -117,6 +117,11 @@ class MapperDefinition extends MapperDefinitionBase
     protected $foreignKeyFactories = [];
 
     /**
+     * @var int
+     */
+    protected $relationCount = 0;
+
+    /**
      * @var Index[]
      */
     protected $indexes = [];
@@ -707,6 +712,11 @@ class MapperDefinition extends MapperDefinitionBase
         return ($this->parent ? $this->parent->getAllMappedProperties() : []) + $this->mappedProperties;
     }
 
+    protected function getRootDefinition(): MapperDefinition
+    {
+        return $this->parent ? $this->parent->getRootDefinition() : $this;
+    }
+
     /**
      * @param string|null $tableName
      *
@@ -725,7 +735,6 @@ class MapperDefinition extends MapperDefinitionBase
             $propertyName = $property->getName();
 
             if ($this->verifyAllPropertiesMapped && !isset($allMappedProperties[$propertyName])) {
-
                 throw IncompleteMapperDefinitionException::format(
                     'Invalid mapper definition for %s: unmapped property \'%s\' of type %s, call $map->ignoreUnmappedProperties() to ignore this warning',
                     $this->class->getClassName(),
@@ -747,8 +756,8 @@ class MapperDefinition extends MapperDefinitionBase
             $tableName  = $parentMapper->getDefinition()->getTable()->getName();
 
             $relations = [];
-            foreach ($this->relationFactories as $uniqueKey => $factory) {
-                $relationId  = implode(':', [$objectType, $tableName, $uniqueKey]);
+            foreach ($this->relationFactories as $factory) {
+                $relationId  = implode(':', [$objectType, $tableName, $this->getRootDefinition()->relationCount++]);
                 $relations[] = $factory($relationId, $table, $parentMapper);
             }
 
