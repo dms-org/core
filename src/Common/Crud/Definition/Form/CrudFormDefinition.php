@@ -105,6 +105,11 @@ class CrudFormDefinition
     protected $currentEditedObjectType;
 
     /**
+     * @var array
+     */
+    protected $metadata = [];
+
+    /**
      * CrudFormDefinition constructor.
      *
      * @param IIdentifiableObjectSet   $dataSource
@@ -578,6 +583,18 @@ class CrudFormDefinition
     }
 
     /**
+     * Adds the supplied metadata to the package.
+     *
+     * @param array $metadata
+     *
+     * @return void
+     */
+    public function metadata(array $metadata)
+    {
+        $this->metadata = $metadata + $this->metadata;
+    }
+
+    /**
      * @return FinalizedCrudFormDefinition
      * @throws InvalidArgumentException
      */
@@ -603,7 +620,8 @@ class CrudFormDefinition
             $this->createObjectCallback,
             $this->beforeSubmitCallbacks,
             $this->onSubmitCallbacks,
-            $this->onSaveCallbacks
+            $this->onSaveCallbacks,
+            $this->metadata
         );
     }
 }

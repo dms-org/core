@@ -77,7 +77,7 @@ class CreateAction extends SelfHandlingParameterizedAction
      */
     protected function metadata() : array
     {
-        return [
+        return $this->form->getMetadata() + [
             'submit-button-text' => 'Save'
         ];
     }

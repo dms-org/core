@@ -1,4 +1,4 @@
-<?php declare(strict_types = 1);
+<?php declare(strict_types=1);
 
 namespace Dms\Core\Common\Crud\Definition\Form;
 
@@ -45,6 +45,11 @@ class FinalizedCrudFormDefinition
     protected $onSaveCallbacks;
 
     /**
+     * @var array
+     */
+    protected $metadata;
+
+    /**
      * FinalizedCrudFormDefinition constructor.
      *
      * @param string        $mode
@@ -53,6 +58,7 @@ class FinalizedCrudFormDefinition
      * @param callable[]    $beforeSubmitCallbacks
      * @param callable[]    $onSubmitCallbacks
      * @param callable[]    $onSaveCallbacks
+     * @param array         $metadata
      */
     public function __construct(
         string $mode,
@@ -60,7 +66,8 @@ class FinalizedCrudFormDefinition
         callable $createObjectCallback = null,
         array $beforeSubmitCallbacks,
         array $onSubmitCallbacks,
-        array $onSaveCallbacks
+        array $onSaveCallbacks,
+        array $metadata
     ) {
         InvalidArgumentException::verify(
             $createObjectCallback || $mode !== CrudFormDefinition::MODE_CREATE,
@@ -72,6 +79,7 @@ class FinalizedCrudFormDefinition
         $this->beforeSubmitCallbacks = $beforeSubmitCallbacks;
         $this->onSubmitCallbacks     = $onSubmitCallbacks;
         $this->onSaveCallbacks       = $onSaveCallbacks;
+        $this->metadata              = $metadata;
     }
 
     /**
@@ -189,5 +197,13 @@ class FinalizedCrudFormDefinition
         foreach ($this->onSaveCallbacks as $callback) {
             $callback($object, $input);
         }
+    }
+
+    /**
+     * @return array
+     */
+    public function getMetadata(): array
+    {
+        return $this->metadata;
     }
 }

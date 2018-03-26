@@ -1,8 +1,7 @@
-<?php declare(strict_types = 1);
+<?php declare(strict_types=1);
 
 namespace Dms\Core\Common\Crud\Action\Crud;
 
-use Dms\Core\Auth\IAuthSystem;
 use Dms\Core\Auth\IAuthSystemInPackageContext;
 use Dms\Core\Auth\IPermission;
 use Dms\Core\Auth\Permission;
@@ -11,7 +10,6 @@ use Dms\Core\Common\Crud\Action\Object\Mapping\ArrayObjectActionFormMapping;
 use Dms\Core\Common\Crud\Action\Object\SelfHandlingObjectAction;
 use Dms\Core\Common\Crud\Definition\Form\FinalizedCrudFormDefinition;
 use Dms\Core\Common\Crud\ICrudModule;
-use Dms\Core\Model\IEntity;
 use Dms\Core\Model\IMutableObjectSet;
 use Dms\Core\Model\ITypedObject;
 use Dms\Core\Model\IValueObject;
@@ -42,8 +40,7 @@ class EditAction extends SelfHandlingObjectAction
         IMutableObjectSet $dataSource,
         IAuthSystemInPackageContext $auth,
         FinalizedCrudFormDefinition $form
-    )
-    {
+    ) {
         $this->dataSource = $dataSource;
         $this->form       = $form;
 
@@ -56,7 +53,7 @@ class EditAction extends SelfHandlingObjectAction
      *
      * @return string
      */
-    protected function name() : string
+    protected function name(): string
     {
         return ICrudModule::EDIT_ACTION;
     }
@@ -66,7 +63,7 @@ class EditAction extends SelfHandlingObjectAction
      *
      * @return IPermission[]
      */
-    protected function permissions() : array
+    protected function permissions(): array
     {
         return [
             Permission::named(ICrudModule::VIEW_PERMISSION),
@@ -79,10 +76,10 @@ class EditAction extends SelfHandlingObjectAction
      *
      * @return array
      */
-    protected function metadata() : array
+    protected function metadata(): array
     {
-        return [
-            'submit-button-text' => 'Save'
+        return $this->form->getMetadata() + [
+            'submit-button-text' => 'Save',
         ];
     }
 
@@ -91,7 +88,7 @@ class EditAction extends SelfHandlingObjectAction
      *
      * @return IObjectActionFormMapping
      */
-    protected function formMapping() : IObjectActionFormMapping
+    protected function formMapping(): IObjectActionFormMapping
     {
         return new ArrayObjectActionFormMapping(
             $this->form->getStagedForm()
@@ -113,7 +110,7 @@ class EditAction extends SelfHandlingObjectAction
      *
      * @return string
      */
-    protected function objectType() : string
+    protected function objectType(): string
     {
         return $this->dataSource->getObjectType();
     }

@@ -76,6 +76,14 @@ class ViewDetailsAction extends SelfHandlingObjectAction
     }
 
     /**
+     * @return array
+     */
+    protected function metadata(): array
+    {
+        return $this->form->getMetadata();
+    }
+
+    /**
      * Gets the action form mapping.
      *
      * @return IObjectActionFormMapping
