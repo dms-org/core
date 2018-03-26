@@ -23,7 +23,8 @@ class AndCondition extends CompositeCondition
             $innerFilter = $condition->getArrayFilterCallable();
 
             $filter = function (array $objects) use ($innerFilter, $filter) {
-                return array_intersect_key($innerFilter($objects), $filter($objects));
+                $filteredObjects = $filter($objects);
+                return array_intersect_key($filteredObjects, $innerFilter($filteredObjects));
             };
         }
 
