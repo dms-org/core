@@ -124,7 +124,7 @@ abstract class FieldType implements IFieldType
         }
 
         if ($isReadonly) {
-            $processors[] = new DefaultValueProcessor($this->processedType, $this->get(self::ATTR_INITIAL_VALUE));
+            $processors[] = new DefaultValueProcessor($currentProcessedType, $this->get(self::ATTR_INITIAL_VALUE));
         }
 
         if ($isReadonly) {
