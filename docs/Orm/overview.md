@@ -21,4 +21,4 @@ up all the relationships where necessary.
 
 Some complete and tested examples can be found in the [test fixtures][orm-fixtures].
 
-[orm-fixtures]: /Tests/Tests/Persistence/Db/Integration/Domains/Fixtures/
+[orm-fixtures]: https://github.com/dms-org/core/tree/master/tests/Tests/Persistence/Db/Integration/Domains/Fixtures
