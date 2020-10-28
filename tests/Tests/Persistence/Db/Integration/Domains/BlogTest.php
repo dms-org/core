@@ -86,7 +86,7 @@ class BlogTest extends DbIntegrationTest
         return TestUser::class;
     }
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->userMapper = $this->mapper;

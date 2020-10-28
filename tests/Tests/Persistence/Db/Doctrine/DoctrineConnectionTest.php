@@ -31,7 +31,7 @@ class DoctrineConnectionTest extends DoctrineTestBase
      */
     protected $connection;
 
-    public function setUp()
+    public function setUp(): void
     {
         try {
             $this->connection = new DoctrineConnection(DriverManager::getConnection([

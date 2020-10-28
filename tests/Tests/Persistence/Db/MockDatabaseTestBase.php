@@ -19,7 +19,7 @@ class MockDatabaseTestBase extends CmsTestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->db = new MockDatabase();
     }

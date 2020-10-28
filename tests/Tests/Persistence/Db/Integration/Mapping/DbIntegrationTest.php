@@ -47,7 +47,7 @@ abstract class DbIntegrationTest extends MockDatabaseTestBase
      */
     protected $mapper;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->db     = new MockDatabase();
         $this->orm    = $this->loadOrm();

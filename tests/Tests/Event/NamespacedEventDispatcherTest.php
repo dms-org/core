@@ -21,7 +21,7 @@ class NamespacedEventDispatcherTest extends CmsTestCase
      */
     protected $innerEventDispatcher;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->innerEventDispatcher = $this->getMockForAbstractClass(IEventDispatcher::class);
         $this->dispatcher           = new NamespacedEventDispatcher('namespace.', $this->innerEventDispatcher);

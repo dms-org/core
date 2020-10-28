@@ -15,7 +15,7 @@ class ArrayRepositoryTest extends IEntitySetTest
      */
     protected $collection;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

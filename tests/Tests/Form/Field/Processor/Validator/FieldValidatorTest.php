@@ -18,7 +18,7 @@ abstract class FieldValidatorTest extends CmsTestCase
      */
     protected $validator;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->validator = $this->validator();
     }

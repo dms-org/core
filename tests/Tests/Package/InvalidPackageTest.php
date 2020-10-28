@@ -19,7 +19,7 @@ class InvalidPackageTest extends CmsTestCase
      */
     protected $package;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->package = new InvalidModuleClassPackage(new MockingIocContainer($this));
     }

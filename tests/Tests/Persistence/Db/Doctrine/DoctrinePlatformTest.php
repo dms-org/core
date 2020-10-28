@@ -27,7 +27,7 @@ class DoctrinePlatformTest extends DoctrineTestBase
      */
     protected $platform;
 
-    public function setUp()
+    public function setUp(): void
     {
         // Use mysql as a test platform
         $platform = new MySqlPlatform();

@@ -35,7 +35,7 @@ class HybridTableInheritanceTest extends DbIntegrationTest
         return CustomOrm::from([TestSuperclassEntity::class => TestHybridTableInheritanceMapper::class]);
     }
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->parentEntities = $this->getSchemaTable('parent_entities');

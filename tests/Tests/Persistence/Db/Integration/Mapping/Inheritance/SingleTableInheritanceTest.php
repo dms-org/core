@@ -35,7 +35,7 @@ class SingleTableInheritanceTest extends DbIntegrationTest
         return CustomOrm::from([TestSuperclassEntity::class => TestSingleTableInheritanceMapper::class]);
     }
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->entities = $this->getSchemaTable('entities');

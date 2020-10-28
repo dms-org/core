@@ -32,7 +32,7 @@ class RowCriteriaTest extends CmsTestCase
      */
     protected $criteria;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->structure = $this->makeStructure();
         $this->criteria  = new RowCriteria($this->structure);

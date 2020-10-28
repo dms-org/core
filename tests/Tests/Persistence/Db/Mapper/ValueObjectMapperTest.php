@@ -20,7 +20,7 @@ abstract class ValueObjectMapperTest extends CmsTestCase
      */
     protected $mapper;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->mapper = $this->buildMapper();
     }

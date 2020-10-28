@@ -36,7 +36,7 @@ class CriteriaMapperTest extends CmsTestCase
      */
     protected $tableDataSource;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $tableDataSource = new ArrayTableDataSource(
                 Table::create([

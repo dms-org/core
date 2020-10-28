@@ -16,7 +16,7 @@ use Dms\Core\Tests\Persistence\Db\Integration\Mapping\Fixtures\Constraints\Const
  */
 class ConstraintsEntityMapperTest extends DbIntegrationTest
 {
-    public function setUp()
+    public function setUp(): void
     {
         $this->mapper = $this->loadOrm()->getEntityMapper(ConstrainedEntity::class);
     }

@@ -47,7 +47,7 @@ abstract class FieldAccessorTest extends CmsTestCase
      */
     abstract protected function buildFieldAccessor($objectType) : IFieldAccessor;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->field      = $this->buildField();
         $this->objectType = $this->getObjectType();

@@ -34,18 +34,18 @@ abstract class CriteriaMapperTestBase extends CmsTestCase
      */
     protected $tables;
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         self::$selectComparator = new IgnorePropertyComparator(Select::class, ['outerSelectAliases']);
         Factory::getInstance()->register(self::$selectComparator);
     }
 
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         Factory::getInstance()->unregister(self::$selectComparator);
     }
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->mapper = $this->buildMapper();
 

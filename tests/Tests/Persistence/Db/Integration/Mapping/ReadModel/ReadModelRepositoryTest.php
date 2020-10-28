@@ -25,7 +25,7 @@ abstract class ReadModelRepositoryTest extends DbIntegrationTest
      */
     protected $mapper;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->db         = new MockDatabase();
         $this->connection = new MockConnection($this->db);

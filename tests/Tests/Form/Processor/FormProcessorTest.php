@@ -37,7 +37,7 @@ abstract class FormProcessorTest extends CmsTestCase
      */
     abstract public function fieldNameMap();
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->processor = $this->processor();
     }

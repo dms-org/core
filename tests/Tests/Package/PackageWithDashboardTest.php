@@ -17,7 +17,7 @@ class PackageWithDashboardTest extends CmsTestCase
      */
     protected $package;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->package = new TestPackageWithDashboard(new MockingIocContainer($this));
     }

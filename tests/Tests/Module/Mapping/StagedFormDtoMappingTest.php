@@ -25,7 +25,7 @@ abstract class StagedFormDtoMappingTest extends CmsTestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->mapping = $this->mapping();
     }

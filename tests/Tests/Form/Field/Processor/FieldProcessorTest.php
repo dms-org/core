@@ -37,7 +37,7 @@ abstract class FieldProcessorTest extends CmsTestCase
      */
     abstract protected function processedType();
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->processor = $this->processor();
     }

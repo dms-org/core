@@ -10,7 +10,7 @@ use Dms\Core\Tests\Bootstrap;
  */
 abstract class DoctrineTestBase extends CmsTestCase
 {
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         Bootstrap::getComposer()->add('Doctrine\\Tests\\Mocks\\', Bootstrap::getVendorPath() . '/doctrine/dbal/tests/');
     }

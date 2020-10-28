@@ -16,7 +16,7 @@ use Dms\Core\Tests\Persistence\Db\Integration\Mapping\Fixtures\ValueObjectCollec
  */
 class ValueObjectCollectionWithEntityRelationTest extends DbIntegrationTest
 {
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
     }

@@ -20,7 +20,7 @@ class EntityCrudModuleFieldTest extends FieldBuilderTestBase
      */
     protected $module;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->module = new SimpleCrudModule(SimpleEntity::collection([
             new SimpleEntity(1, 'abc'),

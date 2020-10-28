@@ -20,7 +20,7 @@ abstract class OrmTestBase extends CmsTestCase
      */
     abstract protected function loadOrm();
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->orm = $this->loadOrm();
     }

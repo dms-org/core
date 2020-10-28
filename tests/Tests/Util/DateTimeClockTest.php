@@ -15,7 +15,7 @@ class DateTimeClockTest extends CmsTestCase
      */
     protected $clock;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->clock = new DateTimeClock();
     }

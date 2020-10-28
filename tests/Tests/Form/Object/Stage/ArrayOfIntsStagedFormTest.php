@@ -18,7 +18,7 @@ class ArrayOfIntsStagedFormTest extends CmsTestCase
      */
     protected $form;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->form = new ArrayOfIntsStagedForm();
     }

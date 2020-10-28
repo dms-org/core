@@ -24,7 +24,7 @@ class CmsTest extends CmsTestCase
      */
     protected $cms;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->cms = new TestCms(new MockingIocContainer($this));
 

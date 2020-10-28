@@ -33,7 +33,7 @@ class DoctrineExpressionCompilerTest extends DoctrineTestBase
      */
     protected $compiler;
 
-    public function setUp()
+    public function setUp(): void
     {
         // Use mysql as a test platform
         $platform = new MySqlPlatform();

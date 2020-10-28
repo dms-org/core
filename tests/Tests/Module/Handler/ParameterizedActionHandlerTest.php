@@ -24,7 +24,7 @@ abstract class ParameterizedActionHandlerTest extends CmsTestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->handler = $this->handler();
     }

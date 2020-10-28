@@ -20,7 +20,7 @@ class ObjectCollectionTest extends CmsTestCase
      */
     protected $collection;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->collection = BlankTypedObject::collection();
     }

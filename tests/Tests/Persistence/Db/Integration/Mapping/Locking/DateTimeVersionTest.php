@@ -28,7 +28,7 @@ class DateTimeVersionTest extends DbIntegrationTest
         return DateTimeVersionedEntityMapper::orm();
     }
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

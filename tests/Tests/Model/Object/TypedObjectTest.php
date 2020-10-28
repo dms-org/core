@@ -20,7 +20,7 @@ abstract class TypedObjectTest extends CmsTestCase
      */
     protected abstract function buildObject();
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->object = $this->buildObject();
     }

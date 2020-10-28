@@ -34,7 +34,7 @@ class ValueObjectCollectionTest extends DbIntegrationTest
      */
     protected $emails;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->entities = $this->db->getTable('entities')->getStructure();

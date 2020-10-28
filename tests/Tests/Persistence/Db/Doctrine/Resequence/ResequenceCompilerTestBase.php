@@ -36,7 +36,7 @@ abstract class ResequenceCompilerTestBase extends DoctrineTestBase
      */
     abstract protected function buildCompiler(DoctrinePlatform $platform);
 
-    public function setUp()
+    public function setUp(): void
     {
         $platform = $this->buildDoctrinePlatform();
 

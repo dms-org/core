@@ -28,7 +28,7 @@ class MultiVersionTest extends DbIntegrationTest
         return MultiVersionedEntityMapper::orm();
     }
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

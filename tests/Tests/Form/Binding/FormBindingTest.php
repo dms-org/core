@@ -31,7 +31,7 @@ class FormBindingTest extends CmsTestCase
      */
     protected $binding;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->form = Form::create()
             ->section('Input', [

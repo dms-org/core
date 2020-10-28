@@ -23,7 +23,7 @@ abstract class ActionHandlerTest extends CmsTestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->handler = $this->handler();
     }

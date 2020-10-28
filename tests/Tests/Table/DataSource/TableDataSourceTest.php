@@ -38,7 +38,7 @@ abstract class TableDataSourceTest extends CmsTestCase
      */
     abstract protected function buildDataSource(ITableStructure $structure);
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->structure  = $this->buildStructure();
         $this->dataSource = $this->buildDataSource($this->structure);

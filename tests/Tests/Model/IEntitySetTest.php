@@ -31,7 +31,7 @@ abstract class IEntitySetTest extends CmsTestCase
         return new TestEntity($id, '', $id % 2 === 0 ? new SubObject('foo') : null);
     }
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->collection = new EntityCollection(TestEntity::class, [
                 $this->entityMock(1),

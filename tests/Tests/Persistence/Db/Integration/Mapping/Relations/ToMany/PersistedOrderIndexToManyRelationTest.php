@@ -36,7 +36,7 @@ class PersistedOrderIndexToManyRelationTest extends ToManyRelationTestBase
         return ParentWithChildOrderPersistenceColumnEntityMapper::orm();
     }
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

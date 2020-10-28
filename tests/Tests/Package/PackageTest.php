@@ -33,7 +33,7 @@ class PackageTest extends CmsTestCase
      */
     protected $eventDispatcher;
 
-    public function setUp()
+    public function setUp(): void
     {
         $iocContainer  = new MockingIocContainer($this);
 

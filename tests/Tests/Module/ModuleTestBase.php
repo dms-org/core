@@ -42,7 +42,7 @@ abstract class ModuleTestBase extends CmsTestCase
      */
     protected $module;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->authSystem      = new MockAuthSystem($this->getMockForAbstractClass(IAdmin::class), $this, 'some-package');
         $this->iocContainer    = $this->authSystem->getIocContainer();

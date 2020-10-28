@@ -17,7 +17,7 @@ abstract class LoadCriteriaMapperTestBase extends CriteriaMapperTestBase
      */
     protected $loadMapper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->loadMapper = new LoadCriteriaMapper($this->mapper);

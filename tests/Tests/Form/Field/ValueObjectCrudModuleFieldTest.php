@@ -20,7 +20,7 @@ class ValueObjectCrudModuleFieldTest extends FieldBuilderTestBase
      */
     protected $module;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->module = new SimpleValueObjectCrudModule(SimpleValueObject::collection([
             new SimpleValueObject('abc'),

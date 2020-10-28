@@ -32,7 +32,7 @@ class TypeTest extends CmsTestCase
 {
     private static $comparator;
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         // Ignore validOperatorTypes as it is simply a cache
         // of the operator types and will be set only if getter
@@ -41,7 +41,7 @@ class TypeTest extends CmsTestCase
         Factory::getInstance()->register(self::$comparator);
     }
 
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         Factory::getInstance()->unregister(self::$comparator);
     }
