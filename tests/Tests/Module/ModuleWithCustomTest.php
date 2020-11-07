@@ -17,17 +17,17 @@ use Dms\Core\Tests\Module\Mock\MockAuthSystem;
 class ModuleWithCustomTest extends ModuleTestBase
 {
     /**
-     * @var IAction|\PHPUnit_Framework_MockObject_MockObject
+     * @var IAction|\PHPUnit\Framework\MockObject\MockObject
      */
     private $mockAction;
 
     /**
-     * @var ITableDisplay|\PHPUnit_Framework_MockObject_MockObject
+     * @var ITableDisplay|\PHPUnit\Framework\MockObject\MockObject
      */
     private $mockTable;
 
     /**
-     * @var IChartDisplay|\PHPUnit_Framework_MockObject_MockObject
+     * @var IChartDisplay|\PHPUnit\Framework\MockObject\MockObject
      */
     private $mockChart;
 

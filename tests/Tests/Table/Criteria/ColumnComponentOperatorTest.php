@@ -29,7 +29,7 @@ class ColumnComponentOperatorTest extends CmsTestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|IField
+     * @return \PHPUnit\Framework\MockObject\MockObject|IField
      */
     private function mockField()
     {

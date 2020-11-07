@@ -19,7 +19,7 @@ class ObjectArrayLoaderProcessorTest extends FieldProcessorTest
      */
     protected function processor()
     {
-        /** @var \PHPUnit_Framework_MockObject_MockObject|IIdentifiableObjectSet $entitiesMock */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|IIdentifiableObjectSet $entitiesMock */
         $entitiesMock = $this->getMockForAbstractClass(IIdentifiableObjectSet::class);
 
         $entitiesMock->expects($this->any())
@@ -95,7 +95,7 @@ class ObjectArrayLoaderProcessorTest extends FieldProcessorTest
 
     protected function entityMock($id)
     {
-        /** @var \PHPUnit_Framework_MockObject_MockObject|IEntity $entityMock */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|IEntity $entityMock */
         $entityMock = $this->getMockForAbstractClass(IEntity::class);
 
         $entityMock->expects($this->any())

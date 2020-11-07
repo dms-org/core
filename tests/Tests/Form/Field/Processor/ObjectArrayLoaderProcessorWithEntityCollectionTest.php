@@ -67,7 +67,7 @@ class ObjectArrayLoaderProcessorWithEntityCollectionTest extends FieldProcessorT
 
     protected function entityMock($id)
     {
-        /** @var \PHPUnit_Framework_MockObject_MockObject|Entity $entityMock */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|Entity $entityMock */
         $entityMock = $this->createMock(Entity::class);
 
         $entityMock->setId($id);

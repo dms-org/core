@@ -40,7 +40,7 @@ class ConditionOperatorTest extends CmsTestCase
 {
     public function testGetAll()
     {
-        $this->assertInternalType('array', ConditionOperator::getAll());
+        $this->assertIsArray(ConditionOperator::getAll());
         $this->assertContainsOnly('string', ConditionOperator::getAll());
         $this->assertCount(count((new \ReflectionClass(ConditionOperator::class))->getConstants()), ConditionOperator::getAll());
     }

@@ -48,7 +48,7 @@ abstract class StagedFormDtoMappingTest extends CmsTestCase
 
     public function testDtoType()
     {
-        $this->assertInternalType('string', $this->mapping->getDtoType());
+        $this->assertIsString($this->mapping->getDtoType());
         $this->assertSame($this->expectedDtoType(), $this->mapping->getDtoType());
     }
 

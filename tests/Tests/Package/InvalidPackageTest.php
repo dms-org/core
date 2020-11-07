@@ -30,7 +30,7 @@ class InvalidPackageTest extends CmsTestCase
             $this->package->loadModule('invalid-module-class');
         }, InvalidArgumentException::class);
 
-        $this->assertContains(TestDto::class, $e->getMessage());
+        $this->assertStringContainsString(TestDto::class, $e->getMessage());
     }
 
     public function testInvalidModuleName()
@@ -39,7 +39,7 @@ class InvalidPackageTest extends CmsTestCase
             $this->package->loadModule('invalid-module-name');
         }, InvalidArgumentException::class);
 
-        $this->assertContains('invalid-module-name', $e->getMessage());
-        $this->assertContains('test-module-with-actions', $e->getMessage());
+        $this->assertStringContainsString('invalid-module-name', $e->getMessage());
+        $this->assertStringContainsString('test-module-with-actions', $e->getMessage());
     }
 }

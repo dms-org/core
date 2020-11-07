@@ -18,7 +18,7 @@ class ObjectIdValidatorTest extends FieldValidatorTest
      */
     protected function validator()
     {
-        /** @var \PHPUnit_Framework_MockObject_MockObject|IIdentifiableObjectSet $entitiesMock */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|IIdentifiableObjectSet $entitiesMock */
         $entitiesMock = $this->getMockForAbstractClass(IIdentifiableObjectSet::class);
         $entitiesMock->expects($this->any())
             ->method('getObjectType')

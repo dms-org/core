@@ -98,7 +98,7 @@ class TableRowTest extends CmsTestCase
     /**
      * @param $name
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject|IColumn
+     * @return \PHPUnit\Framework\MockObject\MockObject|IColumn
      */
     protected function mockColumn($name)
     {
@@ -111,7 +111,7 @@ class TableRowTest extends CmsTestCase
     /**
      * @param $name
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject|IColumnComponent
+     * @return \PHPUnit\Framework\MockObject\MockObject|IColumnComponent
      */
     protected function mockComponent($name)
     {

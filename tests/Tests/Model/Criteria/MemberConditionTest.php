@@ -34,7 +34,7 @@ class MemberConditionTest extends CmsTestCase
         $condition = new MemberCondition($this->member(), '=', 'foo');
 
         $callable = $condition->getFilterCallable();
-        $this->assertInternalType('callable', $callable);
+        $this->assertIsCallable($callable);
         $this->assertFalse($callable(new TestEntity(null, 'abc')));
         $this->assertFalse($callable(new TestEntity(null, 'FOO')));
         $this->assertTrue($callable(new TestEntity(null, 'foo')));

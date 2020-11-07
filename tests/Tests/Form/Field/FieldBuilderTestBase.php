@@ -59,7 +59,7 @@ abstract class FieldBuilderTestBase extends CmsTestCase
      */
     protected function assertHasProcessor(IFieldProcessor $processor, IField $field)
     {
-        $this->assertContains($processor, $field->getProcessors(), '', false, false); // ==
+        $this->assertContainsEquals($processor, $field->getProcessors(), '');
     }
 
     /**

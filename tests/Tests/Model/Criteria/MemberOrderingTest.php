@@ -32,7 +32,7 @@ class MemberOrderingTest extends CmsTestCase
         $ordering = new MemberOrdering($this->member(), OrderingDirection::ASC);
 
         $callable = $ordering->getArrayOrderCallable();
-        $this->assertInternalType('callable', $callable);
+        $this->assertIsCallable($callable);
         $this->assertSame([1 => 'abc'], $callable([1 => new TestEntity(null, 'abc')]));
         $this->assertSame([3 => 'FOO'], $callable([3 => new TestEntity(null, 'FOO')]));
     }

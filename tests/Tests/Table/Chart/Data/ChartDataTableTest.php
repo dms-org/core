@@ -13,7 +13,7 @@ class ChartDataTableTest extends CmsTestCase
 {
     public function testNew()
     {
-        /** @var IChartStructure|\PHPUnit_Framework_MockObject_MockObject $structure */
+        /** @var IChartStructure|\PHPUnit\Framework\MockObject\MockObject $structure */
         $structure = $this->getMockForAbstractClass(IChartStructure::class);
         $data      = new ChartDataTable($structure, [
                 ['x' => ['x' => 1]],

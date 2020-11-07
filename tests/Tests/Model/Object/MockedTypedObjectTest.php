@@ -3,6 +3,7 @@
 namespace Dms\Core\Tests\Model\Object;
 
 use Dms\Core\Tests\Model\Object\Fixtures\BlankTypedObject;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>
@@ -25,6 +26,6 @@ class MockedTypedObjectTest extends TypedObjectTest
     public function testLoads()
     {
         $this->assertInstanceOf(BlankTypedObject::class, $this->object);
-        $this->assertInstanceOf(\PHPUnit_Framework_MockObject_MockObject::class, $this->object);
+        $this->assertInstanceOf(MockObject::class, $this->object);
     }
 }

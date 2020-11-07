@@ -32,7 +32,7 @@ abstract class ActionTest extends CmsTestCase
     /**
      * @param IPermission[] $permissions
      *
-     * @return IAuthSystem|\PHPUnit_Framework_MockObject_MockObject
+     * @return IAuthSystem|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function mockAuthWithExpectedVerifyCall(array $permissions)
     {
@@ -51,7 +51,7 @@ abstract class ActionTest extends CmsTestCase
     }
 
     /**
-     * @return IAuthSystemInPackageContext|\PHPUnit_Framework_MockObject_MockObject
+     * @return IAuthSystemInPackageContext|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function mockAuth()
     {

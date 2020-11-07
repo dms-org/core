@@ -34,20 +34,20 @@ abstract class IEntitySetTest extends CmsTestCase
     public function setUp(): void
     {
         $this->collection = new EntityCollection(TestEntity::class, [
-                $this->entityMock(1),
-                $this->entityMock(5),
-                $this->entityMock(10),
-                $this->entityMock(11),
-                $this->entityMock(12),
+            $this->entityMock(1),
+            $this->entityMock(5),
+            $this->entityMock(10),
+            $this->entityMock(11),
+            $this->entityMock(12),
         ]);
     }
 
     public function testCanAddEntitiesThroughConstructor()
     {
         new EntityCollection(TestEntity::class, [
-                $this->entityMock(1),
-                $this->entityMock(2),
-                $this->entityMock(3),
+            $this->entityMock(1),
+            $this->entityMock(2),
+            $this->entityMock(3),
         ]);
     }
 
@@ -56,9 +56,9 @@ abstract class IEntitySetTest extends CmsTestCase
         $this->expectException(InvalidArgumentException::class);
 
         new EntityCollection(\DateTime::class, [
-                $this->entityMock(1),
-                new \stdClass(),
-                $this->entityMock(2),
+            $this->entityMock(1),
+            new \stdClass(),
+            $this->entityMock(2),
         ]);
     }
 
@@ -80,7 +80,7 @@ abstract class IEntitySetTest extends CmsTestCase
     {
         $entities = $this->collection->getAll();
 
-        $this->assertInternalType('array', $entities);
+        $this->assertIsArray($entities);
         $this->assertContainsOnlyInstancesOf(TestEntity::class, $entities);
         $this->assertEquals([1, 5, 10, 11, 12], $this->getEntityIds($entities));
     }
@@ -150,7 +150,7 @@ abstract class IEntitySetTest extends CmsTestCase
     public function testTryGetAllReturnsAllTheEntitiesWithTheIds()
     {
         $entities = $this->collection->tryGetAll([1, 10, 43, 12]);
-        $this->assertInternalType('array', $entities);
+        $this->assertIsArray($entities);
         $this->assertSame([1, 10, 12], $this->getEntityIds($entities));
     }
 
@@ -183,7 +183,7 @@ abstract class IEntitySetTest extends CmsTestCase
         $criteria = $this->collection->criteria();
 
         $criteria->where('id', '>=', 5)
-                ->whereInstanceOf(TestEntity::class);
+            ->whereInstanceOf(TestEntity::class);
 
         $this->assertSame([5, 10, 11, 12], $this->getEntityIds($this->collection->matching($criteria)));
     }
@@ -193,7 +193,7 @@ abstract class IEntitySetTest extends CmsTestCase
         $criteria = $this->collection->criteria();
 
         $criteria->where('id', '>=', 5)
-                ->whereInstanceOf(TestEntity::class);
+            ->whereInstanceOf(TestEntity::class);
 
         $this->assertSame(4, $this->collection->countMatching($criteria));
     }
@@ -238,7 +238,7 @@ abstract class IEntitySetTest extends CmsTestCase
     {
         $spec = new MockSpecification(TestEntity::class, function (SpecificationDefinition $match) {
             $match->where('id', '>=', 5)
-                    ->whereInstanceOf(TestEntity::class);
+                ->whereInstanceOf(TestEntity::class);
         });
 
         $this->assertSame([5, 10, 11, 12], $this->getEntityIds($this->collection->satisfying($spec)));

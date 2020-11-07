@@ -19,7 +19,7 @@ abstract class FormBuilderTestBase extends CmsTestCase
      */
     protected function assertProcesses(array $input, IForm $form)
     {
-        $this->assertInternalType('array', $form->process($input));
+        $this->assertIsArray($form->process($input));
     }
 
     /**

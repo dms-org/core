@@ -20,7 +20,7 @@ class ResequenceCompilerFactoryTest extends CmsTestCase
     /**
      * @param AbstractPlatform $doctrinePlatform
      *
-     * @return DoctrinePlatform|\PHPUnit_Framework_MockObject_MockObject
+     * @return DoctrinePlatform|\PHPUnit\Framework\MockObject\MockObject
      */
     public function mockPlatform(AbstractPlatform $doctrinePlatform)
     {

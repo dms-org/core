@@ -22,7 +22,7 @@ class MemberPropertyExpressionTest extends CmsTestCase
         $this->assertSame('prop', $member->asString());
 
         $getter = $member->createArrayGetterCallable();
-        $this->assertInternalType('callable', $getter);
+        $this->assertIsCallable($getter);
         $this->assertSame(TestEntity::class, (new \ReflectionFunction($getter))->getClosureScopeClass()->getName());
 
         $this->assertSame([1 => 'abc'], $getter([1 => new TestEntity(null, 'abc')]));
@@ -38,7 +38,7 @@ class MemberPropertyExpressionTest extends CmsTestCase
         $this->assertSame('prop', $member->asString());
 
         $getter = $member->createArrayGetterCallable();
-        $this->assertInternalType('callable', $getter);
+        $this->assertIsCallable($getter);
         $this->assertSame(TestEntity::class, (new \ReflectionFunction($getter))->getClosureScopeClass()->getName());
 
         $this->assertSame([1 => 'abc'], $getter([1 => new TestEntity(null, 'abc')]));
