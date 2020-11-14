@@ -173,6 +173,10 @@ class ClassDefinition
      */
     private function inferPropertyTypesFromTypeDeclarations(): void
     {
+        if (version_compare(PHP_VERSION, '7.4.0', '<')) {
+            return;
+        }
+
         foreach ($this->properties as $definition) {
             if ($definition->hasType() || $definition->isIgnored()) {
                 continue;
@@ -180,7 +184,7 @@ class ClassDefinition
 
             $reflection = $definition->getReflection();
 
-            if (method_exists(\ReflectionProperty::class, 'hasType') && !$reflection->hasType()) {
+            if (!$reflection->hasType()) {
                 continue;
             }
 
