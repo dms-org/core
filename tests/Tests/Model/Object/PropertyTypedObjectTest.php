@@ -13,11 +13,14 @@ class PropertyTypedObjectTest extends CmsTestCase
 {
     public function testInfersTypesFromTypeDeclarations()
     {
+<<<<<<< HEAD
         if (version_compare(PHP_VERSION, '7.4.0', '<=')) {
             $this->expectNotToPerformAssertions();
             return;
         }
 
+=======
+>>>>>>> d579d69189e4d5fc2cf1b45a4b326a0b25a633a7
         $this->assertEquals([
             'string' => Type::string(),
             'int' => Type::int(),
