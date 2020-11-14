@@ -47,11 +47,17 @@ class PropertyDefinition
      */
     private $immutable = false;
 
-    public function __construct($class, $name, PropertyAccessibility $accessibility)
+    /**
+     * @var \ReflectionProperty
+     */
+    private $reflection;
+
+    public function __construct($class, $name, PropertyAccessibility $accessibility, \ReflectionProperty $reflection)
     {
         $this->class         = $class;
         $this->name          = $name;
         $this->accessibility = $accessibility;
+        $this->reflection    = $reflection;
 
         $this->getter = \Closure::bind(function & (TypedObject $instance) use ($name) {
             return $instance->{$name};
@@ -80,6 +86,22 @@ class PropertyDefinition
     public function getAccessibility() : PropertyAccessibility
     {
         return $this->accessibility;
+    }
+
+    /**
+     * @return \ReflectionProperty
+     */
+    public function getReflection() : \ReflectionProperty
+    {
+        return $this->reflection;
+    }
+
+    /**
+     * @return bool
+     */
+    public function canGetReference() : bool
+    {
+        return !$this->reflection->hasType() || $this->reflection->getType()->allowsNull();
     }
 
     /**

@@ -18,6 +18,7 @@ use Dms\Core\Model\Type\ScalarType;
 use Dms\Core\Model\Type\UnionType;
 use Dms\Core\Model\TypedCollection;
 use Dms\Core\Tests\Model\Fixtures\TestEntity;
+use Dms\Core\Tests\Model\Object\Fixtures\TestPropertyTypedObject;
 
 /**
  * @author Elliot Levin <elliotlevin@hotmail.com>
@@ -156,5 +157,26 @@ class TypeBuilderTest extends CmsTestCase
 
         // Will ignore array element type if too many elements
         $this->assertEquals(Type::arrayOf(Type::mixed()), Type::from(range(1, 100)));
+    }
+
+    public function testFromReflection()
+    {
+        if (version_compare(PHP_VERSION, '7.4.0', '<=')) {
+            $this->expectNotToPerformAssertions();
+            return;
+        }
+
+        $reflection = new \ReflectionClass(TestPropertyTypedObject::class);
+
+        $this->assertEquals(Type::string(), Type::fromReflection($reflection->getProperty('string')->getType()));
+        $this->assertEquals(Type::int(), Type::fromReflection($reflection->getProperty('int')->getType()));
+        $this->assertEquals(Type::float(), Type::fromReflection($reflection->getProperty('float')->getType()));
+        $this->assertEquals(Type::bool(), Type::fromReflection($reflection->getProperty('bool')->getType()));
+        $this->assertEquals(Type::arrayOf(Type::mixed()), Type::fromReflection($reflection->getProperty('array')->getType()));
+        $this->assertEquals(Type::object(), Type::fromReflection($reflection->getProperty('object')->getType()));
+        $this->assertEquals(Type::iterable(), Type::fromReflection($reflection->getProperty('iterable')->getType()));
+        $this->assertEquals(Type::object(\ArrayObject::class), Type::fromReflection($reflection->getProperty('arrayObject')->getType()));
+        $this->assertEquals(Type::object(\ArrayObject::class)->nullable(), Type::fromReflection($reflection->getProperty('nullableArrayObject')->getType()));
+        $this->assertEquals(Type::string()->nullable(), Type::fromReflection($reflection->getProperty('nullableString')->getType()));
     }
 }

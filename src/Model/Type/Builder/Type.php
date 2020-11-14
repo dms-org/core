@@ -185,6 +185,17 @@ class Type
         return self::$arrays[$elementTypeString];
     }
 
+
+    /**
+     * The 'iterable' pseudo type. Either an array or instance of \Traversable.
+     *
+     * @return IType
+     */
+    public static function iterable() : IType
+    {
+        return self::arrayOf(self::mixed())->union(self::object(\Traversable::class));
+    }
+
     /**
      * The typed collection type. Contains only elements of the
      * supplied class.
@@ -252,4 +263,55 @@ class Type
         );
     }
 
+    /**
+     * Loads the appropriate type from a reflected type.
+     *
+     * @param \ReflectionNamedType
+     *
+     * @return IType
+     * @throws InvalidArgumentException
+     */
+    public static function fromReflection(\ReflectionNamedType $reflection) : IType
+    {
+        $typeName = $reflection->getName();
+
+        switch ($typeName) {
+            case 'string':
+                $type = self::string();
+            break;
+            case 'int':
+                $type = self::int();
+            break;
+            case 'float':
+                $type = self::float();
+            break;
+            case 'bool':
+                $type = self::bool();
+            break;
+            case 'object':
+                $type = self::object();
+            break;
+            case 'iterable':
+                $type = self::iterable();
+            break;
+            case 'array':
+                $type = self::arrayOf(self::mixed());
+            break;
+            default:
+                if (class_exists($typeName) || interface_exists($typeName)) {
+                    $type = self::object($typeName);
+                } else {
+                    throw InvalidArgumentException::format(
+                            'Unknown reflected type: %s', $typeName
+                    );
+                }
+            break;
+        }
+
+        if ($reflection->allowsNull()) {
+            $type = $type->nullable();
+        }
+
+        return $type;
+    }
 }

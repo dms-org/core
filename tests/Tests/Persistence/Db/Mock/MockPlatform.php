@@ -145,7 +145,7 @@ class MockPlatform extends Platform
                         $row = $row->first();
                     }
 
-                    return $row[$table][$column];
+                    return $row[$table][$column] ?? null;
                 };
 
             case $expr instanceof Count:

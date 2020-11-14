@@ -1,22 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<phpunit
-    backupGlobals="true"
-    stopOnFailure="false"
-    beStrictAboutTestsThatDoNotTestAnything="false"
-    bootstrap="Runner.php">
-
-    <testsuites>
-      <testsuite name="All">
-        <directory>./Tests/</directory>
-      </testsuite>
-    </testsuites>
-    
-    <filter>
-        <whitelist>
-            <directory suffix=".php">./../src/</directory>
-        </whitelist>
-        <blacklist>
-            <directory>./../vendor/</directory>
-        </blacklist>
-    </filter>   
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" backupGlobals="true" stopOnFailure="false" beStrictAboutTestsThatDoNotTestAnything="false" bootstrap="Runner.php" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd">
+  <coverage>
+    <include>
+      <directory suffix=".php">./../src/</directory>
+    </include>
+    <exclude>
+      <directory>./../vendor/</directory>
+    </exclude>
+  </coverage>
+  <testsuites>
+    <testsuite name="All">
+      <directory>./Tests/</directory>
+    </testsuite>
+  </testsuites>
 </phpunit>
