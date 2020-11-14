@@ -101,7 +101,7 @@ class PropertyDefinition
      */
     public function canGetReference() : bool
     {
-        return !$this->reflection->hasType() || $this->reflection->getType()->allowsNull();
+        return !method_exists(\ReflectionProperty::class, 'hasType') || !$this->reflection->hasType() || $this->reflection->getType()->allowsNull();
     }
 
     /**

@@ -180,7 +180,7 @@ class ClassDefinition
 
             $reflection = $definition->getReflection();
 
-            if (!$reflection->hasType()) {
+            if (method_exists(\ReflectionProperty::class, 'hasType') && !$reflection->hasType()) {
                 continue;
             }
 
