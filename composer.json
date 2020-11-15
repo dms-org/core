@@ -16,7 +16,7 @@
     },
     "require": {
         "php": ">=7.0.0",
-        "timetoogo/pinq": "dev-upgrade",
+        "timetoogo/pinq": "^3.5.0",
         "doctrine/dbal": "~2.5",
         "container-interop/container-interop": "~1.1",
         "psr/cache": "^1.0"
@@ -27,6 +27,6 @@
         }
     },
     "require-dev": {
-        "dms-org/common.testing": "dev-upgrade"
+        "dms-org/common.testing": "^0.9.0"
     }
 }
