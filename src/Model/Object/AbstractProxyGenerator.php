@@ -89,12 +89,7 @@ PHP;
      */
     protected static function getReturnType(\ReflectionMethod $method) : string
     {
-        if ($method->getReturnType()->isBuiltin()) {
-            return (string)$method->getReturnType();
-        } else {
-            $type = (string)$method->getReturnType();
-            return '\\' . ($type === 'self' ? $method->getDeclaringClass()->getName() : $type);
-        }
+        return self::convertReflectedTypeToCode($method->getReturnType(), $method->getDeclaringClass());
     }
     /**
      * @param \ReflectionParameter $parameter
@@ -103,27 +98,32 @@ PHP;
      */
     protected static function getParameterTypeHint(\ReflectionParameter $parameter) : string
     {
-        if ($parameter->getClass()) {
-            if (
-                $parameter->allowsNull()
-                && version_compare(PHP_VERSION, '7.1.0', '>=')) {
-                return '?\\' . $parameter->getClass()->getName();
-            }
-
-            return '\\' . $parameter->getClass()->getName();
-        } elseif ($parameter->hasType()) {
-            $type = $parameter->getType();
-
-            if (
-                $type->allowsNull()
-                && $type->__toString()[0] !== '?'
-                && version_compare(PHP_VERSION, '7.1.0', '>=')) {
-                return '?' . $type->__toString();
-            }
-
-            return $type->__toString();
+        if ($parameter->hasType()) {
+            return self::convertReflectedTypeToCode($parameter->getType(), $parameter->getClass());
         } else {
             return '';
         }
+    }
+
+    protected static function convertReflectedTypeToCode(\ReflectionNamedType $reflection, \ReflectionClass $context = null): string
+    {
+        $type = $reflection->getName();
+
+        if ($type === "self" && $context) {
+            $type = $context->getName();
+        }
+
+        if (!$reflection->isBuiltin()) {
+            $type = '\\' . $type;
+        }
+
+        if (
+            $reflection->allowsNull()
+            && $type[0] !== '?'
+            && version_compare(PHP_VERSION, '7.1.0', '>=')) {
+            return '?' . $type;
+        }
+
+        return $type;
     }
 }
