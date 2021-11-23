@@ -20,7 +20,7 @@ class EntityWithTitle extends Entity
     /**
      * @inheritDoc
      */
-    public function __construct($id = null, $title)
+    public function __construct($id = null, $title = null)
     {
         parent::__construct($id);
         $this->title = $title;

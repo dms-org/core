@@ -23,7 +23,7 @@ class OrderedEntity extends Entity
     /**
      * @inheritDoc
      */
-    public function __construct($id = null, $group, $orderIndex = null)
+    public function __construct($id = null, $group = null, $orderIndex = null)
     {
         parent::__construct($id);
         $this->group = $group;

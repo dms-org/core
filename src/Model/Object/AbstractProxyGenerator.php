@@ -99,7 +99,7 @@ PHP;
     protected static function getParameterTypeHint(\ReflectionParameter $parameter) : string
     {
         if ($parameter->hasType()) {
-            return self::convertReflectedTypeToCode($parameter->getType(), $parameter->getClass());
+            return self::convertReflectedTypeToCode($parameter->getType(), @$parameter->getClass());
         } else {
             return '';
         }

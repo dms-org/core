@@ -299,6 +299,15 @@ abstract class Query implements IQuery
     }
 
     /**
+     * @return static
+     */
+    public function clearOrderings()
+    {
+        $this->orderings = [];
+        return $this;
+    }
+
+    /**
      * @param Ordering $ordering
      *
      * @return static

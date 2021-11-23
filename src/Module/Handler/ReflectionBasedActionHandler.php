@@ -27,7 +27,7 @@ abstract class ReflectionBasedActionHandler extends ParameterizedActionHandlerBa
             );
         }
         
-        $typeHint = $parameters[0]->getClass();
+        $typeHint = @$parameters[0]->getClass();
 
         if (!$typeHint) {
             throw InvalidHandlerClassException::format(

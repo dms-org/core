@@ -122,6 +122,7 @@ abstract class Connection implements IConnection
             $rowsWithKeys     = $query->getRowsWithPrimaryKeys();
             $rowsWithKeyArray = $rowsWithKeys->getRows();
             $rowsData         = $this->platform->mapResultSetToDbFormat($rowsWithKeys, 'lock__');
+;
             if ($rowsData) {
                 $lockingColumnNameParameterMap = [];
 
@@ -164,12 +165,20 @@ abstract class Connection implements IConnection
             $rowArray        = $rowsWithoutKeys->getRows();
             $rowsData        = $this->platform->mapResultSetToDbFormat($rowsWithoutKeys);
             $defaultData     = $table->getNullColumnData();
+            $primaryKeyToRemove = !$this->platform->defaultPrimaryKeyToNull() && $table->hasPrimaryKeyColumn()
+                ? $table->getPrimaryKeyColumnName() : null;
 
             if ($rowsData) {
-                $insert = $this->prepare($this->platform->compilePreparedInsert($table));
+                $insert = $this->prepare($this->platform->compilePreparedInsert($table, $this->platform->defaultPrimaryKeyToNull()));
 
                 foreach ($rowsData as $key => $row) {
-                    $insert->setParameters($row + $defaultData);
+                    $params = $row + $defaultData;
+
+                    if ($primaryKeyToRemove) {
+                        unset($params[$primaryKeyToRemove]);
+                    }
+
+                    $insert->setParameters($params);
                     $insert->execute();
                     $rowArray[$key]->firePrimaryKeyCallbacks($this->getLastInsertId());
                 }

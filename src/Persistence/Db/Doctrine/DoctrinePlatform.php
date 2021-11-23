@@ -18,6 +18,7 @@ use Dms\Core\Persistence\Db\Query\Update;
 use Dms\Core\Persistence\Db\Schema\Table;
 use Doctrine\DBAL\Connection as DbalConnection;
 use Doctrine\DBAL\Platforms\AbstractPlatform as DoctrineAbstractPlatform;
+use Doctrine\DBAL\Platforms\MySqlPlatform;
 use Doctrine\DBAL\Query\QueryBuilder;
 
 /**
@@ -81,11 +82,11 @@ class DoctrinePlatform extends Platform
     /**
      * @inheritDoc
      */
-    public function compilePreparedInsert(Table $table) : string
+    public function compilePreparedInsert(Table $table, bool $includePrimaryKey = true) : string
     {
         $queryBuilder = $this->doctrineConnection->createQueryBuilder();
 
-        $values                  = $this->createColumnParameterArray($queryBuilder, $table);
+        $values                  = $this->createColumnParameterArray($queryBuilder, $table, $includePrimaryKey);
         $escapedIdentifierValues = [];
 
         foreach ($values as $column => $parameter) {
@@ -123,12 +124,16 @@ class DoctrinePlatform extends Platform
         return $queryBuilder->getSQL();
     }
 
-    protected function createColumnParameterArray(QueryBuilder $queryBuilder, Table $table)
+    protected function createColumnParameterArray(QueryBuilder $queryBuilder, Table $table, bool $includePrimaryKey)
     {
         $parameters = [];
 
         foreach ($table->getColumns() as $name => $column) {
             $parameters[$name] = ':' . $name;
+        }
+
+        if (!$includePrimaryKey && $table->hasPrimaryKeyColumn()) {
+            unset($parameters[$table->getPrimaryKeyColumnName()]);
         }
 
         return $parameters;
@@ -411,5 +416,10 @@ class DoctrinePlatform extends Platform
     public function supportsForeignKeys(): bool
     {
         return $this->doctrinePlatform->supportsForeignKeyConstraints();
+    }
+
+    public function defaultPrimaryKeyToNull(): bool
+    {
+        return ($this->doctrinePlatform instanceof MySqlPlatform);
     }
 }

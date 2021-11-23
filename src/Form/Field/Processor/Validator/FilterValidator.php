@@ -25,7 +25,7 @@ abstract class FilterValidator extends FieldValidator
      */
     private $options;
 
-    public function __construct(IType $inputType, $filter, $options = null)
+    public function __construct(IType $inputType, $filter, $options = [])
     {
         parent::__construct($inputType);
         $this->filter = $filter;

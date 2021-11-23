@@ -192,6 +192,7 @@ abstract class DbRepositoryBase implements IObjectSetWithLoadCriteriaSupport
         $offset = $select->getOffset();
 
         $select->offset(0)->limit(null);
+        $select->clearOrderings();
 
         $rows = $this->connection->load(
             $select->setColumns(['count' => Expr::count()])

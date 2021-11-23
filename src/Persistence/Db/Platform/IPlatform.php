@@ -53,6 +53,11 @@ interface IPlatform
     public function mapResultSetToPhpForm(Table $table, array $rows) : RowSet;
 
     /**
+     * Whether to default primary key values to null
+     */
+    public function defaultPrimaryKeyToNull(): bool;
+
+    /**
      * Quotes the supplied identifier.
      *
      * @param string $value
@@ -107,7 +112,7 @@ interface IPlatform
      *
      * @return string
      */
-    public function compilePreparedInsert(Table $table);
+    public function compilePreparedInsert(Table $table, bool $includePrimaryKey = true);
 
     /**
      * Compiles a prepared update query with the values as named parameters with their respective column.

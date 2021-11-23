@@ -48,7 +48,7 @@ class CustomObjectActionHandler extends ObjectActionHandler
         }
 
         $parameters     = $reflection->getParameters();
-        $objectTypeHint = $parameters[0]->getClass();
+        $objectTypeHint = @$parameters[0]->getClass();
 
         if (!$objectTypeHint) {
             throw InvalidHandlerClassException::format(
@@ -58,7 +58,7 @@ class CustomObjectActionHandler extends ObjectActionHandler
         }
 
         if (isset($parameters[1])) {
-            $dataParameterTypeHint = $parameters[1]->getClass();
+            $dataParameterTypeHint = @$parameters[1]->getClass();
 
             if (!$dataParameterTypeHint) {
                 throw InvalidHandlerClassException::format(

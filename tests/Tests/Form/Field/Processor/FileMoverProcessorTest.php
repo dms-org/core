@@ -57,7 +57,7 @@ class FileMoverProcessorTest extends FieldProcessorTest
         ];
     }
 
-    protected function mockUploadedFile($clientFileName, $expectedMoveToPath = null, $return, &$movePath = null)
+    protected function mockUploadedFile($clientFileName, $expectedMoveToPath = null, $return = null, &$movePath = null)
     {
         $mock = $this->getMockForAbstractClass(IUploadedFile::class);
 

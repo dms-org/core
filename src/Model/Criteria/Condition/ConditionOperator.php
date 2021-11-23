@@ -187,7 +187,7 @@ final class ConditionOperator
                     $l = $left($arg);
                     $r = $right($arg);
 
-                    if ($l === null || $r === null) {
+                    if ($l === null || $r === null || $r === '') {
                         return false;
                     }
 

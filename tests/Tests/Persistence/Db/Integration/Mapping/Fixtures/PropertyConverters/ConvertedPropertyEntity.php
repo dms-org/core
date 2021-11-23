@@ -18,7 +18,7 @@ class ConvertedPropertyEntity extends Entity
     /**
      * @inheritDoc
      */
-    public function __construct($id = null, $integer)
+    public function __construct($id = null, $integer = null)
     {
         parent::__construct($id);
         $this->integer = $integer;

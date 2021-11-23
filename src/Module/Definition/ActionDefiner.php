@@ -289,7 +289,7 @@ class ActionDefiner
 
         $parameter = $reflection->getParameters()[0] ?? null;
 
-        if (!$parameter || !$parameter->isArray()) {
+        if (!$parameter || !@$parameter->isArray()) {
             return [$handler, null];
         }
 

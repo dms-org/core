@@ -23,7 +23,7 @@ class TestAlias extends Entity
     /**
      * @inheritDoc
      */
-    public function __construct($id = null, $firstName, $lastName)
+    public function __construct($id = null, $firstName = null, $lastName = null)
     {
         parent::__construct($id);
         $this->firstName = $firstName;

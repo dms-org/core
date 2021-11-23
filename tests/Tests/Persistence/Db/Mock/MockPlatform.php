@@ -68,7 +68,7 @@ class MockPlatform extends Platform
         return '!!' . $value . '!!';
     }
 
-    public function compilePreparedInsert(Table $table)
+    public function compilePreparedInsert(Table $table, bool $includePrimaryKey = true)
     {
         return new PhpPreparedCompiledQuery(function (MockDatabase $database, array $parameters) use ($table) {
             $table = $database->getTable($table->getName());
@@ -703,5 +703,10 @@ class MockPlatform extends Platform
     public function supportsForeignKeys(): bool
     {
         return false;
+    }
+
+    public function defaultPrimaryKeyToNull(): bool
+    {
+        return true;
     }
 }

@@ -32,7 +32,7 @@ abstract class RelationMapping
      *
      * @throws IncompatiblePropertyMappingException
      */
-    public function __construct(IAccessor $accessor, IRelation $relation, bool $ignoreNullabilityMismatch = false, bool $ignoreTypeMismatch)
+    public function __construct(IAccessor $accessor, IRelation $relation, bool $ignoreNullabilityMismatch = false, bool $ignoreTypeMismatch = null)
     {
         $accessorType = $accessor->getCompatibleType();
         $relationType = $relation->getValueType();

@@ -15,7 +15,7 @@ class AnotherEntitySubclass extends AnotherEntity
      */
     public $data;
 
-    public function __construct($id = null, $val, $data = false)
+    public function __construct($id = null, $val = null, $data = false)
     {
         parent::__construct($id, $val);
         $this->data = $data;

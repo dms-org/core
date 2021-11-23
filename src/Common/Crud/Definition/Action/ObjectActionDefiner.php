@@ -278,7 +278,7 @@ class ObjectActionDefiner extends ActionDefiner
         $objectParameter = $reflectionParameters[0] ?? null;
         $dtoParameter    = $reflectionParameters[1] ?? null;
 
-        if (!$objectParameter || !$objectParameter->getClass() || !$dtoParameter || !$dtoParameter->isArray()) {
+        if (!$objectParameter || !@$objectParameter->getClass() || !$dtoParameter || !@$dtoParameter->isArray()) {
             return [$handler, null, null];
         }
 
@@ -286,6 +286,6 @@ class ObjectActionDefiner extends ActionDefiner
             return $handler($object, $array->getArray());
         };
 
-        return [$handler, $objectParameter->getClass()->getName(), ArrayDataObject::class];
+        return [$handler, @$objectParameter->getClass()->getName(), ArrayDataObject::class];
     }
 }

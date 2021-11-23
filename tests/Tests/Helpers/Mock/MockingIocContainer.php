@@ -72,8 +72,8 @@ class MockingIocContainer implements IIocContainer
         if ($constructor) {
 
             foreach ($constructor->getParameters() as $param) {
-                if ($param->getClass()) {
-                    $params[] = $this->get($param->getClass()->getName());
+                if (@$param->getClass()) {
+                    $params[] = $this->get(@$param->getClass()->getName());
                 } elseif ($param->isDefaultValueAvailable()) {
                     $params[] = $param->getDefaultValue();
                 } else {

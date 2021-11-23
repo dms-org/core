@@ -129,7 +129,6 @@ abstract class Platform implements IPlatform
                 $rowData[$column] = isset($rowData[$column]) && $rowData[$column] instanceof \DateTimeInterface
                         ? $rowData[$column]->format($dateFormat)
                         : null;
-
             }
 
             foreach ($row->getLockingColumnData() as $column => $value) {
