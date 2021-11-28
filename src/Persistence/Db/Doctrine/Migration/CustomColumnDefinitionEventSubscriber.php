@@ -26,7 +26,7 @@ class CustomColumnDefinitionEventSubscriber implements EventSubscriber
 
     public function onSchemaColumnDefinition(SchemaColumnDefinitionEventArgs $event)
     {
-        $fieldType = $event->getTableColumn()['Type'];
+        $fieldType = $event->getTableColumn()['Type'] ?? $event->getTableColumn()['type'];
 
         if (stripos($fieldType, 'enum(') !== false) {
             $fieldValues = $this->parseEnumTypeToValues($fieldType);

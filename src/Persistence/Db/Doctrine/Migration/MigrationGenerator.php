@@ -7,6 +7,7 @@ use Dms\Core\Persistence\Db\Doctrine\Migration\Type\DoctrineTypes;
 use Dms\Core\Persistence\Db\Mapping\IOrm;
 use Doctrine\DBAL\Schema\Comparator;
 use Doctrine\DBAL\Schema\SchemaDiff;
+use Doctrine\DBAL\Platforms\MySqlPlatform;
 
 /**
  * The migration generator base class.
@@ -40,11 +41,13 @@ abstract class MigrationGenerator
     {
         $doctrine = $connection->getDoctrineConnection();
 
-        $doctrine->getDatabasePlatform()->registerDoctrineTypeMapping('enum', 'string');
-        $doctrine->getEventManager()->addEventSubscriber(new CustomColumnDefinitionEventSubscriber());
+        if ($doctrine->getDatabasePlatform() instanceof MySqlPlatform) {
+            $doctrine->getDatabasePlatform()->registerDoctrineTypeMapping('enum', 'string');
+            $doctrine->getEventManager()->addEventSubscriber(new CustomColumnDefinitionEventSubscriber());
+        }
 
         $currentSchema  = $doctrine->getSchemaManager()->createSchema();
-        $expectedSchema = $this->databaseConverter->convertToDoctrineSchema($orm->getDatabase());
+        $expectedSchema = $this->databaseConverter->convertToDoctrineSchema($orm->getDatabase(), $doctrine->getDatabasePlatform());
 
         $diff        = Comparator::compareSchemas($currentSchema, $expectedSchema);
         $reverseDiff = Comparator::compareSchemas($expectedSchema, $currentSchema);

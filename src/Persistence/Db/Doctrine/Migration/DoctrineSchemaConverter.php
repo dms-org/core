@@ -13,6 +13,8 @@ use Dms\Core\Persistence\Db\Schema\Index;
 use Dms\Core\Persistence\Db\Schema\Table;
 use Dms\Core\Persistence\Db\Schema\Type;
 use Doctrine\DBAL\Schema\Schema;
+use Doctrine\DBAL\Platforms\AbstractPlatform;
+use Doctrine\DBAL\Platforms\MySqlPlatform;
 use Doctrine\DBAL\Schema\Table as DoctrineTable;
 use Doctrine\DBAL\Types\Type as DoctrineType;
 
@@ -28,26 +30,27 @@ class DoctrineSchemaConverter
      * Converts the database to the equivalent doctrine schema.
      *
      * @param Database $database
+     * @param AbstractPlatform $platform
      *
      * @return Schema
      */
-    public function convertToDoctrineSchema(Database $database) : \Doctrine\DBAL\Schema\Schema
+    public function convertToDoctrineSchema(Database $database, AbstractPlatform $platform) : \Doctrine\DBAL\Schema\Schema
     {
         $schema = new Schema();
 
         foreach ($database->getTables() as $table) {
-            $this->mapTable($schema, $table);
+            $this->mapTable($schema, $table, $platform);
         }
 
         return $schema;
     }
 
-    private function mapTable(Schema $schema, Table $table)
+    private function mapTable(Schema $schema, Table $table, AbstractPlatform $platform)
     {
         $doctrineTable = $schema->createTable($table->getName());
 
         foreach ($table->getColumns() as $column) {
-            $this->mapColumn($doctrineTable, $column);
+            $this->mapColumn($doctrineTable, $column, $platform);
         }
 
         if ($table->hasPrimaryKeyColumn()) {
@@ -102,9 +105,9 @@ class DoctrineSchemaConverter
         ForeignKeyMode::validate($mode);
     }
 
-    private function mapColumn(DoctrineTable $doctrineTable, Column $column)
+    private function mapColumn(DoctrineTable $doctrineTable, Column $column, AbstractPlatform $platform)
     {
-        list($typeName, $options) = $this->mapColumnType($column->getType());
+        list($typeName, $options) = $this->mapColumnType($column->getType(), $platform);
 
         $doctrineTable->addColumn(
                 $column->getName(),
@@ -113,7 +116,7 @@ class DoctrineSchemaConverter
         );
     }
 
-    private function mapColumnType(Type\Type $type)
+    private function mapColumnType(Type\Type $type, AbstractPlatform $platform)
     {
         $options = [];
 
@@ -142,8 +145,13 @@ class DoctrineSchemaConverter
 
                 return [DoctrineType::DECIMAL, $options];
 
-            case $type instanceof Type\Enum:
+            case $type instanceof Type\Enum && $platform instanceof MySqlPlatform:
                 return [CustomEnumTypeGenerator::generate($type->getOptions()), $options];
+
+            case $type instanceof Type\Enum:
+                $options['length'] = 255;
+
+                return [DoctrineType::STRING, $options];
 
             case $type instanceof Type\Integer:
                 $options['autoincrement'] = $type->isAutoIncrement();

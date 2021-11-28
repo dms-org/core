@@ -4,6 +4,8 @@ namespace Dms\Core\Tests\Persistence\Db\Doctrine\Migration;
 
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Types\Type;
+use Doctrine\DBAL\Platforms\AbstractPlatform;
+use Doctrine\DBAL\Platforms\MySqlPlatform;
 use Dms\Common\Testing\CmsTestCase;
 use Dms\Core\Persistence\Db\Doctrine\Migration\CustomEnumTypeGenerator;
 use Dms\Core\Persistence\Db\Doctrine\Migration\DoctrineSchemaConverter;
@@ -40,6 +42,7 @@ class DoctrineSchemaConverterTest extends CmsTestCase
                 [new Database([]), new Schema()],
                 $this->tablesTest(),
                 $this->columnTypesTest(),
+                $this->enumForNonMySqlPlatform(),
                 $this->foreignKeysTest(),
                 $this->indexesTest(),
         ];
@@ -48,10 +51,10 @@ class DoctrineSchemaConverterTest extends CmsTestCase
     /**
      * @dataProvider expectedConversions
      */
-    public function testConvertsDatabaseCorrectly(Database $originalDb, Schema $expectedDoctrineSchema)
+    public function testConvertsDatabaseCorrectly(Database $originalDb, Schema $expectedDoctrineSchema, string $platformClass = AbstractPlatform::class)
     {
         $converter            = new DoctrineSchemaConverter();
-        $actualDoctrineSchema = $converter->convertToDoctrineSchema($originalDb);
+        $actualDoctrineSchema = $converter->convertToDoctrineSchema($originalDb, $this->getMockForAbstractClass($platformClass));
 
         $this->assertEquals($expectedDoctrineSchema, $actualDoctrineSchema);
     }
@@ -150,7 +153,25 @@ class DoctrineSchemaConverterTest extends CmsTestCase
         $testTable->addColumn('blob_medium', Type::BLOB)->setLength(pow(2, 24) - 1);
         $testTable->addColumn('blob_long', Type::BLOB)->setLength(pow(2, 32) - 1);
 
-        return [$original, $expected];
+        return [$original, $expected, MySqlPlatform::class];
+    }
+
+    private function enumForNonMySqlPlatform()
+    {
+        $original = new Database([
+                new Table('test', [
+                        new Column('enum_abc', new Enum(['a', 'b', 'c'])),
+                        new Column('enum_123', new Enum(['1', '2', '3'])),
+                ])
+        ]);
+
+        $expected  = new Schema();
+        $testTable = $expected->createTable('test');
+
+        $testTable->addColumn('enum_abc', Type::STRING)->setLength(255);
+        $testTable->addColumn('enum_123', Type::STRING)->setLength(255);
+
+        return [$original, $expected, AbstractPlatform::class];
     }
 
     public function foreignKeysTest()
