@@ -6,6 +6,7 @@ use Dms\Core\Exception\InvalidArgumentException;
 use Dms\Core\Persistence\Db\Query\Expression;
 use Dms\Core\Persistence\Db\Query\Expression\Expr;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
+use Doctrine\DBAL\Platforms\PostgreSqlPlatform;
 use Doctrine\DBAL\Query\QueryBuilder;
 
 /**
@@ -139,13 +140,13 @@ class DoctrineExpressionCompiler
                 return $expressionBuilder->orX($left, $right);
 
             case Expression\BinOp::STR_CONTAINS:
-                return $expressionBuilder->gt($this->doctrinePlatform->getLocateExpression($left, $right), 0);
+                return $expressionBuilder->gt($this->doctrinePlatform->getLocateExpression($this->asString($left), $this->asString($right)), 0);
 
             case Expression\BinOp::STR_CONTAINS_CASE_INSENSITIVE:
                 return $expressionBuilder->gt(
                         $this->doctrinePlatform->getLocateExpression(
-                                $this->doctrinePlatform->getUpperExpression($left),
-                                $this->doctrinePlatform->getUpperExpression($right)
+                                $this->doctrinePlatform->getUpperExpression($this->asString($left)),
+                                $this->doctrinePlatform->getUpperExpression($this->asString($right))
                         ),
                         0
                 );
@@ -215,5 +216,14 @@ class DoctrineExpressionCompiler
         } else {
             return '(' . $subSelect->getSql() . ')';
         }
+    }
+
+    private function asString(string $expr): string
+    {
+        if ($this->doctrinePlatform instanceof PostgreSqlPlatform) {
+            return '(' . $expr . ')::text';
+        }
+        
+        return $expr;
     }
 }
