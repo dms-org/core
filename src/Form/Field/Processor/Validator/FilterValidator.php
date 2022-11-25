@@ -37,7 +37,7 @@ abstract class FilterValidator extends FieldValidator
      */
     protected function validate($input, array &$messages)
     {
-        if (!filter_var($input, $this->filter, $this->options)) {
+        if (!filter_var($input, $this->filter, $this->options ?? [])) {
             $messages[] = new Message(static::MESSAGE);
         }
     }
