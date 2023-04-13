@@ -213,6 +213,14 @@ abstract class TypedObject implements ITypedObject, \Serializable
     /**
      * @inheritDoc
      */
+    final public function __serialize()
+    {
+        return serialize($this->dataToSerialize());
+    }
+
+    /**
+     * @inheritDoc
+     */
     final public function serialize()
     {
         return serialize($this->dataToSerialize());
@@ -226,6 +234,15 @@ abstract class TypedObject implements ITypedObject, \Serializable
     protected function dataToSerialize()
     {
         return $this->properties;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    final public function __unserialize($serialized)
+    {
+        $this->loadFinalizedClassDefinition(static::definition());
+        $this->hydrateFromSerializedData(unserialize($serialized));
     }
 
     /**
