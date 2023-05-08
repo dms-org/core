@@ -8,6 +8,7 @@ use Dms\Core\Model\IObjectSet;
 use Dms\Core\Model\ITypedObject;
 use Dms\Core\Model\Object\Entity;
 use Dms\Core\Model\Object\TypedObject;
+use Dms\Core\Model\Object\ValueObject;
 use Dms\Core\Table\Criteria\ObjectRowCriteria;
 use Dms\Core\Table\Criteria\RowCriteria;
 use Dms\Core\Table\Data\DataTable;
@@ -86,6 +87,7 @@ class ObjectTableDataSource extends TableDataSource
         if (
             $component->getType()->getPhpType()->isSubsetOf(TypedObject::collectionType())
             || $component->getType()->getPhpType()->isSubsetOf(Entity::type())
+            || $component->getType()->getPhpType()->isSubsetOf(ValueObject::type())
         ) return false;
 
         return in_array($column->getName() . '.' . $component->getName(), $this->definition->getPropertyComponentIdMap(), true);
