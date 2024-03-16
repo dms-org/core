@@ -27,6 +27,6 @@
         }
     },
     "require-dev": {
-        "dms-org/common.testing": "^0.9.0"
+        "dms-org/common.testing": "dev-upgrade"
     }
 }
