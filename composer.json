@@ -20,7 +20,7 @@
         "timetoogo/pinq": "^3.5.0",
         "doctrine/dbal": "~2.5",
         "container-interop/container-interop": "~1.1",
-        "psr/cache": "^1.0"
+        "psr/cache": "^3.0"
     },
     "autoload-dev": {
         "psr-4": {
